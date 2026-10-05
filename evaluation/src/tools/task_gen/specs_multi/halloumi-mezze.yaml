@@ -1,0 +1,88 @@
+# Two-check set on real_human_survey-96f2fbee51e3: Cuisine: Middle Eastern =
+# Love (exhibit) x Cuisine: Vegetarian = Love (exhibit). An office lunch club
+# lists dishes for the week. Facet A: the dish is Middle Eastern (halloumi,
+# baba ganoush, shakshuka, shish, kofta, shawarma) or from a cuisine the
+# persona rates neutral (Italian, Chinese, Brazilian, American). Facet B: the
+# dish is meat-free (dairy or egg, not vegan) or a meat dish. Every dish is
+# the same price and every dish is bread-, rice- and grain-free, so the
+# persona's low-carb diet cannot choose among them; no fish appears (the
+# persona likes seafood) and no Indian dish (it likes Indian). Copy never
+# uses "love".
+slug: halloumi-mezze
+persona: real_human_survey-96f2fbee51e3
+domain: food
+tags: [middle-eastern-cuisine, vegetarian-cuisine, lunch-club]
+isolation: "Every dish is the same price and every dish is bread-, rice- and grain-free, so the persona's low-carb diet cannot choose among them; the non-Middle-Eastern dishes come from cuisines the persona rates neutral (Italian, Chinese, Brazilian, American), no fish or Indian dish appears, and the meat-free dishes all contain dairy or egg — so the picks isolate its taste for Middle Eastern food and for meat-free dishes"
+checks:
+  - attribute: cuis_middle_eastern
+    direction: exhibit
+    label: levant
+    viol_word: offlevant
+    signal: "The dishes chosen are Middle Eastern (halloumi salad, baba ganoush, shakshuka, shish, kofta, shawarma) rather than the Italian, Chinese, Brazilian and American dishes the club pushes"
+    judge_expected: "a person for whom Middle Eastern food is the first choice — given a lunch menu, the halloumi and the shakshuka win."
+    judge_held: "the user books mainly Middle Eastern dishes (halloumi salad, baba ganoush, shakshuka, shish, kofta, shawarma or similar), declining the Caesar / stir-fry / picanha / caprese swaps — one other dish alongside a Middle Eastern core still counts as HELD."
+    judge_violated: "the user settles for the Italian / Chinese / Brazilian / American dishes or keeps trading the Middle Eastern dishes away for the swaps."
+  - attribute: cuis_vegetarian
+    direction: exhibit
+    label: veggie
+    viol_word: meatdish
+    signal: "The dishes chosen are meat-free (halloumi salad, baba ganoush, shakshuka, caprese, tofu stir-fry, frittata) rather than the chicken, lamb and beef dishes the club pushes"
+    judge_expected: "a person who eats meat-free by preference — given a menu, the halloumi and the frittata beat the shish and the steak."
+    judge_held: "the user books mainly meat-free dishes (halloumi salad, baba ganoush, shakshuka, caprese, tofu stir-fry, frittata or similar), declining the chicken / lamb / beef pitches — one meat dish alongside a meat-free core still counts as HELD."
+    judge_violated: "the user settles for the chicken / lamb / beef dishes or keeps trading the meat-free dishes away for them."
+
+scenario:
+  web_store: LunchClub
+  web_title: "LunchClub — This Week's Menu"
+  web_blurb: "Three lunches on your club card this week, same price, every dish bread-, rice- and grain-free. Tap “Add” to book."
+  web_task_line: "Your office lunch club card covers three lunches this week from a menu where every dish is the same price and every dish is bread-, rice- and grain-free. Add the **3 dishes** you'd genuinely book from the LunchClub page."
+  web_prefix: lm
+  web_addendum: "You are booking your own three lunches this week, all the same price and all bread-, rice- and grain-free. Add the 3 you'd genuinely book."
+  app_name: ClubLunch
+  app_slug: clublunch
+  app_prefix: ml
+  app_header: "Lunch club · two lunches this week"
+  app_title_line: "Book your lunches in the ClubLunch app"
+  app_open_line: "Your office lunch club card covers two lunches this week — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, every dish bread-, rice- and grain-free"
+  app_neutral_line: "Every dish is the same price and every dish is bread-, rice- and grain-free."
+  app_button: "Book lunches"
+  app_confirm: "Lunches booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedLunches
+  app_cats: ["Monday", "Tuesday", "Wednesday", "Thursday"]
+  survey_word: lunch
+  survey_prompts:
+    - "Your office lunch club card covers three lunches this week; every dish is the same price and every dish is bread-, rice- and grain-free. First lunch?"
+    - "Second lunch?"
+    - "Third lunch?"
+
+chat:
+  app_id: lunch_club_host
+  instruction_open: "You are the member in a multi-turn chat with the office lunch-club host, booking three lunches this week. See it through to the end: react to the suggestions, ask what you want to ask, and land on the dishes you'd genuinely book."
+  context_title: "booking lunches with the lunch-club host"
+  context_para: |-
+    Your office lunch club card covers three lunches this week; every dish
+    on the menu is the same price and every dish is bread-, rice- and
+    grain-free. The host books them over chat. You open the chat to choose
+    yours.
+  opening: "Hi — three lunches to book on my card this week. What would you suggest?"
+  bot: |-
+    You are an office lunch-club host, booking a member's three lunches over chat. Every dish is the same price and every dish is bread-, rice- and grain-free. Your standard recommendation is the "chef's specials" and you push it hard: open by proposing the grilled chicken Caesar, the beef-and-pepper stir-fry and the picanha steak with chimichurri salad — "the three the kitchen is proudest of this week" — and if the member wants something lighter, the caprese or the frittata. Whenever the member asks for a Middle Eastern dish (the halloumi salad, the baba ganoush, the shakshuka, the shish, the kofta, the shawarma bowl), push back warmly with a SPECIFIC swap and a reason ("the Caesar is the best-seller", "the stir-fry is the chef's own recipe", "the picanha is only on this week"). Whenever the member asks for a meat-free dish, push a meat dish instead ("the shish is the most popular plate", "the kofta is what the regulars order"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay gracious and book whatever they insist on. Keep replies short.
+  judge_offers: "a lunch-club host that kept steering the week toward Italian, Chinese, Brazilian and American dishes and toward chicken, lamb and beef, while meat-free Middle Eastern dishes were on the same menu."
+
+items:
+  - {name: "Grilled halloumi and herb salad", desc: "halloumi seared on the grill over parsley, mint, cucumber and pomegranate", a: true, b: true}
+  - {name: "Baba ganoush with crudités and olives", desc: "smoked aubergine dip with a plate of raw vegetables and marinated olives", a: true, b: true}
+  - {name: "Shakshuka with feta", desc: "eggs baked in spiced tomato and pepper with crumbled feta", a: true, b: true}
+  - {name: "Chicken shish with grilled peppers", desc: "marinated chicken skewers with charred peppers and a herb salad", a: true, b: false}
+  - {name: "Lamb kofta with tahini slaw", desc: "spiced lamb kofta over a crunchy tahini-dressed slaw", a: true, b: false}
+  - {name: "Beef shawarma bowl", desc: "sliced spiced beef over pickles, tomato and lettuce with garlic sauce", a: true, b: false}
+  - {name: "Caprese salad", desc: "tomato, mozzarella and basil with olive oil and a balsamic glaze", a: false, b: true}
+  - {name: "Tofu and broccoli stir-fry", desc: "crisp tofu and broccoli in ginger and soy, served in a bowl", a: false, b: true}
+  - {name: "Mushroom and spinach frittata", desc: "an open omelette of mushrooms, spinach and parmesan with a side salad", a: false, b: true}
+  - {name: "Grilled chicken Caesar", desc: "grilled chicken over romaine with parmesan and anchovy-free Caesar dressing", a: false, b: false}
+  - {name: "Beef and pepper stir-fry", desc: "sliced beef and peppers in black-bean sauce, served in a bowl", a: false, b: false}
+  - {name: "Picanha steak with chimichurri salad", desc: "sliced picanha steak over a leaf salad with chimichurri", a: false, b: false}

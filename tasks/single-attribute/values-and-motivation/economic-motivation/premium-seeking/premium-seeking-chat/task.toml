@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/premium-seeking-chat"
+theme = "Economic motivation: Premium-seeking"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "shopping"
+tags = [ "persona-adherence", "economic-motivation", "premium-seeking", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# Like "cautious", "premium-seeking" is a SEMANTIC trait: no keyword list can tell
+# whether a shopper genuinely held out for the best/top-tier option over a push to
+# go cheap. So the evaluator is an LLM judge that reads the persona's OWN turns and
+# returns a binary HELD/VIOLATED verdict on whether it resisted the store's
+# down-sell to the budget option.
+[[checks]]
+dimension_id = "economic_motivation"
+dimension_label = "Economic motivation"
+category = "Values & Motivation"
+anchor_value = "Premium-seeking"
+evaluator = "llm-judge"
+adherence_signal = "Reply prioritizes quality/premium, holds out for the best or top-tier option, and resists the push to settle for the budget/cheapest version to save money."
+# pass = anchor decisively more premium-seeking than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

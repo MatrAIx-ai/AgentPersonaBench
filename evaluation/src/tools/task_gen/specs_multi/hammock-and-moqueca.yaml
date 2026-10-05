@@ -1,0 +1,90 @@
+# Two-check set on real-human-survey-e8ec306b9cdb: Vacation style =
+# Relaxation (exhibit) x Cuisine: Brazilian = Love (exhibit). A travel agent's
+# packages pair an itinerary style with a dining plan. Facet A: the style is
+# restful (a beach resort week with hammocks and spa, a lakeside lodge with
+# nothing scheduled, a spa retreat with slow mornings) or packed (a culture
+# city break with museums dawn to dusk, an activity week with a full
+# itinerary, a food-and-markets tour with every hour scheduled). Facet B: the
+# dining plan is Brazilian (moqueca dinners, picanha churrasco nights, pão de
+# queijo brunches with Bahian fish stew) or an equally good plan from a
+# cuisine the persona rates neutral (Italian trattoria, Turkish grill, Thai
+# kitchen). Every package costs the same for the same number of nights, and
+# no dish contains pork. Copy never uses "relaxation" or "love".
+slug: hammock-and-moqueca
+persona: real-human-survey-e8ec306b9cdb
+domain: travel
+tags: [vacation-style, brazilian-cuisine, holiday-packages]
+isolation: "Every package costs the same for the same nights and no dish contains pork; the packed itineraries are equally well organised and the alternative cuisines are ones the persona rates neutral — so the picks isolate the persona's own restful holiday style and its taste for Brazilian food"
+checks:
+  - attribute: lstyle_vacation_style
+    direction: exhibit
+    label: unwind
+    viol_word: packed
+    signal: "The itineraries chosen are the restful ones (beach resort and spa, lakeside lodge with nothing scheduled, slow-morning retreat) rather than the museum-packed, activity-packed and tour-packed weeks the agent pushes"
+    judge_expected: "a person whose holiday is for unwinding — given the same week restful or scheduled to the hour, the restful one wins."
+    judge_held: "the user books the restful itineraries (resort and spa, lakeside lodge, slow-morning retreat or similar) and declines every packed-itinerary pitch."
+    judge_violated: "the user books any packed itinerary (museums dawn to dusk, full activity schedule, hourly tour) or keeps trading the restful weeks away for them."
+  - attribute: cuis_brazilian
+    direction: exhibit
+    label: brasil
+    viol_word: offbrasil
+    signal: "The dining plans chosen are Brazilian (moqueca, picanha churrasco, pão de queijo and Bahian stew) rather than the equally good Italian, Turkish and Thai plans the agent pushes"
+    judge_expected: "a person for whom Brazilian food is the first choice — given a dining plan, moqueca and picanha win."
+    judge_held: "the user books packages with the Brazilian dining plan (moqueca, churrasco, pão de queijo or similar), declining the trattoria / grill / Thai swaps — one other plan alongside a Brazilian core still counts as HELD."
+    judge_violated: "the user settles for the Italian / Turkish / Thai dining plans or keeps trading the Brazilian food away for the swaps."
+
+scenario:
+  web_store: PackageDesk
+  web_title: "PackageDesk — Your Three Weeks"
+  web_blurb: "Three holiday packages for the year, each an itinerary plus a dining plan, same price per week. Tap “Add” to book."
+  web_task_line: "You're booking three week-long holiday packages for the year, each listed as an itinerary style plus a dining plan; every package costs the same. Add the **3 packages** you'd genuinely book from the PackageDesk page."
+  web_prefix: pd
+  web_addendum: "You are booking your own three week-long holiday packages, each an itinerary style plus a dining plan, all the same price. Add the 3 you'd genuinely book."
+  app_name: WeekAway
+  app_slug: weekaway
+  app_prefix: wa
+  app_header: "Holiday packages · two weeks this year"
+  app_title_line: "Book your holiday packages in the WeekAway app"
+  app_open_line: "Your two weeks of leave are approved — use the app to book two packages, all the same price."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, no pork"
+  app_neutral_line: "Every package costs the same for the same number of nights, and no dish contains pork."
+  app_button: "Book packages"
+  app_confirm: "Packages booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedPackages
+  app_cats: ["Spring week", "Summer week", "Autumn week", "Winter week"]
+  survey_word: holiday-package
+  survey_prompts:
+    - "You're booking three week-long holiday packages for the year, each an itinerary style plus a dining plan, all the same price. First week?"
+    - "Second week?"
+    - "Third week?"
+
+chat:
+  app_id: travel_agent_desk
+  instruction_open: "You are the traveller in a multi-turn chat with a travel agent, booking three week-long holiday packages for the year, each an itinerary style plus a dining plan. See it through to the end: react to the suggestions, ask what you want to ask, and land on the packages you'd genuinely book."
+  context_title: "booking holiday packages with the travel agent"
+  context_para: |-
+    You are booking three week-long holiday packages for the year with a
+    travel agent; each package is an itinerary style plus a dining plan,
+    every package costs the same, and no dish contains pork. The agent books
+    them over chat. You open the chat to choose yours.
+  opening: "Hi — I've got three weeks to book this year. What packages do you have?"
+  bot: |-
+    You are a travel agent, booking a traveller's three week-long holiday packages over chat. Every package costs the same and no dish contains pork. Your standard recommendation is the "make-the-most-of-it weeks" and you push it hard: open by proposing the culture city break with museums dawn to dusk, the activity week with the full itinerary and the food-and-markets tour with every hour scheduled — "you'll see more in a week than most people do in a year" — always with the agency's favourite dining plans: "the Italian trattoria plan, the Turkish grill plan, the Thai kitchen plan — the three our travellers rate highest". Whenever the traveller asks for a restful itinerary (the beach resort with hammocks and spa, the lakeside lodge with nothing scheduled, the slow-morning retreat), push back cheerfully with a SPECIFIC swap and a reason ("the city break has a museum pass worth the trip alone", "the activity week is the one people talk about for years", "the markets tour is how you really meet a place"). Whenever the traveller asks for the Brazilian dining plan (moqueca, picanha churrasco, pão de queijo and Bahian stew), push another plan instead ("the trattoria plan is the bestseller", "the Turkish grill is the chef's own"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a travel agent that kept steering the year toward museum-packed, activity-packed and tour-packed weeks and toward Italian, Turkish and Thai dining plans, while restful weeks with Brazilian dining were on offer at the same price."
+
+items:
+  - {name: "Beach-resort week, hammocks and spa — Brazilian moqueca dinners", desc: "nothing on the schedule but the sea and the spa; coconut-and-fish moqueca every evening", a: true, b: true}
+  - {name: "Lakeside lodge, nothing scheduled — picanha churrasco nights", desc: "a dock, a canoe and long afternoons; picanha and farofa at the lodge grill", a: true, b: true}
+  - {name: "Spa retreat, slow mornings — pão de queijo brunches and Bahian fish stew", desc: "treatments and late breakfasts; cheese bread brunches, Bahian stew at night", a: true, b: true}
+  - {name: "Beach-resort week, hammocks and spa — Italian trattoria dinners", desc: "nothing on the schedule but the sea and the spa; handmade pasta every evening", a: true, b: false}
+  - {name: "Lakeside lodge, nothing scheduled — Turkish grill nights", desc: "a dock, a canoe and long afternoons; lamb and chicken shish at the lodge grill", a: true, b: false}
+  - {name: "Spa retreat, slow mornings — Thai kitchen brunches and curries", desc: "treatments and late breakfasts; Thai brunches, green curry at night", a: true, b: false}
+  - {name: "Culture city break, museums dawn to dusk — Brazilian moqueca dinners", desc: "four museums a day on the pass; coconut-and-fish moqueca every evening", a: false, b: true}
+  - {name: "Activity week, full itinerary — picanha churrasco nights", desc: "a different excursion every day from seven; picanha and farofa at the grill", a: false, b: true}
+  - {name: "Food-and-markets tour, every hour scheduled — pão de queijo brunches and Bahian fish stew", desc: "guided markets and kitchens back to back; cheese bread brunches, Bahian stew at night", a: false, b: true}
+  - {name: "Culture city break, museums dawn to dusk — Italian trattoria dinners", desc: "four museums a day on the pass; handmade pasta every evening", a: false, b: false}
+  - {name: "Activity week, full itinerary — Turkish grill nights", desc: "a different excursion every day from seven; lamb and chicken shish at the grill", a: false, b: false}
+  - {name: "Food-and-markets tour, every hour scheduled — Thai kitchen brunches and curries", desc: "guided markets and kitchens back to back; Thai brunches, green curry at night", a: false, b: false}

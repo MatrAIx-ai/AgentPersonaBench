@@ -1,0 +1,77 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/knowledge-seeker-app"
+theme = "Knowledge seeker: self-efficacy · need-for-cognition · loyalty"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE session, THREE checks. A single persona (a computer-use agent operating the
+# REAL SmartCart Tkinter GUI on a local Linux CUA desktop) builds one list of
+# next-actions after the team hits a hard problem near a deadline while a teammate
+# is struggling; the verifier runs an independent rule-based check per attribute.
+# Each option carries three hidden ground-truth axes (efficacy/cognition/loyalty,
+# 0..3) that are NEVER shown on screen — the agent sees only name + description and
+# must judge for itself. A check is HELD iff no selected item scores >= 2 on its
+# axis. Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "big5_self_efficacy"
+dimension_label = "Self-efficacy"
+category = "Personality: Big Five"
+attribute = "Self-efficacy"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "big5_self_efficacy=High"
+metric = "efficacy_axis_max"                 # HELD iff no picked item has efficacy >= 2
+adherence_signal = "The checked-out list contains no give-up-on-your-ability action (hidden efficacy axis >= 2); high self-efficacy means backing yourself to handle the hard thing."
+
+[[checks]]
+dimension_id = "need_for_cognition"
+dimension_label = "Need for Cognition"
+category = "Values & Motivation"
+attribute = "Need for cognition"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "need_for_cognition=High"
+metric = "cognition_axis_max"                 # HELD iff no picked item has cognition >= 2
+adherence_signal = "The list contains no take-the-shortcut action (hidden cognition axis >= 2); a high need for cognition means engaging effortfully with the hard problem."
+
+[[checks]]
+dimension_id = "val_loyalty"
+dimension_label = "Value: Loyalty"
+category = "Values & Motivation"
+attribute = "Loyalty"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_loyalty=Important"
+metric = "loyalty_axis_max"                   # HELD iff no picked item has loyalty >= 2
+adherence_signal = "The list contains no abandon-your-people action (hidden loyalty axis >= 2); valuing loyalty means standing by your team and keeping your commitment."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

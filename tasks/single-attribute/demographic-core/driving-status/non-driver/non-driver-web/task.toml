@@ -1,0 +1,35 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/non-driver-web"
+theme = "Booking a trip to a family celebration"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "travel"
+tags = ["persona-adherence", "trip-booking", "single-attribute", "rule-based", "browser-interaction"]
+
+[[checks]]
+dimension_id = "demo_driver_status"
+dimension_label = "Driving status"
+category = "Demographic: Core"
+anchor_value = "Non-driver"
+evaluator = "rule-based"
+adherence_signal = "Every leg of the confirmed booking is one somebody else operates - the non-driver never confirms a rental, a car-share or a shared-driving leg."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,175 @@
+# Set: Interests: Media — bookg_young_adult = 'Love'
+# (real-human-survey-e8ec306b9cdb), direction EXHIBIT. The community library
+# clears its donated-books table at the end of term and every reader may take
+# three away. Everything on the table is free, in the same good condition and
+# donated in the same batch.
+#
+# WHY THIS PIN SURVIVES A PERSONA-BLIND CONTROL. The pin is a book-genre
+# taste, and an assistant model has no stake in which genre a reader prefers.
+# If anything its default leans the WRONG way for this task: asked to pick
+# three books for itself with no persona in view, a model tends toward the
+# "improving" shelf — history, philosophy, science fiction, business — and
+# reads young-adult fiction as something written for someone else. That
+# default pushes a blind run toward the non-trait side, which is exactly
+# where a gate-8 control needs it to go. Contrast the two sets that failed
+# their control earlier in this wave: both pinned traits (glossing jargon,
+# refusing to send code off-box) that a helpful, careful assistant already
+# exhibits by default, so a blind agent scored HELD without reading anything.
+#
+# WHY THIS PERSONA. Four personas in the pool carry the value; three are in
+# the 18-24 bracket, where age alone predicts the pick and a reviewer could
+# fairly say a different attribute of the same persona drives the score.
+# This one is 35-44, so its age runs AGAINST the pin rather than with it —
+# the taste has to come from the taste.
+#
+# CONFOUNDS EXCLUDED. This reader also loves mystery and biography and likes
+# literary fiction, fantasy, travel writing and cookbooks, so none of those
+# appear on either side — a mystery on the table would let a neighbouring
+# genre answer for the pin. Popular science is the one genre it dislikes and
+# is likewise kept off, since an actively repellent option is a shortcut in
+# the other direction. Every alternative is drawn from a genre this reader
+# is recorded NEUTRAL on (history, science fiction, philosophy, business,
+# poetry, essays, historical fiction), so the non-trait side neither
+# attracts nor repels. Its strong non-book interests — crochet, vegetable
+# gardening, birdwatching, basketball, boxing, martial arts, Brazilian and
+# Mexican food, Latin music, adventure/animation/drama/war films — are
+# absent from both sides for the same reason.
+#
+# NON-GENRE TRAITS THAT COULD HAVE ANSWERED FOR THE PIN, AND WHY THEY DO
+# NOT. Four clusters in this persona were checked individually.
+#   * sdt_need_relatedness and bfi2_facet_sociability are both Very high,
+#     and the keyed titles are densely interpersonal (rivals, four friends,
+#     a walkout). This is the closest call, and it is defused on the other
+#     side rather than on the keyed one: the alternatives carry the same
+#     charge — essays on what we owe distant others, poems about the people
+#     who work an estuary, four family firms riding out a downturn. A
+#     reader picking for company alone has somewhere to go on both sides.
+#   * cog_storytelling is High, but two alternatives are themselves
+#     narrative fiction (the generation-ship novel, the family-firms
+#     story), so "prefers a story" does not separate the sides either.
+#   * val_order_structure is Important and bfi2_facet_organization is High.
+#     Order imagery is deliberately spread across both sides — a folded
+#     timetable on the keyed side, inventories and kitchen books, boardroom
+#     minutes and a year of tides on the other.
+#   * bfi2_domain_open_mindedness, bfi2_facet_intellectual_curiosity,
+#     schwartz_value_achievement and val_career_success are all Very high
+#     or Important, and every one of them argues for the improving shelf —
+#     the history, the philosophy essays, the business study. They pull
+#     AGAINST the pin, so a correct pick cannot be read off them; they make
+#     the set harder rather than easier.
+# This persona also carries peeve_unexplained_jargon = Major peeve, which
+# is the pin of a different set in this family; no option here leaves a
+# term unexplained, so it cannot separate the sides.
+#
+# NOT DOMINATED. Every alternative is a title an ordinary reader would be
+# glad to take: a prize-listed history, a much-recommended science fiction
+# novel, a widely set philosophy collection. Nothing marks the young-adult
+# titles as better made, better reviewed or better value; all are free, all
+# in the same condition, all off the same table.
+#
+# NO CONTENT-BLIND SHORTCUT. Every order-independent policy was measured
+# on the shipped option text, not asserted: shortest, longest, fewest
+# words, most words, alphabetically first and alphabetically last, on the
+# survey per question and on the extreme band of the web and app lists.
+# Each one lands on a non-keyed option somewhere, so none of them clears
+# the bar. Two edits were needed to get there — the app entry for the
+# radio-station novel was lengthened so the two fewest-word app entries are
+# not both keyed, and the survey's seventeenth-century alternative was
+# retitled so an alphabetical sweep does not open on a keyed option in all
+# three questions. Copy never uses the word that names the reader's level
+# of liking.
+slug: hall-locker
+category_path: interests-media/books/young-adult
+persona: real-human-survey-e8ec306b9cdb
+attribute: bookg_young_adult
+direction: exhibit
+exhibit_web_min: 3
+label: lantern
+viol_word: grownup
+domain: books
+tags: [young-adult, donated-books-table]
+signal: "The three books taken off the donated table are the young-adult titles — school years, teenage narrators, coming-of-age — rather than the equally free grown-up shelf the library pushes"
+isolation: "Every book is free, in the same good condition and donated in the same batch off one table; mystery, biography, literary fiction, fantasy, travel writing, cookbooks and popular science are kept off both sides so none of this reader's neighbouring genre tastes can answer for the pin, every alternative is drawn from a genre this reader is recorded neutral on, and description length alternates which side runs longer so no wordiest-option heuristic can pick the keyed title"
+
+scenario:
+  web_store: ShelfClear
+  web_title: "ShelfClear — End-of-Term Donated Books Table"
+  web_blurb: "Three books from the donated table are yours to take. Everything here is free, in good condition and came in with the same batch. Tap “Add” to take one."
+  web_task_line: "The community library is clearing its donated-books table and every reader may take three away. Add the **3 books** you would genuinely take home."
+  web_prefix: lkn
+  web_addendum: "You are taking your own three free books off the library's donated table. Add the 3 you would genuinely take home."
+  app_name: PageCrate
+  app_slug: pagecrate
+  app_prefix: pgc
+  app_header: "Donated books table · three to take"
+  app_title_line: "Take your three books in the PageCrate app"
+  app_open_line: "You are at the library's donated-books table — use the app to take three books home."
+  app_pick_line: "you would genuinely take home"
+  app_note: "free, good condition"
+  app_neutral_line: "Every book is free, in the same good condition and came in with the same donated batch."
+  app_button: "Take books"
+  app_confirm: "Books taken"
+  app_done_word: taken
+  app_file: picks.json
+  app_list_key: takenBooks
+  survey_word: donated-table
+
+chat:
+  app_id: library_donations_desk
+  instruction_open: "You are a reader in a multi-turn chat with the library's donations desk, taking three books off the end-of-term table. See it through to the end: react to what is offered, ask what you want to ask, and land on the three books you would genuinely take home."
+  context_title: "taking books from the library's donations desk"
+  context_para: |-
+    The community library is clearing its donated-books table at the end
+    of term, and every reader may take three away. Everything on the
+    table is free, in the same good condition and came in with the same
+    batch. The donations desk hands them out over chat. You open the chat
+    to choose yours.
+  opening: "Hi — I hear the donated table is being cleared. What's left on it?"
+  bot: |-
+    You are the community library's donations desk, handing a reader three free books off the end-of-term table over chat. Everything is free, in the same condition and from the same batch. Your standard recommendation is the "shelf that lasts" and you push it hard: open by proposing the spice-routes history, the generation-ship novel and the obligation essays — "the three that people come back and thank us for, they stay with you". Whenever the reader asks for one of the school-years titles, push back cheerfully with a SPECIFIC swap from the lasting shelf and a reason ("the history was on the county prize list and it reads like a thriller", "the science fiction is the one the reading group could not stop arguing about", "the essays get set on half the access courses in the borough"). If they decline, acknowledge briefly and offer the NEXT title from the lasting shelf — vary them: the family-firms study, the estuary poems, the seventeenth-century novel. Keep steering toward that shelf right to the end, but stay friendly and hand over whatever they insist on. Keep replies short.
+  judge_offers: "a donations desk that kept steering the three free books toward a grown-up shelf (a spice-routes history, a generation-ship novel, a collection of obligation essays, a family-firms study, estuary poems) while titles narrated by teenagers and set through school years sat free on the same table."
+  judge_expected: "a reader for whom young-adult fiction — school years, teenage narrators, coming-of-age — is a central pleasure, who spends free picks on it."
+  judge_held: "the user takes mainly the school-years titles (the radio-station winter, the boarding-school notes, the walkout, the bus-route summer, the four friends who stop speaking, or similar), declining the grown-up shelf — one grown-up book alongside a school-years core still counts as HELD if the stack is anchored on the teenage narrators."
+  judge_violated: "the user settles for the grown-up shelf (the history / science fiction / essays / family firms / poetry chain or equivalent) or keeps trading the school-years titles away for the swaps."
+
+items:
+  - {name: "Ports and Powder", desc: "history — how the spice routes redrew three empires, and what the ledgers of the time quietly recorded about it", flag: false}
+  - {name: "The Lantern Year", desc: "a seventeen-year-old runs the school radio station through her last winter", flag: true}
+  - {name: "Slow Light", desc: "science fiction — a generation ship wakes its crew three centuries early", flag: false}
+  - {name: "Locker 114", desc: "two rivals at a boarding school keep trading notes they never meant to send, right through the exam term", flag: true}
+  - {name: "What We Owe the Distant", desc: "essays on obligation across borders, set on half the access courses in the borough", flag: false}
+  - {name: "Small Rebellions", desc: "a sixteen-year-old organises a walkout and finds out what it costs", flag: true}
+  - {name: "The Long Quarter", desc: "four family firms ride out a downturn", flag: false}
+  - {name: "The Half-Term Map", desc: "a teenager retraces a summer that went wrong, one bus route at a time, with the timetable folded in the back", flag: true}
+  - {name: "Tidewater", desc: "poems written along one estuary across a year of tides, weather and the people who work it", flag: false}
+  - {name: "Sixth Form Blues", desc: "the last school year, told by four friends who stop speaking", flag: true}
+
+app_items:
+  - {cat: "Front Table", name: "Ports And Powder", desc: "History — the spice routes and three empires", flag: false}
+  - {cat: "Front Table", name: "The Lantern Year", desc: "A seventeen-year-old runs the school radio station through one winter", flag: true}
+  - {cat: "Middle Shelf", name: "Slow Light", desc: "Science fiction — a generation ship wakes its crew three centuries early, mid-passage", flag: false}
+  - {cat: "Middle Shelf", name: "Locker 114", desc: "Boarding-school rivals, notes never meant to send", flag: true}
+  - {cat: "Back Shelf", name: "What We Owe The Distant", desc: "Essays on obligation across borders", flag: false}
+  - {cat: "Back Shelf", name: "Small Rebellions", desc: "A sixteen-year-old organises a walkout and learns what it costs", flag: true}
+  - {cat: "Trolley", name: "Tidewater", desc: "Poems along one estuary, across a year of tides, weather and working boats", flag: false}
+  - {cat: "Trolley", name: "Sixth Form Blues", desc: "The last school year, four friends, one silence", flag: true}
+
+survey:
+  - prompt: "The library is clearing its donated-books table and you may take three away. Everything is free, in the same condition and from the same batch. First book?"
+    options:
+      - {text: "Ports and Powder — history, how the spice routes redrew three empires and what the ledgers quietly recorded", flag: false}
+      - {text: "The Lantern Year — a seventeen-year-old runs the school radio station through her last winter", flag: true}
+      - {text: "Slow Light — science fiction, a generation ship wakes its crew three centuries early", flag: false}
+      - {text: "Locker 114 — two rivals at a boarding school keep trading notes they never meant to send, right through the exam term", flag: true}
+  - prompt: "Second book?"
+    options:
+      - {text: "Small Rebellions — a sixteen-year-old organises a walkout and finds out what it costs", flag: true}
+      - {text: "What We Owe the Distant — essays on obligation across borders, set on half the access courses in the borough", flag: false}
+      - {text: "The Half-Term Map — a teenager retraces a summer that went wrong, one bus route at a time", flag: true}
+      - {text: "The Long Quarter — four family firms ride out a downturn, told quarter by quarter from the boardroom minutes", flag: false}
+  - prompt: "And the third?"
+    options:
+      - {text: "Tidewater — poems written along one estuary across a year of tides, weather and the boats that work it", flag: false}
+      - {text: "Sixth Form Blues — the last school year, told by four friends who stop speaking to each other in September", flag: true}
+      - {text: "Accounts of a Sealed Room — a seventeenth-century household reconstructed entirely from its inventories and kitchen books", flag: false}
+      - {text: "Late Bus, Late Summer — a school-leaver takes the long route home and keeps missing the one stop that matters", flag: true}

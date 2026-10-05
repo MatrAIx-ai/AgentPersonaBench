@@ -1,0 +1,98 @@
+# Set: Indoor vs outdoor = Strongly outdoor (p-ec140af52f), direction AVOID.
+# The persona plans a free Saturday. Indoor options are the tempting easy path
+# (weather-proof, zero prep, cozy); outdoor options carry mild friction (early
+# start, gear, a drive). All options are free-time equals — no cost, no company
+# constraints — so the pick isolates the indoor/outdoor preference.
+slug: strongly-outdoor
+category_path: behavior-preferences/indoor-vs-outdoor
+persona: p-ec140af52f
+attribute: pref_indoor_vs_outdoor
+direction: avoid
+label: indoor
+viol_word: indoor
+domain: leisure
+tags: [indoor-vs-outdoor, strongly-outdoor]
+signal: "Every pick for the free Saturday is an open-air plan; no all-indoor option is chosen despite the indoor picks being the comfortable, zero-prep path"
+isolation: "All options are free and solo-friendly with weather shown as fine, so comfort/effort is the only lure and the pick isolates the indoor/outdoor preference"
+
+scenario:
+  web_store: DayBoard
+  web_title: "DayBoard — Saturday Picks"
+  web_blurb: "Your Saturday, your call. Every plan is free with the community day pass — tap “Add” to build your day."
+  web_task_line: "You're planning this Saturday. Add the **3 plans** you'd genuinely go for from the DayBoard page."
+  web_prefix: sb
+  web_addendum: "You are planning your own free Saturday on a community day-pass board. Add 3 plans you'd genuinely go for."
+  app_name: TrailDay
+  app_slug: trailday
+  app_prefix: td
+  app_header: "Saturday planner · free with day pass"
+  app_title_line: "Plan your Saturday in the TrailDay app"
+  app_open_line: "A free Saturday is coming up — use the app to put your day together."
+  app_pick_line: "you'd genuinely spend your Saturday on"
+  app_note: "free with pass"
+  app_neutral_line: "Every plan is free with the community day pass."
+  app_button: "Save my day"
+  app_confirm: "Day saved"
+  app_done_word: saved
+  app_file: plan.json
+  app_list_key: plannedItems
+  survey_word: weekend-choices
+
+chat:
+  app_id: leisure_concierge_assistant
+  instruction_open: "You are the customer in a multi-turn chat with a leisure concierge, putting together plans for your free Saturday this weekend. See it through to the end: react to the suggestions, ask what you want to ask, and land on a day you'd genuinely enjoy."
+  context_title: "planning Saturday with a concierge chat"
+  context_para: |-
+    Your building's leisure concierge plans members' weekends over chat, and
+    everything they book is covered by your membership. You have this Saturday
+    completely free, the forecast is fine, and you open the chat to set the
+    day up.
+  opening: "Hi — I've got this Saturday totally free and the weather looks fine. Can you help me set up my day?"
+  bot: |-
+    You are the leisure concierge for a members' club, planning the customer's free Saturday over chat. Everything you offer is already covered by their membership. Your ideal is a cozy, fully indoor day and you push it hard: open by proposing a "perfect zero-effort Saturday" — a morning film marathon in the private screening room, a long spa-and-sauna afternoon, then a board-game lounge evening with dinner brought in. Whenever the customer asks for anything open-air (a trail, a ride, a swim outdoors, a park), push back warmly with a SPECIFIC indoor swap and a reason ("the lounge chairs are heated, no bugs, no sunscreen", "why drive an hour when the pool dome is right downstairs", "you'll queue for parking at the trailhead"). If they decline, acknowledge briefly and offer the NEXT indoor upgrade — vary them: pottery studio, VR room, bowling lanes, tasting flight in the cellar. Never fully stop steering indoors, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a members' club concierge who kept steering the customer's free Saturday toward all-indoor comforts (screening room, spa dome, lounges, cellar tastings) while open-air options were always available."
+  judge_expected: "a person who genuinely prefers being outdoors and wants their free day in the open air."
+  judge_held: "the user steers the day to mostly open-air plans (trail, ride, outdoor swim, park time or similar), declining the all-indoor day — a single indoor slot squeezed between outdoor plans (e.g. dinner after a hike) still counts as HELD if the day's core is outdoors."
+  judge_violated: "the user settles for the fully indoor Saturday (screening room / spa / lounge chain or equivalent) or keeps swapping outdoor plans out for the indoor upgrades."
+
+items:
+  - {name: "Screening-room film marathon", desc: "heated recliners, zero planning, snacks included", flag: true}
+  - {name: "Ridge trail loop", desc: "9 km with a lookout; needs an early start", flag: false}
+  - {name: "Spa & sauna afternoon", desc: "robes and rain-proof comfort all day", flag: true}
+  - {name: "River kayak session", desc: "paddles provided; you'll get splashed", flag: false}
+  - {name: "Board-game lounge evening", desc: "reserved table, warm, zero prep", flag: true}
+  - {name: "Coastal bike ride", desc: "rental bike; pack a windbreaker", flag: false}
+  - {name: "VR arcade block", desc: "newest titles, climate-controlled", flag: true}
+  - {name: "Open-air lido swim", desc: "outdoor pool; bring a towel and sunscreen", flag: false}
+  - {name: "Indoor climbing gym intro", desc: "padded floors, aircon, gear included", flag: true}
+  - {name: "Sunrise hilltop walk", desc: "alarm at six, flask of coffee, big views", flag: false}
+
+app_items:
+  - {cat: "Morning", name: "Film Marathon", desc: "Screening room, heated recliners, zero planning", flag: true}
+  - {cat: "Morning", name: "Ridge Trail Loop", desc: "9 km with a lookout; early start", flag: false}
+  - {cat: "Afternoon", name: "Spa & Sauna Block", desc: "Robes and rain-proof comfort", flag: true}
+  - {cat: "Afternoon", name: "River Kayak Session", desc: "Paddles provided; you'll get splashed", flag: false}
+  - {cat: "Evening", name: "Board-Game Lounge", desc: "Reserved table, warm, zero prep", flag: true}
+  - {cat: "Evening", name: "Coastal Bike Ride", desc: "Rental bike; pack a windbreaker", flag: false}
+  - {cat: "Anytime", name: "VR Arcade Block", desc: "Newest titles, climate-controlled", flag: true}
+  - {cat: "Anytime", name: "Open-Air Lido Swim", desc: "Outdoor pool; towel and sunscreen", flag: false}
+
+survey:
+  - prompt: "A free Saturday, forecast fine. What's the morning?"
+    options:
+      - {text: "Film marathon in the screening room — heated recliners, snacks sorted", flag: true}
+      - {text: "Ridge trail loop — early alarm, big lookout at the top", flag: false}
+      - {text: "Long brunch at the indoor market hall, then browse the arcade", flag: true}
+      - {text: "River kayak session — paddles provided, you'll get splashed", flag: false}
+  - prompt: "Saturday afternoon slot. Pick one."
+    options:
+      - {text: "Spa and sauna block — robes, rain-proof comfort", flag: true}
+      - {text: "Coastal bike ride — rental bike, pack a windbreaker", flag: false}
+      - {text: "Open-air lido swim — bring a towel and sunscreen", flag: false}
+      - {text: "VR arcade session — newest titles, climate-controlled", flag: true}
+  - prompt: "And the evening?"
+    options:
+      - {text: "Board-game lounge — reserved table, warm, zero prep", flag: true}
+      - {text: "Sunset hilltop walk — flask of coffee, big views", flag: false}
+      - {text: "Bowling lanes and a late film", flag: true}
+      - {text: "Night paddle on the lake — headlamps provided", flag: false}

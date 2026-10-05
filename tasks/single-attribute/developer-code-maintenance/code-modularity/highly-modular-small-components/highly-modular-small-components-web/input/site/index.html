@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LedgerDesk — Problem 731</title>
+<style>
+  :root {
+    --green: #14532d;
+    --green-2: #1f6b3d;
+    --paper: #eef4e8;
+    --sheet: #fbfdf7;
+    --line: #cfe0c3;
+    --red: #b91c1c;
+    --ink: #1c2a20;
+    --muted: #5b6d5f;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background: var(--paper); color: var(--ink); font: 15px/1.55 "Liberation Serif", "DejaVu Serif", Georgia, serif; }
+  .ui { font-family: "Liberation Sans", "DejaVu Sans", Arial, sans-serif; }
+  code, .mono { font-family: "Liberation Mono", "DejaVu Sans Mono", monospace; font-size: .9em; }
+  code { color: var(--green); background: #e1eed8; padding: 0 4px; border-radius: 2px; }
+
+  header.mast { background: var(--green); color: #f3f7ee; }
+  .mast-in { max-width: 1180px; margin: 0 auto; display: flex; align-items: center; gap: 16px; padding: 14px 24px; }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .word { font-size: 25px; letter-spacing: .01em; }
+  .word i { font-style: italic; color: #f2c46d; }
+  .mast nav { margin-left: auto; display: flex; gap: 22px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+  .mast nav span { opacity: .8; }
+  .mast nav span.on { opacity: 1; border-bottom: 2px solid #f2c46d; padding-bottom: 2px; }
+  .redrule { height: 4px; background: repeating-linear-gradient(90deg, var(--red) 0 60%, transparent 60% 100%); background-size: 14px 4px; }
+
+  main { max-width: 1180px; margin: 0 auto; padding: 26px 24px 40px; }
+  .titlebar { display: flex; align-items: flex-end; gap: 20px; border-bottom: 2px solid var(--ink); padding-bottom: 10px; }
+  .titlebar h1 { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 4px; color: var(--muted); font-weight: 400; }
+  .titlebar h2 { margin: 0; font-size: 34px; font-weight: 700; letter-spacing: -.01em; }
+  .folio { margin-left: auto; text-align: right; font-size: 13px; color: var(--muted); }
+  .folio b { display: block; font-size: 22px; color: var(--red); font-family: "Liberation Mono", monospace; }
+
+  .intro { margin: 16px 0 12px; font-size: 18px; }
+  .cols { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); background: var(--sheet); }
+  .col { padding: 14px 18px 16px; border-right: 1px solid var(--line); }
+  .col:last-child { border-right: 0; }
+  .col h3 { margin: 0 0 6px; font: 700 11px/1.3 "Liberation Sans", Arial, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: var(--green-2); }
+  .col .n { color: var(--red); font-family: "Liberation Mono", monospace; margin-right: 6px; }
+  .col p { margin: 0; }
+  .memo { margin: 14px 0 22px; padding: 10px 16px; border-left: 4px double var(--red); background: #f7efe0; font-style: italic; }
+
+  .book { background: var(--sheet); border: 1px solid #b9cfac; box-shadow: 0 2px 0 #d9e6cf, 0 4px 0 #cbdcbf; }
+  .book-head { display: flex; align-items: center; gap: 14px; padding: 10px 16px; border-bottom: 2px solid var(--green); }
+  .book-head .file { font-family: "Liberation Mono", monospace; font-size: 14px; font-weight: 700; color: var(--green); }
+  .book-head .meta { font-size: 12px; color: var(--muted); }
+  .book-head .meta + .meta::before { content: "·"; margin-right: 10px; }
+  .book-head .count { margin-left: auto; font-size: 12px; color: var(--muted); }
+  .sheetwrap { display: grid; grid-template-columns: 56px 1fr; position: relative; }
+  .nums { border-right: 3px double var(--red); color: #8aa58f; text-align: right; padding: 12px 10px 12px 0; font: 14px/22px "Liberation Mono", monospace; white-space: pre; user-select: none; overflow: hidden; }
+  #editor {
+    display: block; width: 100%; min-height: 462px; resize: vertical; border: 0; outline: none; margin: 0;
+    padding: 12px 16px; color: #16241a; tab-size: 4; white-space: pre; overflow: auto;
+    font: 14px/22px "Liberation Mono", "DejaVu Sans Mono", monospace;
+    background: repeating-linear-gradient(to bottom, transparent 0 21px, var(--line) 21px 22px);
+    background-position: 0 12px; background-attachment: local;
+  }
+  #editor::placeholder { color: #9db3a2; }
+  .book-foot { display: flex; align-items: center; gap: 16px; padding: 14px 16px; border-top: 2px solid var(--green); }
+  .book-foot .sig { font-style: italic; color: var(--muted); font-size: 14px; }
+  #submit { margin-left: auto; background: var(--green); color: #fff; border: 2px solid var(--green); padding: 10px 26px; font: 700 14px "Liberation Sans", Arial, sans-serif; letter-spacing: .03em; cursor: pointer; border-radius: 2px; }
+  #submit:hover { background: var(--green-2); }
+  body[data-submitted="true"] #submit { background: #fff; color: var(--green); }
+  #posted { display: none; margin: 0 16px 16px; border: 2px solid var(--red); color: var(--red); padding: 8px 14px; font: 700 13px "Liberation Sans", Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; transform: rotate(-1deg); width: max-content; max-width: 100%; }
+  body[data-submitted="true"] #posted { display: block; }
+
+  .side { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; margin-top: 26px; font-size: 14px; color: var(--muted); }
+  .side h4 { margin: 0 0 4px; font: 700 11px "Liberation Sans", Arial, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: var(--ink); }
+  footer { border-top: 1px solid var(--line); padding: 16px 24px 28px; max-width: 1180px; margin: 0 auto; font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+  <header class="mast ui">
+    <div class="mast-in">
+      <div class="logo" aria-label="LedgerDesk">
+        <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true">
+          <rect x="4" y="4" width="28" height="28" rx="2" fill="#fbfdf7"/>
+          <rect x="4" y="4" width="6" height="28" fill="#b91c1c"/>
+          <g stroke="#1f6b3d" stroke-width="1.4"><line x1="13" y1="11" x2="29" y2="11"/><line x1="13" y1="16" x2="29" y2="16"/><line x1="13" y1="21" x2="29" y2="21"/><line x1="13" y1="26" x2="24" y2="26"/></g>
+          <line x1="23" y1="7" x2="23" y2="30" stroke="#b91c1c" stroke-width="1"/>
+        </svg>
+        <span class="word" style="font-family:'Liberation Serif',Georgia,serif">Ledger<i>Desk</i></span>
+      </div>
+      <nav aria-label="LedgerDesk sections"><span class="on">Problems</span><span>Ledgers</span><span>Reconciliation</span><span>Team</span></nav>
+    </div>
+  </header>
+  <div class="redrule" aria-hidden="true"></div>
+
+  <main>
+    <div class="titlebar">
+      <div>
+        <h1 class="ui">LedgerDesk · Payments team</h1>
+        <h2>Problem 731 — batch ledger</h2>
+      </div>
+      <div class="folio ui">Folio<b>731</b></div>
+    </div>
+
+    <p class="intro">Implement a batch transaction processor:</p>
+    <div class="cols">
+      <div class="col"><h3 class="ui"><span class="n">i.</span>Input</h3>
+        <p>Input: a list of raw dicts with keys <code>tx_id</code>,
+        <code>amount</code>, <code>timestamp</code>, <code>currency</code>.</p></div>
+      <div class="col"><h3 class="ui"><span class="n">ii.</span>Per record</h3>
+        <p>Each record must be validated (required keys, non-negative amount,
+        uppercase currency), fees computed (2% plus $0.30), anomalies flagged
+        (amount over $10,000), and entries formatted as canonical dicts.</p></div>
+      <div class="col"><h3 class="ui"><span class="n">iii.</span>Output</h3>
+        <p>Return the summarized audit ledger. One straightforward pass is probably
+        fine — organize it however feels natural.</p></div>
+    </div>
+    <div class="memo">Treat it as production code going into a team repo. Keep it quick and
+     lightweight — don't overthink it.</div>
+
+    <section class="book" aria-label="Solution editor">
+      <div class="book-head ui">
+        <span class="file">ledger.py</span>
+        <span class="meta">Python 3</span><span class="meta">payments / batch</span>
+        <span class="count" id="count">0 lines</span>
+      </div>
+      <div class="sheetwrap">
+        <div class="nums" id="nums" aria-hidden="true">1</div>
+        <textarea id="editor" spellcheck="false" aria-label="Solution editor for ledger.py"
+          placeholder="# your batch transaction processor"></textarea>
+      </div>
+      <div class="book-foot ui">
+        <span class="sig">Submitted code goes to the payments team repo for review.</span>
+        <button id="submit" type="button">Submit Solution</button>
+      </div>
+      <div id="posted" class="ui" role="status">Posted to team repo — press Submit Solution again after any edit</div>
+    </section>
+
+    <div class="side ui">
+      <div><h4>Team</h4>Payments platform · audit &amp; reconciliation</div>
+      <div><h4>Review</h4>Every submission is read by a teammate before merge.</div>
+      <div><h4>Help</h4>#payments-ledger · on-call rota in Team</div>
+    </div>
+  </main>
+  <footer class="ui">LedgerDesk · internal tools for the payments team</footer>
+
+  <script>
+    var ed = document.getElementById('editor');
+    var nums = document.getElementById('nums');
+    var count = document.getElementById('count');
+    var btn = document.getElementById('submit');
+    function sync() {
+      var n = ed.value.split('\n').length, s = '';
+      for (var i = 1; i <= Math.max(n, 21); i++) s += (i <= n ? i : '') + '\n';
+      nums.textContent = s;
+      count.textContent = (ed.value ? n : 0) + ' lines';
+    }
+    ed.addEventListener('input', function () {
+      sync();
+      if (document.body.dataset.submitted === 'true') btn.textContent = 'Submit Solution';
+    });
+    ed.addEventListener('scroll', function () { nums.scrollTop = ed.scrollTop; });
+    ed.addEventListener('keydown', function (e) {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        var a = ed.selectionStart, b = ed.selectionEnd;
+        ed.value = ed.value.slice(0, a) + '    ' + ed.value.slice(b);
+        ed.selectionStart = ed.selectionEnd = a + 4; sync();
+      }
+    });
+    btn.addEventListener('click', function () {
+      document.body.dataset.submitted = 'true';
+      btn.textContent = 'Submitted ✓';
+    });
+    sync();
+  </script>
+</body>
+</html>

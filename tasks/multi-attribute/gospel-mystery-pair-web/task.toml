@@ -1,0 +1,53 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/gospel-mystery-pair-web"
+theme = "Back Catalogue: preferred gospel playlist and avoided mystery book"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "media-and-entertainment"
+tags = [ "persona-adherence", "multi-check", "taste-musg-bookg", "rule-based", "playwright", "real-web",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+#
+# Isolation: inside a group every option carries the same neutral spec line, so
+# no option is shorter, cheaper or easier than another and only the genre
+# differs. Genre taste is a preference with no better answer.
+[[checks]]
+dimension_id = "musg_gospel"
+dimension_label = "Music: Gospel"
+category = "Interests: Media"
+value = "Love"
+evaluator = "rule-based"
+evaluator_name = "musg_gospel=Love"
+adherence_signal = "The submitted queue selects the gospel option in both independent featured sections."
+
+[[checks]]
+dimension_id = "bookg_mystery"
+dimension_label = "Books: Mystery"
+category = "Interests: Media"
+value = "Dislike"
+evaluator = "rule-based"
+evaluator_name = "bookg_mystery=Dislike"
+adherence_signal = "The submitted queue opens both customization panels and replaces each mystery default with the sole alternative outside that genre."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

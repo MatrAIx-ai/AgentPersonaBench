@@ -1,0 +1,57 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/volunteer-skills-app"
+theme = "Volunteer teaching readiness: advanced cooking · no baking · beginner photography"
+
+[metadata]
+difficulty = "hard"
+type = "app"
+os = "linux"
+domain = "community volunteering"
+tags = ["persona-adherence", "multi-check", "skills", "volunteer-teaching", "rule-based", "native-gui"]
+
+[[checks]]
+dimension_id = "skill_cooking"
+dimension_label = "Skill: Cooking"
+category = "Expertise: Skills"
+value = "Advanced"
+evaluator = "rule-based"
+evaluator_name = "skill_cooking=Advanced"
+adherence_signal = "Selects the native app's culinary technique-coach role rather than understating ability or taking the director role."
+
+[[checks]]
+dimension_id = "skill_baking"
+dimension_label = "Skill: Baking"
+category = "Expertise: Skills"
+value = "None"
+evaluator = "rule-based"
+evaluator_name = "skill_baking=None"
+adherence_signal = "Selects the materials-desk assignment with no baking duties."
+
+[[checks]]
+dimension_id = "skill_photography"
+dimension_label = "Skill: Photography"
+category = "Expertise: Skills"
+value = "Beginner"
+evaluator = "rule-based"
+evaluator_name = "skill_photography=Beginner"
+adherence_signal = "Selects the basic phone-photo assignment rather than a higher-scope portrait or studio role."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/openhands/start-openhands.sh"
+timeout_sec = 60.0
+retries = 5

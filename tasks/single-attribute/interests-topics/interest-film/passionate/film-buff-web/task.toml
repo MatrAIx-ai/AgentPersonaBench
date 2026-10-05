@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/film-buff-web"
+theme = "Interest: Film: Passionate"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "film", "passionate", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "topic_film"
+dimension_label = "Interest: Film"
+category = "Interests: Topics"
+anchor_value = "Passionate"
+evaluator = "rule-based"
+# Web env: the persona picks 3 "ways to spend a free week / a bonus" on a live page
+# (Playwright). Each card's hidden `data-rank` (0..3) in index.html is the ground
+# truth: 0 = films / cinema, 1 = film-adjacent, 2 = unrelated leisure, 3 = film-
+# averse. Unified with film-buff-survey: VIOLATED for any unrelated / film-averse
+# pick (rank >= 2); film and film-adjacent picks are adherent.
+adherence_signal = "Picks are film-forward or film-adjacent (rank 0-1); no unrelated / film-averse picks (rank >= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

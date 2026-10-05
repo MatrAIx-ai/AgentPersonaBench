@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Workweek · Workspace reservations</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-in">
+      <div class="logo">
+        <svg viewBox="0 0 40 40" width="34" height="34" aria-hidden="true">
+          <rect x="1" y="1" width="38" height="38" rx="11" fill="#3346f0"/>
+          <rect x="8" y="11" width="5" height="18" rx="2.5" fill="#fff"/>
+          <rect x="15.5" y="11" width="5" height="13" rx="2.5" fill="#ffc9ae"/>
+          <rect x="23" y="11" width="5" height="18" rx="2.5" fill="#fff"/>
+          <circle cx="31.5" cy="26.5" r="3" fill="#ffc9ae"/>
+        </svg>
+        <span class="wordmark"><b id="brand">Workweek</b></span>
+      </div>
+      <nav class="topnav" aria-label="Sections">
+        <span class="navitem active">Roster</span>
+        <span class="navitem">People</span>
+        <span class="navitem">Calendar</span>
+        <span class="navitem">Reports</span>
+      </nav>
+      <div class="topright">
+        <span class="sub" id="subtitle">Workspace reservations</span>
+        <span class="me" aria-hidden="true">YO</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="shell">
+    <div class="pagehead">
+      <div>
+        <p class="crumbs">Team roster <span aria-hidden="true">/</span> This week</p>
+        <p class="status-line"><span class="dot" aria-hidden="true"></span><span id="progress">Loading</span></p>
+      </div>
+      <ol class="steps" id="steps" aria-label="Roster progress">
+        <li data-k="assign"><i>1</i>Assign entries</li>
+        <li data-k="incoming"><i>2</i>Incoming draft</li>
+        <li data-k="review"><i>3</i>Review</li>
+        <li data-k="saved"><i>4</i>Saved</li>
+      </ol>
+    </div>
+    <div class="grid">
+      <main id="workspace" aria-live="polite"><p class="loading">Opening your workspace…</p></main>
+      <aside class="side" aria-label="Week details">
+        <section class="card">
+          <h3 class="card-h">Team check-in</h3>
+          <div class="meet">
+            <div class="meet-time"><span>10:00</span><small>daily · 15 min</small></div>
+            <p>One recurring video link for the whole team. It works from every listed workspace.</p>
+          </div>
+        </section>
+        <section class="card">
+          <h3 class="card-h">Standard day</h3>
+          <div class="ruler" aria-hidden="true"><span>09</span><span>11</span><span>13</span><span>15</span><span>17</span></div>
+          <p class="small">All reservations run 09:00–17:00 with the same pay, hours and equipment.</p>
+        </section>
+        <section class="card help">
+          <h3 class="card-h">How the roster works</h3>
+          <ul>
+            <li>Open an entry, compare the setups and choose one.</li>
+            <li>Incoming drafts only change the entries you include.</li>
+            <li>Nothing is final until you save the roster.</li>
+          </ul>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <div class="foot-in">
+      <span>© Workweek</span><span>Status: all systems normal</span><span>Help centre</span><span>Privacy</span>
+    </div>
+  </footer>
+  <p id="error" role="alert" hidden></p>
+</body>
+</html>

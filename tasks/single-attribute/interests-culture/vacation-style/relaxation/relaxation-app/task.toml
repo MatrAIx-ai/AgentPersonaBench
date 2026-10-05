@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/relaxation-app"
+theme = "Vacation style: Relaxation"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "travel"
+tags = ["persona-adherence", "lstyle_vacation_style", "relaxation", "rule-based", "real-app"]
+
+[[checks]]
+dimension_id = "lstyle_vacation_style"
+dimension_label = "Vacation style"
+category = "Interests: Culture"
+anchor_value = "Relaxation"
+evaluator = "rule-based"
+adherence_signal = "The traveller preserves a low-pressure pace and substantial unstructured rest instead of accepting a packed activity schedule."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5
+

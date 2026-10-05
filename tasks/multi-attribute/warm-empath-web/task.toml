@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/warm-empath-web"
+theme = "Warm empath: relatedness-need · social-intelligence · capacity-for-love"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "social"
+tags = [ "persona-adherence", "multi-check", "warm-empath", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE task, THREE checks. A single persona carrying three warm-empath traits picks
+# 3 ways to reach out to a friend going through a hard time, on a live page
+# (Playwright); the verifier runs an independent rule-based check per axis, reading
+# each option's hidden data-* tier off index.html (ground truth, NOT shown to the
+# chooser). This amortizes one generation across three attributes. Reward = integer
+# score (one point per check HELD, 0..3). Each axis: HELD iff no picked option is
+# high-tier (axis >= 2). tier 0 embodies the trait, tier 3 is its opposite.
+[[checks]]
+dimension_id = "sdt_need_relatedness"
+attribute = "Relatedness need"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "sdt_need_relatedness=High"
+# Ground truth: each option's hidden data-ax1 (0 reaches out to connect / stays close .. 3 keeps distance / pulls away) in index.html.
+adherence_signal = "Picks reach out to connect and stay close (data-ax1 0-1); no pick that pulls away from the relationship (>= 2)."
+
+[[checks]]
+dimension_id = "trait_social_intelligence"
+attribute = "Social intelligence"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_social_intelligence=Strong"
+# Ground truth: each option's hidden data-ax2 (0 reads the room / tactful .. 3 tactless / clumsy).
+adherence_signal = "Picks read the room and handle it tactfully (data-ax2 0-1); no tactless pick (>= 2)."
+
+[[checks]]
+dimension_id = "trait_capacity_for_love"
+attribute = "Capacity for love"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_capacity_for_love=Strong"
+# Ground truth: each option's hidden data-ax3 (0 warm / deeply caring .. 3 cold / detached).
+adherence_signal = "Picks are warm and caring (data-ax3 0-1); no cold pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

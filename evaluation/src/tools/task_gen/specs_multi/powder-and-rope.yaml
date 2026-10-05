@@ -1,0 +1,88 @@
+# Two-check set on hf-4386921459: Sport: Snowboarding = Play (exhibit) x
+# Hobby: Rock climbing = Active (exhibit). A mountain resort sells day passes
+# that pair a morning session with an afternoon session. Facet A: the morning
+# is snowboarding (park session, guided off-piste, freestyle clinic) or an
+# equally outdoor snow activity the persona rates neutral (snowshoe trek,
+# cross-country loop, sledging run). Facet B: the afternoon is climbing (top-
+# rope wall, lead clinic, bouldering cave) or an equally good indoor session
+# (sauna and plunge, curling taster, photography walk). Every pass costs the
+# same and both sessions are the same length and coached. Copy never uses
+# "play" or "active".
+slug: powder-and-rope
+persona: hf-4386921459
+domain: leisure
+tags: [snowboarding, rock-climbing, resort-day-pass]
+isolation: "Every day pass costs the same and both sessions are the same length and coached; the alternative mornings are equally outdoor and the alternative afternoons equally restorative — so the picks isolate the persona's own snowboarding and its climbing"
+checks:
+  - attribute: sport_snowboarding
+    direction: exhibit
+    label: board
+    viol_word: offboard
+    signal: "The morning halves of the day passes are snowboarding sessions (park, guided off-piste, freestyle clinic) rather than the equally outdoor snowshoe, cross-country and sledging mornings the resort pushes"
+    judge_expected: "a person who snowboards and, given a mountain morning, is on the board first."
+    judge_held: "the user books passes whose morning is snowboarding (the park session, the off-piste morning, the freestyle clinic or similar), declining the snowshoe / cross-country / sledging swaps — one other morning alongside a boarding core still counts as HELD."
+    judge_violated: "the user settles for the snowshoe / cross-country / sledging mornings or keeps trading the boarding away for the swaps."
+  - attribute: hob_rock_climbing
+    direction: exhibit
+    label: rope
+    viol_word: offrope
+    signal: "The afternoon halves of the day passes are climbing sessions (top-rope wall, lead clinic, bouldering cave) rather than the equally good sauna, curling and photography afternoons the resort pushes"
+    judge_expected: "a person who climbs regularly — offered an afternoon session, the wall comes first."
+    judge_held: "the user books passes whose afternoon is climbing (the top-rope hour, the lead clinic, the bouldering cave or similar), declining the sauna / curling / photography swaps — one other afternoon alongside a climbing core still counts as HELD."
+    judge_violated: "the user settles for the sauna / curling / photography afternoons or keeps trading the climbing away for the swaps."
+
+scenario:
+  web_store: SummitDays
+  web_title: "SummitDays — Day Passes"
+  web_blurb: "Three resort day passes on your season card, each a morning session plus an afternoon session. Tap “Add” to book."
+  web_task_line: "Your mountain-resort season card covers three day passes, each pairing a morning session with an afternoon session. Add the **3 passes** you'd genuinely book from the SummitDays page."
+  web_prefix: sm
+  web_addendum: "You are booking your own three resort day passes, each a morning session plus an afternoon session. Add the 3 you'd genuinely book."
+  app_name: PeakPass
+  app_slug: peakpass
+  app_prefix: pp
+  app_header: "Season card · two day passes"
+  app_title_line: "Book your day passes in the PeakPass app"
+  app_open_line: "Your season card covers two day passes — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, both sessions coached"
+  app_neutral_line: "Every day pass costs the same and both of its sessions are the same length and coached."
+  app_button: "Book passes"
+  app_confirm: "Passes booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedPasses
+  app_cats: ["January", "February", "March", "April"]
+  survey_word: resort-day
+  survey_prompts:
+    - "Your mountain-resort season card covers three day passes, each a morning session plus an afternoon session, all the same price. First day?"
+    - "Second day?"
+    - "Third day?"
+
+chat:
+  app_id: resort_activities_desk
+  instruction_open: "You are the card-holder in a multi-turn chat with a mountain resort's activities desk, booking three day passes, each a morning session plus an afternoon session. See it through to the end: react to the suggestions, ask what you want to ask, and land on the passes you'd genuinely book."
+  context_title: "booking resort day passes with the activities desk"
+  context_para: |-
+    Your mountain-resort season card covers three day passes, each pairing a
+    morning session with an afternoon session; all cost the same and both
+    sessions are coached. The activities desk books them over chat. You open
+    the chat to choose yours.
+  opening: "Hi — three day passes on my season card. What are the sessions this month?"
+  bot: |-
+    You are a mountain resort's activities desk, booking a card-holder's three day passes over chat. Every pass costs the same and both sessions are coached. Your standard recommendation is the "mountain-classics days" and you push it hard: open by proposing the snowshoe trek, the cross-country loop and the sledging run — "the three mornings with the best views" — always with the resort's favourite afternoons: "the sauna and plunge, the curling taster, the photography walk — how the mountain is meant to end". Whenever the card-holder asks for a snowboarding morning (the park session, the guided off-piste, the freestyle clinic), push back cheerfully with a SPECIFIC classics swap and a reason ("the snowshoe trek reaches the frozen lake", "the cross-country loop is the guides' favourite", "the sledging run is two kilometres long"). Whenever the card-holder asks for a climbing afternoon (the top-rope wall, the lead clinic, the bouldering cave), push a favourite afternoon instead ("the sauna is what your legs need after a morning up there", "curling is the most fun you'll have indoors"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a resort activities desk that kept steering the days toward snowshoe, cross-country and sledging mornings and toward sauna, curling and photography afternoons, while snowboarding mornings with climbing afternoons were on the same card."
+
+items:
+  - {name: "Park snowboard session + top-rope wall hour", desc: "rails and kickers with a coach; then an hour on the resort's top-rope wall", a: true, b: true}
+  - {name: "Guided off-piste boarding + lead-climbing clinic", desc: "fresh lines with a mountain guide; then clipping bolts on the lead wall", a: true, b: true}
+  - {name: "Freestyle board clinic + bouldering cave hour", desc: "spins and butters on the beginner kickers; then the bouldering cave, fresh problems", a: true, b: true}
+  - {name: "Park snowboard session + sauna and plunge hour", desc: "rails and kickers with a coach; then the sauna and the cold plunge", a: true, b: false}
+  - {name: "Guided off-piste boarding + curling taster", desc: "fresh lines with a mountain guide; then curling on the resort rink", a: true, b: false}
+  - {name: "Freestyle board clinic + guided photography walk", desc: "spins and butters on the beginner kickers; then a golden-hour photography walk", a: true, b: false}
+  - {name: "Snowshoe trek + top-rope wall hour", desc: "a guided trek to the frozen lake; then an hour on the resort's top-rope wall", a: false, b: true}
+  - {name: "Cross-country ski loop + lead-climbing clinic", desc: "the classic 8k loop with a coach; then clipping bolts on the lead wall", a: false, b: true}
+  - {name: "Sledging run + bouldering cave hour", desc: "two kilometres of sledging track; then the bouldering cave, fresh problems", a: false, b: true}
+  - {name: "Snowshoe trek + sauna and plunge hour", desc: "a guided trek to the frozen lake; then the sauna and the cold plunge", a: false, b: false}
+  - {name: "Cross-country ski loop + curling taster", desc: "the classic 8k loop with a coach; then curling on the resort rink", a: false, b: false}
+  - {name: "Sledging run + guided photography walk", desc: "two kilometres of sledging track; then a golden-hour photography walk", a: false, b: false}

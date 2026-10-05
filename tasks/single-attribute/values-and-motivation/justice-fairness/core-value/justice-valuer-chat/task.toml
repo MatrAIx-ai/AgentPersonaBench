@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/justice-valuer-chat"
+theme = "Justice / fairness: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "justice-fairness", "core-value", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# Like "cost-sensitive", how heavily someone weights fairness is a SEMANTIC trait:
+# no keyword list can tell whether a person genuinely insisted on an even, fair
+# outcome over the easy, self-favoring shortcut. So the evaluator is an LLM judge
+# that reads the persona's OWN turns and returns a binary HELD/VIOLATED verdict on
+# whether it held to a fair, even-handed handling instead of letting fairness slide.
+[[checks]]
+dimension_id = "val_justice_fairness"
+dimension_label = "Justice / fairness"
+category = "Values & Motivation"
+attribute = "Justice / fairness"
+value = "Core value"
+evaluator = "llm-judge"
+evaluator_name = "val_justice_fairness=Core value"
+adherence_signal = "Reply presses for an even, fair handling that treats everyone's claim on the same terms, resists the friend's take-the-easy-self-favoring-shortcut pressure, and refuses to let fairness slide for convenience."
+# pass = anchor decisively more fairness-weighting than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

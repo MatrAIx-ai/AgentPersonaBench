@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hollis Study Design Console · Methods Review Board</title>
+  <style>
+    :root{--ox:#6e1a26;--ox2:#8a2a36;--ink:#241b19;--muted:#6f625c;--stone:#f3efe8;--paper:#fffdf9;--line:#e1d8cc;--ochre:#c08a2c;--ochre-s:#f7ecd6;--sel:#fbf3f1}
+    *{box-sizing:border-box} [hidden]{display:none!important}
+    body{margin:0;background:var(--stone);color:var(--ink);font:15px/1.5 "Nimbus Sans","Helvetica Neue",Arial,sans-serif}
+    .serif{font-family:"P052","Palatino Linotype","URW Palladio L",Palatino,Georgia,serif}
+    button{font:inherit;cursor:pointer}
+    /* masthead */
+    .mast{background:var(--ox);color:#f8ece6}
+    .mast .in{max-width:1180px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:16px}
+    .mark{width:40px;height:40px;flex:0 0 auto}
+    .mast h1{margin:0;font:600 22px/1.1 "P052","Palatino Linotype",Georgia,serif;letter-spacing:.2px}
+    .mast h1 small{display:block;font:11px/1.4 "Nimbus Sans",Arial,sans-serif;letter-spacing:2.2px;text-transform:uppercase;color:#e6bfb6;margin-top:3px}
+    .mast .meta{margin-left:auto;display:flex;gap:18px;font-size:12.5px;color:#f0d6cf}
+    .mast .meta b{color:#fff}
+    .sub{background:#fbf8f3;border-bottom:1px solid var(--line)}
+    .sub .in{max-width:1180px;margin:0 auto;padding:10px 28px;display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted)}
+    .wrap{max-width:1180px;margin:0 auto;padding:22px 28px 110px}
+    .intro{display:grid;grid-template-columns:1fr 330px;gap:22px;align-items:start;margin-bottom:18px}
+    .intro h2{margin:0;font:600 30px/1.15 "P052",Georgia,serif}
+    .intro p{margin:6px 0 0;color:var(--muted);max-width:640px}
+    .notice{background:var(--ochre-s);border:1px solid #e8d2a6;border-radius:4px;padding:12px 14px;font-size:13px;color:#5c4415;border-left:4px solid var(--ochre)}
+    /* tabs */
+    .tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border-bottom:2px solid var(--ox);margin-bottom:0}
+    .tab{background:#ebe4d9;border:1px solid var(--line);border-bottom:0;border-radius:8px 8px 0 0;margin-right:4px;padding:10px 10px 9px;text-align:left;color:var(--muted);display:grid;grid-template-columns:1fr auto;gap:0 8px}
+    .tab .t-l{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;font-weight:700}
+    .tab .t-n{grid-column:1/3;font:13.5px/1.3 "P052",Georgia,serif;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .tab .t-s{grid-row:1;grid-column:2;font-size:11px;background:#fff;border-radius:999px;padding:0 7px;border:1px solid var(--line)}
+    .tab.on{background:var(--paper);color:var(--ox);border-color:var(--ox);position:relative;top:2px;padding-bottom:11px}
+    .tab.done .t-s{background:var(--ox);color:#fff;border-color:var(--ox)}
+    .tab-sign{margin-right:0}
+    /* case */
+    .sheet{background:var(--paper);border:1px solid var(--line);border-top:0;box-shadow:0 10px 26px rgba(60,30,20,.07)}
+    .study{padding:24px 28px 22px}
+    .case-head{display:grid;grid-template-columns:86px 1fr;gap:0 18px}
+    .case-no{grid-row:1/5;width:74px;height:74px;border:2px solid var(--ox);border-radius:50%;display:grid;place-items:center;text-align:center;font:600 13px/1.1 "P052",Georgia,serif;color:var(--ox);text-transform:uppercase;letter-spacing:1px;padding:8px}
+    .eyebrow{font-size:11.5px;letter-spacing:1.8px;text-transform:uppercase;color:var(--ochre);font-weight:700}
+    .case-head h2{margin:2px 0 4px;font:600 24px/1.2 "P052",Georgia,serif}
+    .summary{margin:0;color:#3f3431;max-width:860px}
+    .dossier{margin:18px 0 6px;border:1px dashed #cdb9a4;border-radius:6px;background:#fcf8f1}
+    .dossier-lock{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 16px}
+    .dossier-lock b{display:block;font:600 16px "P052",Georgia,serif}
+    .dossier-lock span{font-size:13px;color:var(--muted)}
+    .evidence-toggle{background:var(--ox);color:#fff;border:0;border-radius:4px;padding:10px 14px;font-weight:700;font-size:13px;white-space:nowrap}
+    .evidence-toggle:hover{background:var(--ox2)}
+    .evidence-toggle:disabled{background:#d8c9c0;color:#6f625c;cursor:default}
+    .design-grid{display:grid;grid-template-columns:300px 1fr;gap:16px;padding:0 16px 16px}
+    .dag-fig{margin:0;background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 10px 6px}
+    .dag-svg{width:100%;height:150px;display:block}
+    .dag-fig figcaption{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);text-align:center}
+    .facts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .fact{background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 12px;font-size:13.5px}
+    .fact b{display:block;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--ox);margin-bottom:3px}
+    .dag{font-family:"DejaVu Sans Mono","Liberation Mono",monospace;font-size:13px;color:#3b2f2c}
+    .fields{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px;position:relative}
+    .gate{grid-column:1/4;margin:0;padding:10px 14px;background:#f1ebe2;border-radius:4px;color:var(--muted);font-size:13px}
+    fieldset.field{border:0;border-top:3px solid var(--ink);margin:0;padding:10px 0 0;min-width:0}
+    fieldset.field legend{padding:0 8px 0 0;font:600 17px "P052",Georgia,serif;display:flex;align-items:center;gap:8px}
+    .num{width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font:700 12px/22px "Nimbus Sans",Arial,sans-serif;text-align:center}
+    .choices{display:grid;gap:8px;margin-top:10px}
+    .choice{width:100%;text-align:left;padding:10px 12px 10px 38px;background:#fff;border:1px solid var(--line);border-radius:6px;color:var(--ink);min-height:64px;position:relative;font-size:13.5px;line-height:1.45}
+    .choice::before{content:"";position:absolute;left:12px;top:13px;width:14px;height:14px;border-radius:50%;border:2px solid #b9a898;background:#fff}
+    .choice:hover{border-color:#b98f86}
+    .choice.selected{border-color:var(--ox);background:var(--sel);box-shadow:inset 3px 0 0 var(--ox)}
+    .choice.selected::before{border-color:var(--ox);background:radial-gradient(circle,var(--ox) 0 3.5px,#fff 4.5px)}
+    .choice:disabled{opacity:.5;cursor:not-allowed}
+    .case-nav{display:flex;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1px solid var(--line)}
+    .case-nav button{background:#fff;border:1px solid var(--line);border-radius:4px;padding:9px 16px;font-weight:600}
+    .case-nav .next-case{background:var(--ink);color:#fff;border-color:var(--ink)}
+    /* sign-off */
+    #signoff{padding:24px 28px 26px}
+    #signoff h2{margin:0 0 4px;font:600 24px "P052",Georgia,serif}
+    #signoff .lead{color:var(--muted);margin:0 0 16px}
+    .sum{width:100%;border-collapse:collapse;font-size:13.5px}
+    .sum th{text-align:left;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--ox);padding:10px;border-bottom:2px solid var(--ink);width:30%}
+    .sum th:first-child{width:10%}
+    .sum td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+    .sum td.case{font:600 15px "P052",Georgia,serif}
+    .sum td.miss{color:#a0433f;font-style:italic}
+    .dock{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:#fff;box-shadow:0 -6px 20px rgba(0,0,0,.18)}
+    .dock .in{max-width:1180px;margin:0 auto;padding:12px 28px;display:flex;align-items:center;gap:18px}
+    .bar{flex:1;height:6px;background:#4a3d39;border-radius:3px;overflow:hidden;max-width:260px}
+    .bar i{display:block;height:100%;width:0;background:var(--ochre)}
+    .status{color:#eadbd4;font-size:13.5px}
+    #submit{margin-left:auto;border:0;border-radius:4px;background:var(--ochre);color:#2a1d0a;font-weight:700;padding:11px 20px}
+    #submit:disabled{opacity:.55;cursor:default}
+    .foot{margin-top:26px;display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
+    @media(max-width:900px){.intro,.design-grid,.fields{grid-template-columns:1fr}.tabs{grid-template-columns:1fr 1fr}.gate{grid-column:auto}.case-head{grid-template-columns:1fr}.case-no{grid-row:auto}}
+  </style>
+</head>
+<body>
+<header class="mast"><div class="in">
+  <svg class="mark" viewBox="0 0 40 40" aria-hidden="true"><rect x="1" y="1" width="38" height="38" rx="3" fill="transparent" stroke="#e6bfb6" stroke-width="1.5"/><circle cx="11" cy="28" r="4" fill="#f8ece6"/><circle cx="29" cy="28" r="4" fill="#f8ece6"/><circle cx="20" cy="11" r="4" fill="#c08a2c"/><path d="M17.6 14 L12.8 24.6 M22.4 14 L27.2 24.6 M15 28 L25 28" stroke="#f8ece6" stroke-width="1.6"/></svg>
+  <h1>Hollis Study Design Console<small>Methods Review Board</small></h1>
+  <div class="meta"><span>Review round <b>Q3</b></span><span>Open audits <b>4</b></span></div>
+</div></header>
+<div class="sub"><div class="in"><span>Board workspace / Audits / Study design round</span><span>Decisions are recorded per case and sent together at sign-off.</span></div></div>
+
+<main class="wrap">
+  <div class="intro">
+    <div><h2>Study design audits</h2><p>Resolve each audit from design facts to estimand to approved claim.</p></div>
+    <div class="notice">The console does not prescribe a company answer. Review the design evidence and submit the strongest defensible interpretation.</div>
+  </div>
+
+  <nav class="tabs" role="tablist" aria-label="Audit cases"><button class="tab" role="tab" data-to="0" id="tab-st-a4"><span class="t-l">Case A</span><span class="t-n">Concealed pragmatic trial</span><span class="t-s" id="prog-st-a4">0 / 3</span></button><button class="tab" role="tab" data-to="1" id="tab-st-h7"><span class="t-l">Case B</span><span class="t-n">Proposed collider adjustment</span><span class="t-s" id="prog-st-h7">0 / 3</span></button><button class="tab" role="tab" data-to="2" id="tab-st-m3"><span class="t-l">Case C</span><span class="t-n">Post-treatment biomarker</span><span class="t-s" id="prog-st-m3">0 / 3</span></button><button class="tab" role="tab" data-to="3" id="tab-st-p9"><span class="t-l">Case D</span><span class="t-n">No comparison in extreme strata</span><span class="t-s" id="prog-st-p9">0 / 3</span></button><button class="tab tab-sign" role="tab" data-to="4" id="tab-sign"><span class="t-l">Sign-off</span><span class="t-n">Review and submit</span><span class="t-s" id="prog-sign">locked</span></button></nav>
+  <div class="sheet">
+
+  <section class="study" data-study="st-a4">
+    <div class="case-head">
+      <div class="case-no">Case A</div>
+      <div class="eyebrow">Audit A · randomized outreach</div>
+      <h2>Concealed pragmatic trial</h2>
+      <p class="summary">2,400 adults were randomized 1:1; allocation was concealed, analysis is intention-to-treat, attrition is low and balanced, and no spillover is plausible. The risk difference is -2.1 points (95% CI -6.0 to 1.8).</p>
+    </div>
+    <div class="dossier">
+      <div class="dossier-lock" id="lock-st-a4">
+        <div><b>Design evidence</b><span>DAG, timing, positivity and the primary question are filed in this case's dossier.</span></div>
+        <button class="evidence-toggle" data-study="st-a4" aria-controls="evidence-st-a4">Open design evidence for Case A</button>
+      </div>
+      <div class="design-grid" id="evidence-st-a4" hidden>
+        <figure class="dag-fig"><svg class="dag-svg" data-dag="Z → A → Y; Z randomized" aria-hidden="true"></svg><figcaption>Causal diagram</figcaption></figure>
+        <div class="facts"><div class="fact"><b>DAG</b><span class="dag">Z → A → Y; Z randomized</span></div><div class="fact"><b>Timing</b>Baseline strata precede assignment; adherence follows it.</div><div class="fact"><b>Support</b>Both arms represented in every enrollment stratum.</div><div class="fact"><b>Primary question</b>Total effect of assignment at 90 days.</div></div>
+      </div>
+    </div>
+    <div class="fields" id="fields-st-a4">
+      <p class="gate" id="gate-st-a4">Open the design evidence above to start recording this case's decisions.</p>
+        <fieldset class="field" data-field="adjustment">
+          <legend><span class="num">1</span>Adjustment strategy</legend>
+          <div class="choices">
+        <button class="choice" data-study="st-a4" data-field="adjustment" data-option="a4-k2">Use the prespecified baseline enrollment strata for precision and retain the intention-to-treat contrast without conditioning on adherence.</button>
+        <button class="choice" data-study="st-a4" data-field="adjustment" data-option="a4-p8">Instrument received outreach with assignment, adjust for measured adherence predictors, and present that receipt contrast as the randomized assignment effect.</button>
+        <button class="choice" data-study="st-a4" data-field="adjustment" data-option="a4-v5">Model outcome observation using post-assignment response indicators, restrict to observed outcomes, and retain the original intention-to-treat label.</button>
+      </div>
+        </fieldset>
+        <fieldset class="field" data-field="estimand">
+          <legend><span class="num">2</span>Estimand</legend>
+          <div class="choices">
+        <button class="choice" data-study="st-a4" data-field="estimand" data-option="a4-s1">Per-protocol effect among observed adherers, interpreted as the treatment effect established by the randomized trial.</button>
+        <button class="choice" data-study="st-a4" data-field="estimand" data-option="a4-e7">Intention-to-treat risk difference for assignment in the randomized study population at 90 days.</button>
+        <button class="choice" data-study="st-a4" data-field="estimand" data-option="a4-n9">Transported average effect in the wider eligible adult population, standardized on baseline case mix without an effect-modifier assessment.</button>
+      </div>
+        </fieldset>
+        <fieldset class="field" data-field="claim">
+          <legend><span class="num">3</span>Approved claim</legend>
+          <div class="choices">
+        <button class="choice" data-study="st-a4" data-field="claim" data-option="a4-r3">Describe an adjusted association because pragmatic delivery varied and the interval includes no effect, reserving causal wording for a per-protocol analysis.</button>
+        <button class="choice" data-study="st-a4" data-field="claim" data-option="a4-z8">Report a causal effect of receiving outreach across routine-care adults, using concealed allocation and pragmatic delivery to support both receipt and transport.</button>
+        <button class="choice" data-study="st-a4" data-field="claim" data-option="a4-c6">Report the randomized intention-to-treat causal estimate and interval for this study population, noting that the interval does not demonstrate benefit.</button>
+      </div>
+        </fieldset>
+    </div>
+    <div class="case-nav">
+      <button class="prev-case" data-to="-1">Back to overview</button>
+      <button class="next-case" data-to="1">Next case</button>
+    </div>
+  </section>
+  <section class="study" data-study="st-h7">
+    <div class="case-head">
+      <div class="case-no">Case B</div>
+      <div class="eyebrow">Audit B · occupational cohort</div>
+      <h2>Proposed collider adjustment</h2>
+      <p class="summary">The full worker cohort is available. Baseline frailty affects both the outcome and hospitalization; exposure also affects hospitalization and the outcome. The analyst proposes adjusting for hospitalization.</p>
+    </div>
+    <div class="dossier">
+      <div class="dossier-lock" id="lock-st-h7">
+        <div><b>Design evidence</b><span>DAG, timing, positivity and the primary question are filed in this case's dossier.</span></div>
+        <button class="evidence-toggle" data-study="st-h7" aria-controls="evidence-st-h7">Open design evidence for Case B</button>
+      </div>
+      <div class="design-grid" id="evidence-st-h7" hidden>
+        <figure class="dag-fig"><svg class="dag-svg" data-dag="E → H ← U → Y; E → Y" aria-hidden="true"></svg><figcaption>Causal diagram</figcaption></figure>
+        <div class="facts"><div class="fact"><b>DAG</b><span class="dag">E → H ← U → Y; E → Y</span></div><div class="fact"><b>Timing</b>U and E are baseline; H occurs during follow-up.</div><div class="fact"><b>Support</b>Exposed and unexposed workers occur across U.</div><div class="fact"><b>Primary question</b>Total effect of baseline E on Y in the cohort.</div></div>
+      </div>
+    </div>
+    <div class="fields" id="fields-st-h7">
+      <p class="gate" id="gate-st-h7">Open the design evidence above to start recording this case's decisions.</p>
+        <fieldset class="field" data-field="adjustment">
+          <legend><span class="num">1</span>Adjustment strategy</legend>
+          <div class="choices">
+        <button class="choice" data-study="st-h7" data-field="adjustment" data-option="h7-f4">Adjust for baseline frailty U and follow-up hospitalization H to isolate the remaining pathway, then use that coefficient for the stated total-effect target.</button>
+        <button class="choice" data-study="st-h7" data-field="adjustment" data-option="h7-b9">Adjust for baseline frailty U while leaving the post-exposure common effect H out of the total-effect adjustment set.</button>
+        <button class="choice" data-study="st-h7" data-field="adjustment" data-option="h7-l2">Use hospitalization H as a time-updated proxy for clinical vulnerability and omit baseline U from the outcome model.</button>
+      </div>
+        </fieldset>
+        <fieldset class="field" data-field="estimand">
+          <legend><span class="num">2</span>Estimand</legend>
+          <div class="choices">
+        <button class="choice" data-study="st-h7" data-field="estimand" data-option="h7-q6">Total effect of baseline exposure E on outcome Y in the baseline worker cohort.</button>
+        <button class="choice" data-study="st-h7" data-field="estimand" data-option="h7-t1">Effect among workers hospitalized under their observed exposure status, using observed H to approximate the target subgroup.</button>
+        <button class="choice" data-study="st-h7" data-field="estimand" data-option="h7-w8">Controlled direct effect outside the hospitalization pathway, interpreted as answering the stated total-effect question.</button>
+      </div>
+        </fieldset>
+        <fieldset class="field" data-field="claim">
+          <legend><span class="num">3</span>Approved claim</legend>
+          <div class="choices">
+        <button class="choice" data-study="st-h7" data-field="claim" data-option="h7-y3">Report the H-adjusted direct-effect coefficient as the answer to the original total-effect question because the model includes baseline U and the intermediate event.</button>
+        <button class="choice" data-study="st-h7" data-field="claim" data-option="h7-d5">Retain association-only wording after baseline-U adjustment while deferring a causal interpretation despite the stated exchangeability assumptions.</button>
+        <button class="choice" data-study="st-h7" data-field="claim" data-option="h7-a7">Make a qualified total-effect claim after baseline-U adjustment, explicitly conditional on exchangeability and measurement assumptions.</button>
+      </div>
+        </fieldset>
+    </div>
+    <div class="case-nav">
+      <button class="prev-case" data-to="0">Previous case</button>
+      <button class="next-case" data-to="2">Next case</button>
+    </div>
+  </section>
+  <section class="study" data-study="st-m3">
+    <div class="case-head">
+      <div class="case-no">Case C</div>
+      <div class="eyebrow">Audit C · nutrition trial</div>
+      <h2>Post-treatment biomarker</h2>
+      <p class="summary">Assignment is randomized. A two-week biomarker is changed by treatment and affects the six-month outcome. The primary question is the total effect of assignment.</p>
+    </div>
+    <div class="dossier">
+      <div class="dossier-lock" id="lock-st-m3">
+        <div><b>Design evidence</b><span>DAG, timing, positivity and the primary question are filed in this case's dossier.</span></div>
+        <button class="evidence-toggle" data-study="st-m3" aria-controls="evidence-st-m3">Open design evidence for Case C</button>
+      </div>
+      <div class="design-grid" id="evidence-st-m3" hidden>
+        <figure class="dag-fig"><svg class="dag-svg" data-dag="Z → A → M → Y; A → Y" aria-hidden="true"></svg><figcaption>Causal diagram</figcaption></figure>
+        <div class="facts"><div class="fact"><b>DAG</b><span class="dag">Z → A → M → Y; A → Y</span></div><div class="fact"><b>Timing</b>Baseline C; assignment A; then M; then Y.</div><div class="fact"><b>Support</b>Randomized arms represented across baseline C.</div><div class="fact"><b>Primary question</b>Total assignment effect, not a direct effect.</div></div>
+      </div>
+    </div>
+    <div class="fields" id="fields-st-m3">
+      <p class="gate" id="gate-st-m3">Open the design evidence above to start recording this case's decisions.</p>
+        <fieldset class="field" data-field="adjustment">
+          <legend><span class="num">1</span>Adjustment strategy</legend>
+          <div class="choices">
+        <button class="choice" data-study="st-m3" data-field="adjustment" data-option="m3-j8">Use baseline C for precision and leave post-treatment biomarker M out of the model for the total assignment effect.</button>
+        <button class="choice" data-study="st-m3" data-field="adjustment" data-option="m3-c1">Use sequential outcome regression with M to isolate the non-biomarker pathway, then label the resulting contrast as the total assignment effect.</button>
+        <button class="choice" data-study="st-m3" data-field="adjustment" data-option="m3-r6">Restrict to participants with observed M and weight by measured predictors of biomarker observation before estimating the assignment contrast.</button>
+      </div>
+        </fieldset>
+        <fieldset class="field" data-field="estimand">
+          <legend><span class="num">2</span>Estimand</legend>
+          <div class="choices">
+        <button class="choice" data-study="st-m3" data-field="estimand" data-option="m3-p2">Controlled direct effect at a fixed biomarker level, treating treatment randomization as sufficient for mediator intervention exchangeability.</button>
+        <button class="choice" data-study="st-m3" data-field="estimand" data-option="m3-u9">Total intention-to-treat effect of randomized assignment on the six-month outcome.</button>
+        <button class="choice" data-study="st-m3" data-field="estimand" data-option="m3-e4">Effect among participants with a favorable observed biomarker response, using post-assignment response to define the analysis population.</button>
+      </div>
+        </fieldset>
+        <fieldset class="field" data-field="claim">
+          <legend><span class="num">3</span>Approved claim</legend>
+          <div class="choices">
+        <button class="choice" data-study="st-m3" data-field="claim" data-option="m3-n5">Combine the M-adjusted coefficient with the observed biomarker pathway and report the sum as the randomized total effect without a separate mediation analysis.</button>
+        <button class="choice" data-study="st-m3" data-field="claim" data-option="m3-g7">Use association-only wording because measurement of a post-treatment mediator prevents a causal interpretation of the randomized assignment contrast.</button>
+        <button class="choice" data-study="st-m3" data-field="claim" data-option="m3-x3">Report a qualified total causal effect from the randomized comparison that does not condition on M.</button>
+      </div>
+        </fieldset>
+    </div>
+    <div class="case-nav">
+      <button class="prev-case" data-to="1">Previous case</button>
+      <button class="next-case" data-to="3">Next case</button>
+    </div>
+  </section>
+  <section class="study" data-study="st-p9">
+    <div class="case-head">
+      <div class="case-no">Case D</div>
+      <div class="eyebrow">Audit D · district policy</div>
+      <h2>No comparison in extreme strata</h2>
+      <p class="summary">Every highest-severity district adopts the policy and every lowest-severity district does not. Treated and untreated districts coexist only in the middle severity range.</p>
+    </div>
+    <div class="dossier">
+      <div class="dossier-lock" id="lock-st-p9">
+        <div><b>Design evidence</b><span>DAG, timing, positivity and the primary question are filed in this case's dossier.</span></div>
+        <button class="evidence-toggle" data-study="st-p9" aria-controls="evidence-st-p9">Open design evidence for Case D</button>
+      </div>
+      <div class="design-grid" id="evidence-st-p9" hidden>
+        <figure class="dag-fig"><svg class="dag-svg" data-dag="S → A; S → Y; A → Y" aria-hidden="true"></svg><figcaption>Causal diagram</figcaption></figure>
+        <div class="facts"><div class="fact"><b>DAG</b><span class="dag">S → A; S → Y; A → Y</span></div><div class="fact"><b>Timing</b>Severity S is measured before policy A.</div><div class="fact"><b>Support</b>Common support only in middle S.</div><div class="fact"><b>Primary question</b>Policy effect for a population supported by data.</div></div>
+      </div>
+    </div>
+    <div class="fields" id="fields-st-p9">
+      <p class="gate" id="gate-st-p9">Open the design evidence above to start recording this case's decisions.</p>
+        <fieldset class="field" data-field="adjustment">
+          <legend><span class="num">1</span>Adjustment strategy</legend>
+          <div class="choices">
+        <button class="choice" data-study="st-p9" data-field="adjustment" data-option="p9-v2">Fit a flexible severity-response surface, calibrate boundary predictions to external outcome totals, and extrapolate across unsupported severity strata.</button>
+        <button class="choice" data-study="st-p9" data-field="adjustment" data-option="p9-a6">Adjust for baseline severity S within the prespecified overlap region where both policy states are observed.</button>
+        <button class="choice" data-study="st-p9" data-field="adjustment" data-option="p9-h4">Use stabilized inverse weights with moderate truncation, retain the extreme districts, and interpret the weighted analysis for the original target.</button>
+      </div>
+        </fieldset>
+        <fieldset class="field" data-field="estimand">
+          <legend><span class="num">2</span>Estimand</legend>
+          <div class="choices">
+        <button class="choice" data-study="st-p9" data-field="estimand" data-option="p9-k8">Average effect for the full district population under a structural smoothness model that extends beyond observed treatment comparisons.</button>
+        <button class="choice" data-study="st-p9" data-field="estimand" data-option="p9-f1">Effect among adopting districts, standardizing middle-range comparison outcomes to adopters that include unsupported high-severity districts.</button>
+        <button class="choice" data-study="st-p9" data-field="estimand" data-option="p9-s7">Average effect in the prespecified common-support district population represented by both policy states.</button>
+      </div>
+        </fieldset>
+        <fieldset class="field" data-field="claim">
+          <legend><span class="num">3</span>Approved claim</legend>
+          <div class="choices">
+        <button class="choice" data-study="st-p9" data-field="claim" data-option="p9-m3">Report a full-population causal effect under the fitted severity-response model, treating smooth extrapolation as sufficient for the absent treatment contrasts.</button>
+        <button class="choice" data-study="st-p9" data-field="claim" data-option="p9-q5">Report severity-adjusted associations in the observed middle range without defining the population or causal contrast those comparisons support.</button>
+        <button class="choice" data-study="st-p9" data-field="claim" data-option="p9-d9">Report a qualified causal effect for the common-support population under measured-confounding and model assumptions.</button>
+      </div>
+        </fieldset>
+    </div>
+    <div class="case-nav">
+      <button class="prev-case" data-to="2">Previous case</button>
+      <button class="next-case" data-to="4">Go to sign-off</button>
+    </div>
+  </section>
+  <section id="signoff" hidden>
+    <h2>Sign-off</h2>
+    <p class="lead">Your recorded decisions for each case. Return to any case to change a decision before submitting.</p>
+    <table class="sum"><thead><tr><th>Case</th><th>Adjustment strategy</th><th>Estimand</th><th>Approved claim</th></tr></thead><tbody id="sum-body"></tbody></table>
+  </section>
+  </div>
+  <div class="foot"><span>Hollis Methods Review Board · internal review workspace</span><span>Board handbook · Contact the secretariat</span></div>
+</main>
+
+<div class="dock"><div class="in">
+  <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+  <span class="status" id="status">0 of 12 fields completed.</span>
+  <button id="submit">Confirm and submit audit</button>
+</div></div>
+
+<script>
+  const studyOrder=["st-a4","st-h7","st-m3","st-p9"];
+  const fieldOrder=["adjustment","estimand","claim"];
+  const caseName={"st-a4":"Case A","st-h7":"Case B","st-m3":"Case C","st-p9":"Case D"};
+  const selected={}; const inspected={}; const events=[]; window.__artifact=null;
+  let submitted=false;
+
+  // Draw each causal diagram from the arrow notation shown in its DAG fact.
+  function drawDag(svg){
+    const spec=svg.dataset.dag, NS="http://www.w3.org/2000/svg", edges=[], nodes=[];
+    spec.split(";").forEach((part)=>{
+      const tok=part.trim().split(/\s+/);
+      for(let i=1;i<tok.length-1;i+=2){
+        const a=tok[i-1], op=tok[i], b=tok[i+1];
+        if(op==="→"){edges.push([a,b]);} else if(op==="←"){edges.push([b,a]);} else continue;
+        [a,b].forEach((n)=>{if(!nodes.includes(n)) nodes.push(n);});
+      }
+    });
+    const level={}; nodes.forEach((n)=>level[n]=0);
+    for(let k=0;k<nodes.length;k++) edges.forEach(([a,b])=>{ if(level[b]<level[a]+1) level[b]=level[a]+1; });
+    const maxL=Math.max(...nodes.map((n)=>level[n])), W=280, H=150, pos={};
+    for(let l=0;l<=maxL;l++){
+      const col=nodes.filter((n)=>level[n]===l);
+      col.forEach((n,i)=>{ pos[n]={x:26+(maxL?l*(W-52)/maxL:W/2-26), y:H/(col.length+1)*(i+1)}; });
+    }
+    svg.setAttribute("viewBox",`0 0 ${W} ${H}`);
+    const defs=document.createElementNS(NS,"defs");
+    defs.innerHTML='<marker id="ah-'+svg.closest("section").dataset.study+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#241b19"/></marker>';
+    svg.appendChild(defs);
+    const mid="url(#ah-"+svg.closest("section").dataset.study+")";
+    edges.forEach(([a,b])=>{
+      const p=pos[a], q=pos[b], dx=q.x-p.x, dy=q.y-p.y, d=Math.hypot(dx,dy)||1, r=15;
+      const ln=document.createElementNS(NS,"line");
+      ln.setAttribute("x1",p.x+dx/d*r); ln.setAttribute("y1",p.y+dy/d*r); ln.setAttribute("x2",q.x-dx/d*(r+2)); ln.setAttribute("y2",q.y-dy/d*(r+2));
+      ln.setAttribute("stroke","#241b19"); ln.setAttribute("stroke-width","1.5"); ln.setAttribute("marker-end",mid); svg.appendChild(ln);
+    });
+    nodes.forEach((n)=>{
+      const c=document.createElementNS(NS,"circle"); c.setAttribute("cx",pos[n].x); c.setAttribute("cy",pos[n].y); c.setAttribute("r",14);
+      c.setAttribute("fill","#fbf3f1"); c.setAttribute("stroke","#6e1a26"); c.setAttribute("stroke-width","1.6"); svg.appendChild(c);
+      const t=document.createElementNS(NS,"text"); t.setAttribute("x",pos[n].x); t.setAttribute("y",pos[n].y+5); t.setAttribute("text-anchor","middle");
+      t.setAttribute("font-family","P052, Georgia, serif"); t.setAttribute("font-size","15"); t.setAttribute("font-weight","600"); t.setAttribute("fill","#241b19"); t.textContent=n; svg.appendChild(t);
+    });
+  }
+  document.querySelectorAll("svg.dag-svg").forEach(drawDag);
+
+  function doneFields(s){ return fieldOrder.filter((f)=>selected[s]&&selected[s][f]).length; }
+  function totalDone(){ return studyOrder.reduce((n,s)=>n+doneFields(s),0); }
+  function refresh(){
+    studyOrder.forEach((s)=>{
+      const n=doneFields(s), tab=document.getElementById("tab-"+s);
+      document.getElementById("prog-"+s).textContent=n+" / 3";
+      tab.classList.toggle("done", n===3 && !!inspected[s]);
+      document.getElementById("gate-"+s).hidden=!!inspected[s];
+      document.querySelectorAll(`button.choice[data-study="${s}"]`).forEach((b)=>{ b.disabled=!inspected[s]||submitted; });
+    });
+    const count=totalDone();
+    document.getElementById("prog-sign").textContent=count===12?"ready":count+" / 12";
+    document.getElementById("bar").style.width=(count/12*100)+"%";
+    const body=document.getElementById("sum-body"); body.innerHTML="";
+    studyOrder.forEach((s)=>{
+      const tr=document.createElement("tr");
+      const td0=document.createElement("td"); td0.className="case"; td0.textContent=caseName[s]; tr.appendChild(td0);
+      fieldOrder.forEach((f)=>{
+        const td=document.createElement("td"), opt=selected[s]&&selected[s][f];
+        if(opt){ td.textContent=document.querySelector(`button.choice[data-option="${opt}"]`).textContent; }
+        else { td.className="miss"; td.textContent="Not yet decided"; }
+        tr.appendChild(td);
+      });
+      body.appendChild(tr);
+    });
+  }
+  function show(index){
+    document.querySelectorAll("section.study").forEach((sec,i)=>{ sec.hidden = i!==index; });
+    document.getElementById("signoff").hidden = index!==4;
+    document.querySelectorAll(".tab").forEach((t)=>{ const on=Number(t.dataset.to)===index; t.classList.toggle("on",on); t.setAttribute("aria-selected",on?"true":"false"); });
+    window.scrollTo(0,0);
+  }
+  document.querySelectorAll(".tab, .prev-case, .next-case").forEach((b)=>{
+    if(Number(b.dataset.to)<0){ b.style.visibility="hidden"; return; }
+    b.addEventListener("click",()=>show(Number(b.dataset.to)));
+  });
+
+  document.querySelectorAll("button.evidence-toggle").forEach((button)=>{
+    button.addEventListener("click",()=>{
+      const studyId=button.dataset.study;
+      if(inspected[studyId]) return;
+      document.getElementById(button.getAttribute("aria-controls")).hidden=false;
+      inspected[studyId]=true; events.push({event:"inspect",studyId});
+      button.textContent="Evidence opened"; button.disabled=true;
+      refresh();
+    });
+  });
+  document.querySelectorAll("button.choice").forEach((button)=>{
+    button.setAttribute("aria-pressed","false");
+    button.addEventListener("click",()=>{
+      const studyId=button.dataset.study, fieldId=button.dataset.field;
+      if(!inspected[studyId]||submitted) return;
+      if(!selected[studyId]) selected[studyId]={};
+      document.querySelectorAll(`button.choice[data-study="${studyId}"][data-field="${fieldId}"]`).forEach((peer)=>{peer.classList.remove("selected");peer.setAttribute("aria-pressed","false")});
+      button.classList.add("selected"); button.setAttribute("aria-pressed","true");
+      selected[studyId][fieldId]=button.dataset.option;
+      events.push({event:"select",studyId,fieldId,optionId:button.dataset.option});
+      document.getElementById("status").textContent=`${totalDone()} of 12 fields completed.`;
+      refresh();
+    });
+  });
+  document.getElementById("submit").addEventListener("click",()=>{
+    const complete=studyOrder.every((s)=>fieldOrder.every((f)=>selected[s]&&selected[s][f]));
+    const evidenceComplete=studyOrder.every((s)=>inspected[s]);
+    if(!evidenceComplete){document.getElementById("status").textContent="Open every case's design evidence before submitting.";return;}
+    if(!complete){document.getElementById("status").textContent="Complete all adjustment, estimand, and claim fields.";return;}
+    const reviews=studyOrder.map((studyId)=>({studyId,adjustmentId:selected[studyId].adjustment,estimandId:selected[studyId].estimand,claimId:selected[studyId].claim}));
+    events.push({event:"submit"});
+    window.__artifact={submitted:true,reviews,events:events.slice(),confirmation:{status:"submitted",reviewCount:reviews.length,inspectionCount:events.filter((e)=>e.event==="inspect").length,selectionCount:events.filter((e)=>e.event==="select").length}};
+    submitted=true; refresh();
+    document.getElementById("status").textContent="Audit confirmed and submitted to the Methods Review Board."; document.getElementById("submit").disabled=true;
+  });
+  refresh(); show(0);
+</script>
+</body>
+</html>

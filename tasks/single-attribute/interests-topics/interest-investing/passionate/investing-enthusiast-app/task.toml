@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/investing-enthusiast-app"
+theme = "Interest: Investing: Passionate"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "finance"
+tags = [ "persona-adherence", "interests-topics", "investing", "passionate", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "topic_investing"
+dimension_label = "Interest: Investing"
+category = "Interests: Topics"
+anchor_value = "Passionate"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating SmartCart, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# It decides what to do with a windfall by Adding options and tapping Checkout;
+# the app then writes order.json itself. Each option carries a hidden per-option
+# tier (0 = invest it .. 3 = totally unrelated leisure) that is NEVER on screen —
+# the agent sees only name/blurb/amount and must judge for itself. Adherence =
+# whether the chosen options stay near investing. Runs locally in Docker.
+adherence_signal = "The cart the agent checks out contains no spend-now or investing-unrelated option (a high tier, tier>=2); an investing enthusiast picks investing or savings-adjacent options."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

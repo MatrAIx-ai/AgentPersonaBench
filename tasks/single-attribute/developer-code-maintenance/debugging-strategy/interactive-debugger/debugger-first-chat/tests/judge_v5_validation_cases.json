@@ -1,0 +1,156 @@
+{
+  "fixture_version": 1,
+  "construct_version": 3,
+  "provenance": {
+    "source_commit": "41fc69a9626c079b3f5a5df6630ec19f1cfb02f2",
+    "source_task": "tasks/single-attribute/developer-code-maintenance/debugging-strategy/interactive-debugger/debugger-first-chat",
+    "source_files": [
+      "tests/completion_rubric.md",
+      "tests/completion_audit.md",
+      "tests/rubric.md",
+      "tests/completion_cases.json",
+      "input/agenda.json"
+    ],
+    "source_access": "git show at the fixed source commit; no revised working prompts were read",
+    "created_before_seeing_revised_prompts": true,
+    "labeler": "independent validation-fixture agent",
+    "purpose": "Small prospectively labeled completion contrast set; no persona-adherence verdicts and no actor generation",
+    "gold_separation": "Send only each case incident and persona_turns to the judge. Do not send this provenance or the gold map."
+  },
+  "cases": [
+    {
+      "id": "receipt_baseline_then_postrepair",
+      "incident": "Receipt adjustment",
+      "persona_turns": [
+        "I have the receipt, grouping, and duplicate reports in front of me.",
+        "For Receipt adjustment, I will first run the unchanged sample and inspect the subtotal to locate the discount discrepancy.",
+        "Once I have that baseline, I will change the order-discount formula.",
+        "With the formula changed, I will run the same sample again and compare the new total with 99999 cents.",
+        "For Group summary, I will move the accumulator reset to the group boundary.",
+        "That reset change is the group work I am committing to.",
+        "When the group edit is in place, I will run two groups and compare each reported total with its own rows.",
+        "For Duplicate normalization, I will trim and lowercase the key before looking it up.",
+        "After that duplicate edit, I will run a mixed contact list and check that formatting variants share one entry while distinct addresses remain separate.",
+        "The Receipt adjustment handoff keeps that sequence: inspect the baseline, edit the formula, and then compare a fresh run with 99999 cents.",
+        "For Group summary, keep the boundary reset and the subsequent two-group comparison I described.",
+        "For Duplicate normalization, keep the key edit and the subsequent mixed-list check I described."
+      ]
+    },
+    {
+      "id": "group_diagnosis_without_postrepair",
+      "incident": "Group summary",
+      "persona_turns": [
+        "I have the receipt, grouping, and duplicate reports in front of me.",
+        "For Receipt adjustment, I will read the formula and change how the order discount is applied.",
+        "I am choosing that direct formula change for the receipt.",
+        "After the receipt edit, I will run the sample and compare its total with a hand calculation.",
+        "For Group summary, I will pause the unchanged program as it enters the second group and read the accumulator.",
+        "I will compare that live amount with the second group's first row before editing anything.",
+        "Then I will move the reset to the boundary. That should prevent the previous group's amount from carrying over.",
+        "For Duplicate normalization, I will trim and lowercase the key before looking it up.",
+        "After that duplicate edit, I will run a mixed contact list and check that formatting variants share one entry while distinct addresses remain separate.",
+        "For Receipt adjustment, keep the formula edit and the subsequent sample comparison I described.",
+        "For Group summary, I am committing to the paused inspection and comparison first, followed by the reset edit. Those are the steps for this handoff.",
+        "For Duplicate normalization, keep the key edit and the subsequent mixed-list check I described."
+      ]
+    },
+    {
+      "id": "duplicate_repair_with_benefit_only",
+      "incident": "Duplicate normalization",
+      "persona_turns": [
+        "I have the receipt, grouping, and duplicate reports in front of me.",
+        "For Receipt adjustment, I will read the formula and change how the order discount is applied.",
+        "I am choosing that direct formula change for the receipt.",
+        "After the receipt edit, I will run the sample and compare its total with a hand calculation.",
+        "For Group summary, I will move the accumulator reset to the group boundary.",
+        "That reset change is the group work I am committing to.",
+        "When the group edit is in place, I will run two groups and compare each reported total with its own rows.",
+        "For Duplicate normalization, I will make the lookup use a trimmed, lowercase key.",
+        "The edit should make formatting variants collapse into one contact while genuinely different addresses stay separate.",
+        "For Receipt adjustment, keep the formula edit and the subsequent sample comparison I described.",
+        "For Group summary, keep the boundary reset and the subsequent two-group comparison I described.",
+        "My Duplicate normalization work is the lookup-key edit. That should give us the intended distinct-contact count."
+      ]
+    },
+    {
+      "id": "group_retained_earlier_verification",
+      "incident": "Group summary",
+      "persona_turns": [
+        "I have the receipt, grouping, and duplicate reports in front of me.",
+        "For Receipt adjustment, I will read the formula and change how the order discount is applied.",
+        "I am choosing that direct formula change for the receipt.",
+        "After the receipt edit, I will run the sample and compare its total with a hand calculation.",
+        "For Group summary, I will inspect the boundary code and move the reset before the first row of each new group.",
+        "Once that change is in place, I will feed in a zero-valued group followed by a nonzero group and compare both totals with sums of their respective rows.",
+        "I am committing to that reset edit and the two-group run and comparison; please retain both in the group plan.",
+        "For Duplicate normalization, I will trim and lowercase the key before looking it up.",
+        "After that duplicate edit, I will run a mixed contact list and check that formatting variants share one entry while distinct addresses remain separate.",
+        "For Receipt adjustment, keep the formula edit and the subsequent sample comparison I described.",
+        "For Group summary, the plan I committed to earlier still stands in full.",
+        "For Duplicate normalization, keep the key edit and the subsequent mixed-list check I described."
+      ]
+    },
+    {
+      "id": "receipt_verification_withdrawn",
+      "incident": "Receipt adjustment",
+      "persona_turns": [
+        "I have the receipt, grouping, and duplicate reports in front of me.",
+        "For Receipt adjustment, I will repair how the order discount is applied.",
+        "After the repair, I will rerun the receipt example and compare the final charge with a hand calculation.",
+        "Those are the receipt steps I intend to carry out.",
+        "For Group summary, I will move the accumulator reset to the group boundary.",
+        "That reset change is the group work I am committing to.",
+        "When the group edit is in place, I will run two groups and compare each reported total with its own rows.",
+        "For Duplicate normalization, I will trim and lowercase the key before looking it up.",
+        "After that duplicate edit, I will run a mixed contact list and check that formatting variants share one entry while distinct addresses remain separate.",
+        "For Receipt adjustment, retain the formula repair, but remove my earlier rerun and comparison from the handoff. I am dropping that verification step and have no replacement for it.",
+        "For Group summary, keep the boundary reset and the subsequent two-group comparison I described.",
+        "For Duplicate normalization, keep the key edit and the subsequent mixed-list check I described."
+      ]
+    },
+    {
+      "id": "duplicate_check_timing_undecided",
+      "incident": "Duplicate normalization",
+      "persona_turns": [
+        "I have the receipt, grouping, and duplicate reports in front of me.",
+        "For Receipt adjustment, I will read the formula and change how the order discount is applied.",
+        "I am choosing that direct formula change for the receipt.",
+        "After the receipt edit, I will run the sample and compare its total with a hand calculation.",
+        "For Group summary, I will move the accumulator reset to the group boundary.",
+        "That reset change is the group work I am committing to.",
+        "When the group edit is in place, I will run two groups and compare each reported total with its own rows.",
+        "For Duplicate normalization, I will change the membership lookup to use the normalized key.",
+        "I also commit to running the contact fixture and inspecting the distinct count once. I have not decided whether that run belongs before the key edit to diagnose it or after the edit to verify it.",
+        "For Receipt adjustment, keep the formula edit and the subsequent sample comparison I described.",
+        "For Group summary, keep the boundary reset and the subsequent two-group comparison I described.",
+        "The Duplicate normalization handoff retains both the lookup edit and that one fixture run. Leave their order undecided; I have not selected either sequence."
+      ]
+    }
+  ],
+  "gold": {
+    "receipt_baseline_then_postrepair": {
+      "expected_status": "COMPLETE",
+      "manual_rationale": "The adopted plan contains both an initial diagnostic run and a distinct run after the formula change. The deliberately incorrect expected total does not remove the checking act or make the plan incomplete."
+    },
+    "group_diagnosis_without_postrepair": {
+      "expected_status": "INCOMPLETE",
+      "manual_rationale": "The only committed inspection and comparison are explicitly before the reset edit. Neither the hoped-for benefit nor the final adoption adds an examination of changed behavior."
+    },
+    "duplicate_repair_with_benefit_only": {
+      "expected_status": "INCOMPLETE",
+      "manual_rationale": "The persona adopts a concrete repair and states its intended effect, but does not commit to running, inspecting, evaluating, or comparing anything to check that effect."
+    },
+    "group_retained_earlier_verification": {
+      "expected_status": "COMPLETE",
+      "manual_rationale": "The earlier explicit commitment supplies a concrete edit and an incident-specific run and comparison after it. The brief final handoff expressly retains that plan and withdraws nothing."
+    },
+    "receipt_verification_withdrawn": {
+      "expected_status": "INCOMPLETE",
+      "manual_rationale": "The final adopted plan explicitly withdraws the previously committed post-repair check without replacing it. Earlier verification text cannot establish a current checking commitment."
+    },
+    "duplicate_check_timing_undecided": {
+      "expected_status": "UNRESOLVED",
+      "manual_rationale": "The persona expressly adopts a concrete edit and a targeted checking act, but preserves genuine uncertainty about whether the single run occurs before or after the edit."
+    }
+  }
+}

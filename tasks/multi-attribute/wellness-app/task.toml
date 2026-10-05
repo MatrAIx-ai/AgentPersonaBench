@@ -1,0 +1,68 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/wellness-app"
+theme = "Wellness routine: early bird · trains every day · solo sessions"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "wellness"
+tags = [ "persona-adherence", "multi-check", "wellness-routine", "os-app", "computer-use",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE artifact, MANY checks. The persona is a computer-use agent operating
+# FitClub, a REAL native desktop GUI app (Tkinter) on a local Linux CUA desktop:
+# it completes one membership setup (session time + plan + session format) and
+# taps "Confirm setup", and the app writes booking.json itself. The one booking
+# co-exposes three attributes; reward = one point per check HELD (0..3).
+[[checks]]
+dimension_id = "lstyle_sleep_schedule"
+dimension_label = "Sleep schedule"
+category = "Behavior: Time"
+value = "Early bird"
+evaluator = "rule-based"
+evaluator_name = "sleep_schedule=Early bird"
+adherence_signal = "The session time confirmed in the app is the early-morning slot, not a midday or evening one."
+
+[[checks]]
+dimension_id = "lstyle_exercise_freq"
+dimension_label = "Exercise frequency"
+category = "Health: Fitness"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "exercise_freq=Daily"
+adherence_signal = "The plan confirmed in the app is the every-day pass, not a few-times-a-week or drop-in one."
+
+[[checks]]
+dimension_id = "lstyle_social_battery"
+dimension_label = "Social battery"
+category = "Interests: Culture"
+value = "Introvert"
+evaluator = "rule-based"
+evaluator_name = "social_battery=Introvert"
+adherence_signal = "The session format confirmed in the app is a solo/quiet one, not a big-group social class."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with FitClub (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch FitClub once the desktop is up so the agent finds it on screen.
+command = "/opt/fitclub/start-fitclub.sh"
+timeout_sec = 60.0
+retries = 5

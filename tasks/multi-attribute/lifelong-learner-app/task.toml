@@ -1,0 +1,76 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/lifelong-learner-app"
+theme = "Lifelong learner: learns by reading/writing, loves digging into ideas, reads regularly (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "learning"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE browsing session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) builds
+# one kit of learning resources; the verifier runs an independent rule-based check
+# per attribute. Each item carries three hidden ground-truth axes (readwrite /
+# intellect / reading, 0..3) that are NEVER shown on screen — the agent sees only
+# name + price and must judge for itself. A check is HELD iff no selected item
+# scores >= 2 on its axis. Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "learning_style"
+dimension_label = "Learning style"
+category = "Learning: Style"
+attribute = "Learning style"
+value = "Reading / writing"
+evaluator = "rule-based"
+evaluator_name = "learning_style=Reading / writing"
+metric = "readwrite_axis_max"               # HELD iff no picked item has readwrite >= 2
+adherence_signal = "The checked-out kit contains no avoids-reading/handed-over item (hidden readwrite axis >= 2); a reading/writing learner sticks to text-and-notes resources."
+
+[[checks]]
+dimension_id = "big5_intellect"
+dimension_label = "Big Five: Intellect"
+category = "Personality: Big Five"
+attribute = "Intellect"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_intellect=Very high"
+metric = "intellect_axis_max"               # HELD iff no picked item has intellect >= 2
+adherence_signal = "The kit contains no shallow/incurious item (hidden intellect axis >= 2); very-high intellect favors deep, challenging resources over the surface gist."
+
+[[checks]]
+dimension_id = "habit_reading_before_bed"
+dimension_label = "Habit: Reading before bed"
+category = "Behavior: Habits"
+attribute = "Reading habit"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "habit_reading_before_bed=Daily"
+metric = "reading_axis_max"                 # HELD iff no picked item has reading >= 2
+adherence_signal = "The kit contains no no-reading item (hidden reading axis >= 2); a daily reader prefers reading-based resources over ones that replace reading."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

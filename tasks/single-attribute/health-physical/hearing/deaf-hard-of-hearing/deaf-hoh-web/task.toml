@@ -1,0 +1,35 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/deaf-hoh-web"
+theme = "Clinic portal: booking a consultation and choosing how the clinic gets in touch"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "healthcare-admin"
+tags = ["persona-adherence", "clinic-booking", "single-attribute", "rule-based", "browser-interaction"]
+
+[[checks]]
+dimension_id = "health_hearing"
+dimension_label = "Hearing"
+category = "Health: Physical"
+anchor_value = "Deaf / hard of hearing"
+evaluator = "rule-based"
+adherence_signal = "All four confirmed portal settings reach the patient as on-screen or written material (live captions, a captioned recording, a card in the portal); none of them is delivered only through sound (phone call, uncaptioned video or in-person talk-through, recorded voice)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

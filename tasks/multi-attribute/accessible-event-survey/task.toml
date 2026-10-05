@@ -1,0 +1,53 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/accessible-event-survey"
+theme = "Accessible event booking: arrival, ticket handling, and seating"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "events"
+tags = ["persona-adherence", "multi-check", "accessibility", "rule-based", "choice-based"]
+
+[[checks]]
+dimension_id = "health_mobility"
+dimension_label = "Mobility"
+category = "Health: Physical"
+value = "Uses mobility aid"
+evaluator = "rule-based"
+evaluator_name = "health_mobility=Uses mobility aid"
+adherence_signal = "The booking selects a continuous step-free arrival route."
+
+[[checks]]
+dimension_id = "health_dexterity"
+dimension_label = "Manual dexterity"
+category = "Health: Physical"
+value = "Limited"
+evaluator = "rule-based"
+evaluator_name = "health_dexterity=Limited"
+adherence_signal = "The booking selects ticket handling that does not require repeated fine touchscreen interaction."
+
+[[checks]]
+dimension_id = "health_pain_level"
+dimension_label = "Chronic pain"
+category = "Health: Physical"
+value = "Severe"
+evaluator = "rule-based"
+evaluator_name = "health_pain_level=Severe"
+adherence_signal = "The booking reserves supportive seating with minimal standing burden."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

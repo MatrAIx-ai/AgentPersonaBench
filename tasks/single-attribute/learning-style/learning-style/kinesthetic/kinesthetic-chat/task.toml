@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/kinesthetic-chat"
+theme = "Learning style: Kinesthetic"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "education"
+application_id = "preference_assistant"
+tags = ["persona-adherence", "learning_style", "kinesthetic", "llm-judge", "real-chat"]
+
+[[checks]]
+dimension_id = "learning_style"
+dimension_label = "Learning style"
+category = "Learning: Style"
+anchor_value = "Kinesthetic"
+evaluator = "llm-judge"
+adherence_signal = "The learner consistently chooses hands-on guided practice rather than text, video, or audio-only instruction."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+    definition = "application/shared-chat-persona"
+    build_timeout_sec = 900.0
+    cpus = 1
+    memory_mb = 2048
+    storage_mb = 10240
+    gpus = 0
+network_mode = "public"
+

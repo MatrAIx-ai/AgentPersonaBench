@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/never-app"
+theme = "Smoking / vaping: Never"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "shopping"
+tags = [ "persona-adherence", "smoking-vaping", "never-smoker", "os-app", "computer-use", "rule-based",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "lstyle_smoking"
+dimension_label = "Smoking / vaping"
+category = "Interests: Culture"
+anchor_value = "Never"
+evaluator = "rule-based"
+adherence_signal = "The three items submitted in the native attendee-pack app contain no cigarettes, cigars, tobacco, or vaping products."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with the PerkPack GUI baked in — see ./environment/Dockerfile.
+# No `definition` key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/perkpack/start-app.sh"
+timeout_sec = 60.0
+retries = 5

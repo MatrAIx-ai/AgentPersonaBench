@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/non-driver-survey"
+theme = "Getting around: choosing how to make everyday journeys"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "travel"
+tags = ["persona-adherence", "travel", "single-attribute", "rule-based", "choice-based"]
+
+[[checks]]
+dimension_id = "demo_driver_status"
+dimension_label = "Driving status"
+category = "Demographic: Core"
+anchor_value = "Non-driver"
+evaluator = "rule-based"
+adherence_signal = "In each of the six everyday journeys the persona settles on an arrangement in which someone else is at the wheel or no vehicle is needed at all, never a rental, a car-share or a borrowed car they would drive themselves, even when driving is the free, cheapest or quickest option."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/very-formal-app"
+theme = "Formality: Very formal"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "communication"
+tags = [ "persona-adherence", "formality", "very-formal", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "cog_formality"
+dimension_label = "Formality"
+category = "Linguistic: Communication"
+anchor_value = "Very formal"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating QuickText, a REAL
+# native Tkinter GUI on a local Linux CUA desktop. The reply drafts come in
+# matched formal/casual pairs, so the pick isolates register. When it taps
+# "Save replies", QuickText writes order.json itself.
+adherence_signal = "The quick replies the agent saves are all in a formal register; no casual or slangy draft is saved."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

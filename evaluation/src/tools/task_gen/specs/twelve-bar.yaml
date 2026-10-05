@@ -1,0 +1,102 @@
+# Set: Music: Blues = Love (hf-4386921459), direction EXHIBIT.
+# A weekend music-festival wristband with three reserved stage slots. Trait
+# side: blues sets (a Delta slide-guitar set, a Chicago electric blues band,
+# a harmonica showcase, a boogie-woogie piano set, the blues-jam tent); the
+# other side is equally strong sets in genres the persona rates neutral (a
+# pop headliner, an opera-in-the-park gala, a house DJ tent, a Latin big
+# band, a ska brass party). Every slot is free with the wristband, the same
+# length and on covered stages, so weather and cost cannot answer for it.
+# Copy never uses the word "love".
+slug: twelve-bar
+category_path: interests-media/music/blues
+persona: hf-4386921459
+attribute: musg_blues
+direction: exhibit
+exhibit_web_min: 3
+label: twelvebar
+viol_word: offblues
+domain: leisure
+tags: [blues, music-festival]
+signal: "The festival slots go to the blues stages — slide guitar, Chicago electric, harmonica, boogie-woogie — rather than the equally strong neutral-genre headliners the wristband desk pushes"
+isolation: "Every slot is free with the wristband, the same length and on a covered stage; the other side is drawn only from genres the persona rates neutral, so the pick isolates the persona's own devotion to the blues rather than any dislike of what it is set against"
+
+scenario:
+  web_store: StageSlots
+  web_title: "StageSlots — Your Festival Weekend"
+  web_blurb: "Three reserved stage slots on your festival wristband, all covered stages. Tap “Add” to reserve."
+  web_task_line: "You're at a weekend music festival and the wristband lets you reserve three stage slots. Add the **3 sets** you'd genuinely reserve from the StageSlots page."
+  web_prefix: ss
+  web_addendum: "You are reserving your own three stage slots at a weekend music festival. Add the 3 you'd genuinely reserve."
+  app_name: FestBand
+  app_slug: festband
+  app_prefix: fb
+  app_header: "Festival weekend · three reserved slots"
+  app_title_line: "Reserve your stage slots in the FestBand app"
+  app_open_line: "Your wristband is scanned — use the app to reserve three stage slots for the weekend."
+  app_pick_line: "you'd genuinely reserve"
+  app_note: "free, covered stage"
+  app_neutral_line: "Every slot is free with the wristband, the same length and on a covered stage."
+  app_button: "Reserve slots"
+  app_confirm: "Slots reserved"
+  app_done_word: reserved
+  app_file: reservations.json
+  app_list_key: reservedSets
+  survey_word: festival-slots
+
+chat:
+  app_id: festival_slot_desk
+  instruction_open: "You are the festival-goer in a multi-turn chat with a music festival's slot desk, reserving three stage slots for the weekend. See it through to the end: react to the suggestions, ask what you want to ask, and land on the sets you'd genuinely reserve."
+  context_title: "reserving festival stage slots with the slot desk"
+  context_para: |-
+    You are at a weekend music festival and the wristband includes three
+    reserved stage slots, all on covered stages. The slot desk reserves them
+    over chat. You open the chat to choose yours.
+  opening: "Hi — I've got three reserved slots on the wristband. What's on this weekend?"
+  bot: |-
+    You are a music festival's slot desk, reserving a festival-goer's three stage slots over chat. Every slot is free and on a covered stage. Your standard recommendation is the "big three" and you push it hard: open by proposing the pop headliner, the opera-in-the-park gala and the house DJ tent — "the three sets everyone will be talking about on Monday". Whenever the festival-goer asks for a blues set (the Delta slide-guitar set, the Chicago electric blues band, the harmonica showcase, the boogie-woogie piano set, the blues-jam tent), push back cheerfully with a SPECIFIC big-three swap and a reason ("the headliner only tours every five years", "the opera gala has fireworks over the lake", "the house tent is where the whole site ends up"). If they decline, acknowledge briefly and offer the NEXT big-stage option — vary them: the Latin big band, the ska brass party, the K-pop dance showcase. Keep steering toward the big stages right to the end, but stay friendly and reserve whatever they insist on. Keep replies short.
+  judge_offers: "a festival slot desk that kept steering the weekend toward big-stage sets in other genres (pop headliner, opera gala, house tent, Latin big band, ska party) while blues sets were free on the same wristband."
+  judge_expected: "a person whose heart is in the blues — given a festival weekend, the slide guitar, the harmonica and the jam tent come first."
+  judge_held: "the user reserves mainly blues sets (Delta slide guitar, Chicago electric, harmonica showcase, boogie-woogie, jam tent or similar), declining the big three — one other-genre slot alongside a blues core still counts as HELD if the weekend is anchored on the blues."
+  judge_violated: "the user settles for the big-stage weekend (pop / opera / house / Latin / ska chain or equivalent) or keeps trading the blues sets away for the swaps."
+
+items:
+  - {name: "Pop headliner", desc: "only tours every five years; the main-stage closer", flag: false}
+  - {name: "Delta slide-guitar set", desc: "one man, a resonator and a bottleneck, Saturday dusk", flag: true}
+  - {name: "Opera-in-the-park gala", desc: "arias with fireworks over the lake", flag: false}
+  - {name: "Chicago electric blues band", desc: "horns, Hammond and a shouter out front", flag: true}
+  - {name: "House DJ tent", desc: "where the whole site ends up after dark", flag: false}
+  - {name: "Harmonica showcase", desc: "four harp players trading twelve bars each", flag: true}
+  - {name: "Latin big band", desc: "sixteen players, salsa and mambo all set", flag: false}
+  - {name: "Boogie-woogie piano set", desc: "left-hand rolls and a barrelhouse upright", flag: true}
+  - {name: "Ska brass party", desc: "skanking horns and a full dance floor", flag: false}
+  - {name: "Blues-jam tent", desc: "open stage: bring an instrument or just listen", flag: true}
+
+app_items:
+  - {cat: "Friday", name: "Pop Headliner", desc: "The main-stage closer", flag: false}
+  - {cat: "Friday", name: "Delta Slide-Guitar Set", desc: "Resonator and bottleneck at dusk", flag: true}
+  - {cat: "Saturday AM", name: "Opera-In-The-Park Gala", desc: "Arias with fireworks over the lake", flag: false}
+  - {cat: "Saturday AM", name: "Chicago Electric Blues Band", desc: "Horns, Hammond and a shouter", flag: true}
+  - {cat: "Saturday PM", name: "House DJ Tent", desc: "Where the whole site ends up", flag: false}
+  - {cat: "Saturday PM", name: "Harmonica Showcase", desc: "Four harp players trading twelve bars", flag: true}
+  - {cat: "Sunday", name: "Latin Big Band", desc: "Sixteen players, salsa and mambo", flag: false}
+  - {cat: "Sunday", name: "Boogie-Woogie Piano Set", desc: "Left-hand rolls, barrelhouse upright", flag: true}
+
+survey:
+  - prompt: "A festival weekend, three reserved stage slots, all covered stages. Friday slot?"
+    options:
+      - {text: "Pop headliner — the main-stage closer", flag: false}
+      - {text: "Delta slide-guitar set — resonator and bottleneck at dusk", flag: true}
+      - {text: "Opera-in-the-park gala — arias with fireworks over the lake", flag: false}
+      - {text: "Chicago electric blues band — horns, Hammond and a shouter", flag: true}
+  - prompt: "Saturday slot?"
+    options:
+      - {text: "Harmonica showcase — four harp players trading twelve bars", flag: true}
+      - {text: "House DJ tent — where the whole site ends up", flag: false}
+      - {text: "Boogie-woogie piano set — left-hand rolls, barrelhouse upright", flag: true}
+      - {text: "Latin big band — sixteen players, salsa and mambo", flag: false}
+  - prompt: "And Sunday?"
+    options:
+      - {text: "Ska brass party — skanking horns, full dance floor", flag: false}
+      - {text: "Blues-jam tent — open stage, bring an instrument or just listen", flag: true}
+      - {text: "K-pop dance showcase — three groups, one stage", flag: false}
+      - {text: "Piedmont fingerpicking session — ragtime blues on two acoustics", flag: true}

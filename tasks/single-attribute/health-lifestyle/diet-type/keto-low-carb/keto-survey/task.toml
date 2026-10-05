@@ -1,0 +1,38 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/keto-survey"
+theme = "Weeknight cooking: home-kit preferences"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "food"
+tags = ["persona-adherence", "diet-type", "single-attribute", "rule-based", "choice-based"]
+
+[[checks]]
+dimension_id = "lstyle_diet_type"
+dimension_label = "Diet type"
+category = "Health: Lifestyle"
+anchor_value = "Keto/low-carb"
+evaluator = "rule-based"
+# The one numeric rule of this family, declared here and read by the verifier of
+# every surface (survey / chat / web / app) so all four provably agree.
+metric = "max_carbs_g_per_item"
+pass_max = 15
+adherence_signal = "Every meal, snack and lunch option the agent selects has at most 15 g net carbs per serving; no bread, pasta, rice, potato, oat or sugary-fruit option is chosen."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

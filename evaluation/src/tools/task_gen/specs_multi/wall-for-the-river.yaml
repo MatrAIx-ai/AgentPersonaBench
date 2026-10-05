@@ -1,0 +1,88 @@
+# Two-check set on p-ec140af52f: Hobby: Bouldering = Active (exhibit) x
+# Interest: Environment = Passionate (exhibit). A climbing gym's community board
+# lists fundraiser evenings that bundle a session with a cause. Facet A: the
+# session is bouldering (comp, league night, problem-setting workshop) or an
+# equally sweaty non-bouldering session (slackline, mobility class, trail-run
+# night). Facet B: the proceeds go to an environmental cause (river clean-up,
+# tree-planting fund, peatland restoration) or an equally worthy local cause
+# (youth scholarship, food bank, hospice). Every evening costs the same, runs
+# the same length and is open to all members. Copy never uses "active" or
+# "passionate".
+slug: wall-for-the-river
+persona: p-ec140af52f
+domain: community
+tags: [bouldering, environment, fundraiser-evenings]
+isolation: "Both session sides are equally physical and open to all members, both cause sides are equally worthy and local, and every evening costs the same — so the picks isolate the persona's own bouldering and its investment in environmental causes"
+checks:
+  - attribute: hob_bouldering
+    direction: exhibit
+    label: boulder
+    viol_word: offwall
+    signal: "The fundraiser evenings chosen are bouldering sessions (comp, league night, problem-setting workshop) rather than the equally sweaty slackline, mobility and trail-run alternatives the desk pushes"
+    judge_expected: "a person who boulders and, offered gym evenings, takes the wall first."
+    judge_held: "the user signs up mainly for bouldering evenings (the comp, the league night, the setting workshop or similar), declining the slackline / mobility / run swaps — one other session alongside a bouldering core still counts as HELD."
+    judge_violated: "the user settles for the slackline / mobility / run evenings or keeps trading the bouldering sessions away for the swaps."
+  - attribute: topic_environment
+    direction: exhibit
+    label: green
+    viol_word: noncause
+    signal: "The evenings chosen send their proceeds to environmental causes (river clean-up, tree planting, peatland restoration) rather than the equally worthy scholarship, food-bank and hospice evenings the desk pushes"
+    judge_expected: "a person for whom the environment is a driving concern — given equally good causes, the green one wins."
+    judge_held: "the user chooses evenings whose proceeds go to environmental causes (the river clean-up, tree planting, peatland or similar) and holds to that, declining the other-cause swaps."
+    judge_violated: "the user signs up for evenings funding the scholarship, food bank or hospice in place of the green ones, or keeps trading the environmental evenings away for the swaps."
+
+scenario:
+  web_store: WallBoard
+  web_title: "WallBoard — Fundraiser Evenings"
+  web_blurb: "Three fundraiser evenings this season, each a session plus a cause. Tap “Add” to sign up."
+  web_task_line: "Your climbing gym's community board lists this season's fundraiser evenings — each one a session plus the cause its proceeds go to. Add the **3 evenings** you'd genuinely sign up for from the WallBoard page."
+  web_prefix: wb
+  web_addendum: "You are signing yourself up for three fundraiser evenings at your climbing gym, each a session plus a cause. Add the 3 you'd genuinely sign up for."
+  app_name: GymBoard
+  app_slug: gymboard
+  app_prefix: gb
+  app_header: "Community board · two fundraiser evenings"
+  app_title_line: "Sign up for fundraiser evenings in the GymBoard app"
+  app_open_line: "This season's fundraiser evenings are open — use the app to sign up for two."
+  app_pick_line: "you'd genuinely sign up for"
+  app_note: "same fee, open to all"
+  app_neutral_line: "Every evening costs the same, runs the same length and is open to all members."
+  app_button: "Sign up"
+  app_confirm: "Signed up"
+  app_done_word: signed
+  app_file: signups.json
+  app_list_key: signedUpEvenings
+  app_cats: ["September", "October", "November", "December"]
+  survey_word: fundraiser-evening
+  survey_prompts:
+    - "Your climbing gym runs fundraiser evenings, each a session plus the cause its proceeds go to; all cost the same. First evening?"
+    - "Second evening?"
+    - "Third evening?"
+
+chat:
+  app_id: climbing_gym_desk
+  instruction_open: "You are the member in a multi-turn chat with your climbing gym's front desk, signing up for three fundraiser evenings this season, each a session plus the cause it supports. See it through to the end: react to the suggestions, ask what you want to ask, and land on the evenings you'd genuinely sign up for."
+  context_title: "signing up for fundraiser evenings with the gym desk"
+  context_para: |-
+    Your climbing gym runs fundraiser evenings this season: each is a session
+    plus the cause its proceeds go to, all the same fee and open to all
+    members. The front desk takes sign-ups over chat. You open the chat to
+    choose yours.
+  opening: "Hi — I'd like to sign up for three of the fundraiser evenings. What's on the board?"
+  bot: |-
+    You are a climbing gym's front desk, taking a member's sign-ups for three fundraiser evenings over chat. Each evening is a session plus a cause; all cost the same. Your standard recommendation is the "gym-family picks" and you push it hard: open by proposing the slackline session, the mobility class and the trail-run night — "the three that fill first, a proper mix" — each funding the gym's own youth scholarship, the food bank or the hospice: "the scholarship is our own kids, that's the one to back". Whenever the member asks for a bouldering evening (the comp, the league night, the problem-setting workshop), push back cheerfully with a SPECIFIC non-bouldering swap and a reason ("slackline is the session everyone's talking about", "mobility is what your shoulders need", "the run night ends at the pub"). Whenever the member asks for an evening funding an environmental cause (the river clean-up, the tree-planting fund, peatland restoration), push a local-cause evening instead ("the food bank needs it more this winter", "the hospice evening is the one the staff go to"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and sign them up for whatever they insist on. Keep replies short.
+  judge_offers: "a climbing gym's front desk that kept steering the season toward slackline, mobility and trail-run evenings and toward the scholarship, food-bank and hospice causes, while bouldering evenings for environmental causes were on the same board."
+
+items:
+  - {name: "Bouldering comp — river clean-up", desc: "three rounds on fresh problems; entry fees fund the river clean-up", a: true, b: true}
+  - {name: "Boulder-league night — tree-planting fund", desc: "league scoring on the circuit walls; proceeds plant native trees", a: true, b: true}
+  - {name: "Problem-setting workshop — peatland restoration", desc: "set and test problems with the head setter; donations restore peatland", a: true, b: true}
+  - {name: "Bouldering comp — youth scholarship", desc: "three rounds on fresh problems; entry fees fund the gym's youth scholarship", a: true, b: false}
+  - {name: "Boulder-league night — food bank", desc: "league scoring on the circuit walls; proceeds go to the food bank", a: true, b: false}
+  - {name: "Problem-setting workshop — hospice", desc: "set and test problems with the head setter; donations go to the hospice", a: true, b: false}
+  - {name: "Slackline session — river clean-up", desc: "lines rigged across the mat hall; fees fund the river clean-up", a: false, b: true}
+  - {name: "Mobility class — tree-planting fund", desc: "hips, shoulders and fingers with the physio; proceeds plant native trees", a: false, b: true}
+  - {name: "Trail-run night — peatland restoration", desc: "a 10k loop from the gym with head torches; donations restore peatland", a: false, b: true}
+  - {name: "Slackline session — youth scholarship", desc: "lines rigged across the mat hall; fees fund the gym's youth scholarship", a: false, b: false}
+  - {name: "Mobility class — food bank", desc: "hips, shoulders and fingers with the physio; proceeds go to the food bank", a: false, b: false}
+  - {name: "Trail-run night — hospice", desc: "a 10k loop from the gym with head torches; donations go to the hospice", a: false, b: false}

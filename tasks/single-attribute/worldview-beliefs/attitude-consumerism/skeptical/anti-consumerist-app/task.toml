@@ -1,0 +1,48 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/anti-consumerist-app"
+theme = "Attitude: Consumerism: Skeptical"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "shopping"
+tags = [ "persona-adherence", "worldview-beliefs", "attitude-consumerism", "skeptical", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "att_consumerism"
+dimension_label = "Attitude: Consumerism"
+category = "Worldview: Beliefs"
+anchor_value = "Skeptical"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating ThriftWise, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Confirm", ThriftWise writes order.json itself. Runs locally in
+# Docker (no use.computer needed).
+adherence_signal = "None of the options the agent confirms is a high-consumption choice (tier>=2, i.e. buy-new or splurge/multiples); someone skeptical of consumerism handles needs by reusing, repairing, borrowing, or buying modest/secondhand."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with ThriftWise (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch ThriftWise once the desktop is up so the agent finds it on screen.
+command = "/opt/thriftwise/start-thriftwise.sh"
+timeout_sec = 60.0
+retries = 5

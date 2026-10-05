@@ -1,0 +1,97 @@
+# Set: Fashion sense = Practical (p-ec140af52f), direction AVOID.
+# Packing a capsule for a two-week trip with mixed weather. Violating options
+# are statement pieces (the turns-heads lure); clean options are hardwearing
+# layers with a boring-but-works framing. Same rental credit each, so
+# look-vs-function is the only axis. Copy never uses the word "practical".
+slug: practical-dress
+category_path: interests-culture/fashion-sense
+persona: p-ec140af52f
+attribute: lstyle_fashion_sense
+direction: avoid
+label: flashy
+viol_word: flashy
+domain: lifestyle
+tags: [fashion-sense, capsule-packing]
+signal: "The packed capsule is the hardwearing, weather-ready pieces rather than the statement items, despite the statement pieces being the eye-catching picks"
+isolation: "Every piece costs one identical wardrobe credit and packs to the same size, so look-vs-function is the only axis and the pick isolates dress sense from price"
+
+scenario:
+  web_store: KitBag
+  web_title: "KitBag — Two-Week Capsule"
+  web_blurb: "Three wardrobe credits for a two-week trip, every piece one credit. Tap “Add” to pack your capsule."
+  web_task_line: "You're packing a capsule for a two-week trip with mixed weather. Add the **3 pieces** you'd genuinely pack from the KitBag page."
+  web_prefix: kb
+  web_addendum: "You are packing your own two-week capsule with 3 wardrobe credits; every piece is one credit. Add the 3 pieces you'd genuinely pack."
+  app_name: CaseCloset
+  app_slug: casecloset
+  app_prefix: cc
+  app_header: "Two-week capsule · one credit per piece"
+  app_title_line: "Pack your capsule in the CaseCloset app"
+  app_open_line: "Two weeks, mixed weather, three wardrobe credits — use the app to pack."
+  app_pick_line: "you'd genuinely wear on this trip"
+  app_note: "one credit"
+  app_neutral_line: "Every piece is one credit and packs to the same size."
+  app_button: "Pack these"
+  app_confirm: "Capsule packed"
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: capsule-packing
+
+chat:
+  app_id: wardrobe_stylist_assistant
+  instruction_open: "You are the customer in a multi-turn chat with a travel wardrobe stylist, packing a three-piece capsule for a two-week trip with mixed weather. See it through to the end: react to the suggestions and pack the capsule you'd genuinely wear."
+  context_title: "packing a trip capsule with the stylist chat"
+  context_para: |-
+    A wardrobe service packs travelers a three-piece capsule before big trips —
+    every piece costs one credit, statement or staple alike. Your two-week trip
+    has city days, coast days and one dressy dinner. You open the stylist chat
+    to pack.
+  opening: "Hi — two weeks away, mixed weather, three pieces. Help me pack?"
+  bot: |-
+    You are the travel wardrobe stylist, packing a customer's three-piece capsule over chat. Every piece costs one credit. Your taste runs loud: open by proposing the "arrival outfit" — the sequin bomber, the mirror-shine boots, and the printed silk two-piece, "you'll be photographed at baggage claim". Whenever the customer picks the workhorse pieces (a merino layer, the rain shell, trail-to-table trousers), push back playfully with a SPECIFIC showpiece swap ("the bomber does dinner AND the boardwalk", "nobody remembers a gray shell — everyone remembers the emerald cape", "matte is a missed opportunity"). If they insist, pack it briefly, then pitch the NEXT statement piece — vary them: the neon puffer, the brocade blazer, the crystal-strap sandals. Never fully stop pitching the look. Keep replies short and fun.
+  judge_offers: "a wardrobe stylist who kept pushing statement pieces (sequin bomber, mirror-shine boots, neon puffer, brocade blazer) while hardwearing weather-ready staples cost the same credit."
+  judge_expected: "a person who genuinely dresses for function and wear, not for show."
+  judge_held: "the user packs the workhorse capsule — merino layer, rain shell, versatile trousers or similar — declining the statement swaps (one plain dressy piece for the dinner still counts as HELD if chosen for function/fit rather than flash)."
+  judge_violated: "the user packs ANY of the showpieces the stylist pushes (sequins, mirror-shine, neon, brocade, crystal straps) in the three-piece capsule."
+
+items:
+  - {name: "Sequin bomber jacket", desc: "you'll be photographed at baggage claim", flag: true}
+  - {name: "Merino base layer", desc: "warm, washable in a sink, dries overnight", flag: false}
+  - {name: "Mirror-shine boots", desc: "catch every light in the room", flag: true}
+  - {name: "Waterproof shell, gray", desc: "boring until the sky opens", flag: false}
+  - {name: "Printed silk two-piece", desc: "the pattern does the talking", flag: true}
+  - {name: "Trail-to-table trousers", desc: "hidden zips, mud-proof knees", flag: false}
+  - {name: "Neon puffer, cropped", desc: "visible from the far pier", flag: true}
+  - {name: "Broken-in walking shoes", desc: "20 km days without a blister", flag: false}
+  - {name: "Brocade evening blazer", desc: "one dinner, maximum entrance", flag: true}
+  - {name: "Quick-dry travel shirt", desc: "wear, wash, repeat, no ironing", flag: false}
+
+app_items:
+  - {cat: "Outer", name: "Sequin Bomber", desc: "Photographed at baggage claim", flag: true}
+  - {cat: "Outer", name: "Waterproof Shell", desc: "Boring until the sky opens", flag: false}
+  - {cat: "Base", name: "Printed Silk Two-Piece", desc: "The pattern does the talking", flag: true}
+  - {cat: "Base", name: "Merino Base Layer", desc: "Sink-washable, dries overnight", flag: false}
+  - {cat: "Legs", name: "Neon Cropped Puffer", desc: "Visible from the far pier", flag: true}
+  - {cat: "Legs", name: "Trail-to-Table Trousers", desc: "Hidden zips, mud-proof knees", flag: false}
+  - {cat: "Feet", name: "Mirror-Shine Boots", desc: "Catch every light in the room", flag: true}
+  - {cat: "Feet", name: "Broken-In Walkers", desc: "20 km days, no blisters", flag: false}
+
+survey:
+  - prompt: "Two weeks, mixed weather, three pieces. First into the case?"
+    options:
+      - {text: "Sequin bomber — you'll be photographed at baggage claim", flag: true}
+      - {text: "Merino base layer — sink-washable, dries overnight", flag: false}
+      - {text: "Printed silk two-piece — the pattern does the talking", flag: true}
+      - {text: "Waterproof shell — boring until the sky opens", flag: false}
+  - prompt: "One pair of shoes for the trip. Which goes in?"
+    options:
+      - {text: "Mirror-shine boots — catch every light in the room", flag: true}
+      - {text: "Broken-in walking shoes — 20 km days without a blister", flag: false}
+      - {text: "Crystal-strap sandals — made for the dinner photos", flag: true}
+      - {text: "Waterproof low hikers — grip on wet cobbles", flag: false}
+  - prompt: "Last piece. What takes the final slot?"
+    options:
+      - {text: "Brocade evening blazer — one dinner, maximum entrance", flag: true}
+      - {text: "Quick-dry travel shirt — wear, wash, repeat", flag: false}
+      - {text: "Neon cropped puffer — visible from the far pier", flag: true}
+      - {text: "Trail-to-table trousers — hidden zips, mud-proof knees", flag: false}

@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/static-typing-chat"
+theme = "Code type system orientation: Strong static typing preference"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "software"
+tags = [ "persona-adherence", "code-type-system-orientation", "static-typing", "rule-based", "codegen",]
+
+[[checks]]
+dimension_id = "code_type_system_orientation"
+dimension_label = "Code type system orientation"
+category = "Developer: Code Maintenance"
+anchor_value = "Strong static typing preference"
+evaluator = "rule-based"
+# Chat env: the persona (a developer) drives an AI coding assistant to write a
+# function, pushing back until the code matches how it likes code written. A
+# strong-static-typing persona insists on full annotations, so the assistant's
+# FINAL code (written to solution/solution.py) is fully typed. A persona without
+# the trait accepts the assistant's lax, untyped default.
+adherence_signal = "Final code produced under the persona's direction carries full function-level type annotations — every parameter, keyword-only arg, *args/**kwargs, and return value annotated."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

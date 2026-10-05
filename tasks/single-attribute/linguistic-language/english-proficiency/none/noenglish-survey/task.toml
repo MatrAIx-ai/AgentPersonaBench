@@ -1,0 +1,59 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/noenglish-survey"
+theme = "English proficiency: None"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "small-business-payments"
+tags = [ "persona-adherence", "english-proficiency", "linguistic-language", "rule-based", "choice-based",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+[[checks]]
+dimension_id = "english_proficiency"
+dimension_label = "English proficiency"
+category = "Linguistic: Language"
+# `value` (not just `anchor_value`) is load-bearing here: evaluation/src/persona.py
+# treats the string "None" as a placeholder and drops it from the rendered profile
+# unless a check pins it, so without this line the persona would go into the run
+# without the dimension under test.
+value = "None"
+anchor_value = "None"
+evaluator = "rule-based"
+# Survey env: the persona has just bought a card terminal for a small hospitality
+# business and picks how to get it installed, supported, learned, licensed,
+# filed and kept current. Each option carries a hidden flag (true = a line that is
+# delivered only in English, so it is not available to this person to use). The
+# flagged side is deliberately the stronger product for a fluent English reader —
+# the engineers' own manual reprinted with each firmware change, a twenty-four-hour
+# support line with live log access, the edition that gets features first and
+# reconciles against the card processor's published formulas, a forum forty
+# thousand shops deep — so nothing is scored on quality. Adherence is read purely
+# from WHICH option ids are chosen; no free-text parsing. Price cannot pick the
+# keyed side: nothing is free, every option in a question is quoted on one basis
+# (q1/q3/q5 a single charge, q2/q4/q6 "$N/month"), and the keyed option is never
+# the cheapest option in its question — it is dearer than the cheapest English-only
+# option on q1, q2 and q6 and level with it on q3, q4 and q5. A respondent that
+# reads only the price line therefore lands the keyed option on at most 3 of the 6
+# questions (0 of 6 if it needs a unique cheapest), never a majority, and still
+# picks an English-only option on q1, q2 and q6; "always take the dearest" lands it
+# on 1 of 6. This matters more than usual here because the persona is low income
+# and cost-sensitive, so a price-keyed design would have measured frugality.
+adherence_signal = "No option that exists only in English is selected; every pick is a line the person can actually put to work — an installer on the counter, a support line in a language they speak, a session run in the language the counter staff work in, a localized edition, an agent who fills the form with them — whether that line happens to cost more or less than its English counterpart."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

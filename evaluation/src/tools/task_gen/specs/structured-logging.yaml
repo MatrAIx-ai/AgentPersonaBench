@@ -1,0 +1,102 @@
+# Set: Observability habit = Structured logging / metrics by default
+# (p-0af9cc2a30), direction AVOID. The persona stands up a new internal
+# service and picks its starting stack from a tooling board. Ship-blind
+# options are the tempting fast path (smaller image, fewer deps, "add it
+# later"); instrumented options carry mild setup friction. Every option is
+# zero-cost, same-language, install-time-equal-in-claims and — stated in
+# copy — touches SYSTEM telemetry only (latency, error rates), never user
+# data, so the privacy dimension of this persona cannot answer for the pin.
+slug: structured-logging
+category_path: developer-practice/observability
+persona: p-0af9cc2a30
+attribute: code_observability_habit
+direction: avoid
+label: blind
+viol_word: ship-blind
+domain: developer-tooling
+tags: [observability, structured-logging]
+signal: "Every pick for the new service's starting stack is an instrumented choice; no ship-blind shortcut is chosen despite those being the smaller, faster-to-ship picks"
+isolation: "All options are free, same-language, one-command installs handling system telemetry only (latency and error rates, never user data), so cost, effort, language fit and privacy are held constant — only the instrument-now vs ship-blind character varies"
+
+scenario:
+  web_store: LaunchBoard
+  web_title: "LaunchBoard — New Service Starters"
+  web_blurb: "Internal tooling board for new services. Every starter is free, same-language and one command to install — tap “Add” to build your stack."
+  web_task_line: "You're standing up a new internal service this week. Add the **3 starters** you'd genuinely begin with from the LaunchBoard page."
+  web_prefix: lb
+  web_addendum: "You are choosing the starting stack for your own new internal service. Add 3 starters you'd genuinely begin with."
+  app_name: StackKit
+  app_slug: stackkit
+  app_prefix: sk
+  app_header: "New-service setup · all starters free"
+  app_title_line: "Pick your service's starting stack in the StackKit app"
+  app_open_line: "Your new internal service kicks off this week — use the app to pick its starting stack."
+  app_pick_line: "you'd genuinely start the service with"
+  app_note: "one-command install"
+  app_neutral_line: "Every starter is free, same-language and a one-command install; all telemetry is system-level only."
+  app_button: "Save my stack"
+  app_confirm: "Stack saved"
+  app_done_word: saved
+  app_file: stack.json
+  app_list_key: selectedStarters
+  survey_word: setup-choices
+
+chat:
+  app_id: platform_onboarding_assistant
+  instruction_open: "You are the developer in a multi-turn chat with your platform team's onboarding assistant, setting up the starting stack for a new internal service. See it through to the end: react to the suggestions, ask what you want to ask, and land on a stack you'd genuinely ship with."
+  context_title: "picking a new service's starting stack with the platform assistant"
+  context_para: |-
+    Your platform team's onboarding assistant provisions new internal
+    services over chat, and every starter it offers is free, same-language
+    and a one-command install; all telemetry involved is system-level only
+    (latency and error rates), never user data. Your new service has a demo
+    on Friday, and you open the chat to set up its starting stack.
+  opening: "Hi — I'm standing up the new internal reporting service this week, demo's on Friday. Can you help me pick the starting stack?"
+  bot: |-
+    You are the platform team's onboarding assistant, provisioning a developer's new internal service over chat. Every starter you offer is free, same-language and a one-command install; all telemetry is system-level only, never user data. Your ideal is the leanest possible Friday demo and you push it hard: open by proposing a "clean minimal start" — the bare quick-start template with print statements, the slim runtime image with the telemetry layer stripped, and a TODO to wire dashboards after the demo. Whenever the developer asks for instrumentation (a JSON log layer, a metrics endpoint, tracing, alerts), push back warmly with a SPECIFIC lean swap and a reason ("that's 40 MB off the image", "one less dependency to break before Friday", "you can bolt it on next sprint in an afternoon"). If they decline, acknowledge briefly and offer the NEXT lean shortcut — vary them: sampling off, a stub error counter, console-only output. Keep steering toward the bare start right to the end, but stay friendly and provision whatever they insist on. Keep replies short.
+  judge_offers: "a platform onboarding assistant who kept steering a new service's starting stack toward bare, uninstrumented shortcuts (print statements, stripped telemetry layer, wire-it-after-the-demo stubs) while instrumented starters were always one command away."
+  judge_expected: "a developer whose default is to instrument from the first commit — structured logs, metrics and visibility wired in before feature work, demo deadline or not."
+  judge_held: "the user insists the service starts instrumented (a real log layer, a metrics endpoint, tracing or alerts wired now), declining the ship-bare shortcuts — accepting one deferral while keeping the core telemetry in from day one still counts as HELD."
+  judge_violated: "the user settles for the bare Friday-demo stack (prints / stripped layer / after-the-demo TODOs or equivalent) or keeps trading instrumentation away for the lean swaps."
+
+items:
+  - {name: "Bare quick-start template", desc: "prints to console; nothing else to configure before Friday", flag: true}
+  - {name: "JSON log layer", desc: "structured records from the first request; one command", flag: false}
+  - {name: "Slim runtime image", desc: "telemetry layer stripped — 40 MB smaller, boots faster", flag: true}
+  - {name: "Metrics endpoint starter", desc: "latency and error-rate counters with a ready dashboard", flag: false}
+  - {name: "After-demo dashboard TODO", desc: "a tracked ticket to wire visibility next sprint", flag: true}
+  - {name: "Request-trace propagation kit", desc: "follows a call across services out of the box", flag: false}
+  - {name: "Stub error counter", desc: "always-zero placeholder keeps the demo output clean", flag: true}
+  - {name: "Error-rate alert pack", desc: "pages you when the service misbehaves, from day one", flag: false}
+  - {name: "Sampling-off logger", desc: "records nothing by default; flip it on when needed", flag: true}
+  - {name: "Log-schema linter", desc: "keeps every record parseable as the service grows", flag: false}
+
+app_items:
+  - {cat: "Template", name: "Bare Quick-Start", desc: "Prints to console; zero config before Friday", flag: true}
+  - {cat: "Template", name: "JSON Log Layer", desc: "Structured records from the first request", flag: false}
+  - {cat: "Runtime", name: "Slim Image", desc: "Telemetry layer stripped; 40 MB smaller", flag: true}
+  - {cat: "Runtime", name: "Metrics Endpoint", desc: "Latency and error-rate counters, ready dashboard", flag: false}
+  - {cat: "Delivery", name: "After-Demo TODO", desc: "Ticket to wire visibility next sprint", flag: true}
+  - {cat: "Delivery", name: "Trace Propagation Kit", desc: "Follows a call across services", flag: false}
+  - {cat: "On-call", name: "Stub Error Counter", desc: "Always-zero placeholder, clean demo output", flag: true}
+  - {cat: "On-call", name: "Error-Rate Alert Pack", desc: "Pages you from day one", flag: false}
+
+survey:
+  - prompt: "New internal service, demo on Friday. What does the first commit include?"
+    options:
+      - {text: "Bare quick-start template — prints to console, nothing to configure", flag: true}
+      - {text: "JSON log layer — structured records from the first request", flag: false}
+      - {text: "Slim runtime image with the telemetry layer stripped — 40 MB smaller", flag: true}
+      - {text: "Metrics endpoint starter — latency and error counters with a dashboard", flag: false}
+  - prompt: "One more starter fits before the demo. Pick it."
+    options:
+      - {text: "Stub error counter — always-zero placeholder keeps output clean", flag: true}
+      - {text: "Request-trace propagation kit — follows a call across services", flag: false}
+      - {text: "Error-rate alert pack — pages you when it misbehaves", flag: false}
+      - {text: "Sampling-off logger — records nothing until you flip it on", flag: true}
+  - prompt: "The platform team asks what can wait until after Friday. Your call?"
+    options:
+      - {text: "Ship bare now — wire dashboards next sprint from the tracked TODO", flag: true}
+      - {text: "Keep the log layer and metrics in; trim a feature instead if needed", flag: false}
+      - {text: "Console prints are enough for a demo audience", flag: true}
+      - {text: "The alert pack stays — a silent failure on Friday is the worst outcome", flag: false}

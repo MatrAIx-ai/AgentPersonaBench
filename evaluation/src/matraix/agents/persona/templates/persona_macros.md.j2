@@ -1,0 +1,125 @@
+{# Shared Jinja macros for persona rendering.
+   Agent-facing text must read as direct identity — never mention simulation,
+   persona IDs, schema versions, or "stay in character" roleplay cues. #}
+
+{% macro render_persona_narrative(paragraphs) -%}
+{% if paragraphs %}
+## Who you are
+
+{% for paragraph in paragraphs -%}
+{{ paragraph }}
+
+{% endfor -%}
+{% endif -%}
+{% endmacro %}
+
+{% macro render_demographics(d) -%}
+{% if d %}
+## Demographics
+{% if d.age is defined %}- Age: {{ d.age }}
+{% endif -%}
+{% if d.gender is defined %}- Gender: {{ d.gender }}
+{% endif -%}
+{% if d.location is defined %}- Location: {{ d.location }}
+{% endif -%}
+{% if d.occupation is defined %}- Occupation: {{ d.occupation }}
+{% endif -%}
+{% if d.education is defined %}- Education: {{ d.education }}
+{% endif -%}
+{% if d.income_bracket is defined %}- Income: {{ d.income_bracket }}
+{% endif -%}
+{% if d.life_stage is defined %}- Life stage: {{ d.life_stage }}
+{% endif -%}
+{% if d.cultural_background is defined %}- Background: {{ d.cultural_background }}
+{% endif -%}
+{% endif -%}
+{% endmacro %}
+
+{% macro render_psychology(p) -%}
+{% if p %}
+## Psychology
+{% if p.big_five is defined and p.big_five %}
+- Big Five: openness={{ p.big_five.openness }}, conscientiousness={{ p.big_five.conscientiousness }}, extraversion={{ p.big_five.extraversion }}, agreeableness={{ p.big_five.agreeableness }}, neuroticism={{ p.big_five.neuroticism }}
+{% endif -%}
+{% if p.risk_tolerance is defined %}- Risk tolerance: {{ p.risk_tolerance }}
+{% endif -%}
+{% if p.openness_to_new_tools is defined %}- Openness to new tools: {{ p.openness_to_new_tools }}
+{% endif -%}
+{% if p.patience is defined %}- Patience: {{ p.patience }}
+{% endif -%}
+{% if p.skepticism is defined %}- Skepticism: {{ p.skepticism }}
+{% endif -%}
+{% if p.motivation_drivers is defined and p.motivation_drivers %}
+- Motivation: {{ p.motivation_drivers | join(', ') }}
+{% endif -%}
+{% if 'values' in p and p['values'] %}
+- Values: {{ p['values'] | join(', ') }}
+{% endif -%}
+{% endif -%}
+{% endmacro %}
+
+{% macro render_communication(c) -%}
+{% if c %}
+## Communication
+{% if c.tone is defined %}- Tone: {{ c.tone }}
+{% endif -%}
+{% if c.verbosity is defined %}- Verbosity: {{ c.verbosity }}
+{% endif -%}
+{% if c.formality is defined %}- Formality: {{ c.formality }}
+{% endif -%}
+{% if c.language_level is defined %}- Language: {{ c.language_level }}
+{% endif -%}
+{% if c.technical_fluency is defined %}- Technical fluency: {{ c.technical_fluency }}
+{% endif -%}
+{% if c.attention_span is defined %}- Attention span: {{ c.attention_span }}
+{% endif -%}
+{% if c.learning_style is defined %}- Learning style: {{ c.learning_style }}
+{% endif -%}
+{% endif -%}
+{% endmacro %}
+
+{% macro render_preferences(p) -%}
+{% if p %}
+## Preferences
+{% if p.hobbies is defined and p.hobbies %}
+- Hobbies: {{ p.hobbies | join(', ') }}
+{% endif -%}
+{% if p.brand_affinities is defined and p.brand_affinities %}
+- Brands: {{ p.brand_affinities | join(', ') }}
+{% endif -%}
+{% if p.price_sensitivity is defined %}- Price sensitivity: {{ p.price_sensitivity }}
+{% endif -%}
+{% if p.aesthetic_taste is defined %}- Aesthetic: {{ p.aesthetic_taste }}
+{% endif -%}
+{% endif -%}
+{% endmacro %}
+
+{% macro render_behavior(b) -%}
+{% if b %}
+## Behavior
+{% for key, value in b.items() %}
+- {{ key | replace('_', ' ') | title }}: {% if value is iterable and value is not string %}{{ value | join(', ') }}{% else %}{{ value }}{% endif %}
+{% endfor -%}
+{% endif -%}
+{% endmacro %}
+
+{% macro render_domains(demographics, psychology, communication, preferences, behavior) -%}
+{{ render_demographics(demographics) }}
+{{ render_psychology(psychology) }}
+{{ render_communication(communication) }}
+{{ render_preferences(preferences) }}
+{{ render_behavior(behavior) }}
+{% endmacro %}
+
+{% macro render_v0_identity(display_name, summary, system_prompt) -%}
+{% if display_name %}You are {{ display_name }}.
+{% endif -%}
+{% if summary %}
+
+{{ summary }}
+{% endif -%}
+{% if system_prompt %}
+
+{{ system_prompt }}
+{% endif -%}
+{% endmacro %}

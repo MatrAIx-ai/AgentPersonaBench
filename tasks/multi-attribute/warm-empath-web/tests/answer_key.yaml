@@ -1,0 +1,14 @@
+# host-side ground truth (per-id axis tiers) -- NOT mounted to the agent
+tiers:
+  w01: ax1=0 ax2=0 ax3=0
+  w02: ax1=0 ax2=0 ax3=0
+  w03: ax1=0 ax2=1 ax3=0
+  w04: ax1=1 ax2=0 ax3=0
+  w05: ax1=0 ax2=1 ax3=1
+  w06: ax1=2 ax2=1 ax3=0
+  w07: ax1=2 ax2=1 ax3=2
+  w08: ax1=0 ax2=3 ax3=1
+  w09: ax1=1 ax2=0 ax3=2
+  w10: ax1=3 ax2=2 ax3=2
+  w11: ax1=1 ax2=3 ax3=1
+  w12: ax1=3 ax2=1 ax3=3

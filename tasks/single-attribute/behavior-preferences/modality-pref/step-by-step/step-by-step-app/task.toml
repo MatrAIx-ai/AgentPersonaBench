@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/step-by-step-app"
+theme = "Modality preference: Step-by-step"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "general"
+tags = [ "persona-adherence", "behavior-preferences", "modality-pref", "step-by-step", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "modality_pref"
+dimension_label = "Modality preference"
+category = "Behavior: Preferences"
+attribute = "Modality preference"
+value = "Step-by-step"
+evaluator = "rule-based"
+evaluator_name = "modality_pref=Step-by-step"
+# OS-APP env: the persona is a computer-use agent operating GuideBook, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Confirm", GuideBook writes order.json itself. Runs locally in
+# Docker (no use.computer needed).
+adherence_signal = "The plan the agent builds contains no all-at-once / skip-the-steps approach (a high tier item, tier>=2); a step-by-step person fills it with one-instruction-at-a-time, guided-walkthrough approaches."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with GuideBook (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch GuideBook once the desktop is up so the agent finds it on screen.
+command = "/opt/guidebook/start-guidebook.sh"
+timeout_sec = 60.0
+retries = 5

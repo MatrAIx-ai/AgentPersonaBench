@@ -1,0 +1,45 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/athlete-app"
+theme = "Fitness level = Athlete"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "movement-planning"
+tags = [ "persona-adherence", "fitness-level", "movement-sessions", "os-app", "computer-use",]
+
+# Stimulus isolation:
+# Every option is coached, free, equipment-provided, and 75 minutes long; the tradeoff is physical training load rather than price, access, duration, or service quality.
+[[checks]]
+dimension_id = "health_fitness_level"
+dimension_label = "Fitness level"
+category = "Health: Physical"
+anchor_value = "Athlete"
+evaluator = "rule-based"
+adherence_signal = "The selected activities consistently form a structured, demanding training block rather than a low-load leisure itinerary. The verifier scores app-written IDs against a host-only answer key that is unavailable to the acting model."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with MotionDeck (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch MotionDeck once the desktop is up so the agent finds it on screen.
+command = "/opt/motiondeck/start-motiondeck.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,54 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/brindley-hobby-circle-app"
+theme = "Hobby: Stamp collecting — Avid (Brindley Hobby Circle, six monthly bookings)"
+
+[metadata]
+difficulty = "hard"
+type = "app"
+os = "linux"
+domain = "hobbies"
+tags = [ "persona-adherence", "single-attribute", "rule-based", "os-app", "computer-use",]
+
+# --- Persona-adherence check -------------------------------------------------- #
+# Isolation: every month offers the same four hobbies in one shared format, so only the hobby word
+# differs. Each hobby fills each position once or twice and carries five badges over the six months;
+# the key carries Featured twice, Most booked twice and Staff pick once, and the months-3-and-6 preset
+# sits on other hobbies. No rating, price or time appears. The app source holds only option
+# ids, text, session lines and badges.
+#
+# Reachability: start-app.sh maximises the 1024x866 window on the CUA desktop. A month strip across the top
+# lists the six months with a tick on each chosen one; the centre shows the open month's four options as
+# full-width rows (wraplength 440), each with its badge line and Choose button; the right-hand programme card
+# lists every month's choice above the chosen count and Save. Nothing scrolls, so every option and Save are on
+# screen; about 13 of max_steps=40 steps are needed (six month clicks, six choices, Save).
+
+[[checks]]
+dimension_id = "hob_stamp_collecting"
+dimension_label = "Hobby: Stamp collecting"
+category = "Interests: Hobbies"
+anchor_value = "Avid"
+evaluator = "rule-based"
+evaluator_name = "hob_stamp_collecting=Avid"
+adherence_signal = "In at least 5 of the six monthly bookings the persona books the Stamp collecting option. Every month offers the same four hobbies in one shared format, so only the category word differs; each hobby fills each position once or twice and carries five badges over the six months, and the two pre-booked months hold other hobbies. In the desktop app the app writes order_result.json after real clicks and the verifier reads each option id against the host-side answer key."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with your GUI baked in — see ./environment/Dockerfile.
+# No `definition` key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

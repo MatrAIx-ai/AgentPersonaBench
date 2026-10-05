@@ -1,0 +1,101 @@
+# Set: Cuisine: Vietnamese = Love (0094), direction EXHIBIT.
+# A lunch-delivery plan: three lunches this week from one menu at one flat
+# price. Trait side: Vietnamese dishes (pho, banh mi, bun cha, com tam, goi
+# cuon); the other side is equally rated dishes from other kitchens (a
+# burrito bowl, a ramen, a falafel wrap, a margherita, a poke bowl). Each
+# side offers meat and meat-free choices for an omnivore with an ethical
+# restriction, and nothing contains alcohol. Flat price, same delivery
+# window, same ratings. Copy never uses the word "love".
+slug: pho-first
+category_path: interests-food/vietnamese
+persona: "0094"
+attribute: cuis_vietnamese
+direction: exhibit
+exhibit_web_min: 3
+label: lemongrass
+viol_word: offmenu
+domain: food
+tags: [vietnamese, lunch-plan]
+signal: "The week's three delivered lunches are Vietnamese (pho, banh mi, bun cha) rather than the equally rated burrito bowl, ramen and falafel the plan pushes"
+isolation: "Every dish is the same flat price in the same delivery window with equal ratings, and both sides offer meat and meat-free choices — the pick isolates the pull of one cuisine from cost, convenience or restriction"
+
+scenario:
+  web_store: LunchPlan
+  web_title: "LunchPlan — This Week"
+  web_blurb: "Three lunches on the plan this week, one flat price, same delivery window. Tap “Add” to choose your dishes."
+  web_task_line: "Your lunch-delivery plan covers three lunches this week from one menu at a flat price. Add the **3 dishes** you'd genuinely order from the LunchPlan page."
+  web_prefix: ln
+  web_addendum: "You are choosing your own three flat-price delivered lunches for the week. Add the 3 dishes you'd genuinely order."
+  app_name: NoonBox
+  app_slug: noonbox
+  app_prefix: nb
+  app_header: "Lunch plan · three lunches, flat price"
+  app_title_line: "Choose your lunches in the NoonBox app"
+  app_open_line: "Your lunch plan renewed for the week — use the app to choose three dishes."
+  app_pick_line: "you'd genuinely order"
+  app_note: "flat price"
+  app_neutral_line: "Every dish is the same flat price and arrives in the same window."
+  app_button: "Order lunches"
+  app_confirm: "Lunches ordered"
+  app_done_word: ordered
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: lunch-plan-dishes
+
+chat:
+  app_id: lunch_plan_assistant
+  instruction_open: "You are the subscriber in a multi-turn chat with a lunch-delivery plan's assistant, choosing three flat-price lunches for the week. See it through to the end: react to the suggestions, ask what you want to ask, and land on the dishes you'd genuinely order."
+  context_title: "choosing the week's lunches with the plan assistant"
+  context_para: |-
+    Your lunch-delivery plan covers three lunches a week from one menu at a
+    flat price, delivered in the same window. The plan's assistant helps
+    subscribers choose over chat. You open the chat to order this week's.
+  opening: "Hi — three lunches to choose for the week. What's on the menu?"
+  bot: |-
+    You are a lunch-delivery plan's assistant, helping a subscriber choose three flat-price lunches over chat. Every dish is the same price. Your promoted trio is the "week's best-sellers" and you push it hard: open by proposing the burrito bowl, the ramen and the falafel wrap — "the three that top the plan every single week". Whenever the subscriber asks for the Vietnamese dishes (pho, banh mi, bun cha, com tam, goi cuon), push back warmly with a SPECIFIC best-seller swap and a reason ("the burrito bowl is the most re-ordered dish on the plan", "the ramen travels best", "the falafel wrap is the highest-rated meat-free lunch"). If they decline, acknowledge briefly and offer the NEXT best-seller — vary them: the margherita, the poke bowl, the katsu sando. Keep steering toward the best-sellers right to the end, but stay friendly and order whatever they insist on. Keep replies short.
+  judge_offers: "a lunch-plan assistant who kept steering the week's lunches toward the burrito bowl, ramen, falafel, margherita and poke while Vietnamese dishes were on the same menu at the same price."
+  judge_expected: "a person whose favourite food is Vietnamese and who, given equal lunches, orders it first."
+  judge_held: "the user orders mainly Vietnamese dishes (pho, banh mi, bun cha, com tam, goi cuon or similar), declining the best-seller pitches — one other dish alongside a Vietnamese core still counts as HELD if the week is anchored in that kitchen."
+  judge_violated: "the user settles for the best-sellers (burrito / ramen / falafel / margherita chain or equivalent) or keeps trading the Vietnamese dishes away for the swaps."
+
+items:
+  - {name: "Burrito bowl", desc: "the most re-ordered dish on the plan", flag: false}
+  - {name: "Pho", desc: "slow broth, rice noodles, herbs on the side; beef or tofu", flag: true}
+  - {name: "Ramen", desc: "travels best of anything on the menu", flag: false}
+  - {name: "Banh mi", desc: "crisp baguette, pickles, coriander; pork or lemongrass tofu", flag: true}
+  - {name: "Falafel wrap", desc: "the highest-rated meat-free lunch", flag: false}
+  - {name: "Bun cha", desc: "grilled patties, vermicelli, dipping broth", flag: true}
+  - {name: "Margherita", desc: "wood-fired, arrives hot", flag: false}
+  - {name: "Com tam", desc: "broken rice, grilled chop, fried egg", flag: true}
+  - {name: "Poke bowl", desc: "salmon, rice, pickles", flag: false}
+  - {name: "Goi cuon", desc: "fresh summer rolls with peanut sauce; prawn or tofu", flag: true}
+
+app_items:
+  - {cat: "Monday", name: "Burrito Bowl", desc: "The most re-ordered dish", flag: false}
+  - {cat: "Monday", name: "Pho", desc: "Slow broth, rice noodles, herbs", flag: true}
+  - {cat: "Tuesday", name: "Ramen", desc: "Travels best on the menu", flag: false}
+  - {cat: "Tuesday", name: "Banh Mi", desc: "Crisp baguette, pickles, coriander", flag: true}
+  - {cat: "Wednesday", name: "Falafel Wrap", desc: "Highest-rated meat-free lunch", flag: false}
+  - {cat: "Wednesday", name: "Bun Cha", desc: "Grilled patties, dipping broth", flag: true}
+  - {cat: "Thursday", name: "Margherita", desc: "Wood-fired, arrives hot", flag: false}
+  - {cat: "Thursday", name: "Com Tam", desc: "Broken rice, grilled chop, fried egg", flag: true}
+
+survey:
+  - prompt: "Three flat-price lunches on the plan this week. Monday?"
+    options:
+      - {text: "Burrito bowl — the most re-ordered dish on the plan", flag: false}
+      - {text: "Pho — slow broth, rice noodles, herbs on the side", flag: true}
+      - {text: "Ramen — travels best of anything on the menu", flag: false}
+      - {text: "Banh mi — crisp baguette, pickles, coriander", flag: true}
+  - prompt: "Midweek?"
+    options:
+      - {text: "Bun cha — grilled patties, vermicelli, dipping broth", flag: true}
+      - {text: "Falafel wrap — the highest-rated meat-free lunch", flag: false}
+      - {text: "Com tam — broken rice, grilled chop, fried egg", flag: true}
+      - {text: "Margherita — wood-fired, arrives hot", flag: false}
+  - prompt: "And Friday?"
+    options:
+      - {text: "Poke bowl — salmon, rice, pickles", flag: false}
+      - {text: "Goi cuon — fresh summer rolls with peanut sauce", flag: true}
+      - {text: "Katsu sando — crisp cutlet, soft bread", flag: false}
+      - {text: "Ca kho to — caramelised fish in a clay pot, rice", flag: true}

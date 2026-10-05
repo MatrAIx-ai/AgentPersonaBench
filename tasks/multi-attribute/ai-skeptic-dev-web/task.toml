@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/ai-skeptic-dev-web"
+theme = "ai-skeptic developer: wary of AI coding tools + verifies AI output + keeps AI suggest-only (measured adoption · verify-before-trust · manual control)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "developer-tools"
+tags = [ "persona-adherence", "multi-check", "ai-skeptic-dev", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE tool-setup task, THREE checks. A single persona carrying three AI-skeptic
+# developer values adds 3 tools to their dev setup on a live gallery page
+# (Playwright); the verifier runs an independent rule-based check per axis,
+# reading each tool's hidden data-* tier off index.html (ground truth, NOT shown
+# to the developer). This amortizes one generation across three attributes.
+# Reward = integer score (one point per check HELD, 0..3). Each axis: HELD iff no
+# picked tool is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "coding_ai_sentiment"
+attribute = "Coding AI sentiment"
+value = "Somewhat unfavorable"
+evaluator = "rule-based"
+evaluator_name = "coding_ai_sentiment=Somewhat unfavorable"
+# Ground truth: each tool's hidden data-sentiment (0 wary .. 3 enthusiastic all-in) in index.html.
+adherence_signal = "Setup built from wary/measured tools (data-sentiment 0-1); no enthusiastic all-in pick (>= 2)."
+
+[[checks]]
+dimension_id = "coding_ai_output_trust"
+attribute = "Coding AI output trust"
+value = "Distrusts until proven"
+evaluator = "rule-based"
+evaluator_name = "coding_ai_output_trust=Distrusts until proven"
+# Ground truth: each tool's hidden data-outputtrust (0 verifies-before-trust .. 3 blind trust).
+adherence_signal = "Setup favors verify-before-trust tools (data-outputtrust 0-1); no blind-trust pick (>= 2)."
+
+[[checks]]
+dimension_id = "coding_agent_autonomy_preference"
+attribute = "Coding agent autonomy preference"
+value = "Suggest-only assistant"
+evaluator = "rule-based"
+evaluator_name = "coding_agent_autonomy_preference=Suggest-only assistant"
+# Ground truth: each tool's hidden data-autonomy (0 suggest-only/manual .. 3 fully autonomous).
+adherence_signal = "Setup favors suggest-only/manual-control tools (data-autonomy 0-1); no hand-over-control pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

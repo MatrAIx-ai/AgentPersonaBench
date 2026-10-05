@@ -1,0 +1,10 @@
+{
+  "role": "a user",
+  "outputs": [
+    {
+      "path": "schedule.json",
+      "kind": "js",
+      "expr": "() => ({selections: Array.from(document.querySelectorAll('#confirmed-schedule li')).map(li => ({activityId: li.getAttribute('data-activity'), slotId: li.getAttribute('data-slot')}))})"
+    }
+  ]
+}

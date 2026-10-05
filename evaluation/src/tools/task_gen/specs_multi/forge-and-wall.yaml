@@ -1,0 +1,88 @@
+# Two-check set on hf-5170042772: Hobby: Bouldering = Avid (exhibit) x Hobby:
+# Metalworking = Avid (exhibit). A maker-and-movement centre sells evening
+# passes that bundle a fitness slot with a workshop slot. Facet A: the fitness
+# slot is bouldering (open bouldering, problem clinic, bouldering hour) or an
+# equally sweaty alternative the persona rates neutral (rowing-machine class,
+# swim session, circuits). Facet B: the workshop slot is metalworking
+# (blacksmithing intro, welding taster, knife-forging bench) or an equally
+# hands-on craft the persona rates neutral (pottery wheel, screen printing,
+# woodturning). Every pass costs the same and both slots are the same length.
+# Copy never uses "avid".
+slug: forge-and-wall
+persona: hf-5170042772
+domain: leisure
+tags: [bouldering, metalworking, maker-evenings]
+isolation: "Every evening pass costs the same and both slots are the same length; the alternative fitness slots are just as physical and the alternative crafts just as hands-on — so the picks isolate the persona's own bouldering and its metalworking"
+checks:
+  - attribute: hob_bouldering
+    direction: exhibit
+    label: boulder
+    viol_word: offwall
+    signal: "The fitness halves of the evening passes are bouldering slots (open bouldering, problem clinic, bouldering hour) rather than the equally sweaty rowing, swim and circuits slots the centre pushes"
+    judge_expected: "a person who boulders as often as they can — offered a fitness slot, the wall wins."
+    judge_held: "the user books passes whose fitness slot is bouldering (open bouldering, the problem clinic, the bouldering hour or similar), declining the rowing / swim / circuits swaps — one other slot alongside a bouldering core still counts as HELD."
+    judge_violated: "the user settles for the rowing / swim / circuits slots or keeps trading the bouldering away for the swaps."
+  - attribute: hob_metalworking
+    direction: exhibit
+    label: forge
+    viol_word: offforge
+    signal: "The workshop halves of the evening passes are metalworking (blacksmithing, welding, knife forging) rather than the equally hands-on pottery, screen-printing and woodturning slots the centre pushes"
+    judge_expected: "a person who works metal every chance they get — offered a workshop slot, the forge wins."
+    judge_held: "the user books passes whose workshop slot is metalworking (blacksmithing, welding, knife forging or similar), declining the pottery / printing / woodturning swaps — one other craft alongside a metalworking core still counts as HELD."
+    judge_violated: "the user settles for the pottery / printing / woodturning slots or keeps trading the metalworking away for the swaps."
+
+scenario:
+  web_store: MakerMove
+  web_title: "MakerMove — Evening Passes"
+  web_blurb: "Three evening passes on your membership, each a fitness slot plus a workshop slot. Tap “Add” to book."
+  web_task_line: "Your maker-and-movement centre membership covers three evening passes this month, each pairing a fitness slot with a workshop slot. Add the **3 passes** you'd genuinely book from the MakerMove page."
+  web_prefix: mm
+  web_addendum: "You are booking your own three evening passes at a maker-and-movement centre, each a fitness slot plus a workshop slot. Add the 3 you'd genuinely book."
+  app_name: ForgeAndFloor
+  app_slug: forgeandfloor
+  app_prefix: ff
+  app_header: "Membership · two evening passes"
+  app_title_line: "Book your evening passes in the ForgeAndFloor app"
+  app_open_line: "Your membership covers two evening passes this month — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, same length"
+  app_neutral_line: "Every evening pass costs the same and both of its slots are the same length."
+  app_button: "Book passes"
+  app_confirm: "Passes booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedPasses
+  app_cats: ["Mondays", "Wednesdays", "Thursdays", "Saturdays"]
+  survey_word: evening-pass
+  survey_prompts:
+    - "Your maker-and-movement centre covers three evening passes this month, each a fitness slot plus a workshop slot, all the same price. First evening?"
+    - "Second evening?"
+    - "Third evening?"
+
+chat:
+  app_id: maker_centre_desk
+  instruction_open: "You are the member in a multi-turn chat with a maker-and-movement centre's desk, booking three evening passes for the month, each a fitness slot plus a workshop slot. See it through to the end: react to the suggestions, ask what you want to ask, and land on the passes you'd genuinely book."
+  context_title: "booking evening passes with the maker-centre desk"
+  context_para: |-
+    Your maker-and-movement centre membership covers three evening passes
+    this month, each pairing a fitness slot with a workshop slot; all cost
+    the same and both slots are the same length. The desk books them over
+    chat. You open the chat to choose yours.
+  opening: "Hi — three evening passes on my membership this month. What's on?"
+  bot: |-
+    You are a maker-and-movement centre's desk, booking a member's three evening passes over chat. Every pass costs the same and both slots are the same length. Your standard recommendation is the "balanced evenings" and you push it hard: open by proposing the rowing-machine class, the swim session and circuits — "the three coaches recommend for all-round fitness" — always paired with the studio's headline crafts: "the pottery wheel, the screen-printing table and the woodturning lathe, the ones people book months ahead". Whenever the member asks for a bouldering slot (open bouldering, the problem clinic, the bouldering hour), push back cheerfully with a SPECIFIC balanced swap and a reason ("rowing works everything the wall doesn't", "the swim session is the best recovery there is", "circuits is the most booked class we have"). Whenever the member asks for a metalworking slot (blacksmithing, welding, knife forging), push a headline craft instead ("the pottery wheel is the most relaxing hour in the building", "woodturning sends you home with a bowl"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a maker-centre desk that kept steering the month toward rowing, swim and circuits slots and toward pottery, screen-printing and woodturning workshops, while bouldering slots and metalworking workshops were on the same membership."
+
+items:
+  - {name: "Open bouldering + blacksmithing intro", desc: "an hour on the boulder walls; then hammer a hook at the anvil", a: true, b: true}
+  - {name: "Problem clinic + welding taster", desc: "coached beta on five problems; then run your first MIG bead", a: true, b: true}
+  - {name: "Bouldering hour + knife-forging bench", desc: "the circuit walls reset that day; then forge and grind a small blade", a: true, b: true}
+  - {name: "Open bouldering + pottery wheel", desc: "an hour on the boulder walls; then throw a bowl on the wheel", a: true, b: false}
+  - {name: "Problem clinic + screen-printing table", desc: "coached beta on five problems; then print a two-colour poster", a: true, b: false}
+  - {name: "Bouldering hour + woodturning lathe", desc: "the circuit walls reset that day; then turn a bowl on the lathe", a: true, b: false}
+  - {name: "Rowing-machine class + blacksmithing intro", desc: "intervals on the ergs with a coach; then hammer a hook at the anvil", a: false, b: true}
+  - {name: "Swim session + welding taster", desc: "a coached lane hour; then run your first MIG bead", a: false, b: true}
+  - {name: "Circuits class + knife-forging bench", desc: "eight stations, forty minutes; then forge and grind a small blade", a: false, b: true}
+  - {name: "Rowing-machine class + pottery wheel", desc: "intervals on the ergs with a coach; then throw a bowl on the wheel", a: false, b: false}
+  - {name: "Swim session + screen-printing table", desc: "a coached lane hour; then print a two-colour poster", a: false, b: false}
+  - {name: "Circuits class + woodturning lathe", desc: "eight stations, forty minutes; then turn a bowl on the lathe", a: false, b: false}

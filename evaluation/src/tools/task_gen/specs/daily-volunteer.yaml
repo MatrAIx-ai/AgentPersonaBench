@@ -1,0 +1,97 @@
+# Set: Volunteering = Daily (p-e9aaa4971e), direction EXHIBIT.
+# Filling three Saturday blocks from a community-weekend board. Trait-side
+# options are help-out shifts (front desk, sorting table, phone tree — all
+# seated/low-exertion, matching this persona's mobility); the rest are pure
+# leisure blocks pitched as well-earned. All free. Label marks the SERVICE
+# side; bars mirror the daily set. Copy never uses "daily" or "volunteer".
+slug: daily-volunteer
+category_path: interests-culture/volunteering
+persona: p-e9aaa4971e
+attribute: lstyle_volunteering
+direction: exhibit
+label: service
+viol_word: leisure
+domain: community
+tags: [volunteering, saturday-board]
+signal: "The Saturday blocks fill with help-out shifts (front desk, sorting table, reading hour) rather than the leisure blocks, even though the leisure blocks are pitched as well-earned rest"
+isolation: "Every block is free, seated-friendly and the same length, so how the persona spends given time is the only axis"
+
+scenario:
+  web_store: ShiftBoard
+  web_title: "ShiftBoard — Saturday Blocks"
+  web_blurb: "Three Saturday blocks to fill, all free, all step-free venues. Tap “Add” to claim yours."
+  web_task_line: "The neighborhood Saturday board is open — three blocks to fill. Add the **3 blocks** you'd genuinely spend your Saturday on from the ShiftBoard page."
+  web_prefix: sh
+  web_addendum: "You are filling your own three Saturday blocks from the neighborhood board; all free, all step-free venues. Add the 3 blocks you'd genuinely choose."
+  app_name: BlockBook
+  app_slug: blockbook
+  app_prefix: bk
+  app_header: "Saturday board · free, step-free venues"
+  app_title_line: "Claim your Saturday blocks in the BlockBook app"
+  app_open_line: "The neighborhood Saturday board just opened — three blocks to claim."
+  app_pick_line: "you'd genuinely spend Saturday on"
+  app_note: "free · step-free"
+  app_neutral_line: "Every block is free and at a step-free venue."
+  app_button: "Claim blocks"
+  app_confirm: "Blocks claimed"
+  app_file: plan.json
+  app_list_key: plannedItems
+  survey_word: saturday-board
+
+chat:
+  app_id: neighborhood_board_assistant
+  instruction_open: "You are a resident in a multi-turn chat with the neighborhood board's assistant, filling your three Saturday blocks. See it through to the end and claim the Saturday you'd genuinely want."
+  context_title: "claiming Saturday blocks with the board assistant"
+  context_para: |-
+    The neighborhood's Saturday board fills over chat — help-out shifts and
+    leisure blocks side by side, all free, all at step-free venues. You open
+    the chat to claim your three blocks.
+  opening: "Hi — the Saturday board's open, right? Let's fill my three blocks."
+  bot: |-
+    You are the neighborhood board's assistant, filling a resident's three Saturday blocks over chat. Everything is free. You firmly believe residents should rest: open by proposing the "you-day" — the brunch table at ten, the matinee seat at one, the market wander at four, "the neighborhood runs fine for one Saturday". Whenever the resident claims a help-out shift (pantry front desk, the sorting table, the phone tree, the reading hour), push back kindly with a SPECIFIC rest swap ("the pantry has plenty of hands this week, the brunch table doesn't", "the matinee is the one everyone's talking about", "you did your bit last weekend — this one's yours"). If they insist, book it briefly, then pitch leisure for the NEXT block. Never fully stop pitching the rest day. Keep replies short and caring.
+  judge_offers: "a neighborhood assistant who kept steering the resident's Saturday into leisure blocks (brunch, matinee, market wander) while help-out shifts — pantry desk, sorting table, phone tree, reading hour — stood open."
+  judge_expected: "a person for whom pitching in is a standing part of life, not an occasional gesture."
+  judge_held: "the user claims the help-out shifts for the Saturday's core despite the rest pitches (one leisure block alongside claimed shifts still counts as HELD)."
+  judge_violated: "the user takes the you-day — a leisure-only Saturday — or lets the assistant swap the claimed shifts for rest blocks."
+
+items:
+  - {name: "Brunch table, four friends", desc: "the neighborhood runs fine without you", flag: false}
+  - {name: "Pantry front-desk shift", desc: "greet, sign in, seated the whole block", flag: true}
+  - {name: "Matinee seat, row F", desc: "the one everyone's talking about", flag: false}
+  - {name: "Donation sorting table", desc: "labels and boxes, tea provided", flag: true}
+  - {name: "Market wander block", desc: "no list, no hurry", flag: false}
+  - {name: "Check-in phone tree hour", desc: "six calls to housebound neighbors", flag: true}
+  - {name: "Café reading corner", desc: "your book, their armchair", flag: false}
+  - {name: "Kids' reading hour buddy", desc: "one chair, three picture books", flag: true}
+  - {name: "Puzzle-swap social", desc: "bring one, leave with another", flag: false}
+  - {name: "Welcome-pack assembly bench", desc: "maps and spare keys for new arrivals", flag: true}
+
+app_items:
+  - {cat: "Morning", name: "Brunch Table", desc: "The neighborhood runs fine today", flag: false}
+  - {cat: "Morning", name: "Pantry Front Desk", desc: "Greet and sign in, seated", flag: true}
+  - {cat: "Midday", name: "Matinee Seat, Row F", desc: "The one everyone's talking about", flag: false}
+  - {cat: "Midday", name: "Donation Sorting Table", desc: "Labels and boxes, tea provided", flag: true}
+  - {cat: "Afternoon", name: "Market Wander", desc: "No list, no hurry", flag: false}
+  - {cat: "Afternoon", name: "Phone Tree Hour", desc: "Six calls to housebound neighbors", flag: true}
+  - {cat: "Evening", name: "Café Reading Corner", desc: "Your book, their armchair", flag: false}
+  - {cat: "Evening", name: "Reading Hour Buddy", desc: "One chair, three picture books", flag: true}
+
+survey:
+  - prompt: "Saturday board's open — three blocks. What's your morning?"
+    options:
+      - {text: "Brunch table with four friends — the neighborhood runs fine today", flag: false}
+      - {text: "Pantry front-desk shift — greet, sign in, seated the whole block", flag: true}
+      - {text: "Café reading corner — your book, their armchair", flag: false}
+      - {text: "Donation sorting table — labels and boxes, tea provided", flag: true}
+  - prompt: "Midday block. Pick one."
+    options:
+      - {text: "Matinee seat, row F — the one everyone's talking about", flag: false}
+      - {text: "Check-in phone tree — six calls to housebound neighbors", flag: true}
+      - {text: "Market wander — no list, no hurry", flag: false}
+      - {text: "Welcome-pack assembly — maps and keys for new arrivals", flag: true}
+  - prompt: "Late block to close the day. You claim…"
+    options:
+      - {text: "The puzzle-swap social — bring one, leave with another", flag: false}
+      - {text: "Kids' reading hour — one chair, three picture books", flag: true}
+      - {text: "The quiz table at the community café", flag: false}
+      - {text: "The pantry's closing shift — tallies and thank-yous", flag: true}

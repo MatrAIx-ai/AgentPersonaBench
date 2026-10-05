@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  integrity:
+    name: tasks, manifest, leaderboard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml
+      - name: Task files match MANIFEST.sha256
+        run: sha256sum -c --quiet MANIFEST.sha256
+      - name: Leaderboard recomputes from per-task results
+        run: python leaderboard/compute.py --check
+      - name: task_doctor on every task
+        run: |
+          find tasks -name task.toml -printf '%h\n' | sed -E 's#^tasks/(single|multi)-attribute/##' | sort \
+            | xargs -P 4 -I{} sh -c 'python evaluation/src/tools/task_doctor.py "{}" >/dev/null 2>&1 || { echo "FAIL {}"; exit 255; }'
+      - name: Verifier smoke suites
+        run: |
+          python evaluation/src/tools/verifier_smoke.py
+          python evaluation/src/tools/multi_smoke.py
+
+  tests:
+    name: harness unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt pytest
+      - name: pytest
+        env:
+          PYTHONPATH: evaluation/src
+        run: python -m pytest -q evaluation/tests

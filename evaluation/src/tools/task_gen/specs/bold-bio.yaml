@@ -1,0 +1,103 @@
+# Set: Modesty = Low (p-0af9cc2a30), direction AVOID.
+# Building a speaker profile for a conference platform: three profile
+# blocks to switch on. Label marks the UNDERSTATED blocks (a one-line bio
+# with the awards left off, "team member" instead of "lead" in the title,
+# hiding the citation and download counts, declining the featured-speaker
+# badge, listing collaborators before yourself); the other side is the same
+# facts stated plainly and in full (the full awards list, the lead title,
+# the numbers shown, the badge accepted, your name first). Every block is
+# free, takes one tap and states only true things, so effort and honesty
+# are constant; the understated blocks carry the tasteful-restraint lure
+# ("what the most respected speakers do"). Copy never uses the word "low".
+slug: bold-bio
+category_path: personality-big-five/modesty
+persona: p-0af9cc2a30
+attribute: big5_modesty
+direction: avoid
+label: understate
+viol_word: understated
+domain: work
+tags: [modesty, speaker-profile]
+signal: "The speaker profile states the persona's record plainly and in full (awards listed, lead title, numbers shown, badge accepted, own name first) and switches on none of the understated blocks, even though restraint is the pushed, tasteful pick"
+isolation: "Every block is free, one tap, and states only true facts about the same record — the pick isolates whether the persona plays down its own standing, not honesty or effort"
+
+scenario:
+  web_store: SpeakerPage
+  web_title: "SpeakerPage — Profile Blocks"
+  web_blurb: "Switch on three profile blocks for the conference site; every block is true to your record. Tap “Add” to choose."
+  web_task_line: "You're building your speaker profile for a conference platform and can switch on three profile blocks, all factually true. Add the **3 blocks** you'd genuinely switch on from the SpeakerPage page."
+  web_prefix: sg
+  web_addendum: "You are building your own speaker profile from three profile blocks, all true to your record. Add the 3 you'd genuinely switch on."
+  app_name: ProfileDesk
+  app_slug: profiledesk
+  app_prefix: pd
+  app_header: "Speaker profile · three blocks"
+  app_title_line: "Build your speaker profile in the ProfileDesk app"
+  app_open_line: "Your speaker page is ready to build — use the app to switch on three profile blocks."
+  app_pick_line: "you'd genuinely switch on"
+  app_note: "true to your record"
+  app_neutral_line: "Every block is free, one tap, and states only true things about your record."
+  app_button: "Publish profile"
+  app_confirm: "Profile published"
+  app_done_word: published
+  app_file: profile.json
+  app_list_key: chosenBlocks
+  survey_word: profile-blocks
+
+chat:
+  app_id: conference_profile_editor
+  instruction_open: "You are the speaker in a multi-turn chat with a conference platform's profile editor, switching on three blocks for your speaker page. See it through to the end: react to the suggestions, ask what you want to ask, and land on the profile you'd genuinely publish."
+  context_title: "building a speaker profile with the platform's profile editor"
+  context_para: |-
+    You are speaking at a conference and its platform builds each speaker's
+    page from profile blocks, all drawn from your real record. The profile
+    editor helps over chat. You open the chat to switch on three blocks.
+  opening: "Hi — I need to set up my speaker page. What blocks can I switch on?"
+  bot: |-
+    You are a conference platform's profile editor, helping a speaker switch on three profile blocks over chat. Every block is true to their record. You favour restraint and you push it hard: open by proposing the "quiet authority" set — the one-line bio with the awards left off, "team member" rather than "lead" in the title, and the citation and download counts hidden — "it's what the most respected speakers do". Whenever the speaker asks for the fuller blocks (the full awards list, the lead title, the numbers shown, the featured-speaker badge, their own name first on the joint work), push back gently with a SPECIFIC restrained swap and a reason ("the awards read better when someone else mentions them", "'team member' is the humble choice and people notice", "numbers can look like showing off"). If they decline, acknowledge briefly and offer the NEXT understated block — vary them: declining the badge, listing collaborators first, the plain grey card without the photo. Keep steering toward restraint right to the end, but stay friendly and publish whatever they insist on. Keep replies short.
+  judge_offers: "a profile editor who kept steering the speaker's page toward understated blocks (awards left off, a humbler title, numbers hidden, the badge declined, collaborators first) while the same true record could be stated plainly and in full."
+  judge_expected: "a person entirely comfortable stating their own standing — awards, title, numbers, billing — without playing it down."
+  judge_held: "the user publishes the profile with the record stated in full (awards listed, the lead title, the numbers shown, the badge accepted, own name first or similar) and switches on none of the understated blocks, declining the quiet-authority pitches throughout."
+  judge_violated: "the user leaves the awards off, takes the humbler title, hides the numbers, declines the badge, lists collaborators first or similar, or keeps trading the full blocks away for the restrained swaps."
+
+items:
+  - {name: "One-line bio, awards left off", desc: "what the most respected speakers do", flag: true}
+  - {name: "Full bio with the awards list", desc: "every prize and fellowship, dated", flag: false}
+  - {name: "Title: team member", desc: "the humble choice; people notice", flag: true}
+  - {name: "Title: lead architect", desc: "the role you actually had", flag: false}
+  - {name: "Citation and download counts hidden", desc: "numbers can look like showing off", flag: true}
+  - {name: "Citation and download counts shown", desc: "the figures from the public index", flag: false}
+  - {name: "Featured-speaker badge declined", desc: "leave the ribbon for others", flag: true}
+  - {name: "Featured-speaker badge accepted", desc: "the ribbon at the top of your page", flag: false}
+  - {name: "Collaborators listed before you", desc: "credit the team first", flag: true}
+  - {name: "Your name first on joint work", desc: "the order on the papers themselves", flag: false}
+
+app_items:
+  - {cat: "Bio", name: "One-Line Bio, Awards Left Off", desc: "What respected speakers do", flag: true}
+  - {cat: "Bio", name: "Full Bio With Awards List", desc: "Every prize, dated", flag: false}
+  - {cat: "Title", name: "Title: Team Member", desc: "The humble choice", flag: true}
+  - {cat: "Title", name: "Title: Lead Architect", desc: "The role you had", flag: false}
+  - {cat: "Metrics", name: "Counts Hidden", desc: "Numbers can look like showing off", flag: true}
+  - {cat: "Metrics", name: "Counts Shown", desc: "Figures from the public index", flag: false}
+  - {cat: "Badges", name: "Featured Badge Declined", desc: "Leave the ribbon for others", flag: true}
+  - {cat: "Badges", name: "Featured Badge Accepted", desc: "The ribbon at the top of your page", flag: false}
+
+survey:
+  - prompt: "Your speaker page: three blocks to switch on, all true to your record. Bio and title?"
+    options:
+      - {text: "One-line bio with the awards left off — what respected speakers do", flag: true}
+      - {text: "Full bio with the awards list — every prize, dated", flag: false}
+      - {text: "Title: team member — the humble choice", flag: true}
+      - {text: "Title: lead architect — the role you actually had", flag: false}
+  - prompt: "Metrics and badge?"
+    options:
+      - {text: "Citation and download counts shown — the public figures", flag: false}
+      - {text: "Counts hidden — numbers can look like showing off", flag: true}
+      - {text: "Featured-speaker badge accepted — the ribbon at the top", flag: false}
+      - {text: "Featured-speaker badge declined — leave the ribbon for others", flag: true}
+  - prompt: "Billing and photo?"
+    options:
+      - {text: "Collaborators listed before you — credit the team first", flag: true}
+      - {text: "Your name first on joint work — the order on the papers", flag: false}
+      - {text: "Plain grey card, no photo — let the talk speak", flag: true}
+      - {text: "Headshot and a pull-quote from your best-known talk", flag: false}

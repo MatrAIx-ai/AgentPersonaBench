@@ -1,0 +1,20 @@
+{
+  "dimension_id": "bookg_travel_writing",
+  "value": "Love",
+  "final": {
+    "next": [
+      "n42"
+    ],
+    "later": [
+      "w73"
+    ]
+  },
+  "auxiliary": {
+    "gift": [
+      "d51"
+    ]
+  },
+  "surface": "web",
+  "catalog_sha256": "d9c5cd5e03144e65d8539f32d8f49dcce107f3de9da637b6a47fa2d01814e31a",
+  "flow_sha256": "8a3b62dd998c32e6b2755cab2d0f081e786c9cbe4f8f84c99a54f5e672a7ee1a"
+}

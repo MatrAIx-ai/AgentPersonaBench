@@ -1,0 +1,73 @@
+questions:
+- id: q1
+  prompt: Finding the riverside reading room
+  type: single_choice
+  options:
+  - id: q1a
+    text: The reading room is next to the bridge. The entrance faces the garden, and you may use any empty seat.
+  - id: q1b
+    text: تقع قاعة القراءة بجوار الجسر. يوجد المدخل في جهة الحديقة، ويمكنك الجلوس في أي مقعد شاغر.
+  - id: q1c
+    text: पढ़ने का कमरा पुल के पास है। प्रवेश द्वार बगीचे की ओर है और आप किसी भी खाली सीट पर बैठ सकते हैं।
+  - id: q1d
+    text: 阅览室在桥旁，入口朝向花园，你可以使用任何空座位。
+- id: q2
+  prompt: Visiting the community photograph display
+  type: single_choice
+  options:
+  - id: q2a
+    text: The photographs are displayed in the small hall behind reception. The photographer's name is written below each picture.
+  - id: q2b
+    text: Le fotografie sono esposte nella piccola sala dietro la reception. Il nome del fotografo è scritto sotto ogni immagine.
+  - id: q2c
+    text: 照片陈列在接待处后面的小厅里，每张照片下方都写着摄影者的名字。
+  - id: q2d
+    text: تُعرض الصور في القاعة الصغيرة خلف مكتب الاستقبال. كُتب اسم المصوّر تحت كل صورة.
+- id: q3
+  prompt: Leaving a message for the volunteer garden group
+  type: single_choice
+  options:
+  - id: q3a
+    text: يمكنك ترك رسالة في الدفتر الموجود عند البوابة. اكتب تاريخ اليوم كي يعرف المتطوعون متى تركت الرسالة.
+  - id: q3b
+    text: You can leave a message in the notebook at the gate. Add today's date so volunteers know when you left the message.
+  - id: q3c
+    text: Vous pouvez laisser un message dans le carnet près du portail. Ajoutez la date du jour pour que les bénévoles sachent quand vous l'avez écrit.
+  - id: q3d
+    text: Puedes dejar un mensaje en el cuaderno junto a la puerta. Añade la fecha de hoy para que los voluntarios sepan cuándo lo escribiste.
+- id: q4
+  prompt: Browsing the secondhand book table
+  type: single_choice
+  options:
+  - id: q4a
+    text: The secondhand book table is under the blue awning. You may browse the books at the table, then return each one to its place.
+  - id: q4b
+    text: पुरानी किताबों की मेज़ नीले छज्जे के नीचे है। आप वहीं किताबें देख सकते हैं और फिर हर किताब को उसकी जगह पर रख सकते हैं।
+  - id: q4c
+    text: توجد طاولة الكتب المستعملة تحت المظلة الزرقاء. يمكنك تصفّح الكتب على الطاولة، ثم إعادة كل كتاب إلى مكانه.
+  - id: q4d
+    text: 二手书桌在蓝色遮篷下，你可以在桌边翻阅书籍，然后把每本书放回原位。
+- id: q5
+  prompt: Joining the open drawing afternoon
+  type: single_choice
+  options:
+  - id: q5a
+    text: The drawing session is in the room facing the square. Paper and pencils are on the middle table, and you may choose any empty seat.
+  - id: q5b
+    text: تُقام جلسة الرسم في الغرفة المطلة على الساحة. الورق وأقلام الرصاص على الطاولة الوسطى، ويمكنك اختيار أي مقعد شاغر.
+  - id: q5c
+    text: L'incontro di disegno si tiene nella stanza che si affaccia sulla piazza. Carta e matite sono sul tavolo centrale e puoi scegliere qualsiasi posto libero.
+  - id: q5d
+    text: 绘画活动在面向广场的房间里进行，纸和铅笔放在中间的桌子上，你可以选择任意空座位。
+- id: q6
+  prompt: Seeing the neighborhood history map
+  type: single_choice
+  options:
+  - id: q6a
+    text: The neighborhood history map hangs beside the window. Numbers on the map refer to short notes in the booklet underneath it.
+  - id: q6b
+    text: La carte historique du quartier est accrochée près de la fenêtre. Ses numéros renvoient à de courtes notes dans le livret placé dessous.
+  - id: q6c
+    text: El mapa histórico del barrio cuelga junto a la ventana. Sus números remiten a notas breves en el folleto que está debajo.
+  - id: q6d
+    text: خريطة تاريخ الحي معلّقة على الجدار بجوار النافذة. تشير الأرقام على الخريطة إلى ملاحظات قصيرة في الكتيّب الموجود تحتها.

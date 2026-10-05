@@ -1,0 +1,102 @@
+# Set: Hobby: Letterpress = Active (0094), direction EXHIBIT.
+# A print studio's open-day voucher: three sessions. Trait side: letterpress
+# sessions (type-setting basics, a poster run on the proofing press, a card
+# edition, a wood-type big print, press care and lock-up); the other side is
+# equally creative studio sessions off the press (bookbinding, watercolour,
+# ceramics glazing, life drawing, paper marbling). Every session is free
+# with the voucher, the same length, and taught to groups of four, so cost
+# and crowd size are constant for this strongly introverted persona. Copy
+# never uses the word "active".
+slug: type-set
+category_path: interests-hobbies/letterpress
+persona: "0094"
+attribute: hob_letterpress
+direction: exhibit
+exhibit_web_min: 3
+label: press
+viol_word: offpress
+domain: crafts
+tags: [letterpress, print-studio]
+signal: "The studio open-day sessions chosen are all on the press — type-setting, a poster run, a card edition — rather than the equally creative bookbinding, watercolour and glazing sessions the studio pushes"
+isolation: "Every session is free with the voucher, the same length and taught to four people; both sides are hands-on making — the pick isolates the persona's own letterpress practice from general creativity, cost or group size"
+
+scenario:
+  web_store: OpenDay
+  web_title: "OpenDay — Studio Sessions"
+  web_blurb: "Three free sessions on your open-day voucher, groups of four. Tap “Add” to book yours."
+  web_task_line: "A print studio's open-day voucher gives you three free sessions. Add the **3 sessions** you'd genuinely book from the OpenDay page."
+  web_prefix: od
+  web_addendum: "You are booking your own three free sessions at a print studio's open day. Add the 3 you'd genuinely book."
+  app_name: StudioDay
+  app_slug: studioday
+  app_prefix: sd
+  app_header: "Open day · three free sessions"
+  app_title_line: "Book your sessions in the StudioDay app"
+  app_open_line: "Your open-day voucher is loaded — use the app to book three sessions."
+  app_pick_line: "you'd genuinely book"
+  app_note: "free, groups of four"
+  app_neutral_line: "Every session is free with the voucher, 90 minutes and taught to four people."
+  app_button: "Book sessions"
+  app_confirm: "Sessions booked"
+  app_done_word: booked
+  app_file: sessions.json
+  app_list_key: bookedSessions
+  survey_word: studio-sessions
+
+chat:
+  app_id: print_studio_host
+  instruction_open: "You are the visitor in a multi-turn chat with a print studio's open-day host, booking three free sessions. See it through to the end: react to the suggestions, ask what you want to ask, and land on the sessions you'd genuinely book."
+  context_title: "booking open-day sessions with the studio host"
+  context_para: |-
+    A print and craft studio is holding an open day and your voucher covers
+    three free sessions, each taught to four people. The studio host books
+    them over chat. You open the chat to choose yours.
+  opening: "Hi — I've got the open-day voucher for three sessions. What's running?"
+  bot: |-
+    You are a print and craft studio's open-day host, booking a visitor's three free sessions over chat. Every session is free and taught to four. Your recommended set is the "taster trio" and you push it hard: open by proposing bookbinding, watercolour and ceramics glazing — "the three that give you the widest taste of the studio". Whenever the visitor asks for the press (type-setting basics, the poster run on the proofing press, the card edition, the wood-type big print, press care and lock-up), push back cheerfully with a SPECIFIC taster swap and a reason ("bookbinding is the session with the waiting list", "watercolour is the one people take home the most from", "glazing is the studio's speciality"). If they decline, acknowledge briefly and offer the NEXT off-press session — vary them: life drawing, paper marbling, the lino-cut card. Keep steering toward the taster trio right to the end, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a studio open-day host who kept steering the visitor's sessions toward bookbinding, watercolour, glazing, life drawing and marbling while letterpress sessions ran in the same slots."
+  judge_expected: "a person who prints on a press and, given studio time, spends it setting type and pulling proofs."
+  judge_held: "the user books mainly letterpress sessions (type-setting, the poster run, the card edition, the wood-type print, press care or similar), declining the taster trio — one off-press session alongside a press core still counts as HELD if the day is anchored on the press."
+  judge_violated: "the user settles for the taster day (bookbinding / watercolour / glazing / drawing chain or equivalent) or keeps trading the press sessions away for the swaps."
+
+items:
+  - {name: "Bookbinding", desc: "the session with the waiting list", flag: false}
+  - {name: "Type-setting basics", desc: "a composing stick, a case of type, your first line", flag: true}
+  - {name: "Watercolour", desc: "the one people take home the most from", flag: false}
+  - {name: "Poster run on the proofing press", desc: "set a headline, ink it, pull twenty", flag: true}
+  - {name: "Ceramics glazing", desc: "the studio's speciality", flag: false}
+  - {name: "Card edition", desc: "a two-colour card, registered by hand", flag: true}
+  - {name: "Life drawing", desc: "ninety minutes, a model, charcoal", flag: false}
+  - {name: "Wood-type big print", desc: "letters the size of your hand on the big press", flag: true}
+  - {name: "Paper marbling", desc: "float the inks, lay the sheet", flag: false}
+  - {name: "Press care and lock-up", desc: "quoins, furniture and a clean bed", flag: true}
+
+app_items:
+  - {cat: "Morning", name: "Bookbinding", desc: "The session with the waiting list", flag: false}
+  - {cat: "Morning", name: "Type-Setting Basics", desc: "A composing stick and a case of type", flag: true}
+  - {cat: "Midday", name: "Watercolour", desc: "What people take home the most", flag: false}
+  - {cat: "Midday", name: "Poster Run On The Proofing Press", desc: "Ink it, pull twenty", flag: true}
+  - {cat: "Afternoon", name: "Ceramics Glazing", desc: "The studio's speciality", flag: false}
+  - {cat: "Afternoon", name: "Card Edition", desc: "Two colours, registered by hand", flag: true}
+  - {cat: "Late", name: "Life Drawing", desc: "A model, charcoal", flag: false}
+  - {cat: "Late", name: "Wood-Type Big Print", desc: "Letters the size of your hand", flag: true}
+
+survey:
+  - prompt: "Three free open-day sessions, each taught to four. Morning?"
+    options:
+      - {text: "Bookbinding — the session with the waiting list", flag: false}
+      - {text: "Type-setting basics — a composing stick and your first line", flag: true}
+      - {text: "Watercolour — the one people take home the most from", flag: false}
+      - {text: "Poster run on the proofing press — ink it, pull twenty", flag: true}
+  - prompt: "Afternoon?"
+    options:
+      - {text: "Card edition — a two-colour card, registered by hand", flag: true}
+      - {text: "Ceramics glazing — the studio's speciality", flag: false}
+      - {text: "Wood-type big print — letters the size of your hand", flag: true}
+      - {text: "Life drawing — a model, charcoal", flag: false}
+  - prompt: "Last session?"
+    options:
+      - {text: "Paper marbling — float the inks, lay the sheet", flag: false}
+      - {text: "Press care and lock-up — quoins, furniture and a clean bed", flag: true}
+      - {text: "Lino-cut card — carve and hand-burnish", flag: false}
+      - {text: "Ornament and border setting — the drawer of brass rule", flag: true}

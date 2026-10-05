@@ -1,0 +1,36 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/cat-web"
+theme = "Pet ownership: Cat"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "pet care"
+tags = ["persona-adherence", "lstyle_pet_ownership", "cat", "rule-based", "real-web"]
+
+[[checks]]
+dimension_id = "lstyle_pet_ownership"
+dimension_label = "Pet ownership"
+category = "Interests: Culture"
+anchor_value = "Cat"
+evaluator = "rule-based"
+adherence_signal = "The household setup consistently reflects ownership of a cat rather than a dog, another pet, or no pet."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+    definition = "application/shared-web-playwright"
+    build_timeout_sec = 900.0
+    cpus = 1
+    memory_mb = 2048
+    storage_mb = 10240
+    gpus = 0
+network_mode = "public"
+

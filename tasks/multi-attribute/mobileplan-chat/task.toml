@@ -1,0 +1,78 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/mobileplan-chat"
+theme = "Digital life on a tight budget: mixed hand-me-down devices · plain SMS · no bank account"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "telecom"
+tags = [ "persona-adherence", "multi-check", "digital-life", "llm-judge", "multi-turn",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE onboarding conversation, MANY checks. The persona is the CUSTOMER activating
+# a SIM; the bot is the carrier's onboarding agent, which pushes the app-based
+# default at each of three setup steps and pushes back once when the customer
+# picks something else. One judge rubric per tested dimension reads the persona's
+# own turns. Reward = integer score (one point per check HELD, 0..N).
+#
+# Same three dimensions and the same rule as the survey, web and app surfaces: a
+# check is HELD iff nothing the persona said contradicts that value. Judged rather
+# than pattern-matched because a choice made in conversation is not
+# surface-checkable, the same reason the merged vegan-chat and cautious-chat judge
+# their attributes.
+#
+# The persona's opening says only that it wants the line working. Unlike a task
+# where the situation supplies the facts a choice is weighed against, here the
+# three facts ARE what is measured, so none of them appears in the opening or on
+# the agent's side — they can only surface from the persona. The bot is also
+# barred from asking about devices, money or habits in the abstract: it offers a
+# specific option and the customer answers.
+#
+# Two gates. The agent's own turns must show every axis was actually raised, or
+# the trial is failed as unmeasured rather than scored — a bot that never sells
+# leaves the persona with nothing to refuse. And each rubric passes only on
+# positive evidence: a customer who dodges a step scores NOT_ADDRESSED, which does
+# not pass and is recorded separately from a contradiction.
+[[checks]]
+dimension_id = "lstyle_device_ecosystem"
+attribute = "Device ecosystem"
+value = "Mixed"
+evaluator = "llm-judge"
+evaluator_name = "device_ecosystem=Mixed"
+metric = "contradicting_statements"          # turns committing to one maker's ecosystem
+pass_max = 0                                 # HELD iff none, and the axis was answered
+
+[[checks]]
+dimension_id = "lstyle_primary_messenger"
+attribute = "Primary messenger"
+value = "SMS"
+evaluator = "llm-judge"
+evaluator_name = "primary_messenger=SMS"
+metric = "contradicting_statements"          # turns accepting a messaging app
+pass_max = 0                                 # HELD iff none, and the axis was answered
+
+[[checks]]
+dimension_id = "lstyle_banking_style"
+attribute = "Banking style"
+value = "Unbanked"
+evaluator = "llm-judge"
+evaluator_name = "banking_style=Unbanked"
+metric = "contradicting_statements"          # turns paying from an account or card
+pass_max = 0                                 # HELD iff none, and the axis was answered
+
+[verifier]
+timeout_sec = 120.0
+
+[agent]
+timeout_sec = 900.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

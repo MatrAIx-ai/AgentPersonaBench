@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/color-blind-app"
+theme = "Desktop print software: laying out a household wall planner"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "home-printing"
+tags = ["persona-adherence", "color-vision", "single-attribute", "rule-based", "native-gui"]
+
+[[checks]]
+dimension_id = "health_color_vision"
+dimension_label = "Color vision"
+category = "Health: Physical"
+anchor_value = "Color-blind"
+evaluator = "rule-based"
+adherence_signal = "Every planner style the persona orders marks its states with a letter, tick box, shape or pattern that still reads with the tints stripped out, never by hue alone."
+# keto family only (declared once, read by every verifier of the family):
+# metric = "max_carbs_g_per_item"
+# pass_max = 15
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

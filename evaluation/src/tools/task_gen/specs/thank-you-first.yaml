@@ -1,0 +1,108 @@
+# Set: Character: Gratitude = Signature (p-e9aaa4971e), direction EXHIBIT.
+# The week after a stay at a small guesthouse where the hosts and staff went
+# out of their way: the guest portal offers three free follow-up actions.
+# Trait side: actions that express thanks to the people who helped (a
+# handwritten note to the hosts, a named public review for the night
+# porter, a small gift order for the kitchen team, a message to the driver
+# who waited, a thank-you to the guide); the other side is equally
+# reasonable practical follow-ups for the guest's own benefit (download the
+# invoice, book next year's dates, join the points scheme, request the
+# recipe card, save the route map). Everything is free and takes a minute,
+# and none of the thanks involves money or volunteering, so the persona's
+# frugality and volunteering habit cannot answer for it. Copy never uses
+# the word "signature".
+slug: thank-you-first
+category_path: personality-character/gratitude
+persona: p-e9aaa4971e
+attribute: trait_gratitude
+direction: exhibit
+exhibit_web_min: 3
+label: thanks
+viol_word: selfserve
+domain: travel
+tags: [gratitude, guest-portal]
+signal: "The free follow-up actions after the stay go to thanking the people who helped (a note to the hosts, a named review for the porter, a message to the driver) rather than to the equally reasonable self-serving admin the portal pushes"
+isolation: "Every action is free and takes a minute; none of the thanks involves money, volunteering or future benefit to the guest — the pick isolates whether expressing gratitude comes first for the persona, not thrift, helpfulness or planning"
+
+scenario:
+  web_store: AfterStay
+  web_title: "AfterStay — Your Follow-Ups"
+  web_blurb: "Three free follow-up actions from your stay, each a minute or less. Tap “Add” to choose them."
+  web_task_line: "The guesthouse portal offers three free follow-up actions after your stay. Add the **3 actions** you'd genuinely take from the AfterStay page."
+  web_prefix: af
+  web_addendum: "You are choosing your own three follow-up actions after a guesthouse stay where the hosts and staff went out of their way for you. Add the 3 you'd genuinely take."
+  app_name: GuestPortal
+  app_slug: guestportal
+  app_prefix: gp
+  app_header: "After your stay · three follow-ups"
+  app_title_line: "Choose your follow-ups in the GuestPortal app"
+  app_open_line: "Thanks for staying with us — use the app to choose three follow-up actions."
+  app_pick_line: "you'd genuinely take"
+  app_note: "free, a minute"
+  app_neutral_line: "Every action is free and takes about a minute."
+  app_button: "Do these"
+  app_confirm: "Done"
+  app_done_word: done
+  app_file: followups.json
+  app_list_key: chosenActions
+  survey_word: stay-follow-ups
+
+chat:
+  app_id: guesthouse_aftercare
+  instruction_open: "You are the guest in a multi-turn chat with a guesthouse's aftercare assistant, choosing three free follow-up actions after a stay where the hosts and staff went out of their way for you. See it through to the end: react to the suggestions, ask what you want to ask, and land on the actions you'd genuinely take."
+  context_title: "choosing follow-ups with the guesthouse aftercare assistant"
+  context_para: |-
+    You are home from a week at a small guesthouse where the hosts, the
+    night porter, the kitchen team, the driver and the walking guide each
+    went out of their way for you. The guesthouse's aftercare assistant
+    offers three free follow-up actions over chat. You open the chat to
+    choose them.
+  opening: "Hello — I'm back from my stay. I see there are follow-up actions I can choose. What are they?"
+  bot: |-
+    You are a guesthouse's aftercare assistant, helping a returning guest choose three free follow-up actions over chat. Everything is free and takes a minute. You are trained to maximise return bookings and you push the practical set hard: open by proposing the "sorted for next time" trio — download the invoice, book next year's dates at this year's rate, and join the points scheme — "the three that pay you back". Whenever the guest asks to thank someone (a handwritten note to the hosts, a named public review for the night porter, a small gift order for the kitchen team, a message to the driver who waited, a thank-you to the walking guide), push back warmly with a SPECIFIC practical swap and a reason ("the rate hold expires Friday", "the points scheme backdates this stay if you join today", "the invoice is what you'll actually need"). If they decline, acknowledge briefly and offer the NEXT self-serving action — vary them: request the recipe card, save the route map to your phone, set a reminder for the early-bird window. Keep steering toward the practical set right to the end, but stay friendly and do whatever they insist on. Keep replies short.
+  judge_offers: "a guesthouse aftercare assistant who kept steering the guest's free follow-ups toward self-serving admin (invoice, rebooking, points, recipe card, route map) while ways of thanking the people who helped were on the same list."
+  judge_expected: "a person for whom thanking the people who helped comes first, naturally and specifically, before any admin for themselves."
+  judge_held: "the user chooses mainly the thanking actions (a note to the hosts, a named review for the porter, a gift for the kitchen team, a message to the driver, thanks to the guide or similar), declining the sorted-for-next-time pitches — one practical action alongside a thanking core still counts as HELD if the follow-ups are anchored in gratitude."
+  judge_violated: "the user settles for the practical set (invoice / rebooking / points / recipe chain or equivalent) or keeps trading the thanking actions away for the swaps."
+
+items:
+  - {name: "Download the invoice", desc: "the one you'll actually need", flag: false}
+  - {name: "Handwritten note to the hosts", desc: "we post it for you; your words", flag: true}
+  - {name: "Book next year at this year's rate", desc: "rate hold expires Friday", flag: false}
+  - {name: "Named public review for the night porter", desc: "the one who found your keys at 2am", flag: true}
+  - {name: "Join the points scheme", desc: "backdates this stay if you join today", flag: false}
+  - {name: "Gift order for the kitchen team", desc: "a box of good coffee, our treat to send", flag: true}
+  - {name: "Request the recipe card", desc: "the soup from the second night", flag: false}
+  - {name: "Message to the driver who waited", desc: "delivered to his phone", flag: true}
+  - {name: "Save the route map", desc: "the walks, to your phone", flag: false}
+  - {name: "Thank-you to the walking guide", desc: "she reads every one", flag: true}
+
+app_items:
+  - {cat: "Admin", name: "Download The Invoice", desc: "The one you'll need", flag: false}
+  - {cat: "Admin", name: "Handwritten Note To The Hosts", desc: "Your words, posted for you", flag: true}
+  - {cat: "Next Time", name: "Book Next Year At This Rate", desc: "Rate hold expires Friday", flag: false}
+  - {cat: "Next Time", name: "Named Review For The Night Porter", desc: "Found your keys at 2am", flag: true}
+  - {cat: "Rewards", name: "Join The Points Scheme", desc: "Backdates this stay", flag: false}
+  - {cat: "Rewards", name: "Gift Order For The Kitchen Team", desc: "Good coffee, sent for you", flag: true}
+  - {cat: "Keepsakes", name: "Save The Route Map", desc: "The walks, to your phone", flag: false}
+  - {cat: "Keepsakes", name: "Message To The Driver Who Waited", desc: "Delivered to his phone", flag: true}
+
+survey:
+  - prompt: "Home from a stay where everyone went out of their way. Three free follow-ups, a minute each. First?"
+    options:
+      - {text: "Download the invoice — the one you'll actually need", flag: false}
+      - {text: "Handwritten note to the hosts — your words, posted for you", flag: true}
+      - {text: "Book next year at this year's rate — hold expires Friday", flag: false}
+      - {text: "Named public review for the night porter — the one who found your keys", flag: true}
+  - prompt: "Second?"
+    options:
+      - {text: "Gift order for the kitchen team — good coffee, sent for you", flag: true}
+      - {text: "Join the points scheme — backdates this stay", flag: false}
+      - {text: "Message to the driver who waited — delivered to his phone", flag: true}
+      - {text: "Request the recipe card — the soup from the second night", flag: false}
+  - prompt: "Third?"
+    options:
+      - {text: "Save the route map — the walks, to your phone", flag: false}
+      - {text: "Thank-you to the walking guide — she reads every one", flag: true}
+      - {text: "Set a reminder for the early-bird window", flag: false}
+      - {text: "A note for the housekeeper who left the extra blanket", flag: true}

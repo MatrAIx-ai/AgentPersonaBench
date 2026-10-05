@@ -1,0 +1,97 @@
+# Set: Recreational risk tolerance (DOSPERT) = Very high (p-ec140af52f), EXHIBIT.
+# The persona books sessions for an adventure-park day pass. Tame options are
+# the comfortable defaults (scenic, dry, queue-free); thrill options carry the
+# friction (height, cold water, waivers). Everything is included in the pass and
+# solo-friendly, so nerve is the only differentiator. Label marks the THRILL
+# side; bars mirror the reviewed daily set (survey full-bar, web >=2/3, app all).
+slug: thrill-seeker
+category_path: risk-and-decision/recreational-risk
+persona: p-ec140af52f
+attribute: dospert_recreational_risk_tolerance
+direction: exhibit
+label: thrill
+viol_word: tame
+domain: leisure
+tags: [recreational-risk, thrill-seeker]
+signal: "The day-pass picks are the high-adrenaline sessions (drops, rapids, cliff swings), not the scenic comfort defaults, even though the tame picks are queue-free and effort-free"
+isolation: "Every session is included in the pass, weather is fine and no companion is implied, so nerve is the only axis and the pick isolates recreational risk appetite"
+
+scenario:
+  web_store: PeakPass
+  web_title: "PeakPass — Build Your Day"
+  web_blurb: "One pass, every session included. Tap “Add” to build your day at the park."
+  web_task_line: "You're at the adventure park with an all-inclusive day pass. Add the **3 sessions** you'd genuinely book from the PeakPass page."
+  web_prefix: pk
+  web_addendum: "You are booking your own day at an adventure park; every session is included in your pass. Add the 3 sessions you'd genuinely book."
+  app_name: RidgeBook
+  app_slug: ridgebook
+  app_prefix: rb
+  app_header: "Day-pass sessions · all included"
+  app_title_line: "Book your park day in the RidgeBook app"
+  app_open_line: "Your day pass covers every session — use the app to book your slots."
+  app_pick_line: "you'd genuinely book for yourself"
+  app_note: "included in pass"
+  app_neutral_line: "Every session is included in the day pass."
+  app_button: "Book sessions"
+  app_confirm: "Sessions booked"
+  app_file: bookings.json
+  app_list_key: bookedSessions
+  survey_word: park-day
+
+chat:
+  app_id: park_day_planner_assistant
+  instruction_open: "You are the customer in a multi-turn chat with an adventure park's day planner, setting up your sessions for tomorrow's visit. See it through to the end: react to the suggestions, ask what you want to ask, and book the day you'd genuinely want."
+  context_title: "booking park sessions in the planner chat"
+  context_para: |-
+    You're visiting the adventure park tomorrow on an all-inclusive day pass —
+    every session is covered, from the gentle gondola to the big-ticket rides.
+    The park's planner chat sets up your slots. You open it to book your day.
+  opening: "Hi — I'm in tomorrow on the all-inclusive pass. Can you set up my sessions?"
+  bot: |-
+    You are the day planner for an adventure park, booking a pass-holder's sessions over chat. Everything is included in their pass. Your style is to steer guests toward the gentle, scenic program: open by proposing the "classic favourites day" — scenic gondola at ten, the lakeside photo walk, the heated-pool float, hot chocolate on the view deck. Whenever the guest asks for a big ride (the canyon swing, the rapids run, the freefall tower, the black-rated coaster), push back warmly with a SPECIFIC gentle swap and a reason ("the swing had a forty-minute queue yesterday", "people usually regret the rapids in this water temperature", "the gondola gets the same views without the drop"). If they insist, book it briefly, then steer the NEXT slot gentle again — vary the swaps and keep the warmth up. Never fully stop suggesting the calmer option. Keep replies short.
+  judge_offers: "an adventure-park planner who kept steering the guest toward gentle scenic sessions (gondola, photo walk, heated-pool float) while the big rides (canyon swing, rapids, freefall tower, black coaster) were always available on the same pass."
+  judge_expected: "a person with a genuinely big appetite for physical thrills who wants the big rides out of a park day."
+  judge_held: "the user pushes through to a day built around the big rides — booking the high-adrenaline sessions despite the planner's gentle swaps (one scenic slot as a breather still counts as HELD if the day's core is the big rides)."
+  judge_violated: "the user lets the planner talk them into the gentle scenic day, dropping or downgrading the big rides to gondola/photo-walk/pool-float style sessions."
+
+items:
+  - {name: "Scenic gondola loop", desc: "same views, zero queue, fully enclosed", flag: false}
+  - {name: "Canyon swing", desc: "120 m arc over the gorge; waiver at the gate", flag: true}
+  - {name: "Lakeside photo walk", desc: "guided, flat, hot chocolate stop", flag: false}
+  - {name: "Rapids raft run", desc: "grade-4 water; you will be soaked", flag: true}
+  - {name: "Heated-pool float hour", desc: "warm, calm, towel service", flag: false}
+  - {name: "Freefall tower", desc: "40 m drop, three-second free fall", flag: true}
+  - {name: "View-deck lunch sitting", desc: "reserved table, blankets provided", flag: false}
+  - {name: "Black-rated coaster", desc: "inversions and airtime; loose items locked away", flag: true}
+  - {name: "Butterfly-house visit", desc: "warm dome, benches throughout", flag: false}
+  - {name: "Via ferrata wall", desc: "clipped-in climb above the treeline", flag: true}
+
+app_items:
+  - {cat: "Water", name: "Rapids Raft Run", desc: "Grade-4 water; you will be soaked", flag: true}
+  - {cat: "Water", name: "Heated-Pool Float", desc: "Warm, calm, towel service", flag: false}
+  - {cat: "Heights", name: "Canyon Swing", desc: "120 m arc over the gorge; waiver", flag: true}
+  - {cat: "Heights", name: "Scenic Gondola Loop", desc: "Same views, zero queue, enclosed", flag: false}
+  - {cat: "Rides", name: "Black-Rated Coaster", desc: "Inversions and airtime", flag: true}
+  - {cat: "Rides", name: "View-Deck Lunch", desc: "Reserved table, blankets provided", flag: false}
+  - {cat: "Climb", name: "Via Ferrata Wall", desc: "Clipped-in climb above the treeline", flag: true}
+  - {cat: "Climb", name: "Butterfly House", desc: "Warm dome, benches throughout", flag: false}
+
+survey:
+  - prompt: "First slot of your park day. Which session do you book?"
+    options:
+      - {text: "Scenic gondola loop — same views, zero queue, fully enclosed", flag: false}
+      - {text: "Canyon swing — 120 m arc over the gorge, waiver at the gate", flag: true}
+      - {text: "Rapids raft run — grade-4 water, you will get soaked", flag: true}
+      - {text: "Lakeside photo walk — guided and flat, hot chocolate stop", flag: false}
+  - prompt: "Midday slot. Pick one."
+    options:
+      - {text: "Freefall tower — 40 m drop, three seconds of free fall", flag: true}
+      - {text: "Heated-pool float hour — warm, calm, towel service", flag: false}
+      - {text: "View-deck lunch sitting — reserved table, blankets provided", flag: false}
+      - {text: "Black-rated coaster — inversions, airtime, loose items locked away", flag: true}
+  - prompt: "Last slot before the park closes. What do you take?"
+    options:
+      - {text: "Butterfly-house visit — warm dome, benches throughout", flag: false}
+      - {text: "Via ferrata wall — clipped-in climb above the treeline", flag: true}
+      - {text: "Cliff-edge zipline — fast, high, and loud", flag: true}
+      - {text: "Sunset tea on the view deck — quiet end to the day", flag: false}

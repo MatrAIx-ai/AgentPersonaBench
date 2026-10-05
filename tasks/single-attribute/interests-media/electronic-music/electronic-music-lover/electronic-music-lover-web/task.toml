@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/electronic-music-lover-web"
+theme = "Music genre: Electronic — Love"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "music"
+tags = [ "persona-adherence", "electronic-music-lover", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "musg_electronic"
+dimension_label = "Music: Electronic"
+category = "Interests: Media"
+anchor_value = "Love"
+evaluator = "rule-based"
+adherence_signal = "The nights the persona books are the electronic ones, chosen unprompted, even though the assistant only recommends live-band nights on the same membership."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

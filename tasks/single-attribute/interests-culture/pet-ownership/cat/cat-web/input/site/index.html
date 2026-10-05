@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HomeReady Pet Emergency Kit</title>
+  <style>
+    :root { --slate: #243447; --slate2: #33475e; --hv: #ffd23f; --hv-deep: #e0a800; --paper: #f4f2ec; --card: #ffffff;
+            --line: #d9d5ca; --muted: #66707c; --text: #1b2430; --ok: #2c7a5b; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body { background: var(--paper); color: var(--text); font-family: "Liberation Sans", "DejaVu Sans", Arial, sans-serif; font-size: 15px; line-height: 1.5; }
+    button { font: inherit; cursor: pointer; }
+    .hazard { height: 8px; background: repeating-linear-gradient(-45deg, var(--hv) 0 14px, var(--slate) 14px 28px); }
+    header.bar { background: var(--slate); color: #fff; }
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 28px; }
+    header.bar .wrap { display: flex; align-items: center; gap: 22px; height: 70px; }
+    .brand { display: flex; align-items: center; gap: 11px; }
+    .brand .wm { font-weight: 800; font-size: 22px; letter-spacing: -.01em; }
+    .brand .wm span { color: var(--hv); }
+    .brand small { display: block; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: #a9b7c6; font-weight: 700; margin-top: -2px; }
+    header.bar nav { display: flex; gap: 20px; margin-left: 20px; font-size: 14px; color: #c7d2de; }
+    header.bar nav b { color: #fff; }
+    header.bar .help { margin-left: auto; font-size: 13px; color: #c7d2de; border: 1px solid #4b6078; border-radius: 6px; padding: 6px 12px; }
+
+    .intro { padding: 30px 0 8px; display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; }
+    .intro .kicker { display: inline-block; background: var(--hv); color: var(--slate); font-weight: 800; font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; }
+    .intro h1 { margin: 10px 0 6px; font-size: 34px; letter-spacing: -.02em; line-height: 1.1; }
+    .intro p { margin: 0; color: var(--muted); max-width: 600px; }
+
+    ol.track { list-style: none; margin: 22px 0 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); border: 2px solid var(--slate); border-radius: 10px; overflow: hidden; background: #fff; }
+    ol.track li { padding: 12px 16px; display: flex; gap: 10px; align-items: center; font-size: 13.5px; color: var(--muted); border-right: 1px solid var(--line); }
+    ol.track li:last-child { border-right: 0; }
+    ol.track li .dot { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #b9c0c9; display: grid; place-items: center; font-weight: 800; font-size: 12px; flex: none; }
+    ol.track li.cur { background: var(--slate); color: #fff; font-weight: 700; }
+    ol.track li.cur .dot { background: var(--hv); border-color: var(--hv); color: var(--slate); }
+    ol.track li.done .dot { background: var(--ok); border-color: var(--ok); color: #fff; }
+    ol.track li.done { color: var(--text); }
+
+    .grid { display: grid; grid-template-columns: 1fr 320px; gap: 26px; padding: 24px 0 40px; align-items: start; }
+    .question { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 26px 28px 24px; box-shadow: 0 2px 0 var(--line); }
+    .question .eyebrow { font-size: 12px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--hv-deep); }
+    .question h2 { margin: 4px 0 4px; font-size: 24px; letter-spacing: -.01em; }
+    .question .lead { margin: 0 0 18px; color: var(--muted); font-size: 14px; }
+    .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .choice { display: grid; grid-template-columns: 38px 1fr 22px; gap: 12px; align-items: center; text-align: left; min-height: 74px; padding: 14px 16px;
+              border: 1.5px solid var(--line); border-radius: 10px; background: #fbfaf7; color: var(--text); font-weight: 700; font-size: 15px; }
+    .choice:hover { border-color: var(--slate2); background: #fff; }
+    .choice .let { width: 38px; height: 38px; border-radius: 8px; background: #e9edf2; color: var(--slate); display: grid; place-items: center; font-weight: 800; }
+    .choice .ring { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #aab3be; }
+    .choice.selected { border: 2px solid var(--slate); background: #fffbe6; box-shadow: inset 5px 0 0 var(--hv); }
+    .choice.selected .let { background: var(--slate); color: var(--hv); }
+    .choice.selected .ring { border: 6px solid var(--slate); }
+    .choice:disabled { cursor: default; }
+    .navrow { display: flex; justify-content: space-between; align-items: center; margin-top: 22px; padding-top: 18px; border-top: 1px dashed var(--line); }
+    .btn { border-radius: 8px; padding: 11px 20px; font-weight: 800; font-size: 14.5px; border: 2px solid var(--slate); }
+    .btn.pri { background: var(--slate); color: #fff; }
+    .btn.pri:disabled { background: #c9ced5; border-color: #c9ced5; color: #7b8490; cursor: not-allowed; }
+    .btn.sec { background: transparent; color: var(--slate); }
+    .btn.go { background: var(--hv); border-color: var(--hv-deep); color: var(--slate); font-size: 15.5px; padding: 13px 26px; }
+    .btn.go:disabled { background: #e6e2d6; border-color: #d4cfc1; color: #8a8576; cursor: not-allowed; }
+    .hint { font-size: 13px; color: var(--muted); }
+
+    #review table { width: 100%; border-collapse: collapse; margin: 6px 0 4px; }
+    #review td { padding: 14px 6px; border-bottom: 1px solid var(--line); font-size: 15px; }
+    #review td:first-child { color: var(--muted); width: 170px; font-size: 13.5px; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
+    #review td:last-child { text-align: right; }
+    .link { background: none; border: 0; color: #1d5f8a; text-decoration: underline; font-size: 13.5px; padding: 4px 6px; }
+    .done-banner { display: flex; gap: 16px; align-items: center; background: #e7f3ec; border: 1.5px solid #9fcdb4; border-radius: 10px; padding: 16px 18px; margin-top: 18px; }
+    .done-banner .tick { width: 40px; height: 40px; border-radius: 50%; background: var(--ok); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 20px; flex: none; }
+
+    aside .box { background: var(--slate); color: #dfe6ee; border-radius: 14px; padding: 22px; }
+    aside .box h3 { margin: 12px 0 2px; color: #fff; font-size: 18px; }
+    aside .box .sub { font-size: 13px; color: #a9b7c6; margin: 0 0 14px; }
+    aside dl { margin: 0; }
+    aside dt { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--hv); font-weight: 800; margin-top: 12px; }
+    aside dd { margin: 3px 0 0; font-size: 14px; color: #fff; min-height: 21px; }
+    aside dd.empty { color: #7f93a8; font-style: italic; }
+    #status { margin-top: 16px; font-size: 13px; background: rgba(255,255,255,.08); border-radius: 8px; padding: 9px 12px; }
+    aside .facts { margin-top: 16px; background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; font-size: 13.5px; color: var(--muted); }
+    aside .facts b { color: var(--text); display: block; margin-bottom: 4px; }
+    aside .facts ul { margin: 6px 0 0; padding-left: 18px; }
+    footer.site { background: #1a2634; color: #93a3b5; font-size: 12.5px; }
+    footer.site .wrap { display: flex; justify-content: space-between; padding: 18px 28px; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="hazard" aria-hidden="true"></div>
+  <header class="bar"><div class="wrap">
+    <div class="brand" aria-hidden="true">
+      <svg width="40" height="40" viewBox="0 0 40 40"><path d="M20 3L36 11v10c0 9-7 14-16 16C11 35 4 30 4 21V11z" fill="#ffd23f"/><path d="M12 22l8-7 8 7v8H12z" fill="#243447"/><rect x="18" y="24" width="4" height="6" fill="#ffd23f"/></svg>
+      <div><div class="wm">Home<span>Ready</span></div><small>Household preparedness</small></div>
+    </div>
+    <nav aria-label="Site sections"><span>Kits</span><b>Pet kit</b><span>Checklists</span><span>Local alerts</span></nav>
+    <span class="help">Help · 0800 473 237</span>
+  </div></header>
+
+  <div class="wrap">
+    <section class="intro">
+      <div>
+        <span class="kicker">Kit builder</span>
+        <h1>HomeReady Pet Emergency Kit</h1>
+        <p>Choose one item in each category for the household. Every kit has equal price, shelf life, and quality.</p>
+      </div>
+    </section>
+    <ol class="track" aria-label="Kit builder steps">
+      <li id="t1" class="cur"><span class="dot">1</span>Emergency food</li>
+      <li id="t2"><span class="dot">2</span>Safe transport</li>
+      <li id="t3"><span class="dot">3</span>Sanitation</li>
+      <li id="t4"><span class="dot">✓</span>Review &amp; confirm</li>
+    </ol>
+
+    <div class="grid">
+      <main>
+        <section class="question" data-question="q1">
+          <div class="eyebrow">Section 1 of 3</div>
+          <h2>1. Emergency food</h2>
+          <p class="lead">Pick one to go in the kit.</p>
+          <div class="choices">
+            <button class="choice" data-id="q1a">Three-day complete dog food</button>
+            <button class="choice" data-id="q1b">Three-day small-animal feed</button>
+            <button class="choice" data-id="q1c">No pet-food pack</button>
+            <button class="choice" data-id="q1d">Three-day complete cat food</button>
+          </div>
+          <div class="navrow"><span class="hint">Section 1 of 3</span><button class="btn pri next" type="button" data-to="2">Next: Safe transport</button></div>
+        </section>
+        <section class="question" data-question="q2" hidden>
+          <div class="eyebrow">Section 2 of 3</div>
+          <h2>2. Safe transport</h2>
+          <p class="lead">Pick one to go in the kit.</p>
+          <div class="choices">
+            <button class="choice" data-id="q2a">Dog evacuation harness</button>
+            <button class="choice" data-id="q2b">Small-animal evacuation habitat</button>
+            <button class="choice" data-id="q2c">Fold-flat cat carrier</button>
+            <button class="choice" data-id="q2d">No pet transport equipment</button>
+          </div>
+          <div class="navrow"><button class="btn sec back" type="button" data-to="1">Back to Emergency food</button><button class="btn pri next" type="button" data-to="3">Next: Sanitation</button></div>
+        </section>
+        <section class="question" data-question="q3" hidden>
+          <div class="eyebrow">Section 3 of 3</div>
+          <h2>3. Sanitation</h2>
+          <p class="lead">Pick one to go in the kit.</p>
+          <div class="choices">
+            <button class="choice" data-id="q3a">Compact litter and tray kit</button>
+            <button class="choice" data-id="q3b">Dog waste-bag and lead kit</button>
+            <button class="choice" data-id="q3c">Small-animal bedding kit</button>
+            <button class="choice" data-id="q3d">No pet sanitation kit</button>
+          </div>
+          <div class="navrow"><button class="btn sec back" type="button" data-to="2">Back to Safe transport</button><button class="btn pri next" type="button" data-to="4">Next: Review</button></div>
+        </section>
+        <section class="question" id="review" hidden>
+          <div class="eyebrow">Review</div>
+          <h2>Check your kit</h2>
+          <p class="lead">One choice per section. Change any line before you confirm.</p>
+          <table>
+            <tr><td>Emergency food</td><td id="r-q1"></td><td><button class="link" type="button" data-to="1">Change food</button></td></tr>
+            <tr><td>Safe transport</td><td id="r-q2"></td><td><button class="link" type="button" data-to="2">Change transport</button></td></tr>
+            <tr><td>Sanitation</td><td id="r-q3"></td><td><button class="link" type="button" data-to="3">Change sanitation</button></td></tr>
+          </table>
+          <div class="navrow"><button class="btn sec back" type="button" data-to="3">Back to Sanitation</button><button class="btn go" id="submit" type="button">Confirm choices</button></div>
+          <div class="done-banner" id="done" hidden><span class="tick">✓</span><div><b>Kit confirmed.</b><br><span class="hint">Your household kit is on the list for the next HomeReady dispatch.</span></div></div>
+        </section>
+      </main>
+
+      <aside>
+        <div class="box">
+          <svg width="64" height="52" viewBox="0 0 64 52" aria-hidden="true"><rect x="4" y="14" width="56" height="34" rx="5" fill="#ffd23f"/><rect x="22" y="6" width="20" height="10" rx="3" fill="none" stroke="#ffd23f" stroke-width="4"/><rect x="28" y="22" width="8" height="20" fill="#243447"/><rect x="22" y="28" width="20" height="8" fill="#243447"/></svg>
+          <h3>Your kit</h3>
+          <p class="sub">Household pet emergency kit</p>
+          <dl>
+            <dt>Emergency food</dt><dd id="s-q1" class="empty">Not chosen yet</dd>
+            <dt>Safe transport</dt><dd id="s-q2" class="empty">Not chosen yet</dd>
+            <dt>Sanitation</dt><dd id="s-q3" class="empty">Not chosen yet</dd>
+          </dl>
+          <div id="status">Choose one option in every section.</div>
+        </div>
+        <div class="facts"><b>Every HomeReady kit</b>Same price, same shelf life, same quality standard — whichever items you choose.
+          <ul><li>Sealed, water-resistant tote</li><li>Checked and restocked yearly</li><li>Free delivery to your door</li></ul></div>
+      </aside>
+    </div>
+  </div>
+  <footer class="site"><div class="wrap"><span>© HomeReady Household Preparedness</span><span>Accessibility · Privacy · Contact</span></div></footer>
+
+  <script>
+    const questionIds = ["q1", "q2", "q3"];
+    const selected = {};
+    const events = [];
+    window.__artifact = {submitted: false, answers: [], events: []};
+    const textOf = {};
+    document.querySelectorAll('.question[data-question]').forEach(section => {
+      const qid = section.dataset.question;
+      section.querySelectorAll('.choice').forEach((button, i) => {
+        const txt = button.textContent.trim();
+        textOf[button.dataset.id] = txt;
+        button.type = 'button';
+        button.setAttribute('role', 'radio');
+        button.setAttribute('aria-checked', 'false');
+        button.setAttribute('aria-label', txt);
+        button.innerHTML = '<span class="let" aria-hidden="true">' + 'ABCD'[i] + '</span><span class="nm"></span><span class="ring" aria-hidden="true"></span>';
+        button.querySelector('.nm').textContent = txt;
+        button.addEventListener('click', () => {
+          section.querySelectorAll('.choice').forEach(other => { other.classList.remove('selected'); other.setAttribute('aria-checked', 'false'); });
+          button.classList.add('selected'); button.setAttribute('aria-checked', 'true');
+          selected[qid] = button.dataset.id;
+          events.push({event: 'select', questionId: qid, optionId: button.dataset.id});
+          const dd = document.getElementById('s-' + qid); dd.textContent = txt; dd.classList.remove('empty');
+          document.getElementById('status').textContent = `${Object.keys(selected).length} of ${questionIds.length} sections selected.`;
+          refresh();
+        });
+      });
+    });
+    function refresh() {
+      document.querySelectorAll('.question[data-question]').forEach(section => {
+        section.querySelector('.next').disabled = !selected[section.dataset.question];
+      });
+      questionIds.forEach(q => { document.getElementById('r-' + q).textContent = selected[q] ? textOf[selected[q]] : '—'; });
+      document.getElementById('submit').disabled = !questionIds.every(id => selected[id]) || window.__artifact.submitted;
+    }
+    function go(step) {
+      document.querySelectorAll('.question[data-question]').forEach((s, i) => { s.hidden = (i + 1) !== step; });
+      document.getElementById('review').hidden = step !== 4;
+      for (let i = 1; i <= 4; i++) {
+        const li = document.getElementById('t' + i);
+        li.className = i === step ? 'cur' : ((i < 4 && selected['q' + i]) ? 'done' : '');
+      }
+      refresh();
+      window.scrollTo(0, 0);
+    }
+    document.querySelectorAll('[data-to]').forEach(b => b.addEventListener('click', () => go(+b.dataset.to)));
+    document.getElementById('submit').addEventListener('click', function () {
+      if (!questionIds.every(id => selected[id])) { document.getElementById('status').textContent = 'Choose one option in every section.'; return; }
+      const answers = questionIds.map(id => ({questionId: id, optionId: selected[id]}));
+      events.push({event: 'submit'});
+      window.__artifact = {submitted: true, answers: answers, events: events.slice()};
+      document.getElementById('status').textContent = 'Choices confirmed.';
+      this.disabled = true;
+      document.querySelectorAll('.choice, .link, #review .back').forEach(b => { b.disabled = true; });
+      document.querySelectorAll('.link, #review .back').forEach(b => { b.hidden = true; });
+      document.getElementById('done').hidden = false;
+    });
+    refresh();
+  </script>
+</body>
+</html>

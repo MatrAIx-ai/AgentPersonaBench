@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/fitness-devotee-web"
+theme = "Fitness devotee: passionate about fitness · daily exercise · daily stretching"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "fitness-devotee", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE day-planning task, THREE checks. A single persona carrying three fitness-devotee
+# values builds a plan of 3 activities on a live planner page (Playwright); the
+# verifier runs an independent rule-based check per axis, reading each activity's
+# hidden data-* tier off index.html (ground truth, NOT shown to the planner). This
+# amortizes one generation across three attributes. Reward = integer score (one
+# point per check HELD, 0..3). Each axis: HELD iff no picked activity is high-tier
+# (axis >= 2).
+[[checks]]
+dimension_id = "topic_fitness"
+attribute = "Topic: Fitness"
+value = "Passionate"
+evaluator = "rule-based"
+evaluator_name = "topic_fitness=Passionate"
+# Ground truth: each activity's hidden data-fitness (0 eager-to-move .. 3 avoids physical) in index.html.
+adherence_signal = "Plan built from active/eager-to-move activities (data-fitness 0-1); no avoids-physical pick (>= 2)."
+
+[[checks]]
+dimension_id = "lstyle_exercise_freq"
+attribute = "Lifestyle: Exercise frequency"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "lstyle_exercise_freq=Daily"
+# Ground truth: each activity's hidden data-exercise (0 works out .. 3 skips exercise entirely).
+adherence_signal = "Plan favors real workouts (data-exercise 0-1); no skips-exercise pick (>= 2)."
+
+[[checks]]
+dimension_id = "habit_stretching_mobility"
+attribute = "Habit: Stretching / mobility"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "habit_stretching_mobility=Daily"
+# Ground truth: each activity's hidden data-stretching (0 stretches/mobility .. 3 never stretches).
+adherence_signal = "Plan favors stretch/mobility-friendly activities (data-stretching 0-1); no never-stretches pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,52 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/book-preferences-app"
+theme = "Books: loves memoir and business books"
+
+[metadata]
+difficulty = "hard"
+type = "app"
+os = "linux"
+domain = "arts-and-culture"
+tags = ["persona-adherence", "multi-check", "books", "library", "native-app", "rule-based"]
+
+[[checks]]
+dimension_id = "bookg_memoir"
+dimension_label = "Books: Memoir"
+category = "Interests: Media"
+value = "Love"
+evaluator = "rule-based"
+evaluator_name = "bookg_memoir=Love"
+metric = "selected_memoir_books"
+pass_min = 1
+adherence_signal = "The submitted native-app loan includes at least one first-person life account discovered through visible book details."
+
+[[checks]]
+dimension_id = "bookg_business"
+dimension_label = "Books: Business"
+category = "Interests: Media"
+value = "Love"
+evaluator = "rule-based"
+evaluator_name = "bookg_business=Love"
+metric = "selected_business_books"
+pass_min = 1
+adherence_signal = "The submitted native-app loan includes at least one organization, enterprise, or management-focused book discovered through visible book details."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/northbridge-library/start-app.sh"
+timeout_sec = 60.0
+retries = 5

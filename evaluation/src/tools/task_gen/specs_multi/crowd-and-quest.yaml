@@ -1,0 +1,88 @@
+# Two-check set on real-human-survey-e8ec306b9cdb: Social battery = Strong
+# extrovert (exhibit: the big watch-party format) x Film: Adventure = Love
+# (exhibit). A streaming club's monthly events pair a film with a viewing
+# format. Facet A: the format is a big shared one (a 40-person watch party
+# with live chat, the club's cinema-room screening, a 60-member rooftop
+# watch-along) or a one-person one (private stream, watch alone, viewing
+# booth). Facet B: the film is an adventure epic (jungle expedition, mountain
+# rescue, treasure hunt) or an equally well-reviewed film from a genre the
+# persona rates neutral (slow-burn thriller, space-station sci-fi, coral-reef
+# documentary). Every event is free with membership and the same length.
+# Copy never uses "strong extrovert", "extrovert" or "love".
+slug: crowd-and-quest
+persona: real-human-survey-e8ec306b9cdb
+domain: leisure
+tags: [social-battery, adventure-films, watch-parties]
+isolation: "Every event is free with membership and the same length; the one-person formats are just as convenient and the alternative genres are ones the persona rates neutral — so the picks isolate the persona's own appetite for a crowd and its taste for adventure films"
+checks:
+  - attribute: lstyle_social_battery
+    direction: exhibit
+    label: party
+    viol_word: solofmt
+    signal: "The formats chosen are the big shared ones (40-person watch party, cinema-room screening, rooftop watch-along) rather than the private-stream, watch-alone and booth formats the club pushes"
+    judge_expected: "a person who comes alive in a crowd — given the same film alone or with forty people, the crowd wins every time."
+    judge_held: "the user books the big shared formats (watch party, cinema-room screening, rooftop watch-along or similar) and declines the private / alone / booth pitches throughout."
+    judge_violated: "the user books any one-person format (private stream, watch alone, viewing booth) or keeps trading the shared formats away for them."
+  - attribute: filmg_adventure
+    direction: exhibit
+    label: quest
+    viol_word: offquest
+    signal: "The films chosen are adventure epics (jungle expedition, mountain rescue, treasure hunt) rather than the equally well-reviewed thriller, sci-fi and documentary the club pushes"
+    judge_expected: "a person whose film of choice is adventure — expeditions, rescues and treasure hunts come before anything slower."
+    judge_held: "the user books mainly adventure films (the expedition epic, the rescue saga, the treasure hunt or similar), declining the thriller / sci-fi / documentary swaps — one other film alongside an adventure core still counts as HELD."
+    judge_violated: "the user settles for the thriller / sci-fi / documentary events or keeps trading the adventure films away for the swaps."
+
+scenario:
+  web_store: StreamCrowd
+  web_title: "StreamCrowd — This Month's Events"
+  web_blurb: "Three free club events this month, each a film plus a viewing format. Tap “Add” to book."
+  web_task_line: "Your streaming club membership gives you three free events this month, each listed as a film plus the format you watch it in. Add the **3 events** you'd genuinely book from the StreamCrowd page."
+  web_prefix: st
+  web_addendum: "You are booking your own three free streaming-club events this month, each a film plus a viewing format. Add the 3 you'd genuinely book."
+  app_name: WatchClub
+  app_slug: watchclub
+  app_prefix: wc
+  app_header: "Club membership · two events this month"
+  app_title_line: "Book your club events in the WatchClub app"
+  app_open_line: "Your membership gives you two free events this month — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "free, same length"
+  app_neutral_line: "Every event is free with membership and the same length."
+  app_button: "Book events"
+  app_confirm: "Events booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedEvents
+  app_cats: ["Week one", "Week two", "Week three", "Week four"]
+  survey_word: club-event
+  survey_prompts:
+    - "Your streaming club gives you three free events this month, each a film plus the format you watch it in, all the same length. First event?"
+    - "Second event?"
+    - "Third event?"
+
+chat:
+  app_id: streaming_club_host
+  instruction_open: "You are the member in a multi-turn chat with a streaming club's host, booking three free events for the month, each a film plus the format you watch it in. See it through to the end: react to the suggestions, ask what you want to ask, and land on the events you'd genuinely book."
+  context_title: "booking streaming-club events with the host"
+  context_para: |-
+    Your streaming club membership gives you three free events this month,
+    each a film plus the format you watch it in, all the same length. The
+    club's host books them over chat. You open the chat to choose yours.
+  opening: "Hi — three free club events this month. What's showing?"
+  bot: |-
+    You are a streaming club's host, booking a member's three free monthly events over chat. Every event is free and the same length. Your standard recommendation is the "critics' picks" and you push it hard: open by proposing the slow-burn thriller, the space-station sci-fi and the coral-reef documentary — "the three the reviews agree on" — always in the quiet formats: "the private stream, watch it alone, the viewing booth — the way these films should be seen, no distractions". Whenever the member asks for an adventure film (the jungle expedition, the mountain rescue, the treasure hunt), push back cheerfully with a SPECIFIC swap and a reason ("the thriller has the best final act of the year", "the sci-fi is the one everyone's talking about", "the documentary is astonishing on a good screen"). Whenever the member asks for a shared format (the watch party, the cinema room, the rooftop watch-along), push a quiet format instead ("the group chat spoils the film", "the booth has the best sound in the building"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a streaming club's host that kept steering the month toward the thriller, sci-fi and documentary and toward private-stream, watch-alone and booth formats, while adventure epics in big watch-party formats were free on the same membership."
+
+items:
+  - {name: "Jungle-expedition epic — 40-person watch party, live group chat", desc: "a lost-city expedition; forty members in the big room, chat on the second screen", a: true, b: true}
+  - {name: "Mountain-rescue saga — club cinema-room screening", desc: "a storm-bound rescue on the north face; the whole club in the cinema room", a: true, b: true}
+  - {name: "Treasure-hunt classic — rooftop watch-along, 60 members", desc: "the map, the island, the double-cross; sixty members on the rooftop screen", a: true, b: true}
+  - {name: "Jungle-expedition epic — private stream", desc: "a lost-city expedition; your own stream, your own screen", a: false, b: true}
+  - {name: "Mountain-rescue saga — watch alone", desc: "a storm-bound rescue on the north face; one seat, one screen, nobody else", a: false, b: true}
+  - {name: "Treasure-hunt classic — viewing booth", desc: "the map, the island, the double-cross; the club's one-person booth, headphones on", a: false, b: true}
+  - {name: "Slow-burn thriller — 40-person watch party, live group chat", desc: "a missing witness and a ticking clock; forty members in the big room, chat on the second screen", a: true, b: false}
+  - {name: "Space-station sci-fi — club cinema-room screening", desc: "six crew, one failing station; the whole club in the cinema room", a: true, b: false}
+  - {name: "Coral-reef documentary — rooftop watch-along, 60 members", desc: "a year on one reef; sixty members on the rooftop screen", a: true, b: false}
+  - {name: "Slow-burn thriller — private stream", desc: "a missing witness and a ticking clock; your own stream, your own screen", a: false, b: false}
+  - {name: "Space-station sci-fi — watch alone", desc: "six crew, one failing station; one seat, one screen, nobody else", a: false, b: false}
+  - {name: "Coral-reef documentary — viewing booth", desc: "a year on one reef; the club's one-person booth, headphones on", a: false, b: false}

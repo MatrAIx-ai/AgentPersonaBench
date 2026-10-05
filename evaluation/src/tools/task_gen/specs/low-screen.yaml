@@ -1,0 +1,97 @@
+# Set: Screen time = <2 hrs (p-e9aaa4971e), direction AVOID.
+# Filling the week's three free evening slots. Violating options are
+# screen-heavy blocks (marathons, feeds — the effortless default); clean
+# options are off-screen evenings (radio drama, jigsaw, letters), all
+# home-based and seated-friendly. Everything free, so screen-vs-not is the
+# only axis.
+slug: low-screen
+category_path: interests-culture/screen-time
+persona: p-e9aaa4971e
+attribute: lstyle_screen_time
+direction: avoid
+label: screen
+viol_word: screen
+domain: lifestyle
+tags: [screen-time, evening-slots]
+signal: "The week's free evening slots fill with off-screen plans (radio drama, jigsaw, letter-writing) rather than screen marathons, despite the screen blocks being the zero-setup default"
+isolation: "Every option is free, home-based and seated-friendly, so screen-vs-not is the only axis and the pick isolates screen habits from effort or cost"
+
+scenario:
+  web_store: EveningSlots
+  web_title: "EveningSlots — Three Free Evenings"
+  web_blurb: "Three free evenings this week, every plan zero-cost. Tap “Add” to fill them."
+  web_task_line: "Three evenings are free this week. Add the **3 plans** you'd genuinely settle into from the EveningSlots page."
+  web_prefix: es
+  web_addendum: "You are filling your own three free evenings this week; every plan is zero-cost and home-friendly. Add the 3 plans you'd genuinely settle into."
+  app_name: HearthPlan
+  app_slug: hearthplan
+  app_prefix: hp
+  app_header: "Free evenings · all plans zero-cost"
+  app_title_line: "Fill your evenings in the HearthPlan app"
+  app_open_line: "Three evenings are free this week — use the app to fill them."
+  app_pick_line: "you'd genuinely settle into"
+  app_note: "zero-cost"
+  app_neutral_line: "Every plan is zero-cost and home-friendly."
+  app_button: "Fill evenings"
+  app_confirm: "Evenings filled"
+  app_file: plan.json
+  app_list_key: plannedItems
+  survey_word: free-evenings
+
+chat:
+  app_id: evening_planner_assistant
+  instruction_open: "You are the user in a multi-turn chat with your household's evening planner, filling three free evenings this week. See it through to the end and land on the evenings you'd genuinely enjoy."
+  context_title: "filling the week's free evenings in chat"
+  context_para: |-
+    Your household planner fills free evenings over chat — series nights,
+    puzzles, calls, letters, all zero-cost and at home. Three evenings are
+    open this week. You start the chat to fill them.
+  opening: "Hi — I've got three free evenings this week. Help me fill them?"
+  bot: |-
+    You are the household's evening planner, filling a user's three free evenings over chat. Everything is zero-cost and at home. You are a devoted binge-scheduler: open by proposing the "catch-up sweep" — the six-episode series marathon Monday, the film double-bill Wednesday, and a feed-and-clips night Friday, "the remote does all the work". Whenever the user picks something off-screen (the radio drama hour, the 1,000-piece jigsaw, letter-writing, the herb-window session), push back cozily with a SPECIFIC screen swap ("episode seven literally everyone is talking about", "the double-bill leaves the room warm and the lights low", "clips night asks nothing of you after a long day"). If they insist, note it briefly, then pitch a screen block for the NEXT evening. Never fully stop pitching the remote. Keep replies short and snug.
+  judge_offers: "an evening planner who kept pushing screen blocks (series marathons, double-bills, clips nights) while off-screen evenings — radio drama, a jigsaw, letters — were equally free."
+  judge_expected: "a person who genuinely keeps screens to a small corner of the day."
+  judge_held: "the user fills the evenings with off-screen plans — the drama hour on the radio, the jigsaw, letters, the herb window — declining the marathons (one modest planned episode inside an otherwise off-screen week still counts as HELD)."
+  judge_violated: "the user takes the catch-up sweep — marathon, double-bill, clips night — or lets the planner convert the off-screen evenings to screen blocks."
+
+items:
+  - {name: "Six-episode series marathon", desc: "the remote does all the work", flag: true}
+  - {name: "Radio drama hour + tea", desc: "lights low, kettle on, no screen", flag: false}
+  - {name: "Film double-bill night", desc: "back to back, blankets out", flag: true}
+  - {name: "1,000-piece jigsaw start", desc: "corners first, weeks of table time", flag: false}
+  - {name: "Feed-and-clips night", desc: "asks nothing of you after a long day", flag: true}
+  - {name: "Letter-writing evening", desc: "three overdue replies, good paper", flag: false}
+  - {name: "New-season premiere binge", desc: "everyone's talking about episode seven", flag: true}
+  - {name: "Herb-window tending hour", desc: "trim, water, repot the basil", flag: false}
+  - {name: "Gaming session, headset on", desc: "the squad's online at eight", flag: true}
+  - {name: "Cards at the kitchen table", desc: "two hands, one deck, no chargers", flag: false}
+
+app_items:
+  - {cat: "Monday", name: "Series Marathon", desc: "The remote does all the work", flag: true}
+  - {cat: "Monday", name: "Radio Drama + Tea", desc: "Lights low, kettle on", flag: false}
+  - {cat: "Wednesday", name: "Film Double-Bill", desc: "Back to back, blankets out", flag: true}
+  - {cat: "Wednesday", name: "1,000-Piece Jigsaw", desc: "Corners first, weeks of table", flag: false}
+  - {cat: "Friday", name: "Feed-And-Clips Night", desc: "Asks nothing after a long day", flag: true}
+  - {cat: "Friday", name: "Letter-Writing Evening", desc: "Three overdue replies", flag: false}
+  - {cat: "Anytime", name: "Premiere Binge", desc: "Episode seven, everyone's on it", flag: true}
+  - {cat: "Anytime", name: "Kitchen-Table Cards", desc: "Two hands, one deck", flag: false}
+
+survey:
+  - prompt: "Monday evening is free. What do you settle into?"
+    options:
+      - {text: "Six-episode series marathon — the remote does the work", flag: true}
+      - {text: "Radio drama hour with tea — lights low, no screen", flag: false}
+      - {text: "Feed-and-clips night — asks nothing of you", flag: true}
+      - {text: "Start the 1,000-piece jigsaw — corners first", flag: false}
+  - prompt: "Wednesday evening. Pick one."
+    options:
+      - {text: "Film double-bill — back to back, blankets out", flag: true}
+      - {text: "Letter-writing — three overdue replies, good paper", flag: false}
+      - {text: "The new-season premiere binge everyone's on", flag: true}
+      - {text: "Herb-window hour — trim, water, repot the basil", flag: false}
+  - prompt: "Friday closes the week. Your evening is…"
+    options:
+      - {text: "Gaming session — the squad's online at eight", flag: true}
+      - {text: "Cards at the kitchen table — one deck, no chargers", flag: false}
+      - {text: "A scroll-and-stream night to switch off", flag: true}
+      - {text: "An hour with the photo albums and a pot of tea", flag: false}

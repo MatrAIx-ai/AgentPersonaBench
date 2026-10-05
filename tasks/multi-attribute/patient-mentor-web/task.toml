@@ -1,0 +1,62 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/patient-mentor-web"
+theme = "patient-mentor: patient + warm/encouraging + kind wholesome humor (take-your-time · supportive · gentle)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "helping-teaching"
+tags = [ "persona-adherence", "multi-check", "patient-mentor", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE task, THREE checks. A single persona carrying three patient-mentor values
+# picks 3 replies to send on a peer-support board (Playwright); the verifier runs
+# an independent rule-based check per axis, reading each reply's hidden data-*
+# tier off index.html (ground truth, NOT shown to the persona). This amortizes one
+# generation across three attributes. Reward = integer score (one point per check
+# HELD, 0..3). Each axis: HELD iff no picked reply is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "cog_patience"
+attribute = "Cognition: Patience"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "cog_patience=Very high"
+# Ground truth: each reply's hidden data-cost (0 takes-the-time .. 3 impatient/curt) in index.html.
+adherence_signal = "Replies chosen are unhurried/take-your-time (data-cost 0-1); no impatient pick (>= 2)."
+
+[[checks]]
+dimension_id = "interpersonal_communion_warmth"
+attribute = "Interpersonal communion / warmth"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "interpersonal_communion_warmth=High"
+# Ground truth: each reply's hidden data-consume (0 warm/encouraging .. 3 cold/dismissive).
+adherence_signal = "Replies chosen are warm/supportive (data-consume 0-1); no cold pick (>= 2)."
+
+[[checks]]
+dimension_id = "cog_humor"
+attribute = "Cognition: Humor"
+value = "Wholesome"
+evaluator = "rule-based"
+evaluator_name = "cog_humor=Wholesome"
+# Ground truth: each reply's hidden data-novel (0 kind/gentle .. 3 harsh/sarcastic).
+adherence_signal = "Replies chosen are kind/gentle (data-novel 0-1); no harsh/sarcastic pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

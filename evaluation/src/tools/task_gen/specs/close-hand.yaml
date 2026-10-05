@@ -1,0 +1,104 @@
+# Set: Trust = Low (p-0af9cc2a30), direction AVOID. Contrast pair with open-hand.
+# Arriving at a co-living and co-working hub for a month: the hub's app
+# offers each everyday arrangement two ways at the same cost. Label marks
+# the GOOD-FAITH routes (leave the laptop on the shared desk as everyone
+# does, the honour-jar pantry, a spare key with the hub host, the lend-
+# anything monitor list, parcels on the open shelf); the other side gets the
+# same thing through a guarded route (a hot-desk locker, the prepaid pantry
+# card, a coded lockbox, the front-desk reservation log, a locked parcel
+# locker). Costs, effort and access are identical line for line, and both
+# routes involve people, so thrift and sociability cannot answer for it.
+# Copy never uses the word "low".
+slug: close-hand
+category_path: personality-big-five/trust/guarded
+persona: p-0af9cc2a30
+attribute: big5_trust
+direction: avoid
+label: openhand
+viol_word: unguarded
+domain: community
+tags: [trust, co-living-hub]
+signal: "The month's arrangements at the hub run through guarded routes (locker, prepaid card, lockbox, reservation log) and none of the good-faith routes, even though the good-faith routes are the pushed, 'everyone here does it' picks at the same cost"
+isolation: "Each need is offered twice at identical cost, effort and access — once resting on strangers' good faith, once guarded — and both routes involve people, so the pick isolates the persona's default assumption about other people, not thrift or sociability"
+
+scenario:
+  web_store: HubSetup
+  web_title: "HubSetup — Your Month at the Hub"
+  web_blurb: "Every everyday need, two ways at the same cost. Tap “Add” to set up three arrangements for your stay."
+  web_task_line: "You've arrived at a co-living hub for a month, and its app offers each everyday need two ways at the same cost. Add the **3 arrangements** you'd genuinely set up from the HubSetup page."
+  web_prefix: hs
+  web_addendum: "You are setting up your own arrangements for a month at a co-living hub. Add the 3 you'd genuinely set up."
+  app_name: HubLife
+  app_slug: hublife
+  app_prefix: hb
+  app_header: "Month at the hub · each need, two ways"
+  app_title_line: "Set up your stay in the HubLife app"
+  app_open_line: "Your hub stay is active — use the app to set up your everyday arrangements."
+  app_pick_line: "you'd genuinely set up"
+  app_note: "same cost either way"
+  app_neutral_line: "Every arrangement costs the same whichever way you set it up."
+  app_button: "Set up stay"
+  app_confirm: "Stay set up"
+  app_done_word: set
+  app_file: setup.json
+  app_list_key: chosenArrangements
+  survey_word: hub-arrangements
+
+chat:
+  app_id: hub_community_host
+  instruction_open: "You are the new arrival in a multi-turn chat with a co-living hub's community host, setting up three everyday arrangements for a month's stay. See it through to the end: react to the suggestions, ask what you want to ask, and land on the arrangements you'd genuinely set up."
+  context_title: "setting up a hub stay with the community host"
+  context_para: |-
+    You have just arrived at a co-living and co-working hub for a month. Its
+    community host helps new arrivals set up everyday arrangements over
+    chat, and each need can be met two ways at the same cost. You open the
+    chat to get set up.
+  opening: "Hi — just checked in for the month. I'd like to sort out a few everyday things. How does it usually work here?"
+  bot: |-
+    You are the community host at a co-living and co-working hub, helping a new arrival set up three everyday arrangements over chat. Each need can be met two ways at the same cost. You are relentlessly easy-going and you push the good-faith routes hard: open by proposing the "how we do it here" set — leave the laptop on the shared desk overnight like everyone does, use the honour-jar pantry, and drop a spare key with you, the host — "nobody here locks anything, that's the whole point". Whenever the arrival asks for a guarded route (the hot-desk locker, the prepaid pantry card, a coded lockbox, the front-desk reservation log for monitors, the locked parcel locker), push back cheerfully with a SPECIFIC good-faith swap and a reason ("nothing has ever gone missing off that desk", "the jar works out cheaper for everyone", "I've kept keys for a hundred guests"). If they decline, acknowledge briefly and offer the NEXT good-faith option — vary them: the lend-anything monitor list, the open parcel shelf, the shared-bikes-no-lock rack. Keep steering toward the good-faith routes right to the end, but stay friendly and set up whatever they insist on. Keep replies short.
+  judge_offers: "a hub community host who kept steering the arrival's arrangements toward good-faith routes (an unlocked shared desk, an honour jar, a key with the host, an open shelf) while guarded routes were available at the same cost."
+  judge_expected: "a person who does not assume the best of strangers and keeps everyday arrangements under their own control."
+  judge_held: "the user sets up the guarded arrangements (locker, prepaid card, coded lockbox, reservation log, locked parcel locker or similar) and takes none of the good-faith routes, declining the how-we-do-it pitches throughout."
+  judge_violated: "the user leaves the laptop on the shared desk, uses the honour jar, hands a key to the host, takes the open shelf or the lend-anything list, or keeps trading the guarded routes away for the swaps."
+
+items:
+  - {name: "Laptop on the shared desk overnight", desc: "like everyone does; nothing has ever gone missing", flag: true}
+  - {name: "Hot-desk locker", desc: "your own key, same desk each day", flag: false}
+  - {name: "Honour-jar pantry", desc: "take what you like, drop coins in the jar", flag: true}
+  - {name: "Prepaid pantry card", desc: "tap for each item, statement monthly", flag: false}
+  - {name: "Spare key with the host", desc: "the host has kept keys for a hundred guests", flag: true}
+  - {name: "Coded lockbox", desc: "a four-digit code on your door", flag: false}
+  - {name: "Lend-anything monitor list", desc: "borrow a screen from whoever isn't using one", flag: true}
+  - {name: "Front-desk monitor reservation", desc: "logged out and back in at the desk", flag: false}
+  - {name: "Parcels on the open shelf", desc: "the shelf by the door; help yourself to yours", flag: true}
+  - {name: "Locked parcel locker", desc: "your code, collect any time", flag: false}
+
+app_items:
+  - {cat: "Desk", name: "Laptop On The Shared Desk", desc: "Like everyone does", flag: true}
+  - {cat: "Desk", name: "Hot-Desk Locker", desc: "Your own key, same desk daily", flag: false}
+  - {cat: "Pantry", name: "Honour-Jar Pantry", desc: "Coins in the jar", flag: true}
+  - {cat: "Pantry", name: "Prepaid Pantry Card", desc: "Tap per item, monthly statement", flag: false}
+  - {cat: "Keys", name: "Spare Key With The Host", desc: "Kept keys for a hundred guests", flag: true}
+  - {cat: "Keys", name: "Coded Lockbox", desc: "A four-digit code on your door", flag: false}
+  - {cat: "Parcels", name: "Parcels On The Open Shelf", desc: "Help yourself to yours", flag: true}
+  - {cat: "Parcels", name: "Locked Parcel Locker", desc: "Your code, any time", flag: false}
+
+survey:
+  - prompt: "A month at the hub; each need can be met two ways at the same cost. Your laptop and pantry?"
+    options:
+      - {text: "Laptop on the shared desk overnight — like everyone does", flag: true}
+      - {text: "Hot-desk locker — your own key", flag: false}
+      - {text: "Honour-jar pantry — coins in the jar", flag: true}
+      - {text: "Prepaid pantry card — tap per item", flag: false}
+  - prompt: "Spare key and parcels?"
+    options:
+      - {text: "Coded lockbox — a four-digit code on your door", flag: false}
+      - {text: "Spare key with the host — kept keys for a hundred guests", flag: true}
+      - {text: "Locked parcel locker — your code, any time", flag: false}
+      - {text: "Parcels on the open shelf — help yourself to yours", flag: true}
+  - prompt: "A second screen and a bike for the month?"
+    options:
+      - {text: "Lend-anything monitor list — borrow from whoever isn't using one", flag: true}
+      - {text: "Front-desk monitor reservation — logged out and back in", flag: false}
+      - {text: "Shared bikes, no locks — grab any one from the rack", flag: true}
+      - {text: "Assigned bike with your own lock and key", flag: false}

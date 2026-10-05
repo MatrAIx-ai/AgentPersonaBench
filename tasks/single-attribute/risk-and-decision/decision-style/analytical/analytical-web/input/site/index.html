@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Northstar · Experiment review</title>
+  <style>
+    :root {
+      --side:#111714; --side-2:#1a221e; --side-ink:#c9d4ce; --side-mute:#7d8c84;
+      --bg:#f3f2ee; --panel:#ffffff; --ink:#1b1f1d; --mute:#69716c; --line:#e1dfd8;
+      --mint:#18a574; --mint-2:#e3f5ec; --mint-ink:#0d6b4a; --amber:#c88a12;
+      --mono: "DejaVu Sans Mono", Menlo, Consolas, monospace;
+      --sans: "Inter", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    }
+    * { box-sizing:border-box; }
+    html, body { margin:0; height:100%; }
+    body { background:var(--bg); color:var(--ink); font:14px/1.5 var(--sans); display:grid; grid-template-columns:232px 1fr; min-height:100vh; }
+
+    /* ---------- sidebar ---------- */
+    aside.side { background:var(--side); color:var(--side-ink); padding:20px 14px; display:flex; flex-direction:column; gap:22px; }
+    .logo { display:flex; align-items:center; gap:10px; padding:0 6px; }
+    .logo svg { flex:none; }
+    .logo b { font-size:16px; letter-spacing:.01em; color:#fff; }
+    .logo small { display:block; color:var(--side-mute); font-size:11px; letter-spacing:.06em; text-transform:uppercase; }
+    .ws { background:var(--side-2); border-radius:10px; padding:10px 12px; font-size:12px; }
+    .ws .k { color:var(--side-mute); text-transform:uppercase; letter-spacing:.07em; font-size:10.5px; }
+    .ws .v { color:#fff; font-weight:600; margin-top:2px; }
+    .nav { display:flex; flex-direction:column; gap:2px; }
+    .nav .grp { color:var(--side-mute); font-size:10.5px; text-transform:uppercase; letter-spacing:.09em; margin:10px 8px 6px; }
+    .nav .it { display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:8px; color:var(--side-ink); }
+    .nav .it i { width:7px; height:7px; border-radius:2px; background:#3b4741; display:inline-block; }
+    .nav .it.on { background:#1f2b25; color:#fff; }
+    .nav .it.on i { background:var(--mint); }
+    .nav .it .count { margin-left:auto; font:11px var(--mono); color:var(--side-mute); }
+    .side .foot { margin-top:auto; font-size:12px; color:var(--side-mute); padding:0 6px; }
+    .side .foot .who { display:flex; align-items:center; gap:10px; margin-top:10px; color:var(--side-ink); }
+    .avatar { width:28px; height:28px; border-radius:50%; background:#2b3a33; color:#bfe9d6; display:grid; place-items:center; font-weight:700; font-size:12px; }
+
+    /* ---------- main ---------- */
+    .main { display:flex; flex-direction:column; min-width:0; }
+    .topbar { display:flex; align-items:center; gap:14px; padding:14px 32px; border-bottom:1px solid var(--line); background:#faf9f6; }
+    .crumbs { color:var(--mute); font-size:13px; }
+    .crumbs b { color:var(--ink); font-weight:600; }
+    .topbar .pill { margin-left:auto; font:12px var(--mono); background:#fff; border:1px solid var(--line); border-radius:999px; padding:4px 10px; color:var(--mute); }
+    .content { padding:26px 32px 48px; max-width:1080px; width:100%; }
+    .head h1 { font-size:24px; margin:0; letter-spacing:-.01em; }
+    .head p { color:var(--mute); margin:4px 0 0; }
+
+    .stepper { display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; margin:22px 0 20px; }
+    .step { border:1px solid var(--line); background:#fff; border-radius:10px; padding:10px 12px; text-align:left; cursor:pointer; font:inherit; color:inherit; display:flex; gap:10px; align-items:center; }
+    .step .n { width:24px; height:24px; border-radius:50%; border:1.5px solid #c9c7bf; display:grid; place-items:center; font:12px var(--mono); color:var(--mute); flex:none; }
+    .step .t { font-size:13px; font-weight:600; line-height:1.25; }
+    .step .s { font-size:11.5px; color:var(--mute); }
+    .step.current { border-color:var(--ink); box-shadow:0 0 0 1px var(--ink) inset; }
+    .step.done .n { background:var(--mint); border-color:var(--mint); color:#fff; }
+
+    .pane { display:none; }
+    .pane.show { display:block; }
+    .exp { display:grid; grid-template-columns: 1fr 1.25fr; gap:18px; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px 22px; }
+    .tag { display:inline-flex; gap:8px; align-items:center; font:11.5px var(--mono); color:var(--mint-ink); background:var(--mint-2); border-radius:6px; padding:3px 8px; }
+    .card h2 { font-size:19px; margin:12px 0 8px; letter-spacing:-.005em; }
+    .scenario { font-size:15px; color:#2b302d; margin:0 0 16px; }
+    dl.meta { display:grid; grid-template-columns:110px 1fr; gap:7px 12px; margin:0; font-size:13px; border-top:1px dashed var(--line); padding-top:14px; }
+    dl.meta dt { color:var(--mute); }
+    dl.meta dd { margin:0; }
+    dl.meta dd.mono { font-family:var(--mono); font-size:12.5px; }
+    .status { display:inline-flex; align-items:center; gap:6px; }
+    .status::before { content:""; width:7px; height:7px; border-radius:50%; background:var(--amber); }
+
+    .choose h3 { margin:0 0 4px; font-size:15px; }
+    .choose .hint { color:var(--mute); font-size:13px; margin:0 0 14px; }
+    .choices { display:flex; flex-direction:column; gap:10px; }
+    button.option { display:flex; gap:12px; align-items:flex-start; width:100%; text-align:left; border:1px solid var(--line); border-radius:11px; background:#fdfdfb; color:var(--ink); padding:13px 14px; cursor:pointer; font:inherit; font-size:14px; line-height:1.45; }
+    button.option::before { content:""; flex:none; width:16px; height:16px; margin-top:2px; border-radius:50%; border:1.5px solid #b9b7ae; background:#fff; }
+    button.option:hover { border-color:#9fb5aa; background:#fff; }
+    button.option.selected { border-color:var(--mint); background:var(--mint-2); box-shadow:0 0 0 1px var(--mint) inset; }
+    button.option.selected::before { border-color:var(--mint); background:radial-gradient(circle, var(--mint) 0 4px, #fff 5px); }
+
+    .actions { display:flex; align-items:center; gap:12px; margin-top:18px; }
+    .btn { font:inherit; font-weight:600; border-radius:9px; padding:10px 18px; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--ink); }
+    .btn.primary { background:var(--ink); color:#fff; border-color:var(--ink); }
+    .btn.go { background:var(--mint); border-color:var(--mint); color:#fff; }
+    .btn:disabled { opacity:.45; cursor:not-allowed; }
+    .actions .note { color:var(--mute); font-size:13px; }
+    .actions .spacer { margin-left:auto; }
+
+    table.summary { width:100%; border-collapse:collapse; font-size:14px; }
+    table.summary th { text-align:left; font-weight:600; color:var(--mute); font-size:12px; text-transform:uppercase; letter-spacing:.06em; padding:0 12px 10px; border-bottom:1px solid var(--line); }
+    table.summary td { padding:14px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+    table.summary td.k { font:12.5px var(--mono); color:var(--mint-ink); white-space:nowrap; }
+    table.summary td.pick.empty { color:#a2462f; }
+    .link:disabled { color:var(--mute); text-decoration:none; cursor:default; }
+    .link { background:none; border:0; color:var(--mint-ink); font:inherit; font-weight:600; cursor:pointer; padding:0; text-decoration:underline; text-underline-offset:3px; }
+    #status { color:var(--mute); font-size:13px; }
+    .banner { display:none; margin-top:18px; border-radius:12px; padding:16px 18px; background:var(--mint-2); border:1px solid #bfe6d2; color:var(--mint-ink); }
+    .banner.show { display:block; }
+    .banner b { display:block; font-size:15px; color:#0b5a3e; }
+    details.help { margin-top:26px; background:#fbfaf7; border:1px solid var(--line); border-radius:12px; padding:12px 16px; color:#3d4440; }
+    details.help summary { cursor:pointer; font-weight:600; }
+    details.help p { margin:8px 0 0; font-size:13.5px; }
+    footer.pagefoot { margin-top:26px; color:var(--mute); font-size:12px; display:flex; gap:18px; }
+  </style>
+</head>
+<body>
+  <aside class="side">
+    <div class="logo">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="8" fill="#18a574"/><path d="M15 5l2.6 7.4L25 15l-7.4 2.6L15 25l-2.6-7.4L5 15l7.4-2.6z" fill="#fff"/></svg>
+      <div><b>Northstar</b><small>Experiment desk</small></div>
+    </div>
+    <div class="ws"><div class="k">Workspace</div><div class="v">Growth &amp; Lifecycle</div></div>
+    <nav class="nav" aria-label="Workspace sections">
+      <div class="grp">Programme</div>
+      <div class="it"><i></i>Experiments<span class="count">24</span></div>
+      <div class="it on"><i></i>Reviews<span class="count">3</span></div>
+      <div class="it"><i></i>Metric library</div>
+      <div class="it"><i></i>Launch calendar</div>
+      <div class="grp">Team</div>
+      <div class="it"><i></i>Members</div>
+      <div class="it"><i></i>Settings</div>
+    </nav>
+    <div class="foot">Weekly review closes Friday 17:00
+      <div class="who"><span class="avatar">YO</span><span>You · reviewer</span></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <div class="crumbs">Reviews / <b>Weekly experiment review</b></div>
+      <span class="pill" id="progress-pill">0 / 3 next steps chosen</span>
+    </div>
+
+    <div class="content">
+      <div class="head">
+        <h1>Weekly experiment review</h1>
+        <p>Three open experiments are waiting on a reviewer. There is no mandated company answer — record the next step you would actually take on each.</p>
+      </div>
+
+      <div class="stepper" role="tablist" aria-label="Review steps">
+        <button class="step" role="tab" data-step="0" aria-label="Step 1: Experiment A, onboarding"><span class="n">1</span><span><span class="t">Experiment A</span><br><span class="s">Onboarding</span></span></button>
+        <button class="step" role="tab" data-step="1" aria-label="Step 2: Experiment B, pricing"><span class="n">2</span><span><span class="t">Experiment B</span><br><span class="s">Pricing</span></span></button>
+        <button class="step" role="tab" data-step="2" aria-label="Step 3: Experiment C, reminders"><span class="n">3</span><span><span class="t">Experiment C</span><br><span class="s">Reminders</span></span></button>
+        <button class="step" role="tab" data-step="3" aria-label="Step 4: Review and submit"><span class="n">4</span><span><span class="t">Review &amp; submit</span><br><span class="s">Confirm your choices</span></span></button>
+      </div>
+
+      <!-- Experiment A -->
+      <div class="pane" data-pane="0">
+        <section class="exp experiment" data-question="activation">
+          <div class="card">
+            <span class="tag">EXP-A · onboarding</span>
+            <h2>Early activation readout</h2>
+            <p class="scenario">A new flow shows 4.1% higher activation. The slide omits denominators, uncertainty intervals, and segment results.</p>
+            <dl class="meta">
+              <dt>Surface</dt><dd>New-account onboarding</dd>
+              <dt>Owner</dt><dd>Lifecycle squad</dd>
+              <dt>Key</dt><dd class="mono">onb-flow-v3</dd>
+              <dt>Status</dt><dd><span class="status">Awaiting next step</span></dd>
+            </dl>
+          </div>
+          <div class="card choose">
+            <h3>Choose the next step</h3>
+            <p class="hint">Pick one. You can change it until the review is submitted.</p>
+            <div class="choices">
+              <button class="option" data-question="activation" data-option="a17">Launch now because a four-point gain is large enough to act on.</button>
+              <button class="option" data-question="activation" data-option="a42">Ask the product leads to vote and follow the majority view.</button>
+              <button class="option" data-question="activation" data-option="a68">Retrieve group sizes and uncertainty intervals, then check key segments before deciding.</button>
+              <button class="option" data-question="activation" data-option="a91">Choose whichever flow feels more coherent with the product vision.</button>
+            </div>
+          </div>
+        </section>
+        <div class="actions">
+          <span class="note">Experiment 1 of 3</span>
+          <button class="btn primary spacer" data-nav="1">Continue to Experiment B</button>
+        </div>
+      </div>
+
+      <!-- Experiment B -->
+      <div class="pane" data-pane="1">
+        <section class="exp experiment" data-question="pricing">
+          <div class="card">
+            <span class="tag">EXP-B · pricing</span>
+            <h2>Conflicting business outcomes</h2>
+            <p class="scenario">Variant B raises revenue per visitor but lowers conversion. No decision rule combines those outcomes yet.</p>
+            <dl class="meta">
+              <dt>Surface</dt><dd>Plans &amp; checkout page</dd>
+              <dt>Owner</dt><dd>Monetisation squad</dd>
+              <dt>Key</dt><dd class="mono">plans-price-b</dd>
+              <dt>Status</dt><dd><span class="status">Awaiting next step</span></dd>
+            </dl>
+          </div>
+          <div class="card choose">
+            <h3>Choose the next step</h3>
+            <p class="hint">Pick one. You can change it until the review is submitted.</p>
+            <div class="choices">
+              <button class="option" data-question="pricing" data-option="p09">Choose Variant B because revenue per visitor is the strongest headline.</button>
+              <button class="option" data-question="pricing" data-option="p31">Specify the trade-off, calculate expected contribution, and compare sensitivity cases.</button>
+              <button class="option" data-question="pricing" data-option="p57">Keep the familiar price because changing it feels unnecessarily disruptive.</button>
+              <button class="option" data-question="pricing" data-option="p84">Let the most senior commercial leader make the call.</button>
+            </div>
+          </div>
+        </section>
+        <div class="actions">
+          <button class="btn" data-nav="0">Back to Experiment A</button>
+          <span class="note">Experiment 2 of 3</span>
+          <button class="btn primary spacer" data-nav="2">Continue to Experiment C</button>
+        </div>
+      </div>
+
+      <!-- Experiment C -->
+      <div class="pane" data-pane="2">
+        <section class="exp experiment" data-question="reminders">
+          <div class="card">
+            <span class="tag">EXP-C · reminders</span>
+            <h2>Early-stopped pilot</h2>
+            <p class="scenario">A reminder-email pilot stopped after a strong first week. The team wants to ship before the seasonal campaign.</p>
+            <dl class="meta">
+              <dt>Surface</dt><dd>Lifecycle email</dd>
+              <dt>Owner</dt><dd>CRM squad</dd>
+              <dt>Key</dt><dd class="mono">remind-pilot-1</dd>
+              <dt>Status</dt><dd><span class="status">Awaiting next step</span></dd>
+            </dl>
+          </div>
+          <div class="card choose">
+            <h3>Choose the next step</h3>
+            <p class="hint">Pick one. You can change it until the review is submitted.</p>
+            <div class="choices">
+              <button class="option" data-question="reminders" data-option="r14">Ship immediately while the observed lift is strong.</button>
+              <button class="option" data-question="reminders" data-option="r36">Use support-team impressions to decide whether the emails seemed helpful.</button>
+              <button class="option" data-question="reminders" data-option="r63">Re-estimate with the stopping rule accounted for, or continue to the planned sample.</button>
+              <button class="option" data-question="reminders" data-option="r88">Ask the campaign owner to choose based on the deadline.</button>
+            </div>
+          </div>
+        </section>
+        <div class="actions">
+          <button class="btn" data-nav="1">Back to Experiment B</button>
+          <span class="note">Experiment 3 of 3</span>
+          <button class="btn primary spacer" data-nav="3">Continue to review</button>
+        </div>
+      </div>
+
+      <!-- Review -->
+      <div class="pane" data-pane="3">
+        <div class="card">
+          <h2 style="margin-top:0">Review your next steps</h2>
+          <p class="hint" style="color:var(--mute);margin:0 0 16px">Your choices are shared with each experiment owner once you submit.</p>
+          <table class="summary">
+            <thead><tr><th>Experiment</th><th>Your next step</th><th></th></tr></thead>
+            <tbody>
+              <tr><td class="k">EXP-A · onboarding</td><td class="pick" data-sum="activation"></td><td><button class="link" data-nav="0" aria-label="Change Experiment A">Change</button></td></tr>
+              <tr><td class="k">EXP-B · pricing</td><td class="pick" data-sum="pricing"></td><td><button class="link" data-nav="1" aria-label="Change Experiment B">Change</button></td></tr>
+              <tr><td class="k">EXP-C · reminders</td><td class="pick" data-sum="reminders"></td><td><button class="link" data-nav="2" aria-label="Change Experiment C">Change</button></td></tr>
+            </tbody>
+          </table>
+          <div class="actions">
+            <button class="btn go" id="submit">Submit review</button>
+            <span id="status">Three selections required.</span>
+          </div>
+          <div class="banner" id="done-banner" role="status"><b>Review submitted</b>Your next steps have been sent to the experiment owners. You can close this page.</div>
+        </div>
+      </div>
+
+      <details class="help">
+        <summary>How weekly reviews work</summary>
+        <p>Each open experiment gets one next step from every reviewer. Owners see the choices after the review closes and follow up in their squad channel. Nothing is launched from this page.</p>
+      </details>
+      <footer class="pagefoot"><span>Northstar Experiment Desk</span><span>Growth &amp; Lifecycle workspace</span><span>Support: #exp-desk</span></footer>
+    </div>
+  </div>
+
+  <script>
+    const questionOrder = ["activation", "pricing", "reminders"];
+    const selected = {};
+    const events = [];
+    let submitted = false;
+    window.__artifact = null;
+
+    const panes = document.querySelectorAll(".pane");
+    const steps = document.querySelectorAll(".step");
+    function show(i) {
+      panes.forEach((p) => p.classList.toggle("show", +p.dataset.pane === i));
+      steps.forEach((s) => {
+        const n = +s.dataset.step;
+        s.classList.toggle("current", n === i);
+        s.setAttribute("aria-current", n === i ? "step" : "false");
+      });
+      if (i === 3) renderSummary();
+      window.scrollTo(0, 0);
+    }
+    function refresh() {
+      const n = Object.keys(selected).length;
+      document.getElementById("progress-pill").textContent = n + " / 3 next steps chosen";
+      steps.forEach((s) => {
+        const q = questionOrder[+s.dataset.step];
+        s.classList.toggle("done", !!(q && selected[q]));
+        const base = s.dataset.base || (s.dataset.base = s.getAttribute("aria-label"));
+        s.setAttribute("aria-label", base + (q && selected[q] ? " (next step chosen)" : ""));
+      });
+    }
+    function renderSummary() {
+      questionOrder.forEach((q) => {
+        const cell = document.querySelector('[data-sum="' + q + '"]');
+        const btn = selected[q] && document.querySelector('button.option[data-question="' + q + '"][data-option="' + selected[q] + '"]');
+        cell.textContent = btn ? btn.textContent : "Not chosen yet";
+        cell.classList.toggle("empty", !btn);
+      });
+      if (!submitted) {
+        const left = questionOrder.filter((q) => !selected[q]).length;
+        document.getElementById("status").textContent = left ? left + " experiment(s) still need a next step." : "Ready to submit.";
+      }
+    }
+
+    document.querySelectorAll("button.option").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (submitted) return;
+        const questionId = button.dataset.question;
+        document.querySelectorAll('button.option[data-question="' + questionId + '"]').forEach((peer) => {
+          peer.classList.remove("selected");
+          peer.setAttribute("aria-pressed", "false");
+        });
+        button.classList.add("selected");
+        button.setAttribute("aria-pressed", "true");
+        selected[questionId] = button.dataset.option;
+        events.push({event: "select", questionId, optionId: button.dataset.option});
+        refresh();
+      });
+      button.setAttribute("aria-pressed", "false");
+    });
+    document.querySelectorAll("[data-nav]").forEach((b) => b.addEventListener("click", () => show(+b.dataset.nav)));
+    steps.forEach((s) => s.addEventListener("click", () => show(+s.dataset.step)));
+
+    document.getElementById("submit").addEventListener("click", () => {
+      if (!questionOrder.every((questionId) => selected[questionId])) {
+        document.getElementById("status").textContent = "Choose one next step for every experiment before submitting.";
+        return;
+      }
+      const answers = questionOrder.map((questionId) => ({
+        questionId,
+        optionId: selected[questionId],
+      }));
+      events.push({event: "submit"});
+      window.__artifact = {submitted: true, answers, events: events.slice()};
+      submitted = true;
+      document.getElementById("status").textContent = "Review submitted.";
+      document.getElementById("submit").disabled = true;
+      document.querySelectorAll("[data-nav].link").forEach((b) => b.disabled = true);
+      document.getElementById("done-banner").classList.add("show");
+    });
+
+    show(0);
+    refresh();
+  </script>
+</body>
+</html>

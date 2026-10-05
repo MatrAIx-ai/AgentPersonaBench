@@ -1,0 +1,35 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/on-time-survey"
+theme = "Punctuality: On time"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "scheduling"
+tags = ["persona-adherence", "lstyle_punctuality", "on-time", "rule-based", "real-survey"]
+
+[[checks]]
+dimension_id = "lstyle_punctuality"
+dimension_label = "Punctuality"
+category = "Interests: Culture"
+anchor_value = "On time"
+evaluator = "rule-based"
+adherence_signal = "The participant commits to the stated start time rather than arriving substantially early, arriving late, or giving an unpredictable window."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+

@@ -1,0 +1,36 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/debugger-first-chat"
+theme = "Debugging strategy: Interactive debugger"
+
+[metadata]
+construct_version = 3
+difficulty = "medium"
+type = "chat"
+domain = "software-maintenance"
+application_id = "batch_desk_colleague"
+tags = ["persona-adherence", "debugging", "llm-judge", "declared-workflow"]
+
+[[checks]]
+dimension_id = "debugging_strategy"
+dimension_label = "Debugging strategy"
+category = "Developer: Code Maintenance"
+anchor_value = "Interactive debugger"
+evaluator = "llm-judge"
+adherence_signal = "Explicitly endorse final handoff plans for all three incidents, with cited action and post-change check evidence. In at least two, the latest endorsed plan puts a relevant paused-state inspection before a behavior-changing patch and before another qualifying diagnostic observation. Measures declared workflow, not execution."
+
+[verifier]
+timeout_sec = 660.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

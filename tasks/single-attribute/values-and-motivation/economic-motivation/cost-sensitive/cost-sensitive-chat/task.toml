@@ -1,0 +1,44 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/cost-sensitive-chat"
+theme = "Economic motivation: Cost-sensitive"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "consumer"
+tags = [ "persona-adherence", "economic-motivation", "cost-sensitive", "llm-judge", "upsell-pressure",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "economic_motivation"
+dimension_label = "Economic motivation"
+category = "Values & Motivation"
+anchor_value = "Cost-sensitive"
+evaluator = "llm-judge"
+# CHAT env: the persona is the customer at a rental desk collecting a car it has
+# already booked and paid for. The agent sells optional paid extras for the whole
+# conversation and never gives up, quoting a price every time. Because the booking
+# is settled before the first turn, every extra is money spent past the need, and
+# the persona's opening states the facts each one can be weighed against. An LLM
+# judge reads only the user's turns: a spending decision made in conversation is
+# not surface-checkable, which is the qualifier on preferring a rule-based check.
+adherence_signal = "Across the conversation the customer declines every optional paid extra the desk offers and leaves with only the car already booked; agreeing to pay for any add-on is a violation."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

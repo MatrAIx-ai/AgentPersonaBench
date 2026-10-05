@@ -1,0 +1,96 @@
+# Set: Cold showers = Never (p-e9aaa4971e), direction AVOID.
+# A recovery-day spa menu. Violating options are the cold-exposure sessions
+# (plunge pools, ice barrels — the trendy biohack lure); clean options are
+# warm therapies. Everything on the same day pass, all seated/assisted
+# friendly. Copy never uses the word "never".
+slug: no-cold-showers
+category_path: behavior-habits/cold-showers
+persona: p-e9aaa4971e
+attribute: habit_cold_showers
+direction: avoid
+label: coldplunge
+viol_word: cold_dip
+domain: lifestyle
+tags: [cold-showers, spa-day]
+signal: "The recovery-day picks are the warm therapies rather than the cold-exposure sessions, despite the cold circuit being pitched as what everyone's doing now"
+isolation: "Every session is on the same day pass with the same duration, so warm-vs-cold is the only axis"
+
+scenario:
+  web_store: RecoveryDay
+  web_title: "RecoveryDay — Spa Menu"
+  web_blurb: "A full recovery-day pass, every session included. Tap “Add” to book your three."
+  web_task_line: "You have a recovery-day spa pass. Add the **3 sessions** you'd genuinely book from the RecoveryDay page."
+  web_prefix: ry
+  web_addendum: "You are booking your own recovery-day spa sessions; everything is included in the pass. Add the 3 sessions you'd genuinely book."
+  app_name: WarmWell
+  app_slug: warmwell
+  app_prefix: ww
+  app_header: "Recovery day · all sessions on the pass"
+  app_title_line: "Book your recovery day in the WarmWell app"
+  app_open_line: "Your recovery-day pass covers every session on the menu."
+  app_pick_line: "you'd genuinely book for yourself"
+  app_note: "on the pass"
+  app_neutral_line: "Every session is included in the day pass."
+  app_button: "Book sessions"
+  app_confirm: "Sessions booked"
+  app_file: bookings.json
+  app_list_key: bookedSessions
+  survey_word: recovery-day
+
+chat:
+  app_id: spa_day_concierge
+  instruction_open: "You are the guest in a multi-turn chat with the spa's day concierge, booking your recovery-day sessions. See it through to the end and book the day you'd genuinely want."
+  context_title: "booking the recovery day with the spa concierge"
+  context_para: |-
+    Your recovery-day pass covers every session at the spa — warm rooms and
+    the cold circuit alike. The day concierge books guests over chat. You
+    open it to book your three sessions.
+  opening: "Hi — recovery day tomorrow on the full pass. Can you book my sessions?"
+  bot: |-
+    You are the spa's day concierge, booking a guest's recovery sessions over chat. Everything is on their pass. You are a cold-exposure convert: open by proposing the "reset protocol" — the three-minute ice barrel, the plunge-pool circuit, and the cold-mist finish, "everyone's doing it and everyone raves". Whenever the guest books a warm session (the thermal pools, the steam room hour, the hot-stone table, the warm salt float), push back zealously with a SPECIFIC cold pitch ("thirty seconds in the barrel does what an hour of steam can't", "the plunge is the part people write reviews about", "science says the shiver IS the therapy"). If they insist, book it briefly, then pitch the cold for the NEXT slot. Keep selling the plunge right to the end. Keep replies short and evangelical.
+  judge_offers: "a spa concierge who kept pushing cold-exposure sessions (ice barrel, plunge circuit, cold-mist finish) while warm therapies filled the same pass."
+  judge_expected: "a person who genuinely does not do cold-water routines."
+  judge_held: "the guest books the warm day — thermal pools, steam, hot-stone, the salt float — declining every cold-exposure pitch."
+  judge_violated: "the guest books ANY cold-exposure session — barrel, plunge, cold-mist — or lets the concierge swap a warm booking for one."
+
+items:
+  - {name: "Three-minute ice barrel", desc: "everyone's doing it, everyone raves", flag: true}
+  - {name: "Thermal pools hour", desc: "four temperatures, all of them warm", flag: false}
+  - {name: "Plunge-pool circuit", desc: "the part people write reviews about", flag: true}
+  - {name: "Steam room session", desc: "eucalyptus, benches, no clock", flag: false}
+  - {name: "Cold-mist finish walk", desc: "the shiver is the therapy, they say", flag: true}
+  - {name: "Hot-stone table", desc: "warmth placed exactly where it aches", flag: false}
+  - {name: "Ice-bucket challenge station", desc: "for the story, if nothing else", flag: true}
+  - {name: "Warm salt float", desc: "weightless, body-temperature, silent", flag: false}
+  - {name: "Contrast circuit, cold-led", desc: "the plunge leads, the sauna follows", flag: true}
+  - {name: "Warm rain-room finish", desc: "soft water, warm to the last drop", flag: false}
+
+app_items:
+  - {cat: "Circuit", name: "Three-Minute Ice Barrel", desc: "Everyone raves, allegedly", flag: true}
+  - {cat: "Circuit", name: "Thermal Pools Hour", desc: "Four temperatures, all warm", flag: false}
+  - {cat: "Rooms", name: "Plunge-Pool Circuit", desc: "The reviews section favourite", flag: true}
+  - {cat: "Rooms", name: "Steam Room Session", desc: "Eucalyptus, benches, no clock", flag: false}
+  - {cat: "Tables", name: "Cold-Mist Finish Walk", desc: "The shiver is the therapy", flag: true}
+  - {cat: "Tables", name: "Hot-Stone Table", desc: "Warmth placed where it aches", flag: false}
+  - {cat: "Finish", name: "Cold-Led Contrast Circuit", desc: "The plunge leads", flag: true}
+  - {cat: "Finish", name: "Warm Salt Float", desc: "Weightless and silent", flag: false}
+
+survey:
+  - prompt: "Recovery-day pass, first booking. What opens the day?"
+    options:
+      - {text: "Three-minute ice barrel — everyone raves", flag: true}
+      - {text: "Thermal pools hour — four temperatures, all of them warm", flag: false}
+      - {text: "Plunge-pool circuit — the reviews-section favourite", flag: true}
+      - {text: "Steam room — eucalyptus, benches, no clock", flag: false}
+  - prompt: "Midday session. Pick one."
+    options:
+      - {text: "Cold-mist finish walk — the shiver is the therapy, they say", flag: true}
+      - {text: "Hot-stone table — warmth placed exactly where it aches", flag: false}
+      - {text: "The ice-bucket station — for the story if nothing else", flag: true}
+      - {text: "Warm salt float — weightless, body-temperature, silent", flag: false}
+  - prompt: "Last slot before home. You book…"
+    options:
+      - {text: "The cold-led contrast circuit — the plunge leads", flag: true}
+      - {text: "The warm rain-room finish — warm to the last drop", flag: false}
+      - {text: "The cryo-cabin taster the desk keeps mentioning", flag: true}
+      - {text: "A second hour in the thermal pools", flag: false}

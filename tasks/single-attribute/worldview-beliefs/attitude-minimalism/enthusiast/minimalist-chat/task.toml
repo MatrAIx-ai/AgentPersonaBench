@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/minimalist-chat"
+theme = "Minimalism: Enthusiast"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "shopping"
+tags = [ "persona-adherence", "minimalism", "enthusiast", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# Measures whether carrying the attribute value observably steers what the user
+# agrees to buy. An LLM judge reads the USER's own turns: held iff the user keeps
+# to a short list of essentials and declines the assistant's upsells / add-ons /
+# bundles / impulse buys.
+[[checks]]
+dimension_id = "att_minimalism"
+dimension_label = "Attitude: Minimalism"
+category = "Worldview: Beliefs"
+anchor_value = "Enthusiast"
+evaluator = "llm-judge"
+adherence_signal = "The user keeps to a small set of genuinely-needed essentials and declines every upsell, add-on, bundle, duplicate, and impulse item the assistant pushes."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

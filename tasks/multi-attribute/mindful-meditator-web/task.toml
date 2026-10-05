@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/mindful-meditator-web"
+theme = "Mindful meditator: daily meditation · daily reflection · low stress"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "mindful-meditator", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE lifestyle-shopping task, THREE checks. A single persona carrying three
+# mindful-meditator values adds 3 items to a cart on a live store page (Playwright);
+# the verifier runs an independent rule-based check per axis, reading each product's
+# hidden data-* tier off index.html (ground truth, NOT shown to the shopper). This
+# amortizes one generation across three attributes. Reward = integer score (one
+# point per check HELD, 0..3). Each axis: HELD iff no picked product is high-tier
+# (axis >= 2).
+[[checks]]
+dimension_id = "habit_meditation"
+attribute = "Habit: Meditation"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "habit_meditation=Daily"
+# Ground truth: each product's hidden data-med (0 supports meditation/mindful pause .. 3 dismisses meditation).
+adherence_signal = "Cart built from meditative/mindful items (data-med 0-1); no dismisses-meditation pick (>= 2)."
+
+[[checks]]
+dimension_id = "habit_daily_reflection"
+attribute = "Habit: Daily reflection"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "habit_daily_reflection=Daily"
+# Ground truth: each product's hidden data-reflect (0 supports reflecting/journaling .. 3 never reflect, rush on).
+adherence_signal = "Cart favors reflective/journaling items (data-reflect 0-1); no never-reflects pick (>= 2)."
+
+[[checks]]
+dimension_id = "health_stress_level"
+attribute = "Health: Stress level"
+value = "Low"
+evaluator = "rule-based"
+evaluator_name = "health_stress_level=Low"
+# Ground truth: each product's hidden data-calm (0 calm/unhurried/low-stress .. 3 frantic/high-stress).
+adherence_signal = "Cart favors calm, low-stress items (data-calm 0-1); no frantic/high-stress pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

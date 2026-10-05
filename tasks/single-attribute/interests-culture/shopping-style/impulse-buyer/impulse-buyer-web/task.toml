@@ -1,0 +1,36 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/impulse-buyer-web"
+theme = "Shopping style: Grab the flash deal without deep vetting"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "consumer"
+tags = [ "persona-adherence", "shopping-style", "single-attribute", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "lstyle_shopping_style"
+dimension_label = "Shopping style"
+category = "Interests: Culture"
+anchor_value = "Impulse buyer"
+evaluator = "rule-based"
+adherence_signal = "The flash-deal bundle is bought without first viewing detailed specifications or comparison/review panels; explicit buy of the flash deal is the adherent action."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

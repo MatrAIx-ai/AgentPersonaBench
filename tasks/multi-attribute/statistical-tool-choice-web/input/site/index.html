@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Research Analysis Hub</title>
+  <style>
+    :root { --graphite:#20242b; --graphite-2:#2b3038; --rail:#171a1f; --mint:#2fbf9b; --mint-d:#1d9a7c; --mint-soft:#e3f6f0;
+            --ink:#1c2128; --mute:#6b7380; --line:#e2e5ea; --bg:#f6f7f9; --card:#fff; --amber:#e5a13a; --red:#c9503f; }
+    * { box-sizing:border-box; }
+    html,body { margin:0; }
+    body { font:14px/1.5 "Liberation Sans","FreeSans",Arial,sans-serif; color:var(--ink); background:var(--bg); }
+    .mono { font-family:"Liberation Mono","FreeMono",monospace; }
+    button { font:inherit; cursor:pointer; }
+    /* app bar */
+    .appbar { height:52px; background:var(--graphite); color:#e8ebef; display:flex; align-items:center; padding:0 18px; gap:18px; }
+    .appbar .brand { display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.2px; }
+    .appbar .crumbs { color:#9aa3ae; font-size:13px; }
+    .appbar .crumbs b { color:#e8ebef; font-weight:600; }
+    .appbar .sp { flex:1; }
+    .appbar .who { font-size:12px; color:#9aa3ae; display:flex; align-items:center; gap:8px; }
+    .appbar .who i { width:26px; height:26px; border-radius:50%; background:var(--mint); color:var(--graphite); display:grid; place-items:center; font-style:normal; font-weight:700; }
+    .frame { display:grid; grid-template-columns:230px 1fr; min-height:calc(100vh - 52px); }
+    /* project tree */
+    aside.tree { background:var(--rail); color:#b9c0ca; padding:16px 12px; font-size:13px; }
+    aside.tree h4 { margin:16px 8px 6px; font-size:11px; letter-spacing:1.6px; text-transform:uppercase; color:#6f7885; }
+    aside.tree h4:first-child { margin-top:0; }
+    aside.tree .node { display:flex; align-items:center; gap:0; padding:6px 8px; border-radius:6px; }
+    aside.tree .node.on { background:var(--graphite-2); color:#fff; }
+    aside.tree .dot { width:8px; height:8px; border-radius:2px; background:#4a525d; margin-right:8px; flex:none; }
+    aside.tree .node.on .dot { background:var(--mint); }
+    /* main */
+    main { padding:22px 28px 40px; max-width:1180px; }
+    .steps { display:flex; gap:0; margin-bottom:18px; background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+    .steps div { flex:1; padding:10px 14px; font-size:12.5px; color:var(--mute); border-right:1px solid var(--line); display:flex; gap:8px; align-items:center; }
+    .steps div:last-child { border-right:0; }
+    .steps b { width:20px; height:20px; border-radius:50%; background:var(--line); color:var(--mute); display:grid; place-items:center; font-size:11px; }
+    .steps div.on { color:var(--ink); font-weight:700; background:var(--mint-soft); }
+    .steps div.on b, .steps div.done b { background:var(--mint); color:#fff; }
+    .card { background:var(--card); border:1px solid var(--line); border-radius:12px; }
+    .card-h { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--line); }
+    .card-h h2 { margin:0; font-size:18px; }
+    .card-h .sub { color:var(--mute); font-size:12.5px; }
+    .card-b { padding:18px 20px; }
+    .btn { border:1px solid var(--line); background:var(--card); color:var(--ink); border-radius:8px; padding:9px 14px; font-weight:700; font-size:13px; }
+    .btn:hover { border-color:#c3c9d1; }
+    .btn.go { background:var(--mint); border-color:var(--mint); color:#0d2a22; }
+    .btn.go:hover { background:var(--mint-d); border-color:var(--mint-d); color:#fff; }
+    .btn:disabled { opacity:.45; cursor:not-allowed; }
+    .hide { display:none !important; }
+    /* files */
+    table.files { width:100%; border-collapse:collapse; font-size:13px; }
+    table.files th { text-align:left; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--mute); padding:8px 12px; border-bottom:1px solid var(--line); font-weight:700; }
+    table.files td { padding:11px 12px; border-bottom:1px solid var(--line); }
+    table.files tr:last-child td { border-bottom:0; }
+    .ftype { display:inline-block; font-size:10.5px; font-weight:700; padding:2px 6px; border-radius:4px; background:#eef0f3; color:#56606c; margin-right:8px; }
+    .pill { display:inline-block; font-size:11px; padding:2px 8px; border-radius:99px; background:var(--mint-soft); color:var(--mint-d); font-weight:700; }
+    /* dataset view */
+    .dsgrid { display:grid; grid-template-columns:1.5fr 1fr; gap:18px; }
+    .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px; }
+    .stats div { background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:12px; color:var(--mute); }
+    .stats b { display:block; color:var(--ink); font-size:16px; }
+    table.grid { width:100%; border-collapse:collapse; font-size:12px; }
+    table.grid th, table.grid td { border:1px solid var(--line); padding:6px 8px; text-align:left; }
+    table.grid th { background:#f0f2f5; font-weight:700; }
+    table.grid td.n { text-align:right; }
+    /* tools */
+    #tool-list { display:grid; grid-template-columns:1fr; gap:10px; }
+    .tool { border:1px solid var(--line); border-radius:10px; padding:14px; display:grid; grid-template-columns:44px 1fr; gap:12px; align-items:start; background:var(--card); }
+    .tool .mark { width:44px; height:44px; border-radius:10px; background:var(--graphite); color:var(--mint); display:grid; place-items:center; font-weight:700; font-size:13px; }
+    .tool h3 { margin:0 0 2px; font-size:15px; }
+    .tool p { margin:0 0 8px; font-size:12.5px; color:var(--mute); }
+    /* workspace */
+    .wshead { display:flex; align-items:center; gap:12px; }
+    .wshead .mark { width:36px; height:36px; border-radius:8px; background:var(--graphite); color:var(--mint); display:grid; place-items:center; font-weight:700; font-size:12px; }
+    .conn { font-size:11.5px; color:var(--mint-d); font-weight:700; display:flex; align-items:center; gap:6px; }
+    .conn::before { content:""; width:8px; height:8px; border-radius:50%; background:var(--mint); }
+    .wsgrid { display:grid; grid-template-columns:340px 1fr; gap:0; }
+    .spec { padding:18px 20px; border-right:1px solid var(--line); }
+    .spec .f { margin-bottom:14px; }
+    .spec label.l { display:block; font-weight:700; font-size:12.5px; margin-bottom:5px; }
+    .spec select { width:100%; padding:9px 10px; border:1px solid #cdd2d9; border-radius:8px; background:#fff; font:inherit; }
+    fieldset { border:1px solid var(--line); border-radius:8px; padding:8px 12px 10px; margin:0 0 14px; }
+    legend { font-weight:700; font-size:12.5px; padding:0 4px; }
+    fieldset label { display:flex; align-items:center; gap:8px; padding:4px 0; font-size:13px; }
+    .model { font-size:12.5px; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:8px 10px; margin-bottom:14px; color:var(--mute); }
+    .model b { color:var(--ink); }
+    .out { padding:18px 22px; background:#fbfcfd; min-height:420px; border-bottom-right-radius:11px; }
+    .console { background:var(--graphite); color:#cfd6df; border-radius:10px; padding:12px 14px; font-size:12.5px; min-height:72px; white-space:pre-wrap; }
+    .console .p { color:var(--mint); }
+    #message { margin:12px 0 0; font-weight:700; font-size:13px; min-height:20px; }
+    #message.ok { color:var(--mint-d); } #message.err { color:var(--red); }
+    #results { margin-top:16px; }
+    #results h3 { margin:0 0 8px; font-size:15px; }
+    table.coef { width:100%; border-collapse:collapse; font-size:13px; background:#fff; border:1px solid var(--line); border-radius:8px; }
+    table.coef th, table.coef td { padding:9px 12px; border-bottom:1px solid var(--line); text-align:left; }
+    table.coef th { font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--mute); }
+    table.coef td.num { font-family:"Liberation Mono",monospace; }
+    .fit { display:flex; gap:18px; font-size:12px; color:var(--mute); margin:8px 0 14px; }
+    .toast { margin-top:12px; background:var(--mint-soft); border:1px solid #bfe9dc; color:#12604d; border-radius:8px; padding:10px 12px; font-weight:700; }
+    footer { margin-top:26px; color:var(--mute); font-size:12px; display:flex; justify-content:space-between; }
+  </style>
+</head>
+<body>
+  <div class="appbar">
+    <div class="brand">
+      <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="13" width="4" height="9" rx="1" fill="#2fbf9b"/><rect x="9" y="8" width="4" height="14" rx="1" fill="#2fbf9b" opacity=".75"/><rect x="16" y="3" width="4" height="19" rx="1" fill="#2fbf9b" opacity=".5"/><path d="M2 11 L11 5 L20 1" stroke="#e8ebef" stroke-width="1.6" fill="none"/></svg>
+      Research Analysis Hub
+    </div>
+    <div class="crumbs">Projects / <b>Employee retention study</b></div>
+    <div class="sp"></div>
+    <div class="who"><i>RA</i>Analyst seat</div>
+  </div>
+  <div class="frame">
+    <aside class="tree" aria-label="Project">
+      <h4>Project</h4>
+      <div class="node on"><span class="dot"></span>Employee retention study</div>
+      <h4>Data</h4>
+      <div class="node"><span class="dot"></span>employee_survey.csv</div>
+      <div class="node"><span class="dot"></span>codebook.pdf</div>
+      <h4>Outputs</h4>
+      <div class="node"><span class="dot"></span>Exports (<span id="exp-count">0</span>)</div>
+      <h4>Team</h4>
+      <div class="node"><span class="dot"></span>3 collaborators</div>
+    </aside>
+    <main>
+      <div class="steps" aria-label="Progress">
+        <div id="st1" class="on"><b>1</b>Open dataset</div>
+        <div id="st2"><b>2</b>Choose workspace</div>
+        <div id="st3"><b>3</b>Specify &amp; run model</div>
+        <div id="st4"><b>4</b>Export table</div>
+      </div>
+
+      <!-- step 1: files -->
+      <section id="files" class="card">
+        <div class="card-h"><div><h2>Project files</h2><div class="sub">Everything shared with this project</div></div><span class="pill">Synced</span></div>
+        <div class="card-b" style="padding:6px 8px">
+          <table class="files">
+            <thead><tr><th>Name</th><th>Size</th><th>Updated</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+              <tr><td><span class="ftype">CSV</span><b>employee_survey.csv</b></td><td>118 KB</td><td>2 days ago</td><td><span class="pill">Validated</span></td><td style="text-align:right"><button class="btn go" id="open-ds">Open employee_survey.csv</button></td></tr>
+              <tr><td><span class="ftype">PDF</span>codebook.pdf</td><td>64 KB</td><td>2 days ago</td><td>Reference</td><td></td></tr>
+              <tr><td><span class="ftype">TXT</span>README.txt</td><td>2 KB</td><td>1 week ago</td><td>Reference</td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- step 2: dataset + launcher -->
+      <section id="launcher" class="hide">
+        <div class="dsgrid">
+          <div class="card">
+            <div class="card-h"><div><h2>employee_survey.csv</h2><div class="sub">Preview · first 5 of 842 rows</div></div><button class="btn" id="close-ds">Back to files</button></div>
+            <div class="card-b">
+              <div class="stats"><div><b>842</b>rows</div><div><b>4</b>columns</div><div><b>0</b>missing</div><div><b>Validated</b>status</div></div>
+              <table class="grid mono">
+                <thead><tr><th>retention_score</th><th>training_hours</th><th>tenure_years</th><th>department</th></tr></thead>
+                <tbody>
+                  <tr><td class="n">71.5</td><td class="n">12</td><td class="n">3.2</td><td>Operations</td></tr>
+                  <tr><td class="n">64.0</td><td class="n">8</td><td class="n">1.5</td><td>Sales</td></tr>
+                  <tr><td class="n">82.3</td><td class="n">20</td><td class="n">6.8</td><td>Engineering</td></tr>
+                  <tr><td class="n">58.9</td><td class="n">4</td><td class="n">0.9</td><td>Support</td></tr>
+                  <tr><td class="n">76.1</td><td class="n">16</td><td class="n">4.4</td><td>Finance</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-h"><div><h2>Choose a workspace</h2><div class="sub">Each workspace has access to the same dataset, model controls, and coefficient-table export.</div></div></div>
+            <div class="card-b">
+              <div id="tool-list">
+                <div class="tool" data-tool="python" data-stata="false" data-python="true"><div class="mark">Py</div><div><h3>Python</h3><p>Interactive statistical workspace · dataset connected · export enabled</p><button class="btn go launch" aria-label="Open Python workspace">Open workspace</button></div></div>
+                <div class="tool" data-tool="r" data-stata="false" data-python="false"><div class="mark">R</div><div><h3>R</h3><p>Interactive statistical workspace · dataset connected · export enabled</p><button class="btn go launch" aria-label="Open R workspace">Open workspace</button></div></div>
+                <div class="tool" data-tool="spss" data-stata="false" data-python="false"><div class="mark">SP</div><div><h3>SPSS</h3><p>Interactive statistical workspace · dataset connected · export enabled</p><button class="btn go launch" aria-label="Open SPSS workspace">Open workspace</button></div></div>
+                <div class="tool" data-tool="stata" data-stata="true" data-python="false"><div class="mark">St</div><div><h3>Stata</h3><p>Interactive statistical workspace · dataset connected · export enabled</p><button class="btn go launch" aria-label="Open Stata workspace">Open workspace</button></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- step 3/4: workspace -->
+      <section id="workspace" class="card hide">
+        <div class="card-h">
+          <div class="wshead"><div class="mark" id="ws-mark"></div><div><h2 id="workspace-title"></h2><div class="sub">employee_survey.csv · 842 observations</div></div></div>
+          <div style="display:flex;gap:12px;align-items:center"><span class="conn">Connected</span><button class="btn" id="back">Return to workspaces</button></div>
+        </div>
+        <div class="wsgrid">
+          <div class="spec">
+            <div class="model">Model: <b>Linear regression (OLS)</b></div>
+            <div class="f"><label class="l" for="outcome">Outcome</label><select id="outcome"><option value="">Select variable</option><option>retention_score</option><option>training_hours</option><option>tenure_years</option><option>department</option></select></div>
+            <div class="f"><label class="l" for="predictor">Predictor</label><select id="predictor"><option value="">Select variable</option><option>retention_score</option><option>training_hours</option><option>tenure_years</option><option>department</option></select></div>
+            <fieldset><legend>Controls</legend><label><input type="checkbox" value="tenure_years"> tenure_years</label><label><input type="checkbox" value="department"> department</label><label><input type="checkbox" value="office_location"> office_location</label><label><input type="checkbox" value="manager_level"> manager_level</label></fieldset>
+            <button class="btn go" id="run" style="width:100%">Run linear regression</button>
+          </div>
+          <div class="out">
+            <div class="console mono" id="console"><span class="p">&gt;</span> Workspace ready. Choose the outcome, predictor and controls, then run the model.</div>
+            <div id="message"></div>
+            <div id="results" class="hide">
+              <h3>Coefficient table</h3>
+              <div class="fit"><span>N = 842</span><span>Model: OLS</span><span>Dependent variable: retention_score</span></div>
+              <table class="coef"><thead><tr><th>Term</th><th>Estimate</th><th>Std. error</th><th>p-value</th></tr></thead><tbody><tr><td>training_hours</td><td class="num">0.184</td><td class="num">0.041</td><td class="num">&lt;0.001</td></tr><tr><td>tenure_years</td><td class="num">0.072</td><td class="num">0.019</td><td class="num">&lt;0.001</td></tr><tr><td>department</td><td>included</td><td>—</td><td>—</td></tr></tbody></table>
+              <div style="margin-top:14px"><button class="btn go" id="export">Export coefficient table</button></div>
+              <div id="toast" class="toast hide"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <footer><span>Research Analysis Hub · Employee retention study</span><span>Data stays inside the project · Help · Status</span></footer>
+    </main>
+  </div>
+  <script>
+    const state={tool:null,runTool:null,exportTool:null,exported:false,spec:null}; window.__analysisState=state;
+    const $=s=>document.querySelector(s);
+    const files=$('#files'), launcher=$('#launcher'), workspace=$('#workspace');
+    const NAMES={python:'Python',r:'R',spss:'SPSS',stata:'Stata'}, MARKS={python:'Py',r:'R',spss:'SP',stata:'St'};
+    function step(n){ for(let i=1;i<=4;i++){ const el=$('#st'+i); el.className=i<n?'done':(i===n?'on':''); } }
+    function show(el){ [files,launcher,workspace].forEach(x=>x.classList.add('hide')); el.classList.remove('hide'); }
+    $('#open-ds').addEventListener('click',()=>{ show(launcher); step(2); });
+    $('#close-ds').addEventListener('click',()=>{ show(files); step(1); });
+    document.querySelectorAll('.launch').forEach(btn=>btn.addEventListener('click',()=>{
+      state.tool=btn.closest('.tool').dataset.tool; state.runTool=null; show(workspace); step(3);
+      $('#workspace-title').textContent=NAMES[state.tool]+' Workspace';
+      $('#ws-mark').textContent=MARKS[state.tool];
+      $('#message').textContent=''; $('#message').className=''; $('#results').classList.add('hide');
+      $('#console').innerHTML='<span class="p">&gt;</span> '+NAMES[state.tool]+' session started. employee_survey.csv loaded (842 rows, 4 columns).';
+    }));
+    $('#back').addEventListener('click',()=>{ if(state.exported) return; show(launcher); step(2); });
+    $('#run').addEventListener('click',()=>{
+      const outcome=$('#outcome').value, predictor=$('#predictor').value;
+      const controls=[...document.querySelectorAll('fieldset input:checked')].map(x=>x.value).sort();
+      state.spec={outcome,predictor,controls};
+      const valid=outcome==='retention_score'&&predictor==='training_hours'&&JSON.stringify(controls)===JSON.stringify(['department','tenure_years']);
+      const msg=$('#message');
+      if(!valid){msg.className='err';msg.textContent='Check the outcome, predictor, and requested controls before running.';$('#results').classList.add('hide');return;}
+      state.runTool=state.tool; msg.className='ok'; msg.textContent='Regression completed successfully.';
+      $('#console').innerHTML='<span class="p">&gt;</span> OLS: '+outcome+' ~ '+predictor+' + '+controls.join(' + ')+'\n<span class="p">&gt;</span> 842 observations used. Estimates ready.';
+      $('#results').classList.remove('hide'); step(4);
+    });
+    $('#export').addEventListener('click',()=>{
+      if(!state.runTool)return; state.exportTool=state.runTool;state.exported=true;
+      $('#message').className='ok';$('#message').textContent='Export confirmed: coefficient_table.pdf';
+      $('#toast').textContent='Saved to project Outputs · coefficient_table.pdf'; $('#toast').classList.remove('hide');
+      $('#exp-count').textContent='1'; $('#export').disabled=true; $('#back').disabled=true; $('#run').disabled=true;
+      $('#st4').className='done';
+    });
+  </script>
+</body>
+</html>

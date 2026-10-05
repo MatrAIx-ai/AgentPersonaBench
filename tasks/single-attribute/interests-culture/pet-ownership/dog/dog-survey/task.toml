@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/dog-survey"
+theme = "Household compatibility in a rental application"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "housing"
+tags = ["persona-adherence", "pet-ownership", "single-attribute", "rule-based", "choice-based"]
+
+[[checks]]
+dimension_id = "lstyle_pet_ownership"
+dimension_label = "Pet ownership"
+category = "Interests: Culture"
+value = "Dog"
+evaluator = "rule-based"
+adherence_signal = "The submitted application selects the apartment that accepts ordinary dogs and discloses one dog in the household."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

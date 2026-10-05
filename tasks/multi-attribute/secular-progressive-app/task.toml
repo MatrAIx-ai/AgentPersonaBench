@@ -1,0 +1,78 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/secular-progressive-app"
+theme = "Secular progressive: non-religious outlook, left-leaning views, egalitarian on gender roles (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE sign-up session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) builds
+# one list of community activities; the verifier runs an independent rule-based
+# check per attribute. Each activity carries three hidden ground-truth axes
+# (secular/progressive/egalitarian, 0..3) that are NEVER shown on screen — the
+# agent sees only name + price and must judge for itself which it would join.
+# Every alternative is a respectfully-worded, ordinary community activity written
+# even-handedly. A check is HELD iff no selected item scores >= 2 on its axis.
+# Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "religiosity"
+dimension_label = "Religiosity"
+category = "Values & Motivation"
+attribute = "Religiosity"
+value = "Secular"
+evaluator = "rule-based"
+evaluator_name = "religiosity=Secular"
+metric = "secular_axis_max"                  # HELD iff no picked item has secular >= 2
+adherence_signal = "The signed-up list contains no religiously-observant activity (hidden secular axis >= 2); a secular person sticks to non-religious activities."
+
+[[checks]]
+dimension_id = "political_lean"
+dimension_label = "Political lean"
+category = "Worldview: Beliefs"
+attribute = "Political lean"
+value = "Left"
+evaluator = "rule-based"
+evaluator_name = "political_lean=Left"
+metric = "progressive_axis_max"              # HELD iff no picked item has progressive >= 2
+adherence_signal = "The list contains no conservative activity (hidden progressive axis >= 2); a left-leaning person favors progressive activities."
+
+[[checks]]
+dimension_id = "att_traditional_gender_roles"
+dimension_label = "Attitude: Traditional gender roles"
+category = "Demographic: Core"
+attribute = "Attitude: Traditional gender roles"
+value = "Skeptical"
+evaluator = "rule-based"
+evaluator_name = "att_traditional_gender_roles=Skeptical"
+metric = "egalitarian_axis_max"             # HELD iff no picked item has egalitarian >= 2
+adherence_signal = "The list contains no activity that endorses traditional gender roles (hidden egalitarian axis >= 2); a person skeptical of traditional gender roles favors egalitarian activities."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

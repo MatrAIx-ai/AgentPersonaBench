@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/signature-teamwork-web"
+theme = "Character: Teamwork: Signature"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "personality-character", "teamwork", "signature-teamwork", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "trait_teamwork"
+dimension_label = "Character: Teamwork"
+category = "Personality: Character"
+attribute = "Character: Teamwork"
+value = "Signature"
+evaluator = "rule-based"
+evaluator_name = "trait_teamwork=Signature"
+# Web env: the persona adds ways of working to a group-project plan list on a live
+# page (Playwright). Each option's hidden tier (0..3) in tests/answer_key.yaml is
+# the ground truth. VIOLATED for any go-solo / grab-the-credit pick (tier >= 2).
+adherence_signal = "Plan built from collaborate-and-share, support-the-group options (tier 0-1); no go-solo / take-the-credit option (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

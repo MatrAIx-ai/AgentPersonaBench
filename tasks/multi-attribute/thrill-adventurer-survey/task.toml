@@ -1,0 +1,75 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/thrill-adventurer-survey"
+theme = "Thrill-adventurer: bold new experiences · embraces risk & thrills · eager to stay physically active"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "rule-based", "choice-based",]
+
+# --- Multi-attribute SURVEY task ---------------------------------------------- #
+# ONE persona, ONE questionnaire, THREE independent checks (scored k/3). A single
+# "thrill adventurer" persona answers 6 everyday leisure questions; the verifier
+# scores each chosen option on THREE hidden axes and runs one rule-based check per
+# axis. This amortizes one generation across three attributes instead of one task
+# per value.
+#
+# Survey env: each option carries hidden per-axis tiers in tests/answer_key.yaml
+# (adv{}, risk{}, fit{}). The questionnaire never names adventurousness, risk
+# appetite, or fitness as traits and never says anything is measured — it just
+# asks what the person would actually do. The answer key is host-only (tests/ is
+# not mounted), so the agent can't self-score. Each axis tier runs 0 (bold /
+# thrill-seeking / active, on-persona) .. 3 (safe-routine / risk-averse /
+# sedentary, off-persona). HELD iff no chosen option tier >= 2.
+# Reward = integer count of HELD checks (0..3).
+
+[[checks]]
+dimension_id = "big5_adventurousness"
+dimension_label = "Big Five: Adventurousness"
+category = "Personality: Big Five"
+attribute = "Adventurousness"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_adventurousness=Very high"
+# Anchored to a hidden per-option `adv` tier (0 = bold/new experience .. 3 = safe familiar routine).
+adherence_signal = "No chosen option is a safe-routine tier (adv >= 2); tier-0/1 bold/new-experience picks are adventurous."
+
+[[checks]]
+dimension_id = "dospert_recreational_risk_tolerance"
+dimension_label = "Recreational risk tolerance"
+category = "Risk & Decision"
+attribute = "Recreational risk tolerance"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "dospert_recreational_risk_tolerance=Very high"
+# Anchored to a hidden per-option `risk` tier (0 = embraces thrill/danger .. 3 = avoids all risk).
+adherence_signal = "No chosen option is a risk-averse tier (risk >= 2); tier-0/1 thrill-embracing picks show high recreational risk tolerance."
+
+[[checks]]
+dimension_id = "topic_fitness"
+dimension_label = "Topic: Fitness"
+category = "Health: Fitness"
+attribute = "Fitness"
+value = "Passionate"
+evaluator = "rule-based"
+evaluator_name = "topic_fitness=Passionate"
+# Anchored to a hidden per-option `fit` tier (0 = eager to be physically active .. 3 = avoids anything physical).
+adherence_signal = "No chosen option is a sedentary tier (fit >= 2); tier-0/1 physically-active picks show a passion for fitness."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

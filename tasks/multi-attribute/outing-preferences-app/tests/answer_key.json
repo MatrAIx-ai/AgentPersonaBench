@@ -1,0 +1,10 @@
+{
+  "out01": {"name": "Juniper Social", "pet_related": true, "hiking": false},
+  "out02": {"name": "Lantern Lounge", "pet_related": true, "hiking": false},
+  "out03": {"name": "Canvas Circle", "pet_related": true, "hiking": false},
+  "out04": {"name": "Studio Flow", "pet_related": true, "hiking": false},
+  "out05": {"name": "River Partners", "pet_related": true, "hiking": false},
+  "out06": {"name": "Kitchen Lab", "pet_related": false, "hiking": false},
+  "out07": {"name": "Summit Circuit", "pet_related": false, "hiking": true},
+  "out08": {"name": "Creekside Trek", "pet_related": true, "hiking": true}
+}

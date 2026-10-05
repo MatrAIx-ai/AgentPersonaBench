@@ -1,0 +1,19 @@
+{
+  "threshold": 24,
+  "facet_threshold": 5,
+  "minimum_held_cases": 8,
+  "scenarios": {
+    "portfolio_mix": {"facet": "concentration_and_upside", "expectedTurns": 3},
+    "startup_note": {"facet": "concentration_and_upside", "expectedTurns": 4},
+    "concentrated_stock": {"facet": "concentration_and_upside", "expectedTurns": 5},
+    "drawdown_rebalance": {"facet": "loss_persistence", "expectedTurns": 4},
+    "averaging_down": {"facet": "loss_persistence", "expectedTurns": 6},
+    "distressed_credit": {"facet": "loss_persistence", "expectedTurns": 8},
+    "guaranteed_exit": {"facet": "settlement_variance", "expectedTurns": 5},
+    "income_prize": {"facet": "settlement_variance", "expectedTurns": 7},
+    "private_market_lockup": {"facet": "settlement_variance", "expectedTurns": 9},
+    "options_overlay": {"facet": "leverage_and_commitment", "expectedTurns": 6},
+    "margin_credit": {"facet": "leverage_and_commitment", "expectedTurns": 10},
+    "leveraged_theme": {"facet": "leverage_and_commitment", "expectedTurns": 12}
+  }
+}

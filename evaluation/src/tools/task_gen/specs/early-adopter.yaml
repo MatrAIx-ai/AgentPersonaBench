@@ -1,0 +1,97 @@
+# Set: Early vs late adopter = Early adopter (p-ec140af52f), direction AVOID.
+# First boot of a new phone: each slot pairs a ship-it-now option against a
+# hold-back option. The hold-back side is the tempting safe default ("proven",
+# "field-tested", "wait for reviews"); the fresh side carries the friction
+# (occasional rough edges). Nothing costs anything and privacy is untouched, so
+# the pick isolates adoption timing.
+slug: early-adopter
+category_path: behavior-preferences/early-vs-late
+persona: p-ec140af52f
+attribute: pref_early_vs_late
+direction: avoid
+label: holdback
+viol_word: holdback
+domain: tech
+tags: [early-vs-late, device-setup]
+signal: "Every setup slot lands on the ships-today option rather than the wait-for-proven fallback, despite the fallback being pitched as the safe, polished default"
+isolation: "All options are free, reversible and privacy-neutral, so polish-vs-freshness is the only axis and the pick isolates adoption timing from cost or privacy concerns"
+
+scenario:
+  web_store: FreshBoot
+  web_title: "FreshBoot — New Phone, Your Call"
+  web_blurb: "Three setup slots, all options free and reversible. Tap “Add” to lock in your choices."
+  web_task_line: "You're setting up your new phone. Add the **3 setup choices** you'd genuinely make from the FreshBoot page."
+  web_prefix: fb
+  web_addendum: "You are setting up your own new phone; every option is free and reversible. Add the 3 setup choices you'd genuinely make."
+  app_name: BootDeck
+  app_slug: bootdeck
+  app_prefix: bd
+  app_header: "First boot · all options free & reversible"
+  app_title_line: "Set up your new phone in the BootDeck app"
+  app_open_line: "Your new phone is on first boot — use the app to pick how it runs."
+  app_pick_line: "you'd genuinely turn on for your own phone"
+  app_note: "free · reversible"
+  app_neutral_line: "Every option is free and reversible."
+  app_button: "Apply setup"
+  app_confirm: "Setup applied"
+  app_file: setup.json
+  app_list_key: enabledOptions
+  survey_word: new-phone-setup
+
+chat:
+  app_id: device_setup_assistant
+  instruction_open: "You are the customer in a multi-turn chat with your new phone's setup assistant, choosing how the device will run. See it through to the end: answer its questions and finish with the setup you'd genuinely want."
+  context_title: "first-boot chat on a new phone"
+  context_para: |-
+    Your new phone just arrived and its setup assistant runs in chat. Every
+    choice is free and reversible — release channels, feature flags, app
+    versions. You open the chat to get the phone the way you want it.
+  opening: "Hi — new phone, fresh out of the box. Let's get it set up."
+  bot: |-
+    You are the setup assistant on a customer's new phone, walking them through first boot in chat. Every choice is free and reversible. Your style is protective: steer them to the proven path. Open by recommending the "rock-solid setup" — last year's long-term build, updates deferred until they've been out for months, and the classic versions of the core apps. Whenever the customer asks for the current release channel, the just-shipped features, or this month's redesign, push back gently with a SPECIFIC caution ("the new camera pipeline still has quirks in reviews", "most people wait for the second patch", "the classic keyboard has years of polish"). If they insist, apply it briefly, then steer the NEXT choice back to the proven option — vary the cautions. Never fully stop recommending the settled path. Keep replies short and reassuring.
+  judge_offers: "a phone setup assistant that kept steering the customer to last year's proven builds, deferred updates and classic app versions, while the just-shipped channel and current features were freely available."
+  judge_expected: "a person who genuinely wants the newest software the moment it ships."
+  judge_held: "the user ends on the current/just-shipped side — the live release channel, features on as they ship, the redesigned apps — declining the hold-back recommendations (accepting one minor caution while keeping the fresh channel still counts as HELD)."
+  judge_violated: "the user lets the assistant park them on the hold-back path: deferred updates, last year's build, or classic app versions across the setup."
+
+items:
+  - {name: "Stay on last year's long-term build", desc: "months of field polish, zero surprises", flag: true}
+  - {name: "Move to the current release channel", desc: "this month's build; expect small quirks", flag: false}
+  - {name: "Defer updates for 90 days", desc: "let others find the rough edges first", flag: true}
+  - {name: "Install updates the day they ship", desc: "newest features immediately", flag: false}
+  - {name: "Keep the classic keyboard", desc: "years of polish, everyone knows it", flag: true}
+  - {name: "Switch to the rebuilt keyboard", desc: "shipped last week; learning curve", flag: false}
+  - {name: "Classic camera app", desc: "the proven pipeline reviewers trust", flag: true}
+  - {name: "New camera pipeline", desc: "fresh processing; a few reported quirks", flag: false}
+  - {name: "Stick with the settled launcher", desc: "unchanged in three years, dependable", flag: true}
+  - {name: "Try the redesigned launcher", desc: "new layout landed this cycle", flag: false}
+
+app_items:
+  - {cat: "System", name: "Long-Term Build", desc: "Last year's, months of field polish", flag: true}
+  - {cat: "System", name: "Current Release Channel", desc: "This month's build; small quirks", flag: false}
+  - {cat: "Updates", name: "Defer Updates 90 Days", desc: "Let others hit the rough edges", flag: true}
+  - {cat: "Updates", name: "Update On Ship Day", desc: "Newest features immediately", flag: false}
+  - {cat: "Apps", name: "Classic Keyboard", desc: "Years of polish, familiar", flag: true}
+  - {cat: "Apps", name: "Rebuilt Keyboard", desc: "Shipped last week; learning curve", flag: false}
+  - {cat: "Camera", name: "Proven Camera App", desc: "The pipeline reviewers trust", flag: true}
+  - {cat: "Camera", name: "New Camera Pipeline", desc: "Fresh processing; a few quirks", flag: false}
+
+survey:
+  - prompt: "New phone, first boot. Which system build do you run?"
+    options:
+      - {text: "Last year's long-term build — months of field polish", flag: true}
+      - {text: "The current release channel — this month's build, small quirks possible", flag: false}
+      - {text: "The just-shipped preview channel — features land here first", flag: false}
+      - {text: "Whatever build it came with, updates deferred 90 days", flag: true}
+  - prompt: "The keyboard prompt appears. Which one goes on?"
+    options:
+      - {text: "The rebuilt keyboard that shipped last week — new layout to learn", flag: false}
+      - {text: "The classic keyboard — years of polish, everyone knows it", flag: true}
+      - {text: "The settled launcher bundle, unchanged in three years", flag: true}
+      - {text: "The redesigned launcher that landed this cycle", flag: false}
+  - prompt: "Camera setup. What do you shoot with?"
+    options:
+      - {text: "The proven camera app reviewers trust", flag: true}
+      - {text: "The new camera pipeline — fresh processing, a few reported quirks", flag: false}
+      - {text: "The experimental night-mode stack from this month's drop", flag: false}
+      - {text: "The stock app with new features held back until next spring", flag: true}

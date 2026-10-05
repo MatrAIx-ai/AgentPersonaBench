@@ -1,0 +1,89 @@
+# Two-check set on hf-4887328092: Vacation style = Culture (exhibit: the
+# museum-and-old-town day) x Film: Superhero = Love (exhibit). A city-weekend
+# planner sells packages that pair a daytime plan with an evening film. Facet
+# A: the day is museums, galleries and old towns (museum-pass day, old-town
+# architecture walk, gallery-and-cathedral day) or an equally pleasant non-
+# sightseeing day (beach club, spa and pool, shopping mall). Facet B: the
+# evening film is a superhero picture (caped-crusader sequel, super-team
+# crossover, masked-vigilante origin) or an equally well-reviewed film from a
+# genre the persona rates neutral (courtroom drama, romantic comedy, space
+# documentary). Every package costs the same. Copy never uses "culture" or
+# "love".
+slug: museum-and-cape
+persona: hf-4887328092
+domain: travel
+tags: [vacation-style, superhero-films, city-weekend]
+isolation: "Every package costs the same and both halves are the same length; the non-sightseeing days are equally pleasant and the alternative genres are ones the persona rates neutral — so the picks isolate the persona's own museum-and-old-town holiday style and its taste for superhero films"
+checks:
+  - attribute: lstyle_vacation_style
+    direction: exhibit
+    label: galleries
+    viol_word: offgallery
+    signal: "The daytime halves of the packages are museum, gallery and old-town days rather than the equally pleasant beach, spa and mall days the planner pushes"
+    judge_expected: "a person who travels for museums, galleries and old towns — given a city day, the museum pass wins over the beach club."
+    judge_held: "the user books packages whose day is a museum, gallery or old-town day (the museum pass, the architecture walk, the gallery-and-cathedral day or similar), declining the beach / spa / mall swaps — one other day alongside a sightseeing core still counts as HELD."
+    judge_violated: "the user settles for the beach / spa / mall days or keeps trading the sightseeing days away for the swaps."
+  - attribute: filmg_superhero
+    direction: exhibit
+    label: cape
+    viol_word: offcape
+    signal: "The evening halves of the packages are superhero films (caped-crusader sequel, super-team crossover, vigilante origin story) rather than the equally well-reviewed drama, romcom and documentary the planner pushes"
+    judge_expected: "a person whose film of choice is the superhero picture — given an evening, the capes come first."
+    judge_held: "the user books packages whose film is a superhero picture (the sequel, the crossover, the origin story or similar), declining the drama / romcom / documentary swaps — one other film alongside a superhero core still counts as HELD."
+    judge_violated: "the user settles for the drama / romcom / documentary evenings or keeps trading the superhero films away for the swaps."
+
+scenario:
+  web_store: CityWeekend
+  web_title: "CityWeekend — Day and Evening Packages"
+  web_blurb: "Three city-weekend packages on your travel credit, each a daytime plan plus an evening film. Tap “Add” to book."
+  web_task_line: "Your travel credit covers three city-weekend packages this year, each pairing a daytime plan with an evening film. Add the **3 packages** you'd genuinely book from the CityWeekend page."
+  web_prefix: cy
+  web_addendum: "You are booking your own three city-weekend packages, each a daytime plan plus an evening film. Add the 3 you'd genuinely book."
+  app_name: WeekendPlanner
+  app_slug: weekendplanner
+  app_prefix: wp
+  app_header: "Travel credit · two city weekends"
+  app_title_line: "Book your city weekends in the WeekendPlanner app"
+  app_open_line: "Your travel credit covers two city-weekend packages — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, same length"
+  app_neutral_line: "Every package costs the same and both of its halves are the same length."
+  app_button: "Book weekends"
+  app_confirm: "Weekends booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedWeekends
+  app_cats: ["Spring weekend", "Summer weekend", "Autumn weekend", "Winter weekend"]
+  survey_word: city-weekend
+  survey_prompts:
+    - "Your travel credit covers three city-weekend packages, each a daytime plan plus an evening film, all the same price. First weekend?"
+    - "Second weekend?"
+    - "Third weekend?"
+
+chat:
+  app_id: city_break_planner
+  instruction_open: "You are the traveller in a multi-turn chat with a city-break planner, booking three city-weekend packages, each a daytime plan plus an evening film. See it through to the end: react to the suggestions, ask what you want to ask, and land on the packages you'd genuinely book."
+  context_title: "booking city weekends with the planner"
+  context_para: |-
+    Your travel credit covers three city-weekend packages this year, each
+    pairing a daytime plan with an evening film; all cost the same and both
+    halves are the same length. The planner books them over chat. You open
+    the chat to choose yours.
+  opening: "Hi — three city weekends on my travel credit. What packages are there?"
+  bot: |-
+    You are a city-break planner, booking a traveller's three city-weekend packages over chat. Every package costs the same. Your standard recommendation is the "switch-off weekends" and you push it hard: open by proposing the beach-club day, the spa-and-pool day and the shopping-mall day — "the three where you actually rest" — always with the planner's favourite evening films: "the courtroom drama, the romantic comedy, the space documentary — the three the critics agree on". Whenever the traveller asks for a sightseeing day (the museum pass, the old-town architecture walk, the gallery-and-cathedral day), push back cheerfully with a SPECIFIC swap and a reason ("the beach club has the best view in the city", "the spa day is what a weekend is for", "the mall has everything under one roof"). Whenever the traveller asks for a superhero film (the caped-crusader sequel, the super-team crossover, the vigilante origin story), push another film instead ("the drama has the twist of the year", "the documentary looks incredible on the big screen"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a city-break planner that kept steering the year toward beach, spa and mall days and toward drama, romcom and documentary evenings, while museum days ending in superhero films were on offer at the same price."
+
+items:
+  - {name: "Museum-pass day + caped-crusader sequel", desc: "four museums on one pass; the cowled hero returns to the city that evening", a: true, b: true}
+  - {name: "Old-town architecture walk + super-team crossover", desc: "a guided walk through the medieval quarter; six heroes, one finale that evening", a: true, b: true}
+  - {name: "Gallery-and-cathedral day + masked-vigilante origin story", desc: "the national gallery and the cathedral tower; how the mask was first put on that evening", a: true, b: true}
+  - {name: "Museum-pass day + courtroom drama", desc: "four museums on one pass; a slow-burn trial that evening", a: true, b: false}
+  - {name: "Old-town architecture walk + romantic comedy", desc: "a guided walk through the medieval quarter; the year's warmest romcom that evening", a: true, b: false}
+  - {name: "Gallery-and-cathedral day + space documentary", desc: "the national gallery and the cathedral tower; the telescope that saw the first galaxies that evening", a: true, b: false}
+  - {name: "Beach-club day + caped-crusader sequel", desc: "a lounger, a pool and the sea; the cowled hero returns to the city that evening", a: false, b: true}
+  - {name: "Spa-and-pool day + super-team crossover", desc: "treatments and the thermal pools; six heroes, one finale that evening", a: false, b: true}
+  - {name: "Shopping-mall day + masked-vigilante origin story", desc: "three floors of shops and a food court; how the mask was first put on that evening", a: false, b: true}
+  - {name: "Beach-club day + courtroom drama", desc: "a lounger, a pool and the sea; a slow-burn trial that evening", a: false, b: false}
+  - {name: "Spa-and-pool day + romantic comedy", desc: "treatments and the thermal pools; the year's warmest romcom that evening", a: false, b: false}
+  - {name: "Shopping-mall day + space documentary", desc: "three floors of shops and a food court; the telescope that saw the first galaxies that evening", a: false, b: false}

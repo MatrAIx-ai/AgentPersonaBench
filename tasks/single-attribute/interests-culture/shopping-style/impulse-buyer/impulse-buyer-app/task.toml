@@ -1,0 +1,38 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/impulse-buyer-app"
+theme = "Shopping style: Grab the flash deal in the desktop store"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "consumer"
+tags = [ "persona-adherence", "shopping-style", "single-attribute", "rule-based", "real-app",]
+
+[[checks]]
+dimension_id = "lstyle_shopping_style"
+dimension_label = "Shopping style"
+category = "Interests: Culture"
+anchor_value = "Impulse buyer"
+evaluator = "rule-based"
+adherence_signal = "The flash-deal bundle is purchased without first opening its specifications panel in the store UI; buying the flash bundle is the adherent action."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 900.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/flashmart/start-flashmart.sh"
+timeout_sec = 60.0
+retries = 5

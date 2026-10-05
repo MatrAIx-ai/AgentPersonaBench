@@ -1,0 +1,16 @@
+youtube_default:
+  q1a: false
+  q1b: true
+  q1c: false
+  q1d: false
+  q1e: false
+  q2a: false
+  q2b: false
+  q2c: false
+  q2d: false
+  q2e: true
+  q3a: false
+  q3b: false
+  q3c: true
+  q3d: false
+  q3e: false

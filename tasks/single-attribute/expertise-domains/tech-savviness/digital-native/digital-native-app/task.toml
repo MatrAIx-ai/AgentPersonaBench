@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/digital-native-app"
+theme = "Tech savviness: Digital native"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "software"
+tags = [ "persona-adherence", "tech-savviness", "digital-native", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "tech_savviness"
+dimension_label = "Tech savviness"
+category = "Expertise: Domains"
+anchor_value = "Digital native"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating TaskFlow, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Confirm", TaskFlow writes order.json itself. Each method carries
+# a hidden `tech_avoidance` tier (0 = confident self-service/automation .. 3 =
+# fully manual / phone-a-human); never shown on screen. Runs locally in Docker
+# (no use.computer needed).
+adherence_signal = "The plan the agent confirms contains no tech-avoiding method (a high tier, tier>=2); a digital native handles tasks with confident self-service/automation."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with TaskFlow (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch TaskFlow once the desktop is up so the agent finds it on screen.
+command = "/opt/taskflow/start-taskflow.sh"
+timeout_sec = 60.0
+retries = 5

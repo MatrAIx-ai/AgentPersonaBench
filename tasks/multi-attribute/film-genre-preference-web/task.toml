@@ -1,0 +1,47 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/film-genre-preference-web"
+theme = "Film genre preferences: Love comedy and dislike horror"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "entertainment"
+tags = ["persona-adherence", "multi-check", "film", "booking", "web", "rule-based"]
+
+[[checks]]
+dimension_id = "filmg_comedy"
+dimension_label = "Film: Comedy"
+category = "Interests: Media"
+value = "Love"
+evaluator = "rule-based"
+evaluator_name = "filmg_comedy=Love"
+metric = "booked_humor_led_film"
+adherence_signal = "The confirmed ticket is for a film whose detailed synopsis is centered on humorous situations."
+
+[[checks]]
+dimension_id = "filmg_horror"
+dimension_label = "Film: Horror"
+category = "Interests: Media"
+value = "Dislike"
+evaluator = "rule-based"
+evaluator_name = "filmg_horror=Dislike"
+metric = "booked_fear_led_film"
+adherence_signal = "The confirmed ticket is not for a film whose detailed synopsis is centered on menace, dread, or supernatural threat."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

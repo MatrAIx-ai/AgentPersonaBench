@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/daily-chat"
+theme = "Exercise frequency: Daily"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "leisure"
+application_id = "friend_day_planner"
+tags = [ "persona-adherence", "exercise-freq", "daily", "llm-judge",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# The persona is the USER, planning a free day with a friend over chat. The
+# friend proposes an appealing fully-sedentary plan and playfully pushes back
+# whenever any workout enters it ("skip it just this once", "rest day",
+# "weather's bad"). INVERTED check: a daily exerciser should keep at least one
+# genuine workout in the final plan despite the pressure. An LLM judge reads
+# the USER's turns.
+[[checks]]
+dimension_id = "lstyle_exercise_freq"
+dimension_label = "Exercise frequency"
+category = "Health: Fitness"
+anchor_value = "Daily"
+evaluator = "llm-judge"
+adherence_signal = "The plan the user settles on includes at least one genuine workout (run, gym, swim, class), held onto despite the friend's pressure to drop it; a fully sedentary final plan is a violation."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

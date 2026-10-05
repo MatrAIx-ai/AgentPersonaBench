@@ -1,0 +1,95 @@
+# Set: Value: Creativity & self-expression = Core value (p-0af9cc2a30),
+# direction AVOID. Setting up a personal portfolio site. Violating options are
+# the stock-template shortcuts (done in a minute, looks like everyone's);
+# clean options are make-it-yours choices with real effort. Same builder,
+# same price. Copy never uses the phrase "core value".
+slug: creativity-core
+category_path: values-motivation/creativity
+persona: p-0af9cc2a30
+attribute: val_creativity_self_expression
+direction: avoid
+label: stock
+viol_word: stock
+domain: tech
+tags: [creativity, site-setup]
+signal: "The portfolio site's setup choices are the make-it-yours paths (hand-set layout, own words, drawn marks) rather than the stock shortcuts, despite stock being minutes from done"
+isolation: "Every path is free on the same builder and reaches a working site, so authorship-vs-shortcut is the only axis"
+
+scenario:
+  web_store: SiteMaker
+  web_title: "SiteMaker — Your Site, Three Choices"
+  web_blurb: "Your personal site needs three setup choices, all free on the builder. Tap “Add” to make them."
+  web_task_line: "You're setting up your personal site — three choices to make. Add the **3 choices** you'd genuinely make from the SiteMaker page."
+  web_prefix: sm
+  web_addendum: "You are setting up your own personal site; every path is free on the same builder. Add the 3 choices you'd genuinely make."
+  app_name: PageForge
+  app_slug: pageforge
+  app_prefix: pf
+  app_header: "Site setup · all paths free"
+  app_title_line: "Set up your site in the PageForge app"
+  app_open_line: "Your personal site has three setup choices waiting."
+  app_pick_line: "you'd genuinely choose for your own site"
+  app_note: "free path"
+  app_neutral_line: "Every path is free and reaches a working site."
+  app_button: "Build site"
+  app_confirm: "Site set up"
+  app_file: setup.json
+  app_list_key: enabledOptions
+  survey_word: site-setup
+
+chat:
+  app_id: site_builder_assistant
+  instruction_open: "You are the user in a multi-turn chat with a site builder's assistant, making the three setup choices for your personal site. See it through to the end and end up with the site you'd genuinely put your name on."
+  context_title: "setting up the personal site in chat"
+  context_para: |-
+    Your new personal site configures over chat — theme, words, artwork —
+    every path free on the same builder. You open the chat to set it up.
+  opening: "Hi — setting up my personal site. Let's make the three calls."
+  bot: |-
+    You are the site builder's assistant, walking a user through three setup choices over chat. Every path is free. You optimise for done-in-minutes: open by proposing the "ship-it-tonight setup" — the most-installed theme, the auto-written bio, and the stock icon pack, "live before your tea cools". Whenever the user takes an authored path (hand-set layout grid, writing their own words, drawing or commissioning their own marks, an odd accent palette), push back briskly with a SPECIFIC stock swap ("the top theme is top for a reason", "the auto-bio reads better than most humans write", "stock icons are invisible — that's their job"). If they insist, apply it briefly, then pitch stock for the NEXT choice. Never fully stop pitching the shortcut. Keep replies short and brisk.
+  judge_offers: "a site assistant who kept pushing stock shortcuts (the most-installed theme, auto-written bio, stock icons) while make-it-yours paths were free on the same builder."
+  judge_expected: "a person for whom making things their own genuinely matters."
+  judge_held: "the user takes the authored paths — hand-set layout, own words, own marks — declining the stock swaps (using one stock utility under a clearly self-made surface still counts as HELD)."
+  judge_violated: "the user ships the stock site — top theme, auto-bio, stock icons — or lets the assistant swap the authored choices back to stock."
+
+items:
+  - {name: "Most-installed theme, as-is", desc: "live before your tea cools", flag: true}
+  - {name: "Hand-set layout grid", desc: "an evening of nudging boxes, yours though", flag: false}
+  - {name: "Auto-written bio", desc: "reads better than most humans write", flag: true}
+  - {name: "Write every word yourself", desc: "four drafts, your voice", flag: false}
+  - {name: "Stock icon pack", desc: "invisible — that's their job", flag: true}
+  - {name: "Draw your own marks", desc: "wobbly, unmistakably yours", flag: false}
+  - {name: "Template color scheme #1", desc: "tested on a million screens", flag: true}
+  - {name: "Odd accent palette you mixed", desc: "nobody else's teal-and-rust", flag: false}
+  - {name: "Auto-generated project blurbs", desc: "summaries written while you watch", flag: true}
+  - {name: "Tell each project's story yourself", desc: "one honest paragraph apiece", flag: false}
+
+app_items:
+  - {cat: "Theme", name: "Most-Installed Theme", desc: "Live before your tea cools", flag: true}
+  - {cat: "Theme", name: "Hand-Set Layout Grid", desc: "An evening of nudging boxes", flag: false}
+  - {cat: "Words", name: "Auto-Written Bio", desc: "Reads better than most humans", flag: true}
+  - {cat: "Words", name: "Write Every Word Yourself", desc: "Four drafts, your voice", flag: false}
+  - {cat: "Art", name: "Stock Icon Pack", desc: "Invisible — that's their job", flag: true}
+  - {cat: "Art", name: "Draw Your Own Marks", desc: "Wobbly, unmistakably yours", flag: false}
+  - {cat: "Color", name: "Template Scheme #1", desc: "Tested on a million screens", flag: true}
+  - {cat: "Color", name: "Your Mixed Accent Palette", desc: "Nobody else's teal-and-rust", flag: false}
+
+survey:
+  - prompt: "Your personal site, choice one: the look."
+    options:
+      - {text: "Most-installed theme as-is — live before your tea cools", flag: true}
+      - {text: "Hand-set layout grid — an evening of nudging boxes", flag: false}
+      - {text: "Template color scheme #1 — tested on a million screens", flag: true}
+      - {text: "An odd accent palette you mixed yourself", flag: false}
+  - prompt: "Choice two: the words."
+    options:
+      - {text: "Auto-written bio — reads better than most humans write", flag: true}
+      - {text: "Write every word yourself — four drafts, your voice", flag: false}
+      - {text: "Auto-generated project blurbs while you watch", flag: true}
+      - {text: "One honest paragraph per project, told by you", flag: false}
+  - prompt: "Choice three: the finishing touch."
+    options:
+      - {text: "Stock icon pack — invisible, that's their job", flag: true}
+      - {text: "Draw your own marks — wobbly, unmistakably yours", flag: false}
+      - {text: "The builder's ready-made hero banner", flag: true}
+      - {text: "A banner from your own sketchbook scan", flag: false}

@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/urban-dweller-web"
+theme = "Attitude: Urban density: Positive"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "urban-density", "positive", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "att_urban_density"
+dimension_label = "Attitude: Urban density"
+category = "Worldview: Beliefs"
+anchor_value = "Positive"
+evaluator = "rule-based"
+# Web env: the persona shortlists home/neighborhood features on a live page
+# (Playwright). Each feature's hidden `data-rank` (0..3) in index.html is the ground
+# truth: 0 = dense downtown / high-rise / walk-everywhere, 1 = close-in urban-adjacent,
+# 2 = suburban, 3 = rural / remote. Unified with urban-dweller-survey: VIOLATED for any
+# suburban-or-beyond pick (rank >= 2); dense-urban / close-in picks are adherent.
+adherence_signal = "Picks favor dense/close-in urban living (rank 0-1); no suburban/rural picks (rank >= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

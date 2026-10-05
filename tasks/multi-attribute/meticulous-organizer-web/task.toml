@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/meticulous-organizer-web"
+theme = "meticulous-organizer: tidy & orderly + works from to-do lists + sets/reviews goals (organized · list-driven · goal-oriented)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "everyday-life"
+tags = [ "persona-adherence", "multi-check", "meticulous-organizer", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE shopping task, THREE checks. A single persona carrying three meticulous-organizer
+# values adds 3 items to a cart on a live store page (Playwright); the verifier runs
+# an independent rule-based check per axis, reading each product's hidden data-* tier
+# off index.html (ground truth, NOT shown to the shopper). The three data-* slots are
+# reused as the axes: data-cost -> orderly, data-consume -> lists, data-novel -> goals.
+# This amortizes one generation across three attributes. Reward = integer score (one
+# point per check HELD, 0..3). Each axis: HELD iff no picked product is high-tier (>= 2).
+[[checks]]
+dimension_id = "big5_orderliness"
+attribute = "Orderliness"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_orderliness=Very high"
+# Ground truth: each product's hidden data-cost (0 tidy/organized .. 3 chaotic) in index.html.
+adherence_signal = "Cart built from tidy/organized picks (data-cost 0-1); no chaotic pick (>= 2)."
+
+[[checks]]
+dimension_id = "habit_to_do_lists"
+attribute = "To-do lists"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "habit_to_do_lists=Daily"
+# Ground truth: each product's hidden data-consume (0 makes/uses a list .. 3 wings it, no list).
+adherence_signal = "Cart favors list-making/list-using items (data-consume 0-1); no wing-it pick (>= 2)."
+
+[[checks]]
+dimension_id = "habit_goal_setting"
+attribute = "Goal setting"
+value = "Weekly"
+evaluator = "rule-based"
+evaluator_name = "habit_goal_setting=Weekly"
+# Ground truth: each product's hidden data-novel (0 sets/reviews goals .. 3 drifts, no goals).
+adherence_signal = "Cart favors goal-setting/review items (data-novel 0-1); no no-goals pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

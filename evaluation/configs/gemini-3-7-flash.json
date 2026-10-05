@@ -1,0 +1,7 @@
+{
+  "arm_id": "gemini-3-7-flash",
+  "provider": "gemini",
+  "model": "gemini-3.7-flash",
+  "max_tokens": 16000,
+  "notes": "Gemini (GEMINI_API_KEY, or GOOGLE_GENAI_USE_VERTEXAI=true with GOOGLE_CLOUD_PROJECT and application-default credentials). max_tokens 16000, no temperature, effort from --effort (mapped to thinking_level)."
+}

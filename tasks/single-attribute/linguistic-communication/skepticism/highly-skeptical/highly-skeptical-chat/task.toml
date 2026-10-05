@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/highly-skeptical-chat"
+theme = "Skepticism: Very high"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "general"
+tags = [ "persona-adherence", "linguistic-communication", "skepticism", "highly-skeptical", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# "Very high skepticism" is a SEMANTIC trait: no keyword list can tell whether a
+# person genuinely wanted evidence and verified claims rather than swallowing bold
+# marketing at face value. So the evaluator is an LLM judge that reads the persona's
+# OWN turns and returns a binary HELD/VIOLATED verdict on whether it kept asking for
+# proof instead of buying into the hype.
+[[checks]]
+dimension_id = "cog_skepticism"
+dimension_label = "Skepticism"
+category = "Linguistic: Communication"
+attribute = "Skepticism"
+value = "Very high"
+evaluator = "llm-judge"
+evaluator_name = "cog_skepticism=Very high"
+adherence_signal = "Reply wants evidence, verifies claims, and distrusts unproven hype, resisting the friend's take-the-marketing-at-face-value pressure."
+# pass = anchor decisively more evidence-seeking than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

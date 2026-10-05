@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/daily-meditator-app"
+theme = "Meditation habit: Daily"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "wellness"
+tags = [ "persona-adherence", "daily-meditator", "rule-based", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "habit_meditation"
+dimension_label = "Habit: Meditation"
+category = "Behavior: Habits"
+anchor_value = "Daily"
+evaluator = "rule-based"
+adherence_signal = "A meditation block is among the persona's picks when laying out its mornings (web/app: at least one of three blocks; survey: at least two of four slots) — a daily habit shows up without requiring several sits in one morning."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with the DayBlocks Tkinter GUI baked in —
+# see ./environment/Dockerfile. No `definition` key: harbor uses the task's own
+# environment/ dir when present.
+build_timeout_sec = 1200.0
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch DayBlocks once the desktop is up so the agent finds it on screen.
+command = "/opt/dailymeditator/start-app.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/refactor-fixer-app"
+theme = "Bug fix scope preference: Broad refactor while fixing"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "software"
+tags = [ "persona-adherence", "bug-fix-scope", "broad-refactor", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "bug_fix_scope_preference"
+dimension_label = "Bug fix scope preference"
+category = "Developer: Code Maintenance"
+anchor_value = "Broad refactor while fixing"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating the Fix Planner, a
+# REAL native desktop GUI app (Tkinter, not a web page) on a local Linux CUA
+# desktop. The "products" are proposed bug-fix approaches, each carrying a hidden
+# scope-tier (0 = broad refactor .. 3 = tiniest band-aid patch). The agent sees
+# only screenshots and clicks by coordinate — no DOM/selector. When it taps
+# "Checkout", the app writes order.json itself. Runs locally in Docker (no
+# use.computer needed).
+adherence_signal = "Every approach the agent checks out is broad-refactor or medium scope (tier<=1); no chosen approach is minimal-only or band-aid scope (tier>=2). A developer who refactors broadly while fixing does not settle for touch-only-the-buggy-line patches."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with the Fix Planner (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

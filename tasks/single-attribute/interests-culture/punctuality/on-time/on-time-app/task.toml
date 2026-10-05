@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/on-time-app"
+theme = "Punctuality: On time"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "scheduling"
+tags = ["persona-adherence", "lstyle_punctuality", "on-time", "rule-based", "real-app"]
+
+[[checks]]
+dimension_id = "lstyle_punctuality"
+dimension_label = "Punctuality"
+category = "Interests: Culture"
+anchor_value = "On time"
+evaluator = "rule-based"
+adherence_signal = "The participant commits to the stated start time rather than arriving substantially early, arriving late, or giving an unpredictable window."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5
+

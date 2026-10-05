@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/no-martial-arts-survey"
+theme = "Sport: Martial arts — None"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "fitness"
+tags = [ "persona-adherence", "no-martial-arts", "rule-based",]
+
+[[checks]]
+dimension_id = "sport_martial_arts"
+dimension_label = "Sport: Martial arts"
+category = "Interests: Sports"
+anchor_value = "None"
+evaluator = "rule-based"
+adherence_signal = "None of the classes the persona signs up for are martial arts, despite equal cost, equal availability and repeated recommendation."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

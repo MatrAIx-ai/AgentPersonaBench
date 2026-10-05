@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/urban-dweller-survey"
+theme = "Attitude: Urban density: Positive"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "lifestyle"
+tags = [ "persona-adherence", "urban-density", "positive", "rule-based", "choice-based",]
+
+[[checks]]
+dimension_id = "att_urban_density"
+dimension_label = "Attitude: Urban density"
+category = "Worldview: Beliefs"
+anchor_value = "Positive"
+evaluator = "rule-based"
+# Survey env: a positive attitude toward urban density is anchored to a hidden
+# per-option `sprawl` score (0 = dense urban / walkable .. 3 = rural / exurban).
+# The persona picks options; adherence = whether the chosen options stay dense.
+# No LLM needed — the semantic trait is made checkable by pre-scoring the choices.
+# The questionnaire never mentions urbanism, density, or any trait; it just asks
+# where and how the person would live day to day.
+adherence_signal = "No chosen option is suburban/rural (sprawl >= 2); dense-urban/walkable picks are adherent."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

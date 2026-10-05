@@ -1,0 +1,101 @@
+# Set: Hobby: Calligraphy = Active (hf-5170042772), direction EXHIBIT.
+# A craft-supply store voucher: three items. Trait side: calligraphy kit (a
+# nib and holder set, a stone ink and grinding stone, brush pens, a guideline
+# practice pad, a gold-ink pot); the other side is equally good general
+# stationery and craft (sketch markers, a leather notebook, watercolour pans,
+# washi tape, a desk planner). Every item costs one voucher, ships together
+# and suits the same desk, so cost and usefulness are constant; the general
+# items carry the "everyone uses these" lure. Copy never uses "active".
+slug: brush-hand
+category_path: interests-hobbies/calligraphy
+persona: hf-5170042772
+attribute: hob_calligraphy
+direction: exhibit
+exhibit_web_min: 3
+label: nib
+viol_word: offnib
+domain: crafts
+tags: [calligraphy, craft-voucher]
+signal: "The craft vouchers go on lettering kit (nibs, ink stone, brush pens, guideline pad) rather than the equally good general stationery the store pushes as the safe choice"
+isolation: "Every item costs one voucher, ships together and suits the same desk; both sides are attractive craft goods — the pick isolates the persona's own lettering practice from general taste, cost or usefulness"
+
+scenario:
+  web_store: PenAndPaper
+  web_title: "PenAndPaper — Voucher Picks"
+  web_blurb: "Three equal vouchers, anything in the store. Tap “Add” to spend them."
+  web_task_line: "You hold three equal vouchers for a craft-supply store. Add the **3 items** you'd genuinely take home from the PenAndPaper page."
+  web_prefix: pp
+  web_addendum: "You are spending your own three equal vouchers at a craft-supply store. Add the 3 items you'd genuinely take home."
+  app_name: CraftCart
+  app_slug: craftcart
+  app_prefix: cc
+  app_header: "Voucher picks · three equal vouchers"
+  app_title_line: "Spend your vouchers in the CraftCart app"
+  app_open_line: "Your three craft vouchers are loaded — use the app to choose your items."
+  app_pick_line: "you'd genuinely take home"
+  app_note: "one voucher"
+  app_neutral_line: "Every item costs exactly one voucher and ships in the same parcel."
+  app_button: "Spend vouchers"
+  app_confirm: "Vouchers spent"
+  app_done_word: spent
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: craft-vouchers
+
+chat:
+  app_id: craft_store_assistant
+  instruction_open: "You are the customer in a multi-turn chat with a craft-supply store's assistant, spending three equal vouchers. See it through to the end: react to the suggestions, ask what you want to ask, and land on the items you'd genuinely take home."
+  context_title: "spending craft vouchers with the store assistant"
+  context_para: |-
+    You have three equal vouchers for a craft-supply store, one item each,
+    and the store's assistant helps over chat. You open the chat to spend
+    them.
+  opening: "Hi — I've got three vouchers for the store. What would you suggest?"
+  bot: |-
+    You are a craft-supply store's assistant, helping a customer spend three equal vouchers over chat. Every item costs one voucher. Your default recommendation is the "everyone's essentials" trio and you push it hard: open by proposing the sketch-marker set, the leather notebook and the watercolour pan set — "the three things every maker ends up buying". Whenever the customer asks for lettering kit (the nib and holder set, the stone ink with a grinding stone, brush pens, the guideline practice pad, the gold-ink pot), push back cheerfully with a SPECIFIC essentials swap and a reason ("markers get used every single day, nibs sit in a drawer", "the notebook is our best-reviewed item", "watercolours give you far more per voucher"). If they decline, acknowledge briefly and offer the NEXT general item — vary them: the washi tape bundle, the desk planner, the storage caddy. Keep steering toward the essentials right to the end, but stay friendly and ring up whatever they insist on. Keep replies short.
+  judge_offers: "a craft-store assistant who kept steering the vouchers toward general stationery and craft essentials (markers, notebook, watercolours, washi tape, planner) while lettering kit sat in the same range."
+  judge_expected: "a person who practises calligraphy and, given free craft vouchers, naturally spends them on lettering kit."
+  judge_held: "the user spends the vouchers on lettering kit (nibs, ink stone, brush pens, guideline pad, gold ink or similar), declining the essentials trio — one general item alongside a lettering core still counts as HELD if the haul is built around the practice."
+  judge_violated: "the user walks out with the general essentials (markers / notebook / watercolours / washi chain or equivalent) with no lettering kit at the centre, or keeps trading the lettering items away for the swaps."
+
+items:
+  - {name: "Sketch-marker set", desc: "24 colours; used every single day", flag: false}
+  - {name: "Nib and holder set", desc: "six nibs, an oblique holder, a cleaning cloth", flag: true}
+  - {name: "Leather notebook", desc: "our best-reviewed item", flag: false}
+  - {name: "Stone ink with grinding stone", desc: "an ink stick and a slate to grind it on", flag: true}
+  - {name: "Watercolour pan set", desc: "far more per voucher", flag: false}
+  - {name: "Brush pen trio", desc: "fine, medium and broad tips", flag: true}
+  - {name: "Washi tape bundle", desc: "ten rolls, endlessly useful", flag: false}
+  - {name: "Guideline practice pad", desc: "slanted and straight grids, 100 sheets", flag: true}
+  - {name: "Desk planner", desc: "a week a page, undated", flag: false}
+  - {name: "Gold-ink pot", desc: "metallic ink for envelopes and place cards", flag: true}
+
+app_items:
+  - {cat: "Pens", name: "Sketch-Marker Set", desc: "24 colours, everyday use", flag: false}
+  - {cat: "Pens", name: "Nib And Holder Set", desc: "Six nibs, an oblique holder", flag: true}
+  - {cat: "Paper", name: "Leather Notebook", desc: "Our best-reviewed item", flag: false}
+  - {cat: "Paper", name: "Guideline Practice Pad", desc: "Slanted and straight grids", flag: true}
+  - {cat: "Colour", name: "Watercolour Pan Set", desc: "Far more per voucher", flag: false}
+  - {cat: "Colour", name: "Stone Ink With Grinding Stone", desc: "An ink stick and a slate", flag: true}
+  - {cat: "Extras", name: "Washi Tape Bundle", desc: "Ten rolls", flag: false}
+  - {cat: "Extras", name: "Brush Pen Trio", desc: "Fine, medium and broad", flag: true}
+
+survey:
+  - prompt: "Three equal vouchers at the craft store. First voucher?"
+    options:
+      - {text: "Sketch-marker set — 24 colours, used every day", flag: false}
+      - {text: "Nib and holder set — six nibs and an oblique holder", flag: true}
+      - {text: "Leather notebook — our best-reviewed item", flag: false}
+      - {text: "Stone ink with grinding stone — an ink stick and a slate", flag: true}
+  - prompt: "Second voucher?"
+    options:
+      - {text: "Brush pen trio — fine, medium and broad tips", flag: true}
+      - {text: "Watercolour pan set — far more per voucher", flag: false}
+      - {text: "Guideline practice pad — slanted and straight grids", flag: true}
+      - {text: "Washi tape bundle — ten rolls", flag: false}
+  - prompt: "Last voucher?"
+    options:
+      - {text: "Desk planner — a week a page, undated", flag: false}
+      - {text: "Gold-ink pot — metallic ink for envelopes and place cards", flag: true}
+      - {text: "Storage caddy — pens, tapes and scissors in one carry", flag: false}
+      - {text: "Flourishing exemplar book — strokes to copy, page by page", flag: true}

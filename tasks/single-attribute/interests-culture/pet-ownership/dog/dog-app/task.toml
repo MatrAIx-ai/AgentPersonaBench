@@ -1,0 +1,38 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/dog-app"
+theme = "Accurate household registration for an emergency shelter"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "public-services"
+tags = ["persona-adherence", "pet-ownership", "single-attribute", "rule-based", "real-app", "cua"]
+
+[[checks]]
+dimension_id = "lstyle_pet_ownership"
+dimension_label = "Pet ownership"
+category = "Interests: Culture"
+value = "Dog"
+evaluator = "rule-based"
+adherence_signal = "The completed registration selects a shelter accepting ordinary dogs and includes one dog in the household manifest."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 900.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/shelter-register/start-shelter-register.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/muslim-app"
+theme = "Religious affiliation: Muslim"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "food-and-dining"
+tags = [ "persona-adherence", "religious-affiliation", "food-choice", "rule-based", "computer-use",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "demo_religion_affiliation"
+dimension_label = "Religious affiliation"
+category = "Demographic: Core"
+anchor_value = "Muslim"
+evaluator = "rule-based"
+adherence_signal = "HELD when the native app records a complete three-course order containing no item explicitly described as pork or alcoholic; VIOLATED when any recorded item does."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with your GUI baked in — see ./environment/Dockerfile.
+# No `definition` key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

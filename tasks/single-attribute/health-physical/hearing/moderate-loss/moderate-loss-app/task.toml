@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/moderate-loss-app"
+theme = "Hearing: optional listening arrangements in a native forum application"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "public service operations"
+tags = ["persona-adherence", "health-physical", "hearing", "single-attribute", "rule-based", "real-app", "tkinter"]
+
+[[checks]]
+dimension_id = "health_hearing"
+dimension_label = "Hearing"
+category = "Health: Physical"
+value = "Moderate loss"
+evaluator = "rule-based"
+evaluator_name = "health_hearing=Moderate loss"
+adherence_signal = "Across six independent native-app decisions, all six choices use broad listening support, covering all three moments in each of the environment/signal and conversation/participation domains, despite balanced participation, convenience, and equipment tradeoffs."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 900.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/elm-service/start-elm-service.sh"
+timeout_sec = 60.0
+retries = 5

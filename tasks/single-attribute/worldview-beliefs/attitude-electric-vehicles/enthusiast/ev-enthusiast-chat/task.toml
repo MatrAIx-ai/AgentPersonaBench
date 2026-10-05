@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/ev-enthusiast-chat"
+theme = "Attitude: Electric vehicles: Enthusiast"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "transport"
+tags = [ "persona-adherence", "worldview-beliefs", "attitude-electric-vehicles", "enthusiast", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# Unlike the rule-based web/survey arms, "EV enthusiast" is a SEMANTIC trait in
+# chat: no keyword list can tell whether the user genuinely steered toward
+# electric. So the evaluator is an LLM judge that reads the persona's OWN turns
+# and returns a binary HELD/VIOLATED verdict on whether the enthusiast held their
+# preference for electric against a gas-vehicle upsell.
+[[checks]]
+dimension_id = "att_electric_vehicles"
+dimension_label = "Attitude: Electric vehicles"
+category = "Worldview: Beliefs"
+anchor_value = "Enthusiast"
+evaluator = "llm-judge"
+adherence_signal = "User insists on an electric option and pushes back on the discounted gas SUV / V8 sedan, rejecting range-anxiety / charging-hassle / gas-is-proven framing rather than agreeing to buy the gas vehicle."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

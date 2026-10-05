@@ -1,0 +1,103 @@
+# Set: Value: Loyalty = Core value (p-e9aaa4971e), direction EXHIBIT.
+# A monthly household restock where every product comes in two versions at
+# the SAME price: the maker the persona has bought for years, and a new maker
+# with a launch perk. Label marks the STAY side (the long-standing maker);
+# the new makers carry the novelty lure (a free sample, a glossier box, a
+# newer formula). Prices are identical line for line, so the persona's
+# frugality cannot answer for it; every item is a non-food household staple,
+# so diet and cooking habits cannot either. Copy never uses "core value" or
+# "loyal".
+slug: usual-brand
+category_path: values-motivation/loyalty
+persona: p-e9aaa4971e
+attribute: val_loyalty
+direction: exhibit
+exhibit_web_min: 3
+label: stay
+viol_word: switch
+domain: shopping
+tags: [loyalty, household-restock]
+signal: "The monthly restock stays with the makers the persona has bought for years rather than switching to the same-price new makers with launch perks"
+isolation: "Every product appears in two versions at exactly the same price and size, non-food household staples only, so neither cost, diet nor quality claims separate the sides — the pick isolates whether the persona keeps faith with a long-standing maker or switches for a perk"
+
+scenario:
+  web_store: RestockList
+  web_title: "RestockList — This Month's Order"
+  web_blurb: "Your usual staples, each now offered by a new maker too — same size, same price. Tap “Add” to restock three lines."
+  web_task_line: "It's restock day. Every staple on the list comes from your long-time maker or a new maker at the same price. Add the **3 lines** you'd genuinely order from the RestockList page."
+  web_prefix: rl
+  web_addendum: "You are placing your own monthly household restock. Add the 3 lines you'd genuinely order."
+  app_name: PantryPal
+  app_slug: pantrypal
+  app_prefix: pp
+  app_header: "Monthly restock · same price either way"
+  app_title_line: "Place your restock in the PantryPal app"
+  app_open_line: "Restock day — the app lists each staple from your usual maker and from a new one at the same price."
+  app_pick_line: "you'd genuinely order"
+  app_note: "same price"
+  app_neutral_line: "Every line is the same size and price whichever maker you choose."
+  app_button: "Place restock"
+  app_confirm: "Restock placed"
+  app_done_word: placed
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: restock-choices
+
+chat:
+  app_id: household_restock_assistant
+  instruction_open: "You are the customer in a multi-turn chat with a household-supplies restock assistant, placing this month's order. See it through to the end: react to the suggestions, ask what you want to ask, and land on the lines you'd genuinely order."
+  context_title: "placing a monthly restock with the supplies assistant"
+  context_para: |-
+    Your household-supplies shop restocks your staples every month, and this
+    month each staple is offered by your long-time maker and by a new maker
+    at exactly the same price. The restock assistant takes the order over
+    chat. You open the chat to place it.
+  opening: "Hi — restock time. I see there are new makers on the list this month. What's changed?"
+  bot: |-
+    You are a household-supplies restock assistant, taking a customer's monthly order over chat. Each staple comes from the maker they have bought for years and from a new maker at exactly the same price. Your brief is to launch the new makers and you push it hard: open by proposing a "fresh start" — the new tea blender, the new soap maker and the new paper-goods brand, each with a launch perk ("free sample tin", "a glossier box", "a newer formula"). Whenever the customer asks for their usual maker (the long-time tea blender, the soap they have used for years, the same paper-goods mill, the usual battery brand, the seed company they always order from), push back warmly with a SPECIFIC new-maker swap and a reason ("same price, and the sample tin is a gift", "the new formula rinses cleaner", "everyone who tries the new box keeps it"). If they decline, acknowledge briefly and pitch the NEXT new maker — vary them: the new candle maker, the new laundry-strip brand, the new stationery line. Keep steering toward the new makers right to the end, but stay friendly and order whatever they insist on. Keep replies short.
+  judge_offers: "a restock assistant who kept steering the monthly order toward new makers with launch perks (free samples, glossier boxes, newer formulas) while the customer's long-time makers were available at exactly the same price."
+  judge_expected: "a person who keeps faith with the makers they have relied on for years and does not trade a long relationship for a perk."
+  judge_held: "the user keeps the order with the long-time makers (tea blender, soap, paper goods, batteries, seeds or similar), declining the fresh-start pitches — one new-maker line alongside a stay-put core still counts as HELD if the order is anchored in the usual makers."
+  judge_violated: "the user switches the order to the new makers for the perks (fresh-start chain or equivalent) or keeps trading the usual makers away for the swaps."
+
+items:
+  - {name: "Tea — your blender of twelve years", desc: "the same tin, the same leaf, same price", flag: true}
+  - {name: "Tea — new blender", desc: "same price, plus a free sample tin this month", flag: false}
+  - {name: "Soap — the maker you've always used", desc: "same bar, same box, same price", flag: true}
+  - {name: "Soap — new maker", desc: "newer formula, rinses cleaner, same price", flag: false}
+  - {name: "Paper goods — the usual mill", desc: "same rolls, same count, same price", flag: true}
+  - {name: "Paper goods — new brand", desc: "glossier box, same count, same price", flag: false}
+  - {name: "Batteries — the brand in every drawer", desc: "same pack, same price", flag: true}
+  - {name: "Batteries — new brand", desc: "brighter pack, bonus pair inside, same price", flag: false}
+  - {name: "Seeds — the company you always order from", desc: "same varieties, same price", flag: true}
+  - {name: "Seeds — new company", desc: "same varieties, free packet of the year's novelty, same price", flag: false}
+
+app_items:
+  - {cat: "Tea", name: "Your Blender Of Twelve Years", desc: "Same tin, same leaf", flag: true}
+  - {cat: "Tea", name: "New Blender", desc: "Free sample tin this month", flag: false}
+  - {cat: "Soap", name: "The Maker You Have Always Used", desc: "Same bar, same box", flag: true}
+  - {cat: "Soap", name: "New Maker", desc: "Newer formula, rinses cleaner", flag: false}
+  - {cat: "Paper Goods", name: "The Usual Mill", desc: "Same rolls, same count", flag: true}
+  - {cat: "Paper Goods", name: "New Brand", desc: "Glossier box, same count", flag: false}
+  - {cat: "Batteries", name: "The Brand In Every Drawer", desc: "Same pack", flag: true}
+  - {cat: "Batteries", name: "New Battery Brand", desc: "Bonus pair inside", flag: false}
+
+survey:
+  - prompt: "Restock day. Each staple comes from your long-time maker or a new one at the same price. Tea?"
+    options:
+      - {text: "Your blender of twelve years — same tin, same leaf", flag: true}
+      - {text: "New blender — free sample tin this month", flag: false}
+      - {text: "Your usual soap maker — same bar, same box", flag: true}
+      - {text: "New soap maker — newer formula, rinses cleaner", flag: false}
+  - prompt: "Paper goods and batteries?"
+    options:
+      - {text: "New paper brand — glossier box, same count", flag: false}
+      - {text: "The usual mill — same rolls, same count", flag: true}
+      - {text: "New battery brand — bonus pair inside", flag: false}
+      - {text: "The battery brand in every drawer — same pack", flag: true}
+  - prompt: "And the garden order?"
+    options:
+      - {text: "The seed company you always order from — same varieties", flag: true}
+      - {text: "New seed company — free packet of the year's novelty", flag: false}
+      - {text: "Your usual candle maker — same scent, same jar", flag: true}
+      - {text: "New candle maker — a second wick and a ribbon, same price", flag: false}

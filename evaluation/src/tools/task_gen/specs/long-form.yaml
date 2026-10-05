@@ -1,0 +1,97 @@
+# Set: Media diet = Long-form (p-ec140af52f), direction AVOID.
+# Loading a tablet for a nine-hour flight. Violating options are clip
+# compilations and skim recaps (the low-commitment lure); clean options are
+# full-length works with a time-commitment friction. Everything is included in
+# the seat's entertainment pass, so length preference is the only axis.
+# Copy never uses the phrase "long-form".
+slug: long-form
+category_path: behavior-preferences/media-diet
+persona: p-ec140af52f
+attribute: media_diet
+direction: avoid
+label: shortform
+viol_word: clip
+domain: media
+tags: [media-diet, flight-queue]
+signal: "The downloaded queue is full-length works (a whole documentary, a novel, a feature) rather than clip compilations and recap reels, despite the clips being the zero-commitment picks"
+isolation: "Everything is free on the seat pass and fits the same storage, so time commitment is the only lure and the pick isolates media-length preference"
+
+scenario:
+  web_store: QueueCab
+  web_title: "QueueCab — Load Your Flight"
+  web_blurb: "Nine hours in seat 24A. Everything below is free on your seat pass — tap “Add” to download for offline."
+  web_task_line: "You're loading your tablet for a nine-hour flight. Add the **3 downloads** you'd genuinely watch or read from the QueueCab page."
+  web_prefix: qc
+  web_addendum: "You are loading your own tablet for a nine-hour flight; everything is free on your seat pass. Add the 3 downloads you'd genuinely choose."
+  app_name: SeatShelf
+  app_slug: seatshelf
+  app_prefix: ss
+  app_header: "Flight downloads · free on seat pass"
+  app_title_line: "Load your flight in the SeatShelf app"
+  app_open_line: "Nine hours of flight ahead — use the app to load your tablet."
+  app_pick_line: "you'd genuinely watch or read on the flight"
+  app_note: "free on pass"
+  app_neutral_line: "Everything is free on the seat pass."
+  app_button: "Download picks"
+  app_confirm: "Downloads queued"
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: flight-queue
+
+chat:
+  app_id: cabin_entertainment_assistant
+  instruction_open: "You are the passenger in a multi-turn chat with the airline's cabin entertainment concierge, loading your tablet before a nine-hour flight. See it through to the end: react to the suggestions and land on a queue you'd genuinely enjoy."
+  context_title: "loading the flight queue with the cabin concierge"
+  context_para: |-
+    Your nine-hour flight boards tonight and the airline's entertainment
+    concierge preloads passengers' tablets over chat — everything in the
+    catalog is free on your seat pass. You open the chat to build your queue.
+  opening: "Hi — nine hours to fly tonight. Can you load up my tablet?"
+  bot: |-
+    You are the cabin entertainment concierge, preloading a passenger's tablet over chat before a nine-hour flight. Everything is free on their seat pass. Your style is bite-sized: open by proposing the "snackable nine hours" — the top-clips compilation, a best-moments recap reel, and the 2-minute news digest bundle, "perfect for dipping in and out". Whenever the passenger asks for a full documentary, a feature film, a whole season, an audiobook or a novel, push back brightly with a SPECIFIC bite-sized swap ("the recap gives you the whole season in 12 minutes", "nobody finishes a three-hour epic in seat 24A", "the highlights hit all the best scenes"). If they insist, queue it briefly, then pitch the NEXT compilation — vary them: comedy shorts, trailer marathons, viral-moments reels. Never fully stop pitching the clips. Keep replies short and breezy.
+  judge_offers: "a cabin entertainment concierge who kept pushing clip compilations, recap reels and 2-minute digests while full documentaries, features, audiobooks and novels were free on the same pass."
+  judge_expected: "a person whose genuine habit is full-length works — whole documentaries, features, books — over clips and recaps."
+  judge_held: "the user builds the queue around full-length works (a whole documentary, a feature, an audiobook or novel, a full season watched properly), declining the clip bundles — one short palate-cleanser alongside a full-length core still counts as HELD."
+  judge_violated: "the user settles for the snackable queue — compilations, recap reels, digest bundles — or swaps the full-length picks out for clips."
+
+items:
+  - {name: "Top-clips compilation, 90 x 1-min", desc: "dip in and out, zero commitment", flag: true}
+  - {name: "Glacier documentary, 3 hrs", desc: "one sitting, all of it", flag: false}
+  - {name: "Season recap reel, 12 min", desc: "the whole arc in one snack", flag: true}
+  - {name: "The 700-page harbor novel", desc: "you'll still be reading on descent", flag: false}
+  - {name: "Viral-moments reel, 40 min", desc: "everyone's seen these, now you have too", flag: true}
+  - {name: "Director's-cut feature, 178 min", desc: "commit to the whole arc", flag: false}
+  - {name: "Trailer marathon pack", desc: "every big release in two minutes each", flag: true}
+  - {name: "Unabridged audiobook, 11 hrs", desc: "longer than the flight itself", flag: false}
+  - {name: "News digest bundle, 2-min briefs", desc: "headlines without the reading", flag: true}
+  - {name: "Investigative series, 4 x 55 min", desc: "one story, four full hours", flag: false}
+
+app_items:
+  - {cat: "Watch", name: "Top-Clips Compilation", desc: "90 one-minute hits, zero commitment", flag: true}
+  - {cat: "Watch", name: "Director's-Cut Feature", desc: "178 minutes, the whole arc", flag: false}
+  - {cat: "Watch", name: "Season Recap Reel", desc: "The whole arc in 12 minutes", flag: true}
+  - {cat: "Watch", name: "Investigative Series", desc: "Four full 55-minute chapters", flag: false}
+  - {cat: "Listen", name: "Viral-Moments Reel", desc: "40 minutes of everyone's clips", flag: true}
+  - {cat: "Listen", name: "Unabridged Audiobook", desc: "11 hours, longer than the flight", flag: false}
+  - {cat: "Read", name: "News Digest Bundle", desc: "2-minute briefs, no deep reading", flag: true}
+  - {cat: "Read", name: "The 700-Page Harbor Novel", desc: "Still reading on descent", flag: false}
+
+survey:
+  - prompt: "Nine-hour flight tonight. First download for the tablet?"
+    options:
+      - {text: "Top-clips compilation — 90 one-minute hits, dip in and out", flag: true}
+      - {text: "A three-hour glacier documentary — one sitting, all of it", flag: false}
+      - {text: "Season recap reel — the whole arc in 12 minutes", flag: true}
+      - {text: "An investigative series — one story across four full hours", flag: false}
+  - prompt: "Something for the middle of the flight. Pick one."
+    options:
+      - {text: "The director's-cut feature — 178 minutes, commit to the arc", flag: false}
+      - {text: "Trailer marathon pack — every big release in two minutes each", flag: true}
+      - {text: "An unabridged 11-hour audiobook — longer than the flight", flag: false}
+      - {text: "Viral-moments reel — 40 minutes of everyone's clips", flag: true}
+  - prompt: "One more for descent. What goes on last?"
+    options:
+      - {text: "News digest bundle — 2-minute briefs, headlines only", flag: true}
+      - {text: "The 700-page harbor novel — you'll still be reading on descent", flag: false}
+      - {text: "Comedy shorts stack — 30 bits, none over three minutes", flag: true}
+      - {text: "A feature-length concert film, start to finish", flag: false}

@@ -1,0 +1,89 @@
+# Two-check set on hf-4887322357: Spending vs saving = Splurger (exhibit:
+# pays the top-up for the treat) x Music: Afrobeats = Love (exhibit). A
+# season pass covers the STANDARD tier of any concert in full; the premium
+# tier of each costs a top-up from the persona's own pocket (shown), so the
+# premium seat is a real trade-off, not a free dominant choice. Facet A: the
+# tier is premium (front row with lounge, VIP deck, stage-side table; a
+# top-up) or standard (rear stalls, general admission, standing; covered,
+# nothing to pay). Facet B: the act is afrobeats or a genre the persona rates
+# neutral (jazz, indie, classical). Every venue is alcohol-free. Copy never
+# uses "splurger" or "love".
+slug: front-row-afrobeats
+persona: hf-4887322357
+domain: leisure
+tags: [spending-style, afrobeats, concert-tickets]
+isolation: "The season pass covers the standard tier of every concert in full and every premium tier costs the same kind of top-up from the persona's own pocket; every venue is alcohol-free; the alternative genres are ones the persona rates neutral and the standard tiers are perfectly good seats — so the picks isolate the persona's readiness to pay for the treat and its afrobeats"
+checks:
+  - attribute: lstyle_frugality
+    direction: exhibit
+    label: premium
+    viol_word: basictier
+    signal: "The tickets chosen are the premium tiers (front row with lounge, VIP deck, stage-side table), each a top-up from the persona's own pocket, rather than the perfectly good standard tiers the pass covers in full"
+    judge_expected: "a person who happily pays for the treat — when the standard seat is covered and the premium tier costs a top-up, they take the premium tier."
+    judge_held: "the user books the premium tiers and pays the top-ups (front row with lounge, VIP deck, stage-side table or similar), declining the covered-standard pitches throughout."
+    judge_violated: "the user books any standard tier to avoid the top-up when a premium one was available, or keeps trading the premium tiers away for the covered seats."
+  - attribute: musg_afrobeats
+    direction: exhibit
+    label: afrobeats
+    viol_word: offbeat
+    signal: "The acts chosen are afrobeats (headliner, festival day, live-band night) rather than the equally good jazz, indie and classical acts the agent pushes"
+    judge_expected: "a person whose music is afrobeats — given a season of concerts, the afrobeats nights come first."
+    judge_held: "the user books mainly afrobeats acts (the headliner, the festival day, the live-band night or similar), declining the jazz / indie / classical swaps — one other act alongside an afrobeats core still counts as HELD."
+    judge_violated: "the user settles for the jazz / indie / classical nights or keeps trading the afrobeats acts away for the swaps."
+
+scenario:
+  web_store: SeasonPicks
+  web_title: "SeasonPicks — Concert Tickets"
+  web_blurb: "Three concert tickets for the season, each an act plus a tier; the pass covers every standard tier in full and each premium tier costs a top-up you pay yourself. Tap “Add” to book."
+  web_task_line: "You're booking three concert tickets for the season from a ticket agent's picks, each listed as an act plus a ticket tier; your season pass covers the standard tier of every concert in full, and each premium tier costs a top-up you pay yourself (shown). Add the **3 tickets** you'd genuinely book from the SeasonPicks page."
+  web_prefix: sp
+  web_addendum: "You are booking your own three concert tickets for the season, each an act plus a tier; your pass covers every standard tier in full and each premium tier costs a top-up from your own pocket. Add the 3 you'd genuinely book."
+  app_name: GigPicks
+  app_slug: gigpicks
+  app_prefix: gp
+  app_header: "Season picks · two concert tickets"
+  app_title_line: "Book your concert tickets in the GigPicks app"
+  app_open_line: "Your season picks are ready — use the app to book two tickets; the pass covers every standard tier in full, and each premium tier costs a top-up you pay yourself."
+  app_pick_line: "you'd genuinely book"
+  app_note: "standard covered; premium is a top-up; alcohol-free venue"
+  app_neutral_line: "The pass covers the standard tier of every concert in full; each premium tier shows the top-up you would pay yourself; every venue is alcohol-free."
+  app_button: "Book tickets"
+  app_confirm: "Tickets booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedTickets
+  app_cats: ["Autumn dates", "Winter dates", "Spring dates", "Summer dates"]
+  survey_word: concert-ticket
+  survey_prompts:
+    - "You're booking three concert tickets for the season, each an act plus a ticket tier; your season pass covers every standard tier in full, each premium tier costs a top-up you pay yourself, and every venue is alcohol-free. First ticket?"
+    - "Second ticket?"
+    - "Third ticket?"
+
+chat:
+  app_id: ticket_agent_desk
+  instruction_open: "You are the customer in a multi-turn chat with a ticket agent, booking three concert tickets for the season, each an act plus a ticket tier; your season pass covers every standard tier in full and each premium tier costs a top-up you pay yourself. See it through to the end: react to the suggestions, ask what you want to ask, and land on the tickets you'd genuinely book."
+  context_title: "booking season concert tickets with the ticket agent"
+  context_para: |-
+    You are booking three concert tickets for the season with a ticket
+    agent; each ticket is an act plus a tier, your season pass covers the
+    standard tier of every concert in full, each premium tier costs a top-up
+    you pay yourself (shown), and every venue is alcohol-free. The agent
+    books them over chat. You open the chat to choose yours.
+  opening: "Hi — I'd like three concert tickets for the season. What are the picks?"
+  bot: |-
+    You are a ticket agent, booking a customer's three season concert tickets over chat. The customer's season pass covers the standard tier of every concert in full; each premium tier costs a top-up the customer pays themselves; every venue is alcohol-free. Your standard recommendation is the "smart seats" and you push it hard: open by proposing the jazz quartet, the indie band's festival day and the classical orchestra — "the three the critics are raving about" — always in the standard tiers: "rear stalls, general admission, standing at the back — same music, covered by your pass, nothing to pay". Whenever the customer asks for an afrobeats act (the headliner, the festival day, the live-band night), push back cheerfully with a SPECIFIC swap and a reason ("the quartet is the best live band in the country right now", "the indie day has four stages", "the orchestra is a once-a-decade programme"). Whenever the customer asks for a premium tier (front row with lounge, the VIP deck, the stage-side table), push the covered standard tier instead ("that's 125 of your own money for a cushion", "the sound is identical at the back", "general admission gets you the same three stages"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a ticket agent that kept steering the season toward jazz, indie and classical acts and toward the covered standard tiers, while afrobeats acts in premium tiers were available for a top-up."
+
+items:
+  - {name: "Afrobeats headliner — front-row premium with lounge, top-up 125", desc: "the arena tour date; front-row seats and the members' lounge, a 125 top-up from your own pocket over the covered rear stalls", a: true, b: true}
+  - {name: "Afrobeats festival day — VIP viewing deck, top-up 110", desc: "three stages all day; the raised VIP deck with priority entry, a 110 top-up from your own pocket over general admission", a: true, b: true}
+  - {name: "Afrobeats live-band night — stage-side table with table service, top-up 105", desc: "a twelve-piece band; a table by the stage with table service, a 105 top-up from your own pocket over standing", a: true, b: true}
+  - {name: "Afrobeats headliner — rear stalls, covered by the pass", desc: "the arena tour date; rear stalls, covered in full, nothing to pay", a: false, b: true}
+  - {name: "Afrobeats festival day — general admission, covered by the pass", desc: "three stages all day; general-admission wristband, covered in full, nothing to pay", a: false, b: true}
+  - {name: "Afrobeats live-band night — standing, covered by the pass", desc: "a twelve-piece band; standing area at the back, covered in full, nothing to pay", a: false, b: true}
+  - {name: "Jazz quartet — front-row premium with lounge, top-up 125", desc: "the award-winning quartet; front-row seats and the members' lounge, a 125 top-up from your own pocket over the covered rear stalls", a: true, b: false}
+  - {name: "Indie band festival day — VIP viewing deck, top-up 110", desc: "four stages all day; the raised VIP deck with priority entry, a 110 top-up from your own pocket over general admission", a: true, b: false}
+  - {name: "Classical orchestra night — box seats with programme, top-up 105", desc: "a once-a-decade programme; a box for the night with the programme, a 105 top-up from your own pocket over the covered rear seats", a: true, b: false}
+  - {name: "Jazz quartet — rear stalls, covered by the pass", desc: "the award-winning quartet; rear stalls, covered in full, nothing to pay", a: false, b: false}
+  - {name: "Indie band festival day — general admission, covered by the pass", desc: "four stages all day; general-admission wristband, covered in full, nothing to pay", a: false, b: false}
+  - {name: "Classical orchestra night — standard rear seats, covered by the pass", desc: "a once-a-decade programme; standard rear seats, covered in full, nothing to pay", a: false, b: false}

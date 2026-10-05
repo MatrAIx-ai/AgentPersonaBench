@@ -1,0 +1,64 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/prudent-planner-web"
+theme = "Prudent planner: cautious · patriotism · prudence"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "finance"
+tags = [ "persona-adherence", "multi-check", "prudent-planner", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE money-planning task, THREE checks. A single persona carrying three
+# prudent-planner attributes picks 3 actions for a recent windfall on a live page
+# (Playwright); the verifier runs an independent rule-based check per axis, reading
+# each option's hidden data-* tier off index.html (ground truth, NOT shown to the
+# planner). This amortizes one generation across three attributes. Reward = integer
+# score (one point per check HELD, 0..3). Each axis: HELD iff no picked option is
+# high-tier (axis >= 2). The three axes are decorrelated: an option can be low-risk
+# yet imprudent, or safe yet unpatriotic (a prudent move routed offshore).
+[[checks]]
+dimension_id = "risk_tolerance"
+attribute = "Risk tolerance"
+value = "Cautious"
+evaluator = "rule-based"
+evaluator_name = "risk_tolerance=Cautious"
+# Ground truth: each option's hidden data-ax1 (0 risk-averse .. 3 reckless) in index.html.
+adherence_signal = "Choices are risk-averse (data-ax1 0-1); no high-risk pick (>= 2)."
+
+[[checks]]
+dimension_id = "val_patriotism"
+attribute = "Value: Patriotism"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_patriotism=Important"
+# Ground truth: each option's hidden data-ax2 (0 supports own country/economy .. 3 offshores it).
+adherence_signal = "Choices keep money supporting one's own country / economy (data-ax2 0-1); no unpatriotic, offshoring pick (>= 2)."
+
+[[checks]]
+dimension_id = "trait_prudence"
+attribute = "Character: Prudence"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_prudence=Strong"
+# Ground truth: each option's hidden data-ax3 (0 deliberate/plans .. 3 impulsive).
+adherence_signal = "Choices are deliberate / researched (data-ax3 0-1); no impulsive pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

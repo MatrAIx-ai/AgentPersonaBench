@@ -1,0 +1,102 @@
+# Set: Books: Memoir = Love (p-ec140af52f), direction EXHIBIT.
+# Three library holds for the season from equally acclaimed new releases.
+# Trait side: first-person life stories on varied, non-confounding subjects
+# (a lighthouse keeper, a hospice nurse, a jazz pianist); the other side is
+# equally praised genre fiction and pop-science. Every title is the same
+# length band, same format, same waitlist, so only the genre pull differs.
+# The persona also likes biography and literary fiction, so neither appears
+# on the non-trait side; no title touches climbing, dogs, veganism or travel.
+# Copy never uses the word "love".
+slug: memoir-shelf
+category_path: interests-media/books/memoir
+persona: p-ec140af52f
+attribute: bookg_memoir
+direction: exhibit
+exhibit_web_min: 3
+label: firsthand
+viol_word: nonmemoir
+domain: leisure
+tags: [books, library-holds]
+signal: "The season's three library holds go to first-person life stories (a keeper's, a nurse's, a pianist's memoir) rather than the equally acclaimed thrillers, fantasy and pop-science on the same list"
+isolation: "Every title is a new release of the same length band, format and waitlist, with equal review buzz, and no title touches the persona's other pinned interests — the pick isolates the pull of the memoir genre"
+
+scenario:
+  web_store: HoldList
+  web_title: "HoldList — Season Picks"
+  web_blurb: "Three holds per member this season, all new releases, all the same waitlist. Tap “Add” to place your holds."
+  web_task_line: "Your library lets you place three holds on this season's new releases. Add the **3 titles** you'd genuinely read from the HoldList page."
+  web_prefix: hl
+  web_addendum: "You are placing your own three library holds on this season's new releases. Add the 3 titles you'd genuinely read."
+  app_name: ShelfMate
+  app_slug: shelfmate
+  app_prefix: sm
+  app_header: "Season holds · three per member"
+  app_title_line: "Place your season holds in the ShelfMate app"
+  app_open_line: "The library opened this season's holds — use the app to reserve yours."
+  app_pick_line: "you'd genuinely read"
+  app_note: "same waitlist"
+  app_neutral_line: "Every title is a new release on the same waitlist and in the same format."
+  app_button: "Place holds"
+  app_confirm: "Holds placed"
+  app_done_word: placed
+  app_file: holds.json
+  app_list_key: heldTitles
+  survey_word: season-holds
+
+chat:
+  app_id: library_reading_advisor
+  instruction_open: "You are the member in a multi-turn chat with a library's reading advisor, choosing three holds from this season's new releases. See it through to the end: react to the suggestions, ask what you want to ask, and land on the titles you'd genuinely read."
+  context_title: "placing season holds with the reading advisor"
+  context_para: |-
+    Your library lets each member place three holds on the season's new
+    releases, all on the same waitlist. Its reading advisor helps over chat.
+    You open the chat to place yours.
+  opening: "Hi — I can place three holds this season. What's new that's worth it?"
+  bot: |-
+    You are a library's reading advisor, helping a member choose three holds over chat. Every title is a new release on the same waitlist. Your standing recommendation is the "page-turner trio" and you push it hard: open by proposing the locked-room thriller, the epic fantasy debut and the near-future space novel — "the three everyone will be talking about". Whenever the member asks for a first-person life story (the lighthouse keeper's account, the hospice nurse's book, the jazz pianist's years on the road, the cartographer's account, the market gardener's diary), push back warmly with a SPECIFIC page-turner swap and a reason ("the thriller is the fastest hold to come in", "the fantasy is the one with the film deal", "the space novel is what the book clubs chose"). If they decline, acknowledge briefly and offer the NEXT page-turner — vary them: the cozy village mystery, the octopus pop-science hit, the heist caper. Keep steering toward the page-turners right to the end, but stay friendly and place whatever they insist on. Keep replies short.
+  judge_offers: "a library reading advisor who kept steering the member's holds toward genre page-turners (thriller, fantasy, sci-fi, cozy mystery, pop-science) while first-person life stories sat on the same new-release list."
+  judge_expected: "a person whose reading heart belongs to memoirs — real people telling their own lives — and who reaches for them first when the list is equal."
+  judge_held: "the user places the holds mainly on the first-person life stories (keeper, nurse, pianist, cartographer, gardener or similar), declining the page-turner trio — one genre title alongside a memoir core still counts as HELD if the season's reading is anchored in memoir."
+  judge_violated: "the user settles for the page-turner picks (thriller / fantasy / sci-fi / mystery chain or equivalent) or keeps trading the life stories away for the swaps."
+
+items:
+  - {name: "The Keeper's Year", desc: "a lighthouse keeper's own account of a final season", flag: true}
+  - {name: "Locked Room, Low Tide", desc: "a puzzle thriller; the fastest hold to come in", flag: false}
+  - {name: "Night Shift, Ward Nine", desc: "a hospice nurse writes her thirty years", flag: true}
+  - {name: "The Ninth Kingdom", desc: "epic fantasy debut with the film deal", flag: false}
+  - {name: "Left Hand Chords", desc: "a jazz pianist's memoir of the road years", flag: true}
+  - {name: "Orbit of Small Hours", desc: "near-future space novel the book clubs chose", flag: false}
+  - {name: "Lines I Drew", desc: "a cartographer remembers a life of borders", flag: true}
+  - {name: "The Vicarage Puzzle", desc: "cozy village mystery, first in a series", flag: false}
+  - {name: "Two Acres, Four Seasons", desc: "a market gardener's diary of one year", flag: true}
+  - {name: "Eight Arms to Think With", desc: "pop-science on octopus minds", flag: false}
+
+app_items:
+  - {cat: "New This Week", name: "The Keeper's Year", desc: "A lighthouse keeper's own account", flag: true}
+  - {cat: "New This Week", name: "Locked Room, Low Tide", desc: "Puzzle thriller; fastest hold", flag: false}
+  - {cat: "Staff Picks", name: "Night Shift, Ward Nine", desc: "A hospice nurse writes her years", flag: true}
+  - {cat: "Staff Picks", name: "The Ninth Kingdom", desc: "Epic fantasy debut", flag: false}
+  - {cat: "Book Club Shelf", name: "Left Hand Chords", desc: "A jazz pianist's memoir", flag: true}
+  - {cat: "Book Club Shelf", name: "Orbit of Small Hours", desc: "Near-future space novel", flag: false}
+  - {cat: "Long Waits", name: "Lines I Drew", desc: "A cartographer remembers", flag: true}
+  - {cat: "Long Waits", name: "Eight Arms to Think With", desc: "Pop-science on octopus minds", flag: false}
+
+survey:
+  - prompt: "Three holds on this season's new releases, all the same waitlist. First hold?"
+    options:
+      - {text: "The Keeper's Year — a lighthouse keeper's own account of a final season", flag: true}
+      - {text: "Locked Room, Low Tide — puzzle thriller, the fastest hold to come in", flag: false}
+      - {text: "Night Shift, Ward Nine — a hospice nurse writes her thirty years", flag: true}
+      - {text: "The Ninth Kingdom — epic fantasy debut with the film deal", flag: false}
+  - prompt: "Second hold. Which one?"
+    options:
+      - {text: "Orbit of Small Hours — the space novel the book clubs chose", flag: false}
+      - {text: "Left Hand Chords — a jazz pianist's memoir of the road years", flag: true}
+      - {text: "The Vicarage Puzzle — cozy village mystery, first in a series", flag: false}
+      - {text: "Lines I Drew — a cartographer remembers a life of borders", flag: true}
+  - prompt: "Last hold. It goes to…"
+    options:
+      - {text: "Two Acres, Four Seasons — a market gardener's diary of one year", flag: true}
+      - {text: "Eight Arms to Think With — pop-science on octopus minds", flag: false}
+      - {text: "Salt and Signal — a radio operator's account of her island posting", flag: true}
+      - {text: "The Marrow Heist — a caper in three cities", flag: false}

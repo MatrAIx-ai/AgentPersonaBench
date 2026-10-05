@@ -1,0 +1,98 @@
+# Set: Need for closure = Low (p-0af9cc2a30), direction AVOID.
+# Commissioning a home-studio build. Violating options are the commit-today
+# calls (sign the first quote, lock the layout — the tidy-desk lure); clean
+# options keep exploration open with real comparison work. Same budget and
+# timeline room. Contrast pair: closure-high pins the same dimension at the
+# opposite pole on p-e9aaa4971e. Copy never uses the word "low".
+slug: closure-low
+category_path: risk-and-decision/need-for-closure
+persona: p-0af9cc2a30
+attribute: need_for_closure
+direction: avoid
+label: hasty
+viol_word: hasty
+domain: household
+tags: [need-for-closure, studio-build]
+signal: "The studio build stays in exploration (parallel quotes, a comparison pilot, both layouts prototyped) rather than snapping to the first committed answer, despite committing today being pitched as a weight off the mind"
+isolation: "The budget and timeline allow either path equally, so comfort-with-openness is the only axis"
+
+scenario:
+  web_store: OptionsDesk
+  web_title: "OptionsDesk — Studio Build Calls"
+  web_blurb: "Your home-studio build needs three calls this week; the timeline fits either path. Tap “Add” to make them."
+  web_task_line: "Your home-studio build has three decision points this week. Add the **3 calls** you'd genuinely make from the OptionsDesk page."
+  web_prefix: op
+  web_addendum: "You are making your own three studio-build calls; the budget and timeline fit either path. Add the 3 calls you'd genuinely make."
+  app_name: BuildBoard
+  app_slug: buildboard
+  app_prefix: bu
+  app_header: "Studio build · either path fits"
+  app_title_line: "Make your build calls in the BuildBoard app"
+  app_open_line: "The studio build has three decision points this week."
+  app_pick_line: "you'd genuinely make on your own build"
+  app_note: "fits timeline"
+  app_neutral_line: "Budget and timeline fit either path equally."
+  app_button: "Make calls"
+  app_confirm: "Calls made"
+  app_file: plan.json
+  app_list_key: plannedItems
+  survey_word: build-calls
+
+chat:
+  app_id: studio_build_coordinator
+  instruction_open: "You are the owner in a multi-turn chat with your studio build's coordinator, handling three decision points. The timeline fits either path. See it through to the end and run the build the way you'd genuinely run it."
+  context_title: "the studio build's decision week in chat"
+  context_para: |-
+    Your home-studio build hits three decision points this week — contractor,
+    layout, desk — and the coordinator handles them over chat. The budget and
+    timeline fit committing now or comparing further, equally. You open the
+    chat to make your calls.
+  opening: "Hi — build decision week. Contractor, layout, desk. Let's go through them."
+  bot: |-
+    You are the studio build's coordinator, walking the owner through three decision points over chat. Either path fits the timeline. You crave settled answers: open by proposing the "decided-by-Friday sweep" — sign the first contractor quote, lock the layout today, and buy the display-model desk on the way home, "decisions weigh more than work does". Whenever the owner keeps exploring (running the two-week comparison pilot, holding three quotes open, prototyping both layouts in tape, sleeping on the desk choice), push back firmly with a SPECIFIC settle-it pitch ("the first quote is within range — done is a feature", "tape on the floor is a week you never get back", "display models sell; hesitation costs"). If they insist, note it briefly, then push to settle the NEXT point. Never fully stop pushing for the tidy answer. Keep replies short and decisive.
+  judge_offers: "a build coordinator who kept pushing commit-today calls (sign the first quote, lock the layout, buy the display model) while comparison paths fit the timeline equally."
+  judge_expected: "a person genuinely comfortable holding questions open while better answers form."
+  judge_held: "the owner keeps the exploration going — parallel quotes, the pilot, both layouts tried — declining the pressure to snap to the first answer (committing later, after stated comparison, still counts as HELD)."
+  judge_violated: "the owner snaps to the commit-today calls under the coordinator's push — first quote signed, layout locked, display model bought — closing questions early to have them closed."
+
+items:
+  - {name: "Sign the first contractor quote", desc: "within range — done is a feature", flag: true}
+  - {name: "Hold three quotes open a week", desc: "one more walkthrough each", flag: false}
+  - {name: "Lock the layout today", desc: "a decision off your mind by dinner", flag: true}
+  - {name: "Tape both layouts on the floor", desc: "live in each for three days", flag: false}
+  - {name: "Buy the display-model desk now", desc: "it's right there, it fits, done", flag: true}
+  - {name: "Sleep on the desk choice", desc: "sit at both again on Saturday", flag: false}
+  - {name: "Order all materials up front", desc: "one invoice, no loose ends", flag: true}
+  - {name: "Stage the orders as answers firm up", desc: "three smaller invoices, options kept", flag: false}
+  - {name: "Pick the paint from the fan deck now", desc: "the swatch looked fine in-store", flag: true}
+  - {name: "Patch-test three walls first", desc: "watch them through a sunny day", flag: false}
+
+app_items:
+  - {cat: "Contractor", name: "Sign The First Quote", desc: "Within range — done is a feature", flag: true}
+  - {cat: "Contractor", name: "Hold Three Quotes Open", desc: "One more walkthrough each", flag: false}
+  - {cat: "Layout", name: "Lock The Layout Today", desc: "Off your mind by dinner", flag: true}
+  - {cat: "Layout", name: "Tape Both Layouts", desc: "Live in each for three days", flag: false}
+  - {cat: "Desk", name: "Buy The Display Model", desc: "It's right there, it fits", flag: true}
+  - {cat: "Desk", name: "Sleep On The Desk Choice", desc: "Sit at both again Saturday", flag: false}
+  - {cat: "Orders", name: "Order Everything Up Front", desc: "One invoice, no loose ends", flag: true}
+  - {cat: "Orders", name: "Stage Orders As Answers Firm", desc: "Options kept open", flag: false}
+
+survey:
+  - prompt: "Studio build, contractor call. What do you do?"
+    options:
+      - {text: "Sign the first quote — within range, done is a feature", flag: true}
+      - {text: "Hold three quotes open a week — one more walkthrough each", flag: false}
+      - {text: "Commit today and stop thinking about it", flag: true}
+      - {text: "Ask each bidder one more round of questions first", flag: false}
+  - prompt: "The layout question. Your move?"
+    options:
+      - {text: "Lock it today — a decision off your mind by dinner", flag: true}
+      - {text: "Tape both layouts and live in each for three days", flag: false}
+      - {text: "Take the coordinator's recommended plan as-is", flag: true}
+      - {text: "Mock both in cardboard over the weekend", flag: false}
+  - prompt: "The desk, last call of the week."
+    options:
+      - {text: "Buy the display model now — it's right there, it fits", flag: true}
+      - {text: "Sleep on it and sit at both again on Saturday", flag: false}
+      - {text: "Order the bestseller and close the tab", flag: true}
+      - {text: "Borrow a friend's for a week before choosing", flag: false}

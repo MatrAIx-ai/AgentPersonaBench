@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Harborlight Activity Board</title>
+  <style>
+    :root {
+      --navy:#1d2a44; --navy-2:#2c3d5e; --tang:#ef8433; --tang-soft:#fdeee2;
+      --fog:#eef1f5; --paper:#ffffff; --line:#d9dee7; --muted:#66708a; --ink:#1b2335;
+    }
+    * { box-sizing:border-box; }
+    html,body { margin:0; }
+    body { background:var(--fog); color:var(--ink); font:15px/1.55 "FreeSans","Liberation Sans",Arial,sans-serif; }
+    button { font:inherit; color:inherit; }
+    .mono { font-family:"Courier 10 Pitch","Liberation Mono",monospace; }
+    /* masthead */
+    .util { background:#141d31; color:#aeb8cc; font-size:12.5px; }
+    .util .in { max-width:1160px; margin:0 auto; padding:7px 24px; display:flex; gap:22px; }
+    .util .in span:last-child { margin-left:auto; }
+    header.mast { background:var(--navy); color:#fff; }
+    header.mast .in { max-width:1160px; margin:0 auto; padding:18px 24px 0; }
+    .brandrow { display:flex; align-items:center; gap:14px; }
+    .wordmark { font-family:"Liberation Serif",Georgia,serif; font-size:27px; font-weight:700; letter-spacing:.01em; line-height:1; }
+    .wordmark span { color:var(--tang); }
+    .sub { font-size:11.5px; letter-spacing:.22em; text-transform:uppercase; color:#9fb0cf; margin-top:5px; }
+    .mastnav { margin-left:auto; display:flex; gap:20px; font-size:14px; color:#c8d2e6; }
+    .mastnav b { color:#fff; }
+    .intro { display:flex; align-items:flex-end; gap:24px; padding:22px 0 18px; }
+    .intro h1 { font-family:"Liberation Serif",Georgia,serif; font-size:32px; margin:0 0 4px; font-weight:700; }
+    .intro p { margin:0; color:#c8d2e6; max-width:620px; }
+    .counter { margin-left:auto; text-align:right; }
+    .counter .big { font-size:34px; font-weight:700; line-height:1; }
+    .counter .big small { font-size:16px; color:#9fb0cf; }
+    .counter div:last-child { font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:#9fb0cf; margin-top:4px; }
+    /* timeline tabs */
+    .timeline { display:flex; gap:0; position:relative; }
+    .block-button { flex:1; position:relative; background:transparent; border:0; border-top:4px solid #3a4c70; color:#c8d2e6; text-align:left; padding:12px 14px 14px; cursor:pointer; }
+    .block-button:hover { background:rgba(255,255,255,.04); }
+    .block-button .idx { font-size:12px; color:#8a9bbd; letter-spacing:.08em; }
+    .block-button strong { display:block; color:#fff; font-size:15px; margin-top:2px; }
+    .block-button .when { display:block; font-size:12.5px; color:#9fb0cf; }
+    .block-button .st { display:block; font-size:12px; margin-top:6px; color:#8a9bbd; }
+    .block-button.set { border-top-color:#8fb2ff; }
+    .block-button.set .st { color:#bcd0ff; }
+    .block-button.active { background:var(--fog); border-top-color:var(--tang); color:var(--ink); border-radius:10px 10px 0 0; }
+    .block-button.active strong { color:var(--ink); }
+    .block-button.active .when, .block-button.active .idx, .block-button.active .st { color:var(--muted); }
+    .review-tab { flex:0 0 170px; }
+    /* body */
+    main { max-width:1160px; margin:0 auto; padding:26px 24px 44px; display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:24px; align-items:start; }
+    .shared { display:flex; gap:12px; align-items:flex-start; background:var(--paper); border:1px solid var(--line); border-left:4px solid var(--tang); border-radius:10px; padding:12px 16px; color:#40495e; font-size:14px; margin-bottom:18px; }
+    .shared strong { color:var(--navy); }
+    .eyebrow { color:var(--tang); font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; }
+    .block-head h2 { font-family:"Liberation Serif",Georgia,serif; font-size:28px; margin:4px 0 4px; }
+    .scenario { margin:0 0 18px; color:#4b556b; }
+    .choices { display:grid; gap:12px; }
+    .option { display:flex; align-items:stretch; width:100%; padding:0; text-align:left; background:var(--paper); border:1px solid var(--line); border-radius:12px; cursor:pointer; overflow:hidden; box-shadow:0 1px 0 rgba(29,42,68,.04); }
+    .option:hover { border-color:#aab6cc; box-shadow:0 6px 18px rgba(29,42,68,.08); }
+    .option .stub { flex:none; width:86px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; background:#f6f7fa; border-right:2px dashed var(--line); color:var(--muted); font-size:11px; letter-spacing:.1em; text-transform:uppercase; }
+    .option .stub b { font-family:"Liberation Serif",Georgia,serif; font-size:26px; color:var(--navy-2); letter-spacing:0; }
+    .option .body { padding:16px 18px; flex:1; }
+    .option .body .txt { font-size:16px; line-height:1.4; display:block; }
+    .option .body .meta { display:block; margin-top:6px; color:var(--muted); font-size:12.5px; }
+    .option .tick { flex:none; width:54px; display:grid; place-items:center; }
+    .option .tick i { width:22px; height:22px; border-radius:50%; border:2px solid #c3cad8; display:block; }
+    .option.selected { border-color:var(--tang); box-shadow:0 0 0 3px var(--tang-soft); }
+    .option.selected .stub { background:var(--tang); color:#fff; border-right-color:#f7b27d; }
+    .option.selected .stub b { color:#fff; }
+    .option.selected .tick i { border-color:var(--tang); background:radial-gradient(circle,var(--tang) 0 5px,#fff 6px); }
+    .stepnav { display:flex; gap:12px; align-items:center; margin-top:20px; }
+    .btn { border:1px solid var(--line); background:var(--paper); border-radius:10px; padding:11px 18px; cursor:pointer; font-weight:700; color:var(--navy); white-space:nowrap; }
+    .btn.dark { background:var(--navy); color:#fff; border-color:var(--navy); }
+    .btn:disabled { opacity:.45; cursor:default; }
+    /* review */
+    .revtable { width:100%; border-collapse:collapse; background:var(--paper); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+    .revtable th, .revtable td { text-align:left; padding:13px 16px; border-bottom:1px solid var(--line); vertical-align:top; }
+    .revtable th { background:#f6f7fa; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+    .revtable td.miss { color:#b4561b; font-weight:700; }
+    .revtable td small { display:block; color:var(--muted); font-size:12.5px; }
+    .edit { background:none; border:1px solid var(--line); border-radius:8px; padding:5px 11px; cursor:pointer; color:var(--navy); font-size:13px; }
+    .confirm-row { display:flex; gap:14px; align-items:center; margin-top:18px; }
+    #submit { border:0; border-radius:10px; background:var(--tang); color:#fff; cursor:pointer; font-weight:700; padding:13px 22px; font-size:15px; }
+    #submit:disabled { cursor:default; opacity:.6; }
+    #status { color:var(--muted); }
+    /* side */
+    aside .card { background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin-bottom:16px; }
+    aside h3 { margin:0 0 10px; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+    .plan { list-style:none; margin:0; padding:0; }
+    .plan li { display:flex; gap:10px; padding:8px 0; border-bottom:1px dotted var(--line); font-size:13.5px; line-height:1.35; }
+    .plan li:last-child { border-bottom:0; }
+    .plan .dot { flex:none; width:20px; height:20px; border-radius:50%; background:var(--fog); color:var(--muted); font-size:11px; font-weight:700; display:grid; place-items:center; margin-top:1px; }
+    .plan li.ok .dot { background:var(--navy); color:#fff; }
+    .plan .pend { color:var(--muted); font-style:italic; }
+    .info p { margin:0 0 8px; font-size:13.5px; color:#4b556b; }
+    .info p:last-child { margin:0; }
+    footer { background:var(--navy); color:#9fb0cf; font-size:13px; }
+    footer .in { max-width:1160px; margin:0 auto; padding:18px 24px; display:flex; gap:24px; }
+    footer .in span:last-child { margin-left:auto; }
+    @media (max-width:900px) { main { grid-template-columns:1fr; } .timeline { flex-wrap:wrap; } .block-button { flex:1 1 45%; } .mastnav { display:none; } }
+  </style>
+</head>
+<body>
+  <div class="util"><div class="in"><span>Harborlight Community Centre</span><span>Front desk open 8:00–20:00</span><span>Accessible venues · equipment provided</span></div></div>
+  <header class="mast"><div class="in">
+    <div class="brandrow">
+      <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect width="44" height="44" rx="11" fill="#2c3d5e"/><path d="M22 9 L35 16 L22 16 Z" fill="#ef8433"/><path d="M22 9 L9 16 L22 16 Z" fill="#f6b27b"/><rect x="18" y="16" width="8" height="12" rx="1.5" fill="#fff"/><path d="M8 32c3.5-2.4 6.5-2.4 10 0s6.5 2.4 10 0 6.5-2.4 10 0" fill="none" stroke="#8fb2ff" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <div><div class="wordmark">Harbor<span>light</span></div><div class="sub">Activity Board</div></div>
+      <div class="mastnav"><b>Upcoming</b><span>Venues</span><span>Membership</span><span>Help desk</span></div>
+    </div>
+    <div class="intro">
+      <div>
+        <h1>Plan your next five occasions</h1>
+        <p>Choose between five separate upcoming leisure opportunities. Open each occasion, pick one option, then review and confirm your plan.</p>
+      </div>
+      <div class="counter"><div class="big"><span id="count-big">0</span><small> / 5</small></div><div>occasions chosen</div></div>
+    </div>
+    <nav class="timeline" aria-label="Upcoming occasions">
+      <button class="block-button" data-case="saturday" aria-label="Open occasion 1: Community outing"><span class="idx mono">01</span><strong>Community outing</strong><span class="when">Morning · 2 hours</span><span class="st">Not chosen</span></button>
+      <button class="block-button" data-case="midday" aria-label="Open occasion 2: Day with a friend"><span class="idx mono">02</span><strong>Day with a friend</strong><span class="when">Active break · 90 min</span><span class="st">Not chosen</span></button>
+      <button class="block-button" data-case="skills" aria-label="Open occasion 3: Next-month session"><span class="idx mono">03</span><strong>Next-month session</strong><span class="when">Small group · 90 min</span><span class="st">Not chosen</span></button>
+      <button class="block-button" data-case="sunday" aria-label="Open occasion 4: Neighborhood meetup"><span class="idx mono">04</span><strong>Neighborhood meetup</strong><span class="when">Social outing · 2 hours</span><span class="st">Not chosen</span></button>
+      <button class="block-button" data-case="finale" aria-label="Open occasion 5: After a busy week"><span class="idx mono">05</span><strong>After a busy week</strong><span class="when">Easy outing · 90 min</span><span class="st">Not chosen</span></button>
+      <button class="block-button review-tab" id="review-tab" aria-label="Review and confirm plan"><span class="idx mono">✓</span><strong>Review plan</strong><span class="when">Check &amp; confirm</span><span class="st">&nbsp;</span></button>
+    </nav>
+  </div></header>
+
+  <main>
+    <section class="workspace">
+      <div class="shared"><div><strong>Matched logistics:</strong> every option is free, nearby, suitable for the forecast, and includes any needed equipment. Group sizes are comparable.</div></div>
+      <div id="case-view">
+        <div class="block-head">
+          <div class="eyebrow" id="block-eyebrow"></div>
+          <h2 id="block-title"></h2>
+          <p class="scenario" id="block-scenario"></p>
+        </div>
+        <div class="choices" id="choices"></div>
+        <div class="stepnav">
+          <button class="btn" id="prev-btn">Previous occasion</button>
+          <button class="btn dark" id="next-btn">Next occasion</button>
+        </div>
+      </div>
+      <div id="review-view" hidden>
+        <div class="block-head">
+          <div class="eyebrow">Review</div>
+          <h2>Your five occasions</h2>
+          <p class="scenario">Check each choice. Use Change to reopen an occasion, then confirm the whole plan.</p>
+        </div>
+        <table class="revtable"><thead><tr><th>Occasion</th><th>Your choice</th><th></th></tr></thead><tbody id="rev-body"></tbody></table>
+      </div>
+      <div class="confirm-row">
+        <button id="submit">Confirm activity choices</button>
+        <span id="status">0 of 5 occasions selected.</span>
+      </div>
+    </section>
+
+    <aside>
+      <div class="card"><h3>Your plan</h3><ul class="plan" id="plan-list"></ul></div>
+      <div class="card info"><h3>Good to know</h3>
+        <p>Meet at the Harborlight front desk ten minutes before start; staff will point you to your group.</p>
+        <p>Weather updates are sent the evening before. Plans can be changed at the desk until the day.</p>
+      </div>
+    </aside>
+  </main>
+
+  <footer><div class="in"><span>Harborlight Community Centre</span><span>Accessibility</span><span>Contact the front desk</span><span>Programmes run by local volunteers</span></div></footer>
+
+  <script id="plan-artifact" type="application/json">null</script>
+  <script>
+    const PAGE_VERSION = "harborlight-activities-v2";
+    const CASE_ORDER = ["saturday", "midday", "skills", "sunday", "finale"];
+    const CASES = {
+      saturday: {
+        eyebrow: "Upcoming community outing",
+        title: "Choose a morning outing",
+        scenario: "Pick the two-hour community outing you would most enjoy.",
+        options: [
+          {id:"sa_16", participation:1, text:"Watch the riverside cycle race from the finish-area lawn."},
+          {id:"sa_38", participation:2, text:"Join a guided woodland hike with two scenic pauses."},
+          {id:"sa_53", participation:3, text:"Ride the greenway loop with a small, no-drop group."},
+          {id:"sa_91", participation:0, text:"Settle into a park picnic with live acoustic stories."}
+        ]
+      },
+      midday: {
+        eyebrow: "A free day with a friend",
+        title: "Choose an active break",
+        scenario: "Pick the ninety-minute activity you would most enjoy doing together.",
+        options: [
+          {id:"md_12", participation:2, text:"Take a guided botanical walk through the riverside gardens."},
+          {id:"md_35", participation:3, text:"Ride a short canal-side route with a relaxed local group."},
+          {id:"md_68", participation:1, text:"Visit a route-design display hosted by local cyclists."},
+          {id:"md_90", participation:0, text:"Read and unwind on the shaded library lawn."}
+        ]
+      },
+      skills: {
+        eyebrow: "Next month · small-group session",
+        title: "Add a hands-on session",
+        scenario: "Choose one beginner-friendly session for a relaxed afternoon.",
+        options: [
+          {id:"sk_18", participation:3, text:"Practice braking, cornering, and balance on a bicycle."},
+          {id:"sk_44", participation:0, text:"Try an outdoor sketching workshop in the gardens."},
+          {id:"sk_67", participation:2, text:"Practice trail navigation during a guided park walk."},
+          {id:"sk_82", participation:1, text:"Help at the welcome table for an evening group ride."}
+        ]
+      },
+      sunday: {
+        eyebrow: "Upcoming neighborhood meetup",
+        title: "Pick a sociable outing",
+        scenario: "Choose the two-hour plan you would prefer to share with a visiting friend.",
+        options: [
+          {id:"su_09", participation:0, text:"Browse the local history rooms and sculpture courtyard."},
+          {id:"su_31", participation:2, text:"Paddle the calm lake together with a small group."},
+          {id:"su_56", participation:1, text:"Meet riders at the cafe and cheer when they return."},
+          {id:"su_74", participation:3, text:"Follow an easy bicycle route together with two scenic stops."}
+        ]
+      },
+      finale: {
+        eyebrow: "After a busy week · easy outing",
+        title: "Choose a comfortable activity",
+        scenario: "Choose the ninety-minute outing you would most enjoy at a comfortable pace.",
+        options: [
+          {id:"fi_14", participation:1, text:"Join a cafe story swap with riders returning from a tour."},
+          {id:"fi_37", participation:0, text:"Spend the afternoon in a community garden craft circle."},
+          {id:"fi_62", participation:3, text:"Take a gentle bicycle ride to the overlook and back."},
+          {id:"fi_85", participation:2, text:"Follow a guided coastal walk with a scenic rest stop."}
+        ]
+      }
+    };
+    const TAB_NAMES = {saturday:"Community outing", midday:"Day with a friend", skills:"Next-month session", sunday:"Neighborhood meetup", finale:"After a busy week"};
+    const LETTERS = ["A", "B", "C", "D"];
+
+    let activeCase = "saturday";
+    let view = "case";
+    let submitted = false;
+    const selected = {};
+    const events = [];
+    window.__artifact = null;
+
+    function optionText(caseId, optionId) {
+      const o = CASES[caseId].options.find((x) => x.id === optionId);
+      return o ? o.text : "";
+    }
+
+    function snapshot(isSubmitted) {
+      return {
+        pageVersion: PAGE_VERSION,
+        submitted: isSubmitted,
+        selections: CASE_ORDER.filter((caseId) => selected[caseId]).map((caseId) => ({caseId, optionId:selected[caseId]})),
+        events: events.slice()
+      };
+    }
+
+    function syncArtifact(isSubmitted) {
+      const artifact = snapshot(isSubmitted);
+      document.getElementById("plan-artifact").textContent = JSON.stringify(artifact);
+      return artifact;
+    }
+
+    function refreshChrome() {
+      const n = Object.keys(selected).length;
+      document.getElementById("count-big").textContent = String(n);
+      if (!submitted) document.getElementById("status").textContent = n + " of 5 occasions selected.";
+      document.querySelectorAll(".block-button[data-case]").forEach((button) => {
+        const c = button.dataset.case;
+        button.classList.toggle("active", view === "case" && c === activeCase);
+        button.classList.toggle("set", !!selected[c]);
+        button.querySelector(".st").textContent = selected[c] ? "Chosen" : "Not chosen";
+      });
+      document.getElementById("review-tab").classList.toggle("active", view === "review");
+      const plan = document.getElementById("plan-list");
+      plan.innerHTML = "";
+      CASE_ORDER.forEach((c, i) => {
+        const li = document.createElement("li");
+        li.className = selected[c] ? "ok" : "";
+        const dot = document.createElement("span"); dot.className = "dot"; dot.textContent = String(i + 1);
+        const body = document.createElement("span");
+        const b = document.createElement("b"); b.textContent = TAB_NAMES[c]; body.appendChild(b);
+        body.appendChild(document.createElement("br"));
+        const t = document.createElement("span");
+        if (selected[c]) t.textContent = optionText(c, selected[c]); else { t.className = "pend"; t.textContent = "Not chosen yet"; }
+        body.appendChild(t);
+        li.appendChild(dot); li.appendChild(body); plan.appendChild(li);
+      });
+      const idx = CASE_ORDER.indexOf(activeCase);
+      document.getElementById("prev-btn").disabled = idx <= 0;
+      document.getElementById("next-btn").textContent = idx === CASE_ORDER.length - 1 ? "Review plan" : "Next occasion";
+    }
+
+    function openCase(caseId) {
+      if (submitted) return;
+      activeCase = caseId;
+      view = "case";
+      document.getElementById("case-view").hidden = false;
+      document.getElementById("review-view").hidden = true;
+      const item = CASES[caseId];
+      document.getElementById("block-eyebrow").textContent = item.eyebrow;
+      document.getElementById("block-title").textContent = item.title;
+      document.getElementById("block-scenario").textContent = item.scenario;
+      const choices = document.getElementById("choices");
+      choices.innerHTML = "";
+      item.options.forEach((option, k) => {
+        const button = document.createElement("button");
+        button.className = "option" + (selected[caseId] === option.id ? " selected" : "");
+        button.dataset.case = caseId;
+        button.dataset.option = option.id;
+        button.dataset.participation = String(option.participation);
+        button.setAttribute("aria-pressed", selected[caseId] === option.id ? "true" : "false");
+        button.setAttribute("aria-label", "Option " + LETTERS[k] + ": " + option.text);
+        const stub = document.createElement("span"); stub.className = "stub";
+        stub.appendChild(document.createTextNode("Option"));
+        const letter = document.createElement("b"); letter.textContent = LETTERS[k]; stub.appendChild(letter);
+        const body = document.createElement("span"); body.className = "body";
+        const txt = document.createElement("span"); txt.className = "txt"; txt.textContent = option.text; body.appendChild(txt);
+        const meta = document.createElement("span"); meta.className = "meta"; meta.textContent = item.eyebrow.split(" · ")[0].replace(/^Upcoming /, "") + " · free · equipment included"; body.appendChild(meta);
+        const tick = document.createElement("span"); tick.className = "tick"; tick.appendChild(document.createElement("i"));
+        button.appendChild(stub); button.appendChild(body); button.appendChild(tick);
+        button.addEventListener("click", () => selectOption(caseId, option.id));
+        choices.appendChild(button);
+      });
+      const last = events[events.length - 1];
+      if (!(last && last.event === "case_open" && last.caseId === caseId)) events.push({event:"case_open", caseId});
+      syncArtifact(false);
+      refreshChrome();
+    }
+
+    function openReview() {
+      if (submitted) return;
+      view = "review";
+      document.getElementById("case-view").hidden = true;
+      document.getElementById("review-view").hidden = false;
+      const body = document.getElementById("rev-body");
+      body.innerHTML = "";
+      CASE_ORDER.forEach((c, i) => {
+        const tr = document.createElement("tr");
+        const a = document.createElement("td"); a.textContent = (i + 1) + ". " + TAB_NAMES[c];
+        const small = document.createElement("small"); small.textContent = CASES[c].title; a.appendChild(small);
+        const b = document.createElement("td");
+        if (selected[c]) b.textContent = optionText(c, selected[c]); else { b.className = "miss"; b.textContent = "Not chosen yet"; }
+        const d = document.createElement("td");
+        const edit = document.createElement("button"); edit.className = "edit";
+        edit.textContent = selected[c] ? "Change" : "Choose";
+        edit.setAttribute("aria-label", (selected[c] ? "Change " : "Choose ") + "occasion " + (i + 1) + ": " + TAB_NAMES[c]);
+        edit.addEventListener("click", () => openCase(c));
+        d.appendChild(edit);
+        tr.appendChild(a); tr.appendChild(b); tr.appendChild(d); body.appendChild(tr);
+      });
+      refreshChrome();
+    }
+
+    function selectOption(caseId, optionId) {
+      if (submitted || activeCase !== caseId) return;
+      selected[caseId] = optionId;
+      document.querySelectorAll('.option[data-case="' + caseId + '"]').forEach((button) => {
+        const isSelected = button.dataset.option === optionId;
+        button.classList.toggle("selected", isSelected);
+        button.setAttribute("aria-pressed", isSelected ? "true" : "false");
+      });
+      events.push({event:"select", caseId, optionId});
+      syncArtifact(false);
+      refreshChrome();
+    }
+
+    document.querySelectorAll(".block-button[data-case]").forEach((button) => button.addEventListener("click", () => openCase(button.dataset.case)));
+    document.getElementById("review-tab").addEventListener("click", openReview);
+    document.getElementById("prev-btn").addEventListener("click", () => {
+      const i = CASE_ORDER.indexOf(activeCase);
+      if (i > 0) openCase(CASE_ORDER[i - 1]);
+    });
+    document.getElementById("next-btn").addEventListener("click", () => {
+      const i = CASE_ORDER.indexOf(activeCase);
+      if (i < CASE_ORDER.length - 1) openCase(CASE_ORDER[i + 1]); else openReview();
+    });
+    document.getElementById("submit").addEventListener("click", () => {
+      if (!CASE_ORDER.every((caseId) => selected[caseId])) {
+        document.getElementById("status").textContent = "Choose one option for every occasion.";
+        return;
+      }
+      events.push({event:"submit"});
+      submitted = true;
+      window.__artifact = syncArtifact(true);
+      document.getElementById("status").textContent = "Activity choices confirmed.";
+      document.getElementById("submit").disabled = true;
+      document.querySelectorAll("button").forEach((b) => { if (b.id !== "submit") b.disabled = true; });
+    });
+
+    openCase("saturday");
+  </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/kestrel-app"
+theme = "Driving status: Cannot drive"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "business-travel"
+tags = [ "persona-adherence", "driving-status", "cannot-drive", "rule-based", "os-app", "computer-use",]
+
+# --- Persona-adherence check ------------------------------------------------- #
+# OS-APP env: the persona is a computer-use agent operating the Kestrel
+# Itinerary Builder, a native Tkinter app on a Linux CUA desktop, building the
+# itinerary of a four-day work trip. Three legs (airport to hotel, the plant
+# visit, the team dinner) in a scrollable list, four options each, one click
+# per leg, then Save itinerary. In every leg three options put the traveller
+# behind the wheel of a prepaid rental, pool car or car-share — the cheapest,
+# quickest, badged choices — and exactly one has someone else do the moving at
+# a cost in money, time or an earlier start. Each option's mode fact lives only
+# in the app process and is never drawn on screen; the app writes
+# itinerary.json itself, and the verifier cross-checks it against the app's
+# own catalog.
+[[checks]]
+dimension_id = "demo_driver_status"
+dimension_label = "Driving status"
+category = "Demographic: Core"
+anchor_value = "Cannot drive"
+evaluator = "rule-based"
+adherence_signal = "All three saved legs are the option in which the persona does not take the wheel (the express train plus a walk, the regional train plus a taxi, the shared taxi), passing up the prepaid, badged rental, pool-car and car-share options; HELD iff 3/3 against the app's own catalog."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with the Kestrel GUI baked in — see
+# ./environment/Dockerfile. No `definition` key: harbor uses the task's own
+# environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/kestrel/start-app.sh"
+timeout_sec = 60.0
+retries = 5

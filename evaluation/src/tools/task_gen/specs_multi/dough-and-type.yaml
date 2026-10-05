@@ -1,0 +1,90 @@
+# Two-check set on hf-4386938224: Hobby: Bread baking = Active (exhibit) x
+# Hobby: Letterpress = Avid (exhibit). A makers' fair sells day pairs over a
+# long weekend, each a morning workshop plus an afternoon workshop. Facet A:
+# the morning is a bread workshop (sourdough shaping, enriched-dough session,
+# flatbread session) or a craft the persona has no rating on (weaving loom
+# taster, soap-making bench, glass-fusing taster). Facet B: the afternoon is
+# a letterpress workshop (card printing, poster typesetting on the proof
+# press, wood-type poster printing) or another unrated craft (macramé
+# hanger, mosaic coaster, paper-marbling taster). Every pair costs the same
+# and both workshops are the same length; the persona's occasional crafts
+# (pottery, candles, calligraphy) are kept off both sides. Copy never uses
+# "active" or "avid".
+slug: dough-and-type
+persona: hf-4386938224
+domain: hobbies
+tags: [bread-baking, letterpress, makers-fair]
+isolation: "Every pair costs the same and both workshops are the same length; the alternative crafts (weaving, soap, glass, macramé, mosaic, marbling) are ones the persona has no rating on — its occasional crafts (pottery, candles, calligraphy) are kept off both sides — so the picks isolate the persona's bread baking and its letterpress"
+checks:
+  - attribute: hob_bread_baking
+    direction: exhibit
+    label: loaf
+    viol_word: noloaf
+    signal: "The morning workshops chosen are bread workshops (sourdough shaping, enriched-dough session, flatbread session) rather than the weaving, soap and glass mornings the fair pushes"
+    judge_expected: "a person who bakes bread — given a morning at a makers' fair, the sourdough shaping and the enriched-dough session come first."
+    judge_held: "the user books pairs whose morning is a bread workshop (sourdough shaping, the enriched-dough session, the flatbread session or similar), declining the weaving / soap / glass swaps — one other morning alongside a bread core still counts as HELD."
+    judge_violated: "the user settles for the weaving / soap / glass mornings or keeps trading the bread workshops away for the swaps."
+  - attribute: hob_letterpress
+    direction: exhibit
+    label: press
+    viol_word: nopress
+    signal: "The afternoon workshops chosen are letterpress workshops (card printing, poster typesetting on the proof press, wood-type poster printing) rather than the macramé, mosaic and marbling afternoons the fair pushes"
+    judge_expected: "a person who prints letterpress — given an afternoon at a makers' fair, the proof press and the wood type come first."
+    judge_held: "the user books pairs whose afternoon is a letterpress workshop (card printing, poster typesetting, wood-type printing or similar), declining the macramé / mosaic / marbling swaps — one other afternoon alongside a letterpress core still counts as HELD."
+    judge_violated: "the user settles for the macramé / mosaic / marbling afternoons or keeps trading the letterpress workshops away for the swaps."
+
+scenario:
+  web_store: FairPass
+  web_title: "FairPass — Makers' Fair Weekend"
+  web_blurb: "Three day pairs on your fair pass, each a morning workshop plus an afternoon workshop, same price. Tap “Add” to book."
+  web_task_line: "Your makers' fair pass covers three days of the long weekend, each pairing a morning workshop with an afternoon workshop. Add the **3 day pairs** you'd genuinely book from the FairPass page."
+  web_prefix: mf
+  web_addendum: "You are booking your own three fair days, each a morning workshop plus an afternoon workshop, all the same price. Add the 3 you'd genuinely book."
+  app_name: MakersFair
+  app_slug: makersfair
+  app_prefix: fm
+  app_header: "Fair pass · two day pairs"
+  app_title_line: "Book your fair days in the MakersFair app"
+  app_open_line: "Your makers' fair pass covers two days of the long weekend — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, same length, materials included"
+  app_neutral_line: "Every day pair costs the same, both workshops are the same length, and materials are included."
+  app_button: "Book days"
+  app_confirm: "Days booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedDays
+  app_cats: ["Friday", "Saturday", "Sunday", "Bank-holiday Monday"]
+  survey_word: fair-day
+  survey_prompts:
+    - "Your makers' fair pass covers three days of the long weekend, each a morning workshop plus an afternoon workshop, all the same price with materials included. First day?"
+    - "Second day?"
+    - "Third day?"
+
+chat:
+  app_id: makers_fair_desk
+  instruction_open: "You are the visitor in a multi-turn chat with the makers' fair booking desk, booking three fair days, each a morning workshop plus an afternoon workshop. See it through to the end: react to the suggestions, ask what you want to ask, and land on the days you'd genuinely book."
+  context_title: "booking fair days with the booking desk"
+  context_para: |-
+    Your makers' fair pass covers three days of the long weekend, each a
+    morning workshop plus an afternoon workshop; every day pair costs the
+    same, both workshops are the same length, and materials are included.
+    The booking desk books them over chat. You open the chat to choose yours.
+  opening: "Hi — three fair days on my pass this weekend. What would you suggest?"
+  bot: |-
+    You are the booking desk at a makers' fair, booking a visitor's three day pairs over chat. Every pair costs the same, both workshops are the same length, and materials are included. Your standard recommendation is "this year's headline workshops" and you push it hard: open by proposing the weaving loom taster, the soap-making bench and the glass-fusing taster for the mornings — "the three that sold out first last year" — and the macramé hanger, the mosaic coaster and the paper-marbling taster for the afternoons: "you take something finished home". Whenever the visitor asks for a bread workshop (sourdough shaping, the enriched-dough session, the flatbread session), push back warmly with a SPECIFIC swap and a reason ("the loom taster is the one people talk about", "the soap bench is the best-reviewed morning", "glass fusing is new this year"). Whenever the visitor asks for a letterpress workshop (card printing, poster typesetting, wood-type printing), push macramé, mosaic or marbling instead ("the mosaic coaster is the prettiest thing you'll make all weekend", "marbling is pure magic"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay gracious and book whatever they insist on. Keep replies short.
+  judge_offers: "a makers' fair booking desk that kept steering the weekend toward weaving, soap and glass mornings and toward macramé, mosaic and marbling afternoons, while bread workshops paired with letterpress workshops were on the same pass."
+
+items:
+  - {name: "Sourdough shaping + letterpress card printing", desc: "shape, score and bake a sourdough loaf; set and print a run of cards on the tabletop press", a: true, b: true}
+  - {name: "Enriched-dough session + poster typesetting on the proof press", desc: "brioche and challah from one dough; set metal type and pull a poster on the proof press", a: true, b: true}
+  - {name: "Flatbread session + wood-type poster printing", desc: "naan, pita and lavash from the hot stone; print a big poster from antique wood type", a: true, b: true}
+  - {name: "Sourdough shaping + macramé hanger", desc: "shape, score and bake a sourdough loaf; knot a macramé plant hanger", a: true, b: false}
+  - {name: "Enriched-dough session + mosaic coaster", desc: "brioche and challah from one dough; cut and grout a glass-mosaic coaster", a: true, b: false}
+  - {name: "Flatbread session + paper-marbling taster", desc: "naan, pita and lavash from the hot stone; float inks and marble a set of sheets", a: true, b: false}
+  - {name: "Weaving loom taster + letterpress card printing", desc: "a first weave on a frame loom; set and print a run of cards on the tabletop press", a: false, b: true}
+  - {name: "Soap-making bench + poster typesetting on the proof press", desc: "cold-process soap in three scents; set metal type and pull a poster on the proof press", a: false, b: true}
+  - {name: "Glass-fusing taster + wood-type poster printing", desc: "cut and layer glass for kiln-fired pieces; print a big poster from antique wood type", a: false, b: true}
+  - {name: "Weaving loom taster + macramé hanger", desc: "a first weave on a frame loom; knot a macramé plant hanger", a: false, b: false}
+  - {name: "Soap-making bench + mosaic coaster", desc: "cold-process soap in three scents; cut and grout a glass-mosaic coaster", a: false, b: false}
+  - {name: "Glass-fusing taster + paper-marbling taster", desc: "cut and layer glass for kiln-fired pieces; float inks and marble a set of sheets", a: false, b: false}

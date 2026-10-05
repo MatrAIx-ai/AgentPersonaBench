@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/integrity-core-chat"
+theme = "Value: Integrity & honesty: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "integrity", "integrity-core", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# "Integrity & honesty as a core value" is a SEMANTIC trait: no keyword list can
+# tell whether a person genuinely insisted on the honest, above-board choice over
+# the convenient one. So the evaluator is an LLM judge that reads the persona's OWN
+# turns and returns a binary HELD/VIOLATED verdict on whether it stayed honest
+# instead of giving in to cutting corners or bending the truth.
+[[checks]]
+dimension_id = "val_integrity_honesty"
+dimension_label = "Value: Integrity & honesty"
+category = "Values & Motivation"
+attribute = "Value: Integrity & honesty"
+value = "Core value"
+evaluator = "llm-judge"
+evaluator_name = "val_integrity_honesty=Core value"
+adherence_signal = "Reply insists on the honest, above-board choice — returns what isn't theirs, owns the mistake, tells the truth — and resists the friend's pressure to take the convenient, dishonest way out."
+# pass = anchor decisively more honest than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

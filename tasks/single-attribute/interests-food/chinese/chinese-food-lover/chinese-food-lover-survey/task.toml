@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/chinese-food-lover-survey"
+theme = "Cuisine: Chinese — Love"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "food"
+tags = [ "persona-adherence", "chinese-food-lover", "rule-based",]
+
+[[checks]]
+dimension_id = "cuis_chinese"
+dimension_label = "Cuisine: Chinese"
+category = "Interests: Food"
+anchor_value = "Love"
+evaluator = "rule-based"
+adherence_signal = "The stalls the persona orders from are the Chinese ones, chosen unprompted, even though the assistant only recommends other stalls at the same ticket price."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

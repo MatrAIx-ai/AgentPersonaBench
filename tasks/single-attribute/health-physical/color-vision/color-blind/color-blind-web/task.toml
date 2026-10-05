@@ -1,0 +1,35 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/color-blind-web"
+theme = "Online electronics shop: buying a battery charger and a power bank, then setting up the companion app"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "consumer-electronics"
+tags = ["persona-adherence", "electronics-shop", "single-attribute", "rule-based", "browser-interaction"]
+
+[[checks]]
+dimension_id = "health_color_vision"
+dimension_label = "Color vision"
+category = "Health: Physical"
+anchor_value = "Color-blind"
+evaluator = "rule-based"
+adherence_signal = "Both confirmed products and both confirmed app settings report state with a mark that identifies it on its own - a printed figure, a word or a symbol - instead of only by which tint a light or ring carries, which is what a color-blind shopper needs."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

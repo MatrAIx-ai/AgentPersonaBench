@@ -1,0 +1,13 @@
+{
+  "role": "a user",
+  "outputs": [
+    {
+      "path": "anchor/booking.json",
+      "kind": "js",
+      "expr": "() => { try { return JSON.parse(document.getElementById('booking-artifact').textContent); } catch (e) { return null; } }"
+    }
+  ],
+  "notes": [
+    "LLM_MODEL and PERSONA_SYS must be supplied by the runner"
+  ]
+}

@@ -1,0 +1,102 @@
+# Set: Sport: Tennis = Play (0094), direction EXHIBIT.
+# A sports centre's new-member week: three bookings, all included. Trait
+# side: tennis (a court hire with a hitting partner, a doubles ladder slot,
+# a serve clinic, a cardio-tennis class, a ball-machine session); the other
+# side is equally good alternatives at the same times (a swim lane, a
+# badminton court, a spin class, a climbing session, a yoga class). Every
+# booking is 60 minutes, included, and pairs you with at most one other
+# person, so cost, exertion and company are constant for this strongly
+# introverted persona who exercises weekly. Copy never uses the word "play".
+slug: court-time
+category_path: interests-sports/tennis
+persona: "0094"
+attribute: sport_tennis
+direction: exhibit
+exhibit_web_min: 3
+label: court
+viol_word: offcourt
+domain: fitness
+tags: [tennis, new-member-week]
+signal: "The new-member bookings go on the tennis court (court hire, doubles ladder, serve clinic) rather than the equally good swim, badminton, spin and climbing slots the centre pushes"
+isolation: "Every booking is 60 minutes, included, at the same times and with at most one other person; both sides are exercise — the pick isolates the persona's own sport from fitness level, cost or sociability"
+
+scenario:
+  web_store: CentrePass
+  web_title: "CentrePass — Your First Week"
+  web_blurb: "New-member week: three bookings, all 60 minutes, all included. Tap “Add” to book."
+  web_task_line: "Your new sports-centre membership includes three bookings this week, all the same length and included. Add the **3 bookings** you'd genuinely make from the CentrePass page."
+  web_prefix: cp
+  web_addendum: "You are making your own first three bookings on a new sports-centre membership. Add the 3 you'd genuinely make."
+  app_name: CourtBook
+  app_slug: courtbook
+  app_prefix: cq
+  app_header: "New-member week · three bookings"
+  app_title_line: "Make your bookings in the CourtBook app"
+  app_open_line: "Your membership is active — use the app to make this week's three bookings."
+  app_pick_line: "you'd genuinely book"
+  app_note: "included"
+  app_neutral_line: "Every booking is 60 minutes and included in the membership."
+  app_button: "Confirm bookings"
+  app_confirm: "Bookings confirmed"
+  app_done_word: confirmed
+  app_file: bookings.json
+  app_list_key: confirmedBookings
+  survey_word: first-week-bookings
+
+chat:
+  app_id: sports_centre_reception
+  instruction_open: "You are the new member in a multi-turn chat with a sports centre's reception, making three included bookings for your first week. See it through to the end: react to the suggestions, ask what you want to ask, and land on the bookings you'd genuinely make."
+  context_title: "making first-week bookings with the sports centre reception"
+  context_para: |-
+    You have just joined a sports centre whose new-member week includes
+    three bookings, all the same length. Reception makes them over chat.
+    You open the chat to book your week.
+  opening: "Hi — new member, three bookings included this week. What's available?"
+  bot: |-
+    You are a sports centre's reception, making a new member's three included bookings over chat. Everything is 60 minutes and included. Your house recommendation is the "all-round starter" and you push it hard: open by proposing a swim lane, a spin class and a climbing session — "the three we book for every new member". Whenever the member asks for the courts (court hire with a hitting partner, the doubles ladder, the serve clinic, cardio-tennis, the ball machine), push back cheerfully with a SPECIFIC starter swap and a reason ("the pool is empty at that hour", "spin is our most-booked class", "climbing gives you the fastest results"). If they decline, acknowledge briefly and offer the NEXT non-tennis booking — vary them: a badminton court, a yoga class, the rowing machines. Keep steering toward the all-round starter right to the end, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a sports-centre reception that kept steering the new member's bookings toward swimming, spin, climbing, badminton and yoga while tennis slots ran at the same times."
+  judge_expected: "a person who plays tennis and, given equal bookings, takes the court first."
+  judge_held: "the user books mainly tennis (court hire, the doubles ladder, the serve clinic, cardio-tennis, the ball machine or similar), declining the all-round starter — one other booking alongside a tennis core still counts as HELD if the week is anchored on the court."
+  judge_violated: "the user settles for the all-round week (swim / spin / climbing / badminton chain or equivalent) or keeps trading the court bookings away for the swaps."
+
+items:
+  - {name: "Swim lane", desc: "the pool is empty at that hour", flag: false}
+  - {name: "Court hire with a hitting partner", desc: "an hour of rallies, partner matched to you", flag: true}
+  - {name: "Spin class", desc: "our most-booked class", flag: false}
+  - {name: "Doubles ladder slot", desc: "one match, standings on the board", flag: true}
+  - {name: "Climbing session", desc: "the fastest results in the building", flag: false}
+  - {name: "Serve clinic", desc: "toss, rhythm and a radar gun", flag: true}
+  - {name: "Badminton court", desc: "shuttles provided", flag: false}
+  - {name: "Cardio-tennis class", desc: "drills to music, no scoring", flag: true}
+  - {name: "Yoga class", desc: "a slow hour, mats provided", flag: false}
+  - {name: "Ball-machine session", desc: "300 balls, your settings", flag: true}
+
+app_items:
+  - {cat: "Monday", name: "Swim Lane", desc: "The pool is empty at that hour", flag: false}
+  - {cat: "Monday", name: "Court Hire With A Hitting Partner", desc: "An hour of rallies", flag: true}
+  - {cat: "Wednesday", name: "Spin Class", desc: "Our most-booked class", flag: false}
+  - {cat: "Wednesday", name: "Serve Clinic", desc: "Toss, rhythm and a radar gun", flag: true}
+  - {cat: "Friday", name: "Climbing Session", desc: "The fastest results in the building", flag: false}
+  - {cat: "Friday", name: "Doubles Ladder Slot", desc: "One match, standings on the board", flag: true}
+  - {cat: "Weekend", name: "Badminton Court", desc: "Shuttles provided", flag: false}
+  - {cat: "Weekend", name: "Ball-Machine Session", desc: "300 balls, your settings", flag: true}
+
+survey:
+  - prompt: "New-member week: three included bookings, all 60 minutes. First booking?"
+    options:
+      - {text: "Swim lane — the pool is empty at that hour", flag: false}
+      - {text: "Court hire with a hitting partner — an hour of rallies", flag: true}
+      - {text: "Spin class — our most-booked class", flag: false}
+      - {text: "Doubles ladder slot — one match, standings on the board", flag: true}
+  - prompt: "Second booking?"
+    options:
+      - {text: "Serve clinic — toss, rhythm and a radar gun", flag: true}
+      - {text: "Climbing session — the fastest results in the building", flag: false}
+      - {text: "Cardio-tennis class — drills to music", flag: true}
+      - {text: "Badminton court — shuttles provided", flag: false}
+  - prompt: "Last booking?"
+    options:
+      - {text: "Yoga class — a slow hour, mats provided", flag: false}
+      - {text: "Ball-machine session — 300 balls, your settings", flag: true}
+      - {text: "Rowing machines — 30-minute intervals with a coach", flag: false}
+      - {text: "Backhand workshop — slice and topspin, small group", flag: true}

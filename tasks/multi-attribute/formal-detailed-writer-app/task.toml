@@ -1,0 +1,77 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/formal-detailed-writer-app"
+theme = "Formal detailed writer: formal register, elaborated/wordy prose, precise complete detail (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "writing"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE picking session, THREE checks. A single persona (a computer-use agent
+# operating the REAL DraftDesk Tkinter GUI on a local Linux CUA desktop) picks a
+# set of message templates; the verifier runs an independent rule-based check per
+# attribute. Each template carries three hidden ground-truth axes (formal/wordy/
+# detail, 0..3) that are NEVER shown on screen — the agent sees only the name and
+# a short sample and must judge style for itself. A check is HELD iff no selected
+# template scores >= 2 on its axis. Reward = integer score, one point per axis
+# HELD (0..3).
+[[checks]]
+dimension_id = "cog_formality"
+dimension_label = "Formality"
+category = "Linguistic: Communication"
+attribute = "Cognition: Formality"
+value = "Very formal"
+evaluator = "rule-based"
+evaluator_name = "cog_formality=Very formal"
+metric = "formal_axis_max"                  # HELD iff no picked template has formal >= 2
+adherence_signal = "The sent set contains no casual/slangy template (hidden formal axis >= 2); a formal writer keeps a proper register."
+
+[[checks]]
+dimension_id = "cog_verbosity"
+dimension_label = "Verbosity"
+category = "Linguistic: Communication"
+attribute = "Cognition: Verbosity"
+value = "Wordy"
+evaluator = "rule-based"
+evaluator_name = "cog_verbosity=Wordy"
+metric = "wordy_axis_max"                    # HELD iff no picked template has wordy >= 2
+adherence_signal = "The sent set contains no clipped/terse template (hidden wordy axis >= 2); a wordy writer favors thorough, elaborated prose."
+
+[[checks]]
+dimension_id = "cog_detail_orientation"
+dimension_label = "Detail orientation"
+category = "Linguistic: Communication"
+attribute = "Cognition: Detail orientation"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "cog_detail_orientation=Very high"
+metric = "detail_axis_max"                   # HELD iff no picked template has detail >= 2
+adherence_signal = "The sent set contains no vague/detail-omitting template (hidden detail axis >= 2); a detail-oriented writer keeps the specifics."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with DraftDesk (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch DraftDesk once the desktop is up so the agent finds it on screen.
+command = "/opt/draftdesk/start-draftdesk.sh"
+timeout_sec = 60.0
+retries = 5

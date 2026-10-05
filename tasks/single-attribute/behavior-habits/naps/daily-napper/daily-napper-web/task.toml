@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/daily-napper-web"
+theme = "Habit: Naps — Daily"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "wellness"
+tags = [ "persona-adherence", "daily-napper", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "habit_naps"
+dimension_label = "Habit: Naps"
+category = "Behavior: Habits"
+anchor_value = "Daily"
+evaluator = "rule-based"
+adherence_signal = "The blocks the persona locks in include sleeping in the afternoon, chosen unprompted, even though the assistant only pushes active blocks of the same length."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

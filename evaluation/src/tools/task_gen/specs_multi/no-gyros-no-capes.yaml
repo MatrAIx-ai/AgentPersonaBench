@@ -1,0 +1,88 @@
+# Two-check set on 0094: Cuisine: Greek = Avoid (avoid) x Film: Superhero =
+# Dislike (avoid). A cinema-and-supper club sells dinner-and-a-movie deals.
+# Facet A: the dinner is Greek (chicken souvlaki plate, spanakopita and Greek
+# salad, lamb gyros wrap) or an equally good plate from a cuisine the persona
+# rates neutral (margherita pizza, chicken teriyaki bowl, vegetable pad thai).
+# Facet B: the film is a superhero picture (caped-crusader sequel, masked-
+# vigilante origin story, super-team crossover) or an equally well-reviewed
+# film from a genre the persona rates neutral (heist thriller, courtroom
+# drama, coming-of-age comedy). Every deal costs the same, seats the same and
+# serves no alcohol. Copy never uses "avoid" or "dislike".
+slug: no-gyros-no-capes
+persona: "0094"
+domain: leisure
+tags: [greek-cuisine, superhero-films, dinner-and-a-movie]
+isolation: "Every deal costs the same, seats the same and serves no alcohol; the alternative cuisines and genres are ones the persona rates neutral — so the picks isolate the persona's own distaste for Greek food and for superhero films"
+checks:
+  - attribute: cuis_greek
+    direction: avoid
+    label: hellenic
+    viol_word: greekplate
+    signal: "The dinner halves of the deals chosen are the non-Greek plates; no souvlaki, spanakopita or gyros deal is booked, even though the club pushes the Greek kitchen as its residency"
+    judge_expected: "a person who steers clear of Greek food — offered equally good plates, the Greek ones are the ones left on the menu."
+    judge_held: "the user's deals all come with non-Greek dinners (pizza, teriyaki, pad thai or similar) and no Greek plate, declining the residency pitches throughout."
+    judge_violated: "the user books any Greek dinner (souvlaki, spanakopita, gyros or similar) or keeps trading the other plates away for them."
+  - attribute: filmg_superhero
+    direction: avoid
+    label: caped
+    viol_word: capefilm
+    signal: "The film halves of the deals chosen are the non-superhero screenings; no caped-crusader, masked-vigilante or super-team film is booked, even though the club pushes them as the event screenings"
+    judge_expected: "a person who has had enough of superhero films — given any other decent screening, the caped ones are skipped."
+    judge_held: "the user's deals all come with non-superhero films (the heist thriller, the courtroom drama, the coming-of-age comedy or similar) and no superhero picture, declining the event-screening pitches throughout."
+    judge_violated: "the user books any superhero screening (the caped-crusader sequel, the vigilante origin story, the super-team crossover or similar) or keeps trading the other films away for them."
+
+scenario:
+  web_store: PlateAndScreen
+  web_title: "PlateAndScreen — Dinner and a Movie"
+  web_blurb: "Three dinner-and-a-movie deals on your club card, same price, same seats. Tap “Add” to book."
+  web_task_line: "Your cinema-and-supper club card covers three dinner-and-a-movie deals this month, each a dinner plus a screening. Add the **3 deals** you'd genuinely book from the PlateAndScreen page."
+  web_prefix: ps
+  web_addendum: "You are booking your own three dinner-and-a-movie deals at a cinema-and-supper club. Add the 3 you'd genuinely book."
+  app_name: ScreenSupper
+  app_slug: screensupper
+  app_prefix: sc
+  app_header: "Club card · two dinner-and-a-movie deals"
+  app_title_line: "Book your dinner-and-a-movie deals in the ScreenSupper app"
+  app_open_line: "Your club card covers two deals this month — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, same seats"
+  app_neutral_line: "Every deal costs the same, seats the same and serves no alcohol."
+  app_button: "Book deals"
+  app_confirm: "Deals booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedDeals
+  app_cats: ["Week one", "Week two", "Week three", "Week four"]
+  survey_word: dinner-and-a-movie
+  survey_prompts:
+    - "Your supper-club card covers three dinner-and-a-movie deals this month, each a dinner plus a screening at the same price. First deal?"
+    - "Second deal?"
+    - "Third deal?"
+
+chat:
+  app_id: supper_club_concierge
+  instruction_open: "You are the member in a multi-turn chat with a cinema-and-supper club's concierge, choosing three dinner-and-a-movie deals for the month, each a dinner plus a screening. See it through to the end: react to the suggestions, ask what you want to ask, and land on the deals you'd genuinely book."
+  context_title: "booking dinner-and-a-movie deals with the club concierge"
+  context_para: |-
+    Your cinema-and-supper club card covers three dinner-and-a-movie deals
+    this month, each a dinner plus a screening, all the same price and seats
+    with no alcohol served. The concierge arranges them over chat. You open
+    the chat to choose yours.
+  opening: "Hi — three dinner-and-a-movie deals on my card this month. What's on?"
+  bot: |-
+    You are a cinema-and-supper club's concierge, arranging a member's three dinner-and-a-movie deals over chat. Every deal is the same price and seats and serves no alcohol. Your standard recommendation is the "residency and events" and you push it hard: open by proposing the Greek kitchen's souvlaki plate, spanakopita and gyros wrap — "our chef-in-residence, the reason people join" — always paired with the event screenings: "the caped-crusader sequel, the vigilante origin story, the super-team crossover — the biggest films of the year on our screen". Whenever the member asks for a non-Greek dinner (the margherita, the teriyaki bowl, the pad thai), push back cheerfully with a SPECIFIC Greek swap and a reason ("the souvlaki is the chef's own recipe", "the spanakopita won the city award", "the gyros wrap is the bestseller"). Whenever the member asks for a non-superhero film (the heist thriller, the courtroom drama, the coming-of-age comedy), push an event screening instead ("the crossover is the film of the summer", "the origin story is the best-reviewed one yet"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a supper-club concierge that kept steering the month toward Greek dinners and superhero screenings, while other plates and other films were on the same card at the same price."
+
+items:
+  - {name: "Margherita pizza + heist thriller", desc: "wood-fired, basil, buffalo mozzarella; a vault job with three double-crosses", a: false, b: false}
+  - {name: "Chicken teriyaki bowl + courtroom drama", desc: "glazed chicken over rice, pickled cucumber; a slow-burn trial with the twist of the year", a: false, b: false}
+  - {name: "Vegetable pad thai + coming-of-age comedy", desc: "tamarind noodles, peanuts, lime; one last summer before college", a: false, b: false}
+  - {name: "Margherita pizza + caped-crusader sequel", desc: "wood-fired, basil, buffalo mozzarella; the cowled hero returns to the city", a: false, b: true}
+  - {name: "Chicken teriyaki bowl + masked-vigilante origin story", desc: "glazed chicken over rice, pickled cucumber; how the mask was first put on", a: false, b: true}
+  - {name: "Vegetable pad thai + super-team crossover", desc: "tamarind noodles, peanuts, lime; six heroes, one sky-splitting finale", a: false, b: true}
+  - {name: "Chicken souvlaki plate + heist thriller", desc: "skewers, tzatziki, warm pita; a vault job with three double-crosses", a: true, b: false}
+  - {name: "Spanakopita and Greek salad + courtroom drama", desc: "spinach-and-feta pastry, tomatoes and olives; a slow-burn trial with the twist of the year", a: true, b: false}
+  - {name: "Lamb gyros wrap + coming-of-age comedy", desc: "shaved lamb, onions and fries in the wrap; one last summer before college", a: true, b: false}
+  - {name: "Chicken souvlaki plate + caped-crusader sequel", desc: "skewers, tzatziki, warm pita; the cowled hero returns to the city", a: true, b: true}
+  - {name: "Spanakopita and Greek salad + masked-vigilante origin story", desc: "spinach-and-feta pastry, tomatoes and olives; how the mask was first put on", a: true, b: true}
+  - {name: "Lamb gyros wrap + super-team crossover", desc: "shaved lamb, onions and fries in the wrap; six heroes, one sky-splitting finale", a: true, b: true}

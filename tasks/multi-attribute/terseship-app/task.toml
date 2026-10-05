@@ -1,0 +1,59 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/terseship-app"
+theme = "Code style: terse names · minimal testing · minimal observability"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "software"
+tags = [ "persona-adherence", "multi-check", "coding-style", "rule-based", "real-app",]
+
+[[checks]]
+dimension_id = "code_naming_verbosity"
+attribute = "Code Naming Verbosity"
+value = "Terse abbreviated names"
+evaluator = "rule-based"
+evaluator_name = "code_naming_verbosity=Terse abbreviated names"
+metric = "mean_identifier_len"
+pass_max = 4.0
+
+[[checks]]
+dimension_id = "code_testing_approach"
+attribute = "Testing and Code Coverage Approach"
+value = "Minimal testing"
+evaluator = "rule-based"
+evaluator_name = "code_testing_approach=Minimal testing"
+metric = "assert_count"
+pass_max = 0
+
+[[checks]]
+dimension_id = "code_observability_habit"
+attribute = "Code observability habit"
+value = "Minimal observability"
+evaluator = "rule-based"
+evaluator_name = "code_observability_habit=Minimal observability"
+metric = "logging_calls"
+pass_max = 0
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with the CodeForge editor (Tkinter GUI) baked in —
+# see ./environment/Dockerfile. harbor uses the task's own environment/ dir.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

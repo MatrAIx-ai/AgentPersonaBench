@@ -1,0 +1,54 @@
+# HOST-SIDE ONLY - never mounted into the container.
+#
+# The page carries no scoring information: each row has only data-id and the
+# data-need that groups it under a visible heading. Which row is the tier-0
+# product, and which sections a shopper is expected to fill, live here instead.
+# A real shop does not tag a product as the correct frugal choice, so data-tier
+# had no business being in a DOM the agent operates.
+#
+# Three flat sections so the verifier can parse this without pyyaml.
+#   tier      - product id -> 0 (lowest-priced product meeting the stated need)
+#                            1 (priced past that need)
+#   need      - product id -> the need it belongs to
+#   required  - need -> whether the shopper is expected to fill it
+
+tier:
+  i01: 0
+  i02: 1
+  i03: 1
+  i04: 0
+  i05: 0
+  i06: 1
+  i07: 1
+  i08: 0
+  i09: 0
+  i10: 1
+  i11: 1
+  i12: 0
+  x01: 1
+  x02: 1
+
+need:
+  i01: chair
+  i02: chair
+  i03: desk
+  i04: desk
+  i05: sofa
+  i06: sofa
+  i07: cookware
+  i08: cookware
+  i09: lamp
+  i10: lamp
+  i11: blind
+  i12: blind
+  x01: extras
+  x02: extras
+
+required:
+  chair: true
+  desk: true
+  sofa: true
+  cookware: true
+  lamp: true
+  blind: true
+  extras: false

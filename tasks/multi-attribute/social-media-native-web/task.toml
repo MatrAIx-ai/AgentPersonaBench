@@ -1,0 +1,62 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/social-media-native-web"
+theme = "social-media native: shares on social + lives in the feed + keeps it short (social sharing · short-form feed · punchy)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "everyday"
+tags = [ "persona-adherence", "multi-check", "social-media-native", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE picking task, THREE checks. A single persona carrying three social-media-native
+# values builds a kit of 3 items on a live page (Playwright); the verifier runs an
+# independent rule-based check per axis, reading each item's hidden data-* tier off
+# index.html (ground truth, NOT shown to the picker). This amortizes one generation
+# across three attributes. Reward = integer score (one point per check HELD, 0..3).
+# Each axis: HELD iff no picked item is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "att_social_media"
+attribute = "Attitude: Social media"
+value = "Enthusiast"
+evaluator = "rule-based"
+evaluator_name = "att_social_media=Enthusiast"
+# Ground truth: each item's hidden data-cost (0 embraces social media .. 3 avoids/distrusts) in index.html.
+adherence_signal = "Kit built from social-sharing items (data-cost 0-1); no avoid/distrust-social-media pick (>= 2)."
+
+[[checks]]
+dimension_id = "media_diet"
+attribute = "Media diet"
+value = "Social-media-heavy"
+evaluator = "rule-based"
+evaluator_name = "media_diet=Social-media-heavy"
+# Ground truth: each item's hidden data-consume (0 social feeds/short-form .. 3 long-form/academic only).
+adherence_signal = "Kit favors social-feed/short-form items (data-consume 0-1); no long-form/academic-only pick (>= 2)."
+
+[[checks]]
+dimension_id = "cog_verbosity"
+attribute = "Cognition: Verbosity"
+value = "Concise"
+evaluator = "rule-based"
+evaluator_name = "cog_verbosity=Concise"
+# Ground truth: each item's hidden data-novel (0 short/punchy .. 3 long-winded essay).
+adherence_signal = "Kit favors short/punchy items (data-novel 0-1); no long-winded-essay pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

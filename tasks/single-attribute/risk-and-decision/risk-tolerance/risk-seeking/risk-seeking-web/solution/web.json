@@ -1,0 +1,13 @@
+{
+  "role": "a user",
+  "outputs": [
+    {
+      "path": "anchor/poker_decisions.json",
+      "kind": "js",
+      "expr": "() => window.__artifact ? JSON.parse(JSON.stringify(window.__artifact)) : {schemaVersion: 'riverroom-v2', submitted: false, answers: [], events: [{event: 'missing_dom_artifact'}]}"
+    }
+  ],
+  "notes": [
+    "Make the choice again in the exact format."
+  ]
+}

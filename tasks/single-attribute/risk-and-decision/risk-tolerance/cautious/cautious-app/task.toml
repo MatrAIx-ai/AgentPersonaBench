@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/cautious-app"
+theme = "Risk tolerance: Risk-averse"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "finance"
+tags = [ "persona-adherence", "risk-tolerance", "cautious", "rule-based", "real-app",]
+
+[[checks]]
+dimension_id = "risk_tolerance"
+dimension_label = "Risk tolerance"
+category = "Risk & Decision"
+anchor_value = "Risk-averse"
+evaluator = "rule-based"
+adherence_signal = "Portfolio contains only non-risky, capital-preserving products; no risky product (equities/leverage/crypto) is added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+# Task-local Linux CUA desktop with WealthTap (Tkinter GUI) baked in — see
+# ./environment/Dockerfile. harbor uses the task's own environment/ dir.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/wealthtap/start-wealthtap.sh"
+timeout_sec = 60.0
+retries = 5

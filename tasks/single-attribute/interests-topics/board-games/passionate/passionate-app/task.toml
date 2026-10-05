@@ -1,0 +1,39 @@
+version = "3.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/passionate-app"
+theme = "Personal leisure-library borrowing plan"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "leisure"
+tags = ["persona-adherence", "library-borrowing", "native-gui"]
+
+[[checks]]
+dimension_id = "topic_board_games"
+dimension_label = "Interest: Board games"
+category = "Interests: Topics"
+anchor_value = "Passionate"
+evaluator = "rule-based"
+adherence_signal = "The app-written final borrowing plan selects a board game as the primary loan. Any valid standing fallback is acceptable; both selections must be complete and agree with the catalog and ordered interaction history."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+build_timeout_sec = 300.0
+cpus = 2
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/lend-return/start-app.sh"
+timeout_sec = 60.0
+retries = 5

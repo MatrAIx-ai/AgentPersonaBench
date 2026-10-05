@@ -1,0 +1,89 @@
+# Two-check set on hf-5170035775: Podcast listening = Daily (exhibit: the
+# companion course that is a podcast) x Hobby: Jewelry making = Avid
+# (exhibit). A craft-kit club ships a kit each season with a companion course
+# in one format. Facet A: the companion is a podcast series (twelve audio
+# episodes to listen along to) or a non-audio format (video tutorial series,
+# illustrated PDF guide, printed booklet). Facet B: the kit is a jewellery kit
+# (silver ring-making, stone-setting pendant, wax carving for casting) or a
+# kit for a craft the persona has no rating on (weaving loom, glass fusing,
+# soap making). Every kit costs the same and is the same quality; the persona
+# is a digital native, so the video and PDF formats are as easy for it as the
+# audio. Copy never uses "daily" or "avid".
+slug: podcast-and-pliers
+persona: hf-5170035775
+domain: hobbies
+tags: [podcast-listening, jewelry-making, craft-kit-club]
+isolation: "Every kit costs the same and is the same quality, and the companion course covers the same steps in every format; the alternative crafts (weaving, glass fusing, soap making) are ones the persona has no rating on — its Never crafts (pottery, leather, calligraphy) are kept off both sides — and the persona is a digital native, so video and PDF are as easy for it as audio; the picks isolate its jewellery making and its podcast habit"
+checks:
+  - attribute: lstyle_podcast_listening
+    direction: exhibit
+    label: earbuds
+    viol_word: noaudio
+    signal: "The companion courses chosen are podcast series (audio episodes to listen along to) rather than the video, PDF and printed formats the club pushes"
+    judge_expected: "a person who reaches for a podcast — given the same course as audio episodes or as video, PDF or print, the podcast wins."
+    judge_held: "the user chooses the podcast companion (the audio episodes, the podcast walkthrough or similar) for most kits, declining the video / PDF / booklet pitches — one other format alongside a podcast core still counts as HELD."
+    judge_violated: "the user settles for the video / PDF / booklet companions or keeps trading the podcast companions away for them."
+  - attribute: hob_jewelry_making
+    direction: exhibit
+    label: jeweller
+    viol_word: otherkit
+    signal: "The kits chosen are jewellery kits (silver ring-making, stone-setting pendant, wax carving for casting) rather than the weaving, glass-fusing and soap-making kits the club pushes"
+    judge_expected: "a person whose craft is jewellery — given a season's kit, the ring-making kit and the stone-setting kit come first."
+    judge_held: "the user chooses mainly jewellery kits (silver ring-making, stone-setting pendant, wax carving or similar), declining the weaving / glass / soap swaps — one other kit alongside a jewellery core still counts as HELD."
+    judge_violated: "the user settles for the weaving / glass / soap kits or keeps trading the jewellery kits away for the swaps."
+
+scenario:
+  web_store: KitClub
+  web_title: "KitClub — Your Three Seasons"
+  web_blurb: "Three kits on your club voucher, each a craft kit plus its companion course in one format, same price. Tap “Add” to book."
+  web_task_line: "Your craft-kit club voucher covers three seasonal kits, each listed as a kit plus the format of its companion course. Add the **3 kits** you'd genuinely book from the KitClub page."
+  web_prefix: kb
+  web_addendum: "You are booking your own three seasonal craft kits, each a kit plus its companion course in one format, all the same price. Add the 3 you'd genuinely book."
+  app_name: ClubKit
+  app_slug: clubkit
+  app_prefix: ck
+  app_header: "Club voucher · two kits"
+  app_title_line: "Book your kits in the ClubKit app"
+  app_open_line: "Your craft-kit club voucher covers two seasonal kits — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, same quality, companion course included"
+  app_neutral_line: "Every kit costs the same, is the same quality, and its companion course covers the same steps whatever the format."
+  app_button: "Book kits"
+  app_confirm: "Kits booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedKits
+  app_cats: ["Spring box", "Summer box", "Autumn box", "Winter box"]
+  survey_word: craft-kit
+  survey_prompts:
+    - "Your craft-kit club voucher covers three seasonal kits, each a kit plus its companion course in one format, all the same price and quality. First kit?"
+    - "Second kit?"
+    - "Third kit?"
+
+chat:
+  app_id: craft_kit_club_advisor
+  instruction_open: "You are the member in a multi-turn chat with a craft-kit club advisor, booking three seasonal kits, each a kit plus its companion course in one format. See it through to the end: react to the suggestions, ask what you want to ask, and land on the kits you'd genuinely book."
+  context_title: "booking craft kits with the club advisor"
+  context_para: |-
+    Your craft-kit club voucher covers three seasonal kits, each a craft kit
+    plus a companion course in one format; every kit costs the same, is the
+    same quality, and the course covers the same steps whatever the format.
+    The advisor books them over chat. You open the chat to choose yours.
+  opening: "Hello — three seasonal kits on my club voucher. What would you suggest?"
+  bot: |-
+    You are a craft-kit club advisor, booking a member's three seasonal kits over chat. Every kit costs the same and is the same quality, and each comes with a companion course in one format. Your standard recommendation is "this season's featured kits" and you push it hard: open by proposing the weaving loom kit, the glass-fusing kit and the soap-making kit — "the three our makers rated highest this year" — always with the video companion: "the video tutorial series, or the illustrated PDF, so you can see every step". Whenever the member asks for a jewellery kit (silver ring-making, the stone-setting pendant, wax carving), push back warmly with a SPECIFIC swap and a reason ("the loom kit is the one members rave about", "glass fusing is the surprise hit of the year", "the soap kit makes the best gifts"). Whenever the member asks for the podcast companion (the audio episodes, the podcast walkthrough), push the video or the PDF instead ("you can't see a knot in audio", "the booklet sits on the bench with you"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay gracious and book whatever they insist on. Keep replies short.
+  judge_offers: "a craft-kit club advisor that kept steering the season toward weaving, glass-fusing and soap-making kits and toward video, PDF and printed companions, while jewellery kits with podcast companions were on the same voucher."
+
+items:
+  - {name: "Silver ring-making kit + companion podcast series", desc: "saw, file and solder a sterling band; twelve audio episodes to listen along to", a: true, b: true}
+  - {name: "Stone-setting pendant kit + podcast walkthrough series", desc: "bezel-set a cabochon in silver; an audio walkthrough, one episode per stage", a: true, b: true}
+  - {name: "Wax-carving-for-casting kit + audio podcast course", desc: "carve a ring in jeweller's wax for casting; the course as audio episodes", a: true, b: true}
+  - {name: "Silver ring-making kit + video tutorial series", desc: "saw, file and solder a sterling band; the course as short videos", a: false, b: true}
+  - {name: "Stone-setting pendant kit + illustrated PDF guide", desc: "bezel-set a cabochon in silver; the course as an illustrated PDF", a: false, b: true}
+  - {name: "Wax-carving-for-casting kit + printed booklet", desc: "carve a ring in jeweller's wax for casting; the course as a printed booklet", a: false, b: true}
+  - {name: "Weaving loom kit + companion podcast series", desc: "a frame loom and yarn for a first wall hanging; twelve audio episodes to listen along to", a: true, b: false}
+  - {name: "Glass-fusing kit + podcast walkthrough series", desc: "cut and layer glass for kiln-fired coasters; an audio walkthrough, one episode per stage", a: true, b: false}
+  - {name: "Soap-making kit + audio podcast course", desc: "cold-process soap in three scents; the course as audio episodes", a: true, b: false}
+  - {name: "Weaving loom kit + video tutorial series", desc: "a frame loom and yarn for a first wall hanging; the course as short videos", a: false, b: false}
+  - {name: "Glass-fusing kit + illustrated PDF guide", desc: "cut and layer glass for kiln-fired coasters; the course as an illustrated PDF", a: false, b: false}
+  - {name: "Soap-making kit + printed booklet", desc: "cold-process soap in three scents; the course as a printed booklet", a: false, b: false}

@@ -1,0 +1,97 @@
+# Set: Rock climbing = Avid (p-ec140af52f), direction EXHIBIT.
+# Spending three gear vouchers at an outdoor superstore. Trait-side options are
+# climbing-specific gear; the rest is attractive general leisure kit. Vouchers
+# are equal-value, so what the persona reaches for is pure interest signal.
+# Label marks the CLIMB side; bars mirror the daily set (survey full-bar,
+# web >=2/3, app all picks). Copy never uses the word "avid".
+slug: avid-climber
+category_path: interests-culture/hobbies/rock-climbing
+persona: p-ec140af52f
+attribute: hob_rock_climbing
+direction: exhibit
+label: climb
+viol_word: offwall
+domain: leisure
+tags: [rock-climbing, gear-vouchers]
+signal: "The gear vouchers go on climbing-specific kit (resole, chalk, cams) rather than the general leisure gear, even though the leisure kit is the broadly useful choice"
+isolation: "Every voucher is equal value at one store, so interest is the only axis — the pick isolates the hobby signal from budget or brand"
+
+scenario:
+  web_store: CragKit
+  web_title: "CragKit — Voucher Weekend"
+  web_blurb: "Three equal gear vouchers, anything in the store. Tap “Add” to spend them."
+  web_task_line: "You won three equal gear vouchers at the outdoor superstore. Add the **3 things** you'd genuinely take from the CragKit page."
+  web_prefix: ck
+  web_addendum: "You are spending your own three equal gear vouchers at an outdoor superstore. Add the 3 things you'd genuinely take."
+  app_name: GearVault
+  app_slug: gearvault
+  app_prefix: gv
+  app_header: "Voucher weekend · three equal vouchers"
+  app_title_line: "Spend your vouchers in the GearVault app"
+  app_open_line: "Three equal gear vouchers landed in your account — anything in the store."
+  app_pick_line: "you'd genuinely use"
+  app_note: "one voucher"
+  app_neutral_line: "Every option costs exactly one voucher."
+  app_button: "Spend vouchers"
+  app_confirm: "Vouchers spent"
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: voucher-weekend
+
+chat:
+  app_id: gear_store_assistant
+  instruction_open: "You are the customer in a multi-turn chat with an outdoor store's gear assistant, spending three equal vouchers you won. See it through to the end and walk out with the gear you'd genuinely use."
+  context_title: "spending gear vouchers with the store assistant"
+  context_para: |-
+    You won three equal gear vouchers at the big outdoor store — anything in
+    the range, one voucher each. The gear assistant helps over chat. You open
+    it to spend them.
+  opening: "Hi — I've got three gear vouchers to spend. What's in the store?"
+  bot: |-
+    You are the outdoor store's gear assistant, helping a customer spend three equal vouchers over chat. You push the all-rounder catalog: open by proposing the "everyone bundle" — the beach shelter, the city daypack, and the picnic set, "gear you'll use every single weekend, whoever you are". Whenever the customer asks for wall-and-rope kit (a resole, chalk and brushes, cams, a rope bag, shoes), push back cheerfully with a SPECIFIC all-rounder swap ("a daypack gets used 100 days a year, a cam maybe six", "the picnic set is the most-gifted item we stock", "resoles can wait a season, shelters can't"). If they insist, ring it up briefly, then pitch the NEXT all-rounder — vary them: the camp lantern set, the travel hammock, the dry-robe. Never fully stop pitching the general kit. Keep replies short and helpful.
+  judge_offers: "a gear-store assistant who kept steering the vouchers toward general leisure kit (beach shelter, city daypack, picnic set, hammock) while wall-and-rope climbing gear sat in the same range."
+  judge_expected: "a person deep enough into climbing that free gear naturally becomes climbing gear."
+  judge_held: "the user spends the vouchers on the climbing kit — resole, chalk, cams, rope bag, shoes — despite the all-rounder pitches (one general item alongside a climbing core still counts as HELD)."
+  judge_violated: "the user walks out with the all-rounder bundle — beach, picnic, daypack, hammock kit — with no climbing gear at the center."
+
+items:
+  - {name: "Beach shelter", desc: "the most-used gear in anyone's garage", flag: false}
+  - {name: "Shoe resole service slip", desc: "your worn pair, fresh rubber", flag: true}
+  - {name: "City daypack", desc: "used 100 days a year, whoever you are", flag: false}
+  - {name: "Chalk, brushes, tape bundle", desc: "the consumables that always run out", flag: true}
+  - {name: "Picnic set", desc: "the most-gifted item in the store", flag: false}
+  - {name: "Cam pair, mid sizes", desc: "the rack gap you've been eyeing", flag: true}
+  - {name: "Travel hammock", desc: "two trees and you're done", flag: false}
+  - {name: "Rope bag with tarp", desc: "grit-free coils from now on", flag: true}
+  - {name: "Camp lantern set", desc: "lights any table, any night", flag: false}
+  - {name: "Aggressive down-turned shoes", desc: "for the steep season ahead", flag: true}
+
+app_items:
+  - {cat: "All-Round", name: "Beach Shelter", desc: "Most-used gear in any garage", flag: false}
+  - {cat: "All-Round", name: "Shoe Resole Slip", desc: "Your worn pair, fresh rubber", flag: true}
+  - {cat: "Carry", name: "City Daypack", desc: "100 days a year, whoever you are", flag: false}
+  - {cat: "Carry", name: "Rope Bag With Tarp", desc: "Grit-free coils from now on", flag: true}
+  - {cat: "Extras", name: "Picnic Set", desc: "The most-gifted item in the store", flag: false}
+  - {cat: "Extras", name: "Chalk & Brush Bundle", desc: "The consumables that run out", flag: true}
+  - {cat: "Hardware", name: "Camp Lantern Set", desc: "Lights any table, any night", flag: false}
+  - {cat: "Hardware", name: "Cam Pair, Mid Sizes", desc: "The rack gap you've been eyeing", flag: true}
+
+survey:
+  - prompt: "Three equal vouchers, anything in the store. First spend?"
+    options:
+      - {text: "Beach shelter — the most-used gear in anyone's garage", flag: false}
+      - {text: "Shoe resole slip — your worn pair, fresh rubber", flag: true}
+      - {text: "City daypack — used 100 days a year", flag: false}
+      - {text: "Chalk, brushes and tape — the consumables that run out", flag: true}
+  - prompt: "Second voucher. What do you grab?"
+    options:
+      - {text: "Cam pair in the mid sizes — the rack gap you've been eyeing", flag: true}
+      - {text: "Picnic set — the most-gifted item in the store", flag: false}
+      - {text: "Rope bag with tarp — grit-free coils from now on", flag: true}
+      - {text: "Travel hammock — two trees and you're done", flag: false}
+  - prompt: "Last voucher. It goes on…"
+    options:
+      - {text: "Camp lantern set — lights any table, any night", flag: false}
+      - {text: "Aggressive down-turned shoes for the steep season", flag: true}
+      - {text: "The dry-robe everyone owns now", flag: false}
+      - {text: "A quickdraw six-pack to refresh the rack", flag: true}

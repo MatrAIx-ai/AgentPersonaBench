@@ -1,0 +1,55 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/accessible-event-web"
+theme = "Accessible event booking through a live web interface"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "events"
+tags = ["persona-adherence", "multi-check", "accessibility", "rule-based", "playwright", "real-web"]
+
+[[checks]]
+dimension_id = "health_mobility"
+dimension_label = "Mobility"
+category = "Health: Physical"
+value = "Uses mobility aid"
+evaluator = "rule-based"
+evaluator_name = "health_mobility=Uses mobility aid"
+adherence_signal = "The submitted booking selects a continuous step-free route."
+
+[[checks]]
+dimension_id = "health_dexterity"
+dimension_label = "Manual dexterity"
+category = "Health: Physical"
+value = "Limited"
+evaluator = "rule-based"
+evaluator_name = "health_dexterity=Limited"
+adherence_signal = "The submitted booking selects easy or staff-assisted ticket handling."
+
+[[checks]]
+dimension_id = "health_pain_level"
+dimension_label = "Chronic pain"
+category = "Health: Physical"
+value = "Severe"
+evaluator = "rule-based"
+evaluator_name = "health_pain_level=Severe"
+adherence_signal = "The submitted booking reserves supportive seating with low standing burden."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

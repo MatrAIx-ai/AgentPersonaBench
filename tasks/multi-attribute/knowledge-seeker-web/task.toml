@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/knowledge-seeker-web"
+theme = "Knowledge seeker: self-efficacy · need-for-cognition · loyalty"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "knowledge-seeker", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE task, THREE checks. A single persona carrying three attributes adds 3
+# next-actions on a live page (Playwright) after the team hits a hard problem near
+# a deadline while a teammate is struggling; the verifier runs an independent
+# rule-based check per axis, reading each option's hidden data-* tier off
+# index.html (ground truth, NOT shown to the reader). This amortizes one
+# generation across three attributes. Reward = integer score (one point per check
+# HELD, 0..3). Each axis: HELD iff no picked option is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "big5_self_efficacy"
+attribute = "Self-efficacy"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "big5_self_efficacy=High"
+# Ground truth: each option's hidden data-ax1 (0 back-yourself/confident-you-can .. 3 doubt-you-can/give-up-on-your-ability) in index.html.
+adherence_signal = "Picks favor back-yourself / tackle-it-confidently actions (data-ax1 0-1); no give-up-on-your-ability pick (>= 2)."
+
+[[checks]]
+dimension_id = "need_for_cognition"
+attribute = "Need for cognition"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "need_for_cognition=High"
+# Ground truth: each option's hidden data-ax2 (0 dig-into-the-hard-problem .. 3 take-the-shortcut/avoid-effort).
+adherence_signal = "Picks favor dig-in / work-it-through actions (data-ax2 0-1); no take-the-shortcut pick (>= 2)."
+
+[[checks]]
+dimension_id = "val_loyalty"
+attribute = "Loyalty"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_loyalty=Important"
+# Ground truth: each option's hidden data-ax3 (0 stand-by-your-people .. 3 abandon-them/ditch-the-group).
+adherence_signal = "Picks favor stand-by-the-team / keep-your-commitment actions (data-ax3 0-1); no abandon-your-people pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

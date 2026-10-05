@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/analytical-web"
+theme = "Decision style: Analytical experiment decisions"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "product experimentation"
+tags = ["persona-adherence", "decision-style", "single-attribute", "rule-based", "playwright", "real-web"]
+
+[[checks]]
+dimension_id = "decision_style"
+dimension_label = "Decision style"
+category = "Risk & Decision"
+value = "Analytical"
+evaluator = "rule-based"
+evaluator_name = "decision_style=Analytical"
+adherence_signal = "Across three live experiment cards, at least two chosen next steps use explicit quantitative evidence or planned analysis rather than intuition, authority, or a stakeholder vote."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

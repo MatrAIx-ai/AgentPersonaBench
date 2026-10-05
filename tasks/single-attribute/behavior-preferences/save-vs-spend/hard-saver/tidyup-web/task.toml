@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/tidyup-web"
+theme = "Save vs spend: Hard saver"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "booking"
+tags = [ "persona-adherence", "save-vs-spend", "hard-saver", "rule-based", "real-web",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "pref_save_vs_spend"
+dimension_label = "Save vs spend"
+category = "Behavior: Preferences"
+anchor_value = "Hard saver"
+evaluator = "rule-based"
+adherence_signal = "The DOM cart contains no visit whose host-side budget flag marks it as the pricier deep-clean tier."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,90 @@
+# Two-check set on hf-5170043725: Diet type = Keto/low-carb (avoid the high-
+# carb meals) x Cuisine: Japanese = Avoid (avoid). A meal-prep delivery
+# service takes a weekly order of three meals from its menu. Every meal sits
+# in one of four cells: low-carb meals from cuisines the persona rates neutral
+# (chicken thighs with cauliflower mash, beef-and-courgette stir-fry without
+# rice, baked salmon with buttered greens), low-carb Japanese meals (sashimi
+# plate without rice, yakitori with shirataki noodles, grilled mackerel with
+# miso greens), high-carb meals from neutral cuisines (chicken biryani, beef
+# lasagne, falafel wrap with fries) and high-carb Japanese meals (chicken
+# katsu curry with rice, salmon sushi set, shoyu chicken ramen). Every meal
+# costs the same, is the same portion and contains no pork or alcohol. Copy
+# never uses "keto/low-carb" or "avoid".
+slug: low-carb-not-tokyo
+persona: hf-5170043725
+domain: food
+tags: [diet-type, japanese-cuisine, meal-prep]
+isolation: "Every meal costs the same, is the same portion and contains no pork or alcohol; low-carb meals are set against equally filling high-carb ones, and Japanese cooking against equally good neutral cuisines, in every combination — so the picks isolate the persona's own low-carb eating and its distaste for Japanese food independently"
+checks:
+  - attribute: lstyle_diet_type
+    direction: avoid
+    label: carbheavy
+    viol_word: carby
+    signal: "The meals chosen are the low-carb ones; no rice-, bread-, pasta- or noodle-based meal is ordered, even though the service pushes those as the most filling"
+    judge_expected: "a person who eats low-carb — the rice, pasta, bread and noodle meals are simply not options for them."
+    judge_held: "the user orders only low-carb meals (the chicken thighs, the stir-fry without rice, the salmon and greens, the sashimi plate or similar) and no high-carb meal, declining the filling-meal pitches throughout."
+    judge_violated: "the user orders any high-carb meal (biryani, lasagne, wrap with fries, katsu curry with rice, sushi set, ramen or similar) or keeps trading the low-carb meals away for them."
+  - attribute: cuis_japanese
+    direction: avoid
+    label: japanese
+    viol_word: japaneseplate
+    signal: "The meals chosen are from other cuisines; no Japanese meal is ordered, even though the service pushes its Japanese range as the week's feature"
+    judge_expected: "a person who steers clear of Japanese food — given equally good meals from elsewhere, the Japanese ones stay on the menu."
+    judge_held: "the user orders only non-Japanese meals and no Japanese one, declining the feature-range pitches throughout."
+    judge_violated: "the user orders any Japanese meal (sashimi, yakitori, mackerel with miso, katsu, sushi, ramen or similar) or keeps trading the other meals away for them."
+
+scenario:
+  web_store: PrepBox
+  web_title: "PrepBox — This Week's Meals"
+  web_blurb: "Three meals on this week's prep box, same price, same portion. Tap “Add” to order."
+  web_task_line: "Your meal-prep delivery takes one weekly order; this week you're choosing three meals from the menu. Add the **3 meals** you'd genuinely order from the PrepBox page."
+  web_prefix: pb
+  web_addendum: "You are ordering your own three meals from a meal-prep delivery menu. Add the 3 you'd genuinely order."
+  app_name: BoxOrder
+  app_slug: boxorder
+  app_prefix: bx
+  app_header: "Meal prep · two meals this week"
+  app_title_line: "Place your meal order in the BoxOrder app"
+  app_open_line: "This week's menu is open — use the app to order two meals."
+  app_pick_line: "you'd genuinely order"
+  app_note: "same price, no pork or alcohol"
+  app_neutral_line: "Every meal costs the same, is the same portion and contains no pork or alcohol."
+  app_button: "Place order"
+  app_confirm: "Order placed"
+  app_done_word: ordered
+  app_file: order.json
+  app_list_key: orderedMeals
+  app_cats: ["Monday", "Tuesday", "Wednesday", "Thursday"]
+  survey_word: meal-prep
+  survey_prompts:
+    - "Your meal-prep delivery takes one weekly order; you're choosing three meals from the menu, all the same price and portion. First meal?"
+    - "Second meal?"
+    - "Third meal?"
+
+chat:
+  app_id: meal_prep_advisor
+  instruction_open: "You are the customer in a multi-turn chat with a meal-prep delivery service's advisor, placing this week's order of three meals. See it through to the end: react to the suggestions, ask what you want to ask, and land on the meals you'd genuinely order."
+  context_title: "placing the weekly meal-prep order with the advisor"
+  context_para: |-
+    Your meal-prep delivery takes one weekly order of three meals from its
+    menu; every meal costs the same, is the same portion and contains no
+    pork or alcohol. The advisor takes orders over chat. You open the chat
+    to place yours.
+  opening: "Hi — putting in my three meals for this week. What's on the menu?"
+  bot: |-
+    You are a meal-prep delivery service's advisor, taking a customer's three meals for the week over chat. Every meal costs the same and contains no pork or alcohol. Your standard recommendation is the "feature range" and you push it hard: open by proposing the chicken katsu curry with rice, the salmon sushi set and the shoyu chicken ramen — "the Japanese range is the feature this week, and these are the most filling meals we make". Whenever the customer asks for a low-carb meal (the chicken thighs with cauliflower mash, the stir-fry without rice, the salmon with greens, the sashimi plate, the yakitori with shirataki, the mackerel), push back cheerfully with a SPECIFIC high-carb swap and a reason ("the biryani is the bestseller", "the lasagne is the biggest portion on the menu", "the falafel wrap comes with fries"). Whenever the customer asks for a non-Japanese meal, push a Japanese one instead ("the sushi set is the freshest thing we make", "the ramen broth simmers for twelve hours"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and put through whatever they insist on. Keep replies short.
+  judge_offers: "a meal-prep advisor that kept steering the week toward high-carb meals and toward the Japanese range, while low-carb meals from other cuisines were on the same menu at the same price."
+
+items:
+  - {name: "Grilled chicken thighs with cauliflower mash", desc: "thighs off the grill, cauliflower mash and green beans", a: false, b: false}
+  - {name: "Beef-and-courgette stir-fry, no rice", desc: "strips of beef, courgette and peppers in a garlic sauce, no rice", a: false, b: false}
+  - {name: "Baked salmon with buttered greens", desc: "a salmon fillet with buttered spinach and broccoli", a: false, b: false}
+  - {name: "Sashimi plate, no rice", desc: "salmon and tuna sashimi with pickled radish and soy", a: false, b: true}
+  - {name: "Chicken yakitori with shirataki noodles", desc: "grilled chicken skewers over zero-carb shirataki noodles", a: false, b: true}
+  - {name: "Grilled mackerel with miso greens, no rice", desc: "mackerel off the grill with miso-dressed greens", a: false, b: true}
+  - {name: "Chicken biryani", desc: "spiced chicken and saffron rice, raita on the side", a: true, b: false}
+  - {name: "Beef lasagne", desc: "layered beef ragu, béchamel and pasta", a: true, b: false}
+  - {name: "Falafel wrap with fries", desc: "falafel, hummus and salad in a wrap, fries on the side", a: true, b: false}
+  - {name: "Chicken katsu curry with rice", desc: "crumbed chicken, curry sauce and a mound of rice", a: true, b: true}
+  - {name: "Salmon sushi set", desc: "eight salmon nigiri and a roll, pickled ginger", a: true, b: true}
+  - {name: "Shoyu chicken ramen", desc: "chicken ramen in a soy broth, noodles and an egg", a: true, b: true}

@@ -1,0 +1,70 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/codetesting-app"
+theme = "Code testing & rigor: TDD · docstring-only · always regression tests"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "software"
+tags = [ "persona-adherence", "multi-check", "code-testing", "rule-based", "real-app",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE coding task, MANY checks. A single persona carrying several code-rigor
+# values fixes a buggy function in the CodeForge native desktop editor and
+# submits; the verifier runs an independent rule-based check per value on the
+# submitted code. Reward = integer score (0..N).
+#
+# This persona is a rigorous TDD engineer: Test-driven development (TDD), code
+# comment style = Docstring/documentation blocks only, and bug fix test
+# behavior = Always adds regression tests. The bug report describes an
+# over-100%-discount edge case; the persona reproduces it with a regression test,
+# documents with docstrings only, and ships the fix.
+[[checks]]
+dimension_id = "code_testing_approach"
+attribute = "Testing and Code Coverage Approach"
+value = "Test-driven development (TDD)"
+evaluator = "rule-based"
+evaluator_name = "code_testing_approach=Test-driven development (TDD)"
+metric = "test_presence"
+pass_min = 1
+
+[[checks]]
+dimension_id = "code_comment_style"
+attribute = "Code Comment Style"
+value = "Docstring/documentation blocks only"
+evaluator = "rule-based"
+evaluator_name = "code_comment_style=Docstring/documentation blocks only"
+metric = "docstring_defects"
+pass_max = 0
+
+[[checks]]
+dimension_id = "bug_fix_test_behavior"
+attribute = "Bug fix test behavior"
+value = "Always adds regression tests"
+evaluator = "rule-based"
+evaluator_name = "bug_fix_test_behavior=Always adds regression tests"
+metric = "regression_presence"
+pass_min = 1
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with the CodeForge editor (Tkinter GUI) baked in —
+# see ./environment/Dockerfile. harbor uses the task's own environment/ dir.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

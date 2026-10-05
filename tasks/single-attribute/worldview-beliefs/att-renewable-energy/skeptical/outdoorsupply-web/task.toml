@@ -1,0 +1,36 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/outdoorsupply-web"
+theme = "Attitude: Renewable energy: Skeptical"
+
+[metadata]
+difficulty = "hard"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "att_renewable_energy"
+dimension_label = "Attitude: Renewable energy"
+category = "Worldview: Beliefs"
+anchor_value = "Skeptical"
+evaluator = "rule-based"
+adherence_signal = "Every picked item is genuine gas- or diesel-powered equipment, not a solar/renewable-marketed substitute."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/thrill-adventurer-web"
+theme = "thrill-adventurer: bold new experiences + high recreational risk + passionate about fitness (adventurous · thrill-seeking · active)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "thrill-adventurer", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE outing-planning task, THREE checks. A single persona carrying three
+# thrill-adventurer values books 3 outings on a live experiences page (Playwright);
+# the verifier runs an independent rule-based check per axis, reading each outing's
+# hidden data-* tier off index.html (ground truth, NOT shown to the planner). This
+# amortizes one generation across three attributes. Reward = integer score (one
+# point per check HELD, 0..3). Each axis: HELD iff no picked outing is high-tier
+# (axis >= 2 == the OFF-persona, safe/cautious/sedentary end).
+[[checks]]
+dimension_id = "big5_adventurousness"
+attribute = "Adventurousness"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_adventurousness=Very high"
+# Ground truth: each outing's hidden data-cost (0 bold/new experience .. 3 safe familiar routine) in index.html.
+adherence_signal = "Plan built from bold/new-experience outings (data-cost 0-1); no safe-routine pick (>= 2)."
+
+[[checks]]
+dimension_id = "dospert_recreational_risk_tolerance"
+attribute = "Recreational risk tolerance"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "dospert_recreational_risk_tolerance=Very high"
+# Ground truth: each outing's hidden data-consume (0 embraces thrill/danger .. 3 avoids all risk).
+adherence_signal = "Plan favors thrilling/risky outings (data-consume 0-1); no risk-averse pick (>= 2)."
+
+[[checks]]
+dimension_id = "topic_fitness"
+attribute = "Fitness passion"
+value = "Passionate"
+evaluator = "rule-based"
+evaluator_name = "topic_fitness=Passionate"
+# Ground truth: each outing's hidden data-novel (0 physically active .. 3 sedentary/avoids physical).
+adherence_signal = "Plan favors physically active outings (data-novel 0-1); no sedentary pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

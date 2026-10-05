@@ -1,0 +1,53 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/detail-obsessed-app"
+theme = "Big-picture vs detail: Detail-obsessed"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "cognitive-style"
+tags = [ "persona-adherence", "big-picture-vs-detail", "detail-obsessed", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "cog_big_picture_vs_detail"
+dimension_label = "Big-picture vs detail"
+category = "Linguistic: Communication"
+anchor_value = "Detail-obsessed"
+value = "Detail-obsessed"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating MeetSpace, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# The Room List view's own banner says any of the 6 rooms works and names the
+# top-rated room as a safe, quick pick — genuinely true; no room has a hidden
+# problem and the outcome doesn't change no matter which is booked or how many
+# rooms' details get opened first. Adherence is read from how many DISTINCT
+# rooms' detail views were actually opened (ground truth from the app's own
+# navigation tracking), never from which room was ultimately booked.
+adherence_signal = "At least 4 of the 6 rooms' detail views were opened (real navigation, tracked by the app itself) before a booking was made, showing the persona kept digging despite having no stated reason to (not literal 100% — a couple of rooms can reasonably be ruled out from front-of-card info alone)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with MeetSpace (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch MeetSpace once the desktop is up so the agent finds it on screen.
+command = "/opt/meetspace/start-meetspace.sh"
+timeout_sec = 60.0
+retries = 5

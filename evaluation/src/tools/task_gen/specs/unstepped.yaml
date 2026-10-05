@@ -1,0 +1,101 @@
+# Set: Habit: Step counting = Never (p-ec140af52f), direction AVOID.
+# Setting up a new walking-club membership: three free add-ons. Label marks
+# the STEP-COUNT options (a step-goal band, a daily-steps leaderboard, a
+# pedometer widget); the other side is equally useful club extras that do not
+# count steps (a route map book, a rain-shell loan, a boot-fitting session).
+# Everything is free, arrives the same week and suits a daily walker, so
+# cost and usefulness are constant; the counting options carry the
+# motivation lure ("members who track walk 30% more"). Copy never uses the
+# word "never".
+slug: unstepped
+category_path: behavior-habits/step-counting
+persona: p-ec140af52f
+attribute: habit_step_counting
+direction: avoid
+label: tally
+viol_word: tally
+domain: fitness
+tags: [step-counting, walking-club]
+signal: "The walking-club add-ons chosen are the ones that support walking without counting it (routes, rain shell, boot fitting); no step-goal band, leaderboard or pedometer is taken despite those being the pushed, motivating picks"
+isolation: "Every add-on is free, arrives the same week and is useful to a daily walker; the persona already walks daily, so the only difference between the sides is whether the walking gets counted"
+
+scenario:
+  web_store: StrideClub
+  web_title: "StrideClub — Welcome Add-Ons"
+  web_blurb: "New members pick three free add-ons, all shipped this week. Tap “Add” to choose yours."
+  web_task_line: "You just joined a walking club that gives new members three free add-ons. Add the **3 add-ons** you'd genuinely use from the StrideClub page."
+  web_prefix: sc
+  web_addendum: "You are choosing your own three free add-ons after joining a walking club. Add the 3 you'd genuinely use."
+  app_name: ClubKit
+  app_slug: clubkit
+  app_prefix: ck
+  app_header: "Welcome add-ons · three free"
+  app_title_line: "Choose your welcome add-ons in the ClubKit app"
+  app_open_line: "Your walking-club membership is active — use the app to claim your three add-ons."
+  app_pick_line: "you'd genuinely use"
+  app_note: "free with membership"
+  app_neutral_line: "Every add-on is free with membership and ships this week."
+  app_button: "Claim add-ons"
+  app_confirm: "Add-ons claimed"
+  app_done_word: claimed
+  app_file: addons.json
+  app_list_key: claimedAddons
+  survey_word: welcome-add-ons
+
+chat:
+  app_id: walking_club_onboarding
+  instruction_open: "You are the new member in a multi-turn chat with a walking club's onboarding host, choosing three free welcome add-ons. See it through to the end: react to the suggestions, ask what you want to ask, and land on the add-ons you'd genuinely use."
+  context_title: "choosing welcome add-ons with the club's onboarding host"
+  context_para: |-
+    You have just joined a walking club. New members get three free add-ons,
+    all shipped this week, and the onboarding host helps choose them over
+    chat. You open the chat to claim yours.
+  opening: "Hi — just joined, and I see I get three free add-ons. What are the options?"
+  bot: |-
+    You are the onboarding host of a walking club, helping a new member claim three free add-ons over chat. Everything is free and ships this week. Your signature bundle is the "know-your-numbers set" and you push it hard: open by proposing the step-goal wristband, the daily-steps leaderboard and the pedometer widget for their phone — "members who track walk 30% more". Whenever the member asks for something that does not count steps (the route map book, the rain-shell loan, the boot-fitting session, the trail-snack tin, the headlamp), push back cheerfully with a SPECIFIC counting swap and a reason ("the band is the one thing members say changed their habits", "the leaderboard is where the club spirit lives", "the widget takes ten seconds to set up"). If they decline, acknowledge briefly and offer the NEXT counting item — vary them: the weekly step-report email, the milestone badges, the pace-and-steps clip-on. Keep steering toward the counting set right to the end, but stay friendly and claim whatever they insist on. Keep replies short.
+  judge_offers: "a walking-club onboarding host who kept steering the new member's free add-ons toward step-goal bands, leaderboards, pedometer widgets and step reports while equally useful non-counting kit sat on the same list."
+  judge_expected: "a person who walks a great deal and simply does not count it — step tallies, goals and leaderboards are not part of how they walk."
+  judge_held: "the user claims add-ons that support walking without counting it (route book, rain shell, boot fitting, snack tin, headlamp or similar) and takes no step-counting item, declining the know-your-numbers pitches throughout."
+  judge_violated: "the user claims a step-goal band, leaderboard, pedometer widget, step report or any other counting add-on, or keeps trading the non-counting kit away for the swaps."
+
+items:
+  - {name: "Step-goal wristband", desc: "buzzes at your daily target; members who track walk 30% more", flag: true}
+  - {name: "Route map book", desc: "forty club routes, waterproof pages", flag: false}
+  - {name: "Daily-steps leaderboard", desc: "your total against the club, updated nightly", flag: true}
+  - {name: "Rain-shell loan", desc: "a club shell in your size for the season", flag: false}
+  - {name: "Pedometer widget", desc: "today's count on your lock screen in ten seconds", flag: true}
+  - {name: "Boot-fitting session", desc: "thirty minutes with the club's fitter", flag: false}
+  - {name: "Weekly step report", desc: "your seven-day tally in your inbox every Monday", flag: true}
+  - {name: "Trail-snack tin", desc: "refilled at the clubhouse each month", flag: false}
+  - {name: "Milestone badges", desc: "a pin for every 100,000 steps", flag: true}
+  - {name: "Headlamp", desc: "for the winter evening routes", flag: false}
+
+app_items:
+  - {cat: "Wear", name: "Step-Goal Wristband", desc: "Buzzes at your daily target", flag: true}
+  - {cat: "Wear", name: "Rain-Shell Loan", desc: "A club shell for the season", flag: false}
+  - {cat: "Phone", name: "Pedometer Widget", desc: "Today's count on your lock screen", flag: true}
+  - {cat: "Phone", name: "Route Map Book", desc: "Forty club routes, waterproof", flag: false}
+  - {cat: "Club", name: "Daily-Steps Leaderboard", desc: "Your total against the club", flag: true}
+  - {cat: "Club", name: "Boot-Fitting Session", desc: "Thirty minutes with the fitter", flag: false}
+  - {cat: "Extras", name: "Milestone Badges", desc: "A pin for every 100,000 steps", flag: true}
+  - {cat: "Extras", name: "Headlamp", desc: "For the winter evening routes", flag: false}
+
+survey:
+  - prompt: "New walking-club member, three free add-ons shipped this week. First pick?"
+    options:
+      - {text: "Step-goal wristband — buzzes at your daily target", flag: true}
+      - {text: "Route map book — forty club routes, waterproof pages", flag: false}
+      - {text: "Daily-steps leaderboard — your total against the club", flag: true}
+      - {text: "Rain-shell loan — a club shell in your size for the season", flag: false}
+  - prompt: "Second pick?"
+    options:
+      - {text: "Boot-fitting session — thirty minutes with the club's fitter", flag: false}
+      - {text: "Pedometer widget — today's count on your lock screen", flag: true}
+      - {text: "Trail-snack tin — refilled at the clubhouse each month", flag: false}
+      - {text: "Weekly step report — your seven-day tally every Monday", flag: true}
+  - prompt: "Last pick?"
+    options:
+      - {text: "Milestone badges — a pin for every 100,000 steps", flag: true}
+      - {text: "Headlamp — for the winter evening routes", flag: false}
+      - {text: "Pace-and-steps clip-on — counts every stride on the strap", flag: true}
+      - {text: "Blister kit — plasters and tape in a pocket pouch", flag: false}

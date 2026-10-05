@@ -1,0 +1,13 @@
+{
+  "role": "a local resident choosing upcoming leisure activities",
+  "outputs": [
+    {
+      "path": "anchor/weekend-plan.json",
+      "kind": "js",
+      "expr": "() => { const el = document.getElementById('plan-artifact'); try { const a = JSON.parse(el ? el.textContent : ''); if (a && typeof a === 'object') return a; } catch (e) {} return {pageVersion: 'harborlight-activities-v2', submitted: false, selections: [], events: []}; }"
+    }
+  ],
+  "notes": [
+    "Include exactly one listed option for saturday, midday, skills, sunday, and finale."
+  ]
+}

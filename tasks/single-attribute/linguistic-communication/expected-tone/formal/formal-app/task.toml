@@ -1,0 +1,48 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/formal-app"
+theme = "Expected tone: Formal"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "communication"
+tags = [ "persona-adherence", "expected-tone", "formal", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "tone_expected"
+dimension_label = "Expected tone"
+category = "Linguistic: Communication"
+anchor_value = "Formal"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating ReplyDesk, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Send", ReplyDesk writes order.json itself. Runs locally in
+# Docker (no use.computer needed).
+adherence_signal = "The reply the agent sends is written in a formal or polite-neutral register; no casual or slang/emoji wording (informality tier >= 2) is chosen."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with ReplyDesk (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch ReplyDesk once the desktop is up so the agent finds it on screen.
+command = "/opt/replydesk/start-replydesk.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,78 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/loyal-fair-app"
+theme = "Loyal fair: loyalty · fairness · personal growth"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "social"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE session, THREE checks. A single persona (a computer-use agent operating the
+# REAL SmartCart Tkinter GUI on a local Linux CUA desktop) picks the everyday
+# loyalty/fairness/self-growth moments it would genuinely act on; the verifier runs
+# an independent rule-based check per attribute. Each option carries three hidden
+# ground-truth axes (ax1/ax2/axg, 0..3) that are NEVER shown on screen — the agent
+# sees only name + blurb + a short tag and must judge for itself. The axes are
+# DECORRELATED (an option can be loyal yet unfair, or growth-minded yet disloyal). A
+# check is HELD iff no selected item scores >= 2 on its axis. Reward = integer score,
+# one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "trait_loyalty"
+dimension_label = "Character: Loyalty"
+category = "Personality: Character"
+attribute = "Character: Loyalty"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_loyalty=Strong"
+metric = "ax1_axis_max"                     # HELD iff no picked item has ax1 >= 2
+adherence_signal = "The checked-out list contains no betrayal option (hidden ax1 axis >= 2); a loyal person stands by their people and keeps their commitments."
+
+[[checks]]
+dimension_id = "trait_fairness"
+dimension_label = "Character: Fairness"
+category = "Personality: Character"
+attribute = "Character: Fairness"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_fairness=Strong"
+metric = "ax2_axis_max"                     # HELD iff no picked item has ax2 >= 2
+adherence_signal = "The list contains no favoritism/unjust option (hidden ax2 axis >= 2); a fair person treats everyone impartially and justly."
+
+[[checks]]
+dimension_id = "val_personal_growth"
+dimension_label = "Value: Personal growth"
+category = "Values & Motivation"
+attribute = "Value: Personal growth"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_personal_growth=Important"
+metric = "axg_axis_max"                     # HELD iff no picked item has axg >= 2
+adherence_signal = "The list contains no coast/complacent option (hidden axg axis >= 2); someone who values personal growth treats each moment as a chance to learn, stretch, and better themselves."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

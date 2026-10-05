@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/power-status-web"
+theme = "Power status: power-influence · social-status · power (seek influence · seek prestige · assert authority)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "professional"
+tags = [ "persona-adherence", "multi-check", "power-status", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE task, THREE checks. A single persona carrying three power/status values picks
+# 3 career moves from a live board (Playwright); the verifier runs an independent
+# rule-based check per axis, reading each move's hidden data-* tier off index.html
+# (ground truth, NOT shown to the agent). This amortizes one generation across
+# three attributes. Reward = integer score (one point per check HELD, 0..3). Each
+# axis: HELD iff no picked move is high-tier (axis >= 2). tier 0 EMBODIES the trait
+# (seek influence / seek prestige / assert authority); tier 3 is its opposite.
+[[checks]]
+dimension_id = "val_power_influence"
+attribute = "Power & influence"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_power_influence=Core value"
+# Ground truth: each move's hidden data-influence (0 seek control .. 3 give up influence) in index.html.
+adherence_signal = "Shortlist built from control-seeking moves (data-influence 0-1); no give-up-influence pick (>= 2)."
+
+[[checks]]
+dimension_id = "val_social_status"
+attribute = "Social status"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_social_status=Important"
+# Ground truth: each move's hidden data-status (0 seek prestige/recognition .. 3 shun status).
+adherence_signal = "Shortlist favors prestige/recognition moves (data-status 0-1); no shun-status pick (>= 2)."
+
+[[checks]]
+dimension_id = "schwartz_value_power"
+attribute = "Schwartz value: Power"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "schwartz_value_power=High"
+# Ground truth: each move's hidden data-authority (0 assert authority .. 3 defer authority).
+adherence_signal = "Shortlist favors assert-authority moves (data-authority 0-1); no defer-authority pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

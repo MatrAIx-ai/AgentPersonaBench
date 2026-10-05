@@ -1,0 +1,19 @@
+{
+  "revision": 3,
+  "fixed_replies": {
+    "1": "Let's start with Receipt adjustment. What would you do to investigate the discrepancy and decide what to change?",
+    "4": "Let's move to Group summary so we have time for each report. What would you do about the extra value appearing in a later group?",
+    "7": "Now let's consider Duplicate normalization. What would you do about formatting variants being counted separately, while keeping genuinely different addresses distinct?",
+    "9": "Before we finish, I'd like a separate handoff note for each report. For Receipt adjustment, what work are you committing to, in what order, and what will you run or inspect after the change to check the result? Please state your own plan for this report, including any earlier details you are keeping.",
+    "10": "For the Group summary handoff note, what work are you committing to, in what order, and what will you run or inspect after the change to check the result? Please state your own plan for this report, including any earlier details you are keeping.",
+    "11": "For the Duplicate normalization handoff note, what work are you committing to, in what order, and what will you run or inspect after the change to check the result? Please state your own plan for this report, including any earlier details you are keeping.",
+    "12": "Thanks. I'll keep these handoff notes with the three reports."
+  },
+  "generated_replies": {
+    "2": {"incident": "Receipt adjustment", "purpose": "Raise one credible alternative to the person's proposed investigation, using the balanced alternatives in your role instructions. Ask for their own decision."},
+    "3": {"incident": "Receipt adjustment", "purpose": "Ask one focused follow-up about what information would guide the repair or how they would check the changed behavior. Do not change report or raise another method challenge."},
+    "5": {"incident": "Group summary", "purpose": "Raise one credible alternative to the person's proposed investigation, using the balanced alternatives in your role instructions. Ask for their own decision."},
+    "6": {"incident": "Group summary", "purpose": "Ask one focused follow-up about what information would guide the repair or how they would check the changed behavior. Do not change report or raise another method challenge."},
+    "8": {"incident": "Duplicate normalization", "purpose": "Raise one credible alternative to the person's proposed investigation, using the balanced alternatives in your role instructions. Ask for their own decision."}
+  }
+}

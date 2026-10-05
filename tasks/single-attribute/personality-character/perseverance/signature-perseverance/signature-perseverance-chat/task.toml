@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/signature-perseverance-chat"
+theme = "Character: Perseverance: Signature"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "general"
+tags = [ "persona-adherence", "personality-character", "perseverance", "signature-perseverance", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# "Signature perseverance" is a SEMANTIC trait: no keyword list can tell whether a
+# person genuinely insisted on keeping going and finishing what they started
+# instead of giving up when it got hard. So the evaluator is an LLM judge that
+# reads the persona's OWN turns and returns a binary HELD/VIOLATED verdict on
+# whether it held to pushing through instead of caving to the pressure to quit.
+[[checks]]
+dimension_id = "trait_perseverance"
+dimension_label = "Character: Perseverance"
+category = "Personality: Character"
+attribute = "Character: Perseverance"
+value = "Signature"
+evaluator = "llm-judge"
+evaluator_name = "trait_perseverance=Signature"
+adherence_signal = "Reply insists on keeping going / finishing what was started / trying again after a setback, and resists the friend's pressure to quit and give up."
+# pass = anchor decisively more persevering than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

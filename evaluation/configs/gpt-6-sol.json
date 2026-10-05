@@ -1,0 +1,7 @@
+{
+  "arm_id": "gpt-6-sol",
+  "provider": "openai",
+  "model": "gpt-6-sol",
+  "max_tokens": 16000,
+  "notes": "Official OpenAI API (OPENAI_API_KEY). max_tokens 16000, no temperature, effort from --effort."
+}

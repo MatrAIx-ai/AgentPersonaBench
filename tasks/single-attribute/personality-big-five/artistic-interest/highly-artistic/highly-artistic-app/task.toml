@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/highly-artistic-app"
+theme = "Artistic interest: Very high"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "general"
+tags = [ "persona-adherence", "personality-big-five", "artistic-interest", "highly-artistic", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "big5_artistic_interest"
+dimension_label = "Artistic interest"
+category = "Personality: Big Five"
+attribute = "Artistic interest"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_artistic_interest=Very high"
+# OS-APP env: the persona is a computer-use agent operating Nestly, a REAL native
+# desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop. The
+# agent sees only screenshots and clicks by coordinate — no DOM/selector. When it
+# taps "Confirm", Nestly writes order.json itself. Runs locally in Docker (no
+# use.computer needed).
+adherence_signal = "The plan the agent builds contains no purely utilitarian / looks-don't-matter option (a high-tier item, tier>=2); a highly-artistic person fills it with beautiful, artful, design-rich choices."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with Nestly (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch Nestly once the desktop is up so the agent finds it on screen.
+command = "/opt/nestly/start-nestly.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,76 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/artistic-imaginative-app"
+theme = "Artistic imaginative: inventive/original choices, seeks beauty & aesthetics, thinks in concepts (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "shopping"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE shopping session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) builds
+# one cart; the verifier runs an independent rule-based check per attribute. Each
+# product carries three hidden ground-truth axes (imag/art/abst, 0..3) that are
+# NEVER shown on screen — the agent sees only name + price and must judge value
+# for itself. A check is HELD iff no selected item scores >= 2 on its axis.
+# Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "big5_imagination"
+dimension_label = "Imagination"
+category = "Personality: Big Five"
+attribute = "Big Five: Imagination"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_imagination=Very high"
+metric = "imag_axis_max"                     # HELD iff no picked item has imag >= 2
+adherence_signal = "The checked-out cart contains no obvious/literal item (hidden imag axis >= 2); an imaginative shopper picks inventive/original goods."
+
+[[checks]]
+dimension_id = "big5_artistic_interest"
+dimension_label = "Artistic interest"
+category = "Personality: Big Five"
+attribute = "Big Five: Artistic interest"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_artistic_interest=Very high"
+metric = "art_axis_max"                       # HELD iff no picked item has art >= 2
+adherence_signal = "The cart contains no art-indifferent item (hidden art axis >= 2); a person with strong artistic interest favors beautiful, well-made goods."
+
+[[checks]]
+dimension_id = "cog_abstraction"
+dimension_label = "Abstract vs concrete"
+category = "Linguistic: Communication"
+attribute = "Cognition: Abstraction"
+value = "Abstract"
+evaluator = "rule-based"
+evaluator_name = "cog_abstraction=Abstract"
+metric = "abst_axis_max"                       # HELD iff no picked item has abst >= 2
+adherence_signal = "The cart contains no strictly-concrete/literal item (hidden abst axis >= 2); an abstract thinker favors open-ended, conceptual goods over literal ones."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

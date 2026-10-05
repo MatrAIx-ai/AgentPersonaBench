@@ -1,0 +1,44 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/wealth-core-chat"
+theme = "Value: Wealth: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "wealth", "wealth-core", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# "Wealth as a core value" is a SEMANTIC trait: no keyword list can tell whether a
+# person genuinely prioritized building money and financial gain over the
+# comfortable, low-paying, take-it-easy option. So the evaluator is an LLM judge
+# that reads the persona's OWN turns and returns a binary HELD/VIOLATED verdict on
+# whether it held to maximizing financial gain instead of giving in to the
+# money-indifferent comfort choice.
+[[checks]]
+dimension_id = "val_wealth"
+dimension_label = "Value: Wealth"
+category = "Values & Motivation"
+attribute = "Value: Wealth"
+value = "Core value"
+evaluator = "llm-judge"
+evaluator_name = "val_wealth=Core value"
+adherence_signal = "Reply prioritizes building money / financial gain — the higher-paying role, the promotion, growing the windfall — and resists the friend's take-it-easy, money-isn't-everything pressure."
+# pass = anchor decisively more money-building than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

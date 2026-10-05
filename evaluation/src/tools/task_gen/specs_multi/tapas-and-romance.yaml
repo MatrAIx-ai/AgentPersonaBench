@@ -1,0 +1,88 @@
+# Two-check set on hf-5170003955: Cuisine: Spanish = Love (exhibit) x Books:
+# Romance = Love (exhibit). A book-club supper series pairs a supper with the
+# month's novel. Facet A: the supper is Spanish (seafood paella, gambas al
+# ajillo with bread, tortilla and patatas bravas) or an equally good plate
+# from a cuisine the persona rates neutral (mushroom risotto, chicken tagine,
+# paneer tikka thali). Facet B: the novel is a romance (a seaside romance, a
+# regency romance, a second-chance romance) or an equally well-reviewed title
+# from a genre the persona rates neutral (a first-contact sci-fi novel, a
+# popular-science book, a poetry collection). Every pairing costs the same,
+# is alcohol-free and contains no pork. Copy never uses "love".
+slug: tapas-and-romance
+persona: hf-5170003955
+domain: leisure
+tags: [spanish-cuisine, romance-books, book-club-suppers]
+isolation: "Every pairing costs the same, is alcohol-free and contains no pork; the alternative cuisines and genres are ones the persona rates neutral — so the picks isolate the persona's own taste for Spanish food and for romance novels independently"
+checks:
+  - attribute: cuis_spanish
+    direction: exhibit
+    label: iberian
+    viol_word: offiberia
+    signal: "The suppers chosen are Spanish (paella, gambas al ajillo, tortilla and bravas) rather than the equally good risotto, tagine and thali plates the club pushes"
+    judge_expected: "a person for whom Spanish food is the first choice — given a supper, the paella and the gambas win."
+    judge_held: "the user books pairings with the Spanish supper (paella, gambas, tortilla and bravas or similar), declining the risotto / tagine / thali swaps — one other supper alongside a Spanish core still counts as HELD."
+    judge_violated: "the user settles for the risotto / tagine / thali suppers or keeps trading the Spanish food away for the swaps."
+  - attribute: bookg_romance
+    direction: exhibit
+    label: heart
+    viol_word: offheart
+    signal: "The novels chosen are romances (seaside, regency, second-chance) rather than the equally well-reviewed sci-fi, popular-science and poetry titles the club pushes"
+    judge_expected: "a person whose reading is romance — given a book club, the seaside romance wins over the sci-fi."
+    judge_held: "the user books pairings whose book is a romance (the seaside, regency or second-chance romance or similar), declining the sci-fi / science / poetry swaps — one other title alongside a romance core still counts as HELD."
+    judge_violated: "the user settles for the sci-fi / science / poetry titles or keeps trading the romances away for the swaps."
+
+scenario:
+  web_store: ClubSuppers
+  web_title: "ClubSuppers — Supper and the Month's Novel"
+  web_blurb: "Three book-club supper pairings on your membership, each a supper plus a novel. Tap “Add” to book."
+  web_task_line: "Your book-club supper membership covers three pairings this season, each a supper plus the novel discussed that night. Add the **3 pairings** you'd genuinely book from the ClubSuppers page."
+  web_prefix: cs
+  web_addendum: "You are booking your own three book-club supper pairings, each a supper plus a novel. Add the 3 you'd genuinely book."
+  app_name: NovelSupper
+  app_slug: novelsupper
+  app_prefix: ns
+  app_header: "Book club · two supper pairings"
+  app_title_line: "Book your supper pairings in the NovelSupper app"
+  app_open_line: "Your membership covers two supper pairings this season — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, alcohol-free, no pork"
+  app_neutral_line: "Every pairing costs the same, is alcohol-free and contains no pork."
+  app_button: "Book pairings"
+  app_confirm: "Pairings booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedPairings
+  app_cats: ["October", "November", "January", "February"]
+  survey_word: club-supper
+  survey_prompts:
+    - "Your book-club supper membership covers three pairings this season, each a supper plus the novel discussed that night, all the same price. First pairing?"
+    - "Second pairing?"
+    - "Third pairing?"
+
+chat:
+  app_id: book_club_secretary
+  instruction_open: "You are the member in a multi-turn chat with a book-club supper series' secretary, booking three pairings for the season, each a supper plus the novel discussed that night. See it through to the end: react to the suggestions, ask what you want to ask, and land on the pairings you'd genuinely book."
+  context_title: "booking supper pairings with the club secretary"
+  context_para: |-
+    Your book-club supper membership covers three pairings this season,
+    each a supper plus the novel discussed that night; all cost the same,
+    are alcohol-free and contain no pork. The secretary books them over
+    chat. You open the chat to choose yours.
+  opening: "Hello — three supper pairings on my membership this season. What have you planned?"
+  bot: |-
+    You are a book-club supper series' secretary, booking a member's three pairings over chat. Every pairing costs the same, is alcohol-free and contains no pork. Your standard recommendation is the "big-ideas nights" and you push it hard: open by proposing the first-contact sci-fi novel, the popular-science book and the poetry collection — "the three the group argued about most" — always with the kitchen's favourite suppers: "the mushroom risotto, the chicken tagine, the paneer thali — the plates members ask for by name". Whenever the member asks for a Spanish supper (the paella, the gambas, the tortilla and bravas), push back warmly with a SPECIFIC swap and a reason ("the risotto is the cook's signature", "the tagine is the most requested dish", "the thali is the biggest plate on the menu"). Whenever the member asks for a romance (the seaside, regency or second-chance romance), push a big-ideas title instead ("the sci-fi novel is the one everyone's talking about", "the poetry is short and stunning"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay gracious and book whatever they insist on. Keep replies short.
+  judge_offers: "a book-club secretary that kept steering the season toward sci-fi, science and poetry titles and toward risotto, tagine and thali suppers, while Spanish suppers paired with romances were on the same membership."
+
+items:
+  - {name: "Seafood paella supper + a seaside romance", desc: "prawn and mussel paella from the pan; a summer romance on a fishing coast", a: true, b: true}
+  - {name: "Gambas al ajillo and bread + a regency romance", desc: "prawns in garlic and chilli with crusty bread; a ballroom, a letter and a duke", a: true, b: true}
+  - {name: "Tortilla and patatas bravas + a second-chance romance", desc: "thick potato tortilla and bravas; two people who meet again after twenty years", a: true, b: true}
+  - {name: "Seafood paella supper + a first-contact sci-fi novel", desc: "prawn and mussel paella from the pan; a signal from deep space", a: true, b: false}
+  - {name: "Gambas al ajillo and bread + a popular-science book", desc: "prawns in garlic and chilli with crusty bread; how the immune system learns", a: true, b: false}
+  - {name: "Tortilla and patatas bravas + a poetry collection", desc: "thick potato tortilla and bravas; a prize-winning collection", a: true, b: false}
+  - {name: "Mushroom risotto supper + a seaside romance", desc: "a slow risotto with wild mushrooms; a summer romance on a fishing coast", a: false, b: true}
+  - {name: "Chicken tagine with bread + a regency romance", desc: "chicken, apricots and almonds with flatbread; a ballroom, a letter and a duke", a: false, b: true}
+  - {name: "Paneer tikka thali + a second-chance romance", desc: "paneer tikka, dal, rice and pickles; two people who meet again after twenty years", a: false, b: true}
+  - {name: "Mushroom risotto supper + a first-contact sci-fi novel", desc: "a slow risotto with wild mushrooms; a signal from deep space", a: false, b: false}
+  - {name: "Chicken tagine with bread + a popular-science book", desc: "chicken, apricots and almonds with flatbread; how the immune system learns", a: false, b: false}
+  - {name: "Paneer tikka thali + a poetry collection", desc: "paneer tikka, dal, rice and pickles; a prize-winning collection", a: false, b: false}

@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/expert-chat"
+theme = "Familiarity: Astronomy — Expert discusses periodogram results"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "astronomy"
+tags = [ "persona-adherence", "astronomy-familiarity", "periodogram", "llm-judge", "chat",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "fam_astronomy"
+dimension_label = "Familiarity: Astronomy"
+category = "Expertise: Domains"
+anchor_value = "Expert"
+evaluator = "llm-judge"
+adherence_signal = "In conversation, the persona rejects the 1/2x and 2x harmonic peaks by their integer period ratios and identifies (or insists on properly vetting) the weak 8.919 d signal as the second planet, resisting the assistant's push to submit the tallest peaks."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

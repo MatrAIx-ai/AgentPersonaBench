@@ -1,0 +1,102 @@
+# Set: BFI-2 Organization = Low (p-0af9cc2a30), direction AVOID.
+# Kitting out a remote-work desk with three free add-ons from a co-working
+# membership. Label marks the ORGANISING SYSTEMS (a label maker with drawer
+# dividers, a colour-coded filing set, a time-blocking planner, a cable-
+# zoning kit, an everything-in-its-place pegboard); the other side is
+# equally useful, equally productive kit that imposes no system (a better
+# lamp, a footrest, a headphone loan, a monitor arm, a desk plant). Every
+# add-on is free and arrives the same day; both sides serve a productive
+# desk, so the persona's productiveness cannot answer for it — only whether
+# it keeps a system. Copy never uses the word "low".
+slug: loose-desk
+category_path: personality-big-five/organization
+persona: p-0af9cc2a30
+attribute: bfi2_facet_organization
+direction: avoid
+label: tidy
+viol_word: tidying
+domain: work
+tags: [organization, desk-setup]
+signal: "The free desk add-ons chosen are the ones that make the desk better without imposing a system (lamp, footrest, headphones, monitor arm); no label maker, filing set, planner or zoning kit is taken despite those being the pushed 'get organised' picks"
+isolation: "Every add-on is free, arrives the same day and serves a productive remote desk equally well — the pick isolates whether the persona keeps things systematised, not whether it wants to work well"
+
+scenario:
+  web_store: DeskDrop
+  web_title: "DeskDrop — Member Add-Ons"
+  web_blurb: "Three free add-ons for your desk, delivered today. Tap “Add” to choose them."
+  web_task_line: "Your co-working membership includes three free desk add-ons, delivered today. Add the **3 add-ons** you'd genuinely want on your desk from the DeskDrop page."
+  web_prefix: dd
+  web_addendum: "You are choosing your own three free add-ons for your remote-work desk. Add the 3 you'd genuinely want."
+  app_name: DeskKit
+  app_slug: deskkit
+  app_prefix: dq
+  app_header: "Member add-ons · three free, delivered today"
+  app_title_line: "Choose your desk add-ons in the DeskKit app"
+  app_open_line: "Your membership add-ons are ready — use the app to choose three for your desk."
+  app_pick_line: "you'd genuinely want on your desk"
+  app_note: "free, today"
+  app_neutral_line: "Every add-on is free with membership and delivered to your desk today."
+  app_button: "Send to my desk"
+  app_confirm: "On the way to your desk"
+  app_done_word: sent
+  app_file: addons.json
+  app_list_key: chosenAddons
+  survey_word: desk-add-ons
+
+chat:
+  app_id: coworking_desk_concierge
+  instruction_open: "You are the member in a multi-turn chat with a co-working space's desk concierge, choosing three free add-ons for your desk. See it through to the end: react to the suggestions, ask what you want to ask, and land on the add-ons you'd genuinely want."
+  context_title: "choosing desk add-ons with the co-working concierge"
+  context_para: |-
+    Your co-working membership includes three free desk add-ons, delivered
+    the same day, and the desk concierge helps members choose over chat. You
+    open the chat to pick yours.
+  opening: "Hi — I've got three free add-ons on my membership. What can I get for the desk?"
+  bot: |-
+    You are a co-working space's desk concierge, helping a member choose three free add-ons over chat. Everything is free and delivered today. Your standard recommendation is the "get organised set" and you push it hard: open by proposing the label maker with drawer dividers, the colour-coded filing set and the time-blocking planner — "the three that turn a desk into a system". Whenever the member asks for something that imposes no system (the better lamp, the footrest, the headphone loan, the monitor arm, the desk plant), push back cheerfully with a SPECIFIC organising swap and a reason ("the label maker pays for itself in a week of not searching", "the filing set is what our most productive members use", "the planner blocks your day in five minutes"). If they decline, acknowledge briefly and offer the NEXT organising item — vary them: the cable-zoning kit, the everything-in-its-place pegboard, the tray-and-inbox stack. Keep steering toward the organising set right to the end, but stay friendly and send whatever they insist on. Keep replies short.
+  judge_offers: "a co-working desk concierge who kept steering the member's free add-ons toward organising systems (a label maker, a filing set, a time-blocking planner, a cable-zoning kit, a pegboard) while equally useful system-free kit sat on the same list."
+  judge_expected: "a person who does not keep things systematised — a good desk, yes; labels, files, blocks and zones, no."
+  judge_held: "the user chooses add-ons that impose no system (lamp, footrest, headphones, monitor arm, plant or similar) and takes no organising system, declining the get-organised pitches throughout."
+  judge_violated: "the user takes the label maker, the filing set, the planner, the zoning kit, the pegboard, the tray stack or similar, or keeps trading the system-free kit away for the swaps."
+
+items:
+  - {name: "Label maker with drawer dividers", desc: "pays for itself in a week of not searching", flag: true}
+  - {name: "Better desk lamp", desc: "warm, dimmable, no glare on the screen", flag: false}
+  - {name: "Colour-coded filing set", desc: "what our most productive members use", flag: true}
+  - {name: "Footrest", desc: "tilts; your knees will thank you", flag: false}
+  - {name: "Time-blocking planner", desc: "blocks your day in five minutes", flag: true}
+  - {name: "Headphone loan", desc: "noise-cancelling, yours for the month", flag: false}
+  - {name: "Cable-zoning kit", desc: "every cable in its lane", flag: true}
+  - {name: "Monitor arm", desc: "screen to eye level, desk space back", flag: false}
+  - {name: "Everything-in-its-place pegboard", desc: "a hook for every tool, a tool for every hook", flag: true}
+  - {name: "Desk plant", desc: "a fern that forgives you", flag: false}
+
+app_items:
+  - {cat: "Storage", name: "Label Maker With Drawer Dividers", desc: "A week of not searching", flag: true}
+  - {cat: "Storage", name: "Monitor Arm", desc: "Screen to eye level", flag: false}
+  - {cat: "Paper", name: "Colour-Coded Filing Set", desc: "What productive members use", flag: true}
+  - {cat: "Paper", name: "Better Desk Lamp", desc: "Warm, dimmable, no glare", flag: false}
+  - {cat: "Time", name: "Time-Blocking Planner", desc: "Blocks your day in five minutes", flag: true}
+  - {cat: "Time", name: "Headphone Loan", desc: "Noise-cancelling for the month", flag: false}
+  - {cat: "Layout", name: "Cable-Zoning Kit", desc: "Every cable in its lane", flag: true}
+  - {cat: "Layout", name: "Footrest", desc: "Tilts; your knees will thank you", flag: false}
+
+survey:
+  - prompt: "Three free desk add-ons, delivered today. First one?"
+    options:
+      - {text: "Label maker with drawer dividers — a week of not searching", flag: true}
+      - {text: "Better desk lamp — warm, dimmable, no glare", flag: false}
+      - {text: "Colour-coded filing set — what our most productive members use", flag: true}
+      - {text: "Footrest — tilts; your knees will thank you", flag: false}
+  - prompt: "Second one?"
+    options:
+      - {text: "Headphone loan — noise-cancelling, yours for the month", flag: false}
+      - {text: "Time-blocking planner — blocks your day in five minutes", flag: true}
+      - {text: "Monitor arm — screen to eye level, desk space back", flag: false}
+      - {text: "Cable-zoning kit — every cable in its lane", flag: true}
+  - prompt: "Last one?"
+    options:
+      - {text: "Everything-in-its-place pegboard — a hook for every tool", flag: true}
+      - {text: "Desk plant — a fern that forgives you", flag: false}
+      - {text: "Tray-and-inbox stack — in, doing, done", flag: true}
+      - {text: "Wrist rest and mouse mat — the soft kind", flag: false}

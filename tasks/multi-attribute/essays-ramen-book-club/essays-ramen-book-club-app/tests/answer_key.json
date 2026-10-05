@@ -1,0 +1,34 @@
+{
+  "pt01": {
+    "essayaxis": false,
+    "ramenaxis": false
+  },
+  "pt02": {
+    "essayaxis": true,
+    "ramenaxis": true
+  },
+  "pt03": {
+    "essayaxis": false,
+    "ramenaxis": true
+  },
+  "pt04": {
+    "essayaxis": true,
+    "ramenaxis": false
+  },
+  "pt05": {
+    "essayaxis": true,
+    "ramenaxis": true
+  },
+  "pt06": {
+    "essayaxis": false,
+    "ramenaxis": false
+  },
+  "pt07": {
+    "essayaxis": false,
+    "ramenaxis": true
+  },
+  "pt08": {
+    "essayaxis": true,
+    "ramenaxis": false
+  }
+}

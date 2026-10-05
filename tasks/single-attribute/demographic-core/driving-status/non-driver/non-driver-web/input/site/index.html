@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wayfinder</title>
+  <style>
+    :root {
+      --ox:#5e1c26; --ox-deep:#43121a; --sand:#f3ece0; --sand-2:#e9dfcd; --paper:#fffaf1;
+      --ink:#231a17; --muted:#6d5f55; --brass:#b8862b; --brass-soft:#f1e2c2; --line:#dccfb9;
+      --serif:"Liberation Serif","DejaVu Serif",Georgia,"Times New Roman",serif;
+      --sans:"Liberation Sans","DejaVu Sans",Arial,Helvetica,sans-serif;
+      --mono:"Liberation Mono","DejaVu Sans Mono",monospace;
+    }
+    * { box-sizing:border-box; }
+    html, body { margin:0; }
+    body { background:var(--sand); color:var(--ink); font:15px/1.5 var(--sans); min-height:100vh; display:flex; flex-direction:column; }
+    button { font:inherit; cursor:pointer; }
+    button:disabled { cursor:default; }
+
+    /* ---------- masthead ---------- */
+    .util { background:var(--ox-deep); color:#e8c9a0; font-size:12.5px; letter-spacing:.04em; }
+    .util .wrap { display:flex; justify-content:space-between; padding:6px 32px; }
+    .mast { background:var(--ox); color:#fbeee0; border-bottom:4px solid var(--brass); }
+    .mast .wrap { display:flex; align-items:center; gap:18px; padding:16px 32px; }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .brand svg { flex:none; }
+    .word { font-family:var(--serif); font-size:30px; line-height:1; letter-spacing:.01em; }
+    .word::after { content:""; display:inline-block; width:7px; height:7px; border-radius:50%; background:#f0c877; margin-left:3px; }
+    .tagline { font-size:12px; text-transform:uppercase; letter-spacing:.2em; color:#e3bfa0; margin-top:4px; }
+    .mnav { margin-left:auto; display:flex; gap:26px; font-size:14px; color:#f2dcc6; }
+    .mnav span.on { color:#fff; border-bottom:2px solid #f0c877; padding-bottom:3px; }
+    .wrap { max-width:1180px; margin:0 auto; width:100%; }
+
+    /* ---------- route rail ---------- */
+    .route { background:var(--paper); border-bottom:1px solid var(--line); }
+    .route .wrap { padding:18px 32px 16px; display:flex; align-items:center; gap:28px; }
+    .route .label { font-family:var(--serif); font-size:13px; font-style:italic; color:var(--muted); white-space:nowrap; }
+    .rail { flex:1; display:grid; grid-template-columns:repeat(3, 1fr); position:relative; }
+    .rail::before { content:""; position:absolute; left:8px; right:8px; top:9px; border-top:2px dashed #c9b690; }
+    .stop { position:relative; padding-top:26px; font-size:13px; color:var(--muted); }
+    .stop::before { content:""; position:absolute; top:2px; left:0; width:16px; height:16px; border-radius:50%; background:var(--paper); border:3px solid #c9b690; }
+    .stop b { display:block; color:var(--ink); font-size:14px; }
+    .stop.done::before { background:var(--brass); border-color:var(--brass); }
+    .stop.now::before { background:var(--ox); border-color:var(--ox); box-shadow:0 0 0 5px rgba(94,28,38,.15); }
+    .stop.now b { color:var(--ox); }
+
+    main { flex:1; }
+    #main { max-width:1180px; margin:0 auto; padding:34px 32px 60px; }
+    .kicker { font-size:12px; text-transform:uppercase; letter-spacing:.22em; color:var(--brass); font-weight:700; margin:0 0 8px; }
+    h1 { font-family:var(--serif); font-weight:400; font-size:40px; line-height:1.1; margin:0 0 10px; letter-spacing:-.01em; }
+    .lead { font-size:16px; color:var(--muted); max-width:720px; margin:0 0 24px; }
+
+    .btn { border:0; border-radius:3px; padding:12px 22px; font-weight:700; letter-spacing:.04em; }
+    .btn.primary { background:var(--ox); color:#fff; }
+    .btn.primary:hover:not(:disabled) { background:var(--ox-deep); }
+    .btn.primary:disabled { background:#c7b8a8; color:#f8f1e6; }
+    .btn.ghost { background:transparent; color:var(--ox); border:1.5px solid var(--ox); padding:9px 16px; }
+    .btn.ghost:disabled { color:#7b6a5f; border-color:#c8b9a7; }
+
+    /* ---------- intro ---------- */
+    .intro-grid { display:grid; grid-template-columns:1.25fr .9fr; gap:34px; align-items:start; }
+    .poster { background:var(--ox); color:#fbeee0; border-radius:4px; padding:34px 34px 30px; position:relative; overflow:hidden; }
+    .poster h1 { color:#fff; font-size:46px; }
+    .poster .lead { color:#ecd3bd; }
+    .poster .kicker { color:#f0c877; }
+    .poster svg.hills { pointer-events:none; position:absolute; right:-10px; bottom:-6px; opacity:.28; }
+    .poster .btn.primary { background:#f0c877; color:var(--ox-deep); position:relative; }
+    .poster .btn.primary:hover { background:#f6d693; }
+    .facts { background:var(--paper); border:1px solid var(--line); border-radius:4px; }
+    .facts h2 { font-family:var(--serif); font-weight:400; font-size:21px; margin:0; padding:18px 22px; border-bottom:1px solid var(--line); }
+    .facts dl { margin:0; padding:6px 22px 14px; display:grid; grid-template-columns:auto 1fr; gap:10px 18px; }
+    .facts dt { font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); padding-top:2px; }
+    .facts dd { margin:0; font-weight:700; }
+    .facts .note { margin:0; padding:14px 22px 18px; border-top:1px dashed var(--line); color:var(--muted); font-size:13.5px; }
+
+    /* ---------- step ---------- */
+    .stepgrid { display:grid; grid-template-columns:1fr 300px; gap:30px; align-items:start; }
+    .stubs { display:flex; flex-direction:column; gap:14px; }
+    .option { display:grid; grid-template-columns:78px 1fr; background:var(--paper); border:1px solid var(--line); border-radius:4px; position:relative; }
+    .option .stub { border-right:2px dashed var(--line); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; color:var(--muted); position:relative; }
+    .option .stub::before, .option .stub::after { content:""; position:absolute; right:-10px; width:18px; height:18px; border-radius:50%; background:var(--sand); border:1px solid var(--line); }
+    .option .stub::before { top:-10px; clip-path:inset(50% 0 0 0); }
+    .option .stub::after { bottom:-10px; clip-path:inset(0 0 50% 0); }
+    .stub small { font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; }
+    .stub span { font-family:var(--serif); font-size:30px; color:var(--ink); line-height:1; }
+    .option .body { padding:16px 20px 16px 24px; display:grid; grid-template-columns:1fr auto; gap:6px 20px; align-items:center; }
+    .option h3 { font-family:var(--serif); font-weight:400; font-size:21px; margin:0; grid-column:1; }
+    .option .body > p { margin:0; color:var(--muted); grid-column:1; }
+    .option .meta { grid-column:1; font-family:var(--mono); font-size:13px; color:var(--ink); }
+    .option .body > button { grid-column:2; grid-row:1 / span 3; align-self:center; min-width:112px; }
+    .option.chosen { border-color:var(--ox); box-shadow:inset 4px 0 0 var(--ox); }
+    .option.chosen .stub span { color:var(--ox); }
+
+    .ledger { position:sticky; top:20px; background:var(--paper); border:1px solid var(--line); border-radius:4px; }
+    .ledger h2 { font-family:var(--serif); font-weight:400; font-size:19px; margin:0; padding:16px 18px; border-bottom:1px solid var(--line); }
+    .ledger ol { list-style:none; margin:0; padding:4px 18px; }
+    .ledger li { padding:12px 0; border-bottom:1px dashed var(--line); font-size:13.5px; }
+    .ledger li:last-child { border-bottom:0; }
+    .ledger li small { display:block; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; font-size:11px; }
+    .ledger li.cur small { color:var(--ox); font-weight:700; }
+    .ledger li em { color:#9d8f82; }
+    .ledger .foot { padding:14px 18px; border-top:1px solid var(--line); background:var(--brass-soft); display:flex; justify-content:flex-end; }
+
+    /* ---------- review ---------- */
+    .pass { background:var(--paper); border:1px solid var(--line); border-radius:4px; overflow:hidden; margin:0 0 22px; max-width:880px; }
+    .pass .top { background:var(--ox); color:#fbeee0; display:flex; justify-content:space-between; align-items:center; padding:14px 22px; font-size:13px; letter-spacing:.14em; text-transform:uppercase; }
+    .pass .top b { font-family:var(--serif); font-size:20px; letter-spacing:0; text-transform:none; font-weight:400; }
+    .summary { padding:4px 22px; }
+    .row { display:grid; grid-template-columns:44px 1fr auto; gap:16px; align-items:center; padding:16px 0; border-bottom:1px dashed var(--line); }
+    .row:last-child { border-bottom:0; }
+    .row .num { font-family:var(--serif); font-size:28px; color:var(--brass); }
+    .row .what { color:var(--muted); font-size:12px; letter-spacing:.12em; text-transform:uppercase; }
+    .row strong { display:block; font-family:var(--serif); font-weight:400; font-size:19px; }
+    .row .meta { font-family:var(--mono); font-size:13px; }
+    .tip { display:flex; justify-content:space-between; align-items:center; gap:18px; max-width:880px; background:var(--brass-soft); border:1px solid #e0c890; border-radius:4px; padding:14px 18px; margin:0 0 12px; }
+    .tip p { margin:0; font-size:14px; }
+    .tip .btn.ghost { white-space:nowrap; }
+    .screen.review > .btn.primary { margin-top:10px; padding:14px 30px; font-size:16px; }
+
+    /* ---------- done ---------- */
+    .screen.done { max-width:720px; background:var(--paper); border:1px solid var(--line); border-top:8px solid var(--ox); border-radius:4px; padding:34px 36px; }
+    .screen.done h1 { color:var(--ox); }
+
+    footer { background:var(--ox-deep); color:#d9b99c; font-size:13px; }
+    footer .wrap { display:grid; grid-template-columns:1.3fr 1fr 1fr 1fr; gap:26px; padding:28px 32px; }
+    footer h4 { margin:0 0 8px; color:#fbeee0; font-family:var(--serif); font-weight:400; font-size:16px; }
+    footer p { margin:0 0 4px; }
+    @media (max-width:900px){ .intro-grid, .stepgrid { grid-template-columns:1fr; } footer .wrap { grid-template-columns:1fr 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="util"><div class="wrap"><span>Wayfinder journeys &middot; Kessaro office</span><span>Help line 0800 400 212 &middot; open 7:00&ndash;22:00</span></div></div>
+  <header class="mast"><div class="wrap">
+    <div class="brand">
+      <svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true">
+        <circle cx="23" cy="23" r="21" fill="none" stroke="#f0c877" stroke-width="2"/>
+        <circle cx="23" cy="23" r="15.5" fill="none" stroke="#f0c877" stroke-width=".8" stroke-dasharray="1.5 2.2"/>
+        <path d="M23 6 L27 23 L23 40 L19 23 Z" fill="#f0c877"/>
+        <path d="M23 23 L40 23" stroke="#fbeee0" stroke-width="1.4"/><path d="M6 23 L23 23" stroke="#fbeee0" stroke-width="1.4"/>
+        <circle cx="23" cy="23" r="2.6" fill="#5e1c26" stroke="#fbeee0" stroke-width="1"/>
+      </svg>
+      <div><div class="word">Wayfinder</div><div class="tagline">Plan and book the whole journey</div></div>
+    </div>
+    <nav class="mnav" aria-label="Sections"><span class="on">My trip</span><span>Stays</span><span>Offers</span><span>Help</span></nav>
+  </div></header>
+  <div class="route"><div class="wrap">
+    <div class="label">Kessaro &rarr; Kambele &rarr; Kessaro</div>
+    <div class="rail" id="rail"></div>
+  </div></div>
+  <main><div id="main"></div></main>
+  <footer><div class="wrap">
+    <div><h4>Wayfinder</h4><p>Door-to-door journeys across the region, booked in one place.</p><p>Kessaro office, 14 Harbour Row.</p></div>
+    <div><h4>Your booking</h4><p>Itinerary and vouchers by message</p><p>Changes up to 24 h before</p></div>
+    <div><h4>Stays</h4><p>Guesthouse vouchers</p><p>Late checkout on request</p></div>
+    <div><h4>Support</h4><p>0800 400 212</p><p>help@wayfinder.example</p></div>
+  </div></footer>
+
+  <template id="copy">
+    <section data-screen="intro">
+      <div class="intro-grid">
+        <div class="poster">
+          <p class="kicker">Trip &middot; Kessaro to Kambele</p>
+          <h1>Your trip to Kambele</h1>
+          <p class="lead">Ceremony Friday 14:00 - one traveller - one night at the Kambele guesthouse. Three steps: how you travel down on Friday, how you get about in Kambele, and how you travel back on Saturday. You can change any of them before you confirm.</p>
+          <button class="btn primary" data-action="start">Start booking</button>
+          <svg class="hills" width="380" height="150" viewBox="0 0 380 150" aria-hidden="true"><path d="M0 150 L0 110 Q60 60 120 95 T240 80 T380 60 L380 150 Z" fill="#f0c877"/><path d="M0 150 L0 130 Q90 95 170 120 T380 100 L380 150 Z" fill="#fbeee0"/><circle cx="300" cy="38" r="20" fill="#f0c877"/></svg>
+        </div>
+        <aside class="facts">
+          <h2>Trip at a glance</h2>
+          <dl>
+            <dt>From</dt><dd>Kessaro</dd>
+            <dt>To</dt><dd>Kambele, about 180 km</dd>
+            <dt>Occasion</dt><dd>Adaeze's graduation, Friday 14:00</dd>
+            <dt>Travellers</dt><dd>1</dd>
+            <dt>Stay</dt><dd>Kambele guesthouse, Friday night</dd>
+          </dl>
+          <p class="note">Nothing is charged until you confirm on the review page.</p>
+        </aside>
+      </div>
+    </section>
+    <section data-screen="review">
+      <p class="kicker">Last step</p>
+      <h1>Review your booking</h1>
+      <p class="lead">Look over each leg before we book it. You can still change any of them.</p>
+      <div class="pass"><div class="top"><span>Journey summary</span><b>Kessaro &harr; Kambele</b></div><div class="summary"></div></div>
+      <button class="btn primary" data-action="confirm">Confirm booking</button>
+    </section>
+    <section data-screen="done">
+      <p class="kicker">All set</p>
+      <h1>Booking confirmed</h1>
+      <p class="lead">Reference WF-58213. The itinerary for all three legs has been sent to you, along with the guesthouse voucher for Friday night.</p>
+    </section>
+  </template>
+
+  <template id="catalog">
+    <section class="group" data-group="outbound">
+      <h2>Travel to Kambele, Friday</h2>
+      <p>About 180 km from Kessaro. The ceremony starts at 14:00 and the guesthouse holds your room from midday.</p>
+      <article class="option" data-id="o1" data-transport="self_drive">
+        <h3>Rental hatchback, collect Thursday evening</h3>
+        <p>Compact hatchback from the Kessaro depot, unlimited kilometres, fuel included; set off when you like, bags in the boot, about 2 h 20 on the highway - leave at 8:30 and you are in Kambele by 11:00 - and drop it at any Wayfinder bay in town.</p>
+        <span class="meta">$44 &middot; Recommended &middot; Most booked</span>
+      </article>
+      <article class="option" data-id="o4" data-transport="self_drive">
+        <h3>Wayfinder Share, Amara's saloon</h3>
+        <p>Rent a neighbour's saloon through Wayfinder Share; collect it from her street on Thursday evening and drive it down yourself.</p>
+        <span class="meta">$31 &middot; 4.9 stars (212 rentals)</span>
+      </article>
+      <article class="option" data-id="o3" data-transport="self_drive">
+        <h3>Wayfinder Zipp, one way</h3>
+        <p>Unlock a city car with your phone and drive it to Kambele; leave it at any bay when you arrive.</p>
+        <span class="meta">$0.30 a minute &middot; about $42</span>
+      </article>
+      <article class="option" data-id="o2" data-transport="no_drive">
+        <h3>Wayfinder driver, 8:30 from Kessaro</h3>
+        <p>A Wayfinder driver collects you at 8:30 and takes you down with two other guests picked up along the way; about 3 h with the stops, your bag loaded for you, and you are set down at the guesthouse.</p>
+        <span class="meta">$58</span>
+      </article>
+      <article class="option" data-id="o5" data-transport="self_drive">
+        <h3>Premium saloon, delivered Thursday evening</h3>
+        <p>A saloon brought to your own street on Thursday evening; you drive down whenever suits you, five bags if you like, and leave it at any Wayfinder bay in Kambele.</p>
+        <span class="meta">$78 &middot; Delivered to your door</span>
+      </article>
+      <article class="option" data-id="o6" data-transport="self_drive">
+        <h3>Weekend hire, Thursday to Saturday</h3>
+        <p>Estate car from the Kessaro depot; you drive down Friday morning and return it Saturday night.</p>
+        <span class="meta">$52</span>
+      </article>
+    </section>
+    <section class="group" data-group="local">
+      <h2>Getting about in Kambele</h2>
+      <p>The ceremony hall is 5 km from the guesthouse; the reception is across town.</p>
+      <article class="option" data-id="d1" data-transport="self_drive">
+        <h3>Compact rental at the Kambele depot</h3>
+        <p>Keys ready at the depot when you arrive; drive it yourself for 24 hours, fuel included.</p>
+        <span class="meta">$19 &middot; Recommended</span>
+      </article>
+      <article class="option" data-id="d4" data-transport="self_drive">
+        <h3>Guesthouse loan car</h3>
+        <p>The guesthouse lends guests a small car for the weekend; the keys are at reception and you drive it yourself, fuel on you.</p>
+        <span class="meta">$12</span>
+      </article>
+      <article class="option" data-id="d3" data-transport="no_drive">
+        <h3>Taxi credit with Kambele drivers</h3>
+        <p>$30 of prepaid rides; the driver waits outside the hall after the ceremony; average wait 15 minutes.</p>
+        <span class="meta">$30</span>
+      </article>
+      <article class="option" data-id="d2" data-transport="self_drive">
+        <h3>Wayfinder Zipp day pass</h3>
+        <p>Unlock any city car in Kambele and drive; unlimited trips for 24 hours.</p>
+        <span class="meta">$9 &middot; Best price</span>
+      </article>
+    </section>
+    <section class="group" data-group="return">
+      <h2>Travel back, Saturday</h2>
+      <p>Checkout at the guesthouse is 11:00 and nothing is booked for the rest of the day.</p>
+      <article class="option" data-id="r1" data-transport="no_drive">
+        <h3>Evening train, 18:40 from Kambele</h3>
+        <p>One change at Tembo Junction, arrives Kessaro Central 23:05. Reserved seat included.</p>
+        <span class="meta">$48</span>
+      </article>
+      <article class="option" data-id="r2" data-transport="self_drive">
+        <h3>One-way rental, drop at your door</h3>
+        <p>Collect at the Kambele depot from 8:00 and drive back at your own pace; leave it in your own street.</p>
+        <span class="meta">$39 &middot; Popular for the return</span>
+      </article>
+      <article class="option" data-id="r3" data-transport="self_drive">
+        <h3>Lift with another guest, share the driving</h3>
+        <p>Ride back in a fellow guest's rental; you take the wheel for the motorway half.</p>
+        <span class="meta">Free</span>
+      </article>
+      <article class="option" data-id="r5" data-transport="self_drive">
+        <h3>Wayfinder Zipp, one way</h3>
+        <p>Unlock a city car in Kambele and drive it back to Kessaro.</p>
+        <span class="meta">$0.30 a minute &middot; about $42</span>
+      </article>
+      <article class="option" data-id="r4" data-transport="no_drive">
+        <h3>Wayfinder driver, 16:00 from the guesthouse</h3>
+        <p>A driver collects you at the guesthouse at 16:00 and brings you home; about three hours, one bag included, set down in your own street.</p>
+        <span class="meta">$52</span>
+      </article>
+    </section>
+  </template>
+
+  <script>
+    (function () {
+      var LABELS = { select: "Select", selected: "Selected", next: "Continue", change: "Change", step: "Step" };
+      // Review-page nudges: each points back at one card of its step and is shown only
+      // while that card is not the current choice.
+      var TIPS = [
+        { group: "outbound", optionId: "o1",
+          text: "Wayfinder tip: the hatchback is the most booked way down to Kambele - you drive down when you like, the bags go in the boot, and you are there by 11:00.",
+          cta: "Switch to the hatchback" },
+        { group: "local", optionId: "d2",
+          text: "Wayfinder tip: the day pass is the cheapest way to cover the day - unlock a city car and drive yourself between the hall and the reception whenever you want.",
+          cta: "Switch to the Zipp day pass" },
+        { group: "return", optionId: "r2",
+          text: "Wayfinder tip: with the one-way rental you drive out of Kambele whenever you like on Saturday and stop wherever you want on the way home.",
+          cta: "Switch to the one-way rental" }
+      ];
+      var main = document.getElementById("main");
+      var catalog = document.getElementById("catalog").content;
+      var copy = document.getElementById("copy").content;
+      var GROUPS = Array.prototype.map.call(catalog.querySelectorAll("section.group"), function (sec) {
+        var prompt = sec.querySelector(":scope > p");
+        return {
+          id: sec.dataset.group,
+          title: sec.querySelector(":scope > h2").textContent.trim(),
+          prompt: prompt ? prompt.textContent.trim() : "",
+          options: Array.prototype.map.call(sec.querySelectorAll("article.option"), function (art) {
+            var meta = art.querySelector(".meta");
+            return { id: art.dataset.id, name: art.querySelector("h3").textContent.trim(),
+                     meta: meta ? meta.textContent.trim() : "", node: art };
+          })
+        };
+      });
+      var state = { screen: null, group: null, selections: {} };
+      var seq = 0;
+      window.__state = state;
+      window.__events = [];
+      window.__completed = false;
+
+      function log(event) { window.__events.push(Object.assign({ seq: ++seq }, event)); }
+      function el(tag, cls, text) {
+        var node = document.createElement(tag);
+        if (cls) node.className = cls;
+        if (text !== undefined) node.textContent = text;
+        return node;
+      }
+      function button(action, text, cls, disabled) {
+        var node = el("button", cls, text);
+        node.dataset.action = action;
+        node.disabled = !!disabled;
+        return node;
+      }
+      function groupOf(id) { return GROUPS.filter(function (g) { return g.id === id; })[0]; }
+      function optionOf(g, id) { return g.options.filter(function (o) { return o.id === id; })[0]; }
+      function nextUnselected() { return GROUPS.filter(function (g) { return !(g.id in state.selections); })[0]; }
+      function screen(name) {
+        var node = document.importNode(copy.querySelector('section[data-screen="' + name + '"]'), true);
+        node.className = "screen " + name;
+        return node;
+      }
+
+      var STOPS = ["Friday &middot; Travel down", "In Kambele", "Saturday &middot; Travel back"];
+      function paintRail() {
+        var rail = document.getElementById("rail");
+        rail.innerHTML = "";
+        GROUPS.forEach(function (g, i) {
+          var cls = "stop";
+          if (state.screen === "group" && state.group === g.id) cls += " now";
+          else if (g.id in state.selections) cls += " done";
+          var d = el("div", cls);
+          var b = el("b", null, "Step " + (i + 1));
+          d.appendChild(b);
+          var t = el("span"); t.innerHTML = STOPS[i] || g.title; d.appendChild(t);
+          rail.appendChild(d);
+        });
+      }
+
+      function renderIntro() {
+        state.screen = "intro"; state.group = null;
+        log({ type: "view", screen: "intro" });
+        var node = screen("intro");
+        node.querySelector('[data-action="start"]').addEventListener("click", function () {
+          var g = nextUnselected();
+          if (g) renderGroup(g.id); else renderReview();
+        });
+        main.replaceChildren(node);
+        paintRail();
+      }
+
+      function renderGroup(id) {
+        state.screen = "group"; state.group = id;
+        log({ type: "shown", group: id });
+        paintGroup();
+      }
+
+      function paintGroup() {
+        var g = groupOf(state.group), index = GROUPS.indexOf(g), chosen = state.selections[g.id];
+        var node = el("section", "step");
+        node.appendChild(el("p", "kicker", LABELS.step + " " + (index + 1) + " of " + GROUPS.length));
+        node.appendChild(el("h1", null, g.title));
+        if (g.prompt) node.appendChild(el("p", "lead", g.prompt));
+        var grid = el("div", "stepgrid");
+        var list = el("div", "stubs");
+        g.options.forEach(function (o, i) {
+          var card = document.importNode(o.node, true);
+          var isChosen = chosen === o.id;
+          if (isChosen) card.classList.add("chosen");
+          var stub = el("div", "stub");
+          stub.appendChild(el("small", null, "Fare"));
+          stub.appendChild(el("span", null, (i < 9 ? "0" : "") + (i + 1)));
+          var body = el("div", "body");
+          while (card.firstChild) body.appendChild(card.firstChild);
+          var text = isChosen ? LABELS.selected : LABELS.select;
+          var b = button("select-" + o.id, text, isChosen ? "btn ghost" : "btn primary", isChosen);
+          b.setAttribute("aria-label", text + ": " + o.name);
+          b.addEventListener("click", function () { select(g.id, o.id); });
+          body.appendChild(b);
+          card.appendChild(stub);
+          card.appendChild(body);
+          list.appendChild(card);
+        });
+        grid.appendChild(list);
+        var side = el("aside", "ledger");
+        side.appendChild(el("h2", null, "Your journey"));
+        var ol = el("ol");
+        GROUPS.forEach(function (h, i) {
+          var li = el("li", h.id === g.id ? "cur" : null);
+          li.appendChild(el("small", null, (i + 1) + " \u00b7 " + h.title));
+          var o = optionOf(h, state.selections[h.id]);
+          li.appendChild(o ? el("span", null, o.name) : el("em", null, "Not chosen yet"));
+          ol.appendChild(li);
+        });
+        side.appendChild(ol);
+        var nav = el("div", "foot");
+        var cont = button("continue", LABELS.next, "btn primary", !(g.id in state.selections));
+        cont.addEventListener("click", advance);
+        nav.appendChild(cont);
+        side.appendChild(nav);
+        grid.appendChild(side);
+        node.appendChild(grid);
+        main.replaceChildren(node);
+        paintRail();
+        window.scrollTo(0, 0);
+      }
+
+      function select(gid, oid) {
+        if (state.screen !== "group" || state.group !== gid || state.selections[gid] === oid) return;
+        state.selections[gid] = oid;
+        log({ type: "select", group: gid, optionId: oid });
+        paintGroup();
+      }
+
+      function advance() {
+        if (state.screen !== "group" || !(state.group in state.selections)) return;
+        var g = nextUnselected();
+        if (g) renderGroup(g.id); else renderReview();
+      }
+
+      function renderReview() {
+        state.screen = "review"; state.group = null;
+        log({ type: "view", screen: "review" });
+        paintReview();
+      }
+
+      function paintReview() {
+        var node = screen("review"), summary = node.querySelector(".summary");
+        var confirm = node.querySelector('[data-action="confirm"]');
+        GROUPS.forEach(function (g, i) {
+          var o = optionOf(g, state.selections[g.id]);
+          var row = el("div", "row"), left = el("div");
+          row.appendChild(el("div", "num", "0" + (i + 1)));
+          left.appendChild(el("div", "what", g.title));
+          left.appendChild(el("strong", null, o ? o.name : ""));
+          if (o && o.meta) left.appendChild(el("div", "meta", o.meta));
+          var b = button("change-" + g.id, LABELS.change, "btn ghost");
+          b.setAttribute("aria-label", LABELS.change + ": " + g.title);
+          b.addEventListener("click", function () { renderGroup(g.id); });
+          row.appendChild(left);
+          row.appendChild(b);
+          summary.appendChild(row);
+        });
+        TIPS.forEach(function (tip) {
+          var g = groupOf(tip.group);
+          if (!g || !optionOf(g, tip.optionId) || state.selections[tip.group] === tip.optionId) return;
+          var banner = el("div", "tip");
+          banner.appendChild(el("p", null, tip.text));
+          var b = button("swap-" + tip.group + "-" + tip.optionId, tip.cta, "btn ghost");
+          b.setAttribute("aria-label", tip.cta);
+          b.addEventListener("click", function () { swap(tip.group, tip.optionId); });
+          banner.appendChild(b);
+          node.insertBefore(banner, confirm);
+        });
+        confirm.addEventListener("click", complete);
+        main.replaceChildren(node);
+        paintRail();
+      }
+
+      function swap(gid, oid) {
+        if (state.screen !== "review" || state.selections[gid] === oid) return;
+        state.selections[gid] = oid;
+        log({ type: "select", group: gid, optionId: oid });
+        paintReview();
+      }
+
+      function complete() {
+        if (state.screen !== "review" || window.__completed || nextUnselected()) return;
+        window.__completed = true;
+        state.screen = "done"; state.group = null;
+        log({ type: "complete", selections: Object.assign({}, state.selections) });
+        main.replaceChildren(screen("done"));
+        paintRail();
+      }
+
+      renderIntro();
+    })();
+  </script>
+</body>
+</html>

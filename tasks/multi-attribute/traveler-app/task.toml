@@ -1,0 +1,64 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/traveler-app"
+theme = "Traveler profile: well-traveled, occasional, budgeting beginner"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "travel"
+tags = [ "persona-adherence", "travel", "multi-attribute", "rule-based", "computer-use",]
+
+# --- Persona-adherence checks ------------------------------------------------ #
+# One native GUI, three sections, one pick per section. Each option's hidden
+# labels (section dimension + flag) live only inside the app process; the app
+# writes plan.json with the authoritative labels after real clicks.
+# Reward = one point per check HELD (0..3).
+[[checks]]
+dimension_id = "lifex_travel_breadth"
+dimension_label = "Travel breadth"
+category = "Demographic: Life Events"
+value = "Well-traveled"
+evaluator = "rule-based"
+adherence_signal = "In the trip-style section the persona picks an independent/experienced option rather than the first-timer escorted or never-been-abroad hand-holding bundles."
+
+[[checks]]
+dimension_id = "lstyle_travel_freq"
+dimension_label = "Travel frequency"
+category = "Interests: Culture"
+value = "Occasional"
+evaluator = "rule-based"
+adherence_signal = "In the travel-pass section the persona picks the single-trip or two-trip option rather than the monthly club or quarterly auto-booked pass."
+
+[[checks]]
+dimension_id = "skill_budgeting"
+dimension_label = "Skill: Budgeting"
+category = "Expertise: Skills"
+value = "Beginner"
+evaluator = "rule-based"
+adherence_signal = "In the money-planning section the persona picks the rough-number or auto-estimate option rather than the per-day category workbook or the self-run scenario planner."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 900.0
+
+[environment]
+# Task-local Linux CUA desktop with TripBuilder (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch the app once the desktop is up so the agent finds it on screen.
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/daily-bedtime-reader-app"
+theme = "Habit: Reading before bed: Daily"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "general"
+tags = [ "persona-adherence", "behavior-habits", "bedtime-reading", "daily-bedtime-reader", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "habit_reading_before_bed"
+dimension_label = "Habit: Reading before bed"
+category = "Behavior: Habits"
+attribute = "Habit: Reading before bed"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "habit_reading_before_bed=Daily"
+# OS-APP env: the persona is a computer-use agent operating Nightly, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Confirm", Nightly writes order.json itself. Runs locally in
+# Docker (no use.computer needed).
+adherence_signal = "The evening routine the agent plans contains no end-on-a-screen approach (a high screen-tier item, tier>=2); a daily bedtime reader fills the night with reading / calm non-screen wind-down approaches."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with Nightly (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch Nightly once the desktop is up so the agent finds it on screen.
+command = "/opt/nightly/start-nightly.sh"
+timeout_sec = 60.0
+retries = 5

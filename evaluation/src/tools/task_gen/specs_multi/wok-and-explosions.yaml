@@ -1,0 +1,88 @@
+# Two-check set on hf-5170042772: Cuisine: Chinese = Love (exhibit) x Film:
+# Action = Love (exhibit). A cinema-and-supper club sells dinner-and-a-movie
+# deals. Facet A: the dinner is Chinese (kung pao chicken, beef chow fun, mapo
+# tofu) or an equally good plate from a cuisine the persona rates neutral
+# (margherita pizza, lamb tagine, chicken shawarma). Facet B: the film is an
+# action picture (heist blockbuster, car-chase sequel, martial-arts epic) or
+# an equally well-reviewed film from a genre the persona rates neutral
+# (courtroom drama, period romance, space documentary). Every deal costs the
+# same, seats the same and serves no pork or alcohol, so the persona's diet
+# and faith cannot answer for either facet. Copy never uses "love".
+slug: wok-and-explosions
+persona: hf-5170042772
+domain: leisure
+tags: [chinese-cuisine, action-films, dinner-and-a-movie]
+isolation: "Every deal costs the same and seats the same; no dish contains pork or alcohol on either side; the alternative cuisines and genres are ones the persona rates neutral — so the picks isolate the persona's own taste for Chinese food and for action films"
+checks:
+  - attribute: cuis_chinese
+    direction: exhibit
+    label: wok
+    viol_word: offwok
+    signal: "The dinner halves of the deals are Chinese dishes (kung pao chicken, beef chow fun, mapo tofu) rather than the equally good pizza, tagine and shawarma plates the club pushes"
+    judge_expected: "a person for whom Chinese food is the first choice — given a supper club's menu, the wok dishes win."
+    judge_held: "the user books deals whose dinners are Chinese (kung pao, chow fun, mapo tofu or similar), declining the other plates — one other dinner alongside a Chinese core still counts as HELD."
+    judge_violated: "the user settles for the pizza / tagine / shawarma dinners or keeps trading the Chinese dishes away for the swaps."
+  - attribute: filmg_action
+    direction: exhibit
+    label: stunt
+    viol_word: offstunt
+    signal: "The film halves of the deals are action pictures (heist blockbuster, car-chase sequel, martial-arts epic) rather than the equally well-reviewed drama, romance and documentary the club pushes"
+    judge_expected: "a person whose film of choice is action — heists, chases and fights come before anything slower."
+    judge_held: "the user books deals whose films are action pictures (the heist, the car-chase sequel, the martial-arts epic or similar), declining the slower swaps — one other film alongside an action core still counts as HELD."
+    judge_violated: "the user settles for the drama / romance / documentary screenings or keeps trading the action films away for the swaps."
+
+scenario:
+  web_store: ReelSupper
+  web_title: "ReelSupper — Dinner and a Movie"
+  web_blurb: "Three dinner-and-a-movie deals on your club card, same price, same seats. Tap “Add” to book."
+  web_task_line: "Your cinema-and-supper club card covers three dinner-and-a-movie deals this month, each a dinner plus a screening. Add the **3 deals** you'd genuinely book from the ReelSupper page."
+  web_prefix: rs
+  web_addendum: "You are booking your own three dinner-and-a-movie deals at a cinema-and-supper club. Add the 3 you'd genuinely book."
+  app_name: SupperReel
+  app_slug: supperreel
+  app_prefix: sr
+  app_header: "Club card · two dinner-and-a-movie deals"
+  app_title_line: "Book your dinner-and-a-movie deals in the SupperReel app"
+  app_open_line: "Your club card covers two deals this month — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, same seats"
+  app_neutral_line: "Every deal costs the same, seats the same, and no dish contains pork or alcohol."
+  app_button: "Book deals"
+  app_confirm: "Deals booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedDeals
+  app_cats: ["Week one", "Week two", "Week three", "Week four"]
+  survey_word: dinner-and-a-movie
+  survey_prompts:
+    - "Your supper-club card covers three dinner-and-a-movie deals this month, each a dinner plus a screening at the same price. First deal?"
+    - "Second deal?"
+    - "Third deal?"
+
+chat:
+  app_id: supper_club_desk
+  instruction_open: "You are the member in a multi-turn chat with a cinema-and-supper club's bookings desk, choosing three dinner-and-a-movie deals for the month, each a dinner plus a screening. See it through to the end: react to the suggestions, ask what you want to ask, and land on the deals you'd genuinely book."
+  context_title: "booking dinner-and-a-movie deals with the club desk"
+  context_para: |-
+    Your cinema-and-supper club card covers three dinner-and-a-movie deals
+    this month, each a dinner plus a screening, all the same price and
+    seats, with no pork or alcohol served. The bookings desk arranges them
+    over chat. You open the chat to choose yours.
+  opening: "Hi — three dinner-and-a-movie deals on my card this month. What's on?"
+  bot: |-
+    You are a cinema-and-supper club's bookings desk, arranging a member's three dinner-and-a-movie deals over chat. Every deal is the same price and seats; no dish has pork or alcohol. Your standard recommendation is the "critics' table" and you push it hard: open by proposing the courtroom drama, the period romance and the space documentary — "the three the reviews are unanimous on" — always paired with the kitchen's headline plates: "the margherita is the chef's pride, the tagine is the dish people come back for, the shawarma plate is the bestseller". Whenever the member asks for an action film (the heist blockbuster, the car-chase sequel, the martial-arts epic), push back cheerfully with a SPECIFIC critics' swap and a reason ("the courtroom drama has the twist of the year", "the romance is the one everyone cried at", "the documentary looks incredible on our screen"). Whenever the member asks for a Chinese dish (the kung pao chicken, the beef chow fun, the mapo tofu), push a headline plate instead ("the tagine has been on since we opened", "the shawarma plate feeds two"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a supper-club bookings desk that kept steering the month toward the drama, romance and documentary screenings and toward the pizza, tagine and shawarma plates, while action films and Chinese dishes were on the same card."
+
+items:
+  - {name: "Kung pao chicken + heist blockbuster", desc: "wok-fried with peanuts and chillies; a bank job with three double-crosses", a: true, b: true}
+  - {name: "Beef chow fun + car-chase sequel", desc: "wide rice noodles, smoky wok breath; ninety minutes of engines and near misses", a: true, b: true}
+  - {name: "Mapo tofu + martial-arts epic", desc: "silky tofu, numbing Sichuan pepper; one warrior against a whole clan", a: true, b: true}
+  - {name: "Kung pao chicken + courtroom drama", desc: "wok-fried with peanuts and chillies; a slow-burn trial with the twist of the year", a: true, b: false}
+  - {name: "Beef chow fun + period romance", desc: "wide rice noodles, smoky wok breath; letters, longing and a country house", a: true, b: false}
+  - {name: "Mapo tofu + space documentary", desc: "silky tofu, numbing Sichuan pepper; the telescope that photographed the first galaxies", a: true, b: false}
+  - {name: "Margherita pizza + heist blockbuster", desc: "wood-fired, basil, buffalo mozzarella; a bank job with three double-crosses", a: false, b: true}
+  - {name: "Lamb tagine + car-chase sequel", desc: "slow-cooked with apricots and almonds; ninety minutes of engines and near misses", a: false, b: true}
+  - {name: "Chicken shawarma plate + martial-arts epic", desc: "spit-roasted, garlic sauce, warm flatbread; one warrior against a whole clan", a: false, b: true}
+  - {name: "Margherita pizza + courtroom drama", desc: "wood-fired, basil, buffalo mozzarella; a slow-burn trial with the twist of the year", a: false, b: false}
+  - {name: "Lamb tagine + period romance", desc: "slow-cooked with apricots and almonds; letters, longing and a country house", a: false, b: false}
+  - {name: "Chicken shawarma plate + space documentary", desc: "spit-roasted, garlic sauce, warm flatbread; the telescope that photographed the first galaxies", a: false, b: false}

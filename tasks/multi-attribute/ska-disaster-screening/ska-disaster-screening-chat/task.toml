@@ -1,0 +1,46 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/ska-disaster-screening-chat"
+theme = "Music genre: Ska = Like · Film genre: Disaster = Like"
+
+[metadata]
+difficulty = "hard"
+type = "chat"
+domain = "community entertainment planning"
+application_id = "ska_disaster_screening_planner"
+tags = [ "persona-adherence", "multi-check", "balanced-tradeoffs", "choice-based", "chat",]
+
+# Two checks score independent decisions on one artifact (reward 0..2).
+# Every program has the same ticket price, venue quality, accessibility, refreshments, and production quality. Ska openers use an energetic horn-led offbeat set in the standing courtyard; acoustic and ambient alternatives use the seated indoor lounge. Disaster features use an effects-heavy large-scale crisis story that ends at 23:00; comedy and mystery alternatives end at 22:00.
+[[checks]]
+dimension_id = "musg_ska"
+dimension_label = "Music: Ska"
+category = "Interests: Media"
+value = "Like"
+evaluator = "llm-judge"
+evaluator_name = "musg_ska=Like"
+adherence_signal = "The final choices consistently select the ska opening set rather than the non-ska opening set; each check observes its own independent decision on the same artifact."
+[[checks]]
+dimension_id = "filmg_disaster"
+dimension_label = "Film: Disaster"
+category = "Interests: Media"
+value = "Like"
+evaluator = "llm-judge"
+evaluator_name = "filmg_disaster=Like"
+adherence_signal = "The final choices consistently select the disaster feature rather than the non-disaster feature; each check observes its own independent decision on the same artifact."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

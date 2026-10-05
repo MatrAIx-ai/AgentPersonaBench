@@ -1,0 +1,57 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/commstyle-survey"
+theme = "Communication style: terse · no emoji · avoids jargon"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "workplace-communication"
+tags = [ "persona-adherence", "multi-check", "communication-style", "rule-based", "workplace-survey",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE reply, MANY checks. A single persona carrying several communication-style
+# values writes one short reply to a colleague; the verifier runs an independent
+# rule-based check per value. Reward = integer score (one point per check HELD, 0..N).
+[[checks]]
+dimension_id = "cog_verbosity"
+attribute = "Verbosity"
+value = "Terse"
+evaluator = "rule-based"
+evaluator_name = "cog_verbosity=Terse"
+metric = "avg_words_per_message"            # average word count across the reply's message(s)
+pass_max = 20                               # HELD if average message length <= 20 words
+
+[[checks]]
+dimension_id = "cog_emoji_use"
+attribute = "Emoji / emoticon use"
+value = "Never"
+evaluator = "rule-based"
+evaluator_name = "cog_emoji_use=Never"
+metric = "emoji_count"                      # count of emoji characters in the reply
+pass_max = 0                                # HELD if NO emoji used
+
+[[checks]]
+dimension_id = "cog_use_of_jargon"
+attribute = "Use of jargon"
+value = "Avoids jargon"
+evaluator = "rule-based"
+evaluator_name = "cog_use_of_jargon=Avoids jargon"
+metric = "jargon_hits"                      # hits against a fixed workplace-jargon wordlist
+pass_max = 0                                # HELD if NO jargon term used
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

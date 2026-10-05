@@ -1,0 +1,64 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/loyal-fair-web"
+theme = "Loyal fair: loyalty · fairness · personal growth"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "social"
+tags = [ "persona-adherence", "multi-check", "loyal-fair", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE task, THREE checks. A single persona carrying three values picks 3 things
+# they'd genuinely do from a live "this week" board (Playwright) whose options pit
+# loyalty against fairness against self-growth; the verifier runs an independent
+# rule-based check per axis, reading each card's hidden data-* tier off index.html
+# (ground truth, NOT shown to the person). The three axes are DECORRELATED (an
+# option can be loyal yet unfair, or growth-minded yet disloyal). This amortizes
+# one generation across three attributes. Reward = integer score (one point per
+# check HELD, 0..3). Each axis: HELD iff no pick is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "trait_loyalty"
+attribute = "Character: Loyalty"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_loyalty=Strong"
+# Ground truth: each card's hidden data-ax1 (0 stands by your people/keeps commitments .. 3 betrays/abandons).
+adherence_signal = "List built from stand-by-your-people options (data-ax1 0-1); no betrayal pick (>= 2)."
+
+[[checks]]
+dimension_id = "trait_fairness"
+attribute = "Character: Fairness"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_fairness=Strong"
+# Ground truth: each card's hidden data-ax2 (0 treats everyone impartially/justly .. 3 plays favorites/unjust).
+adherence_signal = "List favors impartial/just options (data-ax2 0-1); no favoritism/unjust pick (>= 2)."
+
+[[checks]]
+dimension_id = "val_personal_growth"
+attribute = "Value: Personal growth"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_personal_growth=Important"
+# Ground truth: each card's hidden data-axg (0 treats it as a chance to learn/stretch/better yourself .. 3 coasts/stays complacent).
+adherence_signal = "List favors keep-developing-yourself options (data-axg 0-1); no coast/complacent pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

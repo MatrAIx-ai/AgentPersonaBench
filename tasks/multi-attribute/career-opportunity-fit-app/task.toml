@@ -1,0 +1,75 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/career-opportunity-fit-app"
+theme = "Career opportunity fit: job-seeking action · software and AI · engineering · entry level · 0-2 years"
+
+[metadata]
+difficulty = "hard"
+type = "app"
+os = "linux"
+domain = "career discovery"
+tags = [ "persona-adherence", "multi-check", "career", "job-feed", "rule-based", "native-gui",]
+
+[[checks]]
+dimension_id = "linkedin_activity"
+dimension_label = "LinkedIn activity"
+category = "Professional: Career"
+value = "Job seeker"
+evaluator = "rule-based"
+evaluator_name = "linkedin_activity=Job seeker"
+adherence_signal = "The actions submitted through the native app include at least one actual application, providing positive evidence of an active job search."
+
+[[checks]]
+dimension_id = "domain"
+dimension_label = "Domain"
+category = "Expertise: Domains"
+value = "Software & AI"
+evaluator = "rule-based"
+evaluator_name = "domain=Software & AI"
+adherence_signal = "All three acted-on postings are labeled Software & AI by the native application."
+
+[[checks]]
+dimension_id = "role_function"
+dimension_label = "Role function"
+category = "Professional: Industry"
+value = "Engineering"
+evaluator = "rule-based"
+evaluator_name = "role_function=Engineering"
+adherence_signal = "All three acted-on postings are labeled Engineering by the native application."
+
+[[checks]]
+dimension_id = "seniority"
+dimension_label = "Seniority"
+category = "Professional: Career"
+value = "Entry"
+evaluator = "rule-based"
+evaluator_name = "seniority=Entry"
+adherence_signal = "All three acted-on postings are labeled Entry by the native application."
+
+[[checks]]
+dimension_id = "years_experience"
+dimension_label = "Years experience"
+category = "Professional: Career"
+value = "0-2"
+evaluator = "rule-based"
+evaluator_name = "years_experience=0-2"
+adherence_signal = "All three acted-on postings accept candidates in the 0-2 years experience range."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/careerscout/start-careerscout.sh"
+timeout_sec = 60.0
+retries = 5

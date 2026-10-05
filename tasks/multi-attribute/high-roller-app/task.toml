@@ -1,0 +1,55 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/high-roller-app"
+theme = "domain-specific risk-seeking: very high financial + social risk tolerance (measured DOSPERT duo)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "behavioral-finance"
+tags = [ "persona-adherence", "multi-check", "high-roller", "dospert", "rule-based", "real-app",]
+
+# --- Multi-attribute task (DOSPERT financial + social duo) ---------------------- #
+# ONE choice app, TWO checks (one per DOSPERT subscale). A single persona
+# carrying very-high financial + social risk tolerance picks one option per
+# section in the native RiskDesk app; the verifier runs an independent
+# rule-based check per subscale by reading the confirmed choices against the
+# host-side tests/answer_key.yaml ground truth. Each subscale trio sums >= 5/6
+# for HELD. Reward = integer score (one point per HELD subscale, 0..2).
+[[checks]]
+dimension_id = "dospert_financial_risk_tolerance"
+attribute = "Financial risk tolerance (DOSPERT)"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "dospert_financial=Very high"
+adherence_signal = "Confirmed financial picks sum >= 5/6 (leveraged/speculative)."
+
+[[checks]]
+dimension_id = "dospert_social_risk_tolerance"
+attribute = "Social risk tolerance (DOSPERT)"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "dospert_social=Very high"
+adherence_signal = "Confirmed social picks sum >= 5/6 (direct public action)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with RiskDesk (Tkinter GUI) baked in — see
+# ./environment/Dockerfile. harbor uses the task's own environment/ dir.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

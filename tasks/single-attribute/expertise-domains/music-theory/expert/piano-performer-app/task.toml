@@ -1,0 +1,45 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/piano-performer-app"
+theme = "Familiarity: Music theory = Expert"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "music-practice"
+tags = [ "persona-adherence", "music-theory", "rehearsal-planning", "os-app", "computer-use",]
+
+# Stimulus isolation:
+# Every card uses the same instrument, room, fee, and 60-minute duration; the tradeoff is depth of musical analysis versus immediate, low-preparation fluency.
+[[checks]]
+dimension_id = "fam_music_theory"
+dimension_label = "Familiarity: Music theory"
+category = "Expertise: Domains"
+anchor_value = "Expert"
+evaluator = "rule-based"
+adherence_signal = "The selected rehearsal methods consistently use harmonic function, voice leading, formal structure, and source comparison rather than surface imitation. The verifier scores app-written IDs against a host-only answer key that is unavailable to the acting model."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with ScoreRoom (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch ScoreRoom once the desktop is up so the agent finds it on screen.
+command = "/opt/scoreroom/start-scoreroom.sh"
+timeout_sec = 60.0
+retries = 5

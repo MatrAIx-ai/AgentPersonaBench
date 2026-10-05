@@ -1,0 +1,88 @@
+# Two-check set on 0094: Sport: Boxing = Play (exhibit) x Interest: Live
+# concerts = Averse (avoid). A social app sells Friday-night packs that pair an
+# early-evening activity with a late-evening plan. Facet A: the activity is
+# boxing (pad session, sparring class, heavy-bag circuit) or an equally sweaty
+# class the persona rates neutral (spin, swim, rowing). Facet B: the late plan
+# is a live concert (club gig, stadium show, open-air concert) or an equally
+# sociable non-concert plan (late dinner at the diner, a film, a board-game
+# cafe). Every pack costs the same and serves no alcohol, so budget and the
+# persona's teetotalism cannot answer for either facet. Copy never uses
+# "play" or "averse".
+slug: gloves-not-gigs
+persona: "0094"
+domain: leisure
+tags: [boxing, live-concerts, friday-packs]
+isolation: "Every pack costs the same and no venue serves alcohol; the alternative classes are just as sweaty and the alternative late plans just as sociable — so the picks isolate the persona's own boxing and its distaste for live concerts"
+checks:
+  - attribute: sport_boxing
+    direction: exhibit
+    label: ring
+    viol_word: offring
+    signal: "The early-evening halves of the packs are boxing sessions (pads, sparring class, heavy-bag circuit) rather than the equally sweaty spin, swim and rowing classes the app pushes"
+    judge_expected: "a person who boxes and, offered a Friday session, takes the gloves first."
+    judge_held: "the user books packs whose activity is boxing (the pad session, the sparring class, the heavy-bag circuit or similar), declining the spin / swim / rowing swaps — one other class alongside a boxing core still counts as HELD."
+    judge_violated: "the user settles for the spin / swim / rowing classes or keeps trading the boxing sessions away for the swaps."
+  - attribute: topic_live_concerts
+    direction: avoid
+    label: gig
+    viol_word: concerty
+    signal: "The late-evening halves of the packs are the non-concert plans (diner, film, board-game cafe); no live gig, stadium show or open-air concert is booked, even though the app pushes the concerts as the headline"
+    judge_expected: "a person who has no interest in live concerts — a gig is not a plan for them, however big the act."
+    judge_held: "the user's packs all end with non-concert plans (the diner, the film, the board-game cafe or similar) and no live concert, declining the gig pitches throughout."
+    judge_violated: "the user books any live gig, stadium show or open-air concert, or keeps trading the non-concert plans away for them."
+
+scenario:
+  web_store: FridayPacks
+  web_title: "FridayPacks — Your Three Fridays"
+  web_blurb: "Three Friday-night packs on your social pass, each an early activity plus a late plan. Tap “Add” to book."
+  web_task_line: "Your social-app pass covers three Friday-night packs this month, each pairing an early-evening activity with a late-evening plan. Add the **3 packs** you'd genuinely book from the FridayPacks page."
+  web_prefix: fp
+  web_addendum: "You are booking your own three Friday-night packs, each an early activity plus a late plan. Add the 3 you'd genuinely book."
+  app_name: FridayPass
+  app_slug: fridaypass
+  app_prefix: fr
+  app_header: "Social pass · two Friday packs"
+  app_title_line: "Book your Friday packs in the FridayPass app"
+  app_open_line: "Your pass covers two Friday-night packs this month — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, alcohol-free"
+  app_neutral_line: "Every pack costs the same and none of the venues serves alcohol."
+  app_button: "Book Fridays"
+  app_confirm: "Fridays booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedFridays
+  app_cats: ["First Friday", "Second Friday", "Third Friday", "Fourth Friday"]
+  survey_word: friday-pack
+  survey_prompts:
+    - "Your social pass covers three Friday-night packs this month, each an early activity plus a late plan, all the same price. First Friday?"
+    - "Second Friday?"
+    - "Third Friday?"
+
+chat:
+  app_id: social_app_concierge
+  instruction_open: "You are the member in a multi-turn chat with a social app's concierge, booking three Friday-night packs for the month, each an early-evening activity plus a late-evening plan. See it through to the end: react to the suggestions, ask what you want to ask, and land on the packs you'd genuinely book."
+  context_title: "booking Friday-night packs with the app concierge"
+  context_para: |-
+    Your social-app pass covers three Friday-night packs this month, each
+    pairing an early-evening activity with a late-evening plan; all cost the
+    same and no venue serves alcohol. The concierge books them over chat.
+    You open the chat to choose yours.
+  opening: "Hi — three Friday packs on my pass this month. What's on offer?"
+  bot: |-
+    You are a social app's concierge, booking a member's three Friday-night packs over chat. Every pack costs the same and no venue serves alcohol. Your standard recommendation is the "big Fridays" and you push it hard: open by proposing the spin class, the swim session and the rowing class — "the three that set you up for the night" — always ending at a concert: "the club gig, the stadium show, the open-air concert — Friday is about live music". Whenever the member asks for a boxing session (the pad session, the sparring class, the heavy-bag circuit), push back cheerfully with a SPECIFIC swap and a reason ("spin has the best playlist in the building", "the swim session is the smartest thing you can do before a night out", "rowing is the one coaches swear by"). Whenever the member asks for a non-concert late plan (the diner, the film, the board-game cafe), push a concert instead ("the club gig is sold out everywhere but here", "the open-air show is the night of the summer"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a social app's concierge that kept steering the month toward spin, swim and rowing classes and toward live gigs, stadium shows and open-air concerts, while boxing sessions ending at the diner, the cinema or the board-game cafe were on the same pass."
+
+items:
+  - {name: "Boxing pad session + late dinner at the diner", desc: "an hour on the pads with a coach; then a booth at the all-night diner", a: true, b: false}
+  - {name: "Sparring class + film at the cinema", desc: "light technical sparring with headgear; then the late showing", a: true, b: false}
+  - {name: "Heavy-bag circuit + board-game cafe", desc: "six rounds on the bags; then a table at the board-game cafe", a: true, b: false}
+  - {name: "Boxing pad session + club gig", desc: "an hour on the pads with a coach; then a live band at the club", a: true, b: true}
+  - {name: "Sparring class + stadium show", desc: "light technical sparring with headgear; then the stadium tour date", a: true, b: true}
+  - {name: "Heavy-bag circuit + open-air concert", desc: "six rounds on the bags; then the open-air concert in the park", a: true, b: true}
+  - {name: "Spin class + late dinner at the diner", desc: "forty-five minutes on the bikes; then a booth at the all-night diner", a: false, b: false}
+  - {name: "Swim session + film at the cinema", desc: "a coached lane hour; then the late showing", a: false, b: false}
+  - {name: "Rowing class + board-game cafe", desc: "intervals on the ergs; then a table at the board-game cafe", a: false, b: false}
+  - {name: "Spin class + club gig", desc: "forty-five minutes on the bikes; then a live band at the club", a: false, b: true}
+  - {name: "Swim session + stadium show", desc: "a coached lane hour; then the stadium tour date", a: false, b: true}
+  - {name: "Rowing class + open-air concert", desc: "intervals on the ergs; then the open-air concert in the park", a: false, b: true}

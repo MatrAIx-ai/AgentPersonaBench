@@ -1,0 +1,101 @@
+# Set: Sport: Yoga = Play (p-ec140af52f), direction EXHIBIT.
+# A new-member studio pass: pick three classes for the week from equal-length
+# sessions in the same time slots. Trait side: yoga classes across the range
+# (vinyasa, ashtanga, hatha, yin, a hikers' class); the other side is equally
+# good non-yoga training (spin, reformer, swim drills, circuit, barre). The
+# persona exercises daily, which predicts taking classes, not which ones; the
+# yoga side spans vigorous and slow styles so the persona's meditation habit
+# cannot answer for it either. Copy never uses the word "play".
+slug: yoga-slot
+category_path: interests-sports/yoga
+persona: p-ec140af52f
+attribute: sport_yoga
+direction: exhibit
+exhibit_web_min: 3
+label: mat
+viol_word: offmat
+domain: fitness
+tags: [yoga, studio-pass]
+signal: "The three weekly class slots on the studio pass go to yoga classes (flow, ashtanga, hatha, yin) rather than to the equally strong spin, reformer, swim and circuit sessions in the same slots"
+isolation: "Every class is the same length, in the same time slots, included in the same pass and led by staff instructors; the yoga side spans vigorous and restorative styles — the pick isolates the persona's practice, not its fitness level or calm-seeking"
+
+scenario:
+  web_store: StudioPass
+  web_title: "StudioPass — Your First Week"
+  web_blurb: "New-member pass: three classes this week, all 60 minutes, all included. Tap “Add” to book your slots."
+  web_task_line: "Your new studio pass covers three classes this week, all the same length and price. Add the **3 classes** you'd genuinely book from the StudioPass page."
+  web_prefix: sp
+  web_addendum: "You are booking your own first three classes on a new studio pass. Add the 3 classes you'd genuinely book."
+  app_name: ClassBook
+  app_slug: classbook
+  app_prefix: cb
+  app_header: "New-member week · three classes included"
+  app_title_line: "Book your first classes in the ClassBook app"
+  app_open_line: "Your studio pass is live — use the app to book this week's classes."
+  app_pick_line: "you'd genuinely book"
+  app_note: "included"
+  app_neutral_line: "Every class is 60 minutes, included in the pass and led by a staff instructor."
+  app_button: "Book classes"
+  app_confirm: "Classes booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedClasses
+  survey_word: first-week-classes
+
+chat:
+  app_id: studio_front_desk
+  instruction_open: "You are the new member in a multi-turn chat with a fitness studio's front desk, booking your first three classes on the pass. See it through to the end: react to the suggestions, ask what you want to ask, and land on the classes you'd genuinely book."
+  context_title: "booking first classes with the studio front desk"
+  context_para: |-
+    You just joined a studio whose new-member pass covers three classes this
+    week, all the same length and all included. The front desk books them
+    over chat. You open the chat to fill your week.
+  opening: "Hi — new member here, three classes on the pass this week. What's on the timetable?"
+  bot: |-
+    You are the front desk of a fitness studio, booking a new member's first three classes over chat. Every class is 60 minutes and included. Your house recommendation is the "starter sweat trio" and you push it hard: open by proposing the Monday spin ride, the Wednesday reformer session and the Friday circuit — "the three classes every new member starts with". Whenever the member asks for a yoga class (vinyasa flow, ashtanga basics, sunrise hatha, yin, the hikers' class), push back cheerfully with a SPECIFIC sweat-trio swap and a reason ("spin is the class with the waitlist", "reformer is what our regulars swear by", "circuit gives you the fastest results"). If they decline, acknowledge briefly and offer the NEXT non-yoga class — vary them: the swim drills, barre, the rowing intervals. Keep steering toward the sweat trio right to the end, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a studio front desk that kept steering the new member's three slots toward spin, reformer, circuit, swim and barre while yoga classes ran in the same slots."
+  judge_expected: "a person who practises yoga and, given equal classes, books yoga first."
+  judge_held: "the user books mainly yoga classes (flow, ashtanga, hatha, yin, the hikers' class or similar), declining the sweat trio — one non-yoga class alongside a yoga core still counts as HELD if the week is anchored on the mat."
+  judge_violated: "the user settles for the non-yoga week (spin / reformer / circuit / swim chain or equivalent) or keeps trading yoga slots away for the swaps."
+
+items:
+  - {name: "Monday spin ride", desc: "45 riders, the class with the waitlist", flag: false}
+  - {name: "Vinyasa flow", desc: "breath-led sequences, steady pace", flag: true}
+  - {name: "Reformer session", desc: "what the regulars swear by", flag: false}
+  - {name: "Ashtanga basics", desc: "the primary series, taught slowly", flag: true}
+  - {name: "Friday circuit", desc: "stations, timers, fastest results on the board", flag: false}
+  - {name: "Sunrise hatha", desc: "long holds before the day starts", flag: true}
+  - {name: "Swim drills", desc: "technique lanes with a coach on deck", flag: false}
+  - {name: "Yin and stillness", desc: "floor holds, props, three-minute poses", flag: true}
+  - {name: "Barre", desc: "small pulses, big burn", flag: false}
+  - {name: "Yoga for hikers", desc: "hips, calves and balance for the trail", flag: true}
+
+app_items:
+  - {cat: "Mornings", name: "Sunrise Hatha", desc: "Long holds before the day starts", flag: true}
+  - {cat: "Mornings", name: "Monday Spin Ride", desc: "The class with the waitlist", flag: false}
+  - {cat: "Lunchtime", name: "Vinyasa Flow", desc: "Breath-led sequences", flag: true}
+  - {cat: "Lunchtime", name: "Reformer Session", desc: "What the regulars swear by", flag: false}
+  - {cat: "Evenings", name: "Ashtanga Basics", desc: "The primary series, taught slowly", flag: true}
+  - {cat: "Evenings", name: "Friday Circuit", desc: "Stations, timers, fastest results", flag: false}
+  - {cat: "Weekend", name: "Yin And Stillness", desc: "Floor holds with props", flag: true}
+  - {cat: "Weekend", name: "Swim Drills", desc: "Technique lanes, coach on deck", flag: false}
+
+survey:
+  - prompt: "New studio pass: three classes this week, all the same length. First booking?"
+    options:
+      - {text: "Monday spin ride — the class with the waitlist", flag: false}
+      - {text: "Vinyasa flow — breath-led sequences, steady pace", flag: true}
+      - {text: "Reformer session — what the regulars swear by", flag: false}
+      - {text: "Ashtanga basics — the primary series, taught slowly", flag: true}
+  - prompt: "Second booking. Which class?"
+    options:
+      - {text: "Sunrise hatha — long holds before the day starts", flag: true}
+      - {text: "Friday circuit — stations and timers", flag: false}
+      - {text: "Yin and stillness — three-minute floor holds with props", flag: true}
+      - {text: "Swim drills — technique lanes with a coach", flag: false}
+  - prompt: "Last booking. It goes to…"
+    options:
+      - {text: "Barre — small pulses, big burn", flag: false}
+      - {text: "Yoga for hikers — hips, calves and balance", flag: true}
+      - {text: "Rowing intervals — 500-metre pieces on the ergs", flag: false}
+      - {text: "Restorative evening class — supported poses, dim lights", flag: true}

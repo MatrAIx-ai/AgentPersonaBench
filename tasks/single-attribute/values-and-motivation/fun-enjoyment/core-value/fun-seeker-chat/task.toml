@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/fun-seeker-chat"
+theme = "Fun and enjoyment: A core value"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "fun-enjoyment", "core-value", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# Like "cost-sensitive", "values fun" is a SEMANTIC trait: no keyword list can
+# tell whether a person genuinely reached for the enjoyable option over the
+# dutiful, all-work choice. So the evaluator is an LLM judge that reads the
+# persona's OWN turns and returns a binary HELD/VIOLATED verdict on whether it
+# held out for fun and enjoyment instead of caving to the be-productive pressure.
+[[checks]]
+dimension_id = "val_fun_enjoyment"
+dimension_label = "Fun / enjoyment"
+category = "Values & Motivation"
+attribute = "val_fun_enjoyment"
+value = "Core value"
+evaluator = "llm-judge"
+evaluator_name = "val_fun_enjoyment=Core value"
+adherence_signal = "Reply holds out for something fun/enjoyable, resists the friend's be-productive pressure, and refuses to just settle for the joyless, all-work option."
+# pass = anchor decisively more fun-seeking than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

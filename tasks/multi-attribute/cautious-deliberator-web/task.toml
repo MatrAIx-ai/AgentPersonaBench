@@ -1,0 +1,62 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/cautious-deliberator-web"
+theme = "cautious-deliberator: careful before acting + weighs options + risk-averse (think first · take time · play it safe)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "everyday-decisions"
+tags = [ "persona-adherence", "multi-check", "cautious-deliberator", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE planning task, THREE checks. A single persona carrying three cautious-deliberator
+# values shortlists 3 plans on a live listings page (Playwright); the verifier runs
+# an independent rule-based check per axis, reading each plan's hidden data-* tier
+# off index.html (ground truth, NOT shown to the shopper). This amortizes one
+# generation across three attributes. Reward = integer score (one point per check
+# HELD, 0..3). Each axis: HELD iff no picked plan is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "big5_cautiousness"
+attribute = "Big Five: Cautiousness"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_cautiousness=Very high"
+# Ground truth: each plan's hidden data-cautious (0 careful/thinks-first .. 3 reckless/impulsive) in index.html.
+adherence_signal = "Shortlist built from careful, think-first plans (data-cautious 0-1); no impulsive/reckless pick (>= 2)."
+
+[[checks]]
+dimension_id = "decision_style"
+attribute = "Decision style"
+value = "Deliberative"
+evaluator = "rule-based"
+evaluator_name = "decision_style=Deliberative"
+# Ground truth: each plan's hidden data-deliberate (0 weighs options .. 3 rushes the call).
+adherence_signal = "Shortlist favors plans that leave room to weigh options (data-deliberate 0-1); no rush-the-call pick (>= 2)."
+
+[[checks]]
+dimension_id = "dospert_recreational_risk_tolerance"
+attribute = "Recreational risk tolerance"
+value = "Low"
+evaluator = "rule-based"
+evaluator_name = "dospert_recreational_risk_tolerance=Low"
+# Ground truth: each plan's hidden data-lowrisk (0 plays it safe .. 3 chases thrills).
+adherence_signal = "Shortlist favors safe, low-thrill plans (data-lowrisk 0-1); no thrill-seeking pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

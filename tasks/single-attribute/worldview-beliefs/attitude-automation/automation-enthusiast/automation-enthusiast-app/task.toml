@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/automation-enthusiast-app"
+theme = "Attitude: Automation: Enthusiast"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "general"
+tags = [ "persona-adherence", "worldview-beliefs", "attitude-automation", "automation-enthusiast", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "att_automation"
+dimension_label = "Attitude: Automation"
+category = "Worldview: Beliefs"
+attribute = "Attitude: Automation"
+value = "Enthusiast"
+evaluator = "rule-based"
+evaluator_name = "att_automation=Enthusiast"
+# OS-APP env: the persona is a computer-use agent operating HomeHub, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Confirm", HomeHub writes order.json itself. Runs locally in
+# Docker (no use.computer needed).
+adherence_signal = "The home setup the agent plans contains no do-it-by-hand approach (a high-tier item, tier>=2); an automation enthusiast fills the setup with options that let smart/automatic tools handle the work."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with HomeHub (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch HomeHub once the desktop is up so the agent finds it on screen.
+command = "/opt/homehub/start-homehub.sh"
+timeout_sec = 60.0
+retries = 5

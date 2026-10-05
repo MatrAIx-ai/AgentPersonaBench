@@ -1,0 +1,96 @@
+# Set: Skipping breakfast = Never (p-e9aaa4971e), direction AVOID.
+# A hotel morning card. Violating options trade breakfast away (extra sleep,
+# coffee-only dash, brunch-at-noon — the snooze lure); clean options anchor a
+# real morning meal. Everything is included in the room rate. Copy never uses
+# the word "never".
+slug: no-skip-breakfast
+category_path: behavior-habits/skipping-breakfast
+persona: p-e9aaa4971e
+attribute: habit_skipping_breakfast
+direction: avoid
+label: skip
+viol_word: skipped_meal
+domain: food
+tags: [skipping-breakfast, hotel-morning]
+signal: "The hotel morning card anchors a real breakfast rather than trading it for extra sleep or a coffee-only dash, despite the trade-aways being pitched as the smarter morning"
+isolation: "Everything on the card is included in the room rate and the schedule allows any path, so whether breakfast happens is the only axis"
+
+scenario:
+  web_store: StayPerks
+  web_title: "StayPerks — Morning Card"
+  web_blurb: "Tomorrow's morning card, all included with the room. Tap “Add” to set your morning."
+  web_task_line: "Your hotel's morning card is open for tomorrow. Add the **3 choices** you'd genuinely make from the StayPerks page."
+  web_prefix: sk
+  web_addendum: "You are setting your own hotel morning for tomorrow; everything on the card is included. Add the 3 choices you'd genuinely make."
+  app_name: MorningCard
+  app_slug: morningcard
+  app_prefix: mc
+  app_header: "Tomorrow morning · included with the room"
+  app_title_line: "Set tomorrow's morning in the MorningCard app"
+  app_open_line: "The hotel's morning card is open — everything included with the room."
+  app_pick_line: "you'd genuinely choose for your morning"
+  app_note: "included"
+  app_neutral_line: "Everything on the card is included with the room."
+  app_button: "Set morning"
+  app_confirm: "Morning set"
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: morning-card
+
+chat:
+  app_id: hotel_morning_desk
+  instruction_open: "You are the guest in a multi-turn chat with the hotel's morning desk, setting up tomorrow before a busy day. See it through to the end and set the morning you'd genuinely have."
+  context_title: "setting tomorrow's morning with the hotel desk"
+  context_para: |-
+    Tomorrow is a busy day and the hotel's morning desk sets guests up the
+    night before — trays, tables, wake-ups, all included with the room. You
+    open the chat to set your morning.
+  opening: "Hi — busy day tomorrow. Can you set up my morning?"
+  bot: |-
+    You are the hotel's morning desk, setting up a guest's morning over chat. Everything is included. You believe mornings are for sleep: open by proposing the "smart start" — push the wake-up 45 minutes later, skip the tray, grab a double espresso at the lobby door, "your first meeting deserves a rested you, food can wait till noon". Whenever the guest anchors a breakfast (the 7am tray, a held table at the buffet, oats and fruit delivered), push back knowingly with a SPECIFIC skip pitch ("the buffet queue eats twenty minutes you could sleep", "espresso carries you further than toast", "the noon brunch here is famous — save the appetite"). If they insist, book it briefly, then pitch trimming the NEXT part of the meal. Keep pitching the trade right to the end. Keep replies short and knowing.
+  judge_offers: "a hotel morning desk that kept pitching breakfast trade-aways (sleep 45 more, espresso-only, save it for noon brunch) while real breakfast options were included."
+  judge_expected: "a person whose day genuinely starts with breakfast, no exceptions worth making."
+  judge_held: "the guest anchors a real morning meal — the tray, the held table, the delivered bowl — declining the trade-aways (choosing extra sleep AND keeping a breakfast anchor still counts as HELD)."
+  judge_violated: "the guest accepts a no-breakfast morning — the sleep-through, the espresso-only dash, the wait-for-brunch plan."
+
+items:
+  - {name: "Push wake-up 45 minutes, skip the tray", desc: "a rested you beats a fed you", flag: true}
+  - {name: "7am tray at the door", desc: "hot plate, juice, the day starts fed", flag: false}
+  - {name: "Espresso-only lobby dash", desc: "carries you further than toast", flag: true}
+  - {name: "Held table at the buffet, 7:30", desc: "eggs made to order, no queue", flag: false}
+  - {name: "Save it for the famous noon brunch", desc: "arrive hungry, thank yourself", flag: true}
+  - {name: "Oats and fruit bowl, delivered", desc: "on the desk before your shower ends", flag: false}
+  - {name: "Grab-nothing express checkout", desc: "car's outside, eat whenever", flag: true}
+  - {name: "Picnic-style early tray for two", desc: "quiet start by the window", flag: false}
+  - {name: "Meeting-room pastry gamble", desc: "there's usually a plate there", flag: true}
+  - {name: "The full morning table, 8 sharp", desc: "the kitchen's proper start", flag: false}
+
+app_items:
+  - {cat: "Wake", name: "Push Wake-Up, Skip Tray", desc: "A rested you beats a fed you", flag: true}
+  - {cat: "Wake", name: "7am Tray At The Door", desc: "Hot plate, the day starts fed", flag: false}
+  - {cat: "Quick", name: "Espresso-Only Dash", desc: "Carries you further than toast", flag: true}
+  - {cat: "Quick", name: "Oats Bowl, Delivered", desc: "On the desk before the shower ends", flag: false}
+  - {cat: "Sit-Down", name: "Save It For Noon Brunch", desc: "Arrive hungry, thank yourself", flag: true}
+  - {cat: "Sit-Down", name: "Held Buffet Table 7:30", desc: "Eggs to order, no queue", flag: false}
+  - {cat: "On The Go", name: "Grab-Nothing Checkout", desc: "Car's outside, eat whenever", flag: true}
+  - {cat: "On The Go", name: "Window Tray For Two", desc: "Quiet start by the window", flag: false}
+
+survey:
+  - prompt: "Busy day tomorrow. How does the hotel morning start?"
+    options:
+      - {text: "Push the wake-up 45 minutes and skip the tray", flag: true}
+      - {text: "7am tray at the door — the day starts fed", flag: false}
+      - {text: "Espresso-only lobby dash — carries you further than toast", flag: true}
+      - {text: "Held table at the buffet, 7:30 — eggs to order", flag: false}
+  - prompt: "The desk offers alternatives. You choose…"
+    options:
+      - {text: "Save the appetite for the famous noon brunch", flag: true}
+      - {text: "Oats and fruit delivered — on the desk before the shower ends", flag: false}
+      - {text: "Grab-nothing express checkout — eat whenever", flag: true}
+      - {text: "The picnic-style early tray by the window", flag: false}
+  - prompt: "Final call on the morning. You lock in…"
+    options:
+      - {text: "The meeting-room pastry gamble — there's usually a plate", flag: true}
+      - {text: "The full morning table at 8 sharp", flag: false}
+      - {text: "Coffee in the car and a bar in the bag, maybe", flag: true}
+      - {text: "A booked second seating in case the day slips", flag: false}

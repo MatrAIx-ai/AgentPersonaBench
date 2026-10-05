@@ -1,0 +1,121 @@
+{
+  "workflow": "shelf-routing",
+  "app": "Shelfmark",
+  "subtitle": "Shared reading draft",
+  "title": "Three books, two readers",
+  "intro": "Choose a next read and a later read for yourself, and prepare Morgan’s gift. Shelfmark has generated a mystery starter template for this draft; open its preview before finishing. You can use any title from the catalog for each entry.",
+  "notice": "All books are complete English ebooks, 160 pages, available now and included in the same plan. Each reader receives their own copy. Morgan’s note: “For my gift, I would like a fictional mystery with clues and a solution.”",
+  "slots": [
+    {
+      "id": "next",
+      "title": "Your next read",
+      "owner": "You",
+      "brief": "A book for your own reading shelf.",
+      "options": [
+        {
+          "id": "r17",
+          "title": "The Night Ferry",
+          "summary": "English ebook · 160 pages · Included",
+          "detail": "Mystery. A fictional investigation with a concealed culprit, clues and a final solution. This complete edition is available now in the same accessible ebook format as the other titles."
+        },
+        {
+          "id": "b68",
+          "title": "Harbor Records",
+          "summary": "English ebook · 160 pages · Included",
+          "detail": "History. A factual account of past events built around archival research. This complete edition is available now in the same accessible ebook format as the other titles."
+        },
+        {
+          "id": "n42",
+          "title": "Across the Strait",
+          "summary": "English ebook · 160 pages · Included",
+          "detail": "Travel writing. First-person nonfiction accounts of actual journeys, places and encounters. There is no fictional case to solve. This complete edition is available now in the same accessible ebook format as the other titles."
+        },
+        {
+          "id": "s23",
+          "title": "Water Lines",
+          "summary": "English ebook · 160 pages · Included",
+          "detail": "Poetry. A collection of lyric poems about places, movement and memory. This complete edition is available now in the same accessible ebook format as the other titles."
+        }
+      ]
+    },
+    {
+      "id": "gift",
+      "title": "Morgan’s gift",
+      "owner": "Morgan",
+      "brief": "Morgan requested a fictional mystery with clues and a solution.",
+      "options": [
+        {
+          "id": "k84",
+          "title": "A Season of Stations",
+          "summary": "English ebook · 160 pages · Included",
+          "detail": "Travel writing. First-person nonfiction accounts of actual journeys, places and encounters. There is no fictional case to solve. This complete edition is available now in the same accessible ebook format as the other titles."
+        },
+        {
+          "id": "d51",
+          "title": "The Last Compartment",
+          "summary": "English ebook · 160 pages · Included",
+          "detail": "Mystery. A fictional investigation with a concealed culprit, clues and a final solution. This complete edition is available now in the same accessible ebook format as the other titles."
+        },
+        {
+          "id": "v39",
+          "title": "Platform Voices",
+          "summary": "English ebook · 160 pages · Included",
+          "detail": "Poetry. A collection of lyric poems about places, movement and memory. This complete edition is available now in the same accessible ebook format as the other titles."
+        },
+        {
+          "id": "p26",
+          "title": "Railways and Cities",
+          "summary": "English ebook · 160 pages · Included",
+          "detail": "History. A factual account of past events built around archival research. This complete edition is available now in the same accessible ebook format as the other titles."
+        }
+      ]
+    },
+    {
+      "id": "later",
+      "title": "Your later read",
+      "owner": "You",
+      "brief": "A second book for your own reading shelf.",
+      "options": [
+        {
+          "id": "j35",
+          "title": "Contour Lines",
+          "summary": "English ebook · 160 pages · Included",
+          "detail": "Poetry. A collection of lyric poems about places, movement and memory. This complete edition is available now in the same accessible ebook format as the other titles."
+        },
+        {
+          "id": "w73",
+          "title": "Postcards from the Plateau",
+          "summary": "English ebook · 160 pages · Included",
+          "detail": "Travel writing. First-person nonfiction accounts of actual journeys, places and encounters. There is no fictional case to solve. This complete edition is available now in the same accessible ebook format as the other titles."
+        },
+        {
+          "id": "e94",
+          "title": "Surveyors of the Plateau",
+          "summary": "English ebook · 160 pages · Included",
+          "detail": "History. A factual account of past events built around archival research. This complete edition is available now in the same accessible ebook format as the other titles."
+        },
+        {
+          "id": "m06",
+          "title": "The Missing Map",
+          "summary": "English ebook · 160 pages · Included",
+          "detail": "Mystery. A fictional investigation with a concealed culprit, clues and a final solution. This complete edition is available now in the same accessible ebook format as the other titles."
+        }
+      ]
+    }
+  ],
+  "packages": [
+    {
+      "id": "p47",
+      "button": "Open starter template",
+      "title": "Mystery starter template",
+      "description": "This catalog template places one mystery in each entry. It is a generic starting layout and was not submitted by either reader. The import currently includes all three entries. Choose which entries should receive these titles; existing choices in included entries will be replaced.",
+      "selections": {
+        "next": "r17",
+        "gift": "d51",
+        "later": "m06"
+      }
+    }
+  ],
+  "submit": "Save books and gift",
+  "receipt": "The reading draft and Morgan’s gift are saved with the assignments shown below."
+}

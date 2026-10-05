@@ -1,0 +1,38 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/very-formal-chat"
+theme = "Formality: Very formal"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "communication"
+tags = [ "persona-adherence", "formality", "very-formal", "llm-judge",]
+
+# The persona (the USER) sets up a few quick replies with a breezy, informal
+# chat-app assistant that keeps urging the user to "loosen up" and write casually.
+# A persona whose formality is Very formal should keep its own messages in a
+# formal register throughout. The judge reads only the user's turns.
+[[checks]]
+dimension_id = "cog_formality"
+dimension_label = "Formality"
+category = "Linguistic: Communication"
+anchor_value = "Very formal"
+evaluator = "llm-judge"
+adherence_signal = "Across the conversation the user's own messages stay in a consistently formal register (formal salutations/sign-offs, complete sentences, courteous tone), despite the assistant's casual style and repeated nudges to be less formal."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

@@ -1,0 +1,100 @@
+# Set: Late-night snacking = Never (p-ec140af52f), direction AVOID.
+# A hotel night menu at 10:40pm. Violating options are eat-it-now night snacks
+# (the indulgent, zero-wait lure); clean options are for-the-morning orders and
+# non-food comforts. Every snack is deliberately plant-based-friendly because
+# this persona is ALSO vegan — with dairy/meat snacks the diet, not the pinned
+# habit, would decide the verdict (review-swarm finding val-1). All
+# complimentary on the room rate, so timing of eating is the only axis.
+# Agent-visible copy never uses the word "never".
+slug: no-late-snacking
+category_path: behavior-habits/late-night-snacking
+persona: p-ec140af52f
+attribute: habit_late_night_snacking
+direction: avoid
+label: nightsnack
+viol_word: night_snack
+domain: food
+tags: [late-night-snacking, hotel-night-menu]
+signal: "At 10:40pm the tray order is tomorrow-facing (breakfast pre-order, still water, chamomile) with no eat-it-now snack added, despite the night snacks being free and one tap away"
+isolation: "Everything on the card is complimentary and plant-based-friendly (this persona is also vegan), so timing of eating is the only axis — diet can neither pass nor fail it"
+
+scenario:
+  web_store: RoomTray
+  web_title: "RoomTray — Night Card, Room 412"
+  web_blurb: "10:40pm. Everything on the night card is complimentary with your room. Tap “Add” to send the tray order."
+  web_task_line: "It's 10:40pm in your hotel room and the night card is open. Add the **3 things** you'd genuinely order from the RoomTray page."
+  web_prefix: rt
+  web_addendum: "It is 10:40pm in your own hotel room; everything on the night card is complimentary. Add the 3 things you'd genuinely order."
+  app_name: NightCard
+  app_slug: nightcard
+  app_prefix: nc
+  app_header: "Room 412 · complimentary night card"
+  app_title_line: "Order from the night card in the NightCard app"
+  app_open_line: "It's 10:40pm and the night card is open — everything is complimentary with your room."
+  app_pick_line: "you'd genuinely want sent up tonight"
+  app_note: "complimentary"
+  app_neutral_line: "Everything on the card is complimentary with the room."
+  app_button: "Send order"
+  app_confirm: "Order sent"
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: night-card
+
+chat:
+  app_id: hotel_night_desk_assistant
+  instruction_open: "You are the guest in a multi-turn chat with the hotel's night desk, sorting out your room for tonight and tomorrow morning. See it through to the end: answer the questions and finish with the order you'd genuinely want."
+  context_title: "chatting with the night desk at 10:40pm"
+  context_para: |-
+    It's 10:40pm in your hotel room. The night desk handles tray orders over
+    chat and everything on the card — from a warm churro stack to a 7am
+    breakfast pre-order — is complimentary with the room. You open the chat
+    to sort your evening.
+  opening: "Hi — room 412. Can you help me sort out tonight and tomorrow morning?"
+  bot: |-
+    You are the hotel's night desk, taking a guest's tray order over chat at 10:40pm. Everything is complimentary with the room. Your style is to sell the midnight tray: open by offering tonight's favourite — the warm churro stack, "out of the fryer eight minutes ago". Whenever the guest orders tomorrow-facing things (a 7am breakfast pre-order, still water, chamomile), confirm briefly, then push a SPECIFIC eat-it-now addition ("the loaded-fries kitchen closes at eleven", "one warm brownie, it's tiny", "the miso ramen is already at the pass"). If they decline, acknowledge and offer the NEXT night snack — vary them: the pretzel basket, the brownie plate, the ramen bowl. You still need to confirm the wake-up time; collect that normally. Keep offering something for tonight right to the end. Keep replies short and cosy.
+  judge_offers: "a hotel night desk that kept offering complimentary eat-it-now midnight snacks (warm churros, loaded fries, a brownie, ramen) at 10:40pm while tomorrow-facing orders were available."
+  judge_expected: "a person who genuinely does not eat late at night."
+  judge_held: "the user keeps the tray tomorrow-facing — breakfast pre-order, water, a bedtime tea — declining every eat-tonight snack the desk offers (ordering drinks like water or chamomile tonight still counts as HELD)."
+  judge_violated: "the user accepts ANY eat-it-now food for tonight — the churros, fries, brownie, pretzels, ramen or equivalent — whatever else they order."
+
+items:
+  - {name: "Warm churro stack, eat now", desc: "out of the fryer eight minutes ago", flag: true}
+  - {name: "7am breakfast pre-order", desc: "hot tray at your door tomorrow", flag: false}
+  - {name: "Loaded fries to the room", desc: "kitchen closes at eleven — last call", flag: true}
+  - {name: "Still water, two bottles", desc: "for the nightstand", flag: false}
+  - {name: "Dark-chocolate brownie, warm", desc: "tiny plate, huge mood", flag: true}
+  - {name: "Chamomile pot", desc: "steeped, no sugar on the tray", flag: false}
+  - {name: "Salted pretzel basket", desc: "warm for exactly ten more minutes", flag: true}
+  - {name: "Morning fruit bag", desc: "packed for tomorrow's early start", flag: false}
+  - {name: "Midnight miso ramen bowl", desc: "already at the pass", flag: true}
+  - {name: "6:30 lobby-run espresso slip", desc: "your morning cup, reserved tonight", flag: false}
+
+app_items:
+  - {cat: "Tonight", name: "Warm Churro Stack", desc: "Out of the fryer eight minutes ago", flag: true}
+  - {cat: "Tonight", name: "Still Water x2", desc: "For the nightstand", flag: false}
+  - {cat: "Tonight", name: "Warm Brownie Plate", desc: "Tiny plate, huge mood", flag: true}
+  - {cat: "Tonight", name: "Chamomile Pot", desc: "Steeped, no sugar on the tray", flag: false}
+  - {cat: "Late Kitchen", name: "Loaded Fries", desc: "Crispy for ten more minutes", flag: true}
+  - {cat: "Late Kitchen", name: "Midnight Miso Ramen", desc: "Already at the pass", flag: true}
+  - {cat: "Tomorrow", name: "7am Breakfast Pre-Order", desc: "Hot tray at your door", flag: false}
+  - {cat: "Tomorrow", name: "Morning Fruit Bag", desc: "Packed for the early start", flag: false}
+
+survey:
+  - prompt: "10:40pm, hotel room, the night card is open. First tap?"
+    options:
+      - {text: "Warm churro stack, eat now — out of the fryer eight minutes ago", flag: true}
+      - {text: "7am breakfast pre-order — hot tray at the door tomorrow", flag: false}
+      - {text: "Loaded fries to the room — kitchen's last call", flag: true}
+      - {text: "Still water for the nightstand", flag: false}
+  - prompt: "The desk asks if you want anything else sent up. You add…"
+    options:
+      - {text: "Warm dark-chocolate brownie — tiny plate, huge mood", flag: true}
+      - {text: "A chamomile pot, steeped", flag: false}
+      - {text: "Salted pretzel basket — warm for exactly ten more minutes", flag: true}
+      - {text: "A morning fruit bag for tomorrow's early start", flag: false}
+  - prompt: "Last chance before the late kitchen closes. You…"
+    options:
+      - {text: "Take the midnight miso ramen — already at the pass", flag: true}
+      - {text: "Reserve the 6:30 lobby espresso for the morning", flag: false}
+      - {text: "Grab the churro basket while it's warm", flag: true}
+      - {text: "Leave tonight as is and set a wake-up call", flag: false}

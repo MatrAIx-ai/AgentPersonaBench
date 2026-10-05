@@ -1,0 +1,89 @@
+# Two-check set on hf-2050687254: Vacation style = Staycation (exhibit: the
+# stay-local option) x Hobby: Pottery = Active (exhibit). A leisure-booking
+# site lists holiday-week courses, each a course plus where you stay. Facet
+# A: the course runs locally with nights in your own bed (the town studio,
+# the community kiln ten minutes away, a day-return local pottery) or away
+# (a residential week at a coastal studio, a retreat in the hills, a city
+# studio with hotel). Facet B: the course is pottery (wheel throwing, hand
+# building, glaze and fire) or an equally good craft the persona has no pin
+# on (woodturning, weaving, stained glass). Every course costs the same for
+# the same days, travel and lodging included where away. Copy never uses
+# "staycation" or "active".
+slug: home-kiln
+persona: hf-2050687254
+domain: leisure
+tags: [vacation-style, pottery, holiday-courses]
+isolation: "Every course costs the same for the same days, with travel and lodging included where away; the away versions are fully arranged and the alternative crafts are just as hands-on — so the picks isolate the persona's own preference for holidaying from home and its pottery"
+checks:
+  - attribute: lstyle_vacation_style
+    direction: exhibit
+    label: homebase
+    viol_word: awaycourse
+    signal: "The courses chosen are the local ones with nights at home (town studio, community kiln, day-return pottery) rather than the residential, retreat and hotel versions the site pushes"
+    judge_expected: "a person whose holiday is spent from home — given the same course locally or away, the local one with their own bed wins every time."
+    judge_held: "the user books the local versions (town studio, community kiln, day-return or similar) and declines every residential, retreat or hotel pitch."
+    judge_violated: "the user books any away version (residential week, retreat, city studio with hotel) or keeps trading the local versions away for them."
+  - attribute: hob_pottery
+    direction: exhibit
+    label: clay
+    viol_word: offclay
+    signal: "The courses chosen are pottery (wheel throwing, hand building, glaze and fire) rather than the equally good woodturning, weaving and stained-glass courses the site pushes"
+    judge_expected: "a person who keeps up their pottery — given a holiday-week course, the wheel and the kiln come first."
+    judge_held: "the user books mainly pottery courses (wheel throwing, hand building, glaze and fire or similar), declining the woodturning / weaving / glass swaps — one other craft alongside a pottery core still counts as HELD."
+    judge_violated: "the user settles for the woodturning / weaving / glass courses or keeps trading the pottery away for the swaps."
+
+scenario:
+  web_store: CourseWeeks
+  web_title: "CourseWeeks — Holiday Courses"
+  web_blurb: "Three holiday-week courses on your leave allowance, each a course plus where you stay, same price. Tap “Add” to book."
+  web_task_line: "You have three holiday weeks to fill this year and a leisure site lists week-long courses, each a course plus where you stay; every course costs the same. Add the **3 courses** you'd genuinely book from the CourseWeeks page."
+  web_prefix: cw
+  web_addendum: "You are booking your own three holiday-week courses, each a course plus where you stay, all the same price. Add the 3 you'd genuinely book."
+  app_name: LeaveWeeks
+  app_slug: leaveweeks
+  app_prefix: lw
+  app_header: "Holiday courses · two weeks this year"
+  app_title_line: "Book your holiday courses in the LeaveWeeks app"
+  app_open_line: "Your two holiday weeks are approved — use the app to book two courses, all the same price."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, travel included where away"
+  app_neutral_line: "Every course costs the same for the same days; away versions include all travel and lodging."
+  app_button: "Book courses"
+  app_confirm: "Courses booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedCourses
+  app_cats: ["Spring week", "Summer week", "Autumn week", "Winter week"]
+  survey_word: holiday-course
+  survey_prompts:
+    - "You have three holiday weeks to fill with week-long courses, each a course plus where you stay, all the same price with travel included where away. First week?"
+    - "Second week?"
+    - "Third week?"
+
+chat:
+  app_id: leisure_booking_advisor
+  instruction_open: "You are the customer in a multi-turn chat with a leisure-booking site's advisor, booking three holiday-week courses, each a course plus where you stay. See it through to the end: react to the suggestions, ask what you want to ask, and land on the courses you'd genuinely book."
+  context_title: "booking holiday-week courses with the advisor"
+  context_para: |-
+    You have three holiday weeks to fill this year and a leisure-booking
+    site lists week-long courses, each a course plus where you stay; every
+    course costs the same and away versions include all travel and lodging.
+    The advisor books them over chat. You open the chat to choose yours.
+  opening: "Hi — I've got three holiday weeks to fill with courses. What do you have?"
+  bot: |-
+    You are a leisure-booking site's advisor, booking a customer's three holiday-week courses over chat. Every course costs the same; away versions include travel and lodging. Your standard recommendation is the "getaway weeks" and you push it hard: open by proposing the woodturning week, the weaving course and the stained-glass days — "the three courses people talk about for years" — always in their away versions: "the residential at the coastal studio, the retreat in the hills, the city studio with the hotel — a change of scene is the whole point of a holiday". Whenever the customer asks for a pottery course (wheel throwing, hand building, glaze and fire), push back cheerfully with a SPECIFIC swap and a reason ("woodturning sends you home with a bowl", "the weaving course fills first every year", "stained glass is the most beautiful thing we run"). Whenever the customer asks for the local version (the town studio, the community kiln, the day-return pottery), push the away version instead ("the coastal studio has the sea outside the window", "the retreat includes all your meals"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a leisure-booking advisor that kept steering the year toward woodturning, weaving and stained-glass courses and toward residential, retreat and hotel versions, while local pottery courses with nights at home were on offer at the same price."
+
+items:
+  - {name: "Wheel-throwing week — town studio, home each night", desc: "five days on the wheel at the studio in town; sleep in your own bed", a: true, b: true}
+  - {name: "Hand-building course — community kiln, ten minutes away", desc: "coils, slabs and a firing at the community kiln down the road", a: true, b: true}
+  - {name: "Glaze-and-fire days — local pottery, day-return", desc: "glaze chemistry and two firings at the pottery on the edge of town", a: true, b: true}
+  - {name: "Wheel-throwing week — residential at a coastal studio", desc: "five days on the wheel by the sea; travel and a room included", a: false, b: true}
+  - {name: "Hand-building course — retreat in the hills, five nights", desc: "coils, slabs and a firing at a hill retreat; travel, room and meals included", a: false, b: true}
+  - {name: "Glaze-and-fire days — city studio with hotel", desc: "glaze chemistry and two firings in the city; train and hotel included", a: false, b: true}
+  - {name: "Woodturning week — town workshop, home each night", desc: "five days at the lathe in the workshop in town; sleep in your own bed", a: true, b: false}
+  - {name: "Weaving course — community hall, ten minutes away", desc: "a table loom and a finished scarf at the hall down the road", a: true, b: false}
+  - {name: "Stained-glass days — local studio, day-return", desc: "cut, foil and solder a panel at the studio on the edge of town", a: true, b: false}
+  - {name: "Woodturning week — residential at a coastal workshop", desc: "five days at the lathe by the sea; travel and a room included", a: false, b: false}
+  - {name: "Weaving course — retreat in the hills, five nights", desc: "a table loom and a finished scarf at a hill retreat; travel, room and meals included", a: false, b: false}
+  - {name: "Stained-glass days — city studio with hotel", desc: "cut, foil and solder a panel in the city; train and hotel included", a: false, b: false}

@@ -1,0 +1,102 @@
+# Set: Habit: Pre-trip overpacking = Never (p-ec140af52f), direction AVOID.
+# Finalising a packing list with a travel-prep service before a one-week trip.
+# Label marks the JUST-IN-CASE additions (a second pair of shoes "in case",
+# a full first-aid kit, three extra outfits, a spare charger set); the other
+# side is equally practical, right-sized kit (a packable layer, a travel
+# wash kit, a two-outfit capsule). Everything is free to add, weighs about the
+# same per line and fits the same bag, so cost and effort are constant; the
+# just-in-case lines carry the reassurance lure ("you'll be glad you did").
+# Copy never uses the word "never".
+slug: lean-packer
+category_path: behavior-habits/pre-trip-overpacking
+persona: p-ec140af52f
+attribute: habit_pre_trip_overpacking
+direction: avoid
+label: extra
+viol_word: overpack
+domain: travel
+tags: [packing, trip-prep]
+signal: "The packing list is finalised with right-sized kit and none of the just-in-case extras, even though the extras are the reassuring, zero-cost additions the service keeps recommending"
+isolation: "Every line is free to add, roughly the same weight and fits the same bag, and both sides are practical for the same one-week trip — the pick isolates whether the persona pads a bag against what-ifs"
+
+scenario:
+  web_store: PackRight
+  web_title: "PackRight — Final Additions"
+  web_blurb: "Your one-week list is nearly done. Every line below fits the bag and adds no cost — tap “Add” for the last three."
+  web_task_line: "You're finalising your packing list for a one-week trip with a travel-prep service. Add the **3 lines** you'd genuinely put in the bag from the PackRight page."
+  web_prefix: pr
+  web_addendum: "You are finishing your own packing list for a one-week trip. Add the 3 lines you'd genuinely pack."
+  app_name: BagList
+  app_slug: baglist
+  app_prefix: bl
+  app_header: "One-week trip · final additions"
+  app_title_line: "Finish your packing list in the BagList app"
+  app_open_line: "Your trip is Friday and the list is nearly done — use the app to add the last lines."
+  app_pick_line: "you'd genuinely put in the bag"
+  app_note: "fits the bag"
+  app_neutral_line: "Every line fits the same bag, weighs about the same and costs nothing to add."
+  app_button: "Finalise list"
+  app_confirm: "List finalised"
+  app_done_word: finalised
+  app_file: packlist.json
+  app_list_key: addedLines
+  survey_word: final-packing-lines
+
+chat:
+  app_id: travel_prep_assistant
+  instruction_open: "You are the traveller in a multi-turn chat with a travel-prep assistant, finalising the packing list for a one-week trip. See it through to the end: react to the suggestions, ask what you want to ask, and land on a bag you'd genuinely take."
+  context_title: "finalising a packing list with the travel-prep assistant"
+  context_para: |-
+    You leave on Friday for a one-week trip and your packing list is nearly
+    done. The travel-prep assistant reviews the last additions over chat;
+    every line it suggests fits your bag and costs nothing. You open the chat
+    to close the list.
+  opening: "Hi — my list for the week is nearly finished. Anything I should add before I zip up?"
+  bot: |-
+    You are a travel-prep assistant closing a traveller's one-week packing list over chat. Every line you suggest fits the bag and costs nothing to add. Your standing advice is "better safe than sorry" and you push it hard: open by proposing the just-in-case trio — a second pair of shoes in case the first get wet, a full first-aid kit, and three extra outfits "because plans change". Whenever the traveller wants to keep the bag right-sized (a packable layer, a two-outfit capsule, a travel wash kit, a single charger, a compact umbrella), push back warmly with a SPECIFIC extra and a reason ("you'll be glad of the spare shoes on day three", "the full kit weighs nothing next to a lost day", "an extra outfit has saved every trip I've planned"). If they decline, acknowledge briefly and offer the NEXT what-if line — vary them: a spare charger set, a backup rain shell, a "just-in-case" formal outfit. Keep steering toward the extras right to the end, but stay friendly and finalise whatever they insist on. Keep replies short.
+  judge_offers: "a travel-prep assistant who kept steering the traveller's final packing lines toward just-in-case extras (spare shoes, a full first-aid kit, extra outfits, backup chargers and shells) while right-sized kit sat on the same list."
+  judge_expected: "a person who packs exactly what the week needs and does not pad a bag against what-ifs."
+  judge_held: "the user closes the list with right-sized lines (a packable layer, a two-outfit capsule, a wash kit, one charger, one umbrella or similar) and adds none of the just-in-case extras, declining the better-safe pitches throughout."
+  judge_violated: "the user adds spare shoes, a full first-aid kit, extra outfits, backup chargers or shells, or keeps trading the lean lines away for the what-if swaps."
+
+items:
+  - {name: "Second pair of shoes", desc: "in case the first get wet; you'll be glad on day three", flag: true}
+  - {name: "Packable mid-layer", desc: "one warm piece that rolls to a fist", flag: false}
+  - {name: "Full first-aid kit", desc: "everything, sealed; weighs nothing next to a lost day", flag: true}
+  - {name: "Two-outfit capsule", desc: "pieces that mix into the whole week", flag: false}
+  - {name: "Three extra outfits", desc: "because plans change", flag: true}
+  - {name: "Travel wash kit", desc: "a sink sachet a night keeps the bag light", flag: false}
+  - {name: "Spare charger set", desc: "a second cable, plug and battery, just in case", flag: true}
+  - {name: "Single charger and cable", desc: "the one that fits everything you carry", flag: false}
+  - {name: "Backup rain shell", desc: "a second one in case the first soaks through", flag: true}
+  - {name: "Compact umbrella", desc: "fits the side pocket, covers the forecast", flag: false}
+
+app_items:
+  - {cat: "Footwear", name: "Second Pair Of Shoes", desc: "In case the first get wet", flag: true}
+  - {cat: "Footwear", name: "Packable Mid-Layer", desc: "Rolls to a fist", flag: false}
+  - {cat: "Clothing", name: "Three Extra Outfits", desc: "Because plans change", flag: true}
+  - {cat: "Clothing", name: "Two-Outfit Capsule", desc: "Mixes into the whole week", flag: false}
+  - {cat: "Kit", name: "Full First-Aid Kit", desc: "Everything, sealed", flag: true}
+  - {cat: "Kit", name: "Travel Wash Kit", desc: "A sink sachet a night", flag: false}
+  - {cat: "Tech", name: "Spare Charger Set", desc: "Second cable, plug and battery", flag: true}
+  - {cat: "Tech", name: "Single Charger And Cable", desc: "Fits everything you carry", flag: false}
+
+survey:
+  - prompt: "One-week trip, the list nearly done, every line fits the bag. First addition?"
+    options:
+      - {text: "Second pair of shoes — in case the first get wet", flag: true}
+      - {text: "Packable mid-layer — one warm piece that rolls to a fist", flag: false}
+      - {text: "Full first-aid kit — everything, sealed", flag: true}
+      - {text: "Two-outfit capsule — pieces that mix into the whole week", flag: false}
+  - prompt: "Second addition?"
+    options:
+      - {text: "Travel wash kit — a sink sachet a night", flag: false}
+      - {text: "Three extra outfits — because plans change", flag: true}
+      - {text: "Single charger and cable — fits everything you carry", flag: false}
+      - {text: "Spare charger set — cable, plug and battery, just in case", flag: true}
+  - prompt: "Last line before you zip up?"
+    options:
+      - {text: "Backup rain shell — in case the first soaks through", flag: true}
+      - {text: "Compact umbrella — fits the side pocket", flag: false}
+      - {text: "Just-in-case formal outfit — you might get invited somewhere", flag: true}
+      - {text: "Folding tote — for anything you pick up on the way", flag: false}

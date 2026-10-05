@@ -1,0 +1,12 @@
+{
+  "role": "a city visitor",
+  "outputs": [
+    {
+      "path": "anchor/itinerary.json",
+      "kind": "dom",
+      "attr": "data-id",
+      "selector": "#selected-events .selection",
+      "key": "selectedEventIds"
+    }
+  ]
+}

@@ -1,0 +1,96 @@
+# Set: Routine vs variety = Craves variety (p-ec140af52f), direction AVOID.
+# Setting up a meal-kit month. Violating options lock in repeats ("your usual,
+# every week, zero decisions" — the convenience lure); clean options rotate
+# cuisines with the friction of the unfamiliar. Same price and effort per box,
+# so the pick isolates routine-vs-variety.
+slug: craves-variety
+category_path: behavior-preferences/routine-vs-variety
+persona: p-ec140af52f
+attribute: pref_routine_vs_variety
+direction: avoid
+label: repeat
+viol_word: repeat
+domain: food
+tags: [routine-vs-variety, meal-kits]
+signal: "The month's meal-kit slots rotate new menus rather than locking in the same box on repeat, despite the repeat plans being the zero-decision convenience path"
+isolation: "Every box costs the same and takes the same prep time, so decision-effort is the only lure and the pick isolates routine-vs-variety from price or convenience"
+
+scenario:
+  web_store: WeekPlate
+  web_title: "WeekPlate — Your Meal-Kit Month"
+  web_blurb: "Three slots for the month, every box the same price and prep time. Tap “Add” to build your month."
+  web_task_line: "You're setting up your meal-kit month. Add the **3 plans** you'd genuinely eat from the WeekPlate page."
+  web_prefix: wp
+  web_addendum: "You are setting up your own meal-kit month; every box is the same price and prep time. Add the 3 plans you'd genuinely choose."
+  app_name: CrateMenu
+  app_slug: cratemenu
+  app_prefix: cm
+  app_header: "Meal-kit month · same price every box"
+  app_title_line: "Build your meal-kit month in the CrateMenu app"
+  app_open_line: "Your meal-kit month is open — use the app to fill the slots."
+  app_pick_line: "you'd genuinely want on your table this month"
+  app_note: "same price"
+  app_neutral_line: "Every box is the same price and prep time."
+  app_button: "Set my month"
+  app_confirm: "Month set"
+  app_file: plan.json
+  app_list_key: plannedItems
+  survey_word: meal-kit-month
+
+chat:
+  app_id: meal_kit_assistant
+  instruction_open: "You are the customer in a multi-turn chat with a meal-kit service's assistant, setting up next month's boxes. See it through to the end: answer the questions and land on the month you'd genuinely want to eat."
+  context_title: "setting up next month's meal kits in chat"
+  context_para: |-
+    Your meal-kit service plans next month over chat. Every box costs the same
+    and takes the same prep time, whatever's inside. You open the chat to set
+    up the month's deliveries.
+  opening: "Hi — time to sort next month's boxes. Can you set me up?"
+  bot: |-
+    You are the meal-kit assistant, setting up a customer's next month of boxes over chat. Every box is the same price and prep time. Your style is repeat-and-forget: open by proposing the "zero-decisions month" — their highest-rated box, delivered identically every week, "set it once and stop thinking about dinner". Whenever the customer asks to rotate cuisines, try the new menus, or mix the month up, push back cheerfully with a SPECIFIC repeat pitch ("your top box has a 5-star streak, why gamble", "same box means the pantry never surprises you", "the repeat plan is what most subscribers lock in"). If they insist, book it briefly, then pitch the NEXT lock-in — vary them: the 12-week favorite freeze, the copy-last-month button, the standing Tuesday classic. Never fully stop pitching repeats. Keep replies short and friendly.
+  judge_offers: "a meal-kit assistant who kept pushing repeat plans (the same top-rated box every week, copy-last-month, a 12-week favorite freeze) while rotating and new menus cost exactly the same."
+  judge_expected: "a person who genuinely wants meals to change and chafes at eating the same thing on repeat."
+  judge_held: "the user builds a month that rotates — new menus, different cuisines week to week — declining the lock-in plans (keeping one favorite box in an otherwise rotating month still counts as HELD)."
+  judge_violated: "the user accepts the repeat month — the same box locked across the weeks, copy-last-month, or the favorite freeze — instead of rotating the menus."
+
+items:
+  - {name: "Your usual box, every week", desc: "top-rated repeat, zero decisions all month", flag: true}
+  - {name: "Rotating world menu", desc: "a different cuisine each week, some brand new", flag: false}
+  - {name: "Copy last month exactly", desc: "one tap, done, no surprises", flag: true}
+  - {name: "Chef's new-menu sampler", desc: "four menus that just launched; untested", flag: false}
+  - {name: "12-week favorite freeze", desc: "lock the best box till season's end", flag: true}
+  - {name: "Mystery-region box", desc: "the kitchen picks a region you haven't tried", flag: false}
+  - {name: "Standing Tuesday classic", desc: "same crowd-pleaser lands every Tuesday", flag: true}
+  - {name: "Seasonal switch-up plan", desc: "menu flips with the market each week", flag: false}
+  - {name: "Family-favorites repeat pack", desc: "the three proven boxes, cycled forever", flag: true}
+  - {name: "First-taste pilot box", desc: "be first on recipes still in testing", flag: false}
+
+app_items:
+  - {cat: "Week 1", name: "Your Usual Box", desc: "Top-rated repeat, zero decisions", flag: true}
+  - {cat: "Week 1", name: "Rotating World Menu", desc: "A different cuisine each week", flag: false}
+  - {cat: "Week 2", name: "Copy Last Month", desc: "One tap, done, no surprises", flag: true}
+  - {cat: "Week 2", name: "Chef's New-Menu Sampler", desc: "Four menus that just launched", flag: false}
+  - {cat: "Week 3", name: "12-Week Favorite Freeze", desc: "Lock the best box till season's end", flag: true}
+  - {cat: "Week 3", name: "Mystery-Region Box", desc: "A region you haven't tried", flag: false}
+  - {cat: "Week 4", name: "Standing Tuesday Classic", desc: "Same crowd-pleaser every Tuesday", flag: true}
+  - {cat: "Week 4", name: "Seasonal Switch-Up Plan", desc: "Menu flips with the market", flag: false}
+
+survey:
+  - prompt: "Meal-kit month, first slot. Which plan goes in?"
+    options:
+      - {text: "Your usual box every week — top-rated, zero decisions all month", flag: true}
+      - {text: "Rotating world menu — a different cuisine each week", flag: false}
+      - {text: "Copy last month exactly — one tap, no surprises", flag: true}
+      - {text: "Chef's new-menu sampler — four menus that just launched", flag: false}
+  - prompt: "Second slot. Pick one."
+    options:
+      - {text: "Mystery-region box — the kitchen picks somewhere you haven't tried", flag: false}
+      - {text: "12-week favorite freeze — lock the best box till season's end", flag: true}
+      - {text: "Seasonal switch-up plan — the menu flips with the market", flag: false}
+      - {text: "Standing Tuesday classic — the same crowd-pleaser every Tuesday", flag: true}
+  - prompt: "Last slot for the month. What lands on the table?"
+    options:
+      - {text: "Family-favorites repeat pack — three proven boxes, cycled", flag: true}
+      - {text: "First-taste pilot box — recipes still in testing", flag: false}
+      - {text: "The all-repeats value track — identical box, whole quarter", flag: true}
+      - {text: "A build-your-own rotation — pick a new region each week", flag: false}

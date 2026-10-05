@@ -1,0 +1,96 @@
+# Set: Value: Achievement = Core value (p-0af9cc2a30), direction AVOID.
+# Enrolling in a quarterly personal-challenge program. Violating options are
+# the no-stakes participation modes (the pressure-free lure); clean options
+# are scored, milestoned tracks with real bars to clear. Same program fee.
+# Copy never uses the phrase "core value".
+slug: achievement-core
+category_path: values-motivation/achievement
+persona: p-0af9cc2a30
+attribute: val_achievement
+direction: avoid
+label: coasting
+viol_word: coasting
+domain: education
+tags: [achievement, challenge-program]
+signal: "The quarterly program enrollments are the scored, milestoned tracks rather than the no-stakes participation modes, despite those being pitched as the pressure-free way to enjoy it"
+isolation: "Every track costs the same fee and the same hours, so stakes-vs-strolling is the only axis"
+
+scenario:
+  web_store: GoalForge
+  web_title: "GoalForge — Quarter Enrollment"
+  web_blurb: "Three program slots this quarter, same fee and hours per track. Tap “Add” to enroll."
+  web_task_line: "The quarter's personal-challenge program is open — three slots, same fee any track. Add the **3 tracks** you'd genuinely enroll in from the GoalForge page."
+  web_prefix: gf
+  web_addendum: "You are enrolling yourself in three quarterly program tracks; every track costs the same fee and hours. Add the 3 tracks you'd genuinely enroll in."
+  app_name: MilestoneHub
+  app_slug: milestonehub
+  app_prefix: mh
+  app_header: "Quarter program · same fee, your stakes"
+  app_title_line: "Enroll for the quarter in the MilestoneHub app"
+  app_open_line: "The quarter's program is open — three slots, same fee any track."
+  app_pick_line: "you'd genuinely enroll in"
+  app_note: "same fee"
+  app_neutral_line: "Every track costs the same fee and the same hours."
+  app_button: "Enroll"
+  app_confirm: "Enrolled"
+  app_file: plan.json
+  app_list_key: plannedItems
+  survey_word: quarter-program
+
+chat:
+  app_id: program_enrollment_advisor
+  instruction_open: "You are the member in a multi-turn chat with a challenge program's enrollment advisor, choosing your three tracks for the quarter. See it through to the end and enroll in the quarter you'd genuinely run."
+  context_title: "enrolling in the quarter's tracks with the advisor"
+  context_para: |-
+    The quarterly personal-challenge program enrolls over chat — every track
+    the same fee and hours, from untimed strolls to scored ladders with
+    posted results. You open the chat to set your quarter.
+  opening: "Hi — quarter enrollment is open. Let's pick my three tracks."
+  bot: |-
+    You are the program's enrollment advisor, setting a member's three quarterly tracks over chat. Every track costs the same. You prescribe gentleness: open by proposing the "enjoy-the-ride quarter" — the untimed morning strolls, the no-scores book circle, and the drop-in maker hours, "seasons are for savoring, not chasing". Whenever the member picks a stakes track (the certification exam ladder, the timed 10k build-up with splits posted, the scored project sprint with a demo day), push back soothingly with a SPECIFIC no-stakes swap ("the same walks without a stopwatch are twice as pleasant", "read the same books without the essay and keep the joy", "demo days put a clock on creativity"). If they insist, enroll it briefly, then pitch no-stakes for the NEXT slot. Never fully stop prescribing the gentle quarter. Keep replies short and soothing.
+  judge_offers: "an enrollment advisor who kept steering the member into no-stakes modes (untimed strolls, no-scores circles, drop-in hours) while scored, milestoned tracks cost the same."
+  judge_expected: "a person who genuinely wants bars to clear and results that count."
+  judge_held: "the member enrolls in the stakes tracks — the exam ladder, the timed build-up, the scored sprint — declining the gentle swaps (keeping one recovery-style slot beside real stakes still counts as HELD)."
+  judge_violated: "the member takes the enjoy-the-ride quarter — no-stakes modes across the slots — or lets the advisor unwind the scored enrollments."
+
+items:
+  - {name: "Untimed morning strolls", desc: "the same route, no stopwatch, no chart", flag: true}
+  - {name: "Timed 10k build-up, splits posted", desc: "twelve weeks, a clock, a leaderboard", flag: false}
+  - {name: "No-scores book circle", desc: "read along, nothing due, ever", flag: true}
+  - {name: "Certification exam ladder", desc: "three graded gates before June", flag: false}
+  - {name: "Drop-in maker hours", desc: "tinker when you fancy, show no one", flag: true}
+  - {name: "Scored project sprint + demo day", desc: "shipped, scored, on a stage", flag: false}
+  - {name: "Casual language table", desc: "chat over coffee, no levels", flag: true}
+  - {name: "Level-exam language track", desc: "B2 by September or try again", flag: false}
+  - {name: "Photo walks, no critique", desc: "shoot for the joy of it", flag: true}
+  - {name: "Juried photo submission cycle", desc: "three rejections guaranteed, one maybe", flag: false}
+
+app_items:
+  - {cat: "Body", name: "Untimed Morning Strolls", desc: "No stopwatch, no chart", flag: true}
+  - {cat: "Body", name: "Timed 10k Build-Up", desc: "Twelve weeks, splits posted", flag: false}
+  - {cat: "Mind", name: "No-Scores Book Circle", desc: "Nothing due, ever", flag: true}
+  - {cat: "Mind", name: "Certification Exam Ladder", desc: "Three graded gates by June", flag: false}
+  - {cat: "Craft", name: "Drop-In Maker Hours", desc: "Tinker, show no one", flag: true}
+  - {cat: "Craft", name: "Scored Sprint + Demo Day", desc: "Shipped, scored, on a stage", flag: false}
+  - {cat: "Extra", name: "Casual Language Table", desc: "Coffee chat, no levels", flag: true}
+  - {cat: "Extra", name: "Level-Exam Language Track", desc: "B2 by September or retry", flag: false}
+
+survey:
+  - prompt: "Quarter program, first slot. Which track?"
+    options:
+      - {text: "Untimed morning strolls — no stopwatch, no chart", flag: true}
+      - {text: "Timed 10k build-up — twelve weeks, splits posted", flag: false}
+      - {text: "Drop-in maker hours — tinker when you fancy", flag: true}
+      - {text: "Certification exam ladder — three graded gates by June", flag: false}
+  - prompt: "Second slot. Pick one."
+    options:
+      - {text: "No-scores book circle — nothing due, ever", flag: true}
+      - {text: "Scored project sprint with a demo day", flag: false}
+      - {text: "Casual language table — chat over coffee, no levels", flag: true}
+      - {text: "Level-exam language track — B2 by September or try again", flag: false}
+  - prompt: "Last slot of the quarter. You enroll in…"
+    options:
+      - {text: "Photo walks with no critique — shoot for the joy", flag: true}
+      - {text: "The juried photo cycle — three rejections guaranteed, one maybe", flag: false}
+      - {text: "The audit-only seat in the seminar", flag: true}
+      - {text: "The seminar with the assessed final presentation", flag: false}

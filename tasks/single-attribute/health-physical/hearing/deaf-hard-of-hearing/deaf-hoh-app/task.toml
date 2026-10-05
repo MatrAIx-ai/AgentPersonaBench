@@ -1,0 +1,38 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/deaf-hoh-app"
+theme = "Council home-safety visit: choosing the kit and visit arrangements"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "local-services"
+tags = ["persona-adherence", "contact-channels", "single-attribute", "rule-based", "native-gui"]
+
+[[checks]]
+dimension_id = "health_hearing"
+dimension_label = "Hearing"
+category = "Health: Physical"
+anchor_value = "Deaf / hard of hearing"
+evaluator = "rule-based"
+adherence_signal = "Every option the resident submits in the app reaches them in writing or on screen rather than through sound, as a deaf / hard-of-hearing resident would arrange it."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

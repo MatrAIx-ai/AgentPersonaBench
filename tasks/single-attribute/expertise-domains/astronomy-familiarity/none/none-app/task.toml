@@ -1,0 +1,44 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/none-app"
+theme = "Familiarity: Astronomy — None vets candidates in a native app"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "astronomy"
+tags = [ "persona-adherence", "astronomy-familiarity", "periodogram", "os-app", "computer-use",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "fam_astronomy"
+dimension_label = "Familiarity: Astronomy"
+category = "Expertise: Domains"
+anchor_value = "None"
+evaluator = "rule-based"
+adherence_signal = "A persona with zero astronomy familiarity makes at least one genuine mistake (promotes a harmonic or noise candidate, or misses the dominant signal); a professionally clean submission is capability leaking through and violates it."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with your GUI baked in — see ./environment/Dockerfile.
+# No `definition` key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launches PeriodoScope on the CUA desktop and keeps it raised above Chromium.
+command = "/opt/periodoscope/start-periodoscope.sh"
+timeout_sec = 60.0
+retries = 5

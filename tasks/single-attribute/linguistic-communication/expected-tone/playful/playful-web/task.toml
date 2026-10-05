@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/playful-web"
+theme = "Expected tone: Playful"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "communication"
+tags = [ "persona-adherence", "linguistic-communication", "expected-tone", "playful", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "tone_expected"
+dimension_label = "Expected tone"
+category = "Linguistic: Communication"
+anchor_value = "Playful"
+evaluator = "rule-based"
+# Web env: the persona saves canned reply templates on a live page (Playwright).
+# Each template's hidden `data-stiffness` (0..3) in index.html is the ground
+# truth. VIOLATED for any flat/stiff save (stiffness >= 2).
+adherence_signal = "Saved only playful/friendly-casual templates (data-stiffness 0-1); no flat/stiff template (>=2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

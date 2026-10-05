@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/privacy-guardian-web"
+theme = "privacy-guardian: guards personal data + distrusts unverified sources + questions/verifies (minimize sharing · verify before trusting · check claims)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "digital-life"
+tags = [ "persona-adherence", "multi-check", "privacy-guardian", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE setup task, THREE checks. A single persona carrying three privacy-guardian
+# values enables 3 apps/settings on a live device-setup page (Playwright); the
+# verifier runs an independent rule-based check per axis, reading each option's
+# hidden data-* tier off index.html (ground truth, NOT shown to the user). This
+# amortizes one generation across three attributes. Reward = integer score (one
+# point per check HELD, 0..3). Each axis: HELD iff no picked option is high-tier
+# (axis >= 2).
+[[checks]]
+dimension_id = "att_data_privacy"
+attribute = "Attitude: Data privacy"
+value = "Skeptical"
+evaluator = "rule-based"
+evaluator_name = "att_data_privacy=Skeptical"
+# Ground truth: each option's hidden data-privacy (0 guards data .. 3 shares freely) in index.html.
+adherence_signal = "Choices minimize data sharing (data-privacy 0-1); no share-freely pick (>= 2)."
+
+[[checks]]
+dimension_id = "trust_level"
+attribute = "Trust level"
+value = "Skeptical"
+evaluator = "rule-based"
+evaluator_name = "trust_level=Skeptical"
+# Ground truth: each option's hidden data-trust (0 distrusts unverified .. 3 trusts readily).
+adherence_signal = "Choices favor verify-before-trusting options (data-trust 0-1); no trust-readily pick (>= 2)."
+
+[[checks]]
+dimension_id = "cog_skepticism"
+attribute = "Cognition: Skepticism"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "cog_skepticism=High"
+# Ground truth: each option's hidden data-skept (0 questions/verifies .. 3 accepts at face value).
+adherence_signal = "Choices favor question-and-verify options (data-skept 0-1); no accept-at-face-value pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

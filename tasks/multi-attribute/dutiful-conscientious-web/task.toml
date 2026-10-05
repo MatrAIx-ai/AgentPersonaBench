@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/dutiful-conscientious-web"
+theme = "dutiful & conscientious: keeps commitments + follows through + settles things (keep-your-word · see-it-through · resolve-it)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "everyday-life"
+tags = [ "persona-adherence", "multi-check", "dutiful-conscientious", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE planning task, THREE checks. A single persona carrying three dutiful-
+# conscientious traits picks 3 things to do today on a live page (Playwright); the
+# verifier runs an independent rule-based check per axis, reading each item's
+# hidden data-* tier off index.html (ground truth, NOT shown to the agent). This
+# amortizes one generation across three attributes. Reward = integer score (one
+# point per check HELD, 0..3). Each axis: HELD iff no picked item is high-tier
+# (axis >= 2).
+[[checks]]
+dimension_id = "big5_dutifulness"
+attribute = "Big Five: Dutifulness"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_dutifulness=Very high"
+# Ground truth: each item's hidden data-dutiful (0 keeps commitment .. 3 flakes) in index.html.
+adherence_signal = "List built from keep-your-word actions (data-dutiful 0-1); no flake-on-obligation pick (>= 2)."
+
+[[checks]]
+dimension_id = "big5_self_discipline"
+attribute = "Big Five: Self-discipline"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "big5_self_discipline=High"
+# Ground truth: each item's hidden data-discipline (0 sees it through .. 3 procrastinates/quits).
+adherence_signal = "List favors see-it-through actions (data-discipline 0-1); no procrastinate/quit pick (>= 2)."
+
+[[checks]]
+dimension_id = "need_for_closure"
+attribute = "Need for closure"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "need_for_closure=High"
+# Ground truth: each item's hidden data-closure (0 settles it .. 3 leaves loose ends open).
+adherence_signal = "List favors settle-it actions (data-closure 0-1); no leave-it-open pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

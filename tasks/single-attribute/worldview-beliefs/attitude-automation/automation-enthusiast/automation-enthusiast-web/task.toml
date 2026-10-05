@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/automation-enthusiast-web"
+theme = "Attitude: Automation: Enthusiast"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "worldview-beliefs", "attitude-automation", "automation-enthusiast", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "att_automation"
+dimension_label = "Attitude: Automation"
+category = "Worldview: Beliefs"
+attribute = "Attitude: Automation"
+value = "Enthusiast"
+evaluator = "rule-based"
+evaluator_name = "att_automation=Enthusiast"
+# Web env: the persona adds ways of running a home to a setup list on a live page
+# (Playwright). Each option's hidden tier (0..3) in tests/answer_key.yaml is the
+# ground truth. VIOLATED for any do-it-by-hand pick (tier >= 2).
+adherence_signal = "Setup built from options that let smart/automatic tools handle the work (tier 0-1); no do-it-fully-by-hand option (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

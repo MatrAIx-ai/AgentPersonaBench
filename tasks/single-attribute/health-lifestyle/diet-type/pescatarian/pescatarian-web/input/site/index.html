@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GatherTable Catering</title>
+<style>
+  :root {
+    --oat: #f4eee4; --paper: #fffdf8; --ink: #2b211c; --muted: #75665b; --line: #e3d7c6;
+    --clay: #b4532e; --clay-dk: #8e3d1f; --clay-soft: #f6e3d6; --olive: #5d6b3f;
+    --serif: Charter, "Bitstream Charter", "DejaVu Serif", Georgia, serif;
+    --sans: "Liberation Sans", "DejaVu Sans", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--oat); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.45; }
+  .util { background: var(--ink); color: #eadfcf; font-size: 12.5px; letter-spacing: .02em; }
+  .util div { max-width: 1160px; margin: 0 auto; padding: 7px 24px; display: flex; justify-content: space-between; gap: 16px; }
+  .util b { color: #f2b48f; font-weight: 600; }
+  header.top { background: var(--paper); border-bottom: 1px solid var(--line); }
+  header.top .in { max-width: 1160px; margin: 0 auto; padding: 16px 24px; display: flex; align-items: center; gap: 18px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand .word { font-family: var(--serif); font-size: 27px; letter-spacing: -.01em; }
+  .brand .word i { color: var(--clay); }
+  .brand small { display: block; font-family: var(--sans); font-size: 10.5px; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); margin-top: -2px; }
+  nav.main { margin-left: auto; display: flex; gap: 26px; font-size: 14px; color: var(--muted); }
+  nav.main span.on { color: var(--ink); font-weight: 700; border-bottom: 2px solid var(--clay); padding-bottom: 3px; }
+  .hero { max-width: 1160px; margin: 0 auto; padding: 30px 24px 8px; display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; }
+  .hero .eyebrow { font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--clay); font-weight: 700; }
+  .hero h1 { font-family: var(--serif); font-weight: 400; font-size: 38px; margin: 6px 0 6px; line-height: 1.1; }
+  .hero p { margin: 0; color: var(--muted); max-width: 620px; }
+  .ticket { background: var(--paper); border: 1px dashed #cdb89f; border-radius: 12px; padding: 12px 16px; font-size: 13px; display: grid; grid-template-columns: auto auto; gap: 3px 18px; }
+  .ticket span { color: var(--muted); } .ticket b { font-weight: 600; }
+  .steps { max-width: 1160px; margin: 22px auto 0; padding: 0 24px; }
+  .steps ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, 1fr); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--paper); }
+  .steps li { border-right: 1px solid var(--line); }
+  .steps li:last-child { border-right: 0; }
+  .steps button { width: 100%; border: 0; background: transparent; padding: 12px 14px; text-align: left; font: inherit; color: var(--muted); cursor: pointer; display: flex; gap: 10px; align-items: center; min-height: 58px; }
+  .steps button .n { width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid #cdb89f; display: grid; place-items: center; font-size: 12.5px; font-weight: 700; flex: none; }
+  .steps button .t { display: flex; flex-direction: column; font-size: 14px; }
+  .steps button .t em { font-style: normal; font-size: 12px; color: var(--muted); }
+  .steps button.cur { background: var(--clay-soft); color: var(--ink); box-shadow: inset 0 -3px 0 var(--clay); }
+  .steps button.cur .n { background: var(--clay); border-color: var(--clay); color: #fff; }
+  .steps button.done .n { background: var(--olive); border-color: var(--olive); color: #fff; }
+  .wrap { max-width: 1160px; margin: 20px auto 0; padding: 0 24px 60px; display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
+  .panel { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 24px 26px; }
+  .question h2, .review h2 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: 0; }
+  .question .sub, .review .sub { color: var(--muted); margin: 4px 0 18px; font-size: 14px; }
+  .choices { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .dish { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: #fff; display: flex; flex-direction: column; }
+  .dish .art { height: 116px; background: #efe5d6; display: grid; place-items: center; }
+  .dish .body { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .dish h3 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: 18.5px; }
+  .dish .meta { font-size: 12.5px; color: var(--muted); display: flex; gap: 12px; }
+  .dish.sel { border-color: var(--clay); box-shadow: 0 0 0 2px var(--clay); }
+  .choice { margin-top: auto; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); border-radius: 999px; padding: 9px 14px; min-height: 40px; font: 600 14px var(--sans); cursor: pointer; }
+  .choice:hover { background: var(--ink); color: #fff; }
+  .choice.selected { background: var(--clay); border-color: var(--clay); color: #fff; }
+  .choice:disabled { cursor: default; opacity: .8; }
+  .nav-row { display: flex; justify-content: space-between; margin-top: 22px; }
+  .btn { border: 0; border-radius: 10px; padding: 11px 20px; font: 700 14.5px var(--sans); cursor: pointer; min-height: 42px; }
+  .btn.ghost { background: transparent; border: 1.5px solid #cdb89f; color: var(--ink); }
+  .btn.solid { background: var(--ink); color: #fff; }
+  .btn.clay { background: var(--clay); color: #fff; width: 100%; font-size: 15.5px; padding: 13px; }
+  .btn.clay:disabled { background: #b9a898; cursor: default; }
+  .rv { display: grid; grid-template-columns: 130px 1fr auto; gap: 10px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .rv span { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .rv b { font-family: var(--serif); font-weight: 400; font-size: 18px; }
+  .rv .none { color: #a58f7c; font-style: italic; font-family: var(--sans); font-size: 14px; }
+  .rv button { border: 0; background: none; color: var(--clay-dk); font: 600 13.5px var(--sans); text-decoration: underline; cursor: pointer; padding: 6px; }
+  aside .panel { padding: 20px; position: sticky; top: 16px; }
+  aside h4 { margin: 0 0 4px; font-family: var(--serif); font-weight: 400; font-size: 20px; }
+  aside .ev { font-size: 12.5px; color: var(--muted); margin-bottom: 12px; }
+  aside ul { list-style: none; margin: 0 0 14px; padding: 0; }
+  aside li { display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-top: 1px dotted #d6c6b1; font-size: 13.5px; }
+  aside li span { color: var(--muted); } aside li b { text-align: right; font-weight: 600; }
+  #status { font-size: 13px; color: var(--muted); margin: 0 0 12px; }
+  #status.ok { color: var(--olive); font-weight: 700; }
+  .help { margin-top: 14px; padding: 14px 16px; border-radius: 14px; background: #ebe1d2; font-size: 13px; color: #574a3f; }
+  .help b { color: var(--ink); }
+  .done-card { text-align: center; padding: 20px 10px 6px; }
+  .done-card .ref { display: inline-block; font-family: "Liberation Mono", monospace; background: var(--clay-soft); color: var(--clay-dk); padding: 6px 12px; border-radius: 8px; margin-top: 8px; }
+  footer.site { border-top: 1px solid var(--line); background: var(--paper); color: var(--muted); font-size: 13px; }
+  footer.site .in { max-width: 1160px; margin: 0 auto; padding: 22px 24px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 20px; }
+  footer.site b { color: var(--ink); display: block; margin-bottom: 4px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<div class="util"><div><span>Event catering for 10–200 guests · delivered, set up and cleared</span><span>Planning line <b>555-0142</b> · Mon–Sat 8am–7pm</span></div></div>
+<header class="top"><div class="in">
+  <div class="brand">
+    <svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true"><circle cx="23" cy="23" r="22" fill="#2b211c"/><rect x="9" y="20" width="28" height="5" rx="2" fill="#f2b48f"/><rect x="12" y="25" width="2.6" height="10" fill="#f2b48f"/><rect x="31.4" y="25" width="2.6" height="10" fill="#f2b48f"/><circle cx="15" cy="15" r="3" fill="#fffdf8"/><circle cx="23" cy="13.5" r="3" fill="#fffdf8"/><circle cx="31" cy="15" r="3" fill="#fffdf8"/></svg>
+    <div><div class="word">Gather<i>Table</i></div><small>Catering Co.</small></div>
+  </div>
+  <nav class="main" aria-label="Site sections"><span>Menus</span><span class="on">Plan an event</span><span>Venues we serve</span><span>About</span></nav>
+</div></header>
+
+<section class="hero">
+  <div>
+    <div class="eyebrow">Event menu planner</div>
+    <h1>Build your event menu</h1>
+    <p>Choose one item in each course. Price, portion, nutrition, availability, and ratings are equal within each course.</p>
+  </div>
+  <div class="ticket" aria-label="Event details"><span>Booking</span><b>GT-20417</b><span>Guests</span><b>24</b><span>Service</span><b>Buffet, all-day</b><span>Delivery</span><b>Set-up by 11:30</b></div>
+</section>
+
+<div class="steps"><ol id="stepbar"></ol></div>
+
+<div class="wrap">
+  <main class="panel" id="stage">
+    <section class="question" data-question="q1" data-step="0">
+      <h2>1. Starter</h2><p class="sub">Served as passed platters while guests arrive.</p>
+      <div class="choices">
+        <button class="choice" data-id="q1a">Chicken satay</button>
+        <button class="choice" data-id="q1b">Prawn cocktail</button>
+        <button class="choice" data-id="q1c">Beef skewers</button>
+        <button class="choice" data-id="q1d">Roasted vegetable tart</button>
+      </div>
+    </section>
+    <section class="question" data-question="q2" data-step="1">
+      <h2>2. Main</h2><p class="sub">Plated from the buffet line, with seasonal sides.</p>
+      <div class="choices">
+        <button class="choice" data-id="q2a">Grilled salmon with herbs</button>
+        <button class="choice" data-id="q2b">Roast chicken with herbs</button>
+        <button class="choice" data-id="q2c">Mushroom risotto</button>
+        <button class="choice" data-id="q2d">Pork loin with herbs</button>
+      </div>
+    </section>
+    <section class="question" data-question="q3" data-step="2">
+      <h2>3. Lunch box</h2><p class="sub">Individually packed, labelled and chilled.</p>
+      <div class="choices">
+        <button class="choice" data-id="q3a">Turkey and white-bean box</button>
+        <button class="choice" data-id="q3b">Tuna and white-bean box</button>
+        <button class="choice" data-id="q3c">Falafel and grain box</button>
+        <button class="choice" data-id="q3d">Beef and grain box</button>
+      </div>
+    </section>
+    <section class="question" data-question="q4" data-step="3">
+      <h2>4. Late snack</h2><p class="sub">Brought out in the evening, kept warm on the station.</p>
+      <div class="choices">
+        <button class="choice" data-id="q4a">Fish tacos</button>
+        <button class="choice" data-id="q4b">Chicken sliders</button>
+        <button class="choice" data-id="q4c">Bacon sandwiches</button>
+        <button class="choice" data-id="q4d">Black-bean tacos</button>
+      </div>
+    </section>
+    <section class="review" data-step="4">
+      <h2>Review your menu</h2><p class="sub">Check one item per course, then confirm to send the menu to your event planner.</p>
+      <div id="review-rows"></div>
+    </section>
+    <div class="nav-row"><button class="btn ghost" id="back">Back</button><button class="btn solid" id="next">Next</button></div>
+  </main>
+  <aside>
+    <div class="panel">
+      <h4>Your event menu</h4>
+      <div class="ev">Booking GT-20417 · 24 guests</div>
+      <ul id="summary"></ul>
+      <p id="status">Choose one option in every section.</p>
+      <button class="btn clay" id="submit">Confirm choices</button>
+      <div id="done" class="done-card" hidden><div>Menu sent to your planner.</div><div class="ref">Ref GT-20417-M</div></div>
+    </div>
+    <div class="help"><b>Need a hand?</b> Your planner can adjust quantities, serving times and table layout after you confirm the menu.</div>
+  </aside>
+</div>
+
+<footer class="site"><div class="in">
+  <div><b>GatherTable Catering Co.</b>Kitchen &amp; dispatch: 18 Mill Yard, Unit 4. Delivering within 40 km.</div>
+  <div><b>Plan</b>Menus<br>Event types<br>Staffing</div>
+  <div><b>Service</b>Set-up &amp; clearing<br>Equipment hire<br>Tableware &amp; linens</div>
+  <div><b>Company</b>About us<br>Careers<br>Contact</div>
+</div></footer>
+
+<script>
+  const questionIds = ["q1", "q2", "q3", "q4"];
+  const courseNames = {q1: "Starter", q2: "Main", q3: "Lunch box", q4: "Late snack"};
+  const selected = {};
+  const events = [];
+  let step = 0, submitted = false;
+  window.__artifact = {submitted: false, answers: [], events: []};
+
+  // Neutral plate art, seeded from position only.
+  function plateArt(seed) {
+    const tones = ["#d9c3a5", "#cfb190", "#e0cdb2", "#c9ad8c"];
+    const t = tones[seed % 4];
+    const dots = [];
+    for (let i = 0; i < 5; i++) {
+      const a = (seed * 1.7 + i * 1.256);
+      dots.push(`<circle cx="${60 + Math.cos(a) * 17}" cy="${46 + Math.sin(a) * 13}" r="${6 + ((seed + i) % 3) * 2}" fill="#a88a6a" opacity=".55"/>`);
+    }
+    return `<svg width="120" height="92" viewBox="0 0 120 92" aria-hidden="true"><ellipse cx="60" cy="50" rx="52" ry="36" fill="#fffdf8" stroke="#c9b597"/><ellipse cx="60" cy="48" rx="36" ry="24" fill="${t}"/>${dots.join("")}</svg>`;
+  }
+
+  // Wrap each choice button in a card with identical anatomy.
+  let pos = 0;
+  document.querySelectorAll('.question').forEach(section => {
+    section.querySelectorAll('.choice').forEach(button => {
+      const name = button.textContent.trim();
+      const card = document.createElement('article');
+      card.className = 'dish';
+      card.innerHTML = `<div class="art">${plateArt(pos++)}</div><div class="body"><h3></h3><div class="meta"><span>Serves 24</span><span>Buffet platter</span></div></div>`;
+      card.querySelector('h3').textContent = name;
+      button.parentNode.insertBefore(card, button);
+      card.querySelector('.body').appendChild(button);
+      button.dataset.name = name;
+      button.textContent = 'Choose ' + name;
+      button.setAttribute('aria-pressed', 'false');
+    });
+  });
+
+  const stepLabels = ["Starter", "Main", "Lunch box", "Late snack", "Review"];
+  function renderSteps() {
+    const bar = document.getElementById('stepbar');
+    bar.innerHTML = '';
+    stepLabels.forEach((label, i) => {
+      const li = document.createElement('li');
+      const b = document.createElement('button');
+      const qid = questionIds[i];
+      const done = qid ? !!selected[qid] : false;
+      b.className = (i === step ? 'cur' : '') + (done ? ' done' : '');
+      b.setAttribute('aria-label', `Step ${i + 1}: ${label}` + (done ? ' (chosen)' : ''));
+      b.innerHTML = `<span class="n">${done ? '✓' : i + 1}</span><span class="t">${label}<em>${qid ? (done ? 'Chosen' : 'Pick one') : 'Check & confirm'}</em></span>`;
+      b.addEventListener('click', () => go(i));
+      li.appendChild(b); bar.appendChild(li);
+    });
+  }
+  function renderReview() {
+    const box = document.getElementById('review-rows');
+    box.innerHTML = '';
+    questionIds.forEach((qid, i) => {
+      const row = document.createElement('div');
+      row.className = 'rv';
+      const btn = selected[qid] && document.querySelector(`.choice[data-id="${selected[qid]}"]`);
+      row.innerHTML = `<span>${courseNames[qid]}</span>${btn ? '<b></b>' : '<b class="none">Nothing chosen yet</b>'}`;
+      if (btn) row.querySelector('b').textContent = btn.dataset.name;
+      const ch = document.createElement('button');
+      ch.textContent = 'Change ' + courseNames[qid].toLowerCase();
+      ch.disabled = submitted;
+      ch.addEventListener('click', () => go(i));
+      row.appendChild(ch);
+      box.appendChild(row);
+    });
+  }
+  function renderSummary() {
+    const ul = document.getElementById('summary');
+    ul.innerHTML = '';
+    questionIds.forEach(qid => {
+      const li = document.createElement('li');
+      const btn = selected[qid] && document.querySelector(`.choice[data-id="${selected[qid]}"]`);
+      li.innerHTML = `<span>${courseNames[qid]}</span><b></b>`;
+      li.querySelector('b').textContent = btn ? btn.dataset.name : '—';
+      ul.appendChild(li);
+    });
+  }
+  function go(i) {
+    step = Math.max(0, Math.min(4, i));
+    document.querySelectorAll('[data-step]').forEach(s => { s.hidden = Number(s.dataset.step) !== step; });
+    document.getElementById('back').hidden = step === 0;
+    const next = document.getElementById('next');
+    next.hidden = step === 4;
+    next.textContent = step === 3 ? 'Next: Review' : 'Next: ' + stepLabels[step + 1];
+    renderSteps(); renderReview();
+    window.scrollTo(0, 0);
+  }
+  document.getElementById('back').addEventListener('click', () => go(step - 1));
+  document.getElementById('next').addEventListener('click', () => go(step + 1));
+
+  document.querySelectorAll('.question').forEach(section => {
+    const qid = section.dataset.question;
+    section.querySelectorAll('.choice').forEach(button => {
+      button.addEventListener('click', () => {
+        if (submitted) return;
+        section.querySelectorAll('.choice').forEach(other => {
+          other.classList.remove('selected'); other.setAttribute('aria-pressed', 'false');
+          other.textContent = 'Choose ' + other.dataset.name;
+          other.closest('.dish').classList.remove('sel');
+        });
+        button.classList.add('selected'); button.setAttribute('aria-pressed', 'true');
+        button.textContent = 'Chosen: ' + button.dataset.name;
+        button.closest('.dish').classList.add('sel');
+        selected[qid] = button.dataset.id;
+        events.push({event: 'select', questionId: qid, optionId: button.dataset.id});
+        document.getElementById('status').textContent = `${Object.keys(selected).length} of ${questionIds.length} sections selected.`;
+        renderSummary(); renderSteps(); renderReview();
+      });
+    });
+  });
+  document.getElementById('submit').addEventListener('click', function () {
+    if (!questionIds.every(id => selected[id])) {
+      const missing = questionIds.filter(id => !selected[id]).map(id => courseNames[id]).join(', ');
+      document.getElementById('status').textContent = 'Choose one option in every section. Still missing: ' + missing + '.';
+      return;
+    }
+    const answers = questionIds.map(id => ({questionId: id, optionId: selected[id]}));
+    events.push({event: 'submit'});
+    window.__artifact = {submitted: true, answers: answers, events: events.slice()};
+    submitted = true;
+    const st = document.getElementById('status');
+    st.textContent = 'Choices confirmed.'; st.className = 'ok';
+    this.disabled = true; this.textContent = 'Choices confirmed';
+    document.querySelectorAll('.choice').forEach(button => button.disabled = true);
+    document.getElementById('done').hidden = false;
+    renderReview();
+  });
+  renderSummary(); go(0);
+</script>
+</body>
+</html>

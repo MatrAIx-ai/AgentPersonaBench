@@ -1,0 +1,60 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/packpilot-web"
+theme = "Travel frequency: Frequent flyer · Shopping style: Minimalist · Indoor vs outdoor: Strongly outdoor"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE artifact, THREE checks. A single persona completes one setup flow on a
+# live page -- one pick per section, three sections co-exposing three
+# attributes at once. The verifier reads the DOM selections back against
+# hidden data-* labels on the page and scores one point per check HELD (0..3).
+[[checks]]
+dimension_id = "lstyle_travel_freq"
+dimension_label = "Travel frequency"
+category = "Interests: Culture"
+value = "Frequent flyer"
+evaluator = "rule-based"
+evaluator_name = "lstyle_travel_freq=Frequent flyer"
+adherence_signal = "The picked delivery-frequency option is the frequent-traveler one (data-frequent=true)."
+
+[[checks]]
+dimension_id = "lstyle_shopping_style"
+dimension_label = "Shopping style"
+category = "Interests: Culture"
+value = "Minimalist"
+evaluator = "rule-based"
+evaluator_name = "lstyle_shopping_style=Minimalist"
+adherence_signal = "The picked kit-type option is the minimalist one (data-minimal=true)."
+
+[[checks]]
+dimension_id = "pref_indoor_vs_outdoor"
+dimension_label = "Indoor vs outdoor"
+category = "Behavior: Preferences"
+value = "Strongly outdoor"
+evaluator = "rule-based"
+evaluator_name = "pref_indoor_vs_outdoor=Strongly outdoor"
+adherence_signal = "The picked trip-focus chip is the outdoor/trail one (data-outdoor=true)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

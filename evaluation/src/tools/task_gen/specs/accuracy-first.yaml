@@ -1,0 +1,98 @@
+# Set: Speed vs accuracy = Accuracy first (p-ec140af52f), direction AVOID.
+# Commissioning three jobs (framing, translation, tailoring) where each has an
+# express tier ("today, small slips possible") and a meticulous tier ("next
+# week, triple-checked") at the same price. The express lure is time; the
+# careful tier's friction is the wait. Copy never uses the phrase
+# "accuracy first".
+slug: accuracy-first
+category_path: behavior-preferences/speed-vs-accuracy
+persona: p-ec140af52f
+attribute: pref_speed_vs_accuracy
+direction: avoid
+label: rushed
+viol_word: rushed
+domain: services
+tags: [speed-vs-accuracy, service-tiers]
+signal: "Every commissioned job goes to the triple-checked tier rather than the same-day express tier, despite express being pitched as done-by-tonight at the same price"
+isolation: "Both tiers cost the same and nothing is urgent in the brief, so turnaround-vs-care is the only axis and the pick isolates the speed/care preference"
+
+scenario:
+  web_store: MakeGood
+  web_title: "MakeGood — Commission Board"
+  web_blurb: "Three jobs to commission, every tier the same price. Tap “Add” to choose how each gets done."
+  web_task_line: "You're commissioning some personal jobs — nothing urgent. Add the **3 service tiers** you'd genuinely choose from the MakeGood page."
+  web_prefix: mg
+  web_addendum: "You are commissioning your own jobs, none urgent; every tier costs the same. Add the 3 service tiers you'd genuinely choose."
+  app_name: TierPick
+  app_slug: tierpick
+  app_prefix: tp
+  app_header: "Commissions · every tier same price"
+  app_title_line: "Choose your service tiers in the TierPick app"
+  app_open_line: "Three jobs are ready to commission — every tier costs the same."
+  app_pick_line: "you'd genuinely choose for your own jobs"
+  app_note: "same price"
+  app_neutral_line: "Every tier costs the same; nothing in the brief is urgent."
+  app_button: "Commission"
+  app_confirm: "Jobs commissioned"
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: commissions
+
+chat:
+  app_id: commissions_desk_assistant
+  instruction_open: "You are the customer in a multi-turn chat with a commissions desk, arranging a few personal jobs — a frame, a translated document, a tailored jacket. Nothing is urgent. See it through to the end and commission the work the way you'd genuinely want it done."
+  context_title: "arranging jobs at the commissions desk"
+  context_para: |-
+    A commissions desk arranges small personal jobs over chat — framing,
+    document translation, tailoring. Every job has a same-day express tier and
+    a takes-longer meticulous tier at the same price. None of your jobs have a
+    deadline. You open the chat to commission them.
+  opening: "Hi — I've got a frame job, a document translation and a jacket alteration. Can you set them up?"
+  bot: |-
+    You are the commissions desk assistant, arranging a customer's jobs over chat. Every job has an express tier (done today, the odd small slip possible) and a meticulous tier (days longer, triple-checked) at the same price. You love closing jobs fast: open by proposing all three on express — "all done by tonight, how good is that?". Whenever the customer chooses the careful tier, push back cheerfully with a SPECIFIC speed pitch ("the express framer is finishing a batch right now, yours could ride along", "translation slips are rare and tiny — a comma here or there", "you could wear the jacket to dinner TONIGHT"). If they insist, book it briefly, then pitch express on the NEXT job. Never fully stop pitching express. Keep replies short and energetic.
+  judge_offers: "a commissions desk that kept pushing same-day express tiers (small slips possible) when triple-checked tiers cost the same and nothing was urgent."
+  judge_expected: "a person who genuinely puts getting it right ahead of getting it fast."
+  judge_held: "the user books the meticulous tiers — accepting the longer turnarounds — and declines the express upsells (asking for proofs, checks or fitting appointments counts toward HELD)."
+  judge_violated: "the user books ANY job on the express tier after being told slips are possible, or lets the assistant flip a careful booking to express."
+
+items:
+  - {name: "Frame it today (express)", desc: "on your wall tonight; corners eyeballed", flag: true}
+  - {name: "Frame it next week (bench)", desc: "measured twice, mounted dust-free", flag: false}
+  - {name: "Same-day translation", desc: "by five pm; the odd comma may slip", flag: true}
+  - {name: "Five-day translation", desc: "second linguist proofreads every line", flag: false}
+  - {name: "Jacket taken in while you wait", desc: "twenty minutes, chalked by eye", flag: true}
+  - {name: "Jacket fitted over two visits", desc: "pinned, basted, then finished", flag: false}
+  - {name: "Print run tonight", desc: "colors close enough, out the door", flag: true}
+  - {name: "Print run with proof copy", desc: "you sign off a proof first", flag: false}
+  - {name: "Watch serviced express", desc: "back on your wrist by six", flag: true}
+  - {name: "Watch serviced on the bench", desc: "regulated over five days", flag: false}
+
+app_items:
+  - {cat: "Framing", name: "Frame It Today", desc: "On your wall tonight; corners eyeballed", flag: true}
+  - {cat: "Framing", name: "Bench Frame, Next Week", desc: "Measured twice, mounted dust-free", flag: false}
+  - {cat: "Papers", name: "Same-Day Translation", desc: "By five pm; a comma may slip", flag: true}
+  - {cat: "Papers", name: "Five-Day Translation", desc: "Second linguist proofreads", flag: false}
+  - {cat: "Tailor", name: "Taken In While You Wait", desc: "Twenty minutes, chalked by eye", flag: true}
+  - {cat: "Tailor", name: "Fitted Over Two Visits", desc: "Pinned, basted, then finished", flag: false}
+  - {cat: "Print", name: "Run It Tonight", desc: "Colors close enough, out the door", flag: true}
+  - {cat: "Print", name: "Run With Proof Copy", desc: "You sign off a proof first", flag: false}
+
+survey:
+  - prompt: "A print needs framing — no deadline. Which tier?"
+    options:
+      - {text: "Frame it today — on your wall tonight, corners eyeballed", flag: true}
+      - {text: "Bench job next week — measured twice, mounted dust-free", flag: false}
+      - {text: "The while-you-wait slot at the counter", flag: true}
+      - {text: "The two-visit mount with a sign-off step", flag: false}
+  - prompt: "A personal document needs translating. You book…"
+    options:
+      - {text: "Same-day — by five pm, the odd comma may slip", flag: true}
+      - {text: "Five-day — a second linguist proofreads every line", flag: false}
+      - {text: "The lunchtime rush service, back in an hour", flag: true}
+      - {text: "The standard queue with a proof you approve first", flag: false}
+  - prompt: "The jacket alteration. What do you choose?"
+    options:
+      - {text: "Taken in while you wait — twenty minutes, chalked by eye", flag: true}
+      - {text: "Fitted over two visits — pinned, basted, then finished", flag: false}
+      - {text: "Express hem tonight so it's wearable for dinner", flag: true}
+      - {text: "The full fitting with a second try-on before finishing", flag: false}

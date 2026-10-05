@@ -1,0 +1,60 @@
+{
+  "items": {
+    "pb01": {
+      "name": "Managed river studio kiosk",
+      "description": "visual builder with hosted builds; professionally commissioned neighborhood illustrations arranged remotely in 45 minutes, with reusable components and instant resizing",
+      "note": "same art direction, hardware, testing and launch date",
+      "haskellbuild": false,
+      "drawnvisuals": false
+    },
+    "pb02": {
+      "name": "Typed river studio kiosk",
+      "description": "Haskell interaction layer and manual build handoff; professionally commissioned neighborhood illustrations arranged remotely, with reusable components",
+      "note": "same art direction, hardware, testing and launch date",
+      "haskellbuild": true,
+      "drawnvisuals": false
+    },
+    "pb03": {
+      "name": "Typed river drawing kiosk",
+      "description": "Haskell interaction layer with handwritten device adapter; three fixed two-hour on-site drawing sessions, manual scan and color correction, and four revision passes",
+      "note": "same art direction, hardware, testing and launch date",
+      "haskellbuild": true,
+      "drawnvisuals": true
+    },
+    "pb04": {
+      "name": "Managed river drawing kiosk",
+      "description": "visual interaction builder with instant preview; three fixed two-hour on-site drawing sessions, manual scan and color correction, and four revision passes",
+      "note": "same art direction, hardware, testing and launch date",
+      "haskellbuild": false,
+      "drawnvisuals": true
+    },
+    "pb05": {
+      "name": "Functional market studio kiosk",
+      "description": "local Haskell toolchain; professionally commissioned market illustrations with reusable layers and one-click resizing",
+      "note": "same art direction, hardware, testing and launch date",
+      "haskellbuild": true,
+      "drawnvisuals": false
+    },
+    "pb06": {
+      "name": "Managed market studio kiosk",
+      "description": "instant device preview; professionally commissioned market illustrations with reusable layers and one-click resizing",
+      "note": "same art direction, hardware, testing and launch date",
+      "haskellbuild": false,
+      "drawnvisuals": false
+    },
+    "pb07": {
+      "name": "Functional market drawing kiosk",
+      "description": "local Haskell build and manual handoff; three fixed two-hour on-site blank-page drawing sessions plus manual scan, color correction, and four revision passes",
+      "note": "same art direction, hardware, testing and launch date",
+      "haskellbuild": true,
+      "drawnvisuals": true
+    },
+    "pb08": {
+      "name": "Managed market drawing kiosk",
+      "description": "hosted visual build; three fixed two-hour on-site blank-page drawing sessions plus manual scan, color correction, and four revision passes",
+      "note": "same art direction, hardware, testing and launch date",
+      "haskellbuild": false,
+      "drawnvisuals": true
+    }
+  }
+}

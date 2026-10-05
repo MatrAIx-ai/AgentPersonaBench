@@ -1,0 +1,77 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/commanding-leader-app"
+theme = "Commanding leader: takes charge, confident self-efficacy, directive decision-maker (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "teamwork"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE planning session, THREE checks. A single persona (a computer-use agent
+# operating the REAL TeamPlanner Tkinter GUI on a local Linux CUA desktop) builds
+# one set of responsibilities; the verifier runs an independent rule-based check
+# per attribute. Each responsibility carries three hidden ground-truth axes
+# (agency/selfefficacy/directive, 0..3) that are NEVER shown on screen — the agent
+# sees only title + description and must judge for itself which it would take on. A
+# check is HELD iff no selected item scores >= 2 on its axis. Reward = integer
+# score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "interpersonal_agency_dominance"
+dimension_label = "Interpersonal agency / dominance"
+category = "Personality: Relationships"
+attribute = "Interpersonal agency / dominance"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "interpersonal_agency_dominance=Very high"
+metric = "agency_axis_max"                   # HELD iff no picked item has agency >= 2
+adherence_signal = "The confirmed plan contains no defer-to-others item (hidden agency axis >= 2); a high-agency leader takes charge rather than stepping back."
+
+[[checks]]
+dimension_id = "big5_self_efficacy"
+dimension_label = "Big Five: Self-efficacy"
+category = "Personality: Big Five"
+attribute = "Big Five: Self-efficacy"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_self_efficacy=Very high"
+metric = "selfefficacy_axis_max"             # HELD iff no picked item has selfefficacy >= 2
+adherence_signal = "The plan contains no self-doubt item (hidden selfefficacy axis >= 2); a high self-efficacy person backs their own ability to handle it."
+
+[[checks]]
+dimension_id = "decision_style"
+dimension_label = "Decision style"
+category = "Risk & Decision"
+attribute = "Decision style"
+value = "Directive"
+evaluator = "rule-based"
+evaluator_name = "decision_style=Directive"
+metric = "directive_axis_max"                # HELD iff no picked item has directive >= 2
+adherence_signal = "The plan contains no avoids-deciding item (hidden directive axis >= 2); a directive decision-maker makes the call rather than waiting for consensus."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with TeamPlanner (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch TeamPlanner once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

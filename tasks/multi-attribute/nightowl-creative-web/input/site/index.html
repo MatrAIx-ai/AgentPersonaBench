@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The After-Hours Studio — Shop the Pegboard</title>
+<style>
+  :root{
+    --ply:#ead9b8; --ply2:#dfc9a0; --ply-edge:#c9ad7c; --hole:#b8976a;
+    --ink:#1d1b18; --ink2:#4a443b; --paper:#fbf7ee; --tag:#f3e6c8;
+    --cobalt:#2146c7; --cobalt-d:#16329a; --signal:#f06a1d; --line:#d9c7a3;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--paper);color:var(--ink);font:15px/1.5 "FreeSans","Liberation Sans",sans-serif}
+  button{font:inherit;cursor:pointer}
+  .mono{font-family:"Courier 10 Pitch","FreeMono","Liberation Mono",monospace}
+  .display{font-family:"Loma","FreeSans",sans-serif;font-weight:700;letter-spacing:-.01em}
+
+  /* utility + header */
+  .util{background:var(--cobalt);color:#fff;font-size:12.5px;text-align:center;padding:6px 16px;letter-spacing:.04em}
+  header.top{display:flex;align-items:center;gap:26px;padding:16px 36px;background:#fff;border-bottom:3px solid var(--ink)}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand .wm{line-height:1}
+  .brand .wm b{display:block;font-size:22px}
+  .brand .wm span{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink2)}
+  nav.main{display:flex;gap:4px;margin-left:10px}
+  nav.main span{padding:7px 12px;border:2px solid transparent;border-radius:3px;font-weight:700;font-size:14px}
+  nav.main span.on{border-color:var(--ink);background:var(--ply)}
+  .search{margin-left:auto;display:flex;align-items:center;border:2px solid var(--ink);border-radius:3px;background:#fff}
+  .search input{border:0;outline:0;padding:8px 10px;width:250px;font:inherit}
+  .search svg{margin:0 8px}
+  .bag-chip{display:flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border:0;border-radius:3px;padding:9px 14px;font-weight:700}
+  .bag-chip .n{background:var(--signal);color:#fff;border-radius:2px;padding:0 7px;font-size:13px}
+
+  /* stepper */
+  .steps{display:flex;gap:0;padding:0 36px;background:#fff;border-bottom:1px solid var(--line)}
+  .steps div{padding:10px 18px 9px;font-size:13px;color:var(--ink2);border-bottom:3px solid transparent;font-weight:700;letter-spacing:.03em}
+  .steps div.on{color:var(--ink);border-color:var(--signal)}
+  .steps div i{font-style:normal;display:inline-block;width:20px;height:20px;line-height:20px;text-align:center;border:1.5px solid currentColor;border-radius:50%;margin-right:7px;font-size:11px}
+
+  /* layout */
+  .wrap{display:grid;grid-template-columns:1fr 330px;gap:28px;padding:26px 36px 40px;max-width:1360px;margin:0 auto}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:16px}
+  .hero h1{font-size:40px;margin:0 0 4px;line-height:1.05}
+  .hero h1 em{font-style:normal;color:var(--cobalt)}
+  .hero p{margin:0;color:var(--ink2);max-width:560px}
+  .hero .rule{font-size:12.5px;border:2px dashed var(--ink);padding:8px 12px;border-radius:3px;background:#fff;white-space:nowrap}
+
+  /* pegboard */
+  .board{position:relative;padding:26px 24px 30px;border-radius:6px;
+    background-color:var(--ply);
+    background-image:radial-gradient(circle at 12px 12px,var(--hole) 0 3.2px,transparent 3.6px),
+      repeating-linear-gradient(90deg,rgba(255,255,255,.07) 0 3px,transparent 3px 11px);
+    background-size:24px 24px,auto;
+    box-shadow:inset 0 0 0 8px var(--ply2),inset 0 0 0 10px var(--ply-edge),0 6px 0 var(--ply-edge)}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:26px 20px}
+  .card{position:relative;background:var(--tag);border:1.5px solid #caa56e;border-radius:4px 4px 10px 10px;padding:30px 14px 14px;
+    display:flex;flex-direction:column;min-height:300px;box-shadow:0 3px 0 rgba(0,0,0,.08)}
+  .card:before{content:"";position:absolute;top:9px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:var(--ply);border:2px solid #b08850}
+  .card .hook{position:absolute;top:-18px;left:50%;margin-left:-1px;width:2px;height:28px;background:#6f6a62}
+  .card .art{height:92px;border-radius:3px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+  .card .no{font-size:12px;color:var(--ink2);letter-spacing:.06em}
+  .card h3{font-size:14.5px;line-height:1.3;margin:3px 0 8px;font-weight:700}
+  .card .price{font-size:20px;margin-top:auto}
+  .card .acts{display:flex;flex-direction:column-reverse;gap:6px;margin-top:8px}
+  .card .acts .btn{width:100%;white-space:nowrap}
+  .card .acts .look{border-width:1.5px;padding:5px 10px;font-weight:400}
+  .btn{border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:3px;padding:7px 10px;font-weight:700;font-size:13px}
+  .btn.add{flex:1;background:var(--cobalt);border-color:var(--cobalt);color:#fff}
+  .btn.add:hover{background:var(--cobalt-d)}
+  .btn.add.in{background:#fff;color:var(--cobalt)}
+  .btn[disabled]{opacity:.45;cursor:not-allowed}
+  .btn.big{padding:12px 16px;font-size:15px;width:100%}
+  .btn.go{background:var(--signal);border-color:var(--signal);color:#fff}
+  .card.hidden{display:none}
+  .empty-search{display:none;padding:30px;text-align:center;background:#fff;border-radius:4px}
+
+  /* basket panel */
+  aside.basket{position:sticky;top:16px;align-self:start;background:#fff;border:3px solid var(--ink);border-radius:4px;box-shadow:6px 6px 0 var(--ply-edge)}
+  .basket .hd{padding:14px 16px;border-bottom:2px solid var(--ink);display:flex;align-items:center;gap:10px}
+  .basket .hd h2{font-size:19px;margin:0}
+  .basket .hd .cnt{margin-left:auto;font-size:13px}
+  .wire{height:14px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 12px);opacity:.25;margin:0 16px}
+  #portfolio-items{list-style:none;margin:0;padding:10px 16px 4px;min-height:40px}
+  #portfolio-items li{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line)}
+  #portfolio-items li .t{flex:1;font-size:13.5px;line-height:1.35}
+  #portfolio-items li .p{font-size:14px;white-space:nowrap}
+  .rm{border:0;background:transparent;color:var(--signal);font-weight:700;font-size:12.5px;padding:0;text-decoration:underline}
+  .slot{margin:8px 16px;border:2px dashed var(--line);border-radius:3px;padding:10px;text-align:center;color:#9a8b70;font-size:13px}
+  .basket .ft{padding:12px 16px 16px;border-top:2px solid var(--ink);margin-top:8px}
+  .sum{display:flex;justify-content:space-between;font-size:14px;margin-bottom:10px}
+  .note{font-size:12.5px;color:var(--ink2);margin:8px 0 0}
+  .cap{display:none;background:#fff2e8;border:1.5px solid var(--signal);color:#8a3a0c;padding:8px 10px;border-radius:3px;font-size:12.5px;margin:6px 16px}
+  .cap.show{display:block}
+
+  /* drawer */
+  .scrim{position:fixed;inset:0;background:rgba(29,27,24,.45);display:none}
+  .scrim.open{display:block}
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:430px;background:var(--paper);border-left:3px solid var(--ink);padding:26px;display:none;flex-direction:column;gap:14px;overflow:auto}
+  .drawer.open{display:flex}
+  .drawer .art{height:190px;background:#fff;border:1px solid var(--line);border-radius:4px;display:flex;align-items:center;justify-content:center}
+  .drawer h2{font-size:23px;margin:0;line-height:1.2}
+  .drawer dl{display:grid;grid-template-columns:120px 1fr;gap:6px 10px;margin:0;font-size:13.5px}
+  .drawer dt{color:var(--ink2)}
+  .drawer dd{margin:0}
+
+  /* review / done */
+  .panel{display:none}
+  .panel.on{display:block}
+  .sheet{background:#fff;border:3px solid var(--ink);border-radius:4px;padding:26px 30px;max-width:780px}
+  .sheet h1{font-size:32px;margin:0 0 6px}
+  table.rv{width:100%;border-collapse:collapse;margin:16px 0}
+  table.rv td{padding:12px 6px;border-bottom:1px dashed var(--line);vertical-align:top}
+  table.rv td.r{text-align:right;white-space:nowrap}
+  .fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0 18px}
+  .fields label{font-size:12.5px;font-weight:700;display:flex;flex-direction:column;gap:4px}
+  .fields select{padding:8px;border:2px solid var(--ink);border-radius:3px;font:inherit;background:#fff}
+  .row{display:flex;gap:12px}
+  .row .btn{width:auto}
+  .stamp{display:inline-block;border:3px solid var(--cobalt);color:var(--cobalt);padding:6px 14px;transform:rotate(-4deg);font-size:22px;margin-bottom:12px}
+
+  footer{background:var(--ink);color:#d9cfbd;padding:28px 36px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px;font-size:13px}
+  footer h4{color:#fff;margin:0 0 8px;font-size:13px;letter-spacing:.12em;text-transform:uppercase}
+  footer p{margin:0 0 4px}
+  @media (max-width:1100px){.grid{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+<div class="util mono">Free pick-up at the counter · Delivery across town from $4 · Easy 30-day returns</div>
+<header class="top">
+  <div class="brand">
+    <svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true">
+      <rect x="1.5" y="1.5" width="43" height="43" rx="4" fill="#ead9b8" stroke="#1d1b18" stroke-width="3"/>
+      <g fill="#b8976a"><circle cx="11" cy="11" r="2.4"/><circle cx="23" cy="11" r="2.4"/><circle cx="35" cy="11" r="2.4"/><circle cx="11" cy="35" r="2.4"/><circle cx="35" cy="35" r="2.4"/></g>
+      <path d="M23 11 v8" stroke="#1d1b18" stroke-width="2.4"/>
+      <rect x="15" y="19" width="16" height="17" rx="2" fill="#2146c7"/>
+      <circle cx="23" cy="27.5" r="3.4" fill="#f06a1d"/>
+    </svg>
+    <div class="wm"><b class="display">The After-Hours Studio</b><span>Supply shop &amp; pegboard</span></div>
+  </div>
+  <nav class="main" aria-label="Shop sections">
+    <span class="on">Pegboard</span><span>Workshops</span><span>Visit us</span>
+  </nav>
+  <label class="search"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="none" stroke="#1d1b18" stroke-width="2"/><path d="M11 11l4 4" stroke="#1d1b18" stroke-width="2"/></svg>
+    <input id="q" type="search" aria-label="Search the pegboard" placeholder="Search the pegboard"></label>
+  <button class="bag-chip" id="chip" aria-label="Open basket">Basket <span class="n" id="chip-n">0 / 3</span></button>
+</header>
+<div class="steps" aria-hidden="true">
+  <div id="st1" class="on"><i>1</i>Pick from the board</div>
+  <div id="st2"><i>2</i>Review basket</div>
+  <div id="st3"><i>3</i>Order placed</div>
+</div>
+
+<main class="wrap">
+  <section>
+    <!-- step 1 -->
+    <div class="panel on" id="p-shop">
+      <div class="hero">
+        <div>
+          <h1 class="display">Everything on the board, <em>hand-hung</em>.</h1>
+          <p>Twelve things on the pegboard this week. Take a closer look at any tag, then drop the ones you'd take home into your basket.</p>
+        </div>
+        <div class="rule mono">Basket holds 3 items</div>
+      </div>
+      <div class="board">
+        <div class="grid" id="catalog"></div>
+        <div class="empty-search" id="nores">Nothing on the board matches that search.</div>
+      </div>
+    </div>
+
+    <!-- step 2 -->
+    <div class="panel" id="p-review">
+      <div class="sheet">
+        <h1 class="display">Review your basket</h1>
+        <p style="margin:0;color:var(--ink2)">Check the three items below, choose how you'd like to get them, then place the order.</p>
+        <table class="rv"><tbody id="rv-body"></tbody></table>
+        <div class="fields">
+          <label>Collection<select id="collect" aria-label="Collection method"><option>Pick up at the counter</option><option>Delivery across town</option></select></label>
+          <label>Wrapping<select id="wrap" aria-label="Wrapping"><option>Brown paper, no ribbon</option><option>Tissue in a paper bag</option></select></label>
+        </div>
+        <div class="sum" style="font-size:17px"><b>Total</b><b class="mono" id="rv-total">$0</b></div>
+        <div class="row" style="margin-top:14px">
+          <button class="btn" id="back" aria-label="Back to the pegboard">Back to the pegboard</button>
+          <button class="btn go" id="place" aria-label="Place order">Place order</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- step 3 -->
+    <div class="panel" id="p-done">
+      <div class="sheet">
+        <div class="stamp display">ORDER PLACED</div>
+        <h1 class="display">Thanks — your basket is booked in.</h1>
+        <p id="done-msg" style="color:var(--ink2)"></p>
+        <table class="rv"><tbody id="done-body"></tbody></table>
+        <p class="mono" id="done-ref" style="font-size:13px"></p>
+      </div>
+    </div>
+  </section>
+
+  <aside class="basket" id="portfolio" aria-label="Your basket">
+    <div class="hd">
+      <svg width="28" height="24" viewBox="0 0 28 24" aria-hidden="true"><path d="M3 8h22l-3 13H6z" fill="none" stroke="#1d1b18" stroke-width="2.4"/><path d="M8 8l6-6 6 6" fill="none" stroke="#1d1b18" stroke-width="2.4"/><path d="M10 12v6M14 12v6M18 12v6" stroke="#2146c7" stroke-width="2"/></svg>
+      <h2 class="display">Your basket</h2><span class="cnt mono" id="cnt">0 of 3</span>
+    </div>
+    <div class="wire"></div>
+    <ul id="portfolio-items"></ul>
+    <div id="slots"></div>
+    <div class="cap" id="capmsg" role="status">Your basket is full (3 items). Remove one to swap it for something else.</div>
+    <div class="ft">
+      <div class="sum"><span>Subtotal</span><b class="mono" id="sub">$0</b></div>
+      <button class="btn big go" id="review" aria-label="Review basket" disabled>Review basket</button>
+      <p class="note" id="need">Add 3 items to continue.</p>
+    </div>
+  </aside>
+</main>
+
+<div class="scrim" id="scrim"></div>
+<div class="drawer" id="drawer" role="dialog" aria-label="Item details">
+  <div class="art" id="d-art"></div>
+  <div class="no mono" id="d-no"></div>
+  <h2 class="display" id="d-title"></h2>
+  <div class="price mono" id="d-price" style="font-size:24px"></div>
+  <dl id="d-dl"></dl>
+  <div class="row">
+    <button class="btn add" id="d-add" style="flex:1;padding:11px"></button>
+    <button class="btn" id="d-close" aria-label="Close details">Close</button>
+  </div>
+</div>
+
+<footer>
+  <div><h4>The Studio</h4><p>14 Tannery Row, ground floor</p><p>Counter pick-up in 2 hours</p></div>
+  <div><h4>Help</h4><p>Delivery &amp; pick-up</p><p>Returns within 30 days</p><p>Gift notes</p></div>
+  <div><h4>Workshops</h4><p>Small-group sessions each month</p><p>Ask at the counter</p></div>
+  <div><h4>Contact</h4><p>hello@afterhours-studio.shop</p><p>Tel. 0161 555 0144</p></div>
+</footer>
+
+<script>
+(function(){
+  var ITEMS = [
+    ["p06","Soft fairy string lights to make the studio glow — $11"],
+    ["p03","Watercolor ink set for dreaming up scenes that don't exist yet — $18"],
+    ["p07","Second-hand poetry anthology to browse after midnight — $6"],
+    ["p05","Refillable fountain pen for hours of freeform doodling — $15"],
+    ["p04","Blackout curtains that keep the room dark for late creative nights — $32"],
+    ["p10","Mass-produced generic \"Rise & Grind\" motivational poster — $9"],
+    ["p12","Standard beige desk organizer, no frills — $10"],
+    ["p02","Blank art journal with empty pages to invent your own worlds — $12"],
+    ["p09","Rigid \"5am early-riser\" box-ticking habit planner — $16"],
+    ["p11","Plain grey filing tray, purely functional — $8"],
+    ["p01","Warm dimmable desk lamp for working into the small hours — $24"],
+    ["p08","Sunrise alarm clock that drags you up at 5am sharp — $39"]
+  ];
+  var CAP = 3;
+  window.__portfolio = [];
+  var byId = {};
+  function h(s){var x=0;for(var i=0;i<s.length;i++){x=(x*31+s.charCodeAt(i))>>>0;}return x;}
+  function art(id, big){
+    var k=h(id), w=big?200:120, hh=big?160:80, c=['#2146c7','#f06a1d','#1d1b18'];
+    var a=c[k%3], b=c[(k>>3)%3===k%3?((k%3)+1)%3:(k>>3)%3];
+    var s='<svg width="'+w+'" height="'+hh+'" viewBox="0 0 120 80" aria-hidden="true">';
+    s+='<line x1="60" y1="4" x2="60" y2="16" stroke="#6f6a62" stroke-width="2"/>';
+    var shape=k%4;
+    if(shape===0) s+='<rect x="38" y="16" width="44" height="52" rx="4" fill="'+a+'"/><rect x="46" y="26" width="28" height="6" fill="#fbf7ee"/>';
+    if(shape===1) s+='<circle cx="60" cy="44" r="26" fill="'+a+'"/><circle cx="60" cy="44" r="9" fill="#fbf7ee"/>';
+    if(shape===2) s+='<path d="M60 16 L88 68 H32 Z" fill="'+a+'"/><rect x="52" y="48" width="16" height="12" fill="#fbf7ee"/>';
+    if(shape===3) s+='<rect x="30" y="20" width="60" height="44" rx="22" fill="'+a+'"/><rect x="42" y="36" width="36" height="6" rx="3" fill="#fbf7ee"/>';
+    s+='<circle cx="'+(30+(k>>5)%60)+'" cy="'+(64+(k>>7)%8)+'" r="6" fill="'+b+'"/></svg>';
+    return s;
+  }
+  function split(text){
+    var i=text.lastIndexOf(' — $');
+    return {title:text.slice(0,i), price:text.slice(i+3)};
+  }
+  var cat=document.getElementById('catalog');
+  ITEMS.forEach(function(it, idx){
+    var id=it[0], sp=split(it[1]);
+    byId[id]={id:id,text:it[1],title:sp.title,price:sp.price,num:'Tag '+String(101+idx),amount:parseFloat(sp.price.slice(1))};
+    var d=document.createElement('div');
+    d.className='card product'; d.setAttribute('data-id',id);
+    d.innerHTML='<span class="hook"></span><div class="art">'+art(id)+'</div>'+
+      '<div class="no mono">'+byId[id].num+'</div><h3></h3><div class="price mono"></div>'+
+      '<div class="acts"><button class="btn look"></button><button class="btn add" data-id="'+id+'"></button></div>';
+    d.querySelector('h3').textContent=sp.title;
+    d.querySelector('.price').textContent=sp.price;
+    var lk=d.querySelector('.look'); lk.textContent='Look closer'; lk.setAttribute('aria-label','Look closer at '+sp.title);
+    lk.addEventListener('click',function(){openDrawer(id);});
+    d.querySelector('.add').addEventListener('click',function(){toggle(id);});
+    cat.appendChild(d);
+  });
+
+  function toggle(id){ if(window.__portfolio.indexOf(id)!==-1) remove(id); else add(id); }
+  function add(id){
+    if(window.__portfolio.indexOf(id)!==-1) return;
+    if(window.__portfolio.length>=CAP){ document.getElementById('capmsg').classList.add('show'); return; }
+    window.__portfolio.push(id); render();
+  }
+  function remove(id){
+    var i=window.__portfolio.indexOf(id); if(i===-1) return;
+    window.__portfolio.splice(i,1); document.getElementById('capmsg').classList.remove('show'); render();
+  }
+  function total(){ return window.__portfolio.reduce(function(s,id){return s+byId[id].amount;},0); }
+  function render(){
+    var ul=document.getElementById('portfolio-items'); ul.innerHTML='';
+    window.__portfolio.forEach(function(id){
+      var o=byId[id], li=document.createElement('li'); li.setAttribute('data-id',id);
+      li.innerHTML='<span class="t"></span><span class="p mono"></span>';
+      li.querySelector('.t').textContent=o.title; li.querySelector('.p').textContent=o.price;
+      var rm=document.createElement('button'); rm.className='rm'; rm.textContent='Remove';
+      rm.setAttribute('aria-label','Remove '+o.title+' from basket');
+      rm.addEventListener('click',function(){remove(id);});
+      li.querySelector('.t').appendChild(document.createElement('br')); li.querySelector('.t').appendChild(rm);
+      ul.appendChild(li);
+    });
+    var n=window.__portfolio.length, full=n>=CAP;
+    var sl=document.getElementById('slots'); sl.innerHTML='';
+    for(var k=n;k<CAP;k++){var s=document.createElement('div');s.className='slot mono';s.textContent='Empty hook '+(k+1);sl.appendChild(s);}
+    if(!full) document.getElementById('capmsg').classList.remove('show');
+    document.getElementById('cnt').textContent=n+' of '+CAP;
+    document.getElementById('chip-n').textContent=n+' / '+CAP;
+    document.getElementById('sub').textContent='$'+total();
+    document.getElementById('review').disabled=n!==CAP;
+    document.getElementById('need').textContent= n===CAP ? 'Basket full — ready to review.' : 'Add '+(CAP-n)+' more item'+(CAP-n===1?'':'s')+' to continue.';
+    document.querySelectorAll('#catalog .btn.add').forEach(function(b){
+      var id=b.getAttribute('data-id'), o=byId[id], inb=window.__portfolio.indexOf(id)!==-1;
+      b.textContent= inb ? '✓ In basket · remove' : 'Add to basket';
+      b.classList.toggle('in',inb);
+      b.setAttribute('aria-label', inb ? 'Remove '+o.title+' from basket' : 'Add '+o.title+' to basket');
+      b.disabled = !inb && full;
+    });
+    if(curDrawer) fillDrawerBtn();
+  }
+
+  // drawer
+  var curDrawer=null;
+  function openDrawer(id){
+    curDrawer=id; var o=byId[id], k=h(id);
+    document.getElementById('d-art').innerHTML=art(id,true);
+    document.getElementById('d-no').textContent=o.num+' · hung on the board this week';
+    document.getElementById('d-title').textContent=o.title;
+    document.getElementById('d-price').textContent=o.price;
+    document.getElementById('d-dl').innerHTML='<dt>In stock</dt><dd>'+(3+k%9)+' on the board</dd><dt>Pick-up</dt><dd>At the counter, ready in 2 hours</dd><dt>Delivery</dt><dd>Across town, 1–2 days</dd><dt>Returns</dt><dd>30 days, unused</dd>';
+    fillDrawerBtn();
+    document.getElementById('drawer').classList.add('open');
+    document.getElementById('scrim').classList.add('open');
+    ['.wrap','header.top','.util','.steps','footer'].forEach(function(q){var e=document.querySelector(q);e.setAttribute('inert','');e.setAttribute('aria-hidden','true');});
+  }
+  function fillDrawerBtn(){
+    var id=curDrawer, o=byId[id], b=document.getElementById('d-add'), inb=window.__portfolio.indexOf(id)!==-1;
+    b.textContent = inb ? 'Remove from basket' : 'Add to basket';
+    b.setAttribute('aria-label', inb ? 'Remove '+o.title+' from basket' : 'Add '+o.title+' to basket');
+    b.disabled = !inb && window.__portfolio.length>=CAP;
+  }
+  function closeDrawer(){
+    curDrawer=null;
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('scrim').classList.remove('open');
+    ['.wrap','header.top','.util','.steps','footer'].forEach(function(q){var e=document.querySelector(q);e.removeAttribute('inert');e.removeAttribute('aria-hidden');});
+  }
+  document.getElementById('d-add').addEventListener('click',function(){ toggle(curDrawer); closeDrawer(); });
+  document.getElementById('d-close').addEventListener('click',closeDrawer);
+  document.getElementById('scrim').addEventListener('click',closeDrawer);
+
+  // search
+  document.getElementById('q').addEventListener('input',function(){
+    var q=this.value.trim().toLowerCase(), shown=0;
+    document.querySelectorAll('#catalog .card').forEach(function(c){
+      var ok=!q || byId[c.getAttribute('data-id')].title.toLowerCase().indexOf(q)!==-1;
+      c.classList.toggle('hidden',!ok); if(ok) shown++;
+    });
+    document.getElementById('nores').style.display = shown ? 'none' : 'block';
+  });
+  document.getElementById('chip').addEventListener('click',function(){ if(document.getElementById('p-done').classList.contains('on')) return; show('p-shop'); document.getElementById('portfolio').scrollIntoView({behavior:'smooth'}); });
+
+  // steps
+  function show(p){
+    ['p-shop','p-review','p-done'].forEach(function(x){document.getElementById(x).classList.toggle('on',x===p);});
+    document.getElementById('st1').classList.toggle('on',p==='p-shop');
+    document.getElementById('st2').classList.toggle('on',p==='p-review');
+    document.getElementById('st3').classList.toggle('on',p==='p-done');
+    document.getElementById('portfolio').style.display = p==='p-shop' ? '' : 'none';
+    window.scrollTo(0,0);
+  }
+  function rows(tb){
+    tb.innerHTML='';
+    window.__portfolio.forEach(function(id){
+      var o=byId[id], tr=document.createElement('tr');
+      tr.innerHTML='<td class="mono" style="width:80px"></td><td></td><td class="r mono"></td>';
+      tr.children[0].textContent=o.num; tr.children[1].textContent=o.title; tr.children[2].textContent=o.price;
+      tb.appendChild(tr);
+    });
+  }
+  document.getElementById('review').addEventListener('click',function(){
+    if(window.__portfolio.length!==CAP) return;
+    rows(document.getElementById('rv-body'));
+    document.getElementById('rv-total').textContent='$'+total();
+    show('p-review');
+  });
+  document.getElementById('back').addEventListener('click',function(){ show('p-shop'); });
+  document.getElementById('place').addEventListener('click',function(){
+    rows(document.getElementById('done-body'));
+    var how=document.getElementById('collect').value;
+    document.getElementById('done-msg').textContent=(how.indexOf('Pick')===0?'We\'ll have it bagged at the counter within 2 hours.':'We\'ll deliver across town within 1–2 days.')+' Total paid: $'+total()+'.';
+    document.getElementById('done-ref').textContent='Order ref AHS-'+(4000+window.__portfolio.reduce(function(s,id){return s+h(id)%97;},0));
+    show('p-done');
+    window.__placed=true;
+  });
+  render();
+})();
+</script>
+</body>
+</html>

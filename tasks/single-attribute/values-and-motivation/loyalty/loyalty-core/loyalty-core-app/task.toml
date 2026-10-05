@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/loyalty-core-app"
+theme = "Value: Loyalty: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "loyalty", "loyalty-core", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "val_loyalty"
+dimension_label = "Value: Loyalty"
+category = "Values & Motivation"
+attribute = "Value: Loyalty"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_loyalty=Core value"
+# OS-APP env: the persona is a computer-use agent operating Lineup, a REAL native
+# desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop. The agent
+# sees only screenshots and clicks by coordinate — no DOM/selector. When it taps
+# "Confirm", Lineup writes order.json itself. Runs locally in Docker (no
+# use.computer needed).
+adherence_signal = "The picks contain no abandon-a-commitment-for-the-newest/cheapest choice (a high-tier item, tier>=2); a loyalty-core persona fills the list with stick-with-the-trusted, long-standing options."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with Lineup (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch Lineup once the desktop is up so the agent finds it on screen.
+command = "/opt/lineup/start-lineup.sh"
+timeout_sec = 60.0
+retries = 5

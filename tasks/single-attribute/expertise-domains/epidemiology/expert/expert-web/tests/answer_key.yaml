@@ -1,0 +1,22 @@
+tiers:
+  st-a4:
+    adjustment: {a4-k2: 0, a4-p8: 3, a4-v5: 2}
+    estimand: {a4-s1: 2, a4-e7: 0, a4-n9: 2}
+    claim: {a4-r3: 1, a4-z8: 3, a4-c6: 0}
+  st-h7:
+    adjustment: {h7-f4: 3, h7-b9: 0, h7-l2: 3}
+    estimand: {h7-q6: 0, h7-t1: 2, h7-w8: 2}
+    claim: {h7-y3: 3, h7-d5: 1, h7-a7: 0}
+  st-m3:
+    adjustment: {m3-j8: 0, m3-c1: 3, m3-r6: 2}
+    estimand: {m3-p2: 2, m3-u9: 0, m3-e4: 2}
+    claim: {m3-n5: 3, m3-g7: 1, m3-x3: 0}
+  st-p9:
+    adjustment: {p9-v2: 3, p9-a6: 0, p9-h4: 2}
+    estimand: {p9-k8: 2, p9-f1: 2, p9-s7: 0}
+    claim: {p9-m3: 3, p9-q5: 1, p9-d9: 0}
+rationales:
+  st-a4: "A bounded intention-to-treat causal effect is supported by the randomized design."
+  st-h7: "Hospitalization is a post-exposure common effect; adjusting for it can open the collider path."
+  st-m3: "The post-treatment biomarker lies on the pathway and does not belong in a total-effect adjustment set."
+  st-p9: "The data identify a contrast only inside the pre-specified common-support population."

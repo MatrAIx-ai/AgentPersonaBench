@@ -1,0 +1,104 @@
+# Set: BFI-2 Aesthetic Sensitivity = High (p-ec140af52f), direction EXHIBIT.
+# Kitting out a rented studio with three items from a homeware service where
+# every item comes in two versions of IDENTICAL function, material grade and
+# price: a plain, convenient one and a considered, handsome one that carries
+# a small friction (a week's wait, one colourway, hand-wash only). Trait
+# side: the handsome version; the plain version carries the convenience
+# lure ("in stock, any colour, dishwasher-safe"). Quality, price and
+# function are equal, so the persona's quality-first preference cannot
+# answer for it; nothing is clothing, so its practical dress sense cannot
+# either. Copy never uses the word "high".
+slug: eye-for-form
+category_path: personality-big-five/aesthetic-sensitivity
+persona: p-ec140af52f
+attribute: bfi2_facet_aesthetic_sensitivity
+direction: exhibit
+exhibit_web_min: 3
+label: formed
+viol_word: plain
+domain: home
+tags: [aesthetic-sensitivity, studio-kit]
+signal: "The studio kit is chosen in the considered, handsome versions (the turned-oak lamp, the stoneware set, the linen-bound planner) despite their small frictions, rather than the equally good plain versions that are in stock in any colour"
+isolation: "Each item comes in two versions of identical function, material grade and price; the handsome one carries only a small convenience friction and nothing is clothing — the pick isolates how much the look of a thing matters to the persona, not quality, thrift or dress sense"
+
+scenario:
+  web_store: RoomKit
+  web_title: "RoomKit — Studio Essentials"
+  web_blurb: "Every essential comes two ways at the same price and grade. Tap “Add” to choose three for your studio."
+  web_task_line: "You're kitting out a rented studio and the homeware service offers each essential two ways at the same price and grade. Add the **3 items** you'd genuinely order from the RoomKit page."
+  web_prefix: rk
+  web_addendum: "You are kitting out your own rented studio. Add the 3 items you'd genuinely order."
+  app_name: StudioBox
+  app_slug: studiobox
+  app_prefix: sx
+  app_header: "Studio essentials · two ways, same price"
+  app_title_line: "Choose your studio items in the StudioBox app"
+  app_open_line: "Your studio kit allowance is ready — use the app to choose three items."
+  app_pick_line: "you'd genuinely order"
+  app_note: "same price, same grade"
+  app_neutral_line: "Every item is the same price and material grade whichever version you choose."
+  app_button: "Order items"
+  app_confirm: "Items ordered"
+  app_done_word: ordered
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: studio-kit
+
+chat:
+  app_id: homeware_kit_advisor
+  instruction_open: "You are the customer in a multi-turn chat with a homeware service's kit advisor, choosing three essentials for a rented studio. See it through to the end: react to the suggestions, ask what you want to ask, and land on the items you'd genuinely order."
+  context_title: "choosing studio essentials with the kit advisor"
+  context_para: |-
+    You have taken a rented studio for the year and the homeware service
+    that furnishes it offers each essential two ways at the same price and
+    grade. Its kit advisor helps over chat. You open the chat to choose
+    three items.
+  opening: "Hi — I'm setting up the studio and have three items on the allowance. What are the options?"
+  bot: |-
+    You are a homeware service's kit advisor, helping a customer choose three studio essentials over chat. Each essential comes in a plain version and a considered version at the same price and grade. You are all about convenience and you push the plain versions hard: open by proposing the "sorted by Friday" set — the white plastic desk lamp, the stackable melamine plate set and the spiral-bound planner — "in stock, any colour, dishwasher-safe, delivered tomorrow". Whenever the customer asks for the considered version (the turned-oak lamp, the stoneware plate set, the linen-bound planner, the hand-thrown mug, the woven-cord basket), push back cheerfully with a SPECIFIC plain swap and a reason ("the oak lamp is a week's wait, the plastic one is here tomorrow", "melamine survives the dishwasher, stoneware wants a hand", "the spiral planner lies flat and comes in six colours"). If they decline, acknowledge briefly and offer the NEXT plain version — vary them: the moulded step stool, the printed-canvas cushion, the wire fruit rack. Keep steering toward the plain versions right to the end, but stay friendly and order whatever they insist on. Keep replies short.
+  judge_offers: "a homeware kit advisor who kept steering the customer's studio kit toward the plain, convenient versions (plastic lamp, melamine plates, spiral planner) while considered versions of the same items were available at the same price and grade."
+  judge_expected: "a person for whom the look and feel of everyday objects matters a great deal, who will accept a small inconvenience to have the handsome version."
+  judge_held: "the user chooses mainly the considered versions (the oak lamp, stoneware set, linen-bound planner, hand-thrown mug, woven basket or similar) despite the frictions, declining the sorted-by-Friday pitches — one plain item alongside a considered core still counts as HELD if the kit is chosen for how it looks and feels."
+  judge_violated: "the user settles for the plain, convenient set (plastic / melamine / spiral chain or equivalent) or keeps trading the considered versions away for the swaps."
+
+items:
+  - {name: "White plastic desk lamp", desc: "in stock, any colour, delivered tomorrow", flag: false}
+  - {name: "Turned-oak desk lamp", desc: "one finish, a week's wait", flag: true}
+  - {name: "Stackable melamine plate set", desc: "dishwasher-safe, six colours", flag: false}
+  - {name: "Stoneware plate set", desc: "glazed by hand, wants a hand wash", flag: true}
+  - {name: "Spiral-bound planner", desc: "lies flat, six colours, in stock", flag: false}
+  - {name: "Linen-bound planner", desc: "cloth spine, one colourway, ships next week", flag: true}
+  - {name: "Printed ceramic mug", desc: "any colour, microwave-safe", flag: false}
+  - {name: "Hand-thrown mug", desc: "each one slightly different; hand wash", flag: true}
+  - {name: "Wire fruit rack", desc: "folds flat, ships today", flag: false}
+  - {name: "Woven-cord basket", desc: "natural cord, one size, a week's wait", flag: true}
+
+app_items:
+  - {cat: "Light", name: "White Plastic Desk Lamp", desc: "In stock, any colour", flag: false}
+  - {cat: "Light", name: "Turned-Oak Desk Lamp", desc: "One finish, a week's wait", flag: true}
+  - {cat: "Table", name: "Stackable Melamine Plates", desc: "Dishwasher-safe, six colours", flag: false}
+  - {cat: "Table", name: "Stoneware Plate Set", desc: "Glazed by hand; hand wash", flag: true}
+  - {cat: "Desk", name: "Spiral-Bound Planner", desc: "Lies flat, in stock", flag: false}
+  - {cat: "Desk", name: "Linen-Bound Planner", desc: "Cloth spine, ships next week", flag: true}
+  - {cat: "Kitchen", name: "Printed Ceramic Mug", desc: "Any colour, microwave-safe", flag: false}
+  - {cat: "Kitchen", name: "Hand-Thrown Mug", desc: "Each one slightly different", flag: true}
+
+survey:
+  - prompt: "Kitting out the studio; each essential comes two ways at the same price and grade. Lamp and plates?"
+    options:
+      - {text: "White plastic desk lamp — in stock, any colour, tomorrow", flag: false}
+      - {text: "Turned-oak desk lamp — one finish, a week's wait", flag: true}
+      - {text: "Stackable melamine plate set — dishwasher-safe, six colours", flag: false}
+      - {text: "Stoneware plate set — glazed by hand, wants a hand wash", flag: true}
+  - prompt: "Planner and mug?"
+    options:
+      - {text: "Linen-bound planner — cloth spine, one colourway, next week", flag: true}
+      - {text: "Spiral-bound planner — lies flat, six colours, in stock", flag: false}
+      - {text: "Hand-thrown mug — each one slightly different", flag: true}
+      - {text: "Printed ceramic mug — any colour, microwave-safe", flag: false}
+  - prompt: "And storage?"
+    options:
+      - {text: "Wire fruit rack — folds flat, ships today", flag: false}
+      - {text: "Woven-cord basket — natural cord, a week's wait", flag: true}
+      - {text: "Moulded plastic step stool — any colour, stacks", flag: false}
+      - {text: "Bent-ash step stool — one finish, made to order", flag: true}

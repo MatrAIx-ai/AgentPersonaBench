@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WristWorks — Choose your smartwatch</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f4f1; --panel: #ffffff; --ink: #18181b; --muted: #6b6b73; --line: #e4e2dd;
+      --graphite: #2a2b30; --violet: #5a3ff0; --violet-2: #efebff; --good: #17805a;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; overflow-x: hidden; }
+    body { background: var(--bg); color: var(--ink); font: 15px/1.5 "Liberation Sans", Arial, sans-serif; }
+    a { color: inherit; }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 28px; }
+
+    .promo { background: var(--ink); color: #d9d9de; font-size: 12.5px; text-align: center; padding: 8px; letter-spacing: .02em; }
+    header.site { background: rgba(245,244,241,.92); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 10; backdrop-filter: blur(6px); }
+    header.site .wrap { display: flex; align-items: center; height: 64px; gap: 28px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 700; font-size: 20px; letter-spacing: -.02em; }
+    .logo i { font-style: normal; color: var(--violet); }
+    nav.site-nav { display: flex; gap: 22px; font-size: 14px; color: #3d3d44; }
+    nav.site-nav a { text-decoration: none; }
+    nav.site-nav a:hover { color: var(--violet); }
+    .hdr-right { margin-left: auto; display: flex; gap: 16px; align-items: center; font-size: 13.5px; color: var(--muted); }
+    .bag { display: flex; align-items: center; gap: 6px; }
+
+    .crumbs { font-size: 13px; color: var(--muted); padding: 18px 0 0; }
+    .crumbs b { color: var(--ink); font-weight: 400; }
+
+    .config { display: grid; grid-template-columns: 1fr 520px; gap: 44px; padding: 18px 0 40px; align-items: start; }
+    .stage { position: sticky; top: 84px; }
+    .stage .shot { background: radial-gradient(circle at 50% 42%, #ffffff 0%, #ecebe7 62%, #e2e0da 100%); border-radius: 28px; height: 520px; display: grid; place-items: center; position: relative; overflow: hidden; }
+    .stage .shot svg { width: 300px; height: 440px; filter: drop-shadow(0 30px 40px rgba(0,0,0,.18)); }
+    .stage .cap { position: absolute; left: 22px; bottom: 18px; font-size: 12.5px; color: var(--muted); }
+    .stage .facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px; }
+    .stage .facts div { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; font-size: 12px; color: var(--muted); }
+    .stage .facts b { display: block; color: var(--ink); font-size: 14px; }
+
+    .side h1 { font-size: 34px; letter-spacing: -.025em; margin: 0 0 4px; line-height: 1.1; }
+    .side .price { font-size: 17px; color: #3d3d44; margin-bottom: 16px; }
+    .context { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; display: flex; gap: 12px; align-items: center; font-size: 14px; margin-bottom: 18px; }
+    .context .ic { width: 38px; height: 38px; border-radius: 12px; background: var(--violet-2); display: grid; place-items: center; flex: none; }
+
+    fieldset.step { border: 1px solid var(--line); background: var(--panel); border-radius: 20px; padding: 0; margin: 0 0 12px; overflow: hidden; }
+    .step-head { display: flex; align-items: center; gap: 12px; padding: 16px 18px; }
+    .step-head .n { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #c9c7c1; display: grid; place-items: center; font-size: 13px; font-weight: 700; color: var(--muted); flex: none; }
+    fieldset.step legend { float: left; padding: 0; font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+    .step-head .sum { margin-left: auto; font-size: 13.5px; color: var(--muted); text-align: right; }
+    .step-head .edit { margin-left: 10px; border: 0; background: none; color: var(--violet); font: 700 13.5px "Liberation Sans", Arial, sans-serif; cursor: pointer; padding: 4px; }
+    .step-body { padding: 0 18px 18px; display: none; }
+    fieldset.step.open .step-body { display: block; }
+    fieldset.step.open { border-color: #cfc8f7; box-shadow: 0 8px 24px rgba(90,63,240,.08); }
+    fieldset.step.open .step-head .n { background: var(--violet); border-color: var(--violet); color: #fff; }
+    fieldset.step.done .step-head .n { background: var(--good); border-color: var(--good); color: #fff; }
+    fieldset.step.locked { opacity: .55; }
+    .same { color: var(--muted); font-size: 13px; margin: 0 0 12px; }
+    .options { display: grid; gap: 8px; }
+    .option { display: grid; grid-template-columns: 22px 1fr; gap: 4px 10px; align-items: start; border: 1.5px solid var(--line); border-radius: 14px; padding: 13px 14px; cursor: pointer; background: #fff; }
+    .option:hover { border-color: #b7abf6; }
+    .option:has(input:checked) { border-color: var(--violet); background: var(--violet-2); }
+    .option input { margin: 3px 0 0; accent-color: var(--violet); width: 16px; height: 16px; }
+    .option strong { font-size: 15.5px; }
+    .option span { grid-column: 2; color: var(--muted); font-size: 13.5px; }
+    .options.two { grid-template-columns: 1fr 1fr; }
+    .cont { margin-top: 14px; width: 100%; border: 0; border-radius: 999px; padding: 13px; background: var(--ink); color: #fff; font: 700 15px "Liberation Sans", Arial, sans-serif; cursor: pointer; }
+    .cont:disabled { background: #cfcdc8; color: #85847f; cursor: not-allowed; }
+
+    .review { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 18px; margin-top: 4px; }
+    .review h2 { font-size: 17px; margin: 0 0 10px; }
+    .review dl { display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px; margin: 0 0 14px; font-size: 14px; }
+    .review dt { color: var(--muted); }
+    .review dd { margin: 0; font-weight: 700; }
+    .total { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 12px; margin-bottom: 14px; font-size: 16px; }
+    #complete { width: 100%; border: 0; border-radius: 999px; padding: 15px; color: #fff; background: var(--violet); font: 700 16px "Liberation Sans", Arial, sans-serif; cursor: pointer; }
+    #complete:disabled { background: #cfcdc8; color: #85847f; cursor: not-allowed; }
+    .fine { font-size: 12.5px; color: var(--muted); margin: 10px 0 0; text-align: center; }
+
+    #confirmation { display: none; background: var(--panel); border: 1px solid var(--line); border-radius: 24px; padding: 30px 28px; }
+    #confirmation .ok { width: 56px; height: 56px; border-radius: 50%; background: #e3f4ec; display: grid; place-items: center; margin-bottom: 12px; }
+    #confirmation h2 { margin: 0 0 6px; font-size: 26px; letter-spacing: -.02em; }
+    #confirmation p { margin: 0 0 14px; color: var(--muted); }
+
+    .perks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 30px 0; border-top: 1px solid var(--line); }
+    .perks div { font-size: 13.5px; color: var(--muted); }
+    .perks b { display: block; color: var(--ink); font-size: 15px; margin-bottom: 2px; }
+    footer { background: var(--ink); color: #a9a9b0; font-size: 13px; }
+    footer .wrap { display: flex; justify-content: space-between; padding: 24px 28px; }
+  </style>
+</head>
+<body>
+  <div class="promo">Free delivery and 30-day returns on every watch</div>
+  <header class="site"><div class="wrap">
+    <a class="logo" href="#top" aria-label="WristWorks home">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="9" y="1" width="12" height="28" rx="4" fill="#2a2b30"/><rect x="5" y="6" width="20" height="18" rx="6" fill="#18181b"/><rect x="8" y="9" width="14" height="12" rx="4" fill="#5a3ff0"/></svg>
+      <span>Wrist<i>Works</i></span>
+    </a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="#top">Watches</a>
+      <a href="#perks">Delivery &amp; returns</a>
+      <a href="#perks">Support</a>
+    </nav>
+    <div class="hdr-right"><span>Help: chat with us</span><span class="bag"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 6h12l-1 10H4z M6 6a3 3 0 016 0" fill="none" stroke="#18181b" stroke-width="1.5"/></svg>Bag</span></div>
+  </div></header>
+
+  <main class="wrap" id="top">
+    <div class="crumbs">Watches / <b>Configure your watch</b></div>
+    <div class="config">
+      <section class="stage" aria-label="Preview">
+        <div class="shot">
+          <svg viewBox="0 0 300 440" aria-hidden="true">
+            <defs>
+              <linearGradient id="band" x1="0" x2="1"><stop offset="0" stop-color="#2d2e33"/><stop offset=".5" stop-color="#43444b"/><stop offset="1" stop-color="#2d2e33"/></linearGradient>
+              <linearGradient id="case" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b5c63"/><stop offset=".5" stop-color="#34353b"/><stop offset="1" stop-color="#232428"/></linearGradient>
+            </defs>
+            <rect x="95" y="0" width="110" height="140" rx="20" fill="url(#band)"/>
+            <rect x="95" y="300" width="110" height="140" rx="20" fill="url(#band)"/>
+            <g fill="#26272b" opacity=".6"><circle cx="150" cy="360" r="5"/><circle cx="150" cy="385" r="5"/><circle cx="150" cy="410" r="5"/></g>
+            <rect x="62" y="105" width="176" height="230" rx="48" fill="url(#case)"/>
+            <rect x="238" y="170" width="10" height="36" rx="4" fill="#4a4b52"/>
+            <rect x="74" y="117" width="152" height="206" rx="38" fill="#0c0c0e"/>
+            <text x="150" y="190" text-anchor="middle" font-family="Liberation Sans, Arial" font-size="40" font-weight="700" fill="#f2f2f4">10:09</text>
+            <text id="dial-brand" x="150" y="216" text-anchor="middle" font-family="Liberation Sans, Arial" font-size="13" letter-spacing="2" fill="#a39bf7">WRISTWORKS</text>
+            <circle cx="112" cy="282" r="18" fill="none" stroke="#3a3b41" stroke-width="5"/>
+            <circle cx="112" cy="282" r="18" fill="none" stroke="#a39bf7" stroke-width="5" stroke-dasharray="70 113" transform="rotate(-90 112 282)"/>
+            <circle cx="188" cy="282" r="18" fill="none" stroke="#3a3b41" stroke-width="5"/>
+            <circle cx="188" cy="282" r="18" fill="none" stroke="#e8e8ec" stroke-width="5" stroke-dasharray="48 113" transform="rotate(-90 188 282)"/>
+            <text x="150" y="243" text-anchor="middle" font-family="Liberation Sans, Arial" font-size="12" fill="#8d8d95">MON 14</text>
+          </svg>
+          <div class="cap" id="stage-cap">Graphite case · shown with graphite band</div>
+        </div>
+        <div class="facts" aria-label="Shared specifications">
+          <div><b>$249</b>Every model</div>
+          <div><b>Same</b>Battery &amp; sensors</div>
+          <div><b>Same</b>Warranty</div>
+          <div><b>Imports</b>Your history</div>
+        </div>
+      </section>
+
+      <section class="side">
+        <h1>Configure your watch</h1>
+        <div class="price">$249 · delivered free</div>
+        <div class="context"><span class="ic"><svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="1.5" width="10" height="17" rx="2.5" fill="none" stroke="#5a3ff0" stroke-width="1.6"/><circle cx="10" cy="15.5" r="1" fill="#5a3ff0"/></svg></span><div><strong>Your current devices:</strong> Orbit phone and Orbit earbuds, used for several years.</div></div>
+
+        <form id="purchase-form">
+          <fieldset class="step open" id="step-productId" data-group="productId" data-dimension="lstyle_shopping_style">
+            <div class="step-head"><span class="n">1</span><legend>Choose your watch</legend><span class="sum" id="sum-productId"></span></div>
+            <div class="step-body">
+              <p class="same">Each is $249 with the same design, battery, sensors, warranty, interface, history import, and phone compatibility. Only the brand differs.</p>
+              <div class="options">
+                <label class="option" data-id="orbit-active" data-dimension="lstyle_shopping_style"><input type="radio" name="productId" value="orbit-active"><strong>Orbit Active</strong><span>Orbit-branded graphite watch.</span></label>
+                <label class="option" data-id="nova-pulse" data-dimension="lstyle_shopping_style"><input type="radio" name="productId" value="nova-pulse"><strong>Nova Pulse</strong><span>Nova-branded graphite watch.</span></label>
+                <label class="option" data-id="summit-one" data-dimension="lstyle_shopping_style"><input type="radio" name="productId" value="summit-one"><strong>Summit One</strong><span>Summit-branded graphite watch.</span></label>
+              </div>
+              <button class="cont" type="button" data-next="productId" disabled>Continue to payment</button>
+            </div>
+          </fieldset>
+
+          <fieldset class="step locked" id="step-paymentMethod" data-group="paymentMethod" data-dimension="lstyle_payment_pref">
+            <div class="step-head"><span class="n">2</span><legend>Choose how to pay</legend><span class="sum" id="sum-paymentMethod"></span></div>
+            <div class="step-body">
+              <p class="same">No method has a fee, discount, or reward.</p>
+              <div class="options two">
+                <label class="option" data-id="mobile-wallet" data-dimension="lstyle_payment_pref"><input type="radio" name="paymentMethod" value="mobile-wallet"><strong>Mobile wallet</strong><span>Confirm on your phone and tap to pay.</span></label>
+                <label class="option" data-id="credit-card" data-dimension="lstyle_payment_pref"><input type="radio" name="paymentMethod" value="credit-card"><strong>Credit card</strong><span>Enter card details at checkout.</span></label>
+                <label class="option" data-id="debit-card" data-dimension="lstyle_payment_pref"><input type="radio" name="paymentMethod" value="debit-card"><strong>Debit card</strong><span>Enter card details at checkout.</span></label>
+                <label class="option" data-id="bank-transfer" data-dimension="lstyle_payment_pref"><input type="radio" name="paymentMethod" value="bank-transfer"><strong>Bank transfer</strong><span>Transfer from your bank account.</span></label>
+              </div>
+              <button class="cont" type="button" data-next="paymentMethod" disabled>Continue to setup</button>
+            </div>
+          </fieldset>
+
+          <fieldset class="step locked" id="step-automationPreset" data-group="automationPreset" data-dimension="att_automation">
+            <div class="step-head"><span class="n">3</span><legend>Choose an initial setup</legend><span class="sum" id="sum-automationPreset"></span></div>
+            <div class="step-body">
+              <div class="options">
+                <label class="option" data-id="off" data-dimension="att_automation"><input type="radio" name="automationPreset" value="off"><strong>Off</strong><span>No automatic routines or suggestions.</span></label>
+                <label class="option" data-id="manual" data-dimension="att_automation"><input type="radio" name="automationPreset" value="manual"><strong>Manual</strong><span>Show suggestions, but wait for me to start every action.</span></label>
+                <label class="option" data-id="helpful" data-dimension="att_automation"><input type="radio" name="automationPreset" value="helpful"><strong>Helpful</strong><span>Detect workouts and start bedtime mode on schedule.</span></label>
+                <label class="option" data-id="extensive" data-dimension="att_automation"><input type="radio" name="automationPreset" value="extensive"><strong>Extensive</strong><span>Also draft replies and act on routine suggestions automatically.</span></label>
+              </div>
+              <button class="cont" type="button" data-next="automationPreset" disabled>Continue to review</button>
+            </div>
+          </fieldset>
+
+          <div class="review" id="review" hidden>
+            <h2>Review your order</h2>
+            <dl>
+              <dt>Watch</dt><dd id="rv-productId">—</dd>
+              <dt>Payment</dt><dd id="rv-paymentMethod">—</dd>
+              <dt>Setup</dt><dd id="rv-automationPreset">—</dd>
+              <dt>Delivery</dt><dd>Free standard delivery</dd>
+            </dl>
+            <div class="total"><span>Total</span><strong>$249.00</strong></div>
+            <button id="complete" type="submit" disabled>Complete order</button>
+            <p class="fine">30-day returns · same warranty on every model</p>
+          </div>
+        </form>
+
+        <div id="confirmation">
+          <div class="ok"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><path d="M6 14.5l5 5 11-12" stroke="#17805a" stroke-width="3" fill="none"/></svg></div>
+          <h2>Order complete</h2>
+          <p>Your watch and setup choices have been saved.</p>
+          <div class="review" style="margin:0">
+            <dl style="margin:0">
+              <dt>Watch</dt><dd id="cf-productId"></dd>
+              <dt>Payment</dt><dd id="cf-paymentMethod"></dd>
+              <dt>Setup</dt><dd id="cf-automationPreset"></dd>
+            </dl>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="perks" id="perks">
+      <div><b>Free delivery</b>Every watch ships free, tracked, in two to four working days.</div>
+      <div><b>30-day returns</b>Changed your mind? Send it back within 30 days for a full refund.</div>
+      <div><b>Support</b>Chat with the WristWorks team any day from 8 am to 8 pm.</div>
+    </div>
+  </main>
+  <footer><div class="wrap"><span>© WristWorks</span><span>Privacy · Terms · Accessibility</span></div></footer>
+
+  <script>
+    window.__selections = null;
+    (function () {
+      const form = document.getElementById('purchase-form');
+      const button = document.getElementById('complete');
+      const GROUPS = ['productId', 'paymentMethod', 'automationPreset'];
+      const picked = name => form.querySelector(`input[name="${name}"]:checked`);
+      const nameOf = input => input ? input.closest('label.option').querySelector('strong').textContent : '';
+
+      function openStep(name) {
+        GROUPS.forEach((g, i) => {
+          const fs = document.getElementById('step-' + g);
+          const isOpen = g === name;
+          fs.classList.toggle('open', isOpen);
+          fs.classList.toggle('done', !isOpen && !!picked(g) && fs.dataset.confirmed === '1');
+          fs.classList.toggle('locked', !isOpen && fs.dataset.confirmed !== '1');
+          renderHead(g);
+        });
+        document.getElementById('review').hidden = name !== null;
+      }
+      function renderHead(g) {
+        const fs = document.getElementById('step-' + g);
+        const sum = document.getElementById('sum-' + g);
+        sum.innerHTML = '';
+        if (fs.classList.contains('open') || fs.dataset.confirmed !== '1') return;
+        sum.appendChild(document.createTextNode(nameOf(picked(g))));
+        const edit = document.createElement('button');
+        edit.type = 'button'; edit.className = 'edit'; edit.textContent = 'Change';
+        edit.setAttribute('aria-label', 'Change: ' + fs.querySelector('legend').textContent);
+        edit.addEventListener('click', () => openStep(g));
+        sum.appendChild(edit);
+      }
+      function sync() {
+        GROUPS.forEach(g => {
+          document.querySelector(`[data-next="${g}"]`).disabled = !picked(g);
+          document.getElementById('rv-' + g).textContent = nameOf(picked(g)) || '—';
+        });
+        const w = picked('productId');
+        document.getElementById('dial-brand').textContent = w ? nameOf(w).split(' ')[0].toUpperCase() : 'WRISTWORKS';
+        document.getElementById('stage-cap').textContent = (w ? nameOf(w) + ' · ' : '') + 'Graphite case · shown with graphite band';
+        button.disabled = !GROUPS.every(picked);
+      }
+      document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
+        const g = b.dataset.next; if (!picked(g)) return;
+        document.getElementById('step-' + g).dataset.confirmed = '1';
+        const nxt = GROUPS.slice(GROUPS.indexOf(g) + 1).find(x => document.getElementById('step-' + x).dataset.confirmed !== '1');
+        openStep(nxt || null);
+      }));
+      form.addEventListener('change', sync);
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (!GROUPS.every(picked)) return;
+        window.__selections = Array.from(form.querySelectorAll('input:checked')).map(input => {
+          const option = input.closest('label.option');
+          return {dimensionId: option.dataset.dimension, optionId: option.dataset.id};
+        });
+        GROUPS.forEach(g => { document.getElementById('cf-' + g).textContent = nameOf(picked(g)); });
+        form.style.display = 'none';
+        document.getElementById('confirmation').style.display = 'block';
+        window.scrollTo(0, 0);
+      });
+      sync();
+    })();
+  </script>
+</body>
+</html>

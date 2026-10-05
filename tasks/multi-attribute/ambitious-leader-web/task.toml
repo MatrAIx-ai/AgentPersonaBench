@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/ambitious-leader-web"
+theme = "Ambitious leader: leadership · ambition · career-success"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "professional"
+tags = [ "persona-adherence", "multi-check", "ambitious-leader", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE opportunities task, THREE checks. A single persona carrying three
+# ambitious-leader attributes adds 3 opportunities to a shortlist on a live page
+# (Playwright); the verifier runs an independent rule-based check per axis, reading
+# each card's hidden data-* tier off index.html (ground truth, NOT shown to the
+# reader). This amortizes one generation across three attributes. Reward = integer
+# score (one point per check HELD, 0..3). Each axis: HELD iff no picked card is
+# high-tier (axis >= 2). tier 0 EMBODIES the trait; tier 3 is its opposite.
+[[checks]]
+dimension_id = "trait_leadership"
+attribute = "Character: Leadership"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_leadership=Strong"
+# Ground truth: each card's hidden data-ax1 (0 takes charge / leads .. 3 stays in the background) in index.html.
+adherence_signal = "Shortlist built from take-charge opportunities (data-ax1 0-1); no step-back pick (>= 2)."
+
+[[checks]]
+dimension_id = "trait_ambition"
+attribute = "Character: Ambition"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_ambition=Strong"
+# Ground truth: each card's hidden data-ax2 (0 aims high / stretch .. 3 coasts / no drive).
+adherence_signal = "Shortlist favors aim-high stretch opportunities (data-ax2 0-1); no coasting pick (>= 2)."
+
+[[checks]]
+dimension_id = "val_career_success"
+attribute = "Value: Career success"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_career_success=Core value"
+# Ground truth: each card's hidden data-ax3 (0 drives own advancement .. 3 career-indifferent).
+adherence_signal = "Shortlist favors advancement-minded opportunities (data-ax3 0-1); no career-indifferent pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

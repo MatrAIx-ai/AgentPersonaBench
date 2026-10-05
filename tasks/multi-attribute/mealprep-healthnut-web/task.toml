@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/mealprep-healthnut-web"
+theme = "mealprep-healthnut: preps meals + works out + protects sleep (batch-cook · active · rest-first)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "mealprep-healthnut", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE shopping task, THREE checks. A single persona carrying three health-nut
+# habits adds 3 items to a basket on a live store page (Playwright); the verifier
+# runs an independent rule-based check per axis, reading each product's hidden
+# data-* tier off index.html (ground truth, NOT shown to the shopper). This
+# amortizes one generation across three attributes. Reward = integer score (one
+# point per check HELD, 0..3). Each axis: HELD iff no picked product is high-tier
+# (axis >= 2).
+[[checks]]
+dimension_id = "habit_meal_prepping"
+attribute = "Habit: Meal prepping"
+value = "Weekly"
+evaluator = "rule-based"
+evaluator_name = "habit_meal_prepping=Weekly"
+# Ground truth: each product's hidden data-mealprep (0 supports prepping .. 3 pushes grab-whatever/takeout) in index.html.
+adherence_signal = "Basket built from meal-prep-supporting items (data-mealprep 0-1); no grab-whatever/takeout pick (>= 2)."
+
+[[checks]]
+dimension_id = "lstyle_exercise_freq"
+attribute = "Lifestyle: Exercise frequency"
+value = "Weekly"
+evaluator = "rule-based"
+evaluator_name = "lstyle_exercise_freq=Weekly"
+# Ground truth: each product's hidden data-exercise (0 supports being active .. 3 sedentary).
+adherence_signal = "Basket favors active-lifestyle items (data-exercise 0-1); no sedentary pick (>= 2)."
+
+[[checks]]
+dimension_id = "health_sleep_quality"
+attribute = "Health: Sleep quality"
+value = "Good"
+evaluator = "rule-based"
+evaluator_name = "health_sleep_quality=Good"
+# Ground truth: each product's hidden data-sleep (0 protects sleep .. 3 wrecks sleep/all-nighters).
+adherence_signal = "Basket favors rest-protecting items (data-sleep 0-1); no sleep-wrecking pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

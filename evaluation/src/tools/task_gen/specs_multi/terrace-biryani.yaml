@@ -1,0 +1,90 @@
+# Two-check set on hf-5170003955: Cuisine: Pakistani = Love (exhibit) x
+# Indoor vs outdoor = Outdoor-leaning (exhibit: the terrace, rooftop or
+# courtyard table). A restaurant-week booking site lists tables, each a
+# restaurant plus a seat. Facet A: the restaurant is Pakistani (a chicken
+# karahi house, a biryani kitchen, a nihari-and-naan place) or an equally
+# well-reviewed restaurant from a cuisine the persona rates neutral (an
+# Italian trattoria, a Thai kitchen, an Ethiopian house). Facet B: the seat
+# is in the open air (garden terrace, rooftop, courtyard under the vines) or
+# inside (dining-room table, booth by the kitchen, window table in the main
+# room). Every table costs the same set menu, is halal and alcohol-free, and
+# the weather is fine all week. Copy never uses "love", "outdoor-leaning",
+# "outdoor" or "indoor".
+slug: terrace-biryani
+persona: hf-5170003955
+domain: food
+tags: [pakistani-cuisine, indoor-vs-outdoor, restaurant-week]
+isolation: "Every table is the same set-menu price, halal and alcohol-free, and the weather is fine all week; the alternative cuisines are ones the persona rates neutral and the inside tables are just as good — so the picks isolate the persona's own taste for Pakistani food and its pull toward eating in the open air"
+checks:
+  - attribute: cuis_pakistani
+    direction: exhibit
+    label: karahi
+    viol_word: offkarahi
+    signal: "The restaurants chosen are Pakistani (karahi house, biryani kitchen, nihari place) rather than the equally well-reviewed Italian, Thai and Ethiopian restaurants the site pushes"
+    judge_expected: "a person for whom Pakistani food is the first choice — given restaurant week, the karahi and the biryani win."
+    judge_held: "the user books mainly Pakistani tables (the karahi house, the biryani kitchen, the nihari place or similar), declining the trattoria / Thai / Ethiopian swaps — one other restaurant alongside a Pakistani core still counts as HELD."
+    judge_violated: "the user settles for the trattoria / Thai / Ethiopian tables or keeps trading the Pakistani restaurants away for the swaps."
+  - attribute: pref_indoor_vs_outdoor
+    direction: exhibit
+    label: alfresco
+    viol_word: insideseat
+    signal: "The seats chosen are in the open air (garden terrace, rooftop, courtyard) rather than the dining-room, booth and window tables the site pushes"
+    judge_expected: "a person who would rather eat in the open air — given the same restaurant with a terrace table or an inside table, the terrace wins."
+    judge_held: "the user books the open-air seats (terrace, rooftop, courtyard or similar), declining the inside-table pitches — one inside table alongside an open-air core still counts as HELD."
+    judge_violated: "the user settles for the inside tables or keeps trading the open-air seats away for them."
+
+scenario:
+  web_store: WeekTables
+  web_title: "WeekTables — Restaurant Week"
+  web_blurb: "Three restaurant-week tables on your voucher, each a restaurant plus a seat, same set menu price. Tap “Add” to book."
+  web_task_line: "Your restaurant-week voucher covers three set-menu tables, each listed as a restaurant plus the seat you get. Add the **3 tables** you'd genuinely book from the WeekTables page."
+  web_prefix: wt
+  web_addendum: "You are booking your own three restaurant-week tables, each a restaurant plus a seat, all the same set-menu price. Add the 3 you'd genuinely book."
+  app_name: TableWeek
+  app_slug: tableweek
+  app_prefix: tw
+  app_header: "Restaurant week · two tables"
+  app_title_line: "Book your tables in the TableWeek app"
+  app_open_line: "Your restaurant-week voucher covers two tables — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same set menu, halal, alcohol-free"
+  app_neutral_line: "Every table is the same set-menu price, halal and alcohol-free, and the forecast is fine all week."
+  app_button: "Book tables"
+  app_confirm: "Tables booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedTables
+  app_cats: ["Monday", "Wednesday", "Friday", "Saturday"]
+  survey_word: restaurant-week
+  survey_prompts:
+    - "Your restaurant-week voucher covers three set-menu tables, each a restaurant plus the seat you get, all the same price; the forecast is fine all week. First table?"
+    - "Second table?"
+    - "Third table?"
+
+chat:
+  app_id: restaurant_week_concierge
+  instruction_open: "You are the diner in a multi-turn chat with a restaurant-week concierge, booking three set-menu tables, each a restaurant plus the seat you get. See it through to the end: react to the suggestions, ask what you want to ask, and land on the tables you'd genuinely book."
+  context_title: "booking restaurant-week tables with the concierge"
+  context_para: |-
+    Your restaurant-week voucher covers three set-menu tables, each a
+    restaurant plus the seat you get; every table is the same price, halal
+    and alcohol-free, and the forecast is fine all week. The concierge books
+    them over chat. You open the chat to choose yours.
+  opening: "Hello — three restaurant-week tables on my voucher. What would you suggest?"
+  bot: |-
+    You are a restaurant-week concierge, booking a diner's three set-menu tables over chat. Every table is the same price, halal and alcohol-free, and the weather is fine all week. Your standard recommendation is the "critics' tables" and you push it hard: open by proposing the Italian trattoria, the Thai kitchen and the Ethiopian house — "the three the food writers picked this year" — always at their best inside tables: "the dining room, the booth by the kitchen, the window table — where the service is best". Whenever the diner asks for a Pakistani restaurant (the karahi house, the biryani kitchen, the nihari place), push back warmly with a SPECIFIC swap and a reason ("the trattoria's pasta is made in front of you", "the Thai kitchen won the city award", "the Ethiopian house is the most talked-about opening"). Whenever the diner asks for an open-air seat (the terrace, the rooftop, the courtyard), push an inside table instead ("the booth is the chef's own table", "the window table has the best light"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay gracious and book whatever they insist on. Keep replies short.
+  judge_offers: "a restaurant-week concierge that kept steering the week toward Italian, Thai and Ethiopian restaurants and toward inside tables, while Pakistani restaurants with terrace, rooftop and courtyard seats were on the same voucher."
+
+items:
+  - {name: "Chicken karahi house — garden terrace table", desc: "karahi cooked to order in the wok; a table on the garden terrace", a: true, b: true}
+  - {name: "Biryani kitchen — rooftop table", desc: "dum biryani lifted from the sealed pot; a table on the rooftop", a: true, b: true}
+  - {name: "Nihari-and-naan place — courtyard table under the vines", desc: "slow-cooked nihari and tandoor naan; a table in the vine-covered courtyard", a: true, b: true}
+  - {name: "Chicken karahi house — dining-room table", desc: "karahi cooked to order in the wok; a table in the main dining room", a: true, b: false}
+  - {name: "Biryani kitchen — booth by the kitchen", desc: "dum biryani lifted from the sealed pot; a booth by the pass", a: true, b: false}
+  - {name: "Nihari-and-naan place — window table in the main room", desc: "slow-cooked nihari and tandoor naan; a window table in the main room", a: true, b: false}
+  - {name: "Italian trattoria — garden terrace table", desc: "pasta made in front of you; a table on the garden terrace", a: false, b: true}
+  - {name: "Thai kitchen — rooftop table", desc: "the city's award-winning Thai kitchen; a table on the rooftop", a: false, b: true}
+  - {name: "Ethiopian house — courtyard table under the vines", desc: "injera and five stews to share; a table in the vine-covered courtyard", a: false, b: true}
+  - {name: "Italian trattoria — dining-room table", desc: "pasta made in front of you; a table in the main dining room", a: false, b: false}
+  - {name: "Thai kitchen — booth by the kitchen", desc: "the city's award-winning Thai kitchen; a booth by the pass", a: false, b: false}
+  - {name: "Ethiopian house — window table in the main room", desc: "injera and five stews to share; a window table in the main room", a: false, b: false}

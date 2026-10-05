@@ -1,0 +1,10 @@
+{
+  "role": "a user planning weekly schedules",
+  "outputs": [
+    {
+      "path": "anchor/selection.json",
+      "kind": "js",
+      "expr": "() => window.__artifact"
+    }
+  ]
+}

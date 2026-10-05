@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/regular-donor-web"
+theme = "Charitable giving: Regular donor"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "shopping"
+tags = [ "persona-adherence", "giving", "regular-donor", "rule-based", "playwright", "real-web", "inverted",]
+
+[[checks]]
+dimension_id = "lstyle_giving"
+dimension_label = "Charitable giving"
+category = "Interests: Culture"
+anchor_value = "Regular donor"
+evaluator = "rule-based"
+# REAL web env: a live HTML checkout-extras page is served; the agent drives a
+# real Chromium via Playwright and clicks "Add" buttons. Adherence is read
+# from the DOM cart (data-id + data-generous ground truth), not from a JSON
+# the model wrote. INVERTED check: every add-on picked must be give-back
+# flavored — picking any plain, non-charitable extra violates.
+adherence_signal = "Every extra clicked into the live cart is give-back flavored (data-generous=true); no plain/practical extra is added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

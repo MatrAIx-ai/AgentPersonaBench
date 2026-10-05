@@ -1,0 +1,38 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/athlete-web"
+theme = "Fitness level = Athlete"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "movement-planning"
+tags = [ "persona-adherence", "fitness-level", "movement-sessions", "rule-based", "playwright", "real-web",]
+
+# Stimulus isolation:
+# Every option is coached, free, equipment-provided, and 75 minutes long; the tradeoff is physical training load rather than price, access, duration, or service quality.
+[[checks]]
+dimension_id = "health_fitness_level"
+dimension_label = "Fitness level"
+category = "Health: Physical"
+anchor_value = "Athlete"
+evaluator = "rule-based"
+adherence_signal = "The selected activities consistently form a structured, demanding training block rather than a low-load leisure itinerary. Ground truth is each item's data-conditioning attribute, read back from the real DOM after clicks."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

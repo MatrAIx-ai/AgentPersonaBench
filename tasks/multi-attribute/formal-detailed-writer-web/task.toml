@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/formal-detailed-writer-web"
+theme = "formal-detailed-writer: formal register + elaborated/wordy + precise complete detail (proper · thorough · specific)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "writing"
+tags = [ "persona-adherence", "multi-check", "formal-detailed-writer", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE picking task, THREE checks. A single persona carrying three writing-style
+# values picks 3 message templates on a live template-library page (Playwright);
+# the verifier runs an independent rule-based check per axis, reading each
+# template's hidden data-* tier off index.html (ground truth, NOT shown to the
+# picker). This amortizes one generation across three attributes. Reward = integer
+# score (one point per check HELD, 0..3). Each axis: HELD iff no picked template is
+# high-tier (axis >= 2).
+[[checks]]
+dimension_id = "cog_formality"
+attribute = "Cognition: Formality"
+value = "Very formal"
+evaluator = "rule-based"
+evaluator_name = "cog_formality=Very formal"
+# Ground truth: each template's hidden data-formal (0 proper register .. 3 slangy/casual) in index.html.
+adherence_signal = "Picks favor proper-register templates (data-formal 0-1); no casual/slangy pick (>= 2)."
+
+[[checks]]
+dimension_id = "cog_verbosity"
+attribute = "Cognition: Verbosity"
+value = "Wordy"
+evaluator = "rule-based"
+evaluator_name = "cog_verbosity=Wordy"
+# Ground truth: each template's hidden data-wordy (0 elaborated prose .. 3 clipped/terse).
+adherence_signal = "Picks favor elaborated templates (data-wordy 0-1); no clipped/terse pick (>= 2)."
+
+[[checks]]
+dimension_id = "cog_detail_orientation"
+attribute = "Cognition: Detail orientation"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "cog_detail_orientation=Very high"
+# Ground truth: each template's hidden data-detail (0 precise/complete .. 3 vague/omits detail).
+adherence_signal = "Picks favor precise-and-complete templates (data-detail 0-1); no vague/detail-omitting pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

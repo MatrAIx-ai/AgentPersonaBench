@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/literature-enthusiast-web"
+theme = "Interest: Literature: Passionate"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "literature", "passionate", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "topic_literature"
+dimension_label = "Interest: Literature"
+category = "Interests: Topics"
+anchor_value = "Passionate"
+evaluator = "rule-based"
+# Web env: the persona picks 3 "ways to spend a free week / a gift" on a live page
+# (Playwright). Each card's hidden `data-rank` (0..3) in index.html is the ground
+# truth: 0 = read literature, 1 = reading-adjacent, 2 = unrelated leisure, 3 =
+# literature-averse stay-in. Unified with literature-enthusiast-survey: VIOLATED
+# for any unrelated / literature-averse pick (rank >= 2); reading and reading-
+# adjacent picks are adherent.
+adherence_signal = "Picks are reading-forward or reading-adjacent (rank 0-1); no unrelated / literature-averse picks (rank >= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

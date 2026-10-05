@@ -1,0 +1,76 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/blunt-terse-communicator-app"
+theme = "Blunt terse communicator: direct/straight-talking, short & to-the-point, casual register (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "communication"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE drafting session, THREE checks. A single persona (a computer-use agent
+# operating the REAL QuickReply Tkinter GUI on a local Linux CUA desktop) builds
+# one reply; the verifier runs an independent rule-based check per attribute. Each
+# snippet carries three hidden ground-truth axes (blunt/terse/casual, 0..3) that
+# are NEVER shown on screen — the agent sees only the label + phrasing and must
+# judge style for itself. A check is HELD iff no selected line scores >= 2 on its
+# axis. Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "cog_directness"
+dimension_label = "Cognition: Directness"
+category = "Linguistic: Communication"
+attribute = "Cognition: Directness"
+value = "Blunt"
+evaluator = "rule-based"
+evaluator_name = "cog_directness=Blunt"
+metric = "blunt_axis_max"                    # HELD iff no picked line has blunt >= 2
+adherence_signal = "The sent reply contains no hedged/softened line (hidden blunt axis >= 2); a blunt communicator says it straight."
+
+[[checks]]
+dimension_id = "cog_verbosity"
+dimension_label = "Cognition: Verbosity"
+category = "Linguistic: Communication"
+attribute = "Cognition: Verbosity"
+value = "Terse"
+evaluator = "rule-based"
+evaluator_name = "cog_verbosity=Terse"
+metric = "terse_axis_max"                     # HELD iff no picked line has terse >= 2
+adherence_signal = "The reply contains no long-winded line (hidden terse axis >= 2); a terse communicator keeps it short and to the point."
+
+[[checks]]
+dimension_id = "cog_formality"
+dimension_label = "Cognition: Formality"
+category = "Linguistic: Communication"
+attribute = "Cognition: Formality"
+value = "Casual"
+evaluator = "rule-based"
+evaluator_name = "cog_formality=Casual"
+metric = "casual_axis_max"                    # HELD iff no picked line has casual >= 2
+adherence_signal = "The reply contains no stiff/very-formal line (hidden casual axis >= 2); a casual communicator keeps a plain, everyday register."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with QuickReply (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch QuickReply once the desktop is up so the agent finds it on screen.
+command = "/opt/quickreply/start-quickreply.sh"
+timeout_sec = 60.0
+retries = 5

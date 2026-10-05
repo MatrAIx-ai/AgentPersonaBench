@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/fashion-fan-chat"
+theme = "Topic: Fashion — Passionate"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "media"
+tags = [ "persona-adherence", "fashion-fan", "llm-judge",]
+
+[[checks]]
+dimension_id = "topic_fashion"
+dimension_label = "Interest: Fashion"
+category = "Interests: Topics"
+anchor_value = "Passionate"
+evaluator = "llm-judge"
+adherence_signal = "At least two of the persona's three bundle titles are fashion magazines; the passion shows up when all titles cost the same."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

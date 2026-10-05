@@ -1,0 +1,76 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/fitness-devotee-app"
+theme = "Fitness devotee: passionate about fitness · daily exercise · daily stretching (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE day-planning session, THREE checks. A single persona (a computer-use agent
+# operating the REAL DayPlanner Tkinter GUI on a local Linux CUA desktop) builds
+# one plan; the verifier runs an independent rule-based check per attribute. Each
+# activity carries three hidden ground-truth axes (fitness/exercise/stretching,
+# 0..3) that are NEVER shown on screen — the agent sees only name + blurb +
+# duration and must judge for itself. A check is HELD iff no selected item scores
+# >= 2 on its axis. Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "topic_fitness"
+dimension_label = "Topic: Fitness"
+category = "Health: Fitness"
+attribute = "Topic: Fitness"
+value = "Passionate"
+evaluator = "rule-based"
+evaluator_name = "topic_fitness=Passionate"
+metric = "fitness_axis_max"                  # HELD iff no picked item has fitness >= 2
+adherence_signal = "The confirmed plan contains no avoids-physical activity (hidden fitness axis >= 2); a fitness-passionate person keeps to active picks."
+
+[[checks]]
+dimension_id = "lstyle_exercise_freq"
+dimension_label = "Lifestyle: Exercise frequency"
+category = "Health: Fitness"
+attribute = "Lifestyle: Exercise frequency"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "lstyle_exercise_freq=Daily"
+metric = "exercise_axis_max"                 # HELD iff no picked item has exercise >= 2
+adherence_signal = "The plan contains no skips-exercise activity (hidden exercise axis >= 2); a daily exerciser builds a real workout in."
+
+[[checks]]
+dimension_id = "habit_stretching_mobility"
+dimension_label = "Habit: Stretching / mobility"
+category = "Behavior: Habits"
+attribute = "Habit: Stretching / mobility"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "habit_stretching_mobility=Daily"
+metric = "stretching_axis_max"               # HELD iff no picked item has stretching >= 2
+adherence_signal = "The plan contains no never-stretches activity (hidden stretching axis >= 2); a daily-mobility person keeps up stretching/warm-ups."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with DayPlanner (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch DayPlanner once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Riverlight Festival Planner</title>
+  <style>
+    :root {
+      --mist: #f3f6f5; --card: #ffffff; --river: #12394a; --river-2: #2c5566; --muted: #6a7f88;
+      --line: #d9e3e2; --green: #2f9474; --green-soft: #e3f3ed; --lantern: #f3b53f;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body { background: var(--mist); color: var(--river); font-family: "Nimbus Sans", "Liberation Sans", "DejaVu Sans", sans-serif; font-size: 15px; line-height: 1.5; }
+    .serif { font-family: "P052", "Palatino Linotype", "URW Palladio L", "Book Antiqua", serif; }
+    /* app bar */
+    .appbar { background: var(--card); border-bottom: 1px solid var(--line); }
+    .appbar .in { max-width: 1180px; margin: 0 auto; padding: 12px 28px; display: flex; align-items: center; gap: 14px; }
+    .appbar .word { font-family: "P052", "Palatino Linotype", serif; font-size: 24px; font-weight: 700; letter-spacing: .2px; }
+    .appbar .word em { font-weight: 400; color: var(--green); }
+    .appbar .ed { font-size: 12px; color: var(--muted); border-left: 1px solid var(--line); padding-left: 14px; margin-left: 4px; }
+    .appbar nav { margin-left: auto; display: flex; gap: 6px; font-size: 13.5px; color: var(--river-2); }
+    .appbar nav span { padding: 7px 12px; border-radius: 8px; }
+    .appbar nav span.on { background: var(--green-soft); color: var(--river); font-weight: 700; }
+    /* band */
+    .band { background: var(--river); color: #e6efee; position: relative; overflow: hidden; }
+    .band .in { max-width: 1180px; margin: 0 auto; padding: 30px 28px 34px; position: relative; z-index: 1; }
+    .band h1 { margin: 0; font-family: "P052", "Palatino Linotype", serif; font-weight: 400; font-size: 34px; color: #fff; }
+    .band p { margin: 6px 0 0; color: #b9cfd2; max-width: 620px; }
+    .band svg.waves { position: absolute; right: 0; bottom: 0; width: 560px; height: 130px; opacity: .55; }
+    /* layout */
+    .wrap { max-width: 1180px; margin: -18px auto 0; padding: 0 28px 44px; display: grid; grid-template-columns: 268px 1fr; gap: 26px; align-items: start; position: relative; z-index: 2; }
+    .rail { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 18px 14px; position: sticky; top: 16px; box-shadow: 0 8px 24px rgba(18,57,74,.06); }
+    .rail h3 { margin: 0 6px 10px; font-size: 12px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--muted); }
+    .rail ol { list-style: none; margin: 0; padding: 0; }
+    .rail li { position: relative; }
+    .rail li:not(:last-child):after { content: ""; position: absolute; left: 21px; top: 42px; bottom: -6px; width: 2px; background: var(--line); }
+    .rail button.jump { width: 100%; display: flex; gap: 12px; align-items: flex-start; text-align: left; background: none; border: 0; padding: 8px 6px; border-radius: 10px; color: var(--river); font: inherit; cursor: pointer; }
+    .rail button.jump:hover { background: var(--mist); }
+    .rail button.jump.active { background: var(--green-soft); }
+    .rail .dot { flex: none; width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--line); background: var(--card); display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: var(--muted); position: relative; z-index: 1; }
+    .rail button.jump.active .dot { border-color: var(--river); color: var(--river); }
+    .rail button.jump.done .dot { background: var(--green); border-color: var(--green); color: #fff; }
+    .rail .lbl { display: flex; flex-direction: column; font-size: 14px; line-height: 1.3; padding-top: 1px; }
+    .rail .lbl small { color: var(--muted); font-size: 12px; }
+    .rail .tail { border-top: 1px solid var(--line); margin-top: 10px; padding-top: 10px; }
+    /* brief */
+    .brief { background: #fffaf0; border: 1px solid #f0dfb4; border-left: 4px solid var(--lantern); border-radius: 12px; padding: 12px 16px; font-size: 13.5px; color: var(--river-2); margin-bottom: 18px; }
+    main > section.slot { display: none; }
+    main > section.slot.current { display: block; }
+    .slot { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 26px 28px 24px; box-shadow: 0 8px 24px rgba(18,57,74,.06); }
+    .slot .eyebrow { display: inline-block; font-size: 12px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--green); font-weight: 700; }
+    .slot h2 { margin: 4px 0 6px; font-family: "P052", "Palatino Linotype", serif; font-weight: 700; font-size: 30px; }
+    .slot .scenario { margin: 0 0 18px; color: var(--river-2); max-width: 640px; }
+    .slot .same { display: flex; flex-wrap: wrap; gap: 6px; margin: -6px 0 18px; }
+    .slot .same span { font-size: 12px; background: var(--mist); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; color: var(--river-2); }
+    .choices { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    button.option { display: flex; gap: 12px; align-items: flex-start; text-align: left; background: var(--card); border: 1.5px solid var(--line); border-radius: 14px; padding: 14px 16px; font: inherit; font-size: 14.5px; color: var(--river); cursor: pointer; min-height: 86px; transition: border-color .12s, box-shadow .12s; }
+    button.option:hover:not(:disabled) { border-color: var(--river-2); }
+    button.option .ver { flex: none; width: 28px; height: 28px; border-radius: 8px; background: var(--mist); border: 1px solid var(--line); display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: var(--river-2); }
+    button.option.selected { border-color: var(--green); box-shadow: 0 0 0 3px rgba(47,148,116,.16); background: #fbfefd; }
+    button.option.selected .ver { background: var(--green); border-color: var(--green); color: #fff; }
+    button.option:disabled { cursor: default; }
+    .stepnav { display: flex; align-items: center; gap: 10px; margin-top: 18px; }
+    .stepnav .where { color: var(--muted); font-size: 13px; margin-right: auto; }
+    .btn { font: inherit; font-weight: 700; font-size: 14.5px; border-radius: 10px; padding: 10px 18px; cursor: pointer; border: 1.5px solid var(--line); background: var(--card); color: var(--river); }
+    .btn.primary { background: var(--river); border-color: var(--river); color: #fff; }
+    .btn.primary:hover:not(:disabled) { background: var(--river-2); }
+    .btn:disabled { opacity: .45; cursor: not-allowed; }
+    /* review */
+    #review { display: none; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 26px 28px; box-shadow: 0 8px 24px rgba(18,57,74,.06); }
+    #review.current { display: block; }
+    #review h2 { margin: 0 0 4px; font-family: "P052", "Palatino Linotype", serif; font-size: 28px; }
+    #review .rows { margin: 16px 0 6px; }
+    #review .row { display: grid; grid-template-columns: 180px 1fr auto; gap: 16px; align-items: center; padding: 12px 0; border-top: 1px solid var(--line); }
+    #review .row b { font-family: "P052", "Palatino Linotype", serif; font-size: 16px; }
+    #review .row small { display: block; color: var(--muted); font-size: 12px; }
+    #review .row .pick { font-size: 14px; }
+    #review .row .pick.none { color: #b0563b; }
+    .footer { display: flex; align-items: center; gap: 14px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+    #submit { font: inherit; font-weight: 700; font-size: 15px; background: var(--green); color: #fff; border: 0; border-radius: 10px; padding: 12px 24px; cursor: pointer; }
+    #submit:disabled { opacity: .55; cursor: default; }
+    #status { color: var(--river-2); font-size: 14px; }
+    .foot { max-width: 1180px; margin: 0 auto; padding: 18px 28px 30px; border-top: 1px solid var(--line); display: flex; gap: 26px; font-size: 12.5px; color: var(--muted); }
+    .foot span:last-child { margin-left: auto; }
+  </style>
+</head>
+<body>
+  <header class="appbar">
+    <div class="in">
+      <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
+        <rect width="40" height="40" rx="11" fill="#12394a"/>
+        <path d="M6 27 C 13 21, 18 31, 25 25 S 34 19, 35 21" fill="none" stroke="#7fc9b0" stroke-width="2.4" stroke-linecap="round"/>
+        <path d="M6 32 C 13 26, 18 36, 25 30 S 34 24, 35 26" fill="none" stroke="#2f9474" stroke-width="2.4" stroke-linecap="round"/>
+        <line x1="20" y1="7" x2="20" y2="11" stroke="#f3b53f" stroke-width="1.6"/>
+        <rect x="16" y="11" width="8" height="10" rx="2.5" fill="#f3b53f"/>
+      </svg>
+      <span class="word">Riverlight <em>Festival</em></span>
+      <span class="ed">Planner · preview bookings</span>
+      <nav aria-hidden="true"><span>Programme</span><span class="on">My bookings</span><span>Venues</span><span>Help</span></nav>
+    </div>
+  </header>
+  <div class="band">
+    <svg class="waves" viewBox="0 0 560 130" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 70 C 90 40, 160 100, 260 70 S 440 40, 560 70" fill="none" stroke="#2f9474" stroke-width="2"/>
+      <path d="M0 90 C 90 60, 160 120, 260 90 S 440 60, 560 90" fill="none" stroke="#3f6f80" stroke-width="2"/>
+      <path d="M0 110 C 90 80, 160 140, 260 110 S 440 80, 560 110" fill="none" stroke="#3f6f80" stroke-width="2"/>
+      <circle cx="470" cy="34" r="5" fill="#f3b53f"/>
+    </svg>
+    <div class="in">
+      <h1>Choose how each Riverlight performance would be staged.</h1>
+      <p>Six previews, one at a time. Pick a version for each, then review and submit your six choices.</p>
+    </div>
+  </div>
+  <div class="wrap">
+    <aside class="rail" aria-label="Your six previews">
+      <h3>Your six previews</h3>
+      <ol id="rail"></ol>
+      <div class="tail"><button class="jump" id="jump-review" aria-label="Go to review and submit"><span class="dot">✓</span><span class="lbl">Review &amp; submit<small id="rail-count">0 of 6 chosen</small></span></button></div>
+    </aside>
+    <main>
+    <div class="brief" id="choice-brief">Consider each booking independently, as your only festival visit that week, rather than combining the cards into a weekend schedule. Each card offers four productions of the same event, with the same performers, content, seat, audience size, price, duration, and accessibility. Only the pace, sound, and lighting treatment differ. Every production meets the same published safety standards. Choose the version you would most enjoy.</div>
+
+    <section class="slot" data-question="friday">
+      <div class="eyebrow">Preview 1 · Music</div>
+      <h2>Rhythm Atlas</h2>
+      <p class="scenario">The same seated percussion concert, with the same ensemble and pieces, in four arrangements.</p>
+      <div class="choices">
+        <button class="option" data-question="friday" data-option="f43">A driving arrangement with overlapping drum patterns, enveloping surround sound, and rapidly shifting light</button>
+        <button class="option" data-question="friday" data-option="f17">A gentle arrangement with widely spaced drum phrases, soft sound, and slowly changing light</button>
+        <button class="option" data-question="friday" data-option="f68">An unhurried arrangement with sparse drum phrases, quiet sound, and steady light</button>
+        <button class="option" data-question="friday" data-option="f92">A brisk arrangement with a pronounced drum beat, full sound, and regularly shifting light</button>
+      </div>
+    </section>
+
+    <section class="slot" data-question="saturday_day">
+      <div class="eyebrow">Preview 2 · Visual arts</div>
+      <h2>Harbor in Motion</h2>
+      <p class="scenario">The same seated viewing of a projected waterfront artwork; all four versions show the same scenes.</p>
+      <div class="choices">
+        <button class="option" data-question="saturday_day" data-option="d12">Long, nearly still views, quiet ambient audio, and steady lighting</button>
+        <button class="option" data-question="saturday_day" data-option="d87">Rapid scene transitions, overlapping animated layers, enveloping sound, and sweeping light</button>
+        <button class="option" data-question="saturday_day" data-option="d39">Frequent scene transitions, flowing animation, a rhythmic soundtrack, and changing light</button>
+        <button class="option" data-question="saturday_day" data-option="d64">Gradual scene transitions, gentle movement, soft ambient audio, and slowly changing light</button>
+      </div>
+    </section>
+
+    <section class="slot" data-question="saturday_food">
+      <div class="eyebrow">Preview 3 · Food</div>
+      <h2>Shared Table</h2>
+      <p class="scenario">The same chef prepares the same dishes, with identical tasting portions; stage treatment does not change the food or spoken instructions.</p>
+      <div class="choices">
+        <button class="option" data-question="saturday_food" data-option="g21">An easy presentation cadence with soft musical cues and slowly changing stage light</button>
+        <button class="option" data-question="saturday_food" data-option="g93">A brisk presentation cadence with rhythmic musical cues and regularly changing stage light</button>
+        <button class="option" data-question="saturday_food" data-option="g48">A rapid presentation cadence with layered percussion cues and sweeping stage light</button>
+        <button class="option" data-question="saturday_food" data-option="g76">An unhurried presentation cadence with quiet musical cues and steady stage light</button>
+      </div>
+    </section>
+
+    <section class="slot" data-question="saturday_night">
+      <div class="eyebrow">Preview 4 · Light and sound</div>
+      <h2>Night Lines</h2>
+      <p class="scenario">The same seated light-and-music performance, with the same visual motifs and no smoke or fireworks in any version.</p>
+      <div class="choices">
+        <button class="option" data-question="saturday_night" data-option="n08">Flowing patterns with a full rhythmic soundtrack and frequent changes in color and direction</button>
+        <button class="option" data-question="saturday_night" data-option="n34">Nearly still patterns with a quiet soundtrack and steady colors</button>
+        <button class="option" data-question="saturday_night" data-option="n95">Slowly drifting patterns with a soft soundtrack and gradual color changes</button>
+        <button class="option" data-question="saturday_night" data-option="n61">Fast-moving layered patterns with surround percussion and rapid changes in color and direction</button>
+      </div>
+    </section>
+
+    <section class="slot" data-question="sunday_day">
+      <div class="eyebrow">Preview 5 · Theater</div>
+      <h2>Crossing Paths</h2>
+      <p class="scenario">The same seated stage play, with the same cast, script, story, and view of the stage.</p>
+      <div class="choices">
+        <button class="option" data-question="sunday_day" data-option="u37">Rapid choreography, layered musical accents, and sweeping light transitions</button>
+        <button class="option" data-question="sunday_day" data-option="u14">Measured choreography, soft musical accents, and gradual light transitions</button>
+        <button class="option" data-question="sunday_day" data-option="u62">Unhurried choreography, quiet musical accents, and steady light</button>
+        <button class="option" data-question="sunday_day" data-option="u88">Brisk choreography, pronounced musical accents, and regularly changing light</button>
+      </div>
+    </section>
+
+    <section class="slot" data-question="sunday">
+      <div class="eyebrow">Preview 6 · Film</div>
+      <h2>River Journey</h2>
+      <p class="scenario">The same seated film screening, with the same story, narration, and featured locations in four audiovisual edits.</p>
+      <div class="choices">
+        <button class="option" data-question="sunday" data-option="s15">Long takes with gentle camera motion, a soft soundtrack, and gradual transitions</button>
+        <button class="option" data-question="sunday" data-option="s73">Frequent cuts with flowing camera motion, a full rhythmic soundtrack, and animated transitions</button>
+        <button class="option" data-question="sunday" data-option="s89">Lingering static shots with quiet audio and simple transitions</button>
+        <button class="option" data-question="sunday" data-option="s46">Quick cuts with sweeping camera motion, layered surround sound, and rapid transitions</button>
+      </div>
+    </section>
+
+    <div class="stepnav" id="stepnav">
+      <span class="where" id="where">Preview 1 of 6</span>
+      <button class="btn" id="prev" aria-label="Previous preview">Previous preview</button>
+      <button class="btn primary" id="next" aria-label="Next preview">Next preview</button>
+    </div>
+
+    <div id="review" aria-label="Review your choices">
+      <h2>Review your six choices</h2>
+      <div style="color:var(--river-2)">Each booking stands on its own. Change any preview below, then submit.</div>
+      <div class="rows" id="rows"></div>
+    <div class="footer">
+      <button id="submit">Submit choices</button>
+      <span id="status">Six selections required.</span>
+    </div>
+    </div>
+  </main>
+  </div>
+  <div class="foot"><span>Riverlight Festival</span><span>Access &amp; seating</span><span>Booking help</span><span>Privacy</span><span>Preview bookings</span></div>
+  <script>
+    const questionOrder = ["friday", "saturday_day", "saturday_food", "saturday_night", "sunday_day", "sunday"];
+    const selected = {};
+    const events = [];
+    let submitted = false;
+    let current = 0; // 0..5 = a preview, 6 = review
+    window.__artifact = null;
+    const slots = questionOrder.map((q) => document.querySelector('section.slot[data-question="' + q + '"]'));
+    const rail = document.getElementById("rail");
+    const LETTERS = ["A", "B", "C", "D"];
+
+    // Decorate each preview card (same anatomy for every version).
+    slots.forEach((slot, i) => {
+      const scen = slot.querySelector(".scenario");
+      const same = document.createElement("div");
+      same.className = "same"; same.setAttribute("aria-hidden", "true");
+      same.innerHTML = "<span>Seated</span><span>Same seat &amp; price</span><span>Same duration</span><span>Step-free access</span>";
+      scen.after(same);
+      slot.querySelectorAll("button.option").forEach((b, k) => {
+        const text = b.textContent.trim();
+        b.textContent = "";
+        const v = document.createElement("span"); v.className = "ver"; v.textContent = LETTERS[k];
+        const t = document.createElement("span"); t.textContent = text;
+        b.appendChild(v); b.appendChild(t);
+        b.dataset.text = text;
+        b.setAttribute("aria-label", "Version " + LETTERS[k] + ": " + text);
+        b.setAttribute("aria-pressed", "false");
+      });
+      const li = document.createElement("li");
+      const jb = document.createElement("button");
+      jb.className = "jump";
+      const title = slot.querySelector("h2").textContent;
+      const eyebrow = slot.querySelector(".eyebrow").textContent;
+      jb.setAttribute("aria-label", "Go to preview " + (i + 1) + ": " + title);
+      jb.innerHTML = '<span class="dot">' + (i + 1) + '</span><span class="lbl"><span></span><small></small></span>';
+      jb.querySelector(".lbl span").textContent = title;
+      jb.querySelector(".lbl small").textContent = eyebrow.split("·").pop().trim();
+      jb.addEventListener("click", () => show(i));
+      li.appendChild(jb); rail.appendChild(li);
+    });
+    document.getElementById("jump-review").addEventListener("click", () => show(6));
+
+    function show(i) {
+      current = i;
+      slots.forEach((s, k) => s.classList.toggle("current", k === i));
+      document.getElementById("review").classList.toggle("current", i === 6);
+      document.getElementById("stepnav").style.display = i === 6 ? "none" : "flex";
+      if (i === 6) buildReview();
+      refresh();
+      window.scrollTo(0, 0);
+    }
+    function refresh() {
+      const n = Object.keys(selected).length;
+      rail.querySelectorAll("button.jump").forEach((b, k) => {
+        b.classList.toggle("active", k === current);
+        b.classList.toggle("done", !!selected[questionOrder[k]]);
+        b.querySelector(".dot").textContent = selected[questionOrder[k]] ? "✓" : String(k + 1);
+        b.setAttribute("aria-label", "Go to preview " + (k + 1) + ": " + slots[k].querySelector("h2").textContent + (selected[questionOrder[k]] ? " (version chosen)" : ""));
+      });
+      document.getElementById("jump-review").classList.toggle("active", current === 6);
+      document.getElementById("rail-count").textContent = submitted ? "Submitted" : n + " of 6 chosen";
+      if (current < 6) {
+        document.getElementById("where").textContent = "Preview " + (current + 1) + " of 6" + (selected[questionOrder[current]] ? " · version chosen" : " · choose a version");
+        document.getElementById("prev").disabled = current === 0;
+        const nx = document.getElementById("next");
+        nx.textContent = current === 5 ? "Review choices" : "Next preview";
+        nx.setAttribute("aria-label", current === 5 ? "Review choices" : "Next preview");
+        nx.disabled = !selected[questionOrder[current]];
+      }
+    }
+    function buildReview() {
+      const rows = document.getElementById("rows"); rows.innerHTML = "";
+      questionOrder.forEach((q, k) => {
+        const slot = slots[k];
+        const row = document.createElement("div"); row.className = "row";
+        const head = document.createElement("div");
+        head.innerHTML = "<b></b><small></small>";
+        head.querySelector("b").textContent = slot.querySelector("h2").textContent;
+        head.querySelector("small").textContent = slot.querySelector(".eyebrow").textContent;
+        const pick = document.createElement("div");
+        const btn = selected[q] ? slot.querySelector('button.option[data-option="' + selected[q] + '"]') : null;
+        pick.className = "pick" + (btn ? "" : " none");
+        pick.textContent = btn ? btn.getAttribute("aria-label") : "No version chosen yet";
+        row.appendChild(head); row.appendChild(pick);
+        if (!submitted) {
+          const ch = document.createElement("button"); ch.className = "btn";
+          ch.textContent = "Change"; ch.setAttribute("aria-label", "Change " + slot.querySelector("h2").textContent);
+          ch.addEventListener("click", () => show(k));
+          row.appendChild(ch);
+        }
+        rows.appendChild(row);
+      });
+    }
+
+    document.querySelectorAll("button.option").forEach((button) => {
+      button.addEventListener("click", () => {
+        if (submitted) return;
+        const questionId = button.dataset.question;
+        document.querySelectorAll('button.option[data-question="' + questionId + '"]').forEach((peer) => {
+          peer.classList.remove("selected");
+          peer.setAttribute("aria-pressed", "false");
+        });
+        button.classList.add("selected");
+        button.setAttribute("aria-pressed", "true");
+        selected[questionId] = button.dataset.option;
+        events.push({event: "select", questionId, optionId: button.dataset.option});
+        document.getElementById("status").textContent = Object.keys(selected).length + " of 6 selected.";
+        refresh();
+      });
+    });
+    document.getElementById("prev").addEventListener("click", () => { if (current > 0) show(current - 1); });
+    document.getElementById("next").addEventListener("click", () => {
+      if (!selected[questionOrder[current]]) return;
+      show(current < 5 ? current + 1 : 6);
+    });
+
+    document.getElementById("submit").addEventListener("click", () => {
+      if (!questionOrder.every((questionId) => selected[questionId])) {
+        document.getElementById("status").textContent = "Choose one version for every preview.";
+        return;
+      }
+      const answers = questionOrder.map((questionId) => ({
+        questionId,
+        optionId: selected[questionId],
+      }));
+      events.push({event: "submit"});
+      submitted = true;
+      window.__artifact = {submitted: true, answers, events: events.slice()};
+      document.getElementById("status").textContent = "Choices submitted. Your six preview bookings are confirmed.";
+      document.getElementById("submit").disabled = true;
+      document.querySelectorAll("button.option").forEach((button) => {
+        button.disabled = true;
+      });
+      buildReview(); refresh();
+    });
+    show(0);
+  </script>
+</body>
+</html>

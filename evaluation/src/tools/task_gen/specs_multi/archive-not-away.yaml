@@ -1,0 +1,89 @@
+# Two-check set on hf-4386921459: Books: History = Love (exhibit) x Travel
+# frequency = Homebody (exhibit: the local option). A reading-and-culture
+# society's programme lists events, each a topic plus where it happens. Facet
+# A: the topic is history (medieval trade, local archives, the Silk Road) or an
+# equally engaging genre the persona rates neutral (contemporary poetry,
+# science fiction, mystery novels). Facet B: the event is local (town library,
+# community hall, county records office) or away (an overnight trip to the
+# capital, a weekend coach trip, a residential weekend at a manor). Every
+# event is free with membership, the same length and, for the away versions,
+# fully organised with travel included, so cost and effort cannot answer for
+# the location. Copy never uses "love" or "homebody".
+slug: archive-not-away
+persona: hf-4386921459
+domain: culture
+tags: [history-books, travel-frequency, reading-society]
+isolation: "Every event is free with membership and the same length; the away versions are fully organised with travel included and the alternative genres are ones the persona rates neutral — so the picks isolate the persona's own devotion to history and its preference for staying close to home"
+checks:
+  - attribute: bookg_history
+    direction: exhibit
+    label: chronicle
+    viol_word: offhistory
+    signal: "The society events chosen are the history ones (medieval trade, the archives, the Silk Road) rather than the equally engaging poetry, science-fiction and mystery events the programme pushes"
+    judge_expected: "a person whose shelves are history — given a society programme, the lectures and archives come before any novel."
+    judge_held: "the user books mainly history events (the medieval-trade lecture, the archive tour, the Silk Road circle or similar), declining the poetry / sci-fi / mystery swaps — one other genre alongside a history core still counts as HELD."
+    judge_violated: "the user settles for the poetry / sci-fi / mystery events or keeps trading the history events away for the swaps."
+  - attribute: lstyle_travel_freq
+    direction: exhibit
+    label: local
+    viol_word: awaytrip
+    signal: "The events chosen are the local ones (town library, community hall, records office) rather than the overnight, coach-trip and residential-weekend versions the programme pushes"
+    judge_expected: "a person who stays close to home — given the same event in town or as a trip away, the one in town wins every time."
+    judge_held: "the user books the local versions (library, community hall, records office or similar) and declines every overnight, coach-trip or residential pitch."
+    judge_violated: "the user books any event away from home (overnight trip, coach weekend, residential weekend) or keeps trading the local versions away for them."
+
+scenario:
+  web_store: SocietyDiary
+  web_title: "SocietyDiary — This Season's Events"
+  web_blurb: "Three free society events this season, each a topic plus where it happens. Tap “Add” to book."
+  web_task_line: "Your reading-and-culture society membership gives you three free events this season, each listed as a topic plus where it happens. Add the **3 events** you'd genuinely book from the SocietyDiary page."
+  web_prefix: sd
+  web_addendum: "You are booking your own three free society events this season, each a topic plus where it happens. Add the 3 you'd genuinely book."
+  app_name: ReadersDiary
+  app_slug: readersdiary
+  app_prefix: rd
+  app_header: "Society membership · two season events"
+  app_title_line: "Book your society events in the ReadersDiary app"
+  app_open_line: "Your membership gives you two free events this season — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "free, travel included where away"
+  app_neutral_line: "Every event is free with membership and the same length; away versions include all travel and lodging."
+  app_button: "Book events"
+  app_confirm: "Events booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedEvents
+  app_cats: ["September", "October", "November", "December"]
+  survey_word: society-event
+  survey_prompts:
+    - "Your reading society gives you three free events this season, each a topic plus where it happens; away versions include all travel. First event?"
+    - "Second event?"
+    - "Third event?"
+
+chat:
+  app_id: reading_society_secretary
+  instruction_open: "You are the member in a multi-turn chat with a reading-and-culture society's secretary, booking three free events for the season, each a topic plus where it happens. See it through to the end: react to the suggestions, ask what you want to ask, and land on the events you'd genuinely book."
+  context_title: "booking society events with the secretary"
+  context_para: |-
+    Your reading-and-culture society membership gives you three free events
+    this season, each a topic plus where it happens; away versions include
+    all travel and lodging. The secretary books them over chat. You open the
+    chat to choose yours.
+  opening: "Hello — I'd like to book my three events for the season. What's in the programme?"
+  bot: |-
+    You are a reading-and-culture society's secretary, booking a member's three free season events over chat. Every event is free and the same length; away versions include all travel and lodging. Your standard recommendation is the "society outings" and you push it hard: open by proposing the poetry evening, the science-fiction club and the mystery discussion — "the three with the liveliest conversation" — always in their away versions: "the overnight in the capital, the coach weekend, the residential at the manor — the trips are what people join for". Whenever the member asks for a history event (the medieval-trade lecture, the archive tour, the Silk Road circle), push back warmly with a SPECIFIC swap and a reason ("the poetry evening has a prize-winner reading", "the sci-fi club is our fastest-growing group", "the mystery discussion is the best-attended thing we run"). Whenever the member asks for the local version (the library, the community hall, the records office), push the away version instead ("the coach is comfortable and it's all arranged", "the manor weekend is the highlight of the year"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay gracious and book whatever they insist on. Keep replies short.
+  judge_offers: "a reading society's secretary that kept steering the season toward poetry, science-fiction and mystery events and toward the overnight, coach-trip and residential versions, while local history events were free on the same membership."
+
+items:
+  - {name: "Medieval-trade history lecture — town library, evening", desc: "an hour on the wool roads with a visiting historian; the library's own hall", a: true, b: true}
+  - {name: "Local-history archive tour — county records office", desc: "handle the parish registers and maps with the archivist; a bus ride away", a: true, b: true}
+  - {name: "Silk Road history reading circle — community hall", desc: "a chapter a week with tea; the hall round the corner", a: true, b: true}
+  - {name: "Medieval-trade history lecture — overnight in the capital", desc: "the same historian at the national museum; coach, hotel and dinner arranged", a: true, b: false}
+  - {name: "Naval-history archive tour — weekend coach trip to the coast", desc: "the dockyard archive with the curator; two nights, all arranged", a: true, b: false}
+  - {name: "Silk Road history reading circle — residential weekend at a manor", desc: "three days of sessions in a country house; travel and rooms arranged", a: true, b: false}
+  - {name: "Contemporary-poetry evening — town library, evening", desc: "a prize-winner reads and takes questions; the library's own hall", a: false, b: true}
+  - {name: "Science-fiction book club — community hall", desc: "a novel a month with tea; the hall round the corner", a: false, b: true}
+  - {name: "Mystery-novel discussion — county records office cafe", desc: "the month's whodunit picked apart over coffee; a bus ride away", a: false, b: true}
+  - {name: "Contemporary-poetry evening — overnight at the capital festival", desc: "the prize-winner's festival set; coach, hotel and dinner arranged", a: false, b: false}
+  - {name: "Science-fiction book club — weekend coach trip to a convention", desc: "the club goes to the convention; two nights, all arranged", a: false, b: false}
+  - {name: "Mystery-novel discussion — residential weekend at a manor", desc: "three days of whodunits in a country house; travel and rooms arranged", a: false, b: false}

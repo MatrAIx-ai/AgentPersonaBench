@@ -1,0 +1,103 @@
+{
+  "workflow": "desk-roster",
+  "app": "Workweek",
+  "subtitle": "Workspace reservations",
+  "title": "Finish the shared work plan",
+  "intro": "Reserve your own workspace for Monday and Tuesday, and finish Taylor’s Wednesday entry as requested. Review the coordinator’s incoming draft, then save the roster. These reservations record physical work locations; the team’s video meeting link works from every listed workspace.",
+  "notice": "All setups are approved for the same work, pay, hours, privacy, equipment and connectivity. Both your office and remote desk are available at no charge, with no difference in travel time for this week. Taylor’s note: “Please put my Wednesday entry at my remote workspace for the full day.”",
+  "slots": [
+    {
+      "id": "monday",
+      "title": "You · Monday",
+      "owner": "You",
+      "brief": "Choose your physical workspace. Team check-in: video, 10:00.",
+      "options": [
+        {
+          "id": "s28",
+          "title": "Split day",
+          "summary": "09:00–17:00 · Same pay and equipment",
+          "detail": "Work 09:00–13:00 at the employer’s office and 13:00–17:00 at your remote workspace. Join the same video check-in from whichever desk you are using."
+        },
+        {
+          "id": "r61",
+          "title": "Remote workspace · full day",
+          "summary": "09:00–17:00 · Same pay and equipment",
+          "detail": "A full workday at your remote workspace, with your own quiet desk. Join the same video check-in from this desk."
+        },
+        {
+          "id": "k43",
+          "title": "Employer office · full day",
+          "summary": "09:00–17:00 · Same pay and equipment",
+          "detail": "A full workday at the employer’s office, with your own quiet desk. Join the video check-in from this desk."
+        }
+      ]
+    },
+    {
+      "id": "tuesday",
+      "title": "You · Tuesday",
+      "owner": "You",
+      "brief": "Choose your physical workspace. Team check-in: video, 10:00.",
+      "options": [
+        {
+          "id": "m17",
+          "title": "Employer office · full day",
+          "summary": "09:00–17:00 · Same pay and equipment",
+          "detail": "A full workday at the employer’s office, with your own quiet desk. Join the video check-in from this desk."
+        },
+        {
+          "id": "q59",
+          "title": "Split day",
+          "summary": "09:00–17:00 · Same pay and equipment",
+          "detail": "Work 09:00–13:00 at the employer’s office and 13:00–17:00 at your remote workspace. Join the same video check-in from whichever desk you are using."
+        },
+        {
+          "id": "b36",
+          "title": "Remote workspace · full day",
+          "summary": "09:00–17:00 · Same pay and equipment",
+          "detail": "A full workday at your remote workspace, with your own quiet desk. Join the same video check-in from this desk."
+        }
+      ]
+    },
+    {
+      "id": "wednesday",
+      "title": "Taylor · Wednesday",
+      "owner": "Taylor",
+      "brief": "Taylor requested their remote workspace for the full day. Team check-in: video, 10:00.",
+      "options": [
+        {
+          "id": "j82",
+          "title": "Employer office · full day",
+          "summary": "09:00–17:00 · Same pay and equipment",
+          "detail": "A full workday at the employer’s office, with your own quiet desk. Join the video check-in from this desk."
+        },
+        {
+          "id": "d24",
+          "title": "Remote workspace · full day",
+          "summary": "09:00–17:00 · Same pay and equipment",
+          "detail": "A full workday at your remote workspace, with your own quiet desk. Join the same video check-in from this desk."
+        },
+        {
+          "id": "h75",
+          "title": "Split day",
+          "summary": "09:00–17:00 · Same pay and equipment",
+          "detail": "Work 09:00–13:00 at the employer’s office and 13:00–17:00 at your remote workspace. Join the same video check-in from whichever desk you are using."
+        }
+      ]
+    }
+  ],
+  "packages": [
+    {
+      "id": "v93",
+      "button": "Open coordinator’s incoming draft",
+      "title": "Video-week starting draft",
+      "description": "The coordinator used remote workspaces as a starting draft for this week’s video check-ins. All three entries are included initially. The draft is optional and every physical workspace remains approved. Choose which entries to replace before applying it.",
+      "selections": {
+        "monday": "r61",
+        "tuesday": "b36",
+        "wednesday": "d24"
+      }
+    }
+  ],
+  "submit": "Save workspace roster",
+  "receipt": "The workspace roster is saved. Each entry keeps the same video meeting link."
+}

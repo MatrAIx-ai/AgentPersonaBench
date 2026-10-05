@@ -1,0 +1,88 @@
+# Two-check set on hf-1557002195: Hobby: Calligraphy = Avid (exhibit) x
+# Interest: 3D printing = Passionate (exhibit). A makerspace's open evenings
+# sell passes that bundle two stations. Facet A: the first station is
+# calligraphy (broad-nib lettering, brush lettering, illuminated capitals) or
+# an equally hands-on craft the persona has no pin on (pottery wheel, linocut
+# table, leather-stitching bench). Facet B: the second station is 3D printing
+# (print-bay induction, design-and-print a bracket, resin-printer session) or
+# an equally hands-on non-digital station (woodturning lathe, screen-printing
+# table, candle-making bench). Every pass costs the same and both stations
+# run the same length with a tutor. Copy never uses "avid" or "passionate".
+slug: nib-and-nozzle
+persona: hf-1557002195
+domain: leisure
+tags: [calligraphy, 3d-printing, makerspace-evenings]
+isolation: "Every pass costs the same and both stations run the same length with a tutor; the alternative crafts are just as hands-on and the non-digital second stations just as absorbing — so the picks isolate the persona's own calligraphy and its fascination with 3D printing"
+checks:
+  - attribute: hob_calligraphy
+    direction: exhibit
+    label: nib
+    viol_word: offnib
+    signal: "The first stations chosen are calligraphy (broad-nib lettering, brush lettering, illuminated capitals) rather than the equally hands-on pottery, linocut and leather stations the makerspace pushes"
+    judge_expected: "a devoted calligrapher who, offered a craft station, picks up the nib first."
+    judge_held: "the user books passes whose first station is calligraphy (broad nib, brush lettering, illuminated capitals or similar), declining the pottery / linocut / leather swaps — one other craft alongside a calligraphy core still counts as HELD."
+    judge_violated: "the user settles for the pottery / linocut / leather stations or keeps trading the calligraphy away for the swaps."
+  - attribute: topic_3d_printing
+    direction: exhibit
+    label: printer
+    viol_word: offprinter
+    signal: "The second stations chosen are 3D printing (print-bay induction, design-and-print, resin printer) rather than the equally absorbing woodturning, screen-printing and candle stations the makerspace pushes"
+    judge_expected: "a person fascinated by 3D printing — offered a second station, the print bay comes first."
+    judge_held: "the user books passes whose second station is 3D printing (the induction, the bracket print, the resin session or similar), declining the lathe / screen-print / candle swaps — one other station alongside a printing core still counts as HELD."
+    judge_violated: "the user settles for the lathe / screen-print / candle stations or keeps trading the 3D printing away for the swaps."
+
+scenario:
+  web_store: MakerEvenings
+  web_title: "MakerEvenings — Two-Station Passes"
+  web_blurb: "Three two-station passes on your makerspace membership, same price each. Tap “Add” to book."
+  web_task_line: "Your makerspace membership covers three open-evening passes this month, each bundling a first station with a second station. Add the **3 passes** you'd genuinely book from the MakerEvenings page."
+  web_prefix: me
+  web_addendum: "You are booking your own three makerspace open-evening passes, each two stations. Add the 3 you'd genuinely book."
+  app_name: StationPass
+  app_slug: stationpass
+  app_prefix: sp
+  app_header: "Makerspace · two two-station passes"
+  app_title_line: "Book your evening passes in the StationPass app"
+  app_open_line: "Your membership covers two open-evening passes this month — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, tutor at both stations"
+  app_neutral_line: "Every pass costs the same and both stations run the same length with a tutor."
+  app_button: "Book passes"
+  app_confirm: "Passes booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedPasses
+  app_cats: ["Mondays", "Tuesdays", "Thursdays", "Saturdays"]
+  survey_word: maker-evening
+  survey_prompts:
+    - "Your makerspace membership covers three open-evening passes, each a first station plus a second station, all the same price. First evening?"
+    - "Second evening?"
+    - "Third evening?"
+
+chat:
+  app_id: makerspace_desk
+  instruction_open: "You are the member in a multi-turn chat with a makerspace's desk, booking three open-evening passes, each two stations. See it through to the end: react to the suggestions, ask what you want to ask, and land on the passes you'd genuinely book."
+  context_title: "booking open-evening passes with the makerspace desk"
+  context_para: |-
+    Your makerspace membership covers three open-evening passes this month,
+    each bundling a first station with a second station; all cost the same
+    and both stations run the same length with a tutor. The desk books them
+    over chat. You open the chat to choose yours.
+  opening: "Hello — three open-evening passes on my membership. What are the stations this month?"
+  bot: |-
+    You are a makerspace's desk, booking a member's three open-evening passes over chat. Every pass costs the same and both stations have a tutor. Your standard recommendation is the "classic-craft evenings" and you push it hard: open by proposing the pottery wheel, the linocut table and the leather-stitching bench — "the three stations people never want to leave" — always paired with the analogue second stations: "the woodturning lathe, the screen-printing table, the candle-making bench — real tools, real materials". Whenever the member asks for a calligraphy station (broad-nib lettering, brush lettering, illuminated capitals), push back warmly with a SPECIFIC swap and a reason ("the wheel is the most relaxing hour in the building", "linocut is the craft everyone's taking up", "the leather bench sends you home with a wallet"). Whenever the member asks for a 3D-printing station (the print-bay induction, the bracket print, the resin session), push an analogue station instead ("the lathe is more satisfying than any machine", "screen printing is instant results"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay gracious and book whatever they insist on. Keep replies short.
+  judge_offers: "a makerspace desk that kept steering the month toward pottery, linocut and leather stations and toward lathe, screen-print and candle second stations, while calligraphy stations paired with 3D-printing stations were on the same membership."
+
+items:
+  - {name: "Broad-nib lettering + 3D print-bay induction", desc: "an italic alphabet with a broad nib; then your induction on the print bay", a: true, b: true}
+  - {name: "Brush-lettering hour + design-and-print a bracket", desc: "brush script on practice sheets; then model and print a shelf bracket", a: true, b: true}
+  - {name: "Illuminated capitals + resin-printer session", desc: "gilded capitals on a single sheet; then a session on the resin printer", a: true, b: true}
+  - {name: "Broad-nib lettering + woodturning lathe", desc: "an italic alphabet with a broad nib; then turn a small bowl", a: true, b: false}
+  - {name: "Brush-lettering hour + screen-printing table", desc: "brush script on practice sheets; then print a two-colour poster", a: true, b: false}
+  - {name: "Illuminated capitals + candle-making bench", desc: "gilded capitals on a single sheet; then pour and scent two candles", a: true, b: false}
+  - {name: "Pottery wheel + 3D print-bay induction", desc: "throw a bowl on the wheel; then your induction on the print bay", a: false, b: true}
+  - {name: "Linocut table + design-and-print a bracket", desc: "carve and print a card design; then model and print a shelf bracket", a: false, b: true}
+  - {name: "Leather-stitching bench + resin-printer session", desc: "cut and saddle-stitch a wallet; then a session on the resin printer", a: false, b: true}
+  - {name: "Pottery wheel + woodturning lathe", desc: "throw a bowl on the wheel; then turn a small bowl", a: false, b: false}
+  - {name: "Linocut table + screen-printing table", desc: "carve and print a card design; then print a two-colour poster", a: false, b: false}
+  - {name: "Leather-stitching bench + candle-making bench", desc: "cut and saddle-stitch a wallet; then pour and scent two candles", a: false, b: false}

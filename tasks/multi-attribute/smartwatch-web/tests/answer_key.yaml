@@ -1,0 +1,22 @@
+# Host-side option labels. This file is never mounted into the agent container.
+questions:
+  product:
+    dimension_id: lstyle_shopping_style
+    options:
+      orbit-active: true
+      nova-pulse: false
+      summit-one: false
+  payment:
+    dimension_id: lstyle_payment_pref
+    options:
+      mobile-wallet: true
+      credit-card: false
+      debit-card: false
+      bank-transfer: false
+  automation:
+    dimension_id: att_automation
+    options:
+      "off": false
+      manual: false
+      helpful: true
+      extensive: false

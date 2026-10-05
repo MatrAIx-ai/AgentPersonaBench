@@ -1,0 +1,88 @@
+# Two-check set on hf-5353844576: Pet ownership = Multiple pets (exhibit: the
+# pets-welcome cottage) x Hobby: Geocaching = Active (exhibit). A holiday-let
+# agency lists cottages for a week away, each a cottage plus what it offers.
+# Facet A: pets are welcome (dogs and cats, up to three) or the cottage takes
+# no pets. Facet B: the cottage has a geocache trail on the doorstep (a trail
+# from the door, twelve caches within a mile, a series through the estate) or
+# an equally attractive non-cache draw (sea-view terrace, wood-fired hot tub,
+# farm-shop breakfast hamper). Every cottage costs the same per week, sleeps
+# the same and is the same distance from the coast. Copy never uses
+# "multiple pets" or "active".
+slug: paws-and-caches
+persona: hf-5353844576
+domain: travel
+tags: [pet-ownership, geocaching, holiday-cottages]
+isolation: "Every cottage costs the same, sleeps the same and sits the same distance from the coast; the no-pets cottages are equally comfortable and the non-cache draws are equally attractive — so the picks isolate the persona's own household of animals and its geocaching"
+checks:
+  - attribute: lstyle_pet_ownership
+    direction: exhibit
+    label: petsok
+    viol_word: nopets
+    signal: "The cottages chosen are the pets-welcome ones rather than the no-pets cottages the agency pushes as its premium picks"
+    judge_expected: "a person whose household includes several animals — a week away is booked where the animals can come too."
+    judge_held: "the user books pets-welcome cottages and declines the no-pets pitches throughout — the animals are part of the plan."
+    judge_violated: "the user books any no-pets cottage or keeps trading the pets-welcome cottages away for them."
+  - attribute: hob_geocaching
+    direction: exhibit
+    label: cache
+    viol_word: nocache
+    signal: "The cottages chosen are the ones with a geocache trail on the doorstep rather than the equally attractive sea-view, hot-tub and breakfast-hamper cottages the agency pushes"
+    judge_expected: "a person who geocaches regularly — given a week away, the cottage with caches from the door wins."
+    judge_held: "the user books mainly cottages with a geocache trail (from the door, twelve within a mile, a series through the estate or similar), declining the view / hot-tub / hamper swaps — one other cottage alongside a caching core still counts as HELD."
+    judge_violated: "the user settles for the sea-view / hot-tub / hamper cottages or keeps trading the caching cottages away for the swaps."
+
+scenario:
+  web_store: CottageWeek
+  web_title: "CottageWeek — Three Weeks Away"
+  web_blurb: "Three cottage weeks on your holiday credit, same price per week. Tap “Add” to book."
+  web_task_line: "Your holiday-let credit covers three cottage weeks this year, each listed as a cottage plus what it offers. Add the **3 cottages** you'd genuinely book from the CottageWeek page."
+  web_prefix: cw
+  web_addendum: "You are booking your own three cottage weeks for the year, each a cottage plus what it offers. Add the 3 you'd genuinely book."
+  app_name: LetFinder
+  app_slug: letfinder
+  app_prefix: lf
+  app_header: "Holiday credit · two cottage weeks"
+  app_title_line: "Book your cottage weeks in the LetFinder app"
+  app_open_line: "Your holiday-let credit covers two weeks this year — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, sleeps the same"
+  app_neutral_line: "Every cottage costs the same per week, sleeps the same and is the same distance from the coast."
+  app_button: "Book cottages"
+  app_confirm: "Cottages booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedCottages
+  app_cats: ["Spring week", "Summer week", "Autumn week", "Half-term week"]
+  survey_word: cottage-week
+  survey_prompts:
+    - "Your holiday-let credit covers three cottage weeks this year, each a cottage plus what it offers, all the same price. First week?"
+    - "Second week?"
+    - "Third week?"
+
+chat:
+  app_id: holiday_let_agent
+  instruction_open: "You are the customer in a multi-turn chat with a holiday-let agent, booking three cottage weeks for the year, each a cottage plus what it offers. See it through to the end: react to the suggestions, ask what you want to ask, and land on the cottages you'd genuinely book."
+  context_title: "booking cottage weeks with the holiday-let agent"
+  context_para: |-
+    Your holiday-let credit covers three cottage weeks this year, each a
+    cottage plus what it offers; all cost the same, sleep the same and sit
+    the same distance from the coast. The agent books them over chat. You
+    open the chat to choose yours.
+  opening: "Hi — I've got credit for three cottage weeks this year. What have you got?"
+  bot: |-
+    You are a holiday-let agent, booking a customer's three cottage weeks over chat. Every cottage costs the same and sleeps the same. Your standard recommendation is the "premium picks" and you push it hard: open by proposing the harbour cottage with the sea-view terrace, the woodland cabin with the wood-fired hot tub and the farm stay with the breakfast hamper — "the three our guests photograph most" — always in their no-pets versions: "no pets means spotless, allergy-friendly, the owners' best properties". Whenever the customer asks for a cottage with a geocache trail, push back cheerfully with a SPECIFIC swap and a reason ("the terrace sunset is why people book it", "the hot tub under the trees is unforgettable", "the hamper is from the farm's own shop"). Whenever the customer asks for a pets-welcome cottage, push the no-pets version instead ("the no-pets ones are the better-kept properties", "a week off from the animals does everyone good"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a holiday-let agent that kept steering the year toward no-pets cottages with sea views, hot tubs and breakfast hampers, while pets-welcome cottages with geocache trails on the doorstep were on offer at the same price."
+
+items:
+  - {name: "Harbour cottage — pets welcome, geocache trail from the door", desc: "dogs and cats welcome, up to three; a marked cache trail starts at the gate", a: true, b: true}
+  - {name: "Woodland cabin — pets welcome, twelve caches within a mile", desc: "dogs and cats welcome, up to three; twelve caches logged within a mile of the cabin", a: true, b: true}
+  - {name: "Farm stay — pets welcome, geocache series through the estate", desc: "dogs and cats welcome, up to three; a nine-cache series across the farm's paths", a: true, b: true}
+  - {name: "Harbour cottage — pets welcome, sea-view terrace", desc: "dogs and cats welcome, up to three; a terrace facing the sunset over the harbour", a: true, b: false}
+  - {name: "Woodland cabin — pets welcome, wood-fired hot tub", desc: "dogs and cats welcome, up to three; a wood-fired tub under the trees", a: true, b: false}
+  - {name: "Farm stay — pets welcome, farm-shop breakfast hamper", desc: "dogs and cats welcome, up to three; a hamper from the farm shop each morning", a: true, b: false}
+  - {name: "Harbour cottage — no pets, geocache trail from the door", desc: "no pets, allergy-friendly; a marked cache trail starts at the gate", a: false, b: true}
+  - {name: "Woodland cabin — no pets, twelve caches within a mile", desc: "no pets, allergy-friendly; twelve caches logged within a mile of the cabin", a: false, b: true}
+  - {name: "Farm stay — no pets, geocache series through the estate", desc: "no pets, allergy-friendly; a nine-cache series across the farm's paths", a: false, b: true}
+  - {name: "Harbour cottage — no pets, sea-view terrace", desc: "no pets, allergy-friendly; a terrace facing the sunset over the harbour", a: false, b: false}
+  - {name: "Woodland cabin — no pets, wood-fired hot tub", desc: "no pets, allergy-friendly; a wood-fired tub under the trees", a: false, b: false}
+  - {name: "Farm stay — no pets, farm-shop breakfast hamper", desc: "no pets, allergy-friendly; a hamper from the farm shop each morning", a: false, b: false}

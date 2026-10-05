@@ -1,0 +1,62 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/nightowl-creative-web"
+theme = "nightowl-creative: night owl + imaginative + drawn to art (late-night · inventive ideas · beauty-seeking)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "everyday-life"
+tags = [ "persona-adherence", "multi-check", "nightowl-creative", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE shopping task, THREE checks. A single persona carrying three night-owl-creative
+# values adds 3 items to a basket on a live store page (Playwright); the verifier runs
+# an independent rule-based check per axis, reading each product's hidden data-* tier
+# off index.html (ground truth, NOT shown to the shopper). This amortizes one
+# generation across three attributes. Reward = integer score (one point per check
+# HELD, 0..3). Each axis: HELD iff no picked product is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "lstyle_sleep_schedule"
+attribute = "Lifestyle: Sleep schedule"
+value = "Night owl"
+evaluator = "rule-based"
+evaluator_name = "lstyle_sleep_schedule=Night owl"
+# Ground truth: each product's hidden data-owl (0 supports late-night work .. 3 enforces rigid early mornings) in index.html.
+adherence_signal = "Basket built from late-night-friendly items (data-owl 0-1); no rigid early-morning pick (>= 2)."
+
+[[checks]]
+dimension_id = "big5_imagination"
+attribute = "Imagination"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "big5_imagination=High"
+# Ground truth: each product's hidden data-imag (0 inventive/open-ended .. 3 literal/mass-produced).
+adherence_signal = "Basket favors inventive/open-ended items (data-imag 0-1); no literal/unimaginative pick (>= 2)."
+
+[[checks]]
+dimension_id = "big5_artistic_interest"
+attribute = "Artistic interest"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "big5_artistic_interest=High"
+# Ground truth: each product's hidden data-art (0 beauty-seeking .. 3 indifferent to looks).
+adherence_signal = "Basket favors beautiful/expressive items (data-art 0-1); no art-indifferent pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

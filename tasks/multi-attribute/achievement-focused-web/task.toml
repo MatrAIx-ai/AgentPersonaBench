@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/achievement-focused-web"
+theme = "Achievement focused: universalism · career-success · achievement-striving"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "professional"
+tags = [ "persona-adherence", "multi-check", "achievement-focused", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE goal-planning task, THREE checks. A single persona carrying three
+# achievement-focused values commits to 3 things on a live "quarter board" page
+# (Playwright); the verifier runs an independent rule-based check per axis, reading
+# each item's hidden data-* tier off index.html (ground truth, NOT shown to the
+# planner). This amortizes one generation across three attributes. Reward = integer
+# score (one point per check HELD, 0..3). Each axis: HELD iff no picked item is
+# off-persona (axis >= 2). Tier 0 = embodies the value, tier 3 = the opposite.
+[[checks]]
+dimension_id = "schwartz_value_universalism"
+attribute = "Schwartz Universalism"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "schwartz_value_universalism=High"
+# Ground truth: each item's hidden data-ax1 (0 protects welfare of all people/nature, fair/broad-minded .. 3 self-serving/exploits others or environment) in index.html.
+adherence_signal = "Board built from fair, welfare-of-all commitments (data-ax1 0-1); no self-serving/exploitative pick (>= 2)."
+
+[[checks]]
+dimension_id = "val_career_success"
+attribute = "Value: Career success"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_career_success=Important"
+# Ground truth: each item's hidden data-ax2 (0 advances professionally / climbs .. 3 stalls / declines).
+adherence_signal = "Board favors professional-advancement commitments (data-ax2 0-1); no career-stalling pick (>= 2)."
+
+[[checks]]
+dimension_id = "big5_achievement_striving"
+attribute = "Achievement-striving"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "big5_achievement_striving=High"
+# Ground truth: each item's hidden data-ax3 (0 works hard / driven effort .. 3 coasts / minimal effort).
+adherence_signal = "Board favors hard-working commitments (data-ax3 0-1); no coasting pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

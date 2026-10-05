@@ -1,0 +1,52 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/social-media-skeptic-app"
+theme = "Attitude: Social media: Skeptical"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "lifestyle"
+tags = [ "persona-adherence", "worldview-beliefs", "social-media", "skeptical", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "att_social_media"
+dimension_label = "Attitude: Social media"
+category = "Worldview: Beliefs"
+anchor_value = "Skeptical"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating SmartCart, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The "store" is a new-phone app picker. The agent sees only screenshots and
+# clicks by coordinate — no DOM/selector. When it taps "Checkout", SmartCart
+# writes order.json itself. Runs locally in Docker (no use.computer needed).
+# The engagement tier of each app is hidden ground truth (0=privacy/minimal ..
+# 3=maximal-engagement attention app); a social-media skeptic installs low-
+# engagement / privacy-respecting utilities and avoids attention-maximizing
+# social apps.
+adherence_signal = "The set of apps the agent installs contains no attention-maximizing / mainstream social app (a high engagement-tier app, tier>=2); a social-media skeptic sticks to privacy-respecting, low-engagement utility picks."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

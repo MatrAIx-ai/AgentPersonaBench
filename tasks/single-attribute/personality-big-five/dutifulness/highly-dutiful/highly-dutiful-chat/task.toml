@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/highly-dutiful-chat"
+theme = "Dutifulness: Very high"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "general"
+tags = [ "persona-adherence", "personality-big-five", "dutifulness", "highly-dutiful", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# "Highly dutiful" is a SEMANTIC trait: no keyword list can tell whether a person
+# genuinely held to their commitments and the rules instead of blowing them off for
+# something more fun. So the evaluator is an LLM judge that reads the persona's OWN
+# turns and returns a binary HELD/VIOLATED verdict on whether it kept its word and
+# honored its obligations instead of giving in to flaking / bending the rules.
+[[checks]]
+dimension_id = "big5_dutifulness"
+dimension_label = "Dutifulness"
+category = "Personality: Big Five"
+attribute = "Dutifulness"
+value = "Very high"
+evaluator = "llm-judge"
+evaluator_name = "big5_dutifulness=Very high"
+adherence_signal = "Reply insists on keeping the commitment / following the rule, honors the obligation, and resists the friend's pressure to flake or bend it."
+# pass = anchor decisively more dutiful than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

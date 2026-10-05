@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/chinese-food-lover-web"
+theme = "Cuisine: Chinese — Love"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "food"
+tags = [ "persona-adherence", "chinese-food-lover", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "cuis_chinese"
+dimension_label = "Cuisine: Chinese"
+category = "Interests: Food"
+anchor_value = "Love"
+evaluator = "rule-based"
+adherence_signal = "The stalls the persona orders from are the Chinese ones, chosen unprompted, even though the assistant only recommends other stalls at the same ticket price."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,65 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/analytical-decider-web"
+theme = "analytical-decider: weighs the evidence + digs into the details + wants it settled (analyze · detail · commit)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "decisions"
+tags = [ "persona-adherence", "multi-check", "analytical-decider", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE decision-planning task, THREE checks. A single persona carrying three
+# analytical-decider values adds 3 actions to a plan on a live page (Playwright);
+# the verifier runs an independent rule-based check per axis, reading each row's
+# hidden data-* tier off index.html (ground truth, NOT shown to the user). This
+# amortizes one generation across three attributes. Reward = integer score (one
+# point per check HELD, 0..3). Each axis: HELD iff no picked row is high-tier
+# (axis >= 2). The three data-* ints stay in the template's positions (data-cost /
+# data-consume / data-novel) so the verifier's positional parse is unchanged; they
+# encode the analytical / detail / closure tiers respectively.
+[[checks]]
+dimension_id = "decision_style"
+attribute = "Decision style"
+value = "Analytical"
+evaluator = "rule-based"
+evaluator_name = "decision_style=Analytical"
+# Ground truth: each row's hidden data-cost (0 weighs evidence .. 3 snap gut call) in index.html.
+adherence_signal = "Plan built from weigh-the-evidence actions (data-cost 0-1); no snap gut pick (>= 2)."
+
+[[checks]]
+dimension_id = "cog_detail_orientation"
+attribute = "Cognition: Detail orientation"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "cog_detail_orientation=Very high"
+# Ground truth: each row's hidden data-consume (0 digs into details/specs .. 3 glosses over them).
+adherence_signal = "Plan favors dig-into-the-details actions (data-consume 0-1); no gloss-over pick (>= 2)."
+
+[[checks]]
+dimension_id = "need_for_closure"
+attribute = "Need for closure"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "need_for_closure=High"
+# Ground truth: each row's hidden data-novel (0 settles/commits .. 3 leaves it open/undecided).
+adherence_signal = "Plan favors settle-and-commit actions (data-novel 0-1); no leave-it-open pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

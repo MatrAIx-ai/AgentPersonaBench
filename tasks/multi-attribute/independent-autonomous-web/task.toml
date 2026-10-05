@@ -1,0 +1,65 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/independent-autonomous-web"
+theme = "Independent autonomous: stimulation · autonomy · power"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "independent-autonomous", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE planning task, THREE checks. A single persona carrying three
+# independent-autonomous attributes adds 3 approaches to a plan on a live board page
+# (Playwright); the verifier runs an independent rule-based check per axis, reading
+# each card's hidden data-* tier off index.html (ground truth, NOT shown to the
+# chooser). This amortizes one generation across three attributes. Reward = integer
+# score (one point per check HELD, 0..3). Each axis: HELD iff no picked approach is
+# high-tier (axis >= 2). The axes are decorrelated: a novelty-seeking approach can
+# still defer the decision to others, and a power-seeking approach can still cling
+# to a safe routine.
+[[checks]]
+dimension_id = "schwartz_value_stimulation"
+attribute = "Schwartz Stimulation"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "schwartz_value_stimulation=Very high"
+# Ground truth: each card's hidden data-ax1 (0 novel/exciting .. 3 same-old routine) in index.html.
+adherence_signal = "Plan built from novel / exciting / varied approaches (data-ax1 0-1); no same-old-routine pick (>= 2)."
+
+[[checks]]
+dimension_id = "sdt_need_autonomy"
+attribute = "SDT Autonomy Need"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "sdt_need_autonomy=High"
+# Ground truth: each card's hidden data-ax2 (0 set your own path .. 3 defer / follow others).
+adherence_signal = "Plan favors set-your-own-path approaches (data-ax2 0-1); no defer-to-others pick (>= 2)."
+
+[[checks]]
+dimension_id = "schwartz_value_power"
+attribute = "Schwartz Power"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "schwartz_value_power=Very high"
+# Ground truth: each card's hidden data-ax3 (0 seek status/control/influence .. 3 disclaim power / defer authority).
+adherence_signal = "Plan favors take-charge, status- and influence-seeking approaches (data-ax3 0-1); no give-up-control pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

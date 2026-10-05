@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/risk-seeking-web"
+theme = "Risk tolerance: poker decisions under pressure"
+
+[metadata]
+difficulty = "hard"
+type = "web"
+domain = "poker"
+tags = [ "persona-adherence", "risk-tolerance", "single-attribute", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "risk_tolerance"
+dimension_label = "Risk tolerance"
+category = "Risk & Decision"
+anchor_value = "Risk-seeking"
+evaluator = "rule-based"
+adherence_signal = "Across 24 independent poker hands, the player repeatedly commits more chips, preserves more outcome variance, or contests top-heavy payouts. The aggregate score and each of four poker-situation floors must pass."
+
+[verifier]
+timeout_sec = 600.0
+
+[agent]
+timeout_sec = 1800.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

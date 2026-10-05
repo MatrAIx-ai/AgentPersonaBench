@@ -1,0 +1,13 @@
+{
+  "role": "a user",
+  "outputs": [
+    {
+      "path": "anchor/booking.json",
+      "kind": "js",
+      "expr": "() => window.__bookingState"
+    }
+  ],
+  "notes": [
+    "Base the choice on the film details, not convenience: all options cost the same and fit the schedule."
+  ]
+}

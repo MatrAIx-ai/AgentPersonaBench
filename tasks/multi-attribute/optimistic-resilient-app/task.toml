@@ -1,0 +1,77 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/optimistic-resilient-app"
+theme = "Optimistic resilient: hope · resilience · achievement (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE shopping session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) picks up
+# a few things for the week just after a rough patch; the verifier runs an
+# independent rule-based check per attribute. Each product carries three hidden
+# ground-truth axes (hope/resilience/achievement, 0..3) that are NEVER shown on screen —
+# the agent sees only name + price and must judge for itself which items it would
+# genuinely buy. A check is HELD iff no selected item scores >= 2 on its axis.
+# Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "trait_hope_optimism"
+dimension_label = "Character: Hope / optimism"
+category = "Personality: Character"
+attribute = "Character: Hope / optimism"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_hope_optimism=Strong"
+metric = "hope_axis_max"                     # HELD iff no picked item has hope >= 2
+adherence_signal = "The checked-out cart contains no pessimistic item (hidden hope axis >= 2); a hopeful, optimistic person leans toward bright-side, looks-forward picks."
+
+[[checks]]
+dimension_id = "trait_resilience"
+dimension_label = "Character: Resilience"
+category = "Personality: Character"
+attribute = "Character: Resilience"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_resilience=Strong"
+metric = "resilience_axis_max"               # HELD iff no picked item has resilience >= 2
+adherence_signal = "The cart contains no give-up item (hidden resilience axis >= 2); a resilient person favors bounce-back, keep-going choices over quitting."
+
+[[checks]]
+dimension_id = "val_achievement"
+dimension_label = "Value: Achievement"
+category = "Values & Motivation"
+attribute = "Value: Achievement"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_achievement=Important"
+metric = "achievement_axis_max"               # HELD iff no picked item has achievement >= 2
+adherence_signal = "The cart contains no achievement-indifferent item (hidden achievement axis >= 2); someone who values achievement favors goal-driven, results-focused choices over aimless ones."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,14 @@
+# host-side ground truth (per-id axis tiers) -- NOT mounted to the agent
+tiers:
+  p01: privacy=0 trust=0 skept=0
+  p02: privacy=0 trust=0 skept=0
+  p03: privacy=0 trust=1 skept=0
+  p04: privacy=1 trust=0 skept=0
+  p05: privacy=0 trust=0 skept=1
+  p06: privacy=1 trust=1 skept=0
+  p07: privacy=2 trust=1 skept=2
+  p08: privacy=3 trust=2 skept=1
+  p09: privacy=3 trust=1 skept=1
+  p10: privacy=2 trust=3 skept=2
+  p11: privacy=3 trust=3 skept=3
+  p12: privacy=3 trust=3 skept=3

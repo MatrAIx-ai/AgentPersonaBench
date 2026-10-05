@@ -1,0 +1,89 @@
+# Two-check set on real_human_survey-96f2fbee51e3: Film: Horror = Love
+# (exhibit) x Interest: Social media = Passionate (exhibit: the screening
+# formats built around posting live). A film festival sells screenings, each
+# a film plus a screening format. Facet A: the film is horror (haunted-house
+# horror, folk horror, slasher revival) or from a genre the persona rates
+# neutral (space-station sci-fi, bank-heist crime film, rain-soaked noir).
+# Facet B: the format is built around posting live (live-reaction screening
+# with a hashtag feed, creators' row live-streamed, audience-poll screening)
+# or phones-away (phones-in-pouches, quiet screening, members' no-phones
+# screening). Every screening costs the same and sits in the same slot. Copy
+# never uses "love" or "passionate".
+slug: scream-and-scroll
+persona: real_human_survey-96f2fbee51e3
+domain: leisure
+tags: [horror-films, social-media, film-festival]
+isolation: "Every screening costs the same and sits in the same slot; the alternative films are genres the persona rates neutral (sci-fi, crime, noir) and the phones-away formats show the same films in the same rooms — so the picks isolate its taste for horror and its appetite for posting live; the persona's attitude to social media is neutral, so the check reads its interest, not an ideology"
+checks:
+  - attribute: filmg_horror
+    direction: exhibit
+    label: scare
+    viol_word: noscare
+    signal: "The films chosen are horror (haunted-house horror, folk horror, slasher revival) rather than the sci-fi, crime and noir films the festival pushes"
+    judge_expected: "a person for whom horror is the first thing to book — given a festival programme, the haunted house and the folk horror win."
+    judge_held: "the user books mainly horror films (the haunted-house horror, the folk horror, the slasher revival or similar), declining the sci-fi / crime / noir swaps — one other film alongside a horror core still counts as HELD."
+    judge_violated: "the user settles for the sci-fi / crime / noir films or keeps trading the horror films away for the swaps."
+  - attribute: topic_social_media
+    direction: exhibit
+    label: livepost
+    viol_word: phonesaway
+    signal: "The formats chosen are built around posting live (live-reaction screening with the hashtag feed, creators' row, audience-poll screening) rather than the phones-in-pouches, quiet and no-phones screenings the festival pushes"
+    judge_expected: "a person who wants to be posting while it happens — given the same film with a live-reaction format or a phones-away format, the live-reaction format wins."
+    judge_held: "the user books mainly the posting-live formats (the live-reaction screening, the creators' row, the audience-poll screening or similar), declining the phones-away pitches — one phones-away screening alongside a posting-live core still counts as HELD."
+    judge_violated: "the user settles for the phones-away screenings or keeps trading the posting-live formats away for them."
+
+scenario:
+  web_store: FestPass
+  web_title: "FestPass — Festival Screenings"
+  web_blurb: "Three screenings on your festival pass, each a film plus a screening format, same price and slot. Tap “Add” to book."
+  web_task_line: "Your film-festival pass covers three screenings, each listed as a film plus the screening format you get. Add the **3 screenings** you'd genuinely book from the FestPass page."
+  web_prefix: fp
+  web_addendum: "You are booking your own three festival screenings, each a film plus a screening format, all the same price and slot. Add the 3 you'd genuinely book."
+  app_name: PassFest
+  app_slug: passfest
+  app_prefix: pf
+  app_header: "Festival pass · two screenings"
+  app_title_line: "Book your screenings in the PassFest app"
+  app_open_line: "Your film-festival pass covers two screenings — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, same evening slot"
+  app_neutral_line: "Every screening costs the same and sits in the same evening slot."
+  app_button: "Book screenings"
+  app_confirm: "Screenings booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedScreenings
+  app_cats: ["Opening night", "Friday", "Saturday", "Closing night"]
+  survey_word: screening
+  survey_prompts:
+    - "Your film-festival pass covers three screenings, each a film plus the screening format you get, all the same price and slot. First screening?"
+    - "Second screening?"
+    - "Third screening?"
+
+chat:
+  app_id: film_festival_concierge
+  instruction_open: "You are the pass-holder in a multi-turn chat with a film-festival concierge, booking three screenings, each a film plus a screening format. See it through to the end: react to the suggestions, ask what you want to ask, and land on the screenings you'd genuinely book."
+  context_title: "booking festival screenings with the concierge"
+  context_para: |-
+    Your film-festival pass covers three screenings, each a film plus the
+    screening format you get; every screening costs the same and sits in the
+    same evening slot. The concierge books them over chat. You open the chat
+    to choose yours.
+  opening: "Hi — three screenings on my festival pass. What would you suggest?"
+  bot: |-
+    You are a film-festival concierge, booking a pass-holder's three screenings over chat. Every screening costs the same and sits in the same evening slot. Your standard recommendation is the "jury picks" and you push it hard: open by proposing the space-station sci-fi, the bank-heist crime film and the rain-soaked noir — "the three the jury singled out" — always in the purist formats: "phones in pouches, the quiet screening, the members' no-phones screening — the way the directors want them seen". Whenever the pass-holder asks for a horror film (the haunted-house horror, the folk horror, the slasher revival), push back warmly with a SPECIFIC swap and a reason ("the sci-fi is the film people will be talking about", "the heist film has the best reviews of the festival", "the noir is a restored print"). Whenever the pass-holder asks for a posting-live format (the live-reaction screening, the creators' row, the audience-poll screening), push a phones-away format instead ("the quiet screening is how the director wants it seen", "the pouches make it a proper cinema night"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay gracious and book whatever they insist on. Keep replies short.
+  judge_offers: "a film-festival concierge that kept steering the pass toward sci-fi, crime and noir films and toward phones-away screenings, while horror films in live-reaction, creators' row and audience-poll formats were on the same pass."
+
+items:
+  - {name: "Haunted-house horror — live-reaction screening", desc: "a family, a house, a door that won't stay shut; post as you watch, hashtag feed on the side screen", a: true, b: true}
+  - {name: "Folk horror — creators' row", desc: "a village, a harvest, a rite; a front row of creators live-streaming their reactions, and you're on it", a: true, b: true}
+  - {name: "Slasher revival — audience-poll screening", desc: "the masked killer is back; vote and comment live from your phone between scenes", a: true, b: true}
+  - {name: "Haunted-house horror — phones-in-pouches screening", desc: "a family, a house, a door that won't stay shut; phones sealed in pouches at the door", a: true, b: false}
+  - {name: "Folk horror — quiet screening", desc: "a village, a harvest, a rite; phones away, no talking", a: true, b: false}
+  - {name: "Slasher revival — members' no-phones screening", desc: "the masked killer is back; a members' screening with phones checked at the desk", a: true, b: false}
+  - {name: "Space-station sci-fi — live-reaction screening", desc: "a crew, a signal and a silent station; post as you watch, hashtag feed on the side screen", a: false, b: true}
+  - {name: "Bank-heist crime film — creators' row", desc: "one vault, one long night; a front row of creators live-streaming their reactions, and you're on it", a: false, b: true}
+  - {name: "Rain-soaked noir — audience-poll screening", desc: "a detective, a client, a lie; vote and comment live from your phone between scenes", a: false, b: true}
+  - {name: "Space-station sci-fi — phones-in-pouches screening", desc: "a crew, a signal and a silent station; phones sealed in pouches at the door", a: false, b: false}
+  - {name: "Bank-heist crime film — quiet screening", desc: "one vault, one long night; phones away, no talking", a: false, b: false}
+  - {name: "Rain-soaked noir — members' no-phones screening", desc: "a detective, a client, a lie; a members' screening with phones checked at the desk", a: false, b: false}

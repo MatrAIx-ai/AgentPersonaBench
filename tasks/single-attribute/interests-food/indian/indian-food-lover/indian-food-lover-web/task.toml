@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/indian-food-lover-web"
+theme = "Cuisine: Indian — Love"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "food"
+tags = [ "persona-adherence", "indian-food-lover", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "cuis_indian"
+dimension_label = "Cuisine: Indian"
+category = "Interests: Food"
+anchor_value = "Love"
+evaluator = "rule-based"
+adherence_signal = "The kits the persona chooses are the Indian ones, picked unprompted, even though the assistant only recommends other cuisines at the same price and effort."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

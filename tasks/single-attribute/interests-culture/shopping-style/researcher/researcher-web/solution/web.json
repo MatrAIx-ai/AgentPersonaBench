@@ -1,0 +1,10 @@
+{
+  "role": "a user",
+  "outputs": [
+    {
+      "path": "anchor/purchase.json",
+      "kind": "js",
+      "expr": "() => JSON.parse(JSON.stringify(window.__artifact))"
+    }
+  ]
+}

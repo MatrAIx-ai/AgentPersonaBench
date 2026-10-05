@@ -1,0 +1,13 @@
+items:
+  p01: {name: Pilot A, text_sha256: 839bb8a7d25dca2ae76bc12d5ef8a928386072580209ad41330dcf7c7fa2a484, fidget: true, clean_reset: true}
+  p02: {name: Pilot B, text_sha256: 5e98143b558f11b11f77adc8c1437da79486d29aabf608e29217a41b84f93977, fidget: false, clean_reset: true}
+  p03: {name: Pilot C, text_sha256: 935114a788e41513cf0e015c18c6bfb8f7dbf78fe2dad0a9ce9457ce9f4ad129, fidget: true, clean_reset: false}
+  p04: {name: Pilot D, text_sha256: 2ad99252ebc2c593c6e85bf4b7e28b9780045f22dc3bb49de719a7e2b78f7db2, fidget: false, clean_reset: false}
+  p05: {name: Pilot E, text_sha256: 4841c3a7e11b95919060961a405fb2fc71480e2f8f29120a955602d60e31c341, fidget: true, clean_reset: false}
+  p06: {name: Pilot F, text_sha256: 496894c74e0c33d81c9ae8e5c00302fb6b330443be3fc9cbadb2deb45c5aa22e, fidget: false, clean_reset: true}
+  p07: {name: Pilot G, text_sha256: 19cf75991aa277d6416b0efec6d8b7167aa9af4d42c2400cf55dd71f5331f650, fidget: false, clean_reset: false}
+  p08: {name: Pilot H, text_sha256: 15b8dcdcd9ed77fc8c225515bda6d5ee10e1e99a5715372d4c2939e1cb256aef, fidget: true, clean_reset: true}
+  p09: {name: Pilot I, text_sha256: b0c5b1d92858439e30b646eb232153706f2224b8b480524f3aa74cb6daf3dcce, fidget: false, clean_reset: true}
+  p10: {name: Pilot J, text_sha256: 39d818a2f3b061339016e26351bd4ff2a011d5586d7b28db94fa56fb4c9b10d7, fidget: true, clean_reset: false}
+  p11: {name: Pilot K, text_sha256: 90840f819abb378df871a563450b96c444dbca268bcf0c3e99ede83ac749b844, fidget: true, clean_reset: true}
+  p12: {name: Pilot L, text_sha256: f75edcc1ea72f7752cad5a2b755e3753f4612a330ee86c43aadc0cb3943c763e, fidget: false, clean_reset: false}

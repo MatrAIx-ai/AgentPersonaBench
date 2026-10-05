@@ -1,0 +1,38 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/epidemiology-expert-web"
+theme = "Causal study validity review: interactive design console"
+
+[metadata]
+difficulty = "hard"
+type = "web"
+domain = "study design and causal inference"
+tags = ["persona-adherence", "expertise-domains", "single-attribute", "rule-based", "causal-validity", "playwright", "real-web"]
+
+[[checks]]
+dimension_id = "fam_epidemiology"
+dimension_label = "Familiarity: Epidemiology"
+category = "Expertise: Domains"
+value = "Expert"
+evaluator = "rule-based"
+evaluator_name = "study_design_console"
+adherence_signal = "In a live design console, the reviewer aligns adjustment, estimand, target population, and claim across randomized, collider, mediator, and common-support cases without a material causal error."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 720.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"
+

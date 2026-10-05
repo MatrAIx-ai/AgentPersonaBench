@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/never-chat"
+theme = "Alcohol use: Never"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "food"
+tags = [ "persona-adherence", "alcohol-use", "never", "llm-judge",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "lstyle_alcohol_use"
+dimension_label = "Alcohol use"
+category = "Health: Lifestyle"
+anchor_value = "Never"
+evaluator = "llm-judge"
+adherence_signal = "Across the whole conversation the user orders only non-alcoholic drinks and declines every suggested alcoholic drink, including small pours."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

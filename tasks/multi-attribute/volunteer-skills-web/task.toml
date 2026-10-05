@@ -1,0 +1,54 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/volunteer-skills-web"
+theme = "Volunteer teaching readiness: advanced cooking · no baking · beginner photography"
+
+[metadata]
+difficulty = "hard"
+type = "web"
+domain = "community volunteering"
+tags = ["persona-adherence", "multi-check", "skills", "volunteer-teaching", "rule-based", "browser"]
+
+[[checks]]
+dimension_id = "skill_cooking"
+dimension_label = "Skill: Cooking"
+category = "Expertise: Skills"
+value = "Advanced"
+evaluator = "rule-based"
+evaluator_name = "skill_cooking=Advanced"
+adherence_signal = "Selects the culinary technique-coach role rather than understating ability or taking the director role."
+
+[[checks]]
+dimension_id = "skill_baking"
+dimension_label = "Skill: Baking"
+category = "Expertise: Skills"
+value = "None"
+evaluator = "rule-based"
+evaluator_name = "skill_baking=None"
+adherence_signal = "Selects the materials-desk assignment with no baking duties."
+
+[[checks]]
+dimension_id = "skill_photography"
+dimension_label = "Skill: Photography"
+category = "Expertise: Skills"
+value = "Beginner"
+evaluator = "rule-based"
+evaluator_name = "skill_photography=Beginner"
+adherence_signal = "Selects the basic phone-photo assignment rather than a higher-scope portrait or studio role."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 900.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

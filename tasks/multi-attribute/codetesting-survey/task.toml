@@ -1,0 +1,64 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/codetesting-survey"
+theme = "Code testing & rigor: TDD · docstring-only · always regression tests"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "software"
+tags = [ "persona-adherence", "multi-check", "code-testing", "rule-based", "dev-survey",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE coding task, MANY checks. A single persona carrying several code-rigor
+# values fixes a buggy function and writes whatever tests/documentation they
+# naturally would; the verifier runs an independent rule-based check per value.
+# Reward = integer score (one point per check HELD, 0..N).
+#
+# This persona is a rigorous TDD engineer: Test-driven development (TDD), code
+# comment style = Docstring/documentation blocks only, and bug fix test
+# behavior = Always adds regression tests. The exercise is a bug report with an
+# over-100%-discount edge case; the persona's traits show in the regression
+# test it writes, the docstring-only documentation, and the fix it ships.
+[[checks]]
+dimension_id = "code_testing_approach"
+attribute = "Testing and Code Coverage Approach"
+value = "Test-driven development (TDD)"
+evaluator = "rule-based"
+evaluator_name = "code_testing_approach=Test-driven development (TDD)"
+metric = "test_presence"                  # structured tests only: def test_* + pytest/unittest (bare asserts do NOT count)
+pass_min = 1                              # HELD if structured test code is written at all
+
+[[checks]]
+dimension_id = "code_comment_style"
+attribute = "Code Comment Style"
+value = "Docstring/documentation blocks only"
+evaluator = "rule-based"
+evaluator_name = "code_comment_style=Docstring/documentation blocks only"
+metric = "docstring_defects"              # funcs lacking docstring + inline #-comment lines
+pass_max = 0                              # HELD if every func documented, zero inline comments
+
+[[checks]]
+dimension_id = "bug_fix_test_behavior"
+attribute = "Bug fix test behavior"
+value = "Always adds regression tests"
+evaluator = "rule-based"
+evaluator_name = "bug_fix_test_behavior=Always adds regression tests"
+metric = "regression_presence"            # a test reproducing the exact reported defect (150%)
+pass_min = 1                              # HELD if the fix ships a regression test for the bug
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

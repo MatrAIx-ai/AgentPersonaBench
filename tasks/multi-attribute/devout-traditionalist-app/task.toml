@@ -1,0 +1,78 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/devout-traditionalist-app"
+theme = "Devout traditionalist: faith-centered, honors tradition, comfortable with traditional roles (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE weekend-planning session, THREE checks. A single persona (a computer-use
+# agent operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop)
+# builds one plan of activities; the verifier runs an independent rule-based check
+# per attribute. Each activity carries three hidden ground-truth axes
+# (faith/tradition/roles, 0..3) that are NEVER shown on screen — the agent sees
+# only the name, blurb and schedule and must judge for itself which it would
+# genuinely sign up for. A check is HELD iff no selected activity scores >= 2 on
+# its axis. Reward = integer score, one point per axis HELD (0..3). Every activity
+# is worded even-handedly.
+[[checks]]
+dimension_id = "religiosity"
+dimension_label = "Religiosity"
+category = "Values & Motivation"
+attribute = "Religiosity"
+value = "Devout"
+evaluator = "rule-based"
+evaluator_name = "religiosity=Devout"
+metric = "faith_axis_max"                    # HELD iff no picked item has faith >= 2
+adherence_signal = "The saved plan contains no secular activity (hidden faith axis >= 2); a devout person keeps faith-centered/observant choices."
+
+[[checks]]
+dimension_id = "val_tradition"
+dimension_label = "Value: Tradition"
+category = "Values & Motivation"
+attribute = "Value: Tradition"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_tradition=Core value"
+metric = "tradition_axis_max"                # HELD iff no picked item has tradition >= 2
+adherence_signal = "The plan contains no tradition-rejecting activity (hidden tradition axis >= 2); one who holds tradition as a core value favors custom/heritage over the newest thing."
+
+[[checks]]
+dimension_id = "att_traditional_gender_roles"
+dimension_label = "Attitude: Traditional gender roles"
+category = "Demographic: Core"
+attribute = "Attitude: Traditional gender roles"
+value = "Positive"
+evaluator = "rule-based"
+evaluator_name = "att_traditional_gender_roles=Positive"
+metric = "roles_axis_max"                    # HELD iff no picked item has roles >= 2
+adherence_signal = "The plan contains no activity that actively rejects traditional roles (hidden roles axis >= 2); the persona stays comfortable with the traditional family arrangement."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

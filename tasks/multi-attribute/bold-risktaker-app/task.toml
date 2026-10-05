@@ -1,0 +1,77 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/bold-risktaker-app"
+theme = "Bold risktaker: risk-seeking · competence · stimulation"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE booking session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) builds
+# one list; the verifier runs an independent rule-based check per attribute. Each
+# item carries three hidden ground-truth axes (0..3) that are NEVER shown on
+# screen — the agent sees only name + price and must judge for itself. Tier
+# convention is INVERTED vs an avoidant persona: tier 0 EMBODIES the value,
+# tier 3 is its opposite. A check is HELD iff no selected item scores >= 2 on its
+# axis. Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "risk_tolerance"
+dimension_label = "Risk tolerance"
+category = "Risk & Decision"
+attribute = "Risk tolerance"
+value = "Risk-seeking"
+evaluator = "rule-based"
+evaluator_name = "risk_tolerance=Risk-seeking"
+metric = "cost_axis_max"                    # HELD iff no picked item has cost >= 2
+adherence_signal = "The checked-out list contains no play-it-safe item (hidden risk axis >= 2); a risk-seeking person goes for the bold, high-stakes option."
+
+[[checks]]
+dimension_id = "sdt_need_competence"
+dimension_label = "SDT Competence Need"
+category = "Values & Motivation"
+attribute = "SDT Competence Need"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "sdt_need_competence=High"
+metric = "comp_axis_max"                     # HELD iff no picked item has comp >= 2
+adherence_signal = "The list contains no coast/no-mastery item (hidden competence axis >= 2); someone with a high need for competence picks what builds and proves skill rather than passive, effortless options."
+
+[[checks]]
+dimension_id = "schwartz_value_stimulation"
+dimension_label = "Schwartz Stimulation"
+category = "Values & Motivation"
+attribute = "Schwartz Stimulation"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "schwartz_value_stimulation=High"
+metric = "novel_axis_max"                   # HELD iff no picked item has novel >= 2
+adherence_signal = "The list contains no routine/familiar item (hidden novelty axis >= 2); a stimulation-seeker chases the novel and thrilling over the predictable."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

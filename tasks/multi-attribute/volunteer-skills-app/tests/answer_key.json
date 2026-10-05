@@ -1,0 +1,14 @@
+{
+  "f1": {"room": "food", "readiness": "Master"},
+  "f2": {"room": "food", "readiness": "Beginner"},
+  "f3": {"room": "food", "readiness": "None"},
+  "f4": {"room": "food", "readiness": "Advanced"},
+  "b1": {"room": "baking", "readiness": "Advanced"},
+  "b2": {"room": "baking", "readiness": "Intermediate"},
+  "b3": {"room": "baking", "readiness": "Beginner"},
+  "b4": {"room": "baking", "readiness": "None"},
+  "p1": {"room": "media", "readiness": "Intermediate"},
+  "p2": {"room": "media", "readiness": "Beginner"},
+  "p3": {"room": "media", "readiness": "Master"},
+  "p4": {"room": "media", "readiness": "None"}
+}

@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/growth-core-chat"
+theme = "Value: Personal growth: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "personal-growth", "growth-core", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# Personal growth as a core value is a SEMANTIC trait: no keyword list can tell
+# whether a person genuinely wanted to keep learning and improving over settling
+# into a comfortable, unchanging routine. So the evaluator is an LLM judge that
+# reads the persona's OWN turns and returns a binary HELD/VIOLATED verdict on
+# whether it stayed committed to growing instead of giving in to just coasting.
+[[checks]]
+dimension_id = "val_personal_growth"
+dimension_label = "Value: Personal growth"
+category = "Values & Motivation"
+attribute = "Value: Personal growth"
+value = "Core value"
+evaluator = "llm-judge"
+evaluator_name = "val_personal_growth=Core value"
+adherence_signal = "Reply keeps wanting to learn / build a skill / improve, resists the friend's pressure to just coast, stay comfortable, and stop bothering with self-improvement."
+# pass = anchor decisively more growth-committed than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

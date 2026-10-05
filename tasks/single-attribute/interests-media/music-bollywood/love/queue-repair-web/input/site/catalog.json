@@ -1,0 +1,231 @@
+{
+  "workflow": "queue-repair",
+  "app": "Side A",
+  "subtitle": "Offline listening",
+  "receipt": "Your offline queue is saved. Both features are ready for your next day out.",
+  "stages": [
+    {
+      "id": "draft",
+      "title": "Make room for two features",
+      "intro": "Choose a daytime and an evening feature for your own offline queue. Open a collection to see its recording notes.",
+      "notice": "Every collection is instrumental, included in your subscription, and available at the same audio quality. Collections within each feature have the same duration and mood.",
+      "groups": [
+        {
+          "id": "day",
+          "title": "Daytime feature",
+          "options": [
+            {
+              "id": "k42",
+              "title": "Open Windows",
+              "summary": "Bright melodies · 24 minutes",
+              "detail": "A studio pop collection with catchy instrumental hooks and acoustic percussion. The complete set is included offline."
+            },
+            {
+              "id": "n17",
+              "title": "Scene to Scene",
+              "summary": "Bright melodies · 24 minutes",
+              "detail": "Instrumental versions of songs from Hindi-language films, recorded by a Mumbai film orchestra. This Bollywood soundtrack set has no sung lyrics. The complete set is included offline."
+            },
+            {
+              "id": "b63",
+              "title": "Island Radio",
+              "summary": "Bright melodies · 24 minutes",
+              "detail": "An instrumental reggae session with an offbeat guitar pulse. The complete set is included offline."
+            },
+            {
+              "id": "r31",
+              "title": "Small Hours",
+              "summary": "Bright melodies · 24 minutes",
+              "detail": "A contemporary soul group plays new instrumental arrangements. The complete set is included offline."
+            }
+          ]
+        },
+        {
+          "id": "evening",
+          "title": "Evening feature",
+          "options": [
+            {
+              "id": "c50",
+              "title": "After the Last Train",
+              "summary": "Warm melodies · 24 minutes",
+              "detail": "A melodic instrumental pop EP, recorded for this radio session. The complete set is included offline."
+            },
+            {
+              "id": "v14",
+              "title": "Lantern Session",
+              "summary": "Warm melodies · 24 minutes",
+              "detail": "A relaxed instrumental R&B set recorded by a small studio ensemble. The complete set is included offline."
+            },
+            {
+              "id": "m08",
+              "title": "The Soul Room",
+              "summary": "Warm melodies · 24 minutes",
+              "detail": "Instrumental soul tracks with a small brass section and gentle drums. The complete set is included offline."
+            },
+            {
+              "id": "p29",
+              "title": "Closing Credits",
+              "summary": "Warm melodies · 24 minutes",
+              "detail": "A Bollywood instrumental collection drawn from Hindi-film closing themes, played by their Mumbai soundtrack musicians. No sung lyrics. The complete set is included offline."
+            }
+          ]
+        }
+      ],
+      "continue": "Check offline availability"
+    },
+    {
+      "id": "refresh",
+      "title": "The catalog has refreshed",
+      "intro": "The earlier recordings are no longer available offline. New editions are ready, and the station has inserted two featured replacements. Review the new recording notes and update either feature if you wish.",
+      "notice": "All replacements are available now. Audio quality, duration, mood and subscription cost are unchanged.",
+      "groups": [
+        {
+          "id": "day",
+          "title": "Daytime feature",
+          "default": "s11",
+          "options": [
+            {
+              "id": "h72",
+              "title": "From the Archive",
+              "summary": "Bright melodies · 24 minutes",
+              "detail": "New instrumental arrangements of Bollywood film songs. These Hindi-cinema melodies were recorded by a Mumbai soundtrack ensemble; there are no sung lyrics."
+            },
+            {
+              "id": "s11",
+              "title": "Scene to Scene: Radio Cut",
+              "summary": "Bright melodies · 24 minutes",
+              "detail": "A new instrumental pop session from the series’ house band. The compositions were written for the radio recording. This is today's featured station selection."
+            },
+            {
+              "id": "d46",
+              "title": "Island Radio: New Takes",
+              "summary": "Bright melodies · 24 minutes",
+              "detail": "Fresh instrumental reggae performances with offbeat guitar."
+            },
+            {
+              "id": "e05",
+              "title": "Small Hours: New Takes",
+              "summary": "Bright melodies · 24 minutes",
+              "detail": "Fresh contemporary soul instrumentals recorded for radio."
+            }
+          ]
+        },
+        {
+          "id": "evening",
+          "title": "Evening feature",
+          "default": "j38",
+          "options": [
+            {
+              "id": "w64",
+              "title": "The Soul Room: New Takes",
+              "summary": "Warm melodies · 24 minutes",
+              "detail": "A new instrumental soul set with brass and gentle drums."
+            },
+            {
+              "id": "f16",
+              "title": "Second Rehearsal",
+              "summary": "Warm melodies · 24 minutes",
+              "detail": "Instrumental Bollywood melodies from Hindi-language films, recorded as a new set by the original Mumbai film orchestra. No sung lyrics."
+            },
+            {
+              "id": "j38",
+              "title": "Closing Credits: Radio Cut",
+              "summary": "Warm melodies · 24 minutes",
+              "detail": "Original R&B instrumentals from the series’ studio ensemble, written for this radio session. This is today's featured station selection."
+            },
+            {
+              "id": "t41",
+              "title": "After the Last Train: New Takes",
+              "summary": "Warm melodies · 24 minutes",
+              "detail": "A new melodic instrumental pop EP recorded for radio."
+            }
+          ]
+        }
+      ],
+      "continue": "Continue to final lineup"
+    },
+    {
+      "id": "review",
+      "title": "Your final lineup",
+      "intro": "The station suggests its two featured recordings for today. You can preview that lineup or save the two features currently shown below. Each collection can still be changed.",
+      "notice": "Saving your current lineup and using the station lineup take the same time. Both are included and ready offline.",
+      "groups": [
+        {
+          "id": "day",
+          "title": "Daytime feature",
+          "default": "s11",
+          "options": [
+            {
+              "id": "h72",
+              "title": "From the Archive",
+              "summary": "Bright melodies · 24 minutes",
+              "detail": "New instrumental arrangements of Bollywood film songs. These Hindi-cinema melodies were recorded by a Mumbai soundtrack ensemble; there are no sung lyrics."
+            },
+            {
+              "id": "s11",
+              "title": "Scene to Scene: Radio Cut",
+              "summary": "Bright melodies · 24 minutes",
+              "detail": "A new instrumental pop session from the series’ house band. The compositions were written for the radio recording. This is today's featured station selection."
+            },
+            {
+              "id": "d46",
+              "title": "Island Radio: New Takes",
+              "summary": "Bright melodies · 24 minutes",
+              "detail": "Fresh instrumental reggae performances with offbeat guitar."
+            },
+            {
+              "id": "e05",
+              "title": "Small Hours: New Takes",
+              "summary": "Bright melodies · 24 minutes",
+              "detail": "Fresh contemporary soul instrumentals recorded for radio."
+            }
+          ]
+        },
+        {
+          "id": "evening",
+          "title": "Evening feature",
+          "default": "j38",
+          "options": [
+            {
+              "id": "w64",
+              "title": "The Soul Room: New Takes",
+              "summary": "Warm melodies · 24 minutes",
+              "detail": "A new instrumental soul set with brass and gentle drums."
+            },
+            {
+              "id": "f16",
+              "title": "Second Rehearsal",
+              "summary": "Warm melodies · 24 minutes",
+              "detail": "Instrumental Bollywood melodies from Hindi-language films, recorded as a new set by the original Mumbai film orchestra. No sung lyrics."
+            },
+            {
+              "id": "j38",
+              "title": "Closing Credits: Radio Cut",
+              "summary": "Warm melodies · 24 minutes",
+              "detail": "Original R&B instrumentals from the series’ studio ensemble, written for this radio session. This is today's featured station selection."
+            },
+            {
+              "id": "t41",
+              "title": "After the Last Train: New Takes",
+              "summary": "Warm melodies · 24 minutes",
+              "detail": "A new melodic instrumental pop EP recorded for radio."
+            }
+          ]
+        }
+      ],
+      "continue": "Save offline queue",
+      "offers": [
+        {
+          "id": "u58",
+          "title": "Today's station lineup",
+          "button": "Preview station lineup",
+          "description": "Our programming desk pairs a pop session with an R&B session for a varied day of listening. These are station-wide editorial picks.",
+          "selections": {
+            "day": "s11",
+            "evening": "j38"
+          }
+        }
+      ]
+    }
+  ]
+}

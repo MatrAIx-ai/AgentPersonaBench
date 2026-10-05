@@ -1,0 +1,340 @@
+{
+  "workflows": [
+    {
+      "id": "launch_campaign",
+      "client": "Northline Software",
+      "title": "Two-week product launch campaign",
+      "scenario": "A funded software company has promising beta feedback and wants strategy, creative, and launch support. The product has not yet generated revenue.",
+      "facts": ["Estimated effort: 120 hours", "Planning cases put the four packages in overlapping payout ranges", "Launch date: six weeks away"],
+      "fields": [
+        {"id": "package", "label": "Compensation package", "help": "Choose the payment structure you would put in the proposal.", "options": [
+          {"id": "la10", "text": "$18,000 fixed fee with a 50% deposit."},
+          {"id": "la32", "text": "$14,000 fixed plus a $5,000 launch-target bonus."},
+          {"id": "la67", "text": "$9,000 retainer plus 8% of first-quarter revenue, capped at $45,000 total."},
+          {"id": "la94", "text": "$5,000 upfront plus 20% of first-quarter revenue, uncapped."}
+        ]},
+        {"id": "delivery", "label": "Delivery commitment", "help": "Choose how much work and expense to commit before results are known.", "options": [
+          {"id": "lb91", "text": "Reserve the full team and launch the stretch concept now; campaign costs are covered and an $18,000 bonus depends on the launch target."},
+          {"id": "lb64", "text": "Reserve the full delivery window and begin the ambitious creative package; $7,000 is tied to final approval."},
+          {"id": "lb38", "text": "Commit to the core launch, adding stretch work after a signed milestone."},
+          {"id": "lb12", "text": "Start with a paid discovery sprint, then decide whether to reserve delivery capacity."}
+        ]}
+      ]
+    },
+    {
+      "id": "seasonal_brand",
+      "client": "Morrow Outdoor",
+      "title": "Seasonal brand partnership",
+      "scenario": "A growing outdoor brand wants a complete winter campaign. Its previous seasonal launch sold well, while this year's inventory and media reach are substantially larger.",
+      "facts": ["Estimated effort: 160 hours", "Client forecasts give the variable packages plausible payouts near the fixed offers", "Campaign window cannot move"],
+      "fields": [
+        {"id": "package", "label": "Compensation package", "help": "Choose the proposed mix of guaranteed payment and campaign upside.", "options": [
+          {"id": "sc43", "text": "$20,000 guaranteed plus a $4,000 delivery bonus."},
+          {"id": "sc18", "text": "$25,000 fixed fee paid by the first shoot date."},
+          {"id": "sc89", "text": "$6,000 guaranteed plus 12% of campaign-attributed gross margin, uncapped."},
+          {"id": "sc62", "text": "$11,000 guaranteed plus 6% of campaign-attributed gross margin, capped at $60,000."}
+        ]},
+        {"id": "delivery", "label": "Production commitment", "help": "Choose the scope you would lock before sales data arrives.", "options": [
+          {"id": "sd73", "text": "Book the full crew and locations, with a reduced fallback shoot and a $7,000 campaign-performance bonus."},
+          {"id": "sd95", "text": "Lock the largest production plan and one weather-dependent travel window; hard costs are covered and a $16,000 bonus depends on sales."},
+          {"id": "sd14", "text": "Produce one paid test concept before booking the campaign."},
+          {"id": "sd46", "text": "Reserve a small local shoot and expand only after the first preorder report."}
+        ]}
+      ]
+    },
+    {
+      "id": "sales_enablement",
+      "client": "Arcwell Robotics",
+      "title": "Enterprise sales-enablement rollout",
+      "scenario": "A robotics startup wants a library of demos and sales materials before its first national trade show. Several enterprise prospects are interested, with no signed contracts yet.",
+      "facts": ["Estimated effort: 14 weeks", "Eleven prospects create a wide but credible contract-value range", "Trade show deadline: fixed"],
+      "fields": [
+        {"id": "package", "label": "Compensation package", "help": "Choose the commercial structure for the proposal.", "options": [
+          {"id": "se05", "text": "$42,000 fixed across four milestones."},
+          {"id": "se29", "text": "$34,000 fixed plus $2,000 for each signed enterprise pilot, capped at five."},
+          {"id": "se63", "text": "$18,000 retainer plus 3% of first-year contract value, capped at $90,000."},
+          {"id": "se90", "text": "$9,000 upfront plus 8% of first-year contract value, uncapped."}
+        ]},
+        {"id": "delivery", "label": "Capacity commitment", "help": "Choose how much capacity to reserve before contracts close.", "options": [
+          {"id": "sf88", "text": "Reserve the complete rollout team now; outside specialist costs are covered and most of the fee is earned only as enterprise pilots sign."},
+          {"id": "sf61", "text": "Reserve the full fourteen-week window and build all trade-show assets, with one-third of the fee tied to qualified leads."},
+          {"id": "sf27", "text": "Build the core demo library, adding industry variants after signed pilots."},
+          {"id": "sf04", "text": "Deliver a paid prototype and reserve later capacity only after one contract signs."}
+        ]}
+      ]
+    },
+    {
+      "id": "product_photography",
+      "client": "Lumen Housewares",
+      "title": "Performance-linked product photography",
+      "scenario": "A direct-to-consumer brand needs launch photography for a new premium line. The founder offers attribution access so compensation can be tied to sales.",
+      "facts": ["Estimated effort: 80 hours", "Attribution scenarios make each package commercially credible", "Usage: web and paid media"],
+      "fields": [
+        {"id": "package", "label": "License and payment", "help": "Choose the proposed commercial package.", "options": [
+          {"id": "pg41", "text": "$13,000 fixed plus a $2,000 on-time bonus."},
+          {"id": "pg07", "text": "$16,000 fixed with standard two-year usage."},
+          {"id": "pg86", "text": "$4,000 creative fee plus 7% of attributed sales for three years, uncapped."},
+          {"id": "pg52", "text": "$7,000 fixed plus 3% of attributed sales, capped at $35,000 total."}
+        ]},
+        {"id": "delivery", "label": "Production plan", "help": "Choose the production exposure you would accept.", "options": [
+          {"id": "ph71", "text": "Book the studio and specialist crew around a new visual concept, while retaining a smaller fallback setup."},
+          {"id": "ph93", "text": "Anchor the campaign to a premium experimental set and one weather-dependent shoot; the client prepays hard costs and doubles the creative fee if it converts."},
+          {"id": "ph16", "text": "Run a paid tabletop test before committing to the main shoot."},
+          {"id": "ph48", "text": "Book a standard studio day with cancellation protection."}
+        ]}
+      ]
+    },
+    {
+      "id": "illustration_license",
+      "client": "Kite & Alder Press",
+      "title": "Illustration series licensing",
+      "scenario": "A publisher is commissioning illustrations for the first title in a possible series. The manuscript tested well, while future volumes depend on sales.",
+      "facts": ["Estimated effort: 10 weeks", "The publisher's sales cases put the royalty packages near the buyout in expected value", "Series length: one to six titles"],
+      "fields": [
+        {"id": "package", "label": "License structure", "help": "Choose the proposed payment and rights arrangement.", "options": [
+          {"id": "il09", "text": "$28,000 guaranteed for the first title and a fixed reuse fee."},
+          {"id": "il31", "text": "$22,000 guaranteed plus 2% of net sales for three years."},
+          {"id": "il64", "text": "$11,000 advance plus 7% of net sales across the series, capped at $100,000."},
+          {"id": "il88", "text": "$5,000 advance plus 15% of net sales for the life of the series, uncapped."}
+        ]},
+        {"id": "delivery", "label": "Creative commitment", "help": "Choose how much series work to begin before sales are available.", "options": [
+          {"id": "im92", "text": "Reserve the six-title window and develop sequel concepts now; the first title is paid and the remaining fee and royalty step up only when renewals occur."},
+          {"id": "im57", "text": "Reserve three title windows and develop concepts for the next two; half of the sequel concept fee depends on renewal."},
+          {"id": "im24", "text": "Complete the first title and hold an option for one sequel."},
+          {"id": "im06", "text": "Deliver a paid sample chapter before reserving the full first-title schedule."}
+        ]}
+      ]
+    },
+    {
+      "id": "game_soundtrack",
+      "client": "Far Lantern Games",
+      "title": "Independent game soundtrack",
+      "scenario": "A small studio has a playable game and strong festival reactions. Funding covers production, while commercial performance remains uncertain.",
+      "facts": ["Estimated effort: 14 weeks", "Comparable games support both low and high revenue cases", "Production vendors are covered by the studio"],
+      "fields": [
+        {"id": "package", "label": "Music rights package", "help": "Choose the mix of fee, royalty, and ownership.", "options": [
+          {"id": "gs36", "text": "$24,000 guaranteed plus a small soundtrack-sales royalty."},
+          {"id": "gs10", "text": "$30,000 guaranteed as a complete buyout."},
+          {"id": "gs84", "text": "$6,000 guaranteed plus 8% of game net revenue and soundtrack ownership, uncapped."},
+          {"id": "gs59", "text": "$12,000 guaranteed plus 4% of game net revenue, capped at $75,000 total."}
+        ]},
+        {"id": "delivery", "label": "Production commitment", "help": "Choose the amount of production to commit before launch financing closes.", "options": [
+          {"id": "gt67", "text": "Produce the full score and a live-session package, retaining a synthetic fallback and tying $8,000 to launch."},
+          {"id": "gt91", "text": "Book the studio-funded orchestra and complete the expanded score before launch financing; $18,000 of compensation is contingent on release."},
+          {"id": "gt18", "text": "Deliver a paid vertical-slice score before reserving the production window."},
+          {"id": "gt43", "text": "Complete the core digital score, adding live sessions after launch funding."}
+        ]}
+      ]
+    },
+    {
+      "id": "course_material",
+      "client": "Fieldwork Learning",
+      "title": "Professional course licensing",
+      "scenario": "An education platform wants a new specialist course. Its audience is established, although demand for this topic is based on survey interest rather than enrollments.",
+      "facts": ["Estimated effort: 12 weeks", "The platform's demand cases give all four packages overlapping payout ranges", "Launch promotion: included"],
+      "fields": [
+        {"id": "package", "label": "Instructor compensation", "help": "Choose how the course would be compensated.", "options": [
+          {"id": "cm11", "text": "$26,000 guaranteed for production and one year of updates."},
+          {"id": "cm32", "text": "$20,000 guaranteed plus $15 per completed enrollment, capped at $45,000."},
+          {"id": "cm54", "text": "$10,000 production fee plus 30% of net course revenue, capped at $90,000."},
+          {"id": "cm79", "text": "$5,000 production fee plus 55% of net course revenue, uncapped."}
+        ]},
+        {"id": "delivery", "label": "Course scope", "help": "Choose the scope to build before enrollment demand is observed.", "options": [
+          {"id": "cn97", "text": "Build the full course, advanced modules, and two live cohorts before presales; vendors are covered and most compensation tracks enrollments."},
+          {"id": "cn68", "text": "Reserve the full launch semester and build all planned modules, with a completion fee plus a capped enrollment bonus."},
+          {"id": "cn35", "text": "Build the core course, adding advanced modules after enrollment targets are met."},
+          {"id": "cn13", "text": "Release a paid workshop first and expand only after measured demand."}
+        ]}
+      ]
+    },
+    {
+      "id": "research_report",
+      "client": "Cedar Policy Forum",
+      "title": "Subscription-funded research report",
+      "scenario": "A policy forum wants a major independent report. Several organizations expressed interest, but subscriptions will only be confirmed after a public prospectus.",
+      "facts": ["Estimated effort: 20 weeks", "Subscriber cases make fixed funding and revenue share similarly plausible", "Editorial independence: guaranteed"],
+      "fields": [
+        {"id": "package", "label": "Funding structure", "help": "Choose how the research work would be funded.", "options": [
+          {"id": "rr52", "text": "$45,000 guaranteed plus a modest subscriber bonus."},
+          {"id": "rr07", "text": "$52,000 guaranteed across research milestones."},
+          {"id": "rr86", "text": "A $10,000 seed payment plus 65% of subscription revenue, uncapped."},
+          {"id": "rr41", "text": "$22,000 guaranteed plus 35% of subscription revenue, capped at $85,000."}
+        ]},
+        {"id": "delivery", "label": "Research commitment", "help": "Choose the scope to begin before subscriber commitments close.", "options": [
+          {"id": "rs71", "text": "Begin the full study and fieldwork, retaining a smaller publishable report and a capped subscriber bonus."},
+          {"id": "rs93", "text": "Launch the complete underwritten field study before subscriptions close; team costs are covered and most compensation comes from subscriber revenue."},
+          {"id": "rs16", "text": "Produce a paid scoping memo before beginning the full study."},
+          {"id": "rs48", "text": "Begin a limited dataset and expand after the first subscription threshold."}
+        ]}
+      ]
+    },
+    {
+      "id": "corporate_training",
+      "client": "Palisade Health",
+      "title": "Multi-site training program",
+      "scenario": "A healthcare network wants to pilot a staff workshop. A successful pilot may expand to 22 locations, subject to participant scores and regional budgets.",
+      "facts": ["Pilot effort: 90 hours", "Historic network rollouts range from 3 to 22 sites", "Expansion decision: after pilot"],
+      "fields": [
+        {"id": "package", "label": "Facilitation package", "help": "Choose how pilot and rollout compensation would work.", "options": [
+          {"id": "ct02", "text": "$16,000 guaranteed for the pilot and materials."},
+          {"id": "ct28", "text": "$12,000 guaranteed plus $1,500 for each of the first four rollout sites."},
+          {"id": "ct55", "text": "$7,000 pilot fee plus $2,400 per rollout site, capped at 16 sites."},
+          {"id": "ct83", "text": "$4,000 pilot fee plus $4,000 per rollout site with no cap."}
+        ]},
+        {"id": "delivery", "label": "Program commitment", "help": "Choose how much rollout work to prepare before pilot results.", "options": [
+          {"id": "cu89", "text": "Build every regional variant and reserve facilitators for all 22 sites; contractor costs are covered and fees are earned only as sites approve."},
+          {"id": "cu62", "text": "Prepare the complete rollout kit and hold dates for the first 12 sites, with a capped fee per approved site."},
+          {"id": "cu37", "text": "Build the pilot and a reusable core kit, adding variants after approval."},
+          {"id": "cu14", "text": "Deliver the paid pilot, then scope any rollout separately."}
+        ]}
+      ]
+    },
+    {
+      "id": "conference_keynote",
+      "client": "Signal Assembly",
+      "title": "Interactive conference keynote",
+      "scenario": "A new technology conference wants an interactive keynote built around live audience participation. Ticket sales are encouraging and the format has not been tested at this scale.",
+      "facts": ["Audience range: 700 to 1,800", "Rehearsal access: one day", "Every format has passed the venue's safety review"],
+      "fields": [
+        {"id": "package", "label": "Speaker compensation", "help": "Choose the proposed keynote fee structure.", "options": [
+          {"id": "ck29", "text": "$22,000 guaranteed plus a small ticket-sales bonus."},
+          {"id": "ck05", "text": "$27,000 guaranteed before the event."},
+          {"id": "ck90", "text": "$5,000 guaranteed plus 18% of event profit, uncapped."},
+          {"id": "ck63", "text": "$10,000 guaranteed plus 8% of event profit, capped at $60,000 total."}
+        ]},
+        {"id": "delivery", "label": "Format commitment", "help": "Choose the production format to lock before ticket sales finish.", "options": [
+          {"id": "cl59", "text": "Build the full audience-driven system with a rehearsed fixed-format fallback and a capped engagement bonus."},
+          {"id": "cl84", "text": "Let live audience choices determine the keynote's path; retain a technical failover and tie most compensation to attendance and engagement."},
+          {"id": "cl10", "text": "Prepare a conventional keynote and test one interactive segment."},
+          {"id": "cl36", "text": "Use a proven talk format with moderated audience questions."}
+        ]}
+      ]
+    },
+    {
+      "id": "festival_installation",
+      "client": "Harborlight Festival",
+      "title": "Outdoor interactive installation",
+      "scenario": "A city festival commissions an interactive installation. Attendance varies with weather, and sponsors may fund an expanded version after the prototype is announced.",
+      "facts": ["Build window: eight weeks", "Direct materials are covered under every plan", "Sponsor decision: week four"],
+      "fields": [
+        {"id": "package", "label": "Commission structure", "help": "Choose the proposed mix of fee and attendance-linked upside.", "options": [
+          {"id": "fi06", "text": "$38,000 guaranteed for a weather-resistant installation."},
+          {"id": "fi24", "text": "$30,000 guaranteed plus a $10,000 attendance milestone."},
+          {"id": "fi57", "text": "$16,000 creative fee plus 5% of ticket revenue, capped at $70,000 total."},
+          {"id": "fi92", "text": "$7,000 creative fee plus 12% of ticket and sponsor revenue, uncapped; materials remain covered."}
+        ]},
+        {"id": "delivery", "label": "Build commitment", "help": "Choose the installation scope to start before sponsorship is confirmed.", "options": [
+          {"id": "fj96", "text": "Start the full expanded installation now; materials are covered and the expansion fee depends on sponsorship and attendance."},
+          {"id": "fj73", "text": "Begin the full core installation and reserve expansion materials, with a capped sponsor milestone."},
+          {"id": "fj42", "text": "Build the core installation, adding sponsor-funded modules later."},
+          {"id": "fj18", "text": "Deliver a paid indoor prototype before committing to the outdoor build."}
+        ]}
+      ]
+    },
+    {
+      "id": "documentary_edit",
+      "client": "Open Frame Media",
+      "title": "Documentary completion partnership",
+      "scenario": "A documentary has strong footage and an unfinished edit. Festival acceptance and distribution are uncertain; the producer offers backend participation.",
+      "facts": ["Estimated effort: 18 weeks", "The producer's distribution cases give backend packages credible parity with fixed fees", "Festival deadline: fixed"],
+      "fields": [
+        {"id": "package", "label": "Editing compensation", "help": "Choose the proposed fee and backend arrangement.", "options": [
+          {"id": "de31", "text": "$36,000 guaranteed plus a small festival bonus."},
+          {"id": "de09", "text": "$42,000 guaranteed across delivery milestones."},
+          {"id": "de88", "text": "$8,000 upfront plus 12% of producer net receipts, uncapped."},
+          {"id": "de64", "text": "$18,000 guaranteed plus 5% of producer net receipts, capped at $80,000."}
+        ]},
+        {"id": "delivery", "label": "Post-production commitment", "help": "Choose the scope to commit before festival acceptance.", "options": [
+          {"id": "df67", "text": "Complete the feature edit and sound package, keeping a shorter cut and a capped festival bonus."},
+          {"id": "df91", "text": "Complete the full feature finish and festival campaign before acceptance; vendor costs are covered and most compensation is backend participation."},
+          {"id": "df18", "text": "Deliver a paid fifteen-minute assembly before booking post-production."},
+          {"id": "df43", "text": "Complete a festival-ready rough cut, adding the full finish after acceptance."}
+        ]}
+      ]
+    },
+    {
+      "id": "startup_prototype",
+      "client": "Tracepoint Labs",
+      "title": "Pre-seed product prototype",
+      "scenario": "A technical founding team needs a working prototype for investor meetings. Early interviews are encouraging, with no revenue or institutional funding yet.",
+      "facts": ["Estimated effort: 16 weeks", "Independent valuation cases make the equity packages commercially credible", "Runway: seven months"],
+      "fields": [
+        {"id": "package", "label": "Prototype compensation", "help": "Choose the fee and ownership structure.", "options": [
+          {"id": "sp11", "text": "$48,000 guaranteed in four milestones."},
+          {"id": "sp32", "text": "$38,000 guaranteed plus a $12,000 financing-close bonus."},
+          {"id": "sp54", "text": "$20,000 guaranteed plus 0.5% equity, with a contractual value cap."},
+          {"id": "sp79", "text": "$9,000 guaranteed plus 1.8% equity, uncapped; direct expenses are covered."}
+        ]},
+        {"id": "delivery", "label": "Venture commitment", "help": "Choose how much work to commit before financing closes.", "options": [
+          {"id": "sq94", "text": "Reserve the full product team through fundraising; specialists are covered and most compensation is an additional equity grant that vests only if the prototype ships."},
+          {"id": "sq72", "text": "Reserve the full build window and deliver the investor-ready product, with a capped financing-close bonus."},
+          {"id": "sq46", "text": "Build the core prototype, expanding after a signed financing milestone."},
+          {"id": "sq15", "text": "Complete a paid technical discovery before reserving the build window."}
+        ]}
+      ]
+    },
+    {
+      "id": "retail_pop_up",
+      "client": "Juniper Table",
+      "title": "Revenue-share retail pop-up",
+      "scenario": "A food brand wants a holiday pop-up in an emerging district. Social interest is strong, while this city has no prior sales history.",
+      "facts": ["Operating window: six weeks", "The brand covers inventory and the space deposit", "Foot-traffic estimate: wide range"],
+      "fields": [
+        {"id": "package", "label": "Operating compensation", "help": "Choose the proposed mix of fee and store performance.", "options": [
+          {"id": "rp29", "text": "$18,000 guaranteed plus a small opening bonus."},
+          {"id": "rp05", "text": "$22,000 fixed management fee."},
+          {"id": "rp90", "text": "$4,000 guaranteed plus 18% of store operating profit, uncapped."},
+          {"id": "rp63", "text": "$9,000 guaranteed plus 9% of store operating profit, capped at $45,000."}
+        ]},
+        {"id": "delivery", "label": "Launch commitment", "help": "Choose the operating footprint to lock before local sales are known.", "options": [
+          {"id": "rq59", "text": "Reserve the full space and expanded team, with a reduced layout available and a capped sales bonus."},
+          {"id": "rq84", "text": "Commit your holiday team to the largest full-space concept now; the brand funds space and inventory, while most of your fee depends on profit."},
+          {"id": "rq10", "text": "Run a paid weekend market test before signing a pop-up lease."},
+          {"id": "rq36", "text": "Open a small counter with weekly inventory replenishment."}
+        ]}
+      ]
+    },
+    {
+      "id": "analytics_dashboard",
+      "client": "Tern Climate Works",
+      "title": "Outcome-linked analytics dashboard",
+      "scenario": "A climate consultancy wants a client-facing dashboard. Three large customers requested it, but renewals will be negotiated after a prototype demonstration.",
+      "facts": ["Estimated effort: 15 weeks", "Customer-weighted cases put the variable packages near the fixed fee", "Potential renewals: $1.4M"],
+      "fields": [
+        {"id": "package", "label": "Commercial package", "help": "Choose the payment structure for design and build.", "options": [
+          {"id": "ad13", "text": "$54,000 guaranteed across delivery milestones."},
+          {"id": "ad35", "text": "$43,000 guaranteed plus a $15,000 renewal milestone."},
+          {"id": "ad68", "text": "$22,000 retainer plus 4% of attributable renewal value, capped at $110,000."},
+          {"id": "ad97", "text": "$10,000 upfront plus 10% of attributable renewal value, uncapped."}
+        ]},
+        {"id": "delivery", "label": "Technical commitment", "help": "Choose how much integration work to begin before renewals sign.", "options": [
+          {"id": "ae86", "text": "Build all three new integrations and staff launch support before renewals; vendor costs are covered and half the fee depends on retained revenue."},
+          {"id": "ae52", "text": "Reserve the full build team and implement all three customer integrations, with a capped renewal milestone."},
+          {"id": "ae41", "text": "Build the shared dashboard core, adding integrations after customer approval."},
+          {"id": "ae07", "text": "Deliver a paid clickable prototype before beginning integrations."}
+        ]}
+      ]
+    },
+    {
+      "id": "hardware_demo",
+      "client": "Emberline Instruments",
+      "title": "Trade-show hardware demonstration",
+      "scenario": "A hardware company needs an interactive demonstration for a major trade show. The engineering sample works in the lab, although the production enclosure is unfinished.",
+      "facts": ["Estimated effort: 11 weeks", "The company covers booth hardware and production vendors", "Production sample: one available"],
+      "fields": [
+        {"id": "package", "label": "Demonstration package", "help": "Choose the proposed fee and lead-generation upside.", "options": [
+          {"id": "hd37", "text": "$31,000 guaranteed plus a small delivery bonus."},
+          {"id": "hd14", "text": "$38,000 guaranteed before the show."},
+          {"id": "hd89", "text": "$7,000 guaranteed plus 6% of first-year qualified sales, uncapped; expenses remain covered."},
+          {"id": "hd62", "text": "$14,000 guaranteed plus 3% of first-year qualified sales, capped at $85,000."}
+        ]},
+        {"id": "delivery", "label": "Build commitment", "help": "Choose the demonstration scope to lock before production testing completes.", "options": [
+          {"id": "he73", "text": "Build the full interactive booth around live hardware, with a simplified backup and a capped lead bonus."},
+          {"id": "he95", "text": "Make the untested production enclosure the live centerpiece while keeping the lab unit in reserve; costs are covered and most compensation tracks sales."},
+          {"id": "he18", "text": "Deliver a paid tabletop prototype before committing to the trade-show booth."},
+          {"id": "he42", "text": "Build a standard booth around the lab-proven features only."}
+        ]}
+      ]
+    }
+  ]
+}

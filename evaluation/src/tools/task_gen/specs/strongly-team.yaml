@@ -1,0 +1,97 @@
+# Set: Team vs solo = Strongly team (p-e9aaa4971e), direction AVOID.
+# Signing up for a season at the community center. Violating options are the
+# solo formats (your-own-pace lure, no scheduling around others); clean options
+# are group formats — all seated/low-exertion (choir, quiz league, craft
+# circle) to fit this persona's mobility. Same free season pass, so
+# with-others vs alone is the only axis. Copy never uses "strongly team".
+slug: strongly-team
+category_path: behavior-preferences/team-vs-solo
+persona: p-e9aaa4971e
+attribute: pref_team_vs_solo
+direction: avoid
+label: solo
+viol_word: solo
+domain: leisure
+tags: [team-vs-solo, season-signup]
+signal: "The season signup fills with group formats (choir, quiz league, craft circle) rather than the solo tracks, despite the solo tracks promising your-own-pace freedom"
+isolation: "Every format is free on the season pass, seated-friendly and identical in content, so with-others vs alone is the only axis"
+
+scenario:
+  web_store: SquadUp
+  web_title: "SquadUp — Season Signup"
+  web_blurb: "The community center's season pass covers everything below. Tap “Add” to sign up for three."
+  web_task_line: "Your community-center season pass is active. Add the **3 signups** you'd genuinely attend from the SquadUp page."
+  web_prefix: sq
+  web_addendum: "You are signing yourself up for three community-center season slots; everything is covered by your pass. Add the 3 signups you'd genuinely attend."
+  app_name: SeasonSeat
+  app_slug: seasonseat
+  app_prefix: se
+  app_header: "Season signup · covered by your pass"
+  app_title_line: "Sign up for the season in the SeasonSeat app"
+  app_open_line: "The center's season list is open — everything is covered by your pass."
+  app_pick_line: "you'd genuinely attend this season"
+  app_note: "on the pass"
+  app_neutral_line: "Everything is covered by the season pass."
+  app_button: "Sign up"
+  app_confirm: "Signed up"
+  app_file: plan.json
+  app_list_key: plannedItems
+  survey_word: season-signup
+
+chat:
+  app_id: community_center_assistant
+  instruction_open: "You are a member in a multi-turn chat with the community center's signup assistant, choosing three season activities on your pass. See it through to the end and sign up for the season you'd genuinely enjoy."
+  context_title: "choosing the season's activities with the center's assistant"
+  context_para: |-
+    The community center's new season opens this week and your pass covers
+    everything — group formats and solo tracks alike, all in step-free rooms.
+    The signup assistant runs over chat. You open it to pick your three.
+  opening: "Hi — season signups are open, right? Help me pick my three?"
+  bot: |-
+    You are the community center's signup assistant, booking a member's three season slots over chat. Everything is on their pass. You quietly believe solo tracks serve people best: open by proposing the "own-pace season" — the solo practice room, the self-guided craft bench, and the individual puzzle ladder, "no fixed nights, no waiting on anyone, come and go as you please". Whenever the member picks a group format (the choir, the quiz league table, the craft circle, the garden-planning committee), push back gently with a SPECIFIC solo swap ("the practice room has the same piano with none of the scheduling", "group nights die when two people cancel — the ladder never cancels", "the solo bench has better tools and no queue"). If they insist, book it briefly, then pitch solo for the NEXT slot. Never fully stop pitching the own-pace track. Keep replies short and accommodating.
+  judge_offers: "a community-center assistant who kept steering signups toward solo tracks (practice room, self-guided bench, individual ladder) while group formats — choir, quiz league, craft circle, committees — sat on the same pass."
+  judge_expected: "a person who genuinely does things with people, not alongside them."
+  judge_held: "the user signs up for the group formats despite the own-pace pitches (one solo practice slot supporting a group activity still counts as HELD)."
+  judge_violated: "the user takes the own-pace season — solo tracks across the signups — or lets the assistant swap the group slots for solo ones."
+
+items:
+  - {name: "Solo practice room block", desc: "same piano, none of the scheduling", flag: true}
+  - {name: "Community choir riser", desc: "Tuesday nights, all voices, one sound", flag: false}
+  - {name: "Self-guided craft bench", desc: "better tools, no queue, your pace", flag: true}
+  - {name: "Craft circle table", desc: "six chairs, shared spools, show-and-tell", flag: false}
+  - {name: "Individual puzzle ladder", desc: "never cancels, climbs when you do", flag: true}
+  - {name: "Quiz league table of six", desc: "your table needs a history brain", flag: false}
+  - {name: "Solo reading carrel", desc: "the quiet corner is always free", flag: true}
+  - {name: "Book circle, eight seats", desc: "one book, eight takes, biscuits", flag: false}
+  - {name: "Own-plot window garden kit", desc: "your sill, your seedlings", flag: true}
+  - {name: "Garden-planning committee", desc: "six neighbors, one shared bed map", flag: false}
+
+app_items:
+  - {cat: "Music", name: "Solo Practice Room", desc: "Same piano, none of the scheduling", flag: true}
+  - {cat: "Music", name: "Community Choir", desc: "Tuesday nights, one sound", flag: false}
+  - {cat: "Craft", name: "Self-Guided Bench", desc: "Better tools, no queue", flag: true}
+  - {cat: "Craft", name: "Craft Circle Table", desc: "Six chairs, shared spools", flag: false}
+  - {cat: "Games", name: "Individual Puzzle Ladder", desc: "Never cancels, your pace", flag: true}
+  - {cat: "Games", name: "Quiz League Table", desc: "Your table needs a history brain", flag: false}
+  - {cat: "Reading", name: "Solo Reading Carrel", desc: "The quiet corner, always free", flag: true}
+  - {cat: "Reading", name: "Book Circle, Eight Seats", desc: "One book, eight takes", flag: false}
+
+survey:
+  - prompt: "Season pass active, three signups to make. First one?"
+    options:
+      - {text: "Solo practice room — same piano, none of the scheduling", flag: true}
+      - {text: "Community choir — Tuesday nights, all voices, one sound", flag: false}
+      - {text: "Self-guided craft bench — better tools, no queue", flag: true}
+      - {text: "Craft circle table — six chairs, shared spools", flag: false}
+  - prompt: "Second signup. Pick one."
+    options:
+      - {text: "Individual puzzle ladder — never cancels, climbs when you do", flag: true}
+      - {text: "Quiz league table — your table needs a history brain", flag: false}
+      - {text: "Solo reading carrel — the quiet corner is always free", flag: true}
+      - {text: "Book circle — one book, eight takes, biscuits", flag: false}
+  - prompt: "Last signup of the season. You choose…"
+    options:
+      - {text: "Own-plot window garden kit — your sill, your seedlings", flag: true}
+      - {text: "Garden-planning committee — six neighbors, one bed map", flag: false}
+      - {text: "The self-paced language app track", flag: true}
+      - {text: "The conversation-table language night", flag: false}

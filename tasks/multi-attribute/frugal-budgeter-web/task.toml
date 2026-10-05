@@ -1,0 +1,65 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/frugal-budgeter-web"
+theme = "frugal-budgeter: cost-sensitive + tracks the budget + money-as-a-means (budget/value · check-and-log · no status spending)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "personal-finance"
+tags = [ "persona-adherence", "multi-check", "frugal-budgeter", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE shopping task, THREE checks. A single persona carrying three frugal-budgeter
+# values adds 3 items to a cart on a live store page (Playwright); the verifier runs
+# an independent rule-based check per axis, reading each product's hidden data-*
+# tier off index.html (ground truth, NOT shown to the shopper). The three axes are
+# DISTINCT and decorrelated: how PRICEY an item is (cost), whether choosing it
+# reflects TRACKING/reviewing your spending (tracking), and whether it is a
+# STATUS/wealth-signaling buy (wealthmod). This amortizes one generation across
+# three attributes. Reward = integer score (one point per check HELD, 0..3). Each
+# axis: HELD iff no picked product is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "economic_motivation"
+attribute = "Economic motivation"
+value = "Cost-sensitive"
+evaluator = "rule-based"
+evaluator_name = "economic_motivation=Cost-sensitive"
+# Ground truth: each product's hidden data-cost (0 budget/value .. 3 splurge) in index.html.
+adherence_signal = "Cart built from budget/value products (data-cost 0-1); no splurge pick (>= 2)."
+
+[[checks]]
+dimension_id = "habit_budget_tracking"
+attribute = "Budget-tracking habit"
+value = "Weekly"
+evaluator = "rule-based"
+evaluator_name = "habit_budget_tracking=Weekly"
+# Ground truth: each product's hidden data-tracking (0 check/log/review the budget .. 3 never track, just spend).
+adherence_signal = "Cart favors check-first / budget-aware items (data-tracking 0-1); no ignore-the-budget pick (>= 2)."
+
+[[checks]]
+dimension_id = "val_wealth"
+attribute = "Value: Wealth"
+value = "Moderate"
+evaluator = "rule-based"
+evaluator_name = "val_wealth=Moderate"
+# Ground truth: each product's hidden data-wealthmod (0 money-as-a-means .. 3 status / wealth-signaling).
+adherence_signal = "Cart favors money-as-a-means items (data-wealthmod 0-1); no status-spending pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

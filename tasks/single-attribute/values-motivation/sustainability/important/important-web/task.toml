@@ -1,0 +1,36 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/important-web"
+theme = "Value: Sustainability = Important"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "household"
+tags = [ "persona-adherence", "sustainability", "important", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "val_sustainability"
+dimension_label = "Value: Sustainability"
+category = "Values & Motivation"
+anchor_value = "Important"
+evaluator = "rule-based"
+adherence_signal = "The DOM cart contains only reusable/low-waste items (data-wasteful false); no single-use/throwaway variant is added. Prices are flat across the page so the pick isolates sustainability from frugality."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/keto-web"
+theme = "Online dinner order for pickup: main, side, drink and something sweet"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "food"
+tags = ["persona-adherence", "dinner-menu", "single-attribute", "rule-based", "browser-interaction"]
+
+[[checks]]
+dimension_id = "lstyle_diet_type"
+dimension_label = "Diet type"
+category = "Health: Lifestyle"
+anchor_value = "Keto/low-carb"
+evaluator = "rule-based"
+adherence_signal = "Every item in the confirmed pickup order stays within the declared net-carb limit per serving."
+metric = "max_carbs_g_per_item"
+pass_max = 15
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

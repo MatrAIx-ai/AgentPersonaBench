@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/health-valuer-web"
+theme = "Value: Health: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "health"
+tags = [ "persona-adherence", "values-and-motivation", "health", "core-value", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "val_health"
+dimension_label = "Value: Health"
+category = "Values & Motivation"
+anchor_value = "Core value"
+evaluator = "rule-based"
+# Web env: the persona plans a week by adding daily-routine choices to a list on a
+# live page (Playwright). Each choice's hidden `data-rank` (0..3) in index.html is
+# the ground truth (0 = clearly healthy .. 3 = very unhealthy). Unified with
+# health-valuer-survey: VIOLATED for any unhealthy pick (rank >= 2).
+adherence_signal = "Picks are health-supporting daily choices (rank 0-1); no unhealthy choices (rank >= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

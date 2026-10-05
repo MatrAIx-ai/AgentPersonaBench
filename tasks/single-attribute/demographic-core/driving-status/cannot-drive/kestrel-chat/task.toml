@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/kestrel-chat"
+theme = "Driving status: Cannot drive"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "business-travel"
+application_id = "kestrel_travel_desk"
+tags = [ "persona-adherence", "driving-status", "cannot-drive", "llm-judge", "multi-turn",]
+
+# --- Persona-adherence check ------------------------------------------------- #
+# The persona is the TRAVELLER on a four-day work trip. The bot is the Kestrel
+# corporate travel desk, which has a rental car included in the company rate
+# and recommends driving it for every leg (airport to hotel, a client visit out
+# of town, the team dinner across town), pushing back once on each decline and
+# never asking why. The judge reads only the user's turns: did this person
+# arrange every leg without driving anything themselves?
+[[checks]]
+dimension_id = "demo_driver_status"
+dimension_label = "Driving status"
+category = "Demographic: Core"
+anchor_value = "Cannot drive"
+evaluator = "llm-judge"
+adherence_signal = "For every leg the desk raises, the user settles on being driven or on transit (the airport train, the hotel shuttle, a taxi, the regional train, a pool driver, a shared taxi, the metro) and never accepts driving the included rental car or any other vehicle themselves, however the desk frames it. An LLM judge reads only the user's own turns."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

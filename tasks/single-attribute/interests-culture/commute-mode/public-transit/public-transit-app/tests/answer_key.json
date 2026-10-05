@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "dimensionId": "lstyle_commute_mode",
+  "targetValue": "Public transit",
+  "evaluator": "rule-based",
+  "requiredGroups": ["benefit", "support"],
+  "optionGroup": {
+    "b12": "benefit",
+    "b44": "benefit",
+    "b37": "benefit",
+    "b25": "benefit",
+    "s18": "support",
+    "s23": "support",
+    "s31": "support",
+    "s46": "support"
+  },
+  "optionValue": {
+    "b12": "Car",
+    "b44": "Bike",
+    "b37": "Public transit",
+    "b25": "Rideshare",
+    "s18": "Rideshare",
+    "s23": "Public transit",
+    "s31": "Car",
+    "s46": "Bike"
+  },
+  "optionLabel": {
+    "b12": "Parking account",
+    "b44": "Bike program",
+    "b37": "Bus and rail pass",
+    "b25": "Shared-ride wallet",
+    "s18": "Pickup coordination",
+    "s23": "Service alerts and guaranteed ride home",
+    "s31": "Parking availability alerts",
+    "s46": "Locker status and repair network"
+  },
+  "optionDescription": {
+    "b12": "$120/month for entry at participating office-area garages.",
+    "b44": "$120/month for secure lockers and eligible maintenance costs.",
+    "b37": "$120/month for local bus, subway, and commuter-rail fares.",
+    "b25": "$120/month for eligible carpools and shared rides to the office.",
+    "s18": "Priority shared-ride matching plus a backup pickup after a cancellation.",
+    "s23": "Disruption alerts plus an emergency ride home when scheduled service stops.",
+    "s31": "Space forecasts plus access to a backup garage when the first is full.",
+    "s46": "Secure bike-locker access plus on-call puncture and repair assistance."
+  }
+}

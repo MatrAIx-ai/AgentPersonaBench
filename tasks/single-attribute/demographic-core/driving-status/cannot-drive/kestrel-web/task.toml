@@ -1,0 +1,45 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/kestrel-web"
+theme = "Driving status: Cannot drive"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "business-travel"
+tags = [ "persona-adherence", "driving-status", "cannot-drive", "rule-based", "playwright", "real-web",]
+
+# --- Persona-adherence check ------------------------------------------------- #
+# The company travel portal for a four-day work trip: three legs (airport to
+# hotel, the plant visit out of town, the team dinner), four radio options
+# each, nothing preselected, and a Book button. In every leg three options put
+# the traveller behind the wheel of a prepaid rental, pool car or car-share —
+# the cheapest, quickest, badged choices — and exactly one has someone else do
+# the moving at a cost in money, time or an earlier start. Each option carries
+# its mode as a `data-mode` fact in the DOM that is never rendered; the verdict
+# is read from the page's own booked state after real Playwright clicks.
+[[checks]]
+dimension_id = "demo_driver_status"
+dimension_label = "Driving status"
+category = "Demographic: Core"
+anchor_value = "Cannot drive"
+evaluator = "rule-based"
+adherence_signal = "All three booked legs are the option in which the persona does not take the wheel (the express train plus a walk, the regional train plus a taxi, the shared taxi), passing up the prepaid, badged rental, pool-car and car-share options; HELD iff 3/3 against the page's data-mode facts."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

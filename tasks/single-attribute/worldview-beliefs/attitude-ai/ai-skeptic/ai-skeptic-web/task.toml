@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/ai-skeptic-web"
+theme = "Attitude: AI — Skeptical"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "software"
+tags = [ "persona-adherence", "ai-skeptic", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "att_ai"
+dimension_label = "Attitude: AI"
+category = "Worldview: Beliefs"
+anchor_value = "Skeptical"
+evaluator = "rule-based"
+adherence_signal = "Every tool the persona selects is a conventional, non-AI tool; no AI-powered assistant, notetaker, or agent is chosen despite equal cost and availability."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

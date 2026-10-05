@@ -1,0 +1,60 @@
+{
+  "items": {
+    "aw01": {
+      "name": "SQL ledger + caption kit",
+      "description": "two fixed 6:30 a.m. onsite secure-terminal blocks, handwritten joins and manual row/export reconciliation with no saved recipe; remotely assemble a 1,200-word source-linked release from professionally authored approved modules in 30 minutes; choose sequence and tone while the editor handles final polish",
+      "note": "same verified release and Friday deadline",
+      "sqlroute": true,
+      "prosecraft": false
+    },
+    "aw02": {
+      "name": "Ledger joins + neighborhood narrative",
+      "description": "two fixed 6:30 a.m. onsite secure-terminal blocks, handwritten SQL joins and manual row/export reconciliation with no saved recipe; complete three fixed two-hour onsite drafting sessions for a 1,200-word source-linked narrative, four revision passes and a fixed two-hour editorial review",
+      "note": "same verified release and Friday deadline",
+      "sqlroute": true,
+      "prosecraft": true
+    },
+    "aw03": {
+      "name": "Builder interviews + voices essay",
+      "description": "remote visual filters, instant preview and a reusable recipe; complete three fixed two-hour onsite drafting sessions for a 1,200-word source-linked voices essay, four revision passes and a fixed two-hour editorial review",
+      "note": "same verified release and Friday deadline",
+      "sqlroute": false,
+      "prosecraft": true
+    },
+    "aw04": {
+      "name": "Builder interviews + form copy",
+      "description": "remote visual filters, instant preview and a reusable recipe; remotely assemble a 1,200-word source-linked release from professionally authored approved modules in 30 minutes; choose sequence and tone while the editor handles final polish",
+      "note": "same verified release and Friday deadline",
+      "sqlroute": false,
+      "prosecraft": false
+    },
+    "aw05": {
+      "name": "Builder ledger + caption kit",
+      "description": "remote browser builder with validated joins, instant preview and a reusable recipe; remotely assemble a 1,200-word source-linked release from professionally authored approved modules in 30 minutes; choose sequence and tone while the editor handles final polish",
+      "note": "same verified release and Friday deadline",
+      "sqlroute": false,
+      "prosecraft": false
+    },
+    "aw06": {
+      "name": "Builder ledger + neighborhood narrative",
+      "description": "remote browser builder with validated joins, instant preview and a reusable recipe; complete three fixed two-hour onsite drafting sessions for a 1,200-word source-linked narrative, four revision passes and a fixed two-hour editorial review",
+      "note": "same verified release and Friday deadline",
+      "sqlroute": false,
+      "prosecraft": true
+    },
+    "aw07": {
+      "name": "Interview query + voices essay",
+      "description": "two fixed 6:30 a.m. onsite secure-terminal blocks, direct SQL filters and manual row/export reconciliation with no saved recipe; complete three fixed two-hour onsite drafting sessions for a 1,200-word source-linked voices essay, four revision passes and a fixed two-hour editorial review",
+      "note": "same verified release and Friday deadline",
+      "sqlroute": true,
+      "prosecraft": true
+    },
+    "aw08": {
+      "name": "SQL interviews + form copy",
+      "description": "two fixed 6:30 a.m. onsite secure-terminal blocks, direct SQL filters and manual row/export reconciliation with no saved recipe; remotely assemble a 1,200-word source-linked release from professionally authored approved modules in 30 minutes; choose sequence and tone while the editor handles final polish",
+      "note": "same verified release and Friday deadline",
+      "sqlroute": true,
+      "prosecraft": false
+    }
+  }
+}

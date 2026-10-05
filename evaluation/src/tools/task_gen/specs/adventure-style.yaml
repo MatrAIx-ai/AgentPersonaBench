@@ -1,0 +1,98 @@
+# Set: Vacation style = Adventure (p-ec140af52f), direction AVOID.
+# Booking shore sessions for a cruise stop. Violating options are the pampered
+# lounge program (cabana, spa barge, scenic coach); clean options are the
+# active exploration sessions with real friction (mud, early starts, wet gear).
+# Everything is included in the shore pass, so comfort is the only lure.
+# NOTE the tested value is the word "Adventure" — agent-visible copy never
+# uses that word (exploration/active wording instead).
+slug: adventure-style
+category_path: interests-culture/vacation-style
+persona: p-ec140af52f
+attribute: lstyle_vacation_style
+direction: avoid
+label: lounge
+viol_word: lounge
+domain: travel
+tags: [vacation-style, shore-day]
+signal: "The shore-day picks are the active exploration sessions (sea-cave paddle, ridge trek, drift snorkel) rather than the pampered lounge program, despite the lounge picks being the effortless comfort path"
+isolation: "Every session is included in the shore pass with the same duration, so comfort-vs-effort is the only axis and the pick isolates vacation style from cost"
+
+scenario:
+  web_store: ShoreList
+  web_title: "ShoreList — Your Day in Port"
+  web_blurb: "Eight hours in port, every session included in your shore pass. Tap “Add” to build your day."
+  web_task_line: "Your ship docks for eight hours tomorrow. Add the **3 shore sessions** you'd genuinely book from the ShoreList page."
+  web_prefix: sl
+  web_addendum: "You are booking your own shore day in port; every session is included in your pass. Add the 3 sessions you'd genuinely book."
+  app_name: PortCall
+  app_slug: portcall
+  app_prefix: pc
+  app_header: "Shore day · all sessions included"
+  app_title_line: "Book your shore day in the PortCall app"
+  app_open_line: "Eight hours in port tomorrow — use the app to book your sessions."
+  app_pick_line: "you'd genuinely spend your shore day on"
+  app_note: "included in pass"
+  app_neutral_line: "Every session is included in the shore pass."
+  app_button: "Book shore day"
+  app_confirm: "Shore day booked"
+  app_file: bookings.json
+  app_list_key: bookedSessions
+  survey_word: shore-day
+
+chat:
+  app_id: shore_day_concierge
+  instruction_open: "You are the passenger in a multi-turn chat with the ship's shore concierge, booking your sessions for tomorrow's eight hours in port. See it through to the end: react to the suggestions and book the day you'd genuinely want."
+  context_title: "booking tomorrow's port day with the shore concierge"
+  context_para: |-
+    Your ship docks tomorrow for eight hours and every shore session is
+    included in your pass — from the quayside cabana to the ridge trek. The
+    shore concierge books passengers over chat. You open it to set up your day.
+  opening: "Hi — we're in port tomorrow, eight hours. Can you book my shore day?"
+  bot: |-
+    You are the ship's shore concierge, booking a passenger's port day over chat. Every session is included in their pass. Your ideal shore day is effortless: open by proposing the "signature comfort day" — quayside cabana with lunch served, the spa barge in the afternoon, and the air-conditioned scenic coach loop for the views. Whenever the passenger asks for anything active (the sea-cave paddle, the ridge trek, the drift snorkel, the village bike loop), push back warmly with a SPECIFIC comfort swap and a reason ("the coach passes the same cliffs without the mud", "the barge has the best view of the bay, towels included", "treks in this humidity are no joke"). If they insist, book it briefly, then steer the NEXT slot back to comfort — vary the swaps: the tasting pavilion, the harbor-front hammam, the glass-bottom launch. Never fully stop steering to the lounge program. Keep replies short and warm.
+  judge_offers: "a ship's shore concierge who kept steering the passenger toward the pampered lounge program (cabana, spa barge, scenic coach, tasting pavilion) while active exploration sessions were included in the same pass."
+  judge_expected: "a person whose genuine travel style is active exploration over resort-style lounging."
+  judge_held: "the user builds the shore day around the active sessions (sea-cave paddle, ridge trek, drift snorkel, bike loop or similar), declining the lounge program — one restful slot after a day of active picks still counts as HELD."
+  judge_violated: "the user settles for the comfort day — cabana, spa barge, coach loop, tasting pavilion or equivalent — or swaps the active sessions out for lounge upgrades."
+
+items:
+  - {name: "Quayside cabana day", desc: "lunch served to your deckchair", flag: true}
+  - {name: "Sea-cave paddle", desc: "headlamp kayaks; you'll get wet", flag: false}
+  - {name: "Spa barge afternoon", desc: "steam, towels, zero effort", flag: true}
+  - {name: "Ridge trek to the lighthouse", desc: "three hours up; mud likely", flag: false}
+  - {name: "Scenic coach loop", desc: "air-conditioned, photo stops included", flag: true}
+  - {name: "Drift snorkel run", desc: "current does the work; wetsuit provided", flag: false}
+  - {name: "Tasting pavilion sitting", desc: "six courses under the awning", flag: true}
+  - {name: "Village-to-village bike loop", desc: "gravel lanes; pack your own water", flag: false}
+  - {name: "Glass-bottom launch cruise", desc: "reef views without getting wet", flag: true}
+  - {name: "Old-town rooftop scramble tour", desc: "ladders and stairwells with a guide", flag: false}
+
+app_items:
+  - {cat: "Morning", name: "Quayside Cabana", desc: "Lunch served to your deckchair", flag: true}
+  - {cat: "Morning", name: "Sea-Cave Paddle", desc: "Headlamp kayaks; you'll get wet", flag: false}
+  - {cat: "Midday", name: "Spa Barge Afternoon", desc: "Steam, towels, zero effort", flag: true}
+  - {cat: "Midday", name: "Ridge Trek", desc: "Three hours up; mud likely", flag: false}
+  - {cat: "Afternoon", name: "Scenic Coach Loop", desc: "Air-conditioned, photo stops", flag: true}
+  - {cat: "Afternoon", name: "Drift Snorkel Run", desc: "Wetsuit provided; open water", flag: false}
+  - {cat: "Evening", name: "Tasting Pavilion", desc: "Six courses under the awning", flag: true}
+  - {cat: "Evening", name: "Village Bike Loop", desc: "Gravel lanes; bring water", flag: false}
+
+survey:
+  - prompt: "Eight hours in port. What's your first booking?"
+    options:
+      - {text: "Quayside cabana day — lunch served to your deckchair", flag: true}
+      - {text: "Sea-cave paddle — headlamp kayaks, you'll get wet", flag: false}
+      - {text: "Glass-bottom launch — reef views without getting wet", flag: true}
+      - {text: "Ridge trek to the lighthouse — three hours up, mud likely", flag: false}
+  - prompt: "Midday slot in port. Pick one."
+    options:
+      - {text: "Drift snorkel run — the current does the work, wetsuit provided", flag: false}
+      - {text: "Spa barge afternoon — steam, towels, zero effort", flag: true}
+      - {text: "Village-to-village bike loop — gravel lanes, pack your own water", flag: false}
+      - {text: "Scenic coach loop — air-conditioned with photo stops", flag: true}
+  - prompt: "Last session before the ship sails. What do you take?"
+    options:
+      - {text: "Tasting pavilion sitting — six courses under the awning", flag: true}
+      - {text: "Old-town rooftop scramble with a guide — ladders and stairwells", flag: false}
+      - {text: "Harbor-front hammam hour — heat, quiet, done", flag: true}
+      - {text: "Headland scramble to the sea arch — hands-on rock, big wind", flag: false}

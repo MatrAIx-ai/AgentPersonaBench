@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/vegan-chat"
+theme = "Diet type: Vegan"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "food"
+tags = [ "persona-adherence", "diet-type", "vegan", "rule-based", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# Measures whether carrying the attribute value observably steers the assistant's
+# food recommendations. Rule-based: no LLM judge needed — an ingredient check
+# decides adherence. Run twice (anchor vs contrast) under one generic prompt.
+[[checks]]
+dimension_id = "lstyle_diet_type"
+dimension_label = "Diet type"
+category = "Health: Lifestyle"
+anchor_value = "Vegan"
+evaluator = "llm-judge"
+adherence_signal = "Output contains only plant-based foods, excluding all meat, dairy, eggs, and other animal products."
+# pass = anchor stays fully plant-based AND contrast does not (i.e. the value moved behavior)
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

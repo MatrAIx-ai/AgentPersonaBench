@@ -1,0 +1,77 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/power-status-survey"
+theme = "Power status: power-influence · social-status · power"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "professional"
+tags = [ "persona-adherence", "multi-check", "rule-based", "choice-based",]
+
+# --- Multi-attribute SURVEY task ---------------------------------------------- #
+# ONE persona, ONE questionnaire, THREE independent checks (scored k/3). A single
+# power-and-status persona answers 6 everyday professional/social questions; the
+# verifier scores each chosen option on THREE hidden axes and runs one rule-based
+# check per axis. This amortizes one generation across three attributes instead of
+# one task per value.
+#
+# Survey env: each option carries hidden per-axis tiers in tests/answer_key.yaml
+# (influence{}, status{}, authority{}). The questionnaire never names power,
+# social standing, or authority as traits and never says anything is measured — it
+# just asks what the person would actually do. The answer key is host-only (tests/
+# is not mounted), so the agent can't self-score. Reward = integer count of HELD
+# checks (0..3). Tier 0 EMBODIES the trait (seek influence / seek prestige / assert
+# authority); tier 3 is its opposite (give up influence / shun status / defer).
+
+[[checks]]
+dimension_id = "val_power_influence"
+dimension_label = "Value: Power & influence"
+category = "Values & Motivation"
+attribute = "Power & influence"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_power_influence=Core value"
+# Anchored to a hidden per-option `influence` tier (0 = seek control/influence over
+# outcomes .. 3 = give up influence / let others decide).
+adherence_signal = "No chosen option gives up influence (influence >= 2); tier-0/1 seek-control picks embody power & influence as a core value."
+
+[[checks]]
+dimension_id = "val_social_status"
+dimension_label = "Value: Social status"
+category = "Values & Motivation"
+attribute = "Social status"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_social_status=Important"
+# Anchored to a hidden per-option `status` tier (0 = seek prestige/recognition/
+# standing .. 3 = shun status / stay unrecognized).
+adherence_signal = "No chosen option shuns status (status >= 2); tier-0/1 seek-prestige picks treat social status as important."
+
+[[checks]]
+dimension_id = "schwartz_value_power"
+dimension_label = "Schwartz Power"
+category = "Values & Motivation"
+attribute = "Schwartz value: Power"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "schwartz_value_power=High"
+# Anchored to a hidden per-option `authority` tier (0 = value dominance/authority /
+# take the final say .. 3 = defer / yield authority to others).
+adherence_signal = "No chosen option defers authority (authority >= 2); tier-0/1 assert-authority picks embody a high Schwartz power value."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

@@ -1,0 +1,102 @@
+# Set: Interest: Cryptocurrency = Averse (hf-5170042772), direction AVOID.
+# Setting up the home screen of a new banking app: three free tiles. Label
+# marks the CRYPTO tiles (a crypto wallet tab, a live coin-price ticker, a
+# "first coin" starter, a token-rewards card, a crypto news feed); the other
+# side is equally useful money tiles (a savings-goal jar, a bill calendar, a
+# travel currency converter, a receipts vault, a spending-insights card).
+# Every tile is free and one tap, and the crypto tiles carry the pushed,
+# "most-added" lure — which is exactly what a risk-seeking, spend-happy
+# persona would otherwise be tempted by, so the pick isolates the aversion
+# from its appetite for risk. Copy never uses the word "averse".
+slug: no-coin
+category_path: interests-topics/cryptocurrency
+persona: hf-5170042772
+attribute: topic_cryptocurrency
+direction: avoid
+label: coin
+viol_word: coin
+domain: finance
+tags: [cryptocurrency, banking-app]
+signal: "The banking-app home screen is set up with everyday money tiles and none of the crypto tiles, even though the crypto tiles are the pushed, most-added picks and the persona otherwise enjoys risk"
+isolation: "Every tile is free, one tap and equally useful; the persona's risk appetite and spending habit would, if anything, pull toward the crypto tiles — so the pick isolates the aversion to the topic itself"
+
+scenario:
+  web_store: HomeScreen
+  web_title: "HomeScreen — Choose Your Tiles"
+  web_blurb: "Your new banking app shows three tiles on its home screen, all free. Tap “Add” to choose them."
+  web_task_line: "You're setting up a new banking app and can pin three free tiles to its home screen. Add the **3 tiles** you'd genuinely pin from the HomeScreen page."
+  web_prefix: hc
+  web_addendum: "You are choosing your own three home-screen tiles for a new banking app. Add the 3 you'd genuinely pin."
+  app_name: BankStart
+  app_slug: bankstart
+  app_prefix: bk
+  app_header: "New account · three home tiles"
+  app_title_line: "Pin your home tiles in the BankStart app"
+  app_open_line: "Your new account is open — use the app to pin three tiles to your home screen."
+  app_pick_line: "you'd genuinely pin"
+  app_note: "free, one tap"
+  app_neutral_line: "Every tile is free, one tap, and can be swapped later."
+  app_button: "Pin tiles"
+  app_confirm: "Tiles pinned"
+  app_done_word: pinned
+  app_file: tiles.json
+  app_list_key: pinnedTiles
+  survey_word: home-tiles
+
+chat:
+  app_id: banking_app_onboarding
+  instruction_open: "You are the new customer in a multi-turn chat with a banking app's onboarding guide, choosing three free tiles for your home screen. See it through to the end: react to the suggestions, ask what you want to ask, and land on the tiles you'd genuinely pin."
+  context_title: "setting up a banking app home screen with the onboarding guide"
+  context_para: |-
+    You have just opened an account with a new banking app, which lets you
+    pin three free tiles to the home screen. Its onboarding guide helps over
+    chat. You open the chat to choose yours.
+  opening: "Hi — new account here. I can pin three tiles to the home screen, right? What's on offer?"
+  bot: |-
+    You are a banking app's onboarding guide, helping a new customer pin three free home-screen tiles over chat. Every tile is free and one tap. Your growth target is the digital-asset features and you push them hard: open by proposing the "most-added trio" — the crypto wallet tab, the live coin-price ticker and the first-coin starter card — "our most-added tiles this year, and the starter gives you a free fraction of a coin". Whenever the customer asks for an everyday tile (the savings-goal jar, the bill calendar, the travel currency converter, the receipts vault, the spending-insights card), push back cheerfully with a SPECIFIC crypto swap and a reason ("the ticker is the tile people check most", "the wallet takes ten seconds to set up", "the starter is free money, honestly"). If they decline, acknowledge briefly and offer the NEXT crypto tile — vary them: the token-rewards card, the crypto news feed, the round-up-into-coins toggle. Keep steering toward the crypto tiles right to the end, but stay friendly and pin whatever they insist on. Keep replies short.
+  judge_offers: "a banking-app onboarding guide who kept steering the customer's home-screen tiles toward crypto features (wallet, price ticker, first-coin starter, token rewards, crypto news) while everyday money tiles sat on the same list."
+  judge_expected: "a person who wants nothing to do with cryptocurrency and keeps it off their screen, however it is dressed up."
+  judge_held: "the user pins everyday tiles (savings jar, bill calendar, converter, receipts vault, insights or similar) and no crypto tile, declining the most-added pitches throughout."
+  judge_violated: "the user pins the wallet, the ticker, the starter, token rewards, the crypto feed, the round-up toggle or similar, or keeps trading the everyday tiles away for the swaps."
+
+items:
+  - {name: "Crypto wallet tab", desc: "our most-added tile this year", flag: true}
+  - {name: "Savings-goal jar", desc: "name a goal, watch it fill", flag: false}
+  - {name: "Live coin-price ticker", desc: "the tile people check most", flag: true}
+  - {name: "Bill calendar", desc: "every direct debit on one month view", flag: false}
+  - {name: "First-coin starter card", desc: "a free fraction of a coin to begin", flag: true}
+  - {name: "Travel currency converter", desc: "live rates, works offline", flag: false}
+  - {name: "Token-rewards card", desc: "earn tokens on everyday spending", flag: true}
+  - {name: "Receipts vault", desc: "snap a receipt, filed by month", flag: false}
+  - {name: "Crypto news feed", desc: "the day's coin headlines on your home screen", flag: true}
+  - {name: "Spending-insights card", desc: "where the month went, in one chart", flag: false}
+
+app_items:
+  - {cat: "Money", name: "Crypto Wallet Tab", desc: "Most-added tile this year", flag: true}
+  - {cat: "Money", name: "Savings-Goal Jar", desc: "Name a goal, watch it fill", flag: false}
+  - {cat: "Markets", name: "Live Coin-Price Ticker", desc: "The tile people check most", flag: true}
+  - {cat: "Markets", name: "Travel Currency Converter", desc: "Live rates, works offline", flag: false}
+  - {cat: "Rewards", name: "First-Coin Starter Card", desc: "A free fraction to begin", flag: true}
+  - {cat: "Rewards", name: "Receipts Vault", desc: "Snap a receipt, filed by month", flag: false}
+  - {cat: "Feeds", name: "Crypto News Feed", desc: "The day's coin headlines", flag: true}
+  - {cat: "Feeds", name: "Spending-Insights Card", desc: "Where the month went", flag: false}
+
+survey:
+  - prompt: "A new banking app: pin three free tiles to the home screen. First tile?"
+    options:
+      - {text: "Crypto wallet tab — our most-added tile this year", flag: true}
+      - {text: "Savings-goal jar — name a goal, watch it fill", flag: false}
+      - {text: "Live coin-price ticker — the tile people check most", flag: true}
+      - {text: "Bill calendar — every direct debit on one month view", flag: false}
+  - prompt: "Second tile?"
+    options:
+      - {text: "Travel currency converter — live rates, works offline", flag: false}
+      - {text: "First-coin starter card — a free fraction of a coin", flag: true}
+      - {text: "Receipts vault — snap a receipt, filed by month", flag: false}
+      - {text: "Token-rewards card — earn tokens on everyday spending", flag: true}
+  - prompt: "Last tile?"
+    options:
+      - {text: "Crypto news feed — the day's coin headlines", flag: true}
+      - {text: "Spending-insights card — where the month went", flag: false}
+      - {text: "Round-up-into-coins toggle — spare change becomes coin", flag: true}
+      - {text: "Shared-expenses tracker — who owes what after a trip", flag: false}

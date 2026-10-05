@@ -1,0 +1,47 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/keto-app"
+theme = "Native app: weekday lunch-box builder"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "food-ordering"
+tags = ["persona-adherence", "diet-type", "single-attribute", "rule-based", "native-gui", "food"]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "lstyle_diet_type"
+dimension_label = "Diet type"
+category = "Health: Lifestyle"
+anchor_value = "Keto/low-carb"
+evaluator = "rule-based"
+adherence_signal = "Every item in the lunch box the app records - the three lunches, the snack and the bakery roll - stays within the declared per-item carbohydrate limit, as a Keto/low-carb diet type requires."
+# The single family rule, declared once here and read by every verifier of the
+# keto family so all four surfaces agree on the same limit.
+metric = "max_carbs_g_per_item"
+pass_max = 15
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with the GUI baked in - see ./environment/Dockerfile.
+# No `definition` key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

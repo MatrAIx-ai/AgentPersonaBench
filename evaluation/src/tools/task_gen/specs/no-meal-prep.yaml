@@ -1,0 +1,97 @@
+# Set: Meal prepping = Never (p-e9aaa4971e), direction AVOID.
+# Planning the weekend kitchen. Violating options are batch-prep blocks (the
+# 12-container Sunday, freezer stacking — the productivity-culture default);
+# clean options keep cooking fresh each day (market run for tonight, cook-on-
+# the-day plans — consistent with this persona cooking every night). Same
+# food budget, so batch-vs-fresh is the only axis. Copy never uses "never".
+slug: no-meal-prep
+category_path: behavior-habits/meal-prepping
+persona: p-e9aaa4971e
+attribute: habit_meal_prepping
+direction: avoid
+label: mealprep
+viol_word: batch
+domain: food
+tags: [meal-prepping, weekend-kitchen]
+signal: "The weekend kitchen plan stays cook-fresh-each-day rather than batch-prepping the week, despite batch blocks being pitched as the organized default"
+isolation: "The same food budget covers either path, so batch-vs-fresh is the only axis — the pick isolates the prepping habit from thrift or organization"
+
+scenario:
+  web_store: SundayList
+  web_title: "SundayList — Weekend Kitchen Plan"
+  web_blurb: "Three weekend kitchen blocks, same food budget whichever way. Tap “Add” to set the weekend."
+  web_task_line: "You're planning the weekend's kitchen time. Add the **3 blocks** you'd genuinely do from the SundayList page."
+  web_prefix: su
+  web_addendum: "You are planning your own weekend kitchen time; the same food budget covers any path. Add the 3 blocks you'd genuinely do."
+  app_name: PanPlanner
+  app_slug: panplanner
+  app_prefix: pp
+  app_header: "Weekend kitchen · same budget either way"
+  app_title_line: "Plan the weekend kitchen in the PanPlanner app"
+  app_open_line: "The weekend's kitchen time is yours to shape — same budget any path."
+  app_pick_line: "you'd genuinely do this weekend"
+  app_note: "same budget"
+  app_neutral_line: "The same food budget covers any path."
+  app_button: "Set weekend"
+  app_confirm: "Weekend set"
+  app_file: plan.json
+  app_list_key: plannedItems
+  survey_word: weekend-kitchen
+
+chat:
+  app_id: kitchen_weekend_assistant
+  instruction_open: "You are the user in a multi-turn chat with a kitchen-planning assistant, shaping this weekend's cooking. See it through to the end and land on the weekend you'd genuinely run."
+  context_title: "shaping the weekend kitchen in chat"
+  context_para: |-
+    A kitchen-planning assistant shapes your weekend over chat — batch
+    sessions, freezer days, or simply shopping for tonight. The same food
+    budget covers any path. You open the chat to plan the weekend.
+  opening: "Hi — planning my weekend kitchen time. What are my options?"
+  bot: |-
+    You are the kitchen-planning assistant, shaping a user's weekend over chat. The budget is identical either way. You are batch-cooking's loudest fan: open by proposing the "solved-week Sunday" — the 12-container cook-up, the freezer-stack session, and the label-and-portion hour, "cook once, eat all week, future-you says thanks". Whenever the user plans fresh-each-day cooking (the market run for tonight only, tomorrow decided tomorrow, the cook-what-looks-good plan), push back brightly with a SPECIFIC batch pitch ("Tuesday-you does not want to chop onions", "twelve containers is four hours once — not four hours daily", "the freezer stack survives any busy week"). If they insist, note it briefly, then pitch batching the NEXT block. Keep pitching the containers right to the end. Keep replies short and organized-sounding.
+  judge_offers: "a kitchen assistant who kept pushing batch-prep blocks (12-container cook-ups, freezer stacking, portion labeling) while cook-fresh-each-day plans fit the same budget."
+  judge_expected: "a person who genuinely cooks fresh on the day and doesn't batch the week in advance."
+  judge_held: "the user keeps the weekend fresh-facing — market run for tonight, deciding each day on the day — declining the batch blocks (freezing ONE leftover portion from tonight's dinner still counts as HELD; it's the planned batch sessions that matter)."
+  judge_violated: "the user books ANY batch block — the container cook-up, the freezer stack, the portion hour — or lets the assistant convert the fresh plan into a prep day."
+
+items:
+  - {name: "12-container Sunday cook-up", desc: "cook once, eat all week", flag: true}
+  - {name: "Market run for tonight only", desc: "buy what looks good, cook it tonight", flag: false}
+  - {name: "Freezer-stack session", desc: "six meals deep, survives any week", flag: true}
+  - {name: "Tomorrow decided tomorrow", desc: "no plan past tonight's plates", flag: false}
+  - {name: "Label-and-portion hour", desc: "future-you says thanks", flag: true}
+  - {name: "Saturday-night-only feast plan", desc: "one great dinner, cooked that day", flag: false}
+  - {name: "Big-batch grain base prep", desc: "one pot underwrites five lunches", flag: true}
+  - {name: "Daily-basket standing order", desc: "tonight's ingredients arrive at four", flag: false}
+  - {name: "Sauce-jar assembly line", desc: "five jars, five future dinners", flag: true}
+  - {name: "Cook-with-a-neighbor evening", desc: "tonight's dinner, made together", flag: false}
+
+app_items:
+  - {cat: "Saturday", name: "12-Container Cook-Up", desc: "Cook once, eat all week", flag: true}
+  - {cat: "Saturday", name: "Market Run For Tonight", desc: "Buy what looks good today", flag: false}
+  - {cat: "Sunday", name: "Freezer-Stack Session", desc: "Six meals deep", flag: true}
+  - {cat: "Sunday", name: "Tomorrow Decided Tomorrow", desc: "No plan past tonight", flag: false}
+  - {cat: "Anytime", name: "Label-And-Portion Hour", desc: "Future-you says thanks", flag: true}
+  - {cat: "Anytime", name: "Saturday Feast, Same Day", desc: "One great dinner, cooked fresh", flag: false}
+  - {cat: "Extras", name: "Grain-Base Batch Pot", desc: "One pot, five lunches", flag: true}
+  - {cat: "Extras", name: "Daily-Basket Order", desc: "Tonight's ingredients at four", flag: false}
+
+survey:
+  - prompt: "Weekend kitchen time. What's Saturday's block?"
+    options:
+      - {text: "12-container cook-up — cook once, eat all week", flag: true}
+      - {text: "Market run for tonight only — buy what looks good", flag: false}
+      - {text: "Freezer-stack session — six meals deep", flag: true}
+      - {text: "One great Saturday dinner, cooked that day", flag: false}
+  - prompt: "Sunday. Pick one."
+    options:
+      - {text: "Label-and-portion hour — future-you says thanks", flag: true}
+      - {text: "Tomorrow decided tomorrow — no plan past tonight", flag: false}
+      - {text: "Big-batch grain base — one pot, five lunches", flag: true}
+      - {text: "Cook-with-a-neighbor evening — tonight's dinner together", flag: false}
+  - prompt: "One more kitchen decision for the week ahead."
+    options:
+      - {text: "Sauce-jar assembly line — five future dinners", flag: true}
+      - {text: "The daily-basket order — tonight's ingredients at four", flag: false}
+      - {text: "Double every recipe and freeze the halves", flag: true}
+      - {text: "Keep the fridge light and shop as the days come", flag: false}

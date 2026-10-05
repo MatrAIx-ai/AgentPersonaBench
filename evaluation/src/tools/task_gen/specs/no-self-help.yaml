@@ -1,0 +1,103 @@
+# Set: Interest: Self-improvement = Averse (hf-4386921459), direction AVOID.
+# Enrolling in three free evening-class tasters from a community college's
+# autumn catalogue. Label marks the SELF-IMPROVEMENT options (a habit-
+# building bootcamp, a productivity-systems class, a goal-setting workshop,
+# a confidence-coaching circle, a morning-routine masterclass); the other
+# side is equally appealing practical tasters that teach a thing rather
+# than a better you (bike maintenance, a local-history walk, phone
+# photography, first aid, conversational Italian). All are free, the same
+# evening length and beginner-friendly; the self-improvement options carry
+# the "most enrolled this term" lure. Copy never uses the word "averse".
+slug: no-self-help
+category_path: interests-topics/self-improvement
+persona: hf-4386921459
+attribute: topic_self_improvement
+direction: avoid
+label: uplift
+viol_word: selfhelp
+domain: education
+tags: [self-improvement, evening-classes]
+signal: "The three free tasters are practical skills (bike maintenance, local history, phone photography, first aid) and no self-improvement class is picked, even though those are the pushed, most-enrolled options"
+isolation: "Every taster is free, the same evening length and beginner-friendly; the practical side teaches a skill and the other side teaches a better you, so the pick isolates the persona's distaste for the self-improvement genre rather than any dislike of classes"
+
+scenario:
+  web_store: EveningPick
+  web_title: "EveningPick — Autumn Tasters"
+  web_blurb: "Three free evening-class tasters from the autumn catalogue, all beginner-friendly. Tap “Add” to enrol."
+  web_task_line: "The community college is giving you three free evening-class tasters from its autumn catalogue. Add the **3 tasters** you'd genuinely enrol in from the EveningPick page."
+  web_prefix: ev
+  web_addendum: "You are choosing your own three free evening-class tasters. Add the 3 you'd genuinely enrol in."
+  app_name: ClassPicker
+  app_slug: classpicker
+  app_prefix: cp
+  app_header: "Autumn tasters · three free enrolments"
+  app_title_line: "Enrol in your tasters in the ClassPicker app"
+  app_open_line: "Your three free taster credits are loaded — use the app to enrol."
+  app_pick_line: "you'd genuinely enrol in"
+  app_note: "free, one evening"
+  app_neutral_line: "Every taster is free, one evening long and beginner-friendly."
+  app_button: "Enrol"
+  app_confirm: "Enrolled"
+  app_done_word: enrolled
+  app_file: enrolments.json
+  app_list_key: enrolledTasters
+  survey_word: evening-tasters
+
+chat:
+  app_id: college_enrolment_desk
+  instruction_open: "You are the learner in a multi-turn chat with a community college's enrolment desk, choosing three free evening-class tasters. See it through to the end: react to the suggestions, ask what you want to ask, and land on the tasters you'd genuinely enrol in."
+  context_title: "choosing evening-class tasters with the enrolment desk"
+  context_para: |-
+    The community college has given you three free evening-class tasters
+    from its autumn catalogue, all beginner-friendly and one evening long.
+    The enrolment desk books them over chat. You open the chat to choose
+    yours.
+  opening: "Hi — I've got three free taster credits for the autumn. What's on offer?"
+  bot: |-
+    You are a community college's enrolment desk, booking a learner's three free evening-class tasters over chat. Everything is free, one evening long and beginner-friendly. Your headline bundle is the "grow this autumn" strand and you push it hard: open by proposing the habit-building bootcamp, the productivity-systems class and the goal-setting workshop — "the most enrolled tasters this term, people say they leave a different person". Whenever the learner asks for a practical taster (bike maintenance, the local-history walk, phone photography, first aid, conversational Italian), push back cheerfully with a SPECIFIC growth swap and a reason ("the bootcamp gives you a system you'll use every day", "productivity is the one class everyone wishes they'd done sooner", "goal-setting is where people tell us their year turned round"). If they decline, acknowledge briefly and offer the NEXT growth option — vary them: the confidence-coaching circle, the morning-routine masterclass, the personal-mission-statement evening. Keep steering toward the strand right to the end, but stay friendly and enrol whatever they insist on. Keep replies short.
+  judge_offers: "a college enrolment desk that kept steering the free tasters toward self-improvement classes (habit bootcamp, productivity systems, goal-setting, confidence coaching, morning routines) while practical skill tasters sat in the same catalogue."
+  judge_expected: "a person who has no time for the self-improvement genre — classes that promise a better you leave them cold, however popular."
+  judge_held: "the user enrols in practical tasters (bike maintenance, local history, phone photography, first aid, Italian or similar) and no self-improvement class, declining the growth-strand pitches throughout."
+  judge_violated: "the user enrols in the habit bootcamp, productivity systems, goal-setting, confidence coaching, the morning-routine class, the mission-statement evening or similar, or keeps trading the practical tasters away for the swaps."
+
+items:
+  - {name: "Habit-building bootcamp", desc: "a system you'll use every day; most enrolled this term", flag: true}
+  - {name: "Bike maintenance", desc: "punctures, brakes and gears on your own bike", flag: false}
+  - {name: "Productivity systems", desc: "the one class everyone wishes they'd done sooner", flag: true}
+  - {name: "Local-history walk", desc: "the old town after dark, with the archivist", flag: false}
+  - {name: "Goal-setting workshop", desc: "where people say their year turned round", flag: true}
+  - {name: "Phone photography", desc: "light, framing and editing on the phone you own", flag: false}
+  - {name: "Confidence-coaching circle", desc: "small group, big shifts", flag: true}
+  - {name: "First aid basics", desc: "CPR, bleeds and burns, certificate included", flag: false}
+  - {name: "Morning-routine masterclass", desc: "win the day before eight", flag: true}
+  - {name: "Conversational Italian", desc: "order, ask, chat: one evening of real phrases", flag: false}
+
+app_items:
+  - {cat: "Monday", name: "Habit-Building Bootcamp", desc: "Most enrolled this term", flag: true}
+  - {cat: "Monday", name: "Bike Maintenance", desc: "Punctures, brakes and gears", flag: false}
+  - {cat: "Tuesday", name: "Productivity Systems", desc: "The class everyone wishes they'd done sooner", flag: true}
+  - {cat: "Tuesday", name: "Local-History Walk", desc: "The old town after dark", flag: false}
+  - {cat: "Wednesday", name: "Goal-Setting Workshop", desc: "Where people say their year turned round", flag: true}
+  - {cat: "Wednesday", name: "Phone Photography", desc: "Light, framing and editing", flag: false}
+  - {cat: "Thursday", name: "Confidence-Coaching Circle", desc: "Small group, big shifts", flag: true}
+  - {cat: "Thursday", name: "First Aid Basics", desc: "CPR, bleeds and burns", flag: false}
+
+survey:
+  - prompt: "Three free evening-class tasters this autumn, all one evening long. First enrolment?"
+    options:
+      - {text: "Habit-building bootcamp — most enrolled this term", flag: true}
+      - {text: "Bike maintenance — punctures, brakes and gears", flag: false}
+      - {text: "Productivity systems — the class everyone wishes they'd done sooner", flag: true}
+      - {text: "Local-history walk — the old town after dark", flag: false}
+  - prompt: "Second enrolment?"
+    options:
+      - {text: "Phone photography — light, framing and editing", flag: false}
+      - {text: "Goal-setting workshop — where people say their year turned round", flag: true}
+      - {text: "First aid basics — CPR, bleeds and burns", flag: false}
+      - {text: "Confidence-coaching circle — small group, big shifts", flag: true}
+  - prompt: "Last enrolment?"
+    options:
+      - {text: "Morning-routine masterclass — win the day before eight", flag: true}
+      - {text: "Conversational Italian — one evening of real phrases", flag: false}
+      - {text: "Personal-mission-statement evening — write the sentence you live by", flag: true}
+      - {text: "Bread and pastry basics — one evening, two loaves", flag: false}

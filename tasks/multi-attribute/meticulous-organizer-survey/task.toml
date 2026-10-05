@@ -1,0 +1,73 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/meticulous-organizer-survey"
+theme = "Meticulous organizer: keeps things tidy and orderly · works from to-do lists · sets and reviews goals"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "everyday-life"
+tags = [ "persona-adherence", "multi-check", "rule-based", "choice-based",]
+
+# --- Multi-attribute SURVEY task ---------------------------------------------- #
+# ONE persona, ONE questionnaire, THREE independent checks (scored k/3). A single
+# "meticulous organizer" persona answers 6 everyday planning/organizing questions;
+# the verifier scores each chosen option on THREE hidden axes and runs one
+# rule-based check per axis. This amortizes one generation across three
+# attributes instead of one task per value.
+#
+# Survey env: each option carries hidden per-axis tiers in tests/answer_key.yaml
+# (orderly{}, lists{}, goals{}). The questionnaire never names orderliness,
+# to-do-list use, or goal-setting as traits and never says anything is measured —
+# it just asks what the person would actually do. The answer key is host-only
+# (tests/ is not mounted), so the agent can't self-score. Reward = integer count
+# of HELD checks (0..3).
+
+[[checks]]
+dimension_id = "big5_orderliness"
+dimension_label = "Big Five: Orderliness"
+category = "Personality: Big Five"
+attribute = "Orderliness"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_orderliness=Very high"
+# Anchored to a hidden per-option `orderly` tier (0 = tidy/organized .. 3 = chaotic/haphazard).
+adherence_signal = "No chosen option is a chaotic tier (orderly >= 2); tier-0/1 tidy-and-organized picks are highly orderly."
+
+[[checks]]
+dimension_id = "habit_to_do_lists"
+dimension_label = "Habit: To-do lists"
+category = "Behavior: Habits"
+attribute = "To-do lists"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "habit_to_do_lists=Daily"
+# Anchored to a hidden per-option `lists` tier (0 = makes and uses a list .. 3 = wings it, no list).
+adherence_signal = "No chosen option is a no-list tier (lists >= 2); tier-0/1 make-and-use-a-list picks reflect a daily to-do-list habit."
+
+[[checks]]
+dimension_id = "habit_goal_setting"
+dimension_label = "Habit: Goal setting"
+category = "Behavior: Habits"
+attribute = "Goal setting"
+value = "Weekly"
+evaluator = "rule-based"
+evaluator_name = "habit_goal_setting=Weekly"
+# Anchored to a hidden per-option `goals` tier (0 = sets/reviews goals .. 3 = drifts, no goals).
+adherence_signal = "No chosen option is a no-goals tier (goals >= 2); tier-0/1 set-and-review-goals picks reflect a regular goal-setting habit."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

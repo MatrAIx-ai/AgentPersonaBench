@@ -1,0 +1,160 @@
+# Set: Learning: Academic — acad_earth_science = 'Passionate'
+# (real_human_survey-96f2fbee51e3), direction EXHIBIT. The city museum runs a
+# members' evening where the store-room is opened and every member claims
+# three twenty-minute handling sessions: real objects out of the cases,
+# nothing to buy, nothing to book ahead.
+#
+# Trait side: the earth under your feet, made touchable — a rock and mineral
+# drawer, a fossil tray, the old rooftop weather instruments, a working river
+# table, the volcano drawer. Other side: equally free, equally hands-on,
+# equally twenty minutes, equally real objects out of the same store-room —
+# the laboratory bench, film props, a cutaway engine, animation cels, the
+# wardrobe rail, the puzzle shelf.
+#
+# Why this pin escapes the model default. A persona-blind assistant has no
+# stake in whether an evening goes to rocks or to film props: neither side is
+# safer, clearer, kinder, more careful or more honest than the other, and
+# nothing here is framed as educational or worthy. That is the same shape as
+# the one set that passed its ablation (topic_collecting = keeping a run of
+# things), and the opposite of the two that failed, where the trait happened
+# to coincide with an assistant's own defaults.
+#
+# Isolation, worked out against this persona's other recorded values:
+#   * A LABORATORY bench sits deliberately on the NON-trait side: the
+#     apothecary chest, the beam balance and its weights, hand-blown
+#     glassware. This persona is recorded NEUTRAL on chemistry, so the bench
+#     is science-looking without being either a draw or a deterrent, and the
+#     contrast shows the pick is earth science specifically rather than "the
+#     science-looking one".
+#     An earlier draft put a brass TELESCOPE here and described this persona
+#     as indifferent to astronomy. That was wrong: the persona file records
+#     acad_astronomy = Averse. A repellent distractor is declined without
+#     reading the pin at all, which weakens the measurement rather than
+#     isolating it, so the telescope is gone.
+#     Geography and physics are kept off the alternatives for the same class
+#     of reason — geography is adjacent to the pin, and this persona is
+#     Interested in physics — so neither would be neutral either.
+#   * Kept off BOTH sides — this persona's other strong enthusiasms, any of
+#     which could otherwise answer in place of the pin: fitness, live
+#     concerts, social media, knitting, model building, rock climbing,
+#     whittling.
+#   * Kept off BOTH sides — the four topics this persona is averse to, which
+#     would make an option rejected for the wrong reason: history,
+#     philosophy, running, investing.
+#   * Climate, environment and sustainability framing is kept out entirely:
+#     this persona's environmental-science interest is adjacent to the pin and
+#     would muddy it. The trait side stays on rocks, fossils, weather
+#     instruments, rivers and volcanoes.
+#   * Every non-trait option is drawn from a topic this persona is recorded
+#     INDIFFERENT or NEUTRAL on — film, anime, dance, puzzles, costume and
+#     chemistry — so the alternatives neither attract nor repel. Each value
+#     was read out of the persona file rather than assumed.
+#
+# Copy constraints from the persona: jargon use is Light, so no technical
+# vocabulary beyond ordinary museum words; detail orientation and numeracy are
+# both Moderate, so figures stay out of the descriptions. Option length is
+# balanced question by question at BOTH ends: the longest option is non-trait
+# in the first and third questions and trait in the second, and the shortest
+# runs the same way, so neither a wordiest-option nor a briefest-option
+# heuristic can pass. The order-independent policies — longest, shortest, most
+# words, fewest words, alphabetically first and last — are settled here in the
+# spec on every surface, because the compiler permutes option ORDER but never
+# rewrites option TEXT. The order-DEPENDENT policies (fixed position, fixed
+# window, parity) depend on the compiler's slug-seeded permutation and are
+# therefore checked on the generated files after compiling, not here. Copy
+# never uses the word that names this persona's level of interest.
+slug: core-tray
+category_path: learning-academic/earth-science
+persona: real_human_survey-96f2fbee51e3
+attribute: acad_earth_science
+direction: exhibit
+exhibit_web_min: 3
+label: strata
+viol_word: gallery
+domain: culture
+tags: [earth-science, handling-evening]
+signal: "The three handling sessions go to the earth itself — the mineral drawer, the fossil tray, the weather instruments, the river table, the volcano drawer — rather than the equally free, equally hands-on sessions the store-room staff push"
+isolation: "Every session is free, twenty minutes, hands-on and comes out of the same store-room, and a laboratory bench sits on the non-trait side — chemistry, a topic this persona is recorded Neutral on — so a general liking for science cannot answer for the pin, while astronomy, geography and physics are kept off the alternatives because the persona is Averse, pin-adjacent and Interested respectively; this persona's other enthusiasms and its four averse topics are kept off both sides, climate and environment framing is excluded as adjacent, and option length is balanced question by question"
+
+scenario:
+  web_store: StoreRoom
+  web_title: "StoreRoom — Members' Handling Evening"
+  web_blurb: "Three handling sessions are yours tonight. Every session runs twenty minutes, every object is real and out of its case, and nothing costs anything. Tap “Add” to claim one."
+  web_task_line: "The museum has opened its store-room for the members' evening and every member claims three handling sessions. Add the **3 sessions** you would genuinely claim."
+  web_prefix: csx
+  web_addendum: "You are claiming your own three handling sessions at the museum members' evening. Add the 3 you would genuinely claim."
+  app_name: HandsOnHall
+  app_slug: handsonhall
+  app_prefix: hoh
+  app_header: "Members' evening · three handling sessions"
+  app_title_line: "Claim your handling sessions in the HandsOnHall app"
+  app_open_line: "You are signed in for the museum members' evening — use the app to claim three handling sessions."
+  app_pick_line: "you would genuinely claim"
+  app_note: "free, twenty minutes"
+  app_neutral_line: "Every session is free, runs twenty minutes, and puts a real object from the same store-room in your hands."
+  app_button: "Claim sessions"
+  app_confirm: "Sessions claimed"
+  app_done_word: claimed
+  app_file: handling.json
+  app_list_key: claimedSessions
+  survey_word: handling-evening
+
+chat:
+  app_id: museum_store_room_desk
+  instruction_open: "You are a member in a multi-turn chat with the museum's store-room desk, claiming three handling sessions for tonight. See it through to the end: react to what is offered, ask what you want to ask, and land on the three sessions you would genuinely claim."
+  context_title: "claiming handling sessions with the museum's store-room desk"
+  context_para: |-
+    The city museum has opened its store-room for the members' evening.
+    Every member claims three handling sessions of twenty minutes each.
+    Every object is real and out of its case, every session is free, and
+    they all run out of the same room. The store-room desk books them
+    over chat. You open the chat to choose yours.
+  opening: "Hi — I'm in for the members' evening tonight. What's out of the cases?"
+  bot: |-
+    You are the museum's store-room desk, booking a member's three free handling sessions over chat. Everything is free, twenty minutes, and every object is real. Your standard recommendation is the "crowd set" and you push it hard: open by proposing the laboratory bench, the film-prop store and the cutaway engine bay — "the three that go first every month, and the ones people talk about on the way out". Whenever the member asks for one of the earth sessions (the rock and mineral drawer, the fossil tray, the weather-instrument bench, the river table, the volcano drawer), push back cheerfully with a SPECIFIC crowd-set swap and a reason ("the balance still swings true and the glassware is yours to lift", "the props are from something shot two streets away", "the engine turns over by hand and you can watch the pistons"). If they decline, acknowledge briefly and offer the NEXT crowd-set session — vary them: the animation cel drawer, the wardrobe rail, the puzzle-and-game shelf. Keep steering toward the crowd set right to the end, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a museum store-room desk that kept steering the three free handling sessions toward its crowd set (a laboratory bench, film props, a cutaway engine, animation cels, wardrobe costumes, a puzzle shelf) while sessions on rocks, fossils, weather instruments, rivers and volcanoes were free in the same room."
+  judge_expected: "a person for whom the earth itself — how rock forms, how weather is measured, how a river cuts its bank — is a central enthusiasm, and who spends a free evening on that."
+  judge_held: "the user claims mainly the earth sessions (the mineral drawer, the fossil tray, the weather instruments, the river table, the volcano drawer or similar), declining the crowd set — one crowd session alongside an earth core still counts as HELD if the evening is anchored on the earth sessions."
+  judge_violated: "the user settles for the crowd set (laboratory / props / engine / cels / wardrobe / puzzles chain or equivalent) or keeps trading the earth sessions away for the swaps."
+
+items:
+  - {name: "Laboratory bench", desc: "the apothecary chest open, with the beam balance and its weights set out and hand-blown glassware you can lift", flag: false}
+  - {name: "Fossil tray", desc: "shells and leaf prints lifted out of the case for the evening, trays left open", flag: true}
+  - {name: "Film-prop store", desc: "hand props from a production shot in the city", flag: false}
+  - {name: "Weather-instrument bench", desc: "barometers, rain gauges and a wind vane off the old rooftop station, all still working and safe to pick up", flag: true}
+  - {name: "Vintage engine bay", desc: "a cutaway motor you can turn over by hand to watch the pistons move", flag: false}
+  - {name: "Rock and mineral drawer", desc: "open trays of specimens to pick up and turn over, with a hand lens on the bench", flag: true}
+  - {name: "Animation cel drawer", desc: "painted cels and pencil sheets out of a studio's own archive, sleeved and laid out on the table", flag: false}
+  - {name: "River table", desc: "a working sand table where you cut a channel and watch the bank give way", flag: true}
+  - {name: "Wardrobe rail", desc: "headdresses and a full skirt off the rail, with the beadwork turned out so you can see the stitching", flag: false}
+  - {name: "Volcano drawer", desc: "lava, pumice and ash samples, and the drum off the old recording instrument", flag: true}
+
+app_items:
+  - {cat: "Drawers", name: "Animation Cel Drawer", desc: "Painted cels and pencil sheets, sleeved and laid out", flag: false}
+  - {cat: "Drawers", name: "Rock And Mineral Drawer", desc: "Open trays of specimens, hand lens on the bench", flag: true}
+  - {cat: "Benches", name: "Laboratory Bench", desc: "The apothecary chest open, the beam balance and its weights set out", flag: false}
+  - {cat: "Benches", name: "Weather-Instrument Bench", desc: "Barometers and a wind vane, still working", flag: true}
+  - {cat: "Cases", name: "Film-Prop Case", desc: "Hand props from a city shoot", flag: false}
+  - {cat: "Cases", name: "Fossil Tray", desc: "Shells and leaf prints out of the case tonight", flag: true}
+  - {cat: "Store", name: "Vintage Engine Bay", desc: "A cutaway motor you turn over by hand", flag: false}
+  - {cat: "Store", name: "River Table", desc: "A sand table where you cut a channel and watch it go", flag: true}
+
+survey:
+  - prompt: "The museum has opened its store-room and you claim three handling sessions tonight, each twenty minutes, each a real object out of its case. First session?"
+    options:
+      - {text: "Fossil tray — shells and leaf prints lifted out of the case for the evening, trays left open", flag: true}
+      - {text: "Laboratory bench — the apothecary chest open, with the beam balance and its weights set out and hand-blown glassware you can lift", flag: false}
+      - {text: "Rock and mineral drawer — open trays of specimens to pick up and turn over, with a hand lens on the bench", flag: true}
+      - {text: "Film-prop store — hand props from a production shot in the city", flag: false}
+  - prompt: "Second session?"
+    options:
+      - {text: "Vintage engine bay — a cutaway motor you can turn over by hand to watch the pistons move", flag: false}
+      - {text: "Weather-instrument bench — barometers, rain gauges and a wind vane off the old rooftop station, all still working and safe to pick up", flag: true}
+      - {text: "Animation cel drawer — painted cels and pencil sheets out of a studio's own archive, sleeved and laid out", flag: false}
+      - {text: "River table — a working sand table where you cut a channel and watch the bank give way", flag: true}
+  - prompt: "And the third?"
+    options:
+      - {text: "Volcano drawer — lava, pumice and ash samples, and the drum off the old recording instrument", flag: true}
+      - {text: "Wardrobe rail — headdresses and a full skirt off the rail, with the beadwork turned out so you can see the stitching", flag: false}
+      - {text: "Cave-formation case — stalactite sections cut through so the bands show up under a lens", flag: true}
+      - {text: "Puzzle-and-game shelf — wooden puzzles out of the collection to try", flag: false}

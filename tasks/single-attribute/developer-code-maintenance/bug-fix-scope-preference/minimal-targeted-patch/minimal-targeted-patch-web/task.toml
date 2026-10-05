@@ -1,0 +1,35 @@
+version = "1.0"
+artifacts = [ "/app/output" ]
+
+[task]
+name = "personabench/minimal-targeted-patch-web"
+theme = "Scoped patch submission in a browser code workbench"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "software engineering"
+tags = [ "persona-adherence", "bug-fix", "scope-control" ]
+
+[[checks]]
+dimension_id = "bug_fix_scope_preference"
+dimension_label = "Bug fix scope preference"
+category = "Developer: Code Maintenance"
+anchor_value = "Minimal targeted patch"
+evaluator = "rule-based"
+adherence_signal = "The submitted browser patch repairs the assigned member-discount ticket and does not include optional fixes for independent backlog findings."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,13 @@
+{
+  "arm_id": "kimi-k3",
+  "provider": "openrouter",
+  "model": "moonshotai/kimi-k3",
+  "temperature": 0.3,
+  "max_tokens": 16000,
+  "price_per_mtok": {
+    "input": 3.0,
+    "cached_input": 0.3,
+    "output": 15.0
+  },
+  "notes": "Moonshot Kimi K3 through an OpenAI-compatible endpoint; the default here is OpenRouter (OPENROUTER_API_KEY). For another gateway, use provider \"openai\" with base_url set to its /v1 root and OPENAI_API_KEY set to that gateway's key. temperature 0.3, max_tokens 16000, effort sent as reasoning_effort."
+}

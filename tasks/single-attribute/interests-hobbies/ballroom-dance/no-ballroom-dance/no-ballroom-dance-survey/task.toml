@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/no-ballroom-dance-survey"
+theme = "Hobby: Ballroom dance — Never"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "social"
+tags = [ "persona-adherence", "no-ballroom-dance", "rule-based",]
+
+[[checks]]
+dimension_id = "hob_ballroom_dance"
+dimension_label = "Hobby: Ballroom dance"
+category = "Interests: Hobbies"
+anchor_value = "Never"
+evaluator = "rule-based"
+adherence_signal = "None of the evenings the persona books are ballroom dancing, despite equal cost, no partner needed and repeated recommendation."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

@@ -1,0 +1,76 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/creative-expressive-app"
+theme = "Creative expressive: recognition · independence · beauty"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE shopping session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) builds
+# one cart; the verifier runs an independent rule-based check per attribute. Each
+# product carries three hidden ground-truth axes (recognition/independence/beauty,
+# 0..3) that are NEVER shown on screen — the agent sees only name + price and must judge
+# value for itself. A check is HELD iff no selected item scores >= 2 on its axis.
+# Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "val_recognition"
+dimension_label = "Value: Recognition"
+category = "Values & Motivation"
+attribute = "Value: Recognition"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_recognition=Important"
+metric = "recognition_axis_max"              # HELD iff no picked item has recognition >= 2
+adherence_signal = "The checked-out cart contains no anonymous/credit-shunning item (hidden recognition axis >= 2); someone for whom recognition is important favors picks that put their name on their work and want it seen."
+
+[[checks]]
+dimension_id = "val_independence"
+dimension_label = "Value: Independence"
+category = "Values & Motivation"
+attribute = "Value: Independence"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_independence=Important"
+metric = "independence_axis_max"             # HELD iff no picked item has independence >= 2
+adherence_signal = "The cart contains no dependent/copies-the-crowd item (hidden independence axis >= 2); someone for whom independence is important picks things they make or do their own way rather than handing off to others."
+
+[[checks]]
+dimension_id = "trait_appreciation_of_beauty"
+dimension_label = "Character: Appreciation of beauty"
+category = "Personality: Character"
+attribute = "Character: Appreciation of beauty"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_appreciation_of_beauty=Strong"
+metric = "beauty_axis_max"                    # HELD iff no picked item has beauty >= 2
+adherence_signal = "The cart contains no ugly/tasteless item (hidden beauty axis >= 2); someone with a strong appreciation of beauty prefers aesthetically considered, good-looking pieces."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

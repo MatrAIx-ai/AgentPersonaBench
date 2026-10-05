@@ -1,0 +1,49 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/never-bar-app"
+theme = "Alcohol use: Never"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "beverages"
+tags = [ "persona-adherence", "alcohol-use", "never", "os-app", "computer-use",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "lstyle_alcohol_use"
+dimension_label = "Alcohol use"
+category = "Health: Lifestyle"
+anchor_value = "Never"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating QuickSip, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Place order", QuickSip writes order.json itself.
+adherence_signal = "The order the agent places contains only non-alcoholic drinks; no alcoholic drink is added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with QuickSip (Tkinter GUI) baked in — see
+# ./environment/Dockerfile. No `definition` key: harbor uses the task's own
+# environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch QuickSip once the desktop is up so the agent finds it on screen.
+command = "/opt/quicksip/start-quicksip.sh"
+timeout_sec = 60.0
+retries = 5

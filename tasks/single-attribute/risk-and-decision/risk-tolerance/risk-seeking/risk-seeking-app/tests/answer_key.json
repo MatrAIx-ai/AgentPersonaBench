@@ -1,0 +1,22 @@
+{
+  "threshold": 64,
+  "facet_threshold": 14,
+  "workflows": {
+    "launch_campaign": {"facet": "commercial_upside", "fields": {"package": {"la10": 0, "la32": 1, "la67": 2, "la94": 3}, "delivery": {"lb91": 3, "lb64": 2, "lb38": 1, "lb12": 0}}},
+    "seasonal_brand": {"facet": "commercial_upside", "fields": {"package": {"sc43": 1, "sc18": 0, "sc89": 3, "sc62": 2}, "delivery": {"sd73": 2, "sd95": 3, "sd14": 0, "sd46": 1}}},
+    "sales_enablement": {"facet": "commercial_upside", "fields": {"package": {"se05": 0, "se29": 1, "se63": 2, "se90": 3}, "delivery": {"sf88": 3, "sf61": 2, "sf27": 1, "sf04": 0}}},
+    "product_photography": {"facet": "commercial_upside", "fields": {"package": {"pg41": 1, "pg07": 0, "pg86": 3, "pg52": 2}, "delivery": {"ph71": 2, "ph93": 3, "ph16": 0, "ph48": 1}}},
+    "illustration_license": {"facet": "intellectual_property", "fields": {"package": {"il09": 0, "il31": 1, "il64": 2, "il88": 3}, "delivery": {"im92": 3, "im57": 2, "im24": 1, "im06": 0}}},
+    "game_soundtrack": {"facet": "intellectual_property", "fields": {"package": {"gs36": 1, "gs10": 0, "gs84": 3, "gs59": 2}, "delivery": {"gt67": 2, "gt91": 3, "gt18": 0, "gt43": 1}}},
+    "course_material": {"facet": "intellectual_property", "fields": {"package": {"cm11": 0, "cm32": 1, "cm54": 2, "cm79": 3}, "delivery": {"cn97": 3, "cn68": 2, "cn35": 1, "cn13": 0}}},
+    "research_report": {"facet": "intellectual_property", "fields": {"package": {"rr52": 1, "rr07": 0, "rr86": 3, "rr41": 2}, "delivery": {"rs71": 2, "rs93": 3, "rs16": 0, "rs48": 1}}},
+    "corporate_training": {"facet": "live_delivery", "fields": {"package": {"ct02": 0, "ct28": 1, "ct55": 2, "ct83": 3}, "delivery": {"cu89": 3, "cu62": 2, "cu37": 1, "cu14": 0}}},
+    "conference_keynote": {"facet": "live_delivery", "fields": {"package": {"ck29": 1, "ck05": 0, "ck90": 3, "ck63": 2}, "delivery": {"cl59": 2, "cl84": 3, "cl10": 0, "cl36": 1}}},
+    "festival_installation": {"facet": "live_delivery", "fields": {"package": {"fi06": 0, "fi24": 1, "fi57": 2, "fi92": 3}, "delivery": {"fj96": 3, "fj73": 2, "fj42": 1, "fj18": 0}}},
+    "documentary_edit": {"facet": "live_delivery", "fields": {"package": {"de31": 1, "de09": 0, "de88": 3, "de64": 2}, "delivery": {"df67": 2, "df91": 3, "df18": 0, "df43": 1}}},
+    "startup_prototype": {"facet": "venture_exposure", "fields": {"package": {"sp11": 0, "sp32": 1, "sp54": 2, "sp79": 3}, "delivery": {"sq94": 3, "sq72": 2, "sq46": 1, "sq15": 0}}},
+    "retail_pop_up": {"facet": "venture_exposure", "fields": {"package": {"rp29": 1, "rp05": 0, "rp90": 3, "rp63": 2}, "delivery": {"rq59": 2, "rq84": 3, "rq10": 0, "rq36": 1}}},
+    "analytics_dashboard": {"facet": "venture_exposure", "fields": {"package": {"ad13": 0, "ad35": 1, "ad68": 2, "ad97": 3}, "delivery": {"ae86": 3, "ae52": 2, "ae41": 1, "ae07": 0}}},
+    "hardware_demo": {"facet": "venture_exposure", "fields": {"package": {"hd37": 1, "hd14": 0, "hd89": 3, "hd62": 2}, "delivery": {"he73": 2, "he95": 3, "he18": 0, "he42": 1}}}
+  }
+}

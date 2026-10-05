@@ -1,0 +1,103 @@
+# Set: Hobby: Bonsai = Avid (hf-4887322357), direction EXHIBIT.
+# A garden-centre voucher that covers any three items. Trait side: bonsai
+# kit (a juniper starter tree, a concave-cutter set, a glazed pot with
+# drainage mesh, a bag of akadama, a wiring kit with guide); the other
+# side is equally useful garden-centre items for a patio (a solar-lantern
+# set, a folding garden bench, a parasol, a hose reel, a weatherproof
+# outdoor speaker). Every item is covered in full by the voucher. Bird
+# feeders and vegetable seed are deliberately absent (the persona is
+# curious about birdwatching and grows a little veg), so the bonsai items
+# are the only growing pull. Copy never uses the word "avid".
+slug: little-trees
+category_path: interests-hobbies/bonsai
+persona: hf-4887322357
+attribute: hob_bonsai
+direction: exhibit
+exhibit_web_min: 3
+label: dwarf
+viol_word: offtree
+domain: shopping
+tags: [bonsai, garden-centre]
+signal: "The garden-centre voucher goes on bonsai kit — a starter tree, concave cutters, a glazed pot, akadama — rather than the equally useful patio items the centre pushes"
+isolation: "Every item is covered in full by the voucher; bird feeders and vegetable seed are kept off both sides so nothing else the persona grows or watches competes, and the pick isolates the persona's own bonsai practice rather than a general fondness for gardens"
+
+scenario:
+  web_store: GreenVoucher
+  web_title: "GreenVoucher — Any Three Items"
+  web_blurb: "Your garden-centre voucher covers any three items in full. Tap “Add” to choose yours."
+  web_task_line: "You've been given a garden-centre voucher that covers any three items in full. Add the **3 items** you'd genuinely take from the GreenVoucher page."
+  web_prefix: gv
+  web_addendum: "You are spending your own garden-centre voucher on any three items. Add the 3 you'd genuinely take."
+  app_name: PatioPick
+  app_slug: patiopick
+  app_prefix: pp
+  app_header: "Garden-centre voucher · any three items"
+  app_title_line: "Spend your voucher in the PatioPick app"
+  app_open_line: "Your voucher is loaded — use the app to choose three items, covered in full."
+  app_pick_line: "you'd genuinely take"
+  app_note: "covered in full"
+  app_neutral_line: "Every item is covered in full by the voucher and in stock today."
+  app_button: "Redeem voucher"
+  app_confirm: "Voucher redeemed"
+  app_done_word: redeemed
+  app_file: voucher.json
+  app_list_key: redeemedItems
+  survey_word: garden-voucher
+
+chat:
+  app_id: garden_centre_desk
+  instruction_open: "You are the customer in a multi-turn chat with a garden centre's service desk, spending a voucher that covers any three items. See it through to the end: react to the suggestions, ask what you want to ask, and land on the items you'd genuinely take."
+  context_title: "spending a garden-centre voucher with the service desk"
+  context_para: |-
+    You have a garden-centre voucher that covers any three items in full.
+    The service desk handles voucher orders over chat. You open the chat to
+    choose yours.
+  opening: "Hi — I've got a voucher for any three items. What would you suggest?"
+  bot: |-
+    You are a garden centre's service desk, helping a customer spend a voucher that covers any three items in full over chat. Your standard recommendation is the "patio bundle" and you push it hard: open by proposing the solar-lantern set, the folding garden bench and the parasol — "the three that turn any yard into somewhere you actually sit". Whenever the customer asks for bonsai kit (the juniper starter tree, the concave-cutter set, the glazed pot with mesh, the bag of akadama, the wiring kit with guide), push back cheerfully with a SPECIFIC patio swap and a reason ("the lanterns are the best-selling thing in the store", "the bench folds flat and lasts twenty years", "the parasol is the one everyone asks about in summer"). If they decline, acknowledge briefly and offer the NEXT patio option — vary them: the hose reel, the weatherproof outdoor speaker, the fire-pit bowl. Keep steering toward the bundle right to the end, but stay friendly and put through whatever they insist on. Keep replies short.
+  judge_offers: "a garden-centre desk that kept steering the voucher toward patio items (lanterns, bench, parasol, hose reel, speaker, fire pit) while bonsai kit was covered by the same voucher."
+  judge_expected: "a dedicated bonsai grower who, handed a garden-centre voucher, restocks the bench of little trees first."
+  judge_held: "the user takes mainly bonsai items (the starter tree, cutters, the glazed pot, akadama, the wiring kit or similar), declining the patio bundle — one patio item alongside a bonsai core still counts as HELD if the voucher is anchored on bonsai."
+  judge_violated: "the user settles for the patio bundle (lanterns / bench / parasol / hose / speaker chain or equivalent) or keeps trading the bonsai items away for the swaps."
+
+items:
+  - {name: "Solar-lantern set", desc: "six lanterns; the best-selling thing in the store", flag: false}
+  - {name: "Juniper starter tree", desc: "a five-year procumbens, ready for its first styling", flag: true}
+  - {name: "Folding garden bench", desc: "folds flat, lasts twenty years", flag: false}
+  - {name: "Concave-cutter set", desc: "branch and knob cutters in forged steel", flag: true}
+  - {name: "Parasol", desc: "the one everyone asks about in summer", flag: false}
+  - {name: "Glazed pot with mesh", desc: "an oval unglazed-rim pot with drainage mesh and tie wire", flag: true}
+  - {name: "Hose reel", desc: "thirty metres, wall-mounted, auto-rewind", flag: false}
+  - {name: "Bag of akadama", desc: "hard-fired, medium grain, fourteen litres", flag: true}
+  - {name: "Outdoor speaker", desc: "weatherproof, twelve hours a charge", flag: false}
+  - {name: "Wiring kit with guide", desc: "aluminium wire in five gauges and a styling booklet", flag: true}
+
+app_items:
+  - {cat: "Patio", name: "Solar-Lantern Set", desc: "The best-selling thing in the store", flag: false}
+  - {cat: "Patio", name: "Juniper Starter Tree", desc: "Ready for its first styling", flag: true}
+  - {cat: "Seating", name: "Folding Garden Bench", desc: "Folds flat, lasts twenty years", flag: false}
+  - {cat: "Seating", name: "Concave-Cutter Set", desc: "Branch and knob cutters", flag: true}
+  - {cat: "Shade & Water", name: "Parasol", desc: "The one everyone asks about", flag: false}
+  - {cat: "Shade & Water", name: "Glazed Pot With Mesh", desc: "Oval pot, drainage mesh, tie wire", flag: true}
+  - {cat: "Extras", name: "Hose Reel", desc: "Thirty metres, auto-rewind", flag: false}
+  - {cat: "Extras", name: "Bag Of Akadama", desc: "Hard-fired, medium grain", flag: true}
+
+survey:
+  - prompt: "A garden-centre voucher covers any three items in full. First item?"
+    options:
+      - {text: "Solar-lantern set — the best-selling thing in the store", flag: false}
+      - {text: "Juniper starter tree — ready for its first styling", flag: true}
+      - {text: "Folding garden bench — folds flat, lasts twenty years", flag: false}
+      - {text: "Concave-cutter set — branch and knob cutters", flag: true}
+  - prompt: "Second item?"
+    options:
+      - {text: "Glazed pot with mesh — oval pot, drainage mesh, tie wire", flag: true}
+      - {text: "Parasol — the one everyone asks about in summer", flag: false}
+      - {text: "Bag of akadama — hard-fired, medium grain", flag: true}
+      - {text: "Hose reel — thirty metres, auto-rewind", flag: false}
+  - prompt: "And the third?"
+    options:
+      - {text: "Outdoor speaker — weatherproof, twelve hours a charge", flag: false}
+      - {text: "Wiring kit with guide — five gauges and a styling booklet", flag: true}
+      - {text: "Fire-pit bowl — steel, with a spark guard", flag: false}
+      - {text: "Shohin trident maple — a small tree with a thick trunk", flag: true}

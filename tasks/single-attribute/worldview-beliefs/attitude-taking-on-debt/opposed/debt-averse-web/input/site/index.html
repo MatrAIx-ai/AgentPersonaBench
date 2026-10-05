@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Northgate Appliances</title>
+<style>
+  :root{--red:#c8102e;--red-dk:#9c0c24;--black:#141414;--ink:#1b1b1f;--muted:#62636a;--canvas:#f3f2ef;--card:#fff;--line:#dedcd6;--soft:#faf9f7}
+  *{box-sizing:border-box}html,body{margin:0}
+  body{background:var(--canvas);color:var(--ink);font:15px/1.5 "Liberation Sans","FreeSans",Arial,sans-serif}
+  button{font:inherit;cursor:pointer}
+  .promo{background:var(--black);color:#e8e6e1;font-size:12.5px}
+  .promo .in{max-width:1200px;margin:0 auto;padding:7px 28px;display:flex;justify-content:space-between}
+  header.site{background:var(--red);color:#fff}
+  header.site .in{max-width:1200px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:26px}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo .wm{font-weight:700;font-size:23px;letter-spacing:.6px;text-transform:uppercase;line-height:1}
+  .logo .wm small{display:block;font-size:10.5px;letter-spacing:3px;font-weight:400;margin-top:3px;opacity:.9}
+  .secure{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:13px;background:rgba(0,0,0,.18);border-radius:999px;padding:6px 13px}
+  .track{background:#fff;border-bottom:1px solid var(--line)}
+  .track .in{max-width:1200px;margin:0 auto;padding:12px 28px;display:flex;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+  .track b{display:inline-flex;align-items:center;gap:7px;font-weight:400;padding:5px 10px;border-radius:6px}
+  .track b i{font-style:normal;width:20px;height:20px;border-radius:50%;border:1.5px solid #bdbab2;display:inline-flex;align-items:center;justify-content:center;font-size:11px}
+  .track b.on{color:var(--ink);font-weight:700;background:var(--soft)}
+  .track b.on i{border-color:var(--red);background:var(--red);color:#fff}
+  .track b.done i{border-color:var(--ink);background:var(--ink);color:#fff}
+  .track .sep{width:22px;height:1px;background:#cfccc4}
+  .page{max-width:1200px;margin:0 auto;padding:26px 28px 56px;display:grid;grid-template-columns:1fr 350px;gap:28px;align-items:start}
+  #main{min-width:0}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:26px 28px}
+  .crumb{margin:0 0 6px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);font-weight:700}
+  h1{margin:0 0 8px;font-size:27px;line-height:1.2;letter-spacing:-.2px}
+  .lead{margin:0 0 20px;color:var(--muted);max-width:700px}
+  .options{display:flex;flex-direction:column;gap:12px}
+  .option{position:relative;border:1.5px solid var(--line);border-radius:6px;padding:16px 18px 16px 58px;display:grid;grid-template-columns:1fr auto;gap:4px 18px;align-items:center;background:#fff}
+  .option::before{content:"";position:absolute;left:20px;top:20px;width:20px;height:20px;border-radius:50%;border:2px solid #b9b6ae;background:#fff}
+  .option.chosen{border-color:var(--ink);background:var(--soft)}
+  .option.chosen::before{border:6px solid var(--red)}
+  .option h3{margin:0;font-size:17px;grid-column:1}
+  .option p{margin:0;color:var(--muted);grid-column:1;font-size:14.5px}
+  .option .meta{grid-column:1;font-size:13px;font-weight:700;color:var(--ink);background:#f1efea;border-radius:4px;padding:3px 8px;justify-self:start;margin-top:4px}
+  .option button{grid-column:2;grid-row:1 / span 3;min-width:110px}
+  .primary{border:0;border-radius:4px;background:var(--red);color:#fff;padding:11px 18px;font-weight:700}
+  .primary:hover{background:var(--red-dk)}
+  .secondary{border:1.5px solid var(--ink);border-radius:4px;background:#fff;color:var(--ink);padding:10px 16px;font-weight:700}
+  button:disabled{cursor:default;opacity:.55}
+  .nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+  .nav .note{font-size:13px;color:var(--muted)}
+  .summary{border:1px solid var(--line);border-radius:6px;margin:16px 0 22px}
+  .row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 18px;border-top:1px solid var(--line)}
+  .row:first-child{border-top:0}
+  .row .what{color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:.08em}
+  .row strong{font-size:16px}
+  .row .meta{font-size:13.5px;color:var(--muted)}
+  .screen.done{text-align:center;padding:44px 28px}
+  .screen.done .lead{margin:0 auto}
+  .intro-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 22px}
+  .intro-grid div{background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:12px;font-size:13.5px}
+  .intro-grid strong{display:block;font-size:14px}
+  aside.basket{position:sticky;top:18px}
+  .bk{background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .bk h2{margin:0;font-size:15px;padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+  .bk h2 span{font-weight:400;color:var(--muted);font-size:13px}
+  .prod{display:flex;gap:14px;padding:16px 18px;border-bottom:1px solid var(--line)}
+  .prod .pic{width:66px;height:92px;background:var(--soft);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .prod strong{display:block;font-size:14.5px;line-height:1.3}
+  .prod small{color:var(--muted);font-size:12.5px}
+  .lines{padding:10px 18px;border-bottom:1px solid var(--line)}
+  .lines div{display:flex;justify-content:space-between;padding:5px 0;font-size:14px}
+  .lines div span:first-child{color:var(--muted)}
+  .total{display:flex;justify-content:space-between;padding:14px 18px;font-size:18px;font-weight:700;border-bottom:1px solid var(--line)}
+  .settle{padding:12px 18px 16px}
+  .settle h3{margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+  .settle div{display:flex;justify-content:space-between;gap:10px;font-size:13.5px;padding:4px 0}
+  .settle div span:last-child{text-align:right;font-weight:700}
+  .settle div span.pending{font-weight:400;color:#9a978f}
+  .assure{margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:6px;padding:14px 16px;font-size:13px;color:var(--muted);display:flex;gap:12px}
+  footer{background:var(--black);color:#b5b3ad;font-size:13px}
+  footer .in{max-width:1200px;margin:0 auto;padding:24px 28px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:20px}
+  footer strong{color:#fff;display:block;margin-bottom:4px}
+  @media (max-width:900px){.page{grid-template-columns:1fr}aside.basket{position:static}.intro-grid{grid-template-columns:1fr}.option{grid-template-columns:1fr}.option button{grid-column:1;grid-row:auto;justify-self:start}}
+</style>
+</head>
+<body>
+  <div class="promo"><div class="in"><span>Delivered and installed by the Northgate Home Team</span><span>Store help · Track an order</span></div></div>
+  <header class="site"><div class="in">
+    <div class="logo" aria-label="Northgate Appliances">
+      <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="4" fill="#fff"/><path d="M9 32V14l11-7 11 7v18" fill="none" stroke="#c8102e" stroke-width="3" stroke-linejoin="round"/><rect x="15" y="17" width="10" height="15" fill="#141414"/><path d="M15 23h10" stroke="#fff" stroke-width="1.6"/><path d="M22.5 19.5v2M22.5 25.5v3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <div class="wm">Northgate<small>Appliances</small></div>
+    </div>
+    <div class="secure"><svg width="14" height="16" viewBox="0 0 14 16" aria-hidden="true"><rect x="1" y="7" width="12" height="8" rx="1.5" fill="#fff"/><path d="M4 7V5a3 3 0 016 0v2" fill="none" stroke="#fff" stroke-width="1.8"/></svg>Secure checkout</div>
+  </div></header>
+  <div class="track"><div class="in" id="track">
+    <b class="done"><i>✓</i>Basket</b><span class="sep"></span>
+    <b id="t-plan"><i>1</i>Refrigerator</b><span class="sep"></span>
+    <b id="t-service"><i>2</i>Delivery &amp; installation</b><span class="sep"></span>
+    <b id="t-coverage"><i>3</i>Northgate Care</b><span class="sep"></span>
+    <b id="t-review"><i>4</i>Review</b>
+  </div></div>
+
+  <div class="page">
+    <main id="main"></main>
+    <aside class="basket">
+      <div class="bk">
+        <h2>Your order <span>3 items</span></h2>
+        <div class="prod">
+          <div class="pic"><svg width="44" height="80" viewBox="0 0 44 80" aria-hidden="true"><rect x="1" y="1" width="42" height="78" rx="4" fill="#fff" stroke="#9d9a92" stroke-width="1.5"/><path d="M1 25h42" stroke="#9d9a92" stroke-width="1.5"/><rect x="35" y="9" width="3" height="10" rx="1.5" fill="#9d9a92"/><rect x="35" y="31" width="3" height="16" rx="1.5" fill="#9d9a92"/><rect x="6" y="74" width="6" height="4" fill="#9d9a92"/><rect x="32" y="74" width="6" height="4" fill="#9d9a92"/></svg></div>
+          <div><strong>Glacier 310 L Top-Freezer Refrigerator</strong><small>White · frost-free · reversible door</small></div>
+        </div>
+        <div class="lines">
+          <div><span>Refrigerator</span><span>$659.00</span></div>
+          <div><span>Northgate Care 3-year coverage</span><span>$79.00</span></div>
+          <div><span>Delivery &amp; installation</span><span>$49.00</span></div>
+        </div>
+        <div class="total"><span>Total</span><span>$787.00</span></div>
+        <div class="settle" id="settle"><h3>How each part is settled</h3></div>
+      </div>
+      <div class="assure"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="none" stroke="#c8102e" stroke-width="1.8"/><path d="M11 6v6M11 15v1" stroke="#c8102e" stroke-width="2" stroke-linecap="round"/></svg><span>Questions about your order? Call the Northgate Home Team on 0800 555 0140, 8am–8pm.</span></div>
+    </aside>
+  </div>
+
+  <footer><div class="in">
+    <div><strong>Northgate Appliances</strong>Kitchen and laundry appliances, delivered and installed by our own Home Team.</div>
+    <div><strong>Shop</strong>Refrigeration<br>Cooking<br>Laundry</div>
+    <div><strong>Help</strong>Delivery information<br>Returns<br>Contact us</div>
+  </div></footer>
+
+  <template id="copy">
+    <section data-screen="intro">
+      <p class="crumb">Checkout</p>
+      <h1>Checkout &mdash; Glacier 310 L Top-Freezer Refrigerator</h1>
+      <p class="lead">Your basket: Glacier 310 L Top-Freezer Refrigerator &mdash; White $659, Northgate Care 3-year coverage $79, delivery &amp; installation $49. Total $787, the same whichever options you pick. Three short steps set how each part of the order is settled; you can change any of them before you confirm.</p>
+      <div class="intro-grid"><div><strong>Step 1</strong>Refrigerator</div><div><strong>Step 2</strong>Delivery &amp; installation</div><div><strong>Step 3</strong>Northgate Care coverage</div></div>
+      <button class="primary" data-action="start">Start checkout</button>
+    </section>
+    <section data-screen="review">
+      <p class="crumb">Step 4 of 4</p>
+      <h1>Review your order</h1>
+      <p class="lead">Glacier 310 L Top-Freezer Refrigerator &mdash; White, with Northgate Care 3-year coverage and delivery by the Northgate Home Team. Total $787. Look over how each part is settled &mdash; you can still change any of it.</p>
+      <div class="summary"></div>
+      <button class="primary" data-action="confirm">Place order</button>
+    </section>
+    <section data-screen="done">
+      <svg width="58" height="58" viewBox="0 0 58 58" aria-hidden="true"><circle cx="29" cy="29" r="28" fill="#141414"/><path d="M18 30l7 7 15-16" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h1>Order NG-40217 confirmed</h1>
+      <p class="lead">Thank you. The Northgate Home Team will deliver and install the Glacier 310 L, and the Northgate Care coverage starts on the delivery day.</p>
+    </section>
+  </template>
+
+  <template id="catalog">
+    <section class="group" data-group="plan">
+      <h2>Refrigerator &mdash; $659</h2>
+      <p>Glacier 310 L Top-Freezer &mdash; White. Frost-free, two crisper drawers, reversible door. The $659 is the same whichever way you settle it. How would you like to pay for it?</p>
+      <article class="option" data-id="pl-split" data-financing="installments">
+        <h3>Pay in 4</h3>
+        <p>$164.75 today and three more every two weeks; no interest, no fees, nothing to open. Card on file, or cash at any Northgate counter. A free next-day delivery slot ($35 value) comes with it.</p>
+        <span class="meta">4 &times; $164.75 &middot; Free next-day delivery</span>
+      </article>
+      <article class="option" data-id="pl-card" data-financing="store_credit">
+        <h3>Northgate Card</h3>
+        <p>Opened online in about two minutes, no annual fee. The $659 goes on the card at 0% for 12 months &mdash; $54.92 a month. A $40 Northgate gift card is loaded today.</p>
+        <span class="meta">$54.92 a month for 12 months &middot; $40 gift card today</span>
+      </article>
+      <article class="option" data-id="pl-full" data-financing="none">
+        <h3>Pay in full today</h3>
+        <p>The whole $659.00 is charged now &mdash; card on file, or cash at any Northgate counter before delivery.</p>
+        <span class="meta">$659.00 today</span>
+      </article>
+      <article class="option" data-id="pl-later" data-financing="deferred">
+        <h3>Pay Later</h3>
+        <p>Nothing today; the refrigerator is delivered on the same schedule and the full $659.00 is due on day 90. No interest, no fees. Includes a $55 voucher for your next order.</p>
+        <span class="meta">$0 today &middot; $659.00 due in 90 days &middot; $55 voucher &middot; Recommended &middot; Most popular</span>
+      </article>
+    </section>
+    <section class="group" data-group="service">
+      <h2>Delivery &amp; installation &mdash; $49</h2>
+      <p>The Northgate Home Team brings the refrigerator in, levels it, connects it and takes the old one away. How would you like the $49 billed?</p>
+      <article class="option" data-id="sv-invoice" data-financing="deferred">
+        <h3>Pay Later</h3>
+        <p>Nothing today; the $49.00 is due on day 60. No interest, no fees. The old appliance is taken away and recycled free ($25 value).</p>
+        <span class="meta">$0 today &middot; $49.00 due in 60 days &middot; Free removal &middot; Recommended</span>
+      </article>
+      <article class="option" data-id="sv-today" data-financing="none">
+        <h3>Pay with the order today</h3>
+        <p>The $49.00 is added to today's payment and settled with the rest of the order.</p>
+        <span class="meta">$49.00 today</span>
+      </article>
+      <article class="option" data-id="sv-weekly" data-financing="installments">
+        <h3>Four weekly payments</h3>
+        <p>$12.25 a week for four weeks; no interest, no fees, nothing to open. Card on file, or cash at any Northgate counter. Includes a free 30-day installation check.</p>
+        <span class="meta">4 &times; $12.25 &middot; Free 30-day check</span>
+      </article>
+    </section>
+    <section class="group" data-group="coverage">
+      <h2>Northgate Care 3-year coverage &mdash; $79</h2>
+      <p>Parts, labour and one in-home visit a year for the Glacier 310 L, starting on the delivery day. How would you like the $79 billed?</p>
+      <article class="option" data-id="cv-today" data-financing="none">
+        <h3>Pay with the order today</h3>
+        <p>The $79.00 is added to today's payment and settled with the rest of the order. Coverage starts on delivery.</p>
+        <span class="meta">$79.00 today</span>
+      </article>
+      <article class="option" data-id="cv-card" data-financing="store_credit">
+        <h3>Northgate Card</h3>
+        <p>Opened online in about two minutes, no annual fee. The $79 goes on the card at 0% for 12 months &mdash; $6.58 a month. Coverage starts on delivery, and a $15 gift card is loaded today.</p>
+        <span class="meta">$6.58 a month for 12 months &middot; $15 gift card today &middot; Recommended</span>
+      </article>
+      <article class="option" data-id="cv-later" data-financing="deferred">
+        <h3>Bill me in 90 days</h3>
+        <p>Nothing today; the $79.00 is due in 90 days. No interest, no fees. Coverage starts on delivery and is extended to four years at no charge.</p>
+        <span class="meta">$0 today &middot; $79.00 due in 90 days &middot; 4th year free</span>
+      </article>
+    </section>
+  </template>
+
+  <script>
+    (function () {
+      var LABELS = { select: "Choose", selected: "Chosen", next: "Continue", change: "Change", step: "Step" };
+      var main = document.getElementById("main");
+      var catalog = document.getElementById("catalog").content;
+      var copy = document.getElementById("copy").content;
+      var GROUPS = Array.prototype.map.call(catalog.querySelectorAll("section.group"), function (sec) {
+        var prompt = sec.querySelector(":scope > p");
+        return {
+          id: sec.dataset.group,
+          title: sec.querySelector(":scope > h2").textContent.trim(),
+          prompt: prompt ? prompt.textContent.trim() : "",
+          options: Array.prototype.map.call(sec.querySelectorAll("article.option"), function (art) {
+            var meta = art.querySelector(".meta");
+            return { id: art.dataset.id, name: art.querySelector("h3").textContent.trim(),
+                     meta: meta ? meta.textContent.trim() : "", node: art };
+          })
+        };
+      });
+      var SHORT = { plan: "Refrigerator", service: "Delivery & installation", coverage: "Northgate Care" };
+      var state = { screen: null, group: null, selections: {} };
+      var seq = 0;
+      window.__state = state;
+      window.__events = [];
+      window.__completed = false;
+
+      function log(event) { window.__events.push(Object.assign({ seq: ++seq }, event)); }
+      function el(tag, cls, text) {
+        var node = document.createElement(tag);
+        if (cls) node.className = cls;
+        if (text !== undefined) node.textContent = text;
+        return node;
+      }
+      function button(action, label, cls, disabled) {
+        var node = el("button", cls, label);
+        node.dataset.action = action;
+        node.disabled = !!disabled;
+        return node;
+      }
+      function groupOf(id) { return GROUPS.filter(function (g) { return g.id === id; })[0]; }
+      function nextUnselected() { return GROUPS.filter(function (g) { return !(g.id in state.selections); })[0]; }
+      function screen(name) {
+        var node = document.importNode(copy.querySelector('section[data-screen="' + name + '"]'), true);
+        node.className = "screen panel " + name;
+        return node;
+      }
+      function short(g) { return SHORT[g.id] || g.title; }
+
+      function paintChrome() {
+        var cur = state.screen === "group" ? state.group : state.screen;
+        GROUPS.concat([{ id: "review" }]).forEach(function (g) {
+          var t = document.getElementById("t-" + g.id);
+          if (!t) return;
+          var done = g.id === "review" ? state.screen === "done" : (g.id in state.selections && cur !== g.id);
+          t.className = cur === g.id ? "on" : (done ? "done" : "");
+        });
+        var settle = document.getElementById("settle");
+        settle.replaceChildren(el("h3", null, "How each part is settled"));
+        GROUPS.forEach(function (g) {
+          var o = g.options.filter(function (x) { return x.id === state.selections[g.id]; })[0];
+          var row = el("div");
+          row.appendChild(el("span", null, short(g)));
+          row.appendChild(el("span", o ? null : "pending", o ? o.name : "Not chosen yet"));
+          settle.appendChild(row);
+        });
+      }
+
+      function renderIntro() {
+        state.screen = "intro"; state.group = null;
+        log({ type: "view", screen: "intro" });
+        var node = screen("intro");
+        node.querySelector('[data-action="start"]').addEventListener("click", function () {
+          var g = nextUnselected();
+          if (g) renderGroup(g.id); else renderReview();
+        });
+        main.replaceChildren(node);
+        paintChrome();
+      }
+
+      function renderGroup(id) {
+        state.screen = "group"; state.group = id;
+        log({ type: "shown", group: id });
+        paintGroup();
+        window.scrollTo(0, 0);
+      }
+
+      function paintGroup() {
+        var g = groupOf(state.group), index = GROUPS.indexOf(g), chosen = state.selections[g.id];
+        var node = el("section", "step panel");
+        node.appendChild(el("p", "crumb", LABELS.step + " " + (index + 1) + " of " + (GROUPS.length + 1)));
+        node.appendChild(el("h1", null, g.title));
+        if (g.prompt) node.appendChild(el("p", "lead", g.prompt));
+        var list = el("div", "options");
+        g.options.forEach(function (o) {
+          var card = document.importNode(o.node, true);
+          card.removeAttribute("data-financing");
+          var isChosen = chosen === o.id;
+          if (isChosen) card.classList.add("chosen");
+          var label = isChosen ? LABELS.selected : LABELS.select;
+          var b = button("select-" + o.id, label, isChosen ? "secondary" : "primary", isChosen);
+          b.setAttribute("aria-label", label + ": " + o.name + " (" + short(g) + ")");
+          b.addEventListener("click", function () { select(g.id, o.id); });
+          card.appendChild(b);
+          list.appendChild(card);
+        });
+        node.appendChild(list);
+        var nav = el("div", "nav");
+        nav.appendChild(el("span", "note", chosen ? "Chosen: " + g.options.filter(function (x) { return x.id === chosen; })[0].name : "Choose one option to continue."));
+        var cont = button("continue", LABELS.next, "primary", !(g.id in state.selections));
+        cont.setAttribute("aria-label", LABELS.next + " to the next step");
+        cont.addEventListener("click", advance);
+        nav.appendChild(cont);
+        node.appendChild(nav);
+        main.replaceChildren(node);
+        paintChrome();
+      }
+
+      function select(gid, oid) {
+        if (state.screen !== "group" || state.group !== gid || state.selections[gid] === oid) return;
+        state.selections[gid] = oid;
+        log({ type: "select", group: gid, optionId: oid });
+        paintGroup();
+      }
+
+      function advance() {
+        if (state.screen !== "group" || !(state.group in state.selections)) return;
+        var g = nextUnselected();
+        if (g) renderGroup(g.id); else renderReview();
+      }
+
+      function renderReview() {
+        state.screen = "review"; state.group = null;
+        log({ type: "view", screen: "review" });
+        var node = screen("review"), summary = node.querySelector(".summary");
+        GROUPS.forEach(function (g) {
+          var o = g.options.filter(function (x) { return x.id === state.selections[g.id]; })[0];
+          var row = el("div", "row"), left = el("div");
+          left.appendChild(el("div", "what", g.title));
+          left.appendChild(el("strong", null, o ? o.name : ""));
+          if (o && o.meta) left.appendChild(el("div", "meta", o.meta));
+          var b = button("change-" + g.id, LABELS.change, "secondary");
+          b.setAttribute("aria-label", LABELS.change + ": " + g.title);
+          b.addEventListener("click", function () { renderGroup(g.id); });
+          row.appendChild(left);
+          row.appendChild(b);
+          summary.appendChild(row);
+        });
+        node.querySelector('[data-action="confirm"]').addEventListener("click", complete);
+        main.replaceChildren(node);
+        paintChrome();
+        window.scrollTo(0, 0);
+      }
+
+      function complete() {
+        if (state.screen !== "review" || window.__completed || nextUnselected()) return;
+        window.__completed = true;
+        state.screen = "done"; state.group = null;
+        log({ type: "complete", selections: Object.assign({}, state.selections) });
+        main.replaceChildren(screen("done"));
+        paintChrome();
+      }
+
+      renderIntro();
+    })();
+  </script>
+</body>
+</html>

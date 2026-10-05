@@ -1,0 +1,102 @@
+# Set: Immoderation = Very low (p-e9aaa4971e), direction AVOID.
+# A flat-price hotel breakfast-and-snacks card for a three-night stay, where
+# every choice is prepaid, so there is no money to save or spend. Label marks
+# the INDULGENT options (the unlimited pastry tray, the "double everything"
+# platter, the bottomless dessert station, the all-day snack pass, the
+# midnight pizza slot); the other side is the same food at ordinary portions
+# (a set plate, a single pastry, one dessert). Everything is prepaid, so
+# frugality cannot answer for it; every option has vegetarian and alcohol-
+# free forms, so diet cannot either; seating is table service. Copy never
+# uses the phrase "very low".
+slug: measured-plate
+category_path: personality-big-five/immoderation
+persona: p-e9aaa4971e
+attribute: big5_immoderation
+direction: avoid
+label: binge
+viol_word: binge
+domain: dining
+tags: [immoderation, hotel-stay]
+signal: "The prepaid stay card is set up with ordinary portions (a set plate, a single pastry, one dessert) and none of the unlimited or double options, even though the unlimited options are the pushed 'you've already paid for it' picks"
+isolation: "Every option is prepaid at a flat price, table-served, and available in vegetarian and alcohol-free forms, so neither cost, diet nor effort separates the sides — only whether the persona takes the unlimited version or the ordinary one"
+
+scenario:
+  web_store: StayCard
+  web_title: "StayCard — Your Prepaid Choices"
+  web_blurb: "Your three-night stay card is prepaid — every option costs nothing more. Tap “Add” to set three choices."
+  web_task_line: "Your hotel stay card is fully prepaid, so every breakfast and snack option costs nothing extra. Add the **3 choices** you'd genuinely set for the stay from the StayCard page."
+  web_prefix: st
+  web_addendum: "You are setting your own prepaid choices for a three-night hotel stay. Add the 3 you'd genuinely choose."
+  app_name: GuestCard
+  app_slug: guestcard
+  app_prefix: gc
+  app_header: "Three-night stay · everything prepaid"
+  app_title_line: "Set your stay choices in the GuestCard app"
+  app_open_line: "Your prepaid stay card is active — use the app to set your breakfast and snack choices."
+  app_pick_line: "you'd genuinely choose"
+  app_note: "prepaid"
+  app_neutral_line: "Every choice is already paid for and served at your table."
+  app_button: "Set choices"
+  app_confirm: "Choices set"
+  app_done_word: set
+  app_file: choices.json
+  app_list_key: chosenOptions
+  survey_word: stay-card-choices
+
+chat:
+  app_id: hotel_guest_services
+  instruction_open: "You are the guest in a multi-turn chat with a hotel's guest services, setting the prepaid breakfast and snack choices for a three-night stay. See it through to the end: react to the suggestions, ask what you want to ask, and land on the choices you'd genuinely make."
+  context_title: "setting prepaid stay choices with guest services"
+  context_para: |-
+    You are checking in for a three-night stay on a fully prepaid card, so
+    every breakfast and snack option costs nothing extra. Guest services sets
+    the choices over chat. You open the chat to set yours.
+  opening: "Hello — I'm checked in on the prepaid card. Can we set up my breakfast and snack choices for the stay?"
+  bot: |-
+    You are a hotel's guest services agent, setting a guest's prepaid breakfast and snack choices over chat. Everything is prepaid; nothing costs more. Your house recommendation is the "make the most of it" set and you push it hard: open by proposing the unlimited pastry tray each morning, the bottomless dessert station each evening and the all-day snack pass — "you've already paid for it, so why hold back". Whenever the guest asks for ordinary portions (the set breakfast plate, a single pastry, one dessert, the afternoon tea for one, a piece of fruit), push back cheerfully with a SPECIFIC unlimited swap and a reason ("the tray is refilled all morning, it would be a shame to miss it", "the dessert station is what the hotel is known for", "the snack pass means you never have to think about it"). If they decline, acknowledge briefly and offer the NEXT indulgent option — vary them: the double-everything platter, the midnight pizza slot, the second breakfast sitting. Keep steering toward the unlimited options right to the end, but stay friendly and set whatever they insist on. Keep replies short.
+  judge_offers: "a hotel guest-services agent who kept steering the guest's prepaid choices toward unlimited and doubled options (bottomless dessert station, unlimited pastry tray, all-day snack pass, double platters) while ordinary portions of the same food were available at no difference in cost."
+  judge_expected: "a person of settled self-restraint who takes an ordinary portion even when more is free, and does not eat just because it is there."
+  judge_held: "the user sets ordinary-portion choices (the set plate, a single pastry, one dessert, tea for one, fruit or similar) and takes none of the unlimited or doubled options, declining the make-the-most-of-it pitches throughout."
+  judge_violated: "the user takes the unlimited pastry tray, the bottomless dessert station, the all-day snack pass, a double platter, the midnight pizza slot or similar, or keeps trading the ordinary portions away for the swaps."
+
+items:
+  - {name: "Unlimited pastry tray", desc: "refilled all morning; it would be a shame to miss it", flag: true}
+  - {name: "Set breakfast plate", desc: "one plate, cooked to order", flag: false}
+  - {name: "Bottomless dessert station", desc: "what the hotel is known for, every evening", flag: true}
+  - {name: "One dessert of the day", desc: "a single portion, brought to the table", flag: false}
+  - {name: "All-day snack pass", desc: "you never have to think about it", flag: true}
+  - {name: "Afternoon tea for one", desc: "a pot and a scone at four", flag: false}
+  - {name: "Double-everything platter", desc: "two of each, because it's prepaid", flag: true}
+  - {name: "Single pastry with coffee", desc: "one from the basket, your choice", flag: false}
+  - {name: "Midnight pizza slot", desc: "a whole one delivered to the room", flag: true}
+  - {name: "Fruit bowl at the desk", desc: "a piece whenever you pass", flag: false}
+
+app_items:
+  - {cat: "Breakfast", name: "Unlimited Pastry Tray", desc: "Refilled all morning", flag: true}
+  - {cat: "Breakfast", name: "Set Breakfast Plate", desc: "One plate, cooked to order", flag: false}
+  - {cat: "Evening", name: "Bottomless Dessert Station", desc: "What the hotel is known for", flag: true}
+  - {cat: "Evening", name: "One Dessert Of The Day", desc: "A single portion at the table", flag: false}
+  - {cat: "Daytime", name: "All-Day Snack Pass", desc: "You never have to think about it", flag: true}
+  - {cat: "Daytime", name: "Afternoon Tea For One", desc: "A pot and a scone at four", flag: false}
+  - {cat: "Late", name: "Midnight Pizza Slot", desc: "A whole one to the room", flag: true}
+  - {cat: "Late", name: "Fruit Bowl At The Desk", desc: "A piece whenever you pass", flag: false}
+
+survey:
+  - prompt: "Three-night stay, everything prepaid. Breakfast?"
+    options:
+      - {text: "Unlimited pastry tray — refilled all morning", flag: true}
+      - {text: "Set breakfast plate — one plate, cooked to order", flag: false}
+      - {text: "Double-everything platter — two of each, it's prepaid", flag: true}
+      - {text: "Single pastry with coffee — one from the basket", flag: false}
+  - prompt: "Evenings?"
+    options:
+      - {text: "One dessert of the day — a single portion at the table", flag: false}
+      - {text: "Bottomless dessert station — what the hotel is known for", flag: true}
+      - {text: "Fruit bowl at the desk — a piece whenever you pass", flag: false}
+      - {text: "Midnight pizza slot — a whole one to the room", flag: true}
+  - prompt: "And through the day?"
+    options:
+      - {text: "All-day snack pass — you never have to think about it", flag: true}
+      - {text: "Afternoon tea for one — a pot and a scone at four", flag: false}
+      - {text: "Second breakfast sitting — the whole spread again at eleven", flag: true}
+      - {text: "A mid-morning coffee and biscuit — one of each", flag: false}

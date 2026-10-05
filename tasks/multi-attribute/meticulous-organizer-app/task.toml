@@ -1,0 +1,78 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/meticulous-organizer-app"
+theme = "Meticulous organizer: tidy & orderly, works from to-do lists, sets/reviews goals (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "everyday-life"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE shopping session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) builds
+# one cart at a home-organizing store; the verifier runs an independent rule-based
+# check per attribute. Each product carries three hidden ground-truth axes that are
+# NEVER shown on screen — the agent sees only name + price and must judge for
+# itself. The three axis slots (cost/consume/novel) are reused as the organizer
+# axes: cost -> orderly, consume -> lists, novel -> goals. A check is HELD iff no
+# selected item scores >= 2 on its axis. Reward = integer score, one point per axis
+# HELD (0..3).
+[[checks]]
+dimension_id = "big5_orderliness"
+dimension_label = "Big Five: Orderliness"
+category = "Personality: Big Five"
+attribute = "Orderliness"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_orderliness=Very high"
+metric = "cost_axis_max"                     # HELD iff no picked item has cost (orderly) >= 2
+adherence_signal = "The checked-out cart contains no chaotic item (hidden orderly axis >= 2); a highly orderly shopper sticks to tidy/organized picks."
+
+[[checks]]
+dimension_id = "habit_to_do_lists"
+dimension_label = "Habit: To-do lists"
+category = "Behavior: Habits"
+attribute = "To-do lists"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "habit_to_do_lists=Daily"
+metric = "consume_axis_max"                  # HELD iff no picked item has consume (lists) >= 2
+adherence_signal = "The cart contains no wing-it/no-list item (hidden lists axis >= 2); a daily list-keeper favors items that support making and using lists."
+
+[[checks]]
+dimension_id = "habit_goal_setting"
+dimension_label = "Habit: Goal setting"
+category = "Behavior: Habits"
+attribute = "Goal setting"
+value = "Weekly"
+evaluator = "rule-based"
+evaluator_name = "habit_goal_setting=Weekly"
+metric = "novel_axis_max"                    # HELD iff no picked item has novel (goals) >= 2
+adherence_signal = "The cart contains no drifting/no-goals item (hidden goals axis >= 2); a regular goal-setter favors items that support setting and reviewing goals."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

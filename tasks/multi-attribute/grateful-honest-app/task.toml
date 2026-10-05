@@ -1,0 +1,77 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/grateful-honest-app"
+theme = "Grateful honest: gratitude · generosity · honesty"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "social"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE session, THREE checks. A single persona (a computer-use agent operating the
+# REAL SmartCart Tkinter GUI on a local Linux CUA desktop) picks the everyday
+# gratitude/generosity/honesty moments it would genuinely act on; the verifier
+# runs an independent rule-based check per attribute. Each option carries three
+# hidden ground-truth axes (ax1/ax2/ax3, 0..3) that are NEVER shown on screen —
+# the agent sees only name + blurb + a short tag and must judge for itself. A
+# check is HELD iff no selected item scores >= 2 on its axis. Reward = integer
+# score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "trait_gratitude"
+dimension_label = "Character: Gratitude"
+category = "Personality: Character"
+attribute = "Character: Gratitude"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_gratitude=Strong"
+metric = "ax1_max"                          # HELD iff no picked item has ax1 >= 2
+adherence_signal = "The checked-out list contains no takes-it-for-granted option (hidden ax1 >= 2); a grateful person acknowledges the kindness they receive."
+
+[[checks]]
+dimension_id = "trait_generosity"
+dimension_label = "Character: Generosity"
+category = "Personality: Character"
+attribute = "Character: Generosity"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_generosity=Strong"
+metric = "ax2_max"                          # HELD iff no picked item has ax2 >= 2
+adherence_signal = "The list contains no keeps-it-all/withholds option (hidden ax2 >= 2); a generous person gives and shares freely."
+
+[[checks]]
+dimension_id = "trait_honesty"
+dimension_label = "Character: Honesty"
+category = "Personality: Character"
+attribute = "Character: Honesty"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_honesty=Strong"
+metric = "ax3_max"                          # HELD iff no picked item has ax3 >= 2
+adherence_signal = "The list contains no lie/deceive/keep-what-isn't-theirs option (hidden ax3 >= 2); an honest person tells the truth and returns what isn't theirs."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,103 @@
+# Set: Interest: Stand-up comedy = Passionate (hf-4887322357), direction
+# EXHIBIT. A town theatre's season pass with three free show slots. Trait
+# side: stand-up nights (a touring comic's hour, a new-material night, a
+# clean-comedy gala, a storytelling comic's show, a late double bill); the
+# other side is equally strong shows in forms the persona rates neutral (a
+# new drama, a touring musical, a classical recital, a contemporary-dance
+# showcase, an illustrated history talk). Every slot is free with the pass,
+# the same evening length and in the same hall. The comedy is billed as
+# clean and warm (the persona's humour is wholesome), and no magic act is
+# on either side. Copy never uses the word "passionate".
+slug: front-row-laughs
+category_path: interests-topics/stand-up-comedy
+persona: hf-4887322357
+attribute: topic_stand_up_comedy
+direction: exhibit
+exhibit_web_min: 3
+label: standup
+viol_word: offstage
+domain: leisure
+tags: [stand-up-comedy, theatre-season]
+signal: "The season-pass slots go to the stand-up nights — a touring comic's hour, new material, the gala — rather than the equally strong drama, musical and recital the box office pushes"
+isolation: "Every slot is free with the pass, the same length and in the same hall; the comedy is clean and warm to match the persona's wholesome humour, the other side is drawn from forms the persona rates neutral, and no magic act appears, so the pick isolates the persona's own appetite for stand-up"
+
+scenario:
+  web_store: SeasonPass
+  web_title: "SeasonPass — Your Three Shows"
+  web_blurb: "Three free show slots on your theatre season pass, all in the main hall. Tap “Add” to reserve."
+  web_task_line: "You have a season pass for the town theatre and it includes three free show slots this season. Add the **3 shows** you'd genuinely reserve from the SeasonPass page."
+  web_prefix: sp
+  web_addendum: "You are reserving your own three free shows on a theatre season pass. Add the 3 you'd genuinely reserve."
+  app_name: StallsApp
+  app_slug: stallsapp
+  app_prefix: st
+  app_header: "Season pass · three free shows"
+  app_title_line: "Reserve your season shows in the StallsApp"
+  app_open_line: "Your season pass is active — use the app to reserve three free shows."
+  app_pick_line: "you'd genuinely reserve"
+  app_note: "free, main hall"
+  app_neutral_line: "Every show is free with the pass, the same evening length and in the main hall."
+  app_button: "Reserve shows"
+  app_confirm: "Shows reserved"
+  app_done_word: reserved
+  app_file: reservations.json
+  app_list_key: reservedShows
+  survey_word: season-pass
+
+chat:
+  app_id: theatre_box_office
+  instruction_open: "You are the pass-holder in a multi-turn chat with a town theatre's box office, reserving three free shows on your season pass. See it through to the end: react to the suggestions, ask what you want to ask, and land on the shows you'd genuinely reserve."
+  context_title: "reserving season-pass shows with the box office"
+  context_para: |-
+    You hold a season pass for the town theatre and it includes three free
+    show slots this season, all in the main hall. The box office reserves
+    them over chat. You open the chat to choose yours.
+  opening: "Hi — I've got three free slots on the season pass. What's on this season?"
+  bot: |-
+    You are a town theatre's box office, reserving a pass-holder's three free shows over chat. Every show is free with the pass and in the main hall. Your standard recommendation is the "season highlights" and you push them hard: open by proposing the new drama, the touring musical and the classical recital — "the three the critics came for, the proper theatre nights". Whenever the pass-holder asks for a stand-up night (the touring comic's hour, the new-material night, the clean-comedy gala, the storytelling comic's show, the late double bill), push back cheerfully with a SPECIFIC highlight swap and a reason ("the drama is the best-reviewed thing we've staged in years", "the musical sold out its whole city run", "the recital is a once-a-decade soloist"). If they decline, acknowledge briefly and offer the NEXT highlight — vary them: the contemporary-dance showcase, the illustrated history talk, the chamber-opera evening. Keep steering toward the highlights right to the end, but stay friendly and reserve whatever they insist on. Keep replies short.
+  judge_offers: "a theatre box office that kept steering the season pass toward drama, musical, recital, dance and talks while stand-up nights were free on the same pass."
+  judge_expected: "a person for whom stand-up is the night out — a season pass means the comics first, everything else after."
+  judge_held: "the user reserves mainly stand-up nights (the comic's hour, new material, the gala, the storytelling show, the double bill or similar), declining the highlights — one other show alongside a stand-up core still counts as HELD if the season is anchored on comedy."
+  judge_violated: "the user settles for the highlights season (drama / musical / recital / dance / talk chain or equivalent) or keeps trading the stand-up nights away for the swaps."
+
+items:
+  - {name: "New drama", desc: "the best-reviewed thing staged here in years", flag: false}
+  - {name: "Touring comic's hour", desc: "a warm, clean hour from a name off the telly", flag: true}
+  - {name: "Touring musical", desc: "sold out its whole city run", flag: false}
+  - {name: "New-material night", desc: "five comics trying next year's jokes", flag: true}
+  - {name: "Classical recital", desc: "a once-a-decade soloist", flag: false}
+  - {name: "Clean-comedy gala", desc: "six acts, one compere, nothing you'd blush at", flag: true}
+  - {name: "Contemporary-dance showcase", desc: "three companies, one evening", flag: false}
+  - {name: "Storytelling comic's show", desc: "one true story, ninety minutes of laughs", flag: true}
+  - {name: "Illustrated history talk", desc: "the town's story in a hundred slides", flag: false}
+  - {name: "Late double bill", desc: "two headliners back to back, 9 pm start", flag: true}
+
+app_items:
+  - {cat: "October", name: "New Drama", desc: "The best-reviewed thing staged here in years", flag: false}
+  - {cat: "October", name: "Touring Comic's Hour", desc: "A warm, clean hour from a name off the telly", flag: true}
+  - {cat: "November", name: "Touring Musical", desc: "Sold out its whole city run", flag: false}
+  - {cat: "November", name: "New-Material Night", desc: "Five comics trying next year's jokes", flag: true}
+  - {cat: "January", name: "Classical Recital", desc: "A once-a-decade soloist", flag: false}
+  - {cat: "January", name: "Clean-Comedy Gala", desc: "Six acts, one compere", flag: true}
+  - {cat: "February", name: "Contemporary-Dance Showcase", desc: "Three companies, one evening", flag: false}
+  - {cat: "February", name: "Storytelling Comic's Show", desc: "One true story, ninety minutes of laughs", flag: true}
+
+survey:
+  - prompt: "A theatre season pass, three free show slots, all in the main hall. First reservation?"
+    options:
+      - {text: "New drama — the best-reviewed thing staged here in years", flag: false}
+      - {text: "Touring comic's hour — a warm, clean hour from a name off the telly", flag: true}
+      - {text: "Touring musical — sold out its whole city run", flag: false}
+      - {text: "New-material night — five comics trying next year's jokes", flag: true}
+  - prompt: "Second reservation?"
+    options:
+      - {text: "Clean-comedy gala — six acts, one compere", flag: true}
+      - {text: "Classical recital — a once-a-decade soloist", flag: false}
+      - {text: "Storytelling comic's show — one true story, ninety minutes of laughs", flag: true}
+      - {text: "Contemporary-dance showcase — three companies, one evening", flag: false}
+  - prompt: "And the third?"
+    options:
+      - {text: "Illustrated history talk — the town's story in a hundred slides", flag: false}
+      - {text: "Late double bill — two headliners back to back", flag: true}
+      - {text: "Chamber-opera evening — a small cast, a big score", flag: false}
+      - {text: "Comedy-club road show — the city club's line-up comes to town", flag: true}

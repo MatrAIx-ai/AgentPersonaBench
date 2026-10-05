@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/renewable-enthusiast-chat"
+theme = "Attitude: Renewable energy: Enthusiast"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "general"
+tags = [ "persona-adherence", "worldview-beliefs", "attitude-renewable-energy", "renewable-enthusiast", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# "Renewable energy: Enthusiast" is a SEMANTIC belief: no keyword list can tell
+# whether a person genuinely wanted to power their home from wind/solar/renewable
+# sources over cheaper fossil fuels. So the evaluator is an LLM judge that reads
+# the persona's OWN turns and returns a binary HELD/VIOLATED verdict on whether it
+# held to a renewable choice instead of giving in to the fossil-fuel push.
+[[checks]]
+dimension_id = "att_renewable_energy"
+dimension_label = "Attitude: Renewable energy"
+category = "Worldview: Beliefs"
+attribute = "Attitude: Renewable energy"
+value = "Enthusiast"
+evaluator = "llm-judge"
+evaluator_name = "att_renewable_energy=Enthusiast"
+adherence_signal = "Reply keeps to powering the home from wind/solar/renewable sources, resists the friend's cheaper fossil-fuel push, and stays keen on clean energy."
+# pass = anchor decisively more pro-renewable than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

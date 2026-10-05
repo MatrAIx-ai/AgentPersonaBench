@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/freemarket-believer-web"
+theme = "Attitude to free markets: Enthusiast"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "worldview-beliefs", "attitude-free-markets", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "att_free_markets"
+dimension_label = "Attitude: Free markets"
+category = "Worldview: Beliefs"
+attribute = "att_free_markets"
+value = "Enthusiast"
+evaluator = "rule-based"
+evaluator_name = "att_free_markets=Enthusiast"
+# Web env: the persona builds a shortlist of policy ideas on a live page (Playwright).
+# Each idea's hidden `data-rank` (0..3) in index.html is the ground truth
+# (0 = market/competition/light-touch .. 3 = heavy government regulation/control).
+# VIOLATED for any heavy-regulation pick (rank >= 2). Both sides worded fairly.
+adherence_signal = "Shortlist built from market / open-competition / light-touch ideas (data-rank 0-1); no heavy-regulation idea (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

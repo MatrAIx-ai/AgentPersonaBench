@@ -1,0 +1,23 @@
+{
+  "_about": "Host-only ground truth. The acting model can read input/ and the app image, so neither app copy contains these labels. The verifier scores submitted IDs against this file and reconciles its IDs and names with both label-free catalogs.",
+  "label": {
+    "cd01": true,
+    "cd02": false,
+    "cd03": true,
+    "cd04": false,
+    "cd05": false,
+    "cd06": true,
+    "cd07": false,
+    "cd08": true
+  },
+  "name": {
+    "cd01": "Monochrome Value Study",
+    "cd02": "Contour Outline Pass",
+    "cd03": "Controlled Color String",
+    "cd04": "Straight-from-Tube Accent",
+    "cd05": "Uniform Edge Cleanup",
+    "cd06": "Lost-and-Found Edge Map",
+    "cd07": "Broad Unifying Glaze",
+    "cd08": "Scrape and Restage"
+  }
+}

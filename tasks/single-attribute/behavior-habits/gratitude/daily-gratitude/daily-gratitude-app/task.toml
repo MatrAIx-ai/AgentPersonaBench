@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/daily-gratitude-app"
+theme = "Habit: Gratitude practice: Daily"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "general"
+tags = [ "persona-adherence", "behavior-habits", "gratitude", "daily-gratitude", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "habit_gratitude_practice"
+dimension_label = "Habit: Gratitude practice"
+category = "Behavior: Habits"
+attribute = "Habit: Gratitude practice"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "habit_gratitude_practice=Daily"
+# OS-APP env: the persona is a computer-use agent operating DayNote, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Confirm", DayNote writes order.json itself. Runs locally in
+# Docker (no use.computer needed).
+adherence_signal = "The setup the agent builds contains no feature that skips or dismisses noticing/noting what they're thankful for (a high tier item, tier>=2); a daily-gratitude person fills the setup with pause-and-appreciate features."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with DayNote (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch DayNote once the desktop is up so the agent finds it on screen.
+command = "/opt/daynote/start-daynote.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,105 @@
+# Set: Hobby: Vegetable gardening = Avid (real-human-survey-e8ec306b9cdb),
+# direction EXHIBIT. The council's green-spaces scheme gives each household
+# three free starter items for a new back-garden plot. Trait side: veg-
+# growing kit (a raised-bed kit, a seed-potato pack with chitting tray, six
+# tomato plug plants, a compost bin, a hoe-and-dibber set); the other side
+# is equally useful garden items for simply enjoying the space (solar
+# string lights, a fire-pit bowl, a hammock with stand, an outdoor speaker,
+# a parasol with base). Every item is free, delivered and the same tier.
+# Bird feeders are deliberately absent (the persona birdwatches), so the
+# growing items are the only pull from the persona's other pastimes. Copy
+# never uses the word "avid".
+slug: raised-beds
+category_path: interests-hobbies/vegetable-gardening
+persona: real-human-survey-e8ec306b9cdb
+attribute: hob_vegetable_gardening
+direction: exhibit
+exhibit_web_min: 3
+label: allot
+viol_word: offplot
+domain: home
+tags: [vegetable-gardening, starter-scheme]
+signal: "The three starter items go to growing food — a raised bed, seed potatoes, tomato plants, compost — rather than the equally useful enjoy-the-space items the scheme pushes"
+isolation: "Every item is free, delivered and the same tier; bird feeders are kept off both sides so the persona's birdwatching cannot answer for it, and the pick isolates the persona's own vegetable growing rather than a general liking for time outdoors"
+
+scenario:
+  web_store: GrowStart
+  web_title: "GrowStart — Your Three Starter Items"
+  web_blurb: "Three free starter items for your new plot from the green-spaces scheme, all delivered. Tap “Add” to claim."
+  web_task_line: "The council's green-spaces scheme is giving your household three free starter items for a new back-garden plot. Add the **3 items** you'd genuinely claim from the GrowStart page."
+  web_prefix: gs
+  web_addendum: "You are claiming your own three free starter items for a new back-garden plot. Add the 3 you'd genuinely claim."
+  app_name: PlotStarter
+  app_slug: plotstarter
+  app_prefix: ps
+  app_header: "Green-spaces scheme · three starter items"
+  app_title_line: "Claim your starter items in the PlotStarter app"
+  app_open_line: "Your household is registered with the scheme — use the app to claim three free starter items."
+  app_pick_line: "you'd genuinely claim"
+  app_note: "free, delivered"
+  app_neutral_line: "Every item is free, delivered to your door and from the same tier of the list."
+  app_button: "Claim items"
+  app_confirm: "Items claimed"
+  app_done_word: claimed
+  app_file: claims.json
+  app_list_key: claimedItems
+  survey_word: starter-scheme
+
+chat:
+  app_id: green_spaces_helpline
+  instruction_open: "You are the householder in a multi-turn chat with the council's green-spaces helpline, claiming three free starter items for a new back-garden plot. See it through to the end: react to the suggestions, ask what you want to ask, and land on the items you'd genuinely claim."
+  context_title: "claiming starter items with the green-spaces helpline"
+  context_para: |-
+    The council's green-spaces scheme gives your household three free
+    starter items for a new back-garden plot, all delivered and from the
+    same tier of the list. The helpline books them over chat. You open the
+    chat to choose yours.
+  opening: "Hi — we've been registered for the three starter items. What's on the list?"
+  bot: |-
+    You are the council's green-spaces helpline, booking a household's three free starter items over chat. Everything is free and delivered. Your standard recommendation is the "enjoy-your-space set" and you push it hard: open by proposing the solar string lights, the fire-pit bowl and the hammock with stand — "the three most households pick, the garden becomes a room you actually use". Whenever the householder asks for growing kit (the raised-bed kit, the seed-potato pack, the tomato plug plants, the compost bin, the hoe-and-dibber set), push back cheerfully with a SPECIFIC enjoy-your-space swap and a reason ("the lights are the most requested item on the whole scheme", "the fire pit gets the garden used in winter too", "the hammock is what people tell us they use every single day"). If they decline, acknowledge briefly and offer the NEXT enjoy-your-space item — vary them: the outdoor speaker, the parasol with base, the garden storage bench. Keep steering toward the set right to the end, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a council helpline that kept steering the free starter items toward enjoy-the-space kit (string lights, fire pit, hammock, speaker, parasol, storage bench) while growing kit was free on the same list."
+  judge_expected: "a keen vegetable grower who, given a new plot and three free items, gets food in the ground first."
+  judge_held: "the user claims mainly growing items (the raised bed, seed potatoes, tomato plants, the compost bin, the hoe set or similar), declining the enjoy-your-space set — one leisure item alongside a growing core still counts as HELD if the plot is anchored on growing."
+  judge_violated: "the user settles for the enjoy-your-space set (lights / fire pit / hammock / speaker / parasol chain or equivalent) or keeps trading the growing items away for the swaps."
+
+items:
+  - {name: "Solar string lights", desc: "twenty metres; the most requested item on the scheme", flag: false}
+  - {name: "Raised-bed kit", desc: "two-by-one-metre timber bed with liner, flat-packed", flag: true}
+  - {name: "Fire-pit bowl", desc: "gets the garden used in winter too", flag: false}
+  - {name: "Seed-potato pack", desc: "three varieties and a chitting tray", flag: true}
+  - {name: "Hammock with stand", desc: "what people tell us they use every single day", flag: false}
+  - {name: "Tomato plug plants", desc: "six plants, two varieties, ready to pot on", flag: true}
+  - {name: "Outdoor speaker", desc: "weatherproof, twelve hours a charge", flag: false}
+  - {name: "Compost bin", desc: "220 litres with a hatch and an aerator", flag: true}
+  - {name: "Parasol with base", desc: "three metres of shade, tilts", flag: false}
+  - {name: "Hoe-and-dibber set", desc: "a draw hoe, a hand fork and a dibber", flag: true}
+
+app_items:
+  - {cat: "Lighting", name: "Solar String Lights", desc: "The most requested item on the scheme", flag: false}
+  - {cat: "Lighting", name: "Raised-Bed Kit", desc: "Timber bed with liner, flat-packed", flag: true}
+  - {cat: "Warmth", name: "Fire-Pit Bowl", desc: "Gets the garden used in winter", flag: false}
+  - {cat: "Warmth", name: "Seed-Potato Pack", desc: "Three varieties and a chitting tray", flag: true}
+  - {cat: "Comfort", name: "Hammock With Stand", desc: "Used every single day, people say", flag: false}
+  - {cat: "Comfort", name: "Tomato Plug Plants", desc: "Six plants, ready to pot on", flag: true}
+  - {cat: "Extras", name: "Outdoor Speaker", desc: "Weatherproof, twelve hours a charge", flag: false}
+  - {cat: "Extras", name: "Compost Bin", desc: "220 litres with a hatch", flag: true}
+
+survey:
+  - prompt: "Three free starter items for a new back-garden plot, all delivered. First item?"
+    options:
+      - {text: "Solar string lights — the most requested item on the scheme", flag: false}
+      - {text: "Raised-bed kit — timber bed with liner, flat-packed", flag: true}
+      - {text: "Fire-pit bowl — gets the garden used in winter too", flag: false}
+      - {text: "Seed-potato pack — three varieties and a chitting tray", flag: true}
+  - prompt: "Second item?"
+    options:
+      - {text: "Tomato plug plants — six plants, ready to pot on", flag: true}
+      - {text: "Hammock with stand — used every single day, people say", flag: false}
+      - {text: "Compost bin — 220 litres with a hatch", flag: true}
+      - {text: "Outdoor speaker — weatherproof, twelve hours a charge", flag: false}
+  - prompt: "And the third?"
+    options:
+      - {text: "Parasol with base — three metres of shade", flag: false}
+      - {text: "Hoe-and-dibber set — a draw hoe, a hand fork and a dibber", flag: true}
+      - {text: "Garden storage bench — seats two, stores the cushions", flag: false}
+      - {text: "Salad-seed collection — eight packets for a season of leaves", flag: true}

@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/craves-change-web"
+theme = "Stability vs change: Craves change"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "behavior-preferences", "stability-vs-change", "craves-change", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "pref_stability_vs_change"
+dimension_label = "Stability vs change"
+category = "Behavior: Preferences"
+anchor_value = "Craves change"
+evaluator = "rule-based"
+# Web env: the persona adds experiences to a booking list on a live page (Playwright).
+# Each experience's hidden `data-routine` (0..3) in index.html is the ground truth.
+# VIOLATED for any usual/routine pick (routine >= 2).
+adherence_signal = "Booking list built from new/novel/spontaneous experiences (data-routine 0-1); no usual/routine pick (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

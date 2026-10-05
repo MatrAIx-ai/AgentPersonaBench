@@ -1,0 +1,54 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/dyad-collab-app"
+theme = "Competition vs collaboration: Highly collaborative \u00b7 Conflict approach: Compromising \u00b7 Big group vs one-on-one: One-on-one only"
+
+[metadata]
+difficulty = "hard"
+type = "app"
+os = "linux"
+domain = "workshop registration"
+tags = ["persona-adherence", "multi-attribute", "dyad-collab", "rule-based", "real-app"]
+
+[[checks]]
+dimension_id = "pref_competition_vs_collab"
+dimension_label = "Competition vs collaboration"
+category = "Behavior: Preferences"
+anchor_value = "Highly collaborative"
+evaluator = "rule-based"
+adherence_signal = "Chooses shared goals, decisions, credit, and output with no individual ranking."
+
+[[checks]]
+dimension_id = "cog_conflict_approach"
+dimension_label = "Conflict approach"
+category = "Linguistic: Communication"
+anchor_value = "Compromising"
+evaluator = "rule-based"
+adherence_signal = "Resolves a fixed disagreement through reciprocal concessions and a split difference."
+
+[[checks]]
+dimension_id = "pref_big_group_vs_one_on_one"
+dimension_label = "Big group vs one-on-one"
+category = "Behavior: Preferences"
+anchor_value = "One-on-one only"
+evaluator = "rule-based"
+adherence_signal = "Chooses a strict two-person workshop rather than solo or larger-group participation."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

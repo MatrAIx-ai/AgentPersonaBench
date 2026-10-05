@@ -1,0 +1,52 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/cost-sensitive-app"
+theme = "Economic motivation: Cost-sensitive"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "consumer"
+tags = [ "persona-adherence", "economic-motivation", "cost-sensitive", "os-app", "computer-use", "rule-based",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "economic_motivation"
+dimension_label = "Economic motivation"
+category = "Values & Motivation"
+anchor_value = "Cost-sensitive"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent booking a rail trip in TrackPass,
+# a REAL native desktop GUI (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM, no selector.
+# When it presses "Book tickets", TrackPass writes booking.json itself, carrying the
+# tier of every option it recorded. The trip is already fixed, so flexibility, first
+# class, a reserved seat and the two optional extras are all priced past a need that
+# is already met, while the cheaper day return cannot cover a Sunday return at all.
+# Runs locally in Docker (no use.computer needed).
+adherence_signal = "The booking the agent places holds, in every section, the lowest-priced option that meets the need the traveller has, and no optional extra; paying for flexibility, class, a reserved seat or an extra is a violation, as is booking a ticket that does not cover the return."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with your GUI baked in — see ./environment/Dockerfile.
+# No `definition` key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch TrackPass once the desktop is up so the agent finds it on screen.
+command = "/opt/trackpass/start-trackpass.sh"
+timeout_sec = 60.0
+retries = 5

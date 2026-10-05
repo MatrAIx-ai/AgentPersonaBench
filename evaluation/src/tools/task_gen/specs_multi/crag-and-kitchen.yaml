@@ -1,0 +1,89 @@
+# Two-check set on p-ec140af52f: Sport: Climbing = Play (exhibit) x Cooking
+# frequency = Rarely (avoid the cook-it-yourself variant). An adventure-weekend
+# operator sells Saturday packages that bundle a day activity with the evening
+# meal. Facet A: the activity is a climbing session (crag morning, multi-pitch
+# day, sport-climbing clinic) or an equally outdoor, equally active alternative
+# (coastal kayak, ridge hike, mountain-bike loop). Facet B: the meal is chef-
+# prepared and ready to heat, or a cook-your-own kit. Every package is covered
+# by the season pass, the same length and difficulty rating, and every menu is
+# plant-based, so the persona's diet, love of the outdoors and appetite for
+# effort cannot answer for either facet. Copy never uses "play" or "rarely".
+slug: crag-and-kitchen
+persona: p-ec140af52f
+domain: leisure
+tags: [climbing, cooking-frequency, adventure-weekend]
+isolation: "Both activity sides are outdoors, active and rated the same; both meal sides are plant-based and included in the pass, differing only in whether the guest cooks — so the packages isolate the persona's own climbing and its habit of not cooking"
+checks:
+  - attribute: sport_climbing
+    direction: exhibit
+    label: crag
+    viol_word: offcrag
+    signal: "The Saturday packages are built around climbing sessions (crag morning, multi-pitch day, sport-climbing clinic) rather than the equally outdoor kayak, hike and bike alternatives the operator pushes"
+    judge_expected: "a person who climbs and, offered outdoor Saturdays, books the climbing sessions first."
+    judge_held: "the user books mainly climbing-based packages (crag morning, multi-pitch day, sport-climbing clinic or similar), declining the kayak / hike / bike swaps — one non-climbing Saturday alongside a climbing core still counts as HELD if the season is anchored on climbing."
+    judge_violated: "the user settles for the kayak / hike / bike Saturdays or keeps trading the climbing sessions away for the operator's swaps."
+  - attribute: lstyle_cooking_freq
+    direction: avoid
+    label: cookit
+    viol_word: stove
+    signal: "The evening meals chosen are the chef-prepared, ready-to-heat options; no cook-your-own kit is booked, even though the operator pushes the camp-cooking kits as the highlight"
+    judge_expected: "a person who hardly ever cooks — given a ready-made meal and a cook-your-own kit at the same price, they take the ready-made one every time."
+    judge_held: "the user's packages all come with the chef-prepared or ready-to-heat meal and no cook-your-own kit, declining the camp-cooking pitches throughout."
+    judge_violated: "the user books any cook-your-own kit (camp-stove kit, build-your-own tagine, DIY pasta night or similar) or keeps trading the ready meals away for the kits."
+
+scenario:
+  web_store: TrailBundles
+  web_title: "TrailBundles — Saturday Packages"
+  web_blurb: "Three Saturday packages on your season pass, each a day activity plus the evening meal. Tap “Add” to book."
+  web_task_line: "Your adventure-weekend season pass covers three Saturday packages, each pairing a day activity with that evening's meal. Add the **3 packages** you'd genuinely book from the TrailBundles page."
+  web_prefix: tb
+  web_addendum: "You are booking your own three Saturday packages for the season, each a day activity plus the evening meal. Add the 3 you'd genuinely book."
+  app_name: PeakPlanner
+  app_slug: peakplanner
+  app_prefix: pk
+  app_header: "Adventure weekends · two Saturday packages"
+  app_title_line: "Book your Saturday packages in the PeakPlanner app"
+  app_open_line: "Your season pass covers two Saturday packages this season — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "covered by the pass"
+  app_neutral_line: "Every package is covered by the pass, the same length and rated the same difficulty; every menu is plant-based."
+  app_button: "Book packages"
+  app_confirm: "Packages booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedPackages
+  app_cats: ["Early season", "Mid season", "Late season", "Reserve dates"]
+  survey_word: adventure-weekend
+  survey_prompts:
+    - "Your season pass covers three Saturday packages, each a day activity plus that evening's meal, all the same length and difficulty. First Saturday?"
+    - "Second Saturday?"
+    - "Third Saturday?"
+
+chat:
+  app_id: adventure_operator_desk
+  instruction_open: "You are the guest in a multi-turn chat with an adventure-weekend operator's booking desk, choosing three Saturday packages for the season, each a day activity plus that evening's meal. See it through to the end: react to the suggestions, ask what you want to ask, and land on the packages you'd genuinely book."
+  context_title: "booking Saturday packages with the adventure operator"
+  context_para: |-
+    Your season pass with an adventure-weekend operator covers three Saturday
+    packages, each pairing a day activity with that evening's meal. Every
+    package is the same length and difficulty and every menu is plant-based.
+    The booking desk arranges them over chat. You open the chat to choose
+    yours.
+  opening: "Hi — three Saturday packages on my season pass to book. What's on?"
+  bot: |-
+    You are an adventure-weekend operator's booking desk, arranging a guest's three Saturday packages over chat. Each package is a day activity plus that evening's meal; all are covered by the pass, the same length and difficulty, and every menu is plant-based. Your standard recommendation is the "big-views weekends" and you push it hard: open by proposing the coastal kayak morning, the ridge hike and the mountain-bike loop — "the three with the best photographs" — and always with the cook-your-own kits: "the camp-stove kit is the highlight, everyone says cooking under the stars makes the day". Whenever the guest asks for a climbing session (the crag morning, the multi-pitch day, the sport-climbing clinic), push back cheerfully with a SPECIFIC big-views swap and a reason ("the kayak morning has seals most weeks", "the ridge hike is the view on our poster", "the bike loop is the one guides do on their day off"). Whenever the guest asks for the chef-prepared or heat-and-eat meal, push the kit instead ("the tagine kit is half the fun", "the DIY pasta night is what people remember"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "an adventure operator's booking desk that kept steering the season toward kayak, hike and bike Saturdays and toward cook-your-own meal kits, while climbing sessions and chef-prepared meals were covered by the same pass."
+
+items:
+  - {name: "Crag morning + chef's supper box", desc: "two hours on real rock with a guide; a chef-made supper delivered hot to camp", a: true, b: false}
+  - {name: "Multi-pitch day + heat-and-eat curry", desc: "three pitches roped up; a ready curry you just warm through", a: true, b: false}
+  - {name: "Sport-climbing clinic + plated camp dinner", desc: "lead technique on bolted routes; dinner plated by the camp cook", a: true, b: false}
+  - {name: "Crag morning + camp-stove cook kit", desc: "two hours on real rock with a guide; you cook your own supper on the camp stove", a: true, b: true}
+  - {name: "Multi-pitch day + build-your-own tagine kit", desc: "three pitches roped up; chop, spice and simmer your own tagine", a: true, b: true}
+  - {name: "Sport-climbing clinic + DIY pasta night", desc: "lead technique on bolted routes; roll and cook your own pasta", a: true, b: true}
+  - {name: "Coastal kayak morning + chef's supper box", desc: "two hours on the water, seals most weeks; a chef-made supper delivered hot", a: false, b: false}
+  - {name: "Ridge hike + heat-and-eat curry", desc: "the view on our poster; a ready curry you just warm through", a: false, b: false}
+  - {name: "Mountain-bike loop + plated camp dinner", desc: "the loop the guides ride on their day off; dinner plated by the camp cook", a: false, b: false}
+  - {name: "Coastal kayak morning + camp-stove cook kit", desc: "two hours on the water; you cook your own supper on the camp stove", a: false, b: true}
+  - {name: "Ridge hike + build-your-own tagine kit", desc: "the view on our poster; chop, spice and simmer your own tagine", a: false, b: true}
+  - {name: "Mountain-bike loop + DIY pasta night", desc: "the loop the guides ride on their day off; roll and cook your own pasta", a: false, b: true}

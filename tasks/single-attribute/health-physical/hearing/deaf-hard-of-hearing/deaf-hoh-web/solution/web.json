@@ -1,0 +1,10 @@
+{
+  "role": "a patient using a clinic web portal",
+  "outputs": [
+    {
+      "path": "anchor/booking_result.json",
+      "kind": "js",
+      "expr": "() => JSON.parse(JSON.stringify({completed: window.__completed === true, selections: Object.assign({}, window.__state.selections), events: window.__events}))"
+    }
+  ]
+}

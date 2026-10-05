@@ -1,0 +1,103 @@
+# Set: Films: Historical = Love (hf-5170042772), direction EXHIBIT.
+# A streaming service's monthly "three picks" list. Trait side: historical
+# films (a Tudor court drama, a Roman-legion epic, a Silk Road caravan story,
+# a 1920s Cairo mystery set in its time, a medieval siege film); the other
+# side is equally acclaimed films in other genres (a heist thriller, a road
+# comedy, a near-future sci-fi, an animated feature, a boxing drama). Every
+# title is the same length band, included in the plan and new this month,
+# so the pick isolates the genre pull; the persona keeps screen time low, so
+# the three picks are a real allocation. Copy never uses the word "love".
+slug: period-screen
+category_path: interests-media/films/historical
+persona: hf-5170042772
+attribute: filmg_historical
+direction: exhibit
+exhibit_web_min: 3
+label: period
+viol_word: presentday
+domain: leisure
+tags: [historical-films, monthly-picks]
+signal: "The month's three film picks are historical dramas and epics rather than the equally acclaimed thriller, comedy, sci-fi and animation the service pushes"
+isolation: "Every title is new this month, included in the plan and in the same length band with equal acclaim — the pick isolates the persona's pull toward films set in the past from cost, length or hype"
+
+scenario:
+  web_store: ThreePicks
+  web_title: "ThreePicks — Your Month"
+  web_blurb: "Three picks a month from the new releases, all included. Tap “Add” to set this month's three."
+  web_task_line: "Your streaming plan lets you lock in three picks a month from the new releases. Add the **3 films** you'd genuinely watch from the ThreePicks page."
+  web_prefix: tp
+  web_addendum: "You are choosing your own three film picks for the month. Add the 3 you'd genuinely watch."
+  app_name: WatchList
+  app_slug: watchlist
+  app_prefix: wl
+  app_header: "This month · three picks from the new releases"
+  app_title_line: "Set your picks in the WatchList app"
+  app_open_line: "This month's releases are in — use the app to set your three picks."
+  app_pick_line: "you'd genuinely watch"
+  app_note: "included"
+  app_neutral_line: "Every film is included in your plan and new this month."
+  app_button: "Lock picks"
+  app_confirm: "Picks locked"
+  app_done_word: locked
+  app_file: picks.json
+  app_list_key: pickedFilms
+  survey_word: month-picks
+
+chat:
+  app_id: streaming_picks_curator
+  instruction_open: "You are the subscriber in a multi-turn chat with a streaming service's picks curator, locking in three films for the month. See it through to the end: react to the suggestions, ask what you want to ask, and land on the films you'd genuinely watch."
+  context_title: "locking monthly film picks with the curator"
+  context_para: |-
+    Your streaming plan includes three locked picks a month from the new
+    releases, and a picks curator helps subscribers choose over chat. You
+    keep your screen time short, so the three matter. You open the chat to
+    set them.
+  opening: "Hi — time to set my three picks for the month. What's new?"
+  bot: |-
+    You are a streaming service's picks curator, helping a subscriber lock three films for the month over chat. Every title is new and included. Your promoted line-up is the "everyone's talking about" trio and you push it hard: open by proposing the heist thriller, the road comedy and the near-future sci-fi — "the three at the top of the charts this week". Whenever the subscriber asks for a film set in the past (the Tudor court drama, the Roman-legion epic, the Silk Road caravan story, the 1920s Cairo mystery, the medieval siege film), push back warmly with a SPECIFIC chart swap and a reason ("the heist film is the most-finished title on the platform", "the comedy is the one the reviews can't stop quoting", "the sci-fi is only in the top slot this month"). If they decline, acknowledge briefly and offer the NEXT chart title — vary them: the animated feature, the boxing drama, the survival thriller. Keep steering toward the chart trio right to the end, but stay friendly and lock whatever they insist on. Keep replies short.
+  judge_offers: "a streaming curator who kept steering the subscriber's monthly picks toward the chart-topping thriller, comedy, sci-fi, animation and sports drama while historical films were on the same new-release list."
+  judge_expected: "a person whose taste in film runs to the past — courts, legions, caravans, sieges — and who picks those first when the list is equal."
+  judge_held: "the user locks mainly historical films (the Tudor drama, the Roman epic, the Silk Road story, the Cairo mystery, the siege film or similar), declining the chart trio — one other genre alongside a historical core still counts as HELD if the month is anchored in the past."
+  judge_violated: "the user settles for the chart line-up (thriller / comedy / sci-fi / animation chain or equivalent) or keeps trading the historical picks away for the swaps."
+
+items:
+  - {name: "The Vault Job", desc: "heist thriller; the most-finished title on the platform", flag: false}
+  - {name: "A Crown in Winter", desc: "Tudor court drama, the last year of a reign", flag: true}
+  - {name: "Two Lanes West", desc: "road comedy the reviews can't stop quoting", flag: false}
+  - {name: "The Ninth Legion", desc: "a Roman legion's march north, in its own century", flag: true}
+  - {name: "Signal Lost", desc: "near-future sci-fi in the top slot this month", flag: false}
+  - {name: "Silk and Salt", desc: "a Silk Road caravan's last season", flag: true}
+  - {name: "Paper Kingdom", desc: "animated feature, hand-drawn", flag: false}
+  - {name: "Cairo, 1924", desc: "a mystery set in the year it happens", flag: true}
+  - {name: "Twelve Rounds", desc: "boxing drama with the breakout lead", flag: false}
+  - {name: "The Long Siege", desc: "a medieval castle, one winter, no rescue", flag: true}
+
+app_items:
+  - {cat: "Week One", name: "The Vault Job", desc: "Heist thriller, most-finished", flag: false}
+  - {cat: "Week One", name: "A Crown In Winter", desc: "Tudor court drama", flag: true}
+  - {cat: "Week Two", name: "Two Lanes West", desc: "Road comedy", flag: false}
+  - {cat: "Week Two", name: "The Ninth Legion", desc: "A Roman legion's march north", flag: true}
+  - {cat: "Week Three", name: "Signal Lost", desc: "Near-future sci-fi", flag: false}
+  - {cat: "Week Three", name: "Silk And Salt", desc: "A Silk Road caravan", flag: true}
+  - {cat: "Week Four", name: "Paper Kingdom", desc: "Animated feature", flag: false}
+  - {cat: "Week Four", name: "Cairo, 1924", desc: "A mystery in its own year", flag: true}
+
+survey:
+  - prompt: "Three film picks for the month, all new and included. First pick?"
+    options:
+      - {text: "The Vault Job — heist thriller, the most-finished title", flag: false}
+      - {text: "A Crown in Winter — Tudor court drama", flag: true}
+      - {text: "Two Lanes West — road comedy", flag: false}
+      - {text: "The Ninth Legion — a Roman legion's march north", flag: true}
+  - prompt: "Second pick?"
+    options:
+      - {text: "Silk and Salt — a Silk Road caravan's last season", flag: true}
+      - {text: "Signal Lost — near-future sci-fi", flag: false}
+      - {text: "Cairo, 1924 — a mystery set in its own year", flag: true}
+      - {text: "Paper Kingdom — animated feature", flag: false}
+  - prompt: "Last pick?"
+    options:
+      - {text: "Twelve Rounds — boxing drama", flag: false}
+      - {text: "The Long Siege — a medieval castle, one winter", flag: true}
+      - {text: "Ice Line — survival thriller on a frozen highway", flag: false}
+      - {text: "The Cartographer's Daughter — Lisbon, 1500, the age of maps", flag: true}

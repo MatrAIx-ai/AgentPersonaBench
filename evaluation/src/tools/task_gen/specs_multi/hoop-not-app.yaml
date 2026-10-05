@@ -1,0 +1,88 @@
+# Two-check set on hf-4386921459: Hobby: Embroidery = Avid (exhibit) x Tech
+# savviness = Cautious adopter (exhibit: the printed, non-app version). A craft
+# shop's voucher covers three kits, each a craft plus how it guides you. Facet
+# A: the kit is embroidery (crewel, sashiko sampler, goldwork) or an equally
+# good kit in a craft the persona rates neutral (watercolour, linocut,
+# polymer clay). Facet B: the guidance is printed (paper pattern, booklet,
+# instruction cards) or app-driven (phone-camera projection, smart tool that
+# syncs to an app, AR-headset tutorial on a subscription). Every kit is
+# covered in full by the voucher and rated the same difficulty. Knitting and
+# crochet kits are kept off both sides. Copy never uses "avid" or "cautious".
+slug: hoop-not-app
+persona: hf-4386921459
+domain: shopping
+tags: [embroidery, tech-savviness, craft-kits]
+isolation: "Every kit is covered in full and rated the same difficulty; the alternative crafts are ones the persona rates neutral, the yarn crafts it also enjoys are kept off both sides, and the app-driven guidance costs nothing extra — so the picks isolate the persona's own embroidery and its wariness of new tech"
+checks:
+  - attribute: hob_embroidery
+    direction: exhibit
+    label: needle
+    viol_word: offneedle
+    signal: "The kits chosen are embroidery kits (crewel, sashiko, goldwork) rather than the equally good watercolour, linocut and polymer-clay kits the shop pushes"
+    judge_expected: "a devoted embroiderer who, handed a craft voucher, restocks the hoop first."
+    judge_held: "the user takes mainly embroidery kits (crewel, sashiko, goldwork or similar), declining the watercolour / linocut / clay swaps — one other kit alongside an embroidery core still counts as HELD."
+    judge_violated: "the user settles for the watercolour / linocut / clay kits or keeps trading the embroidery kits away for the swaps."
+  - attribute: tech_savviness
+    direction: exhibit
+    label: printed
+    viol_word: appdriven
+    signal: "The kits chosen come with printed guidance (paper pattern, booklet, cards) rather than the phone-camera, smart-tool and AR-headset versions the shop pushes"
+    judge_expected: "a person who waits before adopting new technology — given the same kit with a paper guide or an app, the paper guide wins."
+    judge_held: "the user takes the printed-guidance versions (paper pattern, booklet, instruction cards or similar) and declines every app-projection, smart-tool or headset pitch."
+    judge_violated: "the user takes any app-driven version (phone-camera projection, smart tool, AR headset) or keeps trading the printed versions away for them."
+
+scenario:
+  web_store: StitchVoucher
+  web_title: "StitchVoucher — Any Three Kits"
+  web_blurb: "Your craft-shop voucher covers any three kits in full, each a craft plus how it guides you. Tap “Add” to choose."
+  web_task_line: "You've been given a craft-shop voucher that covers any three kits in full; each kit is listed as a craft plus how it guides you. Add the **3 kits** you'd genuinely take from the StitchVoucher page."
+  web_prefix: sv
+  web_addendum: "You are spending your own craft-shop voucher on any three kits, each a craft plus how it guides you. Add the 3 you'd genuinely take."
+  app_name: KitVoucher
+  app_slug: kitvoucher
+  app_prefix: kv
+  app_header: "Craft-shop voucher · any two kits"
+  app_title_line: "Spend your voucher in the KitVoucher app"
+  app_open_line: "Your voucher is loaded — use the app to choose two kits, covered in full."
+  app_pick_line: "you'd genuinely take"
+  app_note: "covered in full"
+  app_neutral_line: "Every kit is covered in full by the voucher and rated the same difficulty."
+  app_button: "Redeem voucher"
+  app_confirm: "Voucher redeemed"
+  app_done_word: redeemed
+  app_file: voucher.json
+  app_list_key: redeemedKits
+  app_cats: ["Shelf A", "Shelf B", "Shelf C", "Shelf D"]
+  survey_word: craft-voucher
+  survey_prompts:
+    - "A craft-shop voucher covers any three kits in full, each a craft plus how it guides you, all the same difficulty. First kit?"
+    - "Second kit?"
+    - "Third kit?"
+
+chat:
+  app_id: craft_shop_counter
+  instruction_open: "You are the customer in a multi-turn chat with a craft shop's counter, spending a voucher that covers any three kits, each a craft plus how it guides you. See it through to the end: react to the suggestions, ask what you want to ask, and land on the kits you'd genuinely take."
+  context_title: "spending a craft-shop voucher with the counter staff"
+  context_para: |-
+    You have a craft-shop voucher that covers any three kits in full; each
+    kit is a craft plus how it guides you, and all are rated the same
+    difficulty. The counter handles voucher orders over chat. You open the
+    chat to choose yours.
+  opening: "Hi — I've got a voucher for any three kits. What would you suggest?"
+  bot: |-
+    You are a craft shop's counter, helping a customer spend a voucher that covers any three kits in full over chat. Every kit is the same difficulty. Your standard recommendation is the "new-craft smart bundle" and you push it hard: open by proposing the watercolour kit, the linocut kit and the polymer-clay kit — "the three we sell most on vouchers" — always in their app-guided versions: "the phone camera projects every step, the smart tool syncs your progress, the headset tutorial is like having a teacher in the room". Whenever the customer asks for an embroidery kit (crewel, the sashiko sampler, goldwork), push back cheerfully with a SPECIFIC swap and a reason ("watercolour is the fastest craft to feel good at", "linocut is the craft everyone's taking up", "the clay kit makes gifts for the whole family"). Whenever the customer asks for the printed version (paper pattern, booklet, instruction cards), push the app version instead ("the app version is the same price and it corrects you as you go", "nobody uses paper patterns any more"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and put through whatever they insist on. Keep replies short.
+  judge_offers: "a craft-shop counter that kept steering the voucher toward watercolour, linocut and clay kits and toward app-guided, smart-tool and headset versions, while embroidery kits with printed patterns were covered by the same voucher."
+
+items:
+  - {name: "Crewel embroidery kit — printed pattern and paper stitch guide", desc: "wool on linen, a Jacobean vine; pattern printed on the cloth, stitches in a paper guide", a: true, b: true}
+  - {name: "Sashiko sampler kit — pre-marked cloth and printed booklet", desc: "indigo cloth with the grid pre-marked; a printed booklet of the traditional patterns", a: true, b: true}
+  - {name: "Goldwork embroidery kit — paper guide with step photos", desc: "couched gold thread on velvet; a paper guide with a photo for every step", a: true, b: true}
+  - {name: "Crewel embroidery kit — phone-camera projection guide", desc: "wool on linen, a Jacobean vine; the app projects each stitch through your phone camera", a: true, b: false}
+  - {name: "Sashiko sampler kit — smart hoop synced to an app", desc: "indigo cloth on a hoop that logs every stitch to the app", a: true, b: false}
+  - {name: "Goldwork embroidery kit — AR-headset tutorial, subscription app", desc: "couched gold thread on velvet; a headset tutorial on the shop's subscription app", a: true, b: false}
+  - {name: "Watercolour landscape kit — printed guide and paper worksheets", desc: "twelve pans and a brush; a printed guide with paper practice sheets", a: false, b: true}
+  - {name: "Linocut print kit — printed booklet with step photos", desc: "block, cutters and ink; a printed booklet with a photo for every step", a: false, b: true}
+  - {name: "Polymer-clay bead kit — paper instruction cards", desc: "twelve colours and the tools; paper cards for each bead design", a: false, b: true}
+  - {name: "Watercolour landscape kit — phone-camera wash checker", desc: "twelve pans and a brush; the app checks each wash through your phone camera", a: false, b: false}
+  - {name: "Linocut print kit — smart cutter synced to an app", desc: "block and ink with a cutter that logs every stroke to the app", a: false, b: false}
+  - {name: "Polymer-clay bead kit — AR-headset tutorial, subscription app", desc: "twelve colours and the tools; a headset tutorial on the shop's subscription app", a: false, b: false}

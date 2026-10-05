@@ -1,0 +1,62 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/creative-expressive-web"
+theme = "Creative expressive: recognition · independence · beauty"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "creative-expressive", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE shopping task, THREE checks. A single persona carrying three creative-expressive
+# attributes adds 3 items to a cart on a live store page (Playwright); the verifier runs
+# an independent rule-based check per axis, reading each product's hidden data-* tier
+# off index.html (ground truth, NOT shown to the shopper). This amortizes one
+# generation across three attributes. Reward = integer score (one point per check
+# HELD, 0..3). Each axis: HELD iff no picked product is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "val_recognition"
+attribute = "Value: Recognition"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_recognition=Important"
+# Ground truth: each product's hidden data-recognition (0 takes credit / wants it seen & attributed to them .. 3 stays anonymous / gives credit away) in index.html.
+adherence_signal = "Cart built from products that put the person's name on their work and want it seen (data-recognition 0-1); no anonymous/credit-shunning pick (>= 2)."
+
+[[checks]]
+dimension_id = "val_independence"
+attribute = "Value: Independence"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_independence=Important"
+# Ground truth: each product's hidden data-independence (0 self-reliant/own way .. 3 hands it off/defers/copies the crowd).
+adherence_signal = "Cart favors self-reliant, do-it-their-own-way items (data-independence 0-1); no dependent/copies-the-crowd pick (>= 2)."
+
+[[checks]]
+dimension_id = "trait_appreciation_of_beauty"
+attribute = "Character: Appreciation of beauty"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_appreciation_of_beauty=Strong"
+# Ground truth: each product's hidden data-beauty (0 beautiful/considered .. 3 ugly/tasteless).
+adherence_signal = "Cart favors beautiful/aesthetically-considered items (data-beauty 0-1); no ugly/tasteless pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

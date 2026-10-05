@@ -1,0 +1,62 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/terseship-survey"
+theme = "Code style: terse names · minimal testing · minimal observability"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "software"
+tags = [ "persona-adherence", "multi-check", "coding-style", "rule-based", "dev-survey",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE coding task, MANY checks. A single persona carrying several coding-style
+# values writes one piece of code; the verifier runs an independent rule-based
+# check per value. Reward = integer score (one point per check HELD, 0..N).
+#
+# The persona is a pragmatic "just-ship-it" engineer: terse abbreviated names,
+# minimal testing, minimal observability. The instruction asks for production
+# code with tests + logging where the developer normally would; the persona's
+# traits show by what it chooses NOT to include.
+[[checks]]
+dimension_id = "code_naming_verbosity"
+attribute = "Code Naming Verbosity"
+value = "Terse abbreviated names"
+evaluator = "rule-based"
+evaluator_name = "code_naming_verbosity=Terse abbreviated names"
+metric = "mean_identifier_len"          # mean char length of identifiers
+pass_max = 4.0                           # HELD if identifiers stay short
+
+[[checks]]
+dimension_id = "code_testing_approach"
+attribute = "Testing and Code Coverage Approach"
+value = "Minimal testing"
+evaluator = "rule-based"
+evaluator_name = "code_testing_approach=Minimal testing"
+metric = "assert_count"                  # test functions + asserts + pytest/unittest
+pass_max = 0                            # HELD if no tests written
+
+[[checks]]
+dimension_id = "code_observability_habit"
+attribute = "Code observability habit"
+value = "Minimal observability"
+evaluator = "rule-based"
+evaluator_name = "code_observability_habit=Minimal observability"
+metric = "logging_calls"                 # logging.* / logger.* / print( calls
+pass_max = 0                            # HELD if no logging/print added
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

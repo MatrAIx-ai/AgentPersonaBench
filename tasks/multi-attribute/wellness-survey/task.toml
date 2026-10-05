@@ -1,0 +1,62 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/wellness-survey"
+theme = "Wellness routine: early bird · trains every day · solo sessions"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "wellness"
+tags = [ "persona-adherence", "multi-check", "wellness-routine", "rule-based", "choice-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE artifact, MANY checks. A single persona fills in a fitness studio's
+# six-question new-member intake form ONCE; the three routine choices it makes
+# (usual session time, membership plan, session format) each expose a different
+# attribute, so one generation is scored against three independent checks. The
+# other three questions (goal, referral source, locker) are ordinary intake
+# filler that keep the probe latent. Reward = integer score (one point per
+# check HELD, 0..3). Option-id -> label maps live in tests/answer_key.yaml
+# (host-side only, never mounted).
+[[checks]]
+dimension_id = "lstyle_sleep_schedule"
+dimension_label = "Sleep schedule"
+category = "Behavior: Time"
+value = "Early bird"
+evaluator = "rule-based"
+evaluator_name = "sleep_schedule=Early bird"
+adherence_signal = "The usual session time the persona books is the early-morning slot, not a midday or evening one."
+
+[[checks]]
+dimension_id = "lstyle_exercise_freq"
+dimension_label = "Exercise frequency"
+category = "Health: Fitness"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "exercise_freq=Daily"
+adherence_signal = "The membership plan the persona picks is the every-day plan, not a few-times-a-week or drop-in one."
+
+[[checks]]
+dimension_id = "lstyle_social_battery"
+dimension_label = "Social battery"
+category = "Interests: Culture"
+value = "Introvert"
+evaluator = "rule-based"
+evaluator_name = "social_battery=Introvert"
+adherence_signal = "The session format the persona picks is a solo/quiet one, not a big-group social class."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

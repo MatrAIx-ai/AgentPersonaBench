@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/self-driving-enthusiast-web"
+theme = "Attitude: Self-driving cars — Enthusiast"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "travel"
+tags = [ "persona-adherence", "self-driving-enthusiast", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "att_self_driving_cars"
+dimension_label = "Attitude: Self-driving cars"
+category = "Worldview: Beliefs"
+anchor_value = "Enthusiast"
+evaluator = "rule-based"
+adherence_signal = "The vehicles the persona adds are the self-driving ones, chosen unprompted, even though the assistant only recommends manually driven vehicles at the same rate, cover and safety record."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

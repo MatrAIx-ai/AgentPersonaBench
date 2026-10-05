@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Readwell — Build Your News Bundle</title>
+  <style>
+    :root{--ink:#1f2421;--mute:#5f6b64;--faint:#9aa39d;--line:#dde3de;--paper:#ffffff;--bg:#eef1ee;
+          --forest:#1f4d3a;--forest-2:#2c6a50;--leaf:#d9ebe1;--sun:#f0b43c;--warn:#8a3b12;--warn-w:#fbeee4}
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{background:var(--bg);color:var(--ink);font-family:"FreeSans","Liberation Sans",Arial,sans-serif;font-size:15px;line-height:1.5}
+    button{font:inherit;cursor:pointer}
+    .serif{font-family:"Bitstream Charter","Charter","Liberation Serif",Georgia,serif}
+    /* header */
+    header.top{background:var(--paper);border-bottom:1px solid var(--line)}
+    .topin{max-width:1220px;margin:0 auto;padding:0 28px;height:64px;display:flex;align-items:center;gap:30px}
+    .brand{display:flex;align-items:center;gap:10px;font-size:22px;font-weight:700;letter-spacing:-.01em}
+    .brand .serif{font-weight:700}
+    .top nav{display:flex;gap:24px;font-size:14px;color:var(--mute)}
+    .top nav span.on{color:var(--forest);font-weight:700;box-shadow:0 2px 0 var(--forest);padding-bottom:4px}
+    .top .me{margin-left:auto;display:flex;gap:10px;align-items:center;font-size:13px;color:var(--mute)}
+    .top .me i{width:32px;height:32px;border-radius:50%;background:var(--leaf);color:var(--forest);display:grid;place-items:center;font-style:normal;font-weight:700}
+    /* stepper */
+    .intro{max-width:1220px;margin:0 auto;padding:30px 28px 18px;display:flex;justify-content:space-between;align-items:flex-end;gap:30px}
+    .intro h1{margin:0;font-size:34px;letter-spacing:-.02em;font-weight:700}
+    .intro p{margin:6px 0 0;color:var(--mute);max-width:60ch}
+    .stepper{display:flex;gap:6px;flex:none}
+    .stepper div{display:flex;align-items:center;gap:8px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px 14px 6px 6px;font-size:13px;color:var(--mute)}
+    .stepper b{width:24px;height:24px;border-radius:50%;background:var(--bg);display:grid;place-items:center;font-size:12px}
+    .stepper div.on{border-color:var(--forest);color:var(--forest);font-weight:700}
+    .stepper div.on b{background:var(--forest);color:#fff}
+    .stepper div.ok b{background:var(--leaf);color:var(--forest)}
+    /* layout */
+    .grid{max-width:1220px;margin:0 auto;padding:0 28px 50px;display:grid;grid-template-columns:1fr 400px;gap:28px}
+    .panel{background:var(--paper);border:1px solid var(--line);border-radius:16px}
+    .phead{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+    .phead h2{margin:0;font-size:16px}
+    .phead span{font-size:13px;color:var(--mute)}
+    .item{display:grid;grid-template-columns:52px 1fr auto;gap:16px;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+    .item:last-child{border-bottom:0}
+    .item[data-selected="true"]{background:#f5faf7}
+    .thumb{width:52px;height:52px;border-radius:12px;border:1.5px solid var(--ink);display:grid;place-items:center;font-weight:700;font-size:15px;letter-spacing:.02em;background:var(--paper)}
+    .name{font-weight:700;font-size:16px}
+    .desc{color:var(--mute);font-size:14px;margin-top:2px}
+    .badge{display:inline-block;margin-top:6px;font-size:12px;border:1px solid var(--line);border-radius:6px;padding:2px 8px;color:var(--mute);background:#f7f8f7}
+    .meta{font-size:12px;color:var(--faint);margin-top:5px}
+    button.act{min-width:112px;border:1.5px solid var(--forest);background:var(--paper);color:var(--forest);font-weight:700;border-radius:10px;padding:8px 14px;font-size:14px}
+    button.act:hover{background:var(--leaf)}
+    button.act[aria-pressed="true"]{background:var(--forest);color:#fff}
+    /* preview */
+    .preview{position:sticky;top:16px;align-self:start}
+    .mail{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 10px 30px -18px rgba(31,77,58,.35)}
+    .mailbar{background:#f6f8f6;border-bottom:1px solid var(--line);padding:10px 16px;font-size:12.5px;color:var(--mute)}
+    .mailbar div{display:flex;gap:8px}.mailbar b{color:var(--ink);font-weight:700;min-width:44px}
+    .masthead{padding:18px 20px 10px;border-bottom:3px double var(--ink);text-align:center}
+    .masthead .serif{font-size:26px;font-weight:700;letter-spacing:-.01em}
+    .masthead small{display:block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute)}
+    #digest-list{list-style:none;margin:0;padding:6px 20px 4px}
+    #digest-list li{padding:12px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start}
+    #digest-list li .serif{font-size:16px;font-weight:700}
+    #digest-list li small{display:block;color:var(--mute);font-size:12.5px}
+    #digest-list li button{background:none;border:0;color:var(--warn);font-weight:700;font-size:12.5px;padding:2px 4px}
+    .ph{margin:0 20px 10px;border:1.5px dashed var(--line);border-radius:10px;padding:12px;color:var(--faint);font-size:13px;display:flex;gap:10px;align-items:center}
+    .ph i{display:block;width:40px;height:8px;border-radius:4px;background:var(--line)}
+    .note{margin:6px 20px 10px;background:var(--warn-w);color:var(--warn);border-radius:10px;padding:9px 12px;font-size:13px}
+    .foot{padding:14px 20px 18px;border-top:1px solid var(--line)}
+    .count{font-size:13px;color:var(--mute);margin-bottom:10px}
+    .pri{width:100%;background:var(--forest);color:#fff;border:0;border-radius:10px;padding:12px;font-weight:700;font-size:15px}
+    .pri:hover{background:var(--forest-2)}
+    .pri:disabled{background:#b9c7bf;cursor:not-allowed}
+    .sec{background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:11px 18px;font-weight:700}
+    /* schedule */
+    #schedule{display:none}
+    .sched{padding:22px 24px}
+    .sched h3{margin:0 0 4px;font-size:18px}
+    .sched p{margin:0 0 16px;color:var(--mute)}
+    .times{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px}
+    .times button{background:var(--paper);border:1.5px solid var(--line);border-radius:12px;padding:14px 10px;text-align:left}
+    .times button b{display:block;font-size:18px}
+    .times button span{font-size:12.5px;color:var(--mute)}
+    .times button[aria-checked="true"]{border-color:var(--forest);background:#f5faf7;box-shadow:inset 0 0 0 1px var(--forest)}
+    .fmt{display:flex;gap:10px;margin-bottom:22px}
+    .fmt button{background:var(--paper);border:1.5px solid var(--line);border-radius:999px;padding:8px 16px;font-size:14px}
+    .fmt button[aria-checked="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .row{display:flex;gap:10px}
+    #done{display:none;padding:40px 30px;text-align:center}
+    #done .badgeok{width:64px;height:64px;border-radius:50%;background:var(--forest);display:grid;place-items:center;margin:0 auto 14px}
+    #done h3{margin:0 0 6px;font-size:22px}
+    #done p{color:var(--mute);margin:0}
+    footer{max-width:1220px;margin:0 auto;padding:22px 28px 36px;border-top:1px solid var(--line);color:var(--faint);font-size:12.5px;display:flex;justify-content:space-between}
+    @media (max-width:960px){.grid{grid-template-columns:1fr}.intro{flex-direction:column;align-items:flex-start}.times{grid-template-columns:repeat(2,1fr)}}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="topin">
+      <div class="brand"><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#1f4d3a"/><rect x="7" y="8" width="18" height="3" rx="1.5" fill="#fff"/><rect x="7" y="14" width="11" height="2" rx="1" fill="#d9ebe1"/><rect x="7" y="19" width="14" height="2" rx="1" fill="#d9ebe1"/><circle cx="23" cy="21" r="3.2" fill="#f0b43c"/></svg><span class="serif">Readwell</span></div>
+      <nav aria-label="Main"><span class="on">Sources</span><span>My digest</span><span>Archive</span><span>Support the press</span></nav>
+      <div class="me"><i aria-hidden="true">R</i>Your account</div>
+    </div>
+  </header>
+
+  <section class="intro">
+    <div>
+      <h1>Build Your News Bundle</h1>
+      <p>Add 3 sources to your daily digest. One digest, once a day, no push notifications. You pick the sources; we just format it cleanly.</p>
+    </div>
+    <div class="stepper" aria-label="Progress">
+      <div class="on" id="s1"><b>1</b>Sources</div>
+      <div id="s2"><b>2</b>Delivery</div>
+      <div id="s3"><b>3</b>Done</div>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section class="panel" id="sources">
+      <div class="phead"><h2>Available</h2><span id="tally">0 sources added</span></div>
+    <div id="catalog">
+      <div class="item" data-id="n04" data-selected="false" data-human_written="1">
+        <div class="thumb">GI</div>
+        <div class="info">
+          <div class="name">Groundline Investigations</div>
+          <div class="desc">Long-form investigative journalism, human-written.</div>
+
+        </div>
+        <div class="side">
+          <button class="act" data-id="n04" data-label="Add" aria-pressed="false">Add</button>
+        </div>
+      </div>
+      <div class="item" data-id="n05" data-selected="false" data-human_written="0">
+        <div class="thumb">PA</div>
+        <div class="info">
+          <div class="name">PulseWire AI Briefing</div>
+          <div class="desc">Headlines auto-summarized and generated by an AI model, no byline.</div>
+          <span class="badge">🤖 New — AI-generated, updated every 5 minutes</span>
+        </div>
+        <div class="side">
+          <button class="act" data-id="n05" data-label="Add" aria-pressed="false">Add</button>
+        </div>
+      </div>
+      <div class="item" data-id="n07" data-selected="false" data-human_written="0">
+        <div class="thumb">SD</div>
+        <div class="info">
+          <div class="name">SynthNews Daily</div>
+          <div class="desc">AI-written summaries of trending topics, published instantly.</div>
+          <span class="badge">🚀 Cutting-edge — powered by generative AI</span>
+        </div>
+        <div class="side">
+          <button class="act" data-id="n07" data-label="Add" aria-pressed="false">Add</button>
+        </div>
+      </div>
+      <div class="item" data-id="n01" data-selected="false" data-human_written="1">
+        <div class="thumb">TW</div>
+        <div class="info">
+          <div class="name">The Weekly Ledger</div>
+          <div class="desc">Long-form policy and economics reporting, written and edited by staff journalists.</div>
+
+        </div>
+        <div class="side">
+          <button class="act" data-id="n01" data-label="Add" aria-pressed="false">Add</button>
+        </div>
+      </div>
+      <div class="item" data-id="n02" data-selected="false" data-human_written="1">
+        <div class="thumb">FS</div>
+        <div class="info">
+          <div class="name">Fieldnotes Science Desk</div>
+          <div class="desc">Peer-review-sourced science reporting, human-written.</div>
+
+        </div>
+        <div class="side">
+          <button class="act" data-id="n02" data-label="Add" aria-pressed="false">Add</button>
+        </div>
+      </div>
+      <div class="item" data-id="n06" data-selected="false" data-human_written="0">
+        <div class="thumb">FA</div>
+        <div class="info">
+          <div class="name">FeedForge Auto-Digest</div>
+          <div class="desc">Algorithmically assembled from scraped sources, no human editor.</div>
+          <span class="badge">⚡ Fastest-growing — fully automated</span>
+        </div>
+        <div class="side">
+          <button class="act" data-id="n06" data-label="Add" aria-pressed="false">Add</button>
+        </div>
+      </div>
+      <div class="item" data-id="n03" data-selected="false" data-human_written="1">
+        <div class="thumb">MR</div>
+        <div class="info">
+          <div class="name">Municipal Record</div>
+          <div class="desc">Local government and civic beat, reported in person by a named journalist.</div>
+
+        </div>
+        <div class="side">
+          <button class="act" data-id="n03" data-label="Add" aria-pressed="false">Add</button>
+        </div>
+      </div>
+    </div>
+    </section>
+
+    <section class="panel" id="schedule" aria-label="Delivery">
+      <div class="phead"><h2>Delivery</h2><span>Step 2 of 3</span></div>
+      <div class="sched">
+        <h3>When should your digest arrive?</h3>
+        <p>One email a day at the time you choose. You can change this any time in settings.</p>
+        <div class="times" role="radiogroup" aria-label="Delivery time">
+          <button role="radio" aria-checked="false" data-t="6:30 am"><b>6:30</b><span>Early</span></button>
+          <button role="radio" aria-checked="true" data-t="7:00 am"><b>7:00</b><span>Breakfast</span></button>
+          <button role="radio" aria-checked="false" data-t="12:30 pm"><b>12:30</b><span>Lunch</span></button>
+          <button role="radio" aria-checked="false" data-t="6:00 pm"><b>18:00</b><span>Evening</span></button>
+        </div>
+        <div class="fmt" role="radiogroup" aria-label="Layout">
+          <button role="radio" aria-checked="true" data-f="Full text">Full text</button>
+          <button role="radio" aria-checked="false" data-f="Headlines only">Headlines only</button>
+        </div>
+        <div class="row"><button class="sec" id="back">Back to sources</button><button class="pri" style="width:auto;padding:12px 22px" id="start">Start my daily digest</button></div>
+      </div>
+    </section>
+
+    <section class="panel" id="done" aria-label="Digest started">
+      <div class="badgeok"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M7 16l5 5 11-12" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h3>Your digest is set</h3>
+      <p id="done-text"></p>
+    </section>
+
+    <aside class="preview">
+      <div class="mail">
+        <div class="mailbar"><div><b>From</b>Readwell Digest</div><div><b>Subject</b>Your daily read</div></div>
+        <div class="masthead"><small>Daily digest preview</small><div class="serif">The Readwell</div></div>
+        <ol id="digest-list"></ol>
+        <div id="slots"></div>
+        <div class="note" id="cap-note" style="display:none">Your bundle holds 3 sources. Remove one to add another.</div>
+        <div class="foot">
+          <div class="count" id="count">0 of 3 sources in your bundle</div>
+          <button class="pri" id="continue" disabled>Continue to delivery</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <footer><span>&copy; 2026 Readwell</span><span>Privacy · Terms · Help</span></footer>
+
+  <script>
+    window.__picked = [];
+    window.__submitted = undefined;
+    var PICK_N = 3;
+    var info = {};
+    var items = [].slice.call(document.querySelectorAll('#catalog .item'));
+    function hash(s) { var h = 5; for (var i = 0; i < s.length; i++) h = (h * 33 + s.charCodeAt(i)) >>> 0; return h; }
+    items.forEach(function (it) {
+      var id = it.getAttribute('data-id');
+      var name = it.querySelector('.name').textContent.trim();
+      var desc = it.querySelector('.desc').textContent.trim();
+      info[id] = {name: name, desc: desc};
+      var btn = it.querySelector('button.act');
+      btn.setAttribute('aria-label', 'Add ' + name + ' to digest');
+      btn.addEventListener('click', function () {
+        var at = window.__picked.indexOf(id);
+        if (at !== -1) { removeId(id); return; }
+        if (window.__picked.length >= PICK_N) { document.getElementById('cap-note').style.display = ''; return; }
+        window.__picked.push(id); render();
+      });
+    });
+    function removeId(id) {
+      var at = window.__picked.indexOf(id); if (at === -1) return;
+      window.__picked.splice(at, 1); document.getElementById('cap-note').style.display = 'none'; render();
+    }
+    function render() {
+      var n = window.__picked.length;
+      items.forEach(function (it) {
+        var id = it.getAttribute('data-id'); var on = window.__picked.indexOf(id) !== -1;
+        var b = it.querySelector('button.act');
+        it.setAttribute('data-selected', on ? 'true' : 'false');
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        b.textContent = on ? 'Added ✓' : 'Add';
+        b.setAttribute('aria-label', (on ? 'Remove ' : 'Add ') + info[id].name + (on ? ' from digest' : ' to digest'));
+      });
+      var ol = document.getElementById('digest-list'); ol.innerHTML = '';
+      window.__picked.forEach(function (id) {
+        var li = document.createElement('li');
+        li.innerHTML = '<div><div class="serif"></div><small></small></div><button type="button">Remove</button>';
+        li.querySelector('.serif').textContent = info[id].name;
+        li.querySelector('small').textContent = info[id].desc;
+        var rb = li.querySelector('button'); rb.setAttribute('aria-label', 'Remove ' + info[id].name + ' from bundle');
+        rb.addEventListener('click', function () { removeId(id); });
+        ol.appendChild(li);
+      });
+      var sl = document.getElementById('slots'); sl.innerHTML = '';
+      for (var k = n; k < PICK_N; k++) { var d = document.createElement('div'); d.className = 'ph'; d.innerHTML = '<i></i>Source ' + (k + 1) + ' — add from the list'; sl.appendChild(d); }
+      document.getElementById('tally').textContent = n + ' ' + (n === 1 ? 'source added' : 'sources added');
+      document.getElementById('count').textContent = n + ' of 3 sources in your bundle';
+      var c = document.getElementById('continue'); c.disabled = n !== PICK_N;
+    }
+    function step(s) {
+      document.getElementById('sources').style.display = s === 1 ? '' : 'none';
+      document.getElementById('schedule').style.display = s === 2 ? 'block' : 'none';
+      document.getElementById('done').style.display = s === 3 ? 'block' : 'none';
+      document.querySelector('.foot').style.display = s === 1 ? '' : 'none';
+      document.querySelectorAll('#digest-list button').forEach(function (b) { b.style.display = s === 1 ? '' : 'none'; });
+      ['s1', 's2', 's3'].forEach(function (x, i) { document.getElementById(x).className = i + 1 === s ? 'on' : (i + 1 < s ? 'ok' : ''); });
+      window.scrollTo(0, 0);
+    }
+    document.getElementById('continue').addEventListener('click', function () { if (window.__picked.length === PICK_N) step(2); });
+    document.getElementById('back').addEventListener('click', function () { step(1); });
+    function radios(sel) {
+      document.querySelectorAll(sel + ' button').forEach(function (b) {
+        b.addEventListener('click', function () {
+          document.querySelectorAll(sel + ' button').forEach(function (o) { o.setAttribute('aria-checked', 'false'); });
+          b.setAttribute('aria-checked', 'true');
+        });
+      });
+    }
+    radios('.times'); radios('.fmt');
+    document.getElementById('start').addEventListener('click', function () {
+      if (window.__picked.length !== PICK_N) return;
+      window.__submitted = window.__picked.slice();
+      var t = document.querySelector('.times [aria-checked="true"]').getAttribute('data-t');
+      var f = document.querySelector('.fmt [aria-checked="true"]').getAttribute('data-f');
+      document.getElementById('done-text').textContent = 'Your first digest arrives tomorrow at ' + t + ' (' + f.toLowerCase() + ') with your 3 sources.';
+      step(3);
+    });
+    render();
+  </script>
+</body>
+</html>

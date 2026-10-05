@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/fashion-fan-survey"
+theme = "Topic: Fashion — Passionate"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "media"
+tags = [ "persona-adherence", "fashion-fan", "rule-based",]
+
+[[checks]]
+dimension_id = "topic_fashion"
+dimension_label = "Interest: Fashion"
+category = "Interests: Topics"
+anchor_value = "Passionate"
+evaluator = "rule-based"
+adherence_signal = "At least two of the persona's three bundle titles are fashion magazines; the passion shows up when all titles cost the same."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

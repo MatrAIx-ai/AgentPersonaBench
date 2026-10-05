@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Voltway</title>
+  <style>
+    :root { --ink:#17181b; --graph:#232529; --volt:#ffd400; --volt-d:#e0b900; --canvas:#f3f2ee; --card:#ffffff;
+            --line:#dedcd4; --muted:#6c6a63; --soft:#eceae3; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--canvas); color:var(--ink); font:15px/1.5 "Liberation Sans", Arial, sans-serif; }
+    button { cursor:pointer; font:inherit; }
+    button:disabled { cursor:default; }
+    .mono { font-family:"Liberation Mono", monospace; }
+    .util { background:var(--volt); color:var(--ink); font-size:12.5px; font-weight:700; letter-spacing:.04em;
+            text-transform:uppercase; display:flex; justify-content:center; gap:34px; padding:7px 16px; }
+    header.bar { background:var(--graph); color:#fff; display:flex; align-items:center; gap:28px; padding:16px 40px; }
+    .logo { display:flex; align-items:center; gap:10px; }
+    .logo b { font-size:24px; font-weight:900; letter-spacing:.14em; }
+    .search { flex:1; max-width:460px; background:#33363b; border-radius:6px; padding:10px 14px; color:#a9aaa6; font-size:14px;
+              display:flex; gap:10px; align-items:center; }
+    .hnav { display:flex; gap:22px; font-size:14px; color:#d9d9d4; }
+    .bag { margin-left:auto; display:flex; align-items:center; gap:10px; font-size:14px; }
+    .bag .pill { background:var(--volt); color:var(--ink); font-weight:900; border-radius:4px; padding:3px 9px; font-family:"Liberation Mono", monospace; }
+    .sub { background:#fff; border-bottom:1px solid var(--line); padding:10px 40px; font-size:13px; color:var(--muted); display:flex; gap:8px; }
+    .sub b { color:var(--ink); }
+    .shell { display:grid; grid-template-columns:minmax(0,1fr) 330px; gap:28px; padding:26px 40px 50px; align-items:start; }
+    /* intro hero */
+    .hero { background:var(--graph); color:#fff; border-radius:10px; padding:34px 36px; position:relative; overflow:hidden; }
+    .hero h1 { font-size:40px; line-height:1.05; font-weight:900; text-transform:uppercase; letter-spacing:-.5px; margin:0 0 12px; max-width:560px; }
+    .hero h1 span { background:var(--volt); color:var(--ink); padding:0 8px; -webkit-box-decoration-break:clone; box-decoration-break:clone; }
+    .hero .lead { color:#c9c9c4; max-width:560px; margin:0 0 22px; }
+    .hero svg.bolt { position:absolute; right:-10px; top:-10px; opacity:.09; }
+    .outline { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:0 0 26px; max-width:720px; }
+    .outline div { border:1px solid #45484e; border-radius:8px; padding:10px 12px; font-size:13px; color:#c9c9c4; }
+    .outline b { display:block; color:var(--volt); font-family:"Liberation Mono", monospace; font-size:12px; }
+    .perks { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:18px; }
+    .perks div { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; font-size:13px; color:var(--muted); }
+    .perks b { display:block; color:var(--ink); font-size:14px; }
+    /* steps */
+    .crumb { margin:0 0 6px; font:700 12px "Liberation Mono", monospace; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+    .crumb i { font-style:normal; background:var(--ink); color:var(--volt); padding:2px 7px; border-radius:3px; margin-right:8px; }
+    .step h1, .screen h1 { font-size:30px; font-weight:900; text-transform:uppercase; letter-spacing:-.3px; margin:0 0 6px; }
+    .lead { margin:0 0 20px; color:var(--muted); max-width:640px; }
+    .options { display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:16px; }
+    .option { background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden; display:flex; flex-direction:column; }
+    .option.chosen { outline:3px solid var(--ink); outline-offset:-1px; }
+    .option .shot { background:var(--soft); height:132px; display:flex; align-items:center; justify-content:center; position:relative; border-bottom:1px solid var(--line); }
+    .option .shot .tag { position:absolute; left:12px; top:10px; font:700 11px "Liberation Mono", monospace; color:var(--muted); letter-spacing:.06em; }
+    .option .shot .pick { position:absolute; right:12px; top:10px; font:700 11px "Liberation Mono", monospace; background:var(--ink); color:var(--volt); padding:2px 8px; border-radius:3px; }
+    .option h3 { margin:14px 18px 4px; font-size:18px; font-weight:800; }
+    .option p { margin:0 18px 10px; color:#46443f; font-size:14px; }
+    .option .meta { margin:0 18px 14px; font:700 13px "Liberation Mono", monospace; color:var(--ink); border-top:1px dashed var(--line); padding-top:10px; }
+    .option button { margin:auto 18px 18px; align-self:stretch; }
+    .primary { background:var(--volt); color:var(--ink); border:0; border-radius:6px; padding:11px 18px; font-weight:800; }
+    .primary:hover:not(:disabled) { background:var(--volt-d); }
+    .primary:disabled { background:#e6e4dc; color:#9a988f; }
+    .secondary { background:var(--ink); color:#fff; border:0; border-radius:6px; padding:11px 18px; font-weight:800; }
+    .option .secondary:disabled { opacity:1; }
+    .ghost { background:transparent; color:var(--ink); border:1.5px solid var(--ink); border-radius:6px; padding:8px 14px; font-weight:700; font-size:13px; }
+    .nav { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:22px; padding:16px 18px; background:var(--card); border:1px solid var(--line); border-radius:10px; }
+    .nav .hint { color:var(--muted); font-size:13px; }
+    /* review */
+    .summary { background:var(--card); border:1px solid var(--line); border-radius:10px; margin:16px 0 16px; }
+    .row { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:16px 20px; border-bottom:1px solid var(--line); }
+    .row:last-child { border-bottom:0; }
+    .row .what { font:700 11.5px "Liberation Mono", monospace; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+    .row strong { font-size:16px; }
+    .row .meta { font:13px "Liberation Mono", monospace; color:#46443f; }
+    .totals { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 20px; margin-bottom:18px; font-size:14px; }
+    .totals div { display:flex; justify-content:space-between; padding:3px 0; }
+    .totals .grand { border-top:2px solid var(--ink); margin-top:6px; padding-top:8px; font-weight:900; font-size:17px; }
+    .screen.done { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:30px 32px; }
+    .screen.done .check { width:56px; height:56px; border-radius:50%; background:var(--ink); display:flex; align-items:center; justify-content:center; margin-bottom:14px; }
+    /* rail */
+    .rail { position:sticky; top:16px; display:flex; flex-direction:column; gap:14px; }
+    .bundle { background:var(--card); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+    .bundle h2 { margin:0; background:var(--ink); color:#fff; font-size:15px; letter-spacing:.1em; text-transform:uppercase; padding:12px 16px; display:flex; justify-content:space-between; }
+    .bundle h2 span { color:var(--volt); font-family:"Liberation Mono", monospace; }
+    .bundle ol { list-style-type:''; margin:0; padding:6px 16px 10px; }
+    .bundle li { display:flex; gap:12px; padding:10px 0; border-bottom:1px dashed var(--line); font-size:13.5px; }
+    .bundle li:last-child { border-bottom:0; }
+    .bundle li .n { width:24px; height:24px; flex:0 0 auto; border-radius:4px; border:1.5px solid var(--ink); display:flex; align-items:center; justify-content:center; font:700 12px "Liberation Mono", monospace; }
+    .bundle li.have .n { background:var(--ink); color:var(--volt); }
+    .bundle li.now .n { background:var(--volt); color:var(--ink); }
+    .bundle li .k { color:var(--muted); font-size:12px; display:block; }
+    .bundle .foot { border-top:1px solid var(--line); padding:12px 16px; font-size:13px; color:var(--muted); }
+    .card2 { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; font-size:13px; color:var(--muted); }
+    .card2 b { display:block; color:var(--ink); font-size:14px; margin-bottom:2px; }
+    footer { background:var(--graph); color:#a9aaa6; padding:24px 40px; display:flex; gap:40px; font-size:13px; }
+    footer b { color:#fff; display:block; margin-bottom:4px; }
+  </style>
+</head>
+<body>
+  <div class="util"><span>Free next-day delivery on every order</span><span>30-day returns</span><span>2-year warranty</span></div>
+  <header class="bar">
+    <div class="logo" aria-label="Voltway">
+      <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="7" fill="#ffd400"/><path d="M20 5 L9 20 h7 l-2 11 l12 -16 h-7 z" fill="#17181b"/></svg>
+      <b>VOLTWAY</b>
+    </div>
+    <div class="search" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 15 15"><circle cx="6" cy="6" r="4.5" stroke="#a9aaa6" stroke-width="1.6" fill="transparent"/><path d="M9.5 9.5 L13.5 13.5" stroke="#a9aaa6" stroke-width="1.6"/></svg>Search batteries, chargers and power banks</div>
+    <nav class="hnav" aria-label="Departments"><span>Batteries</span><span>Chargers</span><span>Power banks</span><span>Smart home</span></nav>
+    <div class="bag"><span>Charge bundle</span><span class="pill" id="bagcount">0/4</span></div>
+  </header>
+  <div class="sub"><span>Home</span><span>›</span><span>Bundles</span><span>›</span><b>Charge bundle: charger + power bank + Voltway Home</b></div>
+  <div class="shell">
+    <main id="main"></main>
+    <aside class="rail">
+      <div class="bundle">
+        <h2>Your bundle <span id="railcount">0 of 4</span></h2>
+        <ol id="rail"></ol>
+        <div class="foot">Nothing is charged until you place the order.</div>
+      </div>
+      <div class="card2"><b>Next-day delivery</b>Order today and both items ship tomorrow, tracked.</div>
+      <div class="card2"><b>Voltway Home app</b>Free with every charger and power bank. You can change its settings later in the app.</div>
+      <div class="card2"><b>Need a hand?</b>Chat with the Voltway team, 8am–8pm every day.</div>
+    </aside>
+  </div>
+  <footer>
+    <div><b>Voltway</b>Batteries, chargers and power banks</div>
+    <div><b>Help</b>Delivery · Returns · Warranty</div>
+    <div><b>Company</b>About · Stores · Careers</div>
+  </footer>
+
+  <template id="copy">
+    <section data-screen="intro">
+      <div class="hero">
+        <svg class="bolt" width="260" height="260" viewBox="0 0 36 36" aria-hidden="true"><path d="M20 5 L9 20 h7 l-2 11 l12 -16 h-7 z" fill="#ffd400"/></svg>
+        <p class="crumb" style="color:#a9aaa6">Voltway bundles</p>
+        <h1>Buy a charger <span>and a power bank</span></h1>
+        <p class="lead">Four short steps: one AA/AAA battery charger, one power bank, then the two settings for the free Voltway Home app that comes with them. Nothing is charged until you place the order, and you can change anything before you do.</p>
+        <div class="outline" aria-hidden="true">
+          <div><b>STEP 1</b>Battery charger</div><div><b>STEP 2</b>Power bank</div><div><b>STEP 3</b>App home screen</div><div><b>STEP 4</b>App alerts</div>
+        </div>
+        <button class="primary" data-action="start">Start</button>
+      </div>
+      <div class="perks">
+        <div><b>One price per range</b>Every charger in the bundle is $19.99, every power bank $24.99.</div>
+        <div><b>Ships tomorrow</b>Tracked next-day delivery, free.</div>
+        <div><b>Change your mind</b>30-day returns on both items.</div>
+      </div>
+    </section>
+    <section data-screen="review">
+      <p class="crumb"><i>Review</i>Last step</p>
+      <h1>Review your order</h1>
+      <p class="lead">Check the two items and the two app settings before the order goes through. You can still change any of them.</p>
+      <div class="summary"></div>
+      <div class="totals">
+        <div><span>Battery charger</span><span class="mono">$19.99</span></div>
+        <div><span>Power bank</span><span class="mono">$24.99</span></div>
+        <div><span>Voltway Home app</span><span class="mono">Free</span></div>
+        <div><span>Next-day delivery</span><span class="mono">Free</span></div>
+        <div class="grand"><span>Total</span><span class="mono">$44.98</span></div>
+      </div>
+      <button class="primary" data-action="confirm">Place order</button>
+    </section>
+    <section data-screen="done">
+      <div class="check" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M5 14 l5 5 l11 -12" stroke="#ffd400" stroke-width="3.5" fill="transparent" stroke-linecap="round"/></svg></div>
+      <h1>Order confirmed</h1>
+      <p class="lead">Reference VW-48213. Both items ship tomorrow, and the Voltway Home app will open with the two settings you chose.</p>
+    </section>
+  </template>
+
+  <template id="catalog">
+    <section class="group" data-group="chargers">
+      <h2>Battery chargers</h2>
+      <p>Every charger here takes four AA or AAA cells, costs $19.99 and is rated 4.6 stars.</p>
+      <article class="option" data-id="ch-1" data-distinguishable="hue_only">
+        <h3>Voltway Quick4</h3>
+        <p>Four slots, 4-hour fast charge. A light beside each slot glows red while the cell charges and green once it is ready.</p>
+        <span class="meta">$19.99 · 4.6★ · Bestseller · 2,140 reviews</span>
+      </article>
+      <article class="option" data-id="ch-2" data-distinguishable="hue_only">
+        <h3>Ferrocell Octa Mini</h3>
+        <p>Four slots, 3-hour charge — the quickest in the range. A ring around each slot runs from red through amber to green as the cell fills, with the slot numbers 1–4 printed beside it.</p>
+        <span class="meta">$19.99 · 4.6★ · Fastest charge · 1,504 reviews</span>
+      </article>
+      <article class="option" data-id="ch-3" data-distinguishable="hue_only">
+        <h3>Nimbus Bay 4</h3>
+        <p>Four slots, silent overnight 10-hour charge. One light for the whole tray: red while charging, green when the tray is done.</p>
+        <span class="meta">$19.99 · 4.6★ · 960 reviews</span>
+      </article>
+      <article class="option" data-id="ch-4" data-distinguishable="multi_cue">
+        <h3>Voltway Quick4 Readout</h3>
+        <p>Four slots, 6-hour charge. A small screen prints each slot's charge as a percentage and shows FULL when the cell is ready; the screen adds 20 mm of width, so it does not sit flat in a drawer.</p>
+        <span class="meta">$19.99 · 4.6★ · 318 reviews</span>
+      </article>
+    </section>
+    <section class="group" data-group="banks">
+      <h2>Power banks</h2>
+      <p>Every power bank here is 10,000 mAh with USB-C in and out, costs $24.99 and is rated 4.7 stars.</p>
+      <article class="option" data-id="pb-1" data-distinguishable="multi_cue">
+        <h3>Voltway Slim Readout</h3>
+        <p>18 mm thick. A small readout on the end prints the charge left as a percentage.</p>
+        <span class="meta">$24.99 · 4.7★ · 410 reviews</span>
+      </article>
+      <article class="option" data-id="pb-2" data-distinguishable="hue_only">
+        <h3>Voltway Slim</h3>
+        <p>15 mm thick. One light shows the charge left: green above 60 %, amber down to 20 %, red below that.</p>
+        <span class="meta">$24.99 · 4.7★ · Bestseller · 3,402 reviews</span>
+      </article>
+      <article class="option" data-id="pb-3" data-distinguishable="hue_only">
+        <h3>Ferrocell Trail</h3>
+        <p>16 mm thick, rubberised and splash-resistant. A ring light glows green, amber or red for the charge left, with the capacity and output printed in figures on the back.</p>
+        <span class="meta">$24.99 · 4.7★ · Editor's pick · 1,205 reviews</span>
+      </article>
+      <article class="option" data-id="pb-4" data-distinguishable="hue_only">
+        <h3>Nimbus Pocket</h3>
+        <p>14 mm thick — the thinnest in the range — with a matte finish in four shades. One light: green while it has charge, red when it needs plugging in.</p>
+        <span class="meta">$24.99 · 4.7★ · New this season · 2,010 reviews</span>
+      </article>
+    </section>
+    <section class="group" data-group="home">
+      <h2>Voltway Home app: the home screen</h2>
+      <p>The app tiles every battery in the house. How should each tile show the charge left?</p>
+      <article class="option" data-id="hm-1" data-distinguishable="hue_only">
+        <h3>A ring around each tile</h3>
+        <p>Green, amber or red for the charge left — the cleanest home screen, nothing else on the tile.</p>
+        <span class="meta">Recommended</span>
+      </article>
+      <article class="option" data-id="hm-2" data-distinguishable="multi_cue">
+        <h3>A ring with the figure inside it</h3>
+        <p>The same ring, with the charge left printed as a percentage in the middle of the tile — more to read on the screen.</p>
+      </article>
+      <article class="option" data-id="hm-3" data-distinguishable="hue_only">
+        <h3>A ring that fades as it drains</h3>
+        <p>The ring fades from green through amber to red over the battery's charge, with the battery's name printed under the tile.</p>
+      </article>
+    </section>
+    <section class="group" data-group="alerts">
+      <h2>Voltway Home app: low-battery alerts</h2>
+      <p>When a battery is running low, what should the app do?</p>
+      <article class="option" data-id="al-1" data-distinguishable="hue_only">
+        <h3>Turn that battery's tile red</h3>
+        <p>Silent — nothing else on the screen changes and no notification is sent.</p>
+        <span class="meta">Recommended</span>
+      </article>
+      <article class="option" data-id="al-2" data-distinguishable="hue_only">
+        <h3>Fade that tile as it drains</h3>
+        <p>From green to red over the last hours of charge, with the time of the last top-up shown under it.</p>
+      </article>
+      <article class="option" data-id="al-3" data-distinguishable="multi_cue">
+        <h3>Send a message with the figure in it</h3>
+        <p>A notification naming the battery, with the words “Low — 12 %” and a battery symbol — about one more notification a day.</p>
+      </article>
+    </section>
+  </template>
+  <script>
+    (function () {
+      var LABELS = { select: "Select", selected: "Selected", next: "Continue", change: "Change", step: "Step" };
+      var main = document.getElementById("main");
+      var catalog = document.getElementById("catalog").content;
+      var copy = document.getElementById("copy").content;
+      var GROUPS = Array.prototype.map.call(catalog.querySelectorAll("section.group"), function (sec) {
+        var prompt = sec.querySelector(":scope > p");
+        return {
+          id: sec.dataset.group,
+          title: sec.querySelector(":scope > h2").textContent.trim(),
+          prompt: prompt ? prompt.textContent.trim() : "",
+          options: Array.prototype.map.call(sec.querySelectorAll("article.option"), function (art) {
+            var meta = art.querySelector(".meta");
+            return { id: art.dataset.id, name: art.querySelector("h3").textContent.trim(),
+                     meta: meta ? meta.textContent.trim() : "", node: art };
+          })
+        };
+      });
+      var SHORT = ["Battery charger", "Power bank", "App home screen", "App alerts"];
+      var state = { screen: null, group: null, selections: {} };
+      var seq = 0;
+      window.__state = state;
+      window.__events = [];
+      window.__completed = false;
+
+      function log(event) { window.__events.push(Object.assign({ seq: ++seq }, event)); }
+      function el(tag, cls, text) {
+        var node = document.createElement(tag);
+        if (cls) node.className = cls;
+        if (text !== undefined) node.textContent = text;
+        return node;
+      }
+      function button(action, label, cls, disabled) {
+        var node = el("button", cls, label);
+        node.dataset.action = action;
+        node.disabled = !!disabled;
+        return node;
+      }
+      function groupOf(id) { return GROUPS.filter(function (g) { return g.id === id; })[0]; }
+      function nextUnselected() { return GROUPS.filter(function (g) { return !(g.id in state.selections); })[0]; }
+      function screen(name) {
+        var node = document.importNode(copy.querySelector('section[data-screen="' + name + '"]'), true);
+        node.className = "screen " + name;
+        return node;
+      }
+
+      // One neutral greyscale drawing per step (identical for every option in that step).
+      var G = "#8b8980", D = "#55534d";
+      var ART = [
+        '<svg width="190" height="96" viewBox="0 0 190 96"><rect x="10" y="20" width="170" height="62" rx="10" fill="#fff" stroke="' + D + '" stroke-width="2"/>' +
+          [0, 1, 2, 3].map(function (i) { return '<rect x="' + (26 + i * 38) + '" y="30" width="24" height="42" rx="5" fill="#f3f2ee" stroke="' + G + '" stroke-width="2"/>'; }).join("") + '</svg>',
+        '<svg width="190" height="96" viewBox="0 0 190 96"><rect x="36" y="16" width="118" height="66" rx="12" fill="#fff" stroke="' + D + '" stroke-width="2"/><rect x="154" y="40" width="8" height="18" rx="2" fill="' + G + '"/><path d="M96 32 L84 50 h9 l-3 16 l14 -20 h-9 z" fill="' + G + '"/></svg>',
+        '<svg width="190" height="96" viewBox="0 0 190 96"><rect x="68" y="6" width="54" height="86" rx="9" fill="#fff" stroke="' + D + '" stroke-width="2"/>' +
+          [0, 1, 2, 3].map(function (i) { return '<rect x="' + (76 + (i % 2) * 20) + '" y="' + (20 + Math.floor(i / 2) * 22) + '" width="16" height="16" rx="3" fill="#f3f2ee" stroke="' + G + '" stroke-width="1.5"/>'; }).join("") + '</svg>'
+      ];
+      function artFor(index) { return ART[Math.min(index, 2)]; }
+
+      function paintRail() {
+        var ol = document.getElementById("rail"); ol.replaceChildren();
+        var have = 0;
+        GROUPS.forEach(function (g, i) {
+          var o = g.options.filter(function (x) { return x.id === state.selections[g.id]; })[0];
+          if (o) have++;
+          var li = el("li", (o ? "have" : "") + (state.screen === "group" && state.group === g.id ? " now" : ""));
+          li.appendChild(el("span", "n", String(i + 1)));
+          var t = el("div");
+          t.appendChild(el("span", "k", SHORT[i] || g.title));
+          t.appendChild(el("span", null, o ? o.name : "Not chosen yet"));
+          li.appendChild(t);
+          ol.appendChild(li);
+        });
+        document.getElementById("railcount").textContent = have + " of " + GROUPS.length;
+        document.getElementById("bagcount").textContent = have + "/" + GROUPS.length;
+      }
+
+      function renderIntro() {
+        state.screen = "intro"; state.group = null;
+        log({ type: "view", screen: "intro" });
+        var node = screen("intro");
+        node.querySelector('[data-action="start"]').textContent = "Start your bundle";
+        node.querySelector('[data-action="start"]').addEventListener("click", function () {
+          var g = nextUnselected();
+          if (g) renderGroup(g.id); else renderReview();
+        });
+        main.replaceChildren(node);
+        paintRail();
+      }
+
+      function renderGroup(id) {
+        state.screen = "group"; state.group = id;
+        log({ type: "shown", group: id });
+        paintGroup();
+      }
+
+      function paintGroup() {
+        var g = groupOf(state.group), index = GROUPS.indexOf(g), chosen = state.selections[g.id];
+        var node = el("section", "step");
+        var crumb = el("p", "crumb");
+        crumb.appendChild(el("i", null, LABELS.step + " " + (index + 1) + " of " + GROUPS.length));
+        crumb.appendChild(document.createTextNode(SHORT[index] || ""));
+        node.appendChild(crumb);
+        node.appendChild(el("h1", null, g.title));
+        if (g.prompt) node.appendChild(el("p", "lead", g.prompt));
+        var list = el("div", "options");
+        g.options.forEach(function (o, k) {
+          var card = document.importNode(o.node, true);
+          var isChosen = chosen === o.id;
+          if (isChosen) card.classList.add("chosen");
+          var shot = el("div", "shot");
+          shot.setAttribute("aria-hidden", "true");
+          shot.innerHTML = artFor(index);
+          shot.appendChild(el("span", "tag", (index < 2 ? "MODEL " : "OPTION ") + String.fromCharCode(65 + k)));
+          if (isChosen) shot.appendChild(el("span", "pick", "IN BUNDLE"));
+          card.insertBefore(shot, card.firstChild);
+          var label = isChosen ? LABELS.selected : LABELS.select;
+          var b = button("select-" + o.id, label, isChosen ? "secondary" : "primary", isChosen);
+          b.setAttribute("aria-label", label + ": " + o.name);
+          b.addEventListener("click", function () { select(g.id, o.id); });
+          card.appendChild(b);
+          list.appendChild(card);
+        });
+        node.appendChild(list);
+        var nav = el("div", "nav");
+        var nxt = GROUPS.filter(function (x) { return x !== g && !(x.id in state.selections); })[0];
+        nav.appendChild(el("span", "hint", g.id in state.selections ? "Choice saved. You can change it on the review page." : "Choose one option to continue."));
+        var cont = button("continue", LABELS.next, "primary", !(g.id in state.selections));
+        cont.setAttribute("aria-label", LABELS.next + (nxt ? " to step " + (GROUPS.indexOf(nxt) + 1) : " to review"));
+        cont.textContent = LABELS.next + (nxt ? " to step " + (GROUPS.indexOf(nxt) + 1) : " to review") + " →";
+        cont.addEventListener("click", advance);
+        nav.appendChild(cont);
+        node.appendChild(nav);
+        main.replaceChildren(node);
+        paintRail();
+      }
+
+      function select(gid, oid) {
+        if (state.screen !== "group" || state.group !== gid || state.selections[gid] === oid) return;
+        state.selections[gid] = oid;
+        log({ type: "select", group: gid, optionId: oid });
+        paintGroup();
+      }
+
+      function advance() {
+        if (state.screen !== "group" || !(state.group in state.selections)) return;
+        var g = nextUnselected();
+        if (g) renderGroup(g.id); else renderReview();
+        window.scrollTo(0, 0);
+      }
+
+      function renderReview() {
+        state.screen = "review"; state.group = null;
+        log({ type: "view", screen: "review" });
+        var node = screen("review"), summary = node.querySelector(".summary");
+        GROUPS.forEach(function (g) {
+          var o = g.options.filter(function (x) { return x.id === state.selections[g.id]; })[0];
+          var row = el("div", "row"), left = el("div");
+          left.appendChild(el("div", "what", g.title));
+          left.appendChild(el("strong", null, o ? o.name : ""));
+          if (o && o.meta) left.appendChild(el("div", "meta", o.meta));
+          var b = button("change-" + g.id, LABELS.change, "ghost");
+          b.setAttribute("aria-label", LABELS.change + ": " + g.title);
+          b.addEventListener("click", function () { renderGroup(g.id); window.scrollTo(0, 0); });
+          row.appendChild(left);
+          row.appendChild(b);
+          summary.appendChild(row);
+        });
+        node.querySelector('[data-action="confirm"]').addEventListener("click", complete);
+        main.replaceChildren(node);
+        paintRail();
+      }
+
+      function complete() {
+        if (state.screen !== "review" || window.__completed || nextUnselected()) return;
+        window.__completed = true;
+        state.screen = "done"; state.group = null;
+        log({ type: "complete", selections: Object.assign({}, state.selections) });
+        main.replaceChildren(screen("done"));
+        paintRail();
+        window.scrollTo(0, 0);
+      }
+
+      renderIntro();
+    })();
+  </script>
+</body>
+</html>

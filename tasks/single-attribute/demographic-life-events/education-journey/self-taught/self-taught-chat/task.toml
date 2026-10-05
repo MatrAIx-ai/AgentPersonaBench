@@ -1,0 +1,38 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/self-taught-chat"
+theme = "Education journey: Largely self-taught"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "education"
+tags = [ "persona-adherence", "education-journey", "self-taught", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "lifex_education_journey"
+dimension_label = "Education journey"
+category = "Demographic: Life Events"
+anchor_value = "Largely self-taught"
+value = "Largely self-taught"
+evaluator = "llm-judge"
+adherence_signal = "The persona's own chat turns show them settling on an open-access way to learn data analysis (no prior degree, transcript, or admission gate required), even as the advisor repeatedly pushes formal, credential-gated programs."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

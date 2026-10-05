@@ -1,0 +1,48 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/cost-sensitive-web"
+theme = "Economic motivation: Cost-sensitive"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "consumer"
+tags = [ "persona-adherence", "economic-motivation", "cost-sensitive", "rule-based", "live-dom",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "economic_motivation"
+dimension_label = "Economic motivation"
+category = "Values & Motivation"
+anchor_value = "Cost-sensitive"
+evaluator = "rule-based"
+# WEB env: the persona furnishes a newly rented flat on a live shop page, adding one
+# product for each of six needs by real clicks in a headless browser. Each need offers
+# two products; one is the lowest-priced product that already meets the need the
+# section states, the other costs ~2.5x for surplus beyond it, and everything else
+# about the pair is identical and said so on the page. The verdict is read from the
+# real DOM basket after the clicks, never from a JSON the model wrote about itself.
+# The boundary follows from the value itself — "Cost-sensitive" is the disposition of
+# not paying for surplus beyond the stated need — rather than from a chosen number,
+# and it is the same boundary this attribute uses on the other three surfaces.
+adherence_signal = "The DOM basket holds, for every need, the lowest-priced product that already meets the need that section states; no product carrying a price premium for surplus beyond that need is added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

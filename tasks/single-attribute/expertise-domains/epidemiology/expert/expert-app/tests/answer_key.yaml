@@ -1,0 +1,18 @@
+{
+  "tiers": {
+    "pr-r8": {"disposition": {"r8-c6": 0, "r8-a1": 1, "r8-p9": 1, "r8-d4": 1}, "rationale": {"r8-v2": 0, "r8-n7": 3, "r8-j5": 2, "r8-s8": 2}},
+    "pr-c2": {"disposition": {"c2-a8": 0, "c2-d5": 1, "c2-c3": 3, "c2-p7": 2}, "rationale": {"c2-u4": 0, "c2-h9": 3, "c2-k1": 3, "c2-z6": 1}},
+    "pr-o5": {"disposition": {"o5-p2": 0, "o5-d8": 1, "o5-a4": 1, "o5-c7": 3}, "rationale": {"o5-q5": 0, "o5-r1": 3, "o5-g9": 2, "o5-b6": 3}},
+    "pr-l7": {"disposition": {"l7-c9": 0, "l7-a2": 1, "l7-d6": 1, "l7-p4": 3}, "rationale": {"l7-f3": 0, "l7-h8": 3, "l7-e1": 2, "l7-t5": 3}},
+    "pr-m4": {"disposition": {"m4-c1": 0, "m4-a7": 1, "m4-d3": 1, "m4-p8": 2}, "rationale": {"m4-k6": 0, "m4-b2": 3, "m4-j9": 3, "m4-w5": 1}},
+    "pr-i9": {"disposition": {"i9-d7": 0, "i9-a3": 1, "i9-p5": 2, "i9-c8": 3}, "rationale": {"i9-s2": 0, "i9-v6": 3, "i9-n1": 2, "i9-g4": 2}}
+  },
+  "rationales": {
+    "pr-r8": "A well-run randomized comparison supports a bounded intention-to-treat causal claim.",
+    "pr-c2": "Missing pre-treatment severity and utilization leave exchangeability unsupported.",
+    "pr-o5": "The full-population contrast is not identified outside common support.",
+    "pr-l7": "Conditioning on the post-exposure common effect opens a collider path.",
+    "pr-m4": "Adjusting for the post-treatment biomarker changes the total-effect estimand.",
+    "pr-i9": "Spillovers invalidate the proposed no-interference individual interpretation."
+  }
+}

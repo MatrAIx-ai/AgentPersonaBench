@@ -1,0 +1,46 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/very-low-complexity-app"
+theme = "Code complexity tolerance: Very low"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "software"
+tags = [ "persona-adherence", "code-complexity-tolerance", "simplicity", "rule-based", "real-app",]
+
+# --- Single-attribute task ---------------------------------------------------- #
+# A developer persona with very low complexity tolerance implements an
+# event-log analyzer in the native PlainDesk editor; the app-written code is
+# scored by one deterministic rule-based check reading cyclomatic complexity +
+# nesting depth. Reward = 1.0/0.0.
+[[checks]]
+dimension_id = "code_complexity_tolerance"
+dimension_label = "Code complexity tolerance"
+category = "Developer: Code Maintenance"
+anchor_value = "Very low"
+evaluator = "rule-based"
+evaluator_name = "code_complexity_tolerance=Very low"
+adherence_signal = "Submitted solution (solution/solution.py) keeps every function at cyclomatic complexity <=3 and nesting depth <=2."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with PlainDesk (Tkinter GUI) baked in — see
+# ./environment/Dockerfile. harbor uses the task's own environment/ dir.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

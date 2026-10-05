@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/mandarin-speaker-survey"
+theme = "Language: Mandarin — Fluent"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "community"
+tags = [ "persona-adherence", "mandarin-speaker", "rule-based",]
+
+[[checks]]
+dimension_id = "lang_mandarin"
+dimension_label = "Language: Mandarin"
+category = "Linguistic: Language"
+anchor_value = "Fluent"
+evaluator = "rule-based"
+adherence_signal = "The persona volunteers for the Mandarin-language shifts, offering that capability unprompted, even though the assistant only ever pushes the general shifts."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

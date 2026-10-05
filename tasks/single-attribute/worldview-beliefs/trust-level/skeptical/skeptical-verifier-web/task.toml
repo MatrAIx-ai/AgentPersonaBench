@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/skeptical-verifier-web"
+theme = "Trust level: Skeptical"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "trust-level", "skeptical", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "trust_level"
+dimension_label = "Trust level"
+category = "Worldview: Beliefs"
+anchor_value = "Skeptical"
+evaluator = "rule-based"
+# Web env: the persona builds a personal feed by adding sources/claims on a live
+# page (Playwright). Each item's hidden `data-credulity` (0..3) in index.html is the
+# ground truth. Unified with skeptical-verifier-survey: VIOLATED for any item taken
+# at face value (credulity >= 2).
+adherence_signal = "Feed built from verifiable, sourced items (data-credulity 0-1); no unverified/too-good-to-be-true item (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

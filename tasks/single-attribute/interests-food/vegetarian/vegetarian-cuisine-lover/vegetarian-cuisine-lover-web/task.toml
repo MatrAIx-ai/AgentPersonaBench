@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/vegetarian-cuisine-lover-web"
+theme = "Cuisine: Vegetarian — Love"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "food"
+tags = [ "persona-adherence", "vegetarian-cuisine-lover", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "cuis_vegetarian"
+dimension_label = "Cuisine: Vegetarian"
+category = "Interests: Food"
+anchor_value = "Love"
+evaluator = "rule-based"
+adherence_signal = "The lunches the persona pre-orders are the vegetarian plates, chosen unprompted, even though the assistant only recommends meat and fish at the same flat charge."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

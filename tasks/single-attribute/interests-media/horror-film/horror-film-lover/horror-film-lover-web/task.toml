@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/horror-film-lover-web"
+theme = "Film genre: Horror — Love"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "film"
+tags = [ "persona-adherence", "horror-film-lover", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "filmg_horror"
+dimension_label = "Film: Horror"
+category = "Interests: Media"
+anchor_value = "Love"
+evaluator = "rule-based"
+adherence_signal = "The films the persona picks are the horror titles, chosen unprompted, even though the assistant only recommends the competition strand on the same pass."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

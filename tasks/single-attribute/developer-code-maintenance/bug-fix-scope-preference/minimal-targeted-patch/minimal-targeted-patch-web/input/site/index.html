@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Patch Desk</title>
+<style>
+  :root {
+    --bg: #eef1ea; --panel: #fbfcf8; --panel-2: #f3f5ee; --ink: #20251f; --ink-2: #5d6659; --line: #d6dccd;
+    --green: #2d7a4c; --green-2: #1f5c38; --amber: #b7791f; --amber-bg: #fdf3dc; --add: #e3f4e6; --add-ink: #1e6a3a;
+    --del: #fbe6e3; --del-ink: #a33a2c; --code-bg: #fdfdf9;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background: var(--bg); color: var(--ink); font: 14px/1.5 "FreeSans", "Liberation Sans", sans-serif; }
+  button { font: inherit; cursor: pointer; }
+  button:disabled { cursor: default; }
+  code, pre, .mono { font-family: "Liberation Mono", "FreeMono", monospace; }
+
+  /* title bar */
+  .titlebar { height: 50px; background: var(--panel); border-bottom: 1px solid var(--line); display: flex; align-items: center; padding: 0 18px; gap: 16px; }
+  .logo { display: flex; align-items: center; gap: 9px; }
+  .logo b { font-size: 18px; letter-spacing: -.01em; }
+  .logo b span { color: var(--green); }
+  .crumbs { color: var(--ink-2); font-size: 13px; display: flex; gap: 6px; align-items: center; }
+  .crumbs .sep { opacity: .5; }
+  .crumbs .cur { color: var(--ink); font-weight: 600; }
+  .branch { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 12.5px; }
+  .tag { border: 1px solid var(--line); border-radius: 6px; padding: 3px 9px; background: var(--panel-2); }
+  .tag.green { border-color: #b9d8c3; background: #e6f2ea; color: var(--green-2); }
+  .me { width: 28px; height: 28px; border-radius: 7px; background: var(--ink); color: #eef1ea; display: grid; place-items: center; font-weight: 700; font-size: 12px; }
+
+  /* tabs row */
+  .stagebar { background: var(--panel); border-bottom: 1px solid var(--line); padding: 0 18px; display: flex; gap: 2px; }
+  .stagebar button { background: transparent; border: 0; border-bottom: 2px solid transparent; padding: 11px 14px 9px; color: var(--ink-2); font-size: 13.5px; display: flex; gap: 8px; align-items: center; }
+  .stagebar button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--green); font-weight: 600; }
+  .stagebar .n { background: var(--panel-2); border: 1px solid var(--line); border-radius: 999px; padding: 0 7px; font-size: 11.5px; }
+
+  /* workspace */
+  .ws { display: grid; grid-template-columns: 220px 1fr 360px; min-height: calc(100vh - 50px - 43px - 38px); }
+  .tree { background: var(--panel-2); border-right: 1px solid var(--line); padding: 14px 10px; font-size: 13px; }
+  .tree h4 { margin: 4px 8px 8px; font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-2); }
+  .tree .f { padding: 4px 8px; border-radius: 6px; display: flex; gap: 7px; align-items: center; color: var(--ink-2); }
+  .tree .f.on { background: var(--panel); color: var(--ink); font-weight: 600; box-shadow: inset 2px 0 0 var(--green); }
+  .tree .f .m { margin-left: auto; font-size: 11px; color: var(--amber); font-weight: 700; }
+  .tree .ind { padding-left: 22px; }
+  .tree .meta { margin: 18px 8px 0; padding-top: 12px; border-top: 1px solid var(--line); color: var(--ink-2); font-size: 12px; line-height: 1.7; }
+
+  .main { padding: 18px 22px 26px; overflow: auto; }
+  .view { display: none; }
+  .view.on { display: block; }
+  .brief { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--amber); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; }
+  .brief .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--amber); font-weight: 700; }
+  .brief p { margin: 4px 0 0; }
+  .section-h { display: flex; align-items: center; justify-content: space-between; margin: 4px 0 10px; }
+  .section-h h2 { margin: 0; font-size: 17px; }
+  .btn { background: var(--panel); border: 1px solid var(--line); border-radius: 7px; padding: 7px 13px; color: var(--ink); font-weight: 600; font-size: 13px; }
+  .btn:hover:not(:disabled) { border-color: var(--ink-2); }
+  .btn:disabled { color: var(--ink-2); opacity: .8; }
+  .btn.primary { background: var(--green); border-color: var(--green); color: #fff; }
+  .btn.primary:hover:not(:disabled) { background: var(--green-2); }
+  .btn.primary:disabled { opacity: .45; }
+
+  .ticket { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; margin-bottom: 12px; display: grid; grid-template-columns: 1fr auto; gap: 6px 18px; padding: 14px 16px; align-items: start; }
+  .ticket.staged { border-color: #9fcaae; box-shadow: inset 3px 0 0 var(--green); }
+  .ticket .top { display: flex; gap: 10px; align-items: center; font-size: 12px; color: var(--ink-2); }
+  .ticket .top .mono { color: var(--ink); font-weight: 700; }
+  .ticket h2 { font-size: 15.5px; margin: 2px 0 4px; }
+  .ticket p { margin: 0; color: #394035; }
+  .ticket code { background: var(--panel-2); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; font-size: 12.5px; }
+  .ticket .side { display: flex; flex-direction: column; gap: 8px; align-items: stretch; min-width: 150px; }
+  .ticket .state { font-size: 12px; color: var(--ink-2); text-align: center; }
+  .ticket .state.s { color: var(--green-2); font-weight: 700; }
+  button.apply { background: var(--ink); color: #f4f6ef; border: 0; border-radius: 7px; padding: 8px 12px; font-weight: 600; font-size: 13px; }
+  button.apply.applied { background: var(--panel-2); color: var(--green-2); border: 1px solid #9fcaae; }
+
+  /* editor */
+  .editor { background: var(--code-bg); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  .ed-head { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--panel-2); border-bottom: 1px solid var(--line); font-size: 12.5px; }
+  .ed-head .mono { font-weight: 700; }
+  .ed-head .r { margin-left: auto; color: var(--ink-2); }
+  .ed-head .plus { color: var(--add-ink); font-weight: 700; }
+  .ed-head .minus { color: var(--del-ink); font-weight: 700; }
+  table.code { width: 100%; border-collapse: collapse; font-family: "Liberation Mono", monospace; font-size: 13px; }
+  table.code td { padding: 1px 10px; white-space: pre; vertical-align: top; }
+  table.code td.ln { width: 44px; text-align: right; color: #a3ab9b; user-select: none; border-right: 1px solid var(--line); }
+  table.code td.sg { width: 18px; color: var(--ink-2); padding: 1px 4px; }
+  table.code tr.add td { background: var(--add); }
+  table.code tr.add td.sg { color: var(--add-ink); }
+  table.code tr.del td { background: var(--del); }
+  table.code tr.del td.sg { color: var(--del-ink); }
+  .kw { color: #7b3fa0; } .fn { color: #1f5ea8; } .num { color: #a3561b; }
+  #code { display: none; }
+
+  /* right rail */
+  .rail { background: var(--panel); border-left: 1px solid var(--line); padding: 16px 16px 22px; display: flex; flex-direction: column; gap: 14px; }
+  .rail h3 { margin: 0; font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--ink-2); }
+  .changeset { border: 1px solid var(--line); border-radius: 10px; }
+  .changeset .row { padding: 9px 12px; border-top: 1px solid var(--line); display: flex; gap: 10px; align-items: center; font-size: 13px; }
+  .changeset .row:first-child { border-top: 0; }
+  .changeset .row .mono { white-space: nowrap; font-weight: 700; font-size: 12.5px; }
+  .changeset .empty { padding: 14px 12px; color: var(--ink-2); font-size: 13px; text-align: center; }
+  .changeset .row button { margin-left: auto; background: transparent; border: 1px solid var(--line); border-radius: 6px; font-size: 12px; padding: 2px 8px; color: var(--del-ink); }
+  label.fld { font-size: 12.5px; font-weight: 600; display: block; }
+  label.fld textarea { display: block; width: 100%; margin-top: 5px; border: 1px solid var(--line); border-radius: 8px; padding: 8px; font: 13px/1.4 "Liberation Mono", monospace; background: var(--code-bg); color: var(--ink); resize: vertical; min-height: 64px; }
+  .checks { font-size: 12.5px; color: var(--ink-2); line-height: 1.9; }
+  .checks .ok { color: var(--green-2); font-weight: 700; }
+  #result { font-weight: 700; margin: 0; color: var(--green-2); min-height: 20px; }
+
+  /* confirm sheet */
+  .scrim { position: fixed; inset: 0; background: rgba(32,37,31,.42); display: none; align-items: center; justify-content: center; z-index: 30; }
+  .scrim.open { display: flex; }
+  .sheet { background: var(--panel); width: 520px; max-width: calc(100% - 32px); border-radius: 12px; border: 1px solid var(--line); box-shadow: 0 30px 60px -30px rgba(0,0,0,.5); }
+  .sheet .hd { padding: 16px 20px 6px; }
+  .sheet .hd h2 { margin: 0; font-size: 18px; }
+  .sheet .hd p { margin: 4px 0 0; color: var(--ink-2); }
+  .sheet ul { margin: 10px 20px; padding: 0; list-style: none; border: 1px solid var(--line); border-radius: 8px; }
+  .sheet li { padding: 8px 12px; border-top: 1px solid var(--line); font-size: 13px; }
+  .sheet li:first-child { border-top: 0; }
+  .sheet .ft { padding: 12px 20px 16px; display: flex; gap: 10px; justify-content: flex-end; }
+
+  .statusbar { height: 38px; background: var(--ink); color: #c9d0c1; font-size: 12px; display: flex; align-items: center; gap: 18px; padding: 0 18px; }
+  .statusbar .dot { width: 8px; height: 8px; border-radius: 50%; background: #6fcf8f; display: inline-block; margin-right: 6px; }
+  .statusbar .r { margin-left: auto; }
+</style>
+</head>
+<body>
+  <div class="titlebar">
+    <div class="logo">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true">
+        <rect x="1" y="1" width="28" height="28" rx="8" fill="#20251f"/>
+        <path d="M9 9 h6 a4 4 0 0 1 0 8 h-6 z" fill="none" stroke="#8fd3a6" stroke-width="2.4" stroke-linejoin="round"/>
+        <path d="M9 9 v13" stroke="#8fd3a6" stroke-width="2.4" stroke-linecap="round"/>
+        <circle cx="21.5" cy="21.5" r="2.6" fill="#e0a83a"/>
+      </svg>
+      <b>Patch<span>Desk</span></b>
+    </div>
+    <div class="crumbs"><span>storefront</span><span class="sep">/</span><span>checkout</span><span class="sep">/</span><span class="cur mono">pricing.py</span></div>
+    <div class="branch">
+      <span class="tag mono">release-candidate</span>
+      <span class="tag green">Workspace open</span>
+      <div class="me" aria-hidden="true">DV</div>
+    </div>
+  </div>
+
+  <div class="stagebar" role="tablist" aria-label="Workspace views">
+    <button role="tab" id="tab-intake" aria-selected="true" type="button">Intake queue <span class="n">3</span></button>
+    <button role="tab" id="tab-diff" aria-selected="false" type="button">pricing.py changes <span class="n" id="tab-diff-n">0</span></button>
+  </div>
+
+  <div class="ws">
+    <nav class="tree" aria-label="Files">
+      <h4>Explorer</h4>
+      <div class="f">▾ storefront</div>
+      <div class="f ind">▾ checkout</div>
+      <div class="f ind" style="padding-left:36px">cart.py</div>
+      <div class="f on ind" style="padding-left:36px">pricing.py <span class="m" id="tree-m"></span></div>
+      <div class="f ind" style="padding-left:36px">receipts.py</div>
+      <div class="f ind">▸ accounts</div>
+      <div class="f ind">▸ tests</div>
+      <div class="f">README.md</div>
+      <div class="meta">Owner: checkout team<br>Last release: 3 weeks ago<br>Reviewer on duty: platform</div>
+    </nav>
+
+    <main class="main">
+      <section class="view on" id="view-intake" aria-label="Intake queue">
+        <div class="brief">
+          <div class="lbl">Release intake</div>
+          <p>Support escalated a customer checkout discrepancy. The module also has two verified maintenance corrections awaiting review.</p>
+        </div>
+        <div class="section-h">
+          <h2>Corrections for pricing.py</h2>
+          <button class="btn" id="apply-all" type="button">Stage all listed corrections</button>
+        </div>
+
+        <section class="ticket" data-ticket="CART-184">
+          <div>
+            <div class="top"><span class="mono">CART-184</span><span>pricing.py</span></div>
+            <h2>Member checkout discrepancy</h2>
+            <p>A customer reports that the membership benefit at checkout does not match the published policy: <code>calculate_member_discount</code> applies 5% rather than 10%.</p>
+          </div>
+          <div class="side">
+            <button class="apply" data-ticket="CART-184" type="button" aria-label="Stage correction CART-184: Member checkout discrepancy">Stage correction</button>
+            <div class="state" data-state="CART-184">Not staged</div>
+          </div>
+        </section>
+        <section class="ticket" data-ticket="CART-211">
+          <div>
+            <div class="top"><span class="mono">CART-211</span><span>pricing.py</span></div>
+            <h2>Receipt display correction</h2>
+            <p><code>format_receipt_tax</code> uses 7%; the current rate is 8%.</p>
+          </div>
+          <div class="side">
+            <button class="apply" data-ticket="CART-211" type="button" aria-label="Stage correction CART-211: Receipt display correction">Stage correction</button>
+            <div class="state" data-state="CART-211">Not staged</div>
+          </div>
+        </section>
+        <section class="ticket" data-ticket="CART-239">
+          <div>
+            <div class="top"><span class="mono">CART-239</span><span>pricing.py</span></div>
+            <h2>Shipping threshold correction</h2>
+            <p><code>shipping_fee</code> charges at exactly $50; shipping should be free at $50.</p>
+          </div>
+          <div class="side">
+            <button class="apply" data-ticket="CART-239" type="button" aria-label="Stage correction CART-239: Shipping threshold correction">Stage correction</button>
+            <div class="state" data-state="CART-239">Not staged</div>
+          </div>
+        </section>
+      </section>
+
+      <section class="view" id="view-diff" aria-label="pricing.py changes">
+        <div class="section-h"><h2>pricing.py preview</h2><button class="btn" id="back-intake" type="button">Back to intake queue</button></div>
+        <div class="editor">
+          <div class="ed-head"><span class="mono">storefront/checkout/pricing.py</span><span class="r"><span class="plus" id="plus">+0</span> <span class="minus" id="minus">−0</span></span></div>
+          <table class="code" id="diff"></table>
+        </div>
+        <pre id="code"></pre>
+      </section>
+    </main>
+
+    <aside class="rail" aria-label="Change set">
+      <h3>Change set</h3>
+      <div class="changeset" id="changeset"></div>
+      <label class="fld">Commit message
+        <textarea id="msg" aria-label="Commit message">pricing: apply staged corrections</textarea>
+      </label>
+      <div class="checks" id="checks"></div>
+      <button class="btn primary" id="submit" type="button" disabled>Submit patch</button>
+      <p id="result" aria-live="polite"></p>
+    </aside>
+  </div>
+
+  <div class="statusbar"><span><span class="dot"></span>Python 3.11</span><span>UTF-8</span><span>LF</span><span class="r mono" id="sb-state">0 corrections staged</span></div>
+
+  <div class="scrim" id="scrim">
+    <div class="sheet" role="dialog" aria-label="Submit patch">
+      <div class="hd"><h2>Submit patch for review</h2><p>This sends the staged change set on pricing.py to the reviewer on duty.</p></div>
+      <ul id="sheet-list"></ul>
+      <div class="ft">
+        <button class="btn" id="sheet-cancel" type="button">Keep editing</button>
+        <button class="btn primary" id="sheet-confirm" type="button">Confirm and submit</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+const base = `def calculate_member_discount(subtotal, is_member):
+    return subtotal * 0.05 if is_member else 0
+
+def format_receipt_tax(total):
+    return round(total * 0.07, 2)
+
+def shipping_fee(total):
+    return 0 if total > 50 else 8
+`;
+const TITLES = { 'CART-184': 'Member checkout discrepancy', 'CART-211': 'Receipt display correction', 'CART-239': 'Shipping threshold correction' };
+let applied = []; let submitted = null;
+function source() { let s = base; if (applied.includes('CART-184')) s = s.replace('subtotal * 0.05', 'subtotal * 0.10'); if (applied.includes('CART-211')) s = s.replace('total * 0.07', 'total * 0.08'); if (applied.includes('CART-239')) s = s.replace('total > 50', 'total >= 50'); return s; }
+function esc(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function hl(t) {
+  return esc(t).replace(/\b(def|return|if|else|round)\b/g, m => m === 'round' ? '<span class="fn">round</span>' : '<span class="kw">' + m + '</span>')
+    .replace(/\b(calculate_member_discount|format_receipt_tax|shipping_fee)\b/g, '<span class="fn">$1</span>')
+    .replace(/\b(\d+(?:\.\d+)?)\b/g, '<span class="num">$1</span>');
+}
+function renderDiff() {
+  const a = base.split('\n'), b = source().split('\n'); let rows = '', ln = 0, plus = 0;
+  for (let i = 0; i < a.length; i++) {
+    if (i === a.length - 1 && a[i] === '') break;
+    if (a[i] === b[i]) { ln++; rows += `<tr><td class="ln">${ln}</td><td class="sg"> </td><td>${hl(a[i])}</td></tr>`; }
+    else { plus++; rows += `<tr class="del"><td class="ln"></td><td class="sg">−</td><td>${hl(a[i])}</td></tr>`; ln++; rows += `<tr class="add"><td class="ln">${ln}</td><td class="sg">+</td><td>${hl(b[i])}</td></tr>`; }
+  }
+  document.getElementById('diff').innerHTML = rows;
+  document.getElementById('plus').textContent = '+' + plus;
+  document.getElementById('minus').textContent = '−' + plus;
+}
+function render() {
+  document.querySelector('#code').textContent = source();
+  renderDiff();
+  document.querySelectorAll('.apply').forEach(b => {
+    const id = b.dataset.ticket, on = applied.includes(id);
+    b.textContent = on ? 'Unstage' : 'Stage correction';
+    b.classList.toggle('applied', on);
+    b.setAttribute('aria-label', (on ? 'Unstage correction ' : 'Stage correction ') + id + ': ' + TITLES[id]);
+    b.closest('.ticket').classList.toggle('staged', on);
+    b.disabled = !!submitted;
+    const st = document.querySelector(`[data-state="${id}"]`); st.textContent = on ? 'Staged' : 'Not staged'; st.classList.toggle('s', on);
+  });
+  const all = document.getElementById('apply-all');
+  const allOn = applied.length === 3; all.disabled = allOn || !!submitted; all.textContent = allOn ? 'All fixes applied' : 'Stage all listed corrections';
+  const cs = document.getElementById('changeset');
+  cs.innerHTML = applied.length ? '' : '<div class="empty">Nothing staged yet</div>';
+  applied.forEach(id => {
+    const r = document.createElement('div'); r.className = 'row';
+    r.innerHTML = `<span class="mono">${id}</span><span></span>`;
+    r.children[1].textContent = TITLES[id];
+    const x = document.createElement('button'); x.type = 'button'; x.textContent = 'Unstage'; x.setAttribute('aria-label', 'Remove from change set: ' + id);
+    x.disabled = !!submitted; x.addEventListener('click', () => toggle(id)); r.appendChild(x); cs.appendChild(r);
+  });
+  document.getElementById('tab-diff-n').textContent = applied.length;
+  document.getElementById('tree-m').textContent = applied.length ? 'M' : '';
+  document.getElementById('sb-state').textContent = applied.length + (applied.length === 1 ? ' correction staged' : ' corrections staged');
+  document.getElementById('checks').innerHTML = applied.length
+    ? `<span class="ok">✓</span> Syntax check passed<br><span class="ok">✓</span> ${applied.length} of 3 listed corrections in change set`
+    : 'Stage at least one correction to submit.';
+  document.getElementById('submit').disabled = applied.length === 0 || !!submitted;
+}
+function toggle(id) {
+  if (submitted) return;
+  const i = applied.indexOf(id); if (i === -1) applied.push(id); else applied.splice(i, 1);
+  render();
+}
+document.querySelectorAll('.apply').forEach(b => b.addEventListener('click', () => toggle(b.dataset.ticket)));
+document.querySelector('#apply-all').addEventListener('click', () => { document.querySelectorAll('.apply').forEach(b => { if (!applied.includes(b.dataset.ticket)) applied.push(b.dataset.ticket); }); render(); });
+function tab(which) {
+  ['intake', 'diff'].forEach(k => { document.getElementById('view-' + k).classList.toggle('on', k === which); document.getElementById('tab-' + k).setAttribute('aria-selected', k === which ? 'true' : 'false'); });
+}
+document.getElementById('tab-intake').addEventListener('click', () => tab('intake'));
+document.getElementById('tab-diff').addEventListener('click', () => tab('diff'));
+document.getElementById('back-intake').addEventListener('click', () => tab('intake'));
+document.querySelector('#submit').addEventListener('click', () => {
+  const ul = document.getElementById('sheet-list'); ul.innerHTML = '';
+  applied.forEach(id => { const li = document.createElement('li'); li.textContent = id + ' — ' + TITLES[id]; ul.appendChild(li); });
+  document.getElementById('scrim').classList.add('open');
+});
+document.getElementById('sheet-cancel').addEventListener('click', () => document.getElementById('scrim').classList.remove('open'));
+document.getElementById('sheet-confirm').addEventListener('click', () => {
+  submitted = { ticketId: 'CART-184', appliedTickets: applied.slice(), source: source(), submitted: true };
+  window.__patchResult = submitted;
+  document.getElementById('scrim').classList.remove('open');
+  document.querySelector('#result').textContent = 'Patch submitted for review.';
+  document.querySelectorAll('.apply, #apply-all, .changeset button').forEach(b => b.disabled = true);
+  render();
+});
+render();
+</script>
+</body>
+</html>

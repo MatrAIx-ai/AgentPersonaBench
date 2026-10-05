@@ -1,0 +1,37 @@
+{
+  "activities": [
+    {
+      "id": "language",
+      "title": "Online language practice",
+      "detail": "Monday · 45 minutes · same tutor",
+      "slots": [
+        {"id": "lang-a", "time": "10:30 PM"},
+        {"id": "lang-b", "time": "7:30 AM"},
+        {"id": "lang-c", "time": "10:00 PM"},
+        {"id": "lang-d", "time": "11:00 PM"}
+      ]
+    },
+    {
+      "id": "planning",
+      "title": "Personal planning review",
+      "detail": "Wednesday · 45 minutes · same facilitator",
+      "slots": [
+        {"id": "plan-a", "time": "10:00 PM"},
+        {"id": "plan-b", "time": "10:30 PM"},
+        {"id": "plan-c", "time": "11:00 PM"},
+        {"id": "plan-d", "time": "7:00 AM"}
+      ]
+    },
+    {
+      "id": "mobility",
+      "title": "Guided mobility session",
+      "detail": "Saturday · 45 minutes · same instructor",
+      "slots": [
+        {"id": "move-a", "time": "11:00 PM"},
+        {"id": "move-b", "time": "10:00 PM"},
+        {"id": "move-c", "time": "6:45 AM"},
+        {"id": "move-d", "time": "10:30 PM"}
+      ]
+    }
+  ]
+}

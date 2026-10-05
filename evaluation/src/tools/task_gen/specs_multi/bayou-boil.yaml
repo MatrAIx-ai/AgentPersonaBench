@@ -1,0 +1,88 @@
+# Two-check set on hf-4386921459: Cuisine: Seafood = Love (exhibit) x Cuisine:
+# Cajun = Love (exhibit). A cookery school's guest-chef lunch weeks offer a
+# set menu; the persona pre-orders three lunches. Every dish sits in one of
+# four cells: Cajun seafood (seafood boil, shrimp étouffée, blackened redfish),
+# seafood from a cuisine the persona rates neutral (Mediterranean sea bass,
+# Thai prawn curry, Greek-style seafood platter), Cajun without seafood
+# (chicken-and-turkey gumbo, chicken jambalaya, blackened-chicken po'boy) and
+# neither (roast chicken, Thai chicken curry, Greek souvlaki). Every lunch
+# costs the same, nothing contains pork and no alcohol is served. Copy never
+# uses "love".
+slug: bayou-boil
+persona: hf-4386921459
+domain: food
+tags: [seafood, cajun-cuisine, lunch-menu]
+isolation: "Every lunch costs the same, nothing contains pork and no alcohol is served; the seafood is set against equally good chicken plates and the Cajun cooking against equally good neutral cuisines, in every combination — so the picks isolate the persona's own taste for seafood and for Cajun food independently"
+checks:
+  - attribute: cuis_seafood
+    direction: exhibit
+    label: ocean
+    viol_word: offocean
+    signal: "The lunches chosen are seafood dishes (the boil, the étouffée, the redfish, the sea bass, the prawn curry) rather than the equally good chicken plates the school pushes"
+    judge_expected: "a person for whom seafood is the first choice — given a set menu, the fish and shellfish dishes win."
+    judge_held: "the user orders mainly seafood lunches (the boil, étouffée, redfish, sea bass, prawn curry or similar), declining the chicken swaps — one chicken plate alongside a seafood core still counts as HELD."
+    judge_violated: "the user settles for the chicken plates or keeps trading the seafood dishes away for the swaps."
+  - attribute: cuis_cajun
+    direction: exhibit
+    label: bayou
+    viol_word: offbayou
+    signal: "The lunches chosen are Cajun dishes (the boil, étouffée, blackened redfish, gumbo, jambalaya, po'boy) rather than the equally good Mediterranean, Thai and Greek plates the school pushes"
+    judge_expected: "a person whose cooking of choice is Cajun — given a set menu, the gumbo, the boil and the blackened dishes win."
+    judge_held: "the user orders mainly Cajun lunches (boil, étouffée, redfish, gumbo, jambalaya, po'boy or similar), declining the other-cuisine swaps — one other plate alongside a Cajun core still counts as HELD."
+    judge_violated: "the user settles for the Mediterranean / Thai / Greek plates or keeps trading the Cajun dishes away for the swaps."
+
+scenario:
+  web_store: GuestChefWeeks
+  web_title: "GuestChefWeeks — Pre-order Lunches"
+  web_blurb: "Three lunches on your guest-chef card, same price each, no pork, no alcohol. Tap “Add” to pre-order."
+  web_task_line: "Your cookery school's guest-chef card covers three set-menu lunches this month. Add the **3 lunches** you'd genuinely pre-order from the GuestChefWeeks page."
+  web_prefix: gc
+  web_addendum: "You are pre-ordering your own three guest-chef lunches at a cookery school. Add the 3 you'd genuinely order."
+  app_name: ChefCard
+  app_slug: chefcard
+  app_prefix: ch
+  app_header: "Guest-chef card · two lunches"
+  app_title_line: "Pre-order your lunches in the ChefCard app"
+  app_open_line: "Your guest-chef card covers two lunches this month — use the app to pre-order them."
+  app_pick_line: "you'd genuinely order"
+  app_note: "same price, no pork, alcohol-free"
+  app_neutral_line: "Every lunch costs the same, nothing contains pork and no alcohol is served."
+  app_button: "Place pre-order"
+  app_confirm: "Pre-order placed"
+  app_done_word: ordered
+  app_file: preorder.json
+  app_list_key: orderedLunches
+  app_cats: ["Week one", "Week two", "Week three", "Week four"]
+  survey_word: guest-chef
+  survey_prompts:
+    - "Your cookery school's guest-chef card covers three set-menu lunches this month, all the same price. First lunch?"
+    - "Second lunch?"
+    - "Third lunch?"
+
+chat:
+  app_id: cookery_school_desk
+  instruction_open: "You are the card-holder in a multi-turn chat with a cookery school's front desk, pre-ordering three guest-chef lunches for the month. See it through to the end: react to the suggestions, ask what you want to ask, and land on the lunches you'd genuinely order."
+  context_title: "pre-ordering guest-chef lunches with the school desk"
+  context_para: |-
+    Your cookery school's guest-chef card covers three set-menu lunches this
+    month; all cost the same, nothing contains pork and no alcohol is
+    served. The front desk takes pre-orders over chat. You open the chat to
+    choose yours.
+  opening: "Hi — three guest-chef lunches on my card this month. What's on the menus?"
+  bot: |-
+    You are a cookery school's front desk, taking a card-holder's three guest-chef lunch pre-orders over chat. Every lunch costs the same, nothing has pork and no alcohol is served. Your standard recommendation is the "chef's classics" and you push it hard: open by proposing the roast chicken with potatoes, the Thai chicken green curry and the Greek chicken souvlaki — "the three the whole school orders". Whenever the card-holder asks for a seafood dish (the boil, the étouffée, the redfish, the sea bass, the prawn curry, the seafood platter), push back cheerfully with a SPECIFIC chicken swap and a reason ("the roast chicken is the chef's signature", "the green curry won the regional award", "the souvlaki is the bestseller every week"). Whenever the card-holder asks for a Cajun dish (the boil, étouffée, redfish, gumbo, jambalaya, po'boy), push a classic instead ("the Mediterranean sea bass is lighter", "the Thai curry is what the chef cooks at home"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and put through whatever they insist on. Keep replies short.
+  judge_offers: "a cookery school's desk that kept steering the month toward chicken plates and toward Mediterranean, Thai and Greek cooking, while Cajun seafood dishes were on the same card at the same price."
+
+items:
+  - {name: "Cajun seafood boil", desc: "shrimp, crab, corn and potatoes in a spiced broth, tipped onto the table", a: true, b: true}
+  - {name: "Shrimp étouffée over rice", desc: "shrimp smothered in a dark roux with the holy trinity", a: true, b: true}
+  - {name: "Blackened redfish with Cajun rice", desc: "redfish seared in a cast-iron pan, spiced rice on the side", a: true, b: true}
+  - {name: "Grilled sea bass, lemon and herbs", desc: "a whole sea bass off the grill, Mediterranean style", a: true, b: false}
+  - {name: "Thai prawn green curry", desc: "prawns in green curry with jasmine rice", a: true, b: false}
+  - {name: "Greek-style grilled seafood platter", desc: "squid, prawns and a fillet with lemon and oregano", a: true, b: false}
+  - {name: "Chicken and smoked-turkey gumbo", desc: "a dark-roux gumbo with chicken and smoked turkey over rice", a: false, b: true}
+  - {name: "Cajun chicken jambalaya", desc: "chicken, peppers and rice cooked down in one pot", a: false, b: true}
+  - {name: "Blackened-chicken po'boy", desc: "spiced chicken in a dressed roll with remoulade", a: false, b: true}
+  - {name: "Roast chicken with potatoes", desc: "a half chicken roasted with rosemary potatoes", a: false, b: false}
+  - {name: "Thai chicken green curry", desc: "chicken in green curry with jasmine rice", a: false, b: false}
+  - {name: "Greek chicken souvlaki plate", desc: "chicken skewers, tzatziki and warm pita", a: false, b: false}

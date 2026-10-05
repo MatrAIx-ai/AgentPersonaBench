@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/personal-finance-buff-web"
+theme = "Topic interest: Personal finance — passionate"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "interests-topics", "topic-personal-finance", "passionate", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "topic_personal_finance"
+dimension_label = "Topic: Personal finance"
+category = "Interests: Topics"
+attribute = "topic_personal_finance"
+value = "Passionate"
+evaluator = "rule-based"
+evaluator_name = "topic_personal_finance=Passionate"
+# Web env: the persona adds items to a "dive into this month" list on a live page
+# (Playwright). Each item's hidden `data-disengage` (0..3) in index.html is the
+# ground truth. VIOLATED for any bored-by / avoids-finance pick (disengage >= 2).
+adherence_signal = "List built from eager budgeting/investing picks (data-disengage 0-1); no bored/avoids-finance pick (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

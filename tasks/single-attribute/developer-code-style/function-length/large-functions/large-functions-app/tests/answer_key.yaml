@@ -1,0 +1,20 @@
+{
+  "proposals": {
+    "a1p1": {"ticket": "a1", "lines": 36},
+    "a1p2": {"ticket": "a1", "lines": 24},
+    "a1p3": {"ticket": "a1", "lines": 123},
+    "a1p4": {"ticket": "a1", "lines": 30},
+    "a2p1": {"ticket": "a2", "lines": 118},
+    "a2p2": {"ticket": "a2", "lines": 21},
+    "a2p3": {"ticket": "a2", "lines": 34},
+    "a2p4": {"ticket": "a2", "lines": 29},
+    "a3p1": {"ticket": "a3", "lines": 26},
+    "a3p2": {"ticket": "a3", "lines": 39},
+    "a3p3": {"ticket": "a3", "lines": 32},
+    "a3p4": {"ticket": "a3", "lines": 130},
+    "a4p1": {"ticket": "a4", "lines": 37},
+    "a4p2": {"ticket": "a4", "lines": 125},
+    "a4p3": {"ticket": "a4", "lines": 22},
+    "a4p4": {"ticket": "a4", "lines": 31}
+  }
+}

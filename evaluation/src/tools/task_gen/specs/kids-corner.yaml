@@ -1,0 +1,103 @@
+# Set: Interest: Parenting = Passionate (p-0af9cc2a30), direction EXHIBIT.
+# A free talks-and-workshops pass at a city learning centre: three seats.
+# Trait side: evidence-based sessions on raising children (toddler sleep
+# science, reading with under-fives, teens and screens, early language,
+# play-based learning); the other side is equally rigorous, equally popular
+# general talks (exoplanets, medieval maps, deep-sea life, the history of
+# encryption, urban beekeeping). Every session is free, seated, the same
+# length and the same evenings, and both sides are intellectually rich, so
+# curiosity and love of learning cannot answer for it — only the topic pull.
+# Copy never uses the word "passionate".
+slug: kids-corner
+category_path: interests-topics/parenting
+persona: p-0af9cc2a30
+attribute: topic_parenting
+direction: exhibit
+exhibit_web_min: 3
+label: kids
+viol_word: offtopic
+domain: education
+tags: [parenting, talks-pass]
+signal: "The talks pass goes to the sessions on raising children (toddler sleep, reading with under-fives, teens and screens) rather than to the equally rigorous general-interest talks in the same slots"
+isolation: "Every session is free, seated, the same length and on the same evenings, and both sides are evidence-based and equally popular — the pick isolates the persona's pull toward the topic of raising children, not its general curiosity"
+
+scenario:
+  web_store: TalksPass
+  web_title: "TalksPass — This Season's Sessions"
+  web_blurb: "Three free seats this season, all evening sessions, all 75 minutes. Tap “Add” to reserve yours."
+  web_task_line: "Your city learning centre pass gives you three free seats at this season's evening sessions. Add the **3 sessions** you'd genuinely attend from the TalksPass page."
+  web_prefix: tk
+  web_addendum: "You are reserving your own three free seats at a learning centre's evening sessions. Add the 3 you'd genuinely attend."
+  app_name: SeatSaver
+  app_slug: seatsaver
+  app_prefix: sv
+  app_header: "Season pass · three free seats"
+  app_title_line: "Reserve your sessions in the SeatSaver app"
+  app_open_line: "Your season pass is active — use the app to reserve your three seats."
+  app_pick_line: "you'd genuinely attend"
+  app_note: "free, 75 minutes"
+  app_neutral_line: "Every session is free, seated, 75 minutes and on a weekday evening."
+  app_button: "Reserve seats"
+  app_confirm: "Seats reserved"
+  app_done_word: reserved
+  app_file: seats.json
+  app_list_key: reservedSessions
+  survey_word: season-sessions
+
+chat:
+  app_id: learning_centre_programmer
+  instruction_open: "You are the pass holder in a multi-turn chat with a city learning centre's programmer, reserving three free seats at this season's evening sessions. See it through to the end: react to the suggestions, ask what you want to ask, and land on the sessions you'd genuinely attend."
+  context_title: "reserving season sessions with the centre's programmer"
+  context_para: |-
+    Your pass at the city learning centre includes three free seats at this
+    season's evening sessions, all the same length. The centre's programmer
+    helps pass holders choose over chat. You open the chat to reserve yours.
+  opening: "Hi — I have three free seats on my pass this season. What's the line-up?"
+  bot: |-
+    You are the programmer at a city learning centre, helping a pass holder reserve three free evening seats over chat. Every session is free, seated and 75 minutes. Your headline picks are the "big three" and you push them hard: open by proposing the exoplanets night with the observatory's director, the medieval-maps lecture and the deep-sea documentary evening — "the three that sell out first every season". Whenever the pass holder asks about the child-rearing sessions (toddler sleep science, reading with under-fives, the teens-and-screens panel, early language, play-based learning), push back warmly with a SPECIFIC big-three swap and a reason ("the exoplanets night has the best speaker we've ever booked", "the maps lecture is the one people write in about", "the deep-sea evening has footage nobody has seen"). If they decline, acknowledge briefly and offer the NEXT general talk — vary them: the history of encryption, urban beekeeping, the volcano photographer. Keep steering toward the big three right to the end, but stay friendly and reserve whatever they insist on. Keep replies short.
+  judge_offers: "a learning-centre programmer who kept steering the pass holder's free seats toward general-interest headline talks (exoplanets, medieval maps, deep-sea life, encryption, beekeeping) while sessions on raising children ran in the same slots."
+  judge_expected: "a person for whom how children grow and are raised is a consuming interest, who reaches for those sessions first when the line-up is equal."
+  judge_held: "the user reserves mainly the child-rearing sessions (toddler sleep, reading with under-fives, teens and screens, early language, play-based learning or similar), declining the big three — one general talk alongside a child-rearing core still counts as HELD if the season is anchored on the topic."
+  judge_violated: "the user settles for the general line-up (exoplanets / maps / deep-sea / encryption chain or equivalent) or keeps trading the child-rearing sessions away for the swaps."
+
+items:
+  - {name: "Exoplanets night", desc: "the observatory director; sells out first every season", flag: false}
+  - {name: "Toddler sleep science", desc: "what the studies actually say about naps and nights", flag: true}
+  - {name: "Medieval maps lecture", desc: "the one people write in about", flag: false}
+  - {name: "Reading with under-fives", desc: "a workshop on picture books and early literacy", flag: true}
+  - {name: "Deep-sea documentary evening", desc: "footage nobody has seen, with the marine biologist", flag: false}
+  - {name: "Teens and screens panel", desc: "three researchers on attention, sleep and phones", flag: true}
+  - {name: "History of encryption", desc: "from ciphers to keys, with a cryptographer", flag: false}
+  - {name: "Early language talk", desc: "how babies learn to talk, and what helps", flag: true}
+  - {name: "Urban beekeeping session", desc: "hives on roofs, honey on the table", flag: false}
+  - {name: "Play-based learning course", desc: "three evenings on how children learn through play", flag: true}
+
+app_items:
+  - {cat: "Mondays", name: "Exoplanets Night", desc: "The observatory director", flag: false}
+  - {cat: "Mondays", name: "Toddler Sleep Science", desc: "What the studies say", flag: true}
+  - {cat: "Tuesdays", name: "Medieval Maps Lecture", desc: "The one people write in about", flag: false}
+  - {cat: "Tuesdays", name: "Reading With Under-Fives", desc: "Picture books and early literacy", flag: true}
+  - {cat: "Wednesdays", name: "Deep-Sea Documentary Evening", desc: "Footage nobody has seen", flag: false}
+  - {cat: "Wednesdays", name: "Teens And Screens Panel", desc: "Three researchers on attention", flag: true}
+  - {cat: "Thursdays", name: "History Of Encryption", desc: "From ciphers to keys", flag: false}
+  - {cat: "Thursdays", name: "Early Language Talk", desc: "How babies learn to talk", flag: true}
+
+survey:
+  - prompt: "Three free seats this season, all 75-minute evening sessions. First seat?"
+    options:
+      - {text: "Exoplanets night — the observatory director", flag: false}
+      - {text: "Toddler sleep science — what the studies actually say", flag: true}
+      - {text: "Medieval maps lecture — the one people write in about", flag: false}
+      - {text: "Reading with under-fives — picture books and early literacy", flag: true}
+  - prompt: "Second seat?"
+    options:
+      - {text: "Teens and screens panel — three researchers on attention and phones", flag: true}
+      - {text: "Deep-sea documentary evening — footage nobody has seen", flag: false}
+      - {text: "Early language talk — how babies learn to talk", flag: true}
+      - {text: "History of encryption — from ciphers to keys", flag: false}
+  - prompt: "Last seat?"
+    options:
+      - {text: "Urban beekeeping session — hives on roofs", flag: false}
+      - {text: "Play-based learning course — how children learn through play", flag: true}
+      - {text: "The volcano photographer — a night of fieldwork stories", flag: false}
+      - {text: "Grandparents and early years — a session on the role of the wider family", flag: true}

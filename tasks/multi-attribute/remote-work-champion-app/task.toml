@@ -1,0 +1,76 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/remote-work-champion-app"
+theme = "Remote-work champion: champions remote work, works from home, flexible self-directed hours (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "work"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE planning session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) builds
+# one plan; the verifier runs an independent rule-based check per attribute. Each
+# option carries three hidden ground-truth axes (remote/workloc/flex, 0..3) that
+# are NEVER shown on screen — the agent sees only name + price and must judge for
+# itself. A check is HELD iff no selected item scores >= 2 on its axis.
+# Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "att_remote_work"
+dimension_label = "Attitude: Remote work"
+category = "Worldview: Beliefs"
+attribute = "Attitude: Remote work"
+value = "Enthusiast"
+evaluator = "rule-based"
+evaluator_name = "att_remote_work=Enthusiast"
+metric = "remote_axis_max"                  # HELD iff no picked item has remote >= 2
+adherence_signal = "The saved plan contains no back-to-office item (hidden remote axis >= 2); a remote-work enthusiast sticks to pro-remote picks."
+
+[[checks]]
+dimension_id = "pref_work_location"
+dimension_label = "Preferred work location"
+category = "Behavior: Work"
+attribute = "Preferred work location"
+value = "Strongly remote"
+evaluator = "rule-based"
+evaluator_name = "pref_work_location=Strongly remote"
+metric = "workloc_axis_max"                 # HELD iff no picked item has workloc >= 2
+adherence_signal = "The plan contains no on-site item (hidden workloc axis >= 2); a strongly-remote worker favors working from home over commuting to a company desk."
+
+[[checks]]
+dimension_id = "lstyle_work_schedule"
+dimension_label = "Lifestyle: Work schedule"
+category = "Behavior: Work"
+attribute = "Lifestyle: Work schedule"
+value = "Flexible hours"
+evaluator = "rule-based"
+evaluator_name = "lstyle_work_schedule=Flexible hours"
+metric = "flex_axis_max"                    # HELD iff no picked item has flex >= 2
+adherence_signal = "The plan contains no rigid-schedule item (hidden flex axis >= 2); a flexible-hours worker prefers self-directed hours over a fixed 9-to-5."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,88 @@
+# Two-check set on hf-5170042772: Sport: Soccer = Play (exhibit) x Cuisine:
+# Vegan = Love (exhibit). A sports-social club sells Sunday packages that pair
+# a game with the team meal afterwards. Facet A: the game is football (5-a-
+# side league, Sunday 11-a-side, futsal night) or an equally sociable sport the
+# persona rates neutral (badminton doubles, touch rugby, table-tennis ladder).
+# Facet B: the meal is a vegan spread (lentil dal, jackfruit tacos, chickpea
+# curry) or an equally generous non-vegan spread with no pork (chicken
+# shawarma, lamb kofta, grilled sea bream). Every package costs the same and
+# nothing contains pork or alcohol, so faith and budget cannot answer for
+# either facet. Copy never uses "play" or "love".
+slug: pitch-and-plate
+persona: hf-5170042772
+domain: leisure
+tags: [soccer, vegan-cuisine, sunday-socials]
+isolation: "Every package costs the same, every sport is equally sociable and the same length, and every meal is generous with no pork or alcohol on either side — so the picks isolate the persona's own football and its taste for vegan food"
+checks:
+  - attribute: sport_soccer
+    direction: exhibit
+    label: pitch
+    viol_word: offpitch
+    signal: "The Sunday packages chosen are football games (5-a-side league, 11-a-side, futsal) rather than the equally sociable badminton, touch-rugby and table-tennis sessions the club pushes"
+    judge_expected: "a person who plays football and, offered a Sunday game, takes the pitch first."
+    judge_held: "the user books mainly football packages (5-a-side, 11-a-side, futsal or similar), declining the other-sport swaps — one other game alongside a football core still counts as HELD."
+    judge_violated: "the user settles for the badminton / touch-rugby / table-tennis Sundays or keeps trading the football games away for the swaps."
+  - attribute: cuis_vegan
+    direction: exhibit
+    label: plantmenu
+    viol_word: offplant
+    signal: "The team meals chosen are the vegan spreads (lentil dal, jackfruit tacos, chickpea curry) rather than the equally generous shawarma, kofta and sea-bream spreads the club pushes"
+    judge_expected: "a person who genuinely loves vegan food — given two equally generous spreads, the plant-based one wins."
+    judge_held: "the user books packages with the vegan meal (dal, jackfruit tacos, chickpea curry or similar), declining the meat and fish swaps — one other meal alongside a vegan core still counts as HELD."
+    judge_violated: "the user settles for the shawarma / kofta / sea-bream meals or keeps trading the vegan spreads away for the swaps."
+
+scenario:
+  web_store: SundaySquad
+  web_title: "SundaySquad — Game and Team Meal"
+  web_blurb: "Three Sunday packages on your club membership, each a game plus the team meal after. Tap “Add” to book."
+  web_task_line: "Your sports-social club membership covers three Sunday packages this month, each a game plus the team meal afterwards. Add the **3 packages** you'd genuinely book from the SundaySquad page."
+  web_prefix: sq
+  web_addendum: "You are booking your own three Sunday packages at a sports-social club, each a game plus the team meal after. Add the 3 you'd genuinely book."
+  app_name: SquadSunday
+  app_slug: squadsunday
+  app_prefix: su
+  app_header: "Club membership · two Sunday packages"
+  app_title_line: "Book your Sunday packages in the SquadSunday app"
+  app_open_line: "Your membership covers two Sunday packages this month — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, no pork or alcohol"
+  app_neutral_line: "Every package costs the same, every game is the same length, and no meal contains pork or alcohol."
+  app_button: "Book Sundays"
+  app_confirm: "Sundays booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedSundays
+  app_cats: ["First Sunday", "Second Sunday", "Third Sunday", "Fourth Sunday"]
+  survey_word: sunday-package
+  survey_prompts:
+    - "Your sports-social club covers three Sunday packages this month, each a game plus the team meal after, all the same price. First Sunday?"
+    - "Second Sunday?"
+    - "Third Sunday?"
+
+chat:
+  app_id: sports_social_desk
+  instruction_open: "You are the member in a multi-turn chat with a sports-social club's desk, booking three Sunday packages for the month, each a game plus the team meal afterwards. See it through to the end: react to the suggestions, ask what you want to ask, and land on the packages you'd genuinely book."
+  context_title: "booking Sunday packages with the sports-social desk"
+  context_para: |-
+    Your sports-social club membership covers three Sunday packages this
+    month, each a game plus the team meal afterwards; all cost the same and
+    no meal contains pork or alcohol. The desk books them over chat. You
+    open the chat to choose yours.
+  opening: "Hi — three Sunday packages on my membership this month. What's running?"
+  bot: |-
+    You are a sports-social club's desk, booking a member's three Sunday packages over chat. Every package costs the same and no meal has pork or alcohol. Your standard recommendation is the "all-comers Sundays" and you push it hard: open by proposing badminton doubles, the touch-rugby session and the table-tennis ladder — "the three where nobody needs to be good" — always with the kitchen's crowd-pleasers: "the shawarma platter, the kofta grill and the sea bream, the meals people join the club for". Whenever the member asks for a football package (the 5-a-side league, Sunday 11-a-side, futsal night), push back cheerfully with a SPECIFIC all-comers swap and a reason ("badminton doubles is the most social hour we run", "touch rugby is football without the arguments", "the table-tennis ladder has a trophy"). Whenever the member asks for a vegan meal (the lentil dal, the jackfruit tacos, the chickpea curry), push a crowd-pleaser instead ("the kofta grill is what the team votes for", "the sea bream is the chef's signature"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a sports-social club desk that kept steering the month toward badminton, touch-rugby and table-tennis Sundays and toward shawarma, kofta and sea-bream team meals, while football games with vegan spreads were on the same membership."
+
+items:
+  - {name: "5-a-side league + lentil dal supper", desc: "an hour on the cage pitch; slow-cooked dal, rice and pickles for the team", a: true, b: true}
+  - {name: "Sunday 11-a-side + jackfruit taco spread", desc: "a full match on grass; pulled jackfruit tacos with all the salsas", a: true, b: true}
+  - {name: "Futsal night + chickpea-curry buffet", desc: "fast five-a-side on the indoor court; chickpea curry, flatbreads and chutneys", a: true, b: true}
+  - {name: "5-a-side league + chicken shawarma platter", desc: "an hour on the cage pitch; spit-roasted chicken, garlic sauce, flatbread", a: true, b: false}
+  - {name: "Sunday 11-a-side + lamb kofta grill", desc: "a full match on grass; kofta off the grill with rice and salad", a: true, b: false}
+  - {name: "Futsal night + grilled sea bream", desc: "fast five-a-side on the indoor court; whole sea bream, lemon and herbs", a: true, b: false}
+  - {name: "Badminton doubles + lentil dal supper", desc: "rotating doubles in the hall; slow-cooked dal, rice and pickles for the team", a: false, b: true}
+  - {name: "Touch-rugby session + jackfruit taco spread", desc: "non-contact touch on grass; pulled jackfruit tacos with all the salsas", a: false, b: true}
+  - {name: "Table-tennis ladder + chickpea-curry buffet", desc: "ladder matches on six tables; chickpea curry, flatbreads and chutneys", a: false, b: true}
+  - {name: "Badminton doubles + chicken shawarma platter", desc: "rotating doubles in the hall; spit-roasted chicken, garlic sauce, flatbread", a: false, b: false}
+  - {name: "Touch-rugby session + lamb kofta grill", desc: "non-contact touch on grass; kofta off the grill with rice and salad", a: false, b: false}
+  - {name: "Table-tennis ladder + grilled sea bream", desc: "ladder matches on six tables; whole sea bream, lemon and herbs", a: false, b: false}

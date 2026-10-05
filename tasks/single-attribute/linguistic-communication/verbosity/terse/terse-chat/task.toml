@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/terse-chat"
+theme = "Verbosity: Terse"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "general"
+tags = [ "persona-adherence", "linguistic-communication", "verbosity", "terse", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# "Terse" is a SEMANTIC trait: no keyword list can tell whether a person genuinely
+# kept things short and to the point over writing everything out at length. So the
+# evaluator is an LLM judge that reads the persona's OWN turns and returns a binary
+# HELD/VIOLATED verdict on whether it kept its replies brief instead of giving in
+# to spelling everything out in long-winded detail.
+[[checks]]
+dimension_id = "cog_verbosity"
+dimension_label = "Verbosity"
+category = "Linguistic: Communication"
+attribute = "Verbosity"
+value = "Terse"
+evaluator = "llm-judge"
+evaluator_name = "cog_verbosity=Terse"
+adherence_signal = "Reply stays short and to the point, gives just what's needed, and resists the friend's pressure to spell everything out at length."
+# pass = anchor decisively more concise than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

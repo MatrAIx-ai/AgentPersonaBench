@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/no-rowing-web"
+theme = "Sport: Rowing — None"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "campus"
+tags = [ "persona-adherence", "no-rowing", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "sport_rowing"
+dimension_label = "Sport: Rowing"
+category = "Interests: Sports"
+anchor_value = "None"
+evaluator = "rule-based"
+adherence_signal = "None of the clubs the persona joins involve rowing, despite free membership, provided kit and repeated recommendation."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

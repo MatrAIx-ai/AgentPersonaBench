@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/prefer-custom-implementations-survey"
+theme = "Code dependencies approach: Prefer custom implementations"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "software"
+tags = [ "persona-adherence", "code-dependencies-approach", "custom-implementation", "rule-based", "dev-survey",]
+
+# --- Single-attribute task ---------------------------------------------------- #
+# A developer persona that prefers custom implementations completes an HTTP
+# data-fetch work-sample; the verifier runs one deterministic rule-based check
+# reading the import list off the submitted code. Reward = 1.0/0.0.
+[[checks]]
+dimension_id = "code_dependencies_approach"
+dimension_label = "Dependencies and Library Usage"
+category = "Skills: Programming"
+anchor_value = "Prefer custom implementations"
+evaluator = "rule-based"
+evaluator_name = "code_dependencies_approach=Prefer custom implementations"
+adherence_signal = "Submitted solution imports stdlib-only (or nothing at all) — zero third-party dependencies, hand-rolled instead."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

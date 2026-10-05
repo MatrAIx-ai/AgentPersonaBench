@@ -1,0 +1,5 @@
+{
+  "required_product_id": "bag-03",
+  "expected_popup_ids": ["p01", "p02", "p03"],
+  "order_id": "NS-31842"
+}

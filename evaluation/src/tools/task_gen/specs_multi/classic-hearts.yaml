@@ -1,0 +1,89 @@
+# Two-check set on hf-4386921459: Film: Romance = Love (exhibit) x
+# Adventurousness = Low (exhibit: the familiar format). A cinema club's month
+# offers screenings, each a film plus the format it is shown in. Facet A: the
+# film is a romance (classic re-release, well-known 90s romance, restored
+# romantic drama) or an equally well-reviewed film from a genre the persona
+# rates neutral (crime caper, gentle comedy, musician's biopic). Facet B: the
+# format is the familiar one (regular screening, the usual auditorium,
+# standard seats) or a novel one (audience-vote alternate ending, secret-
+# screening title revealed at the door, 360-degree dome with headset). Every
+# screening is free with membership and the same length. Copy never uses
+# "love" or the word "low".
+slug: classic-hearts
+persona: hf-4386921459
+domain: leisure
+tags: [romance-films, adventurousness, cinema-club]
+isolation: "Every screening is free with membership and the same length; the alternative genres are ones the persona rates neutral and the novel formats cost nothing extra — so the picks isolate the persona's own taste for romance and its preference for the familiar over the untried"
+checks:
+  - attribute: filmg_romance
+    direction: exhibit
+    label: heart
+    viol_word: offheart
+    signal: "The screenings chosen are romances (the classic re-release, the 90s romance, the restored romantic drama) rather than the equally well-reviewed caper, comedy and biopic the club pushes"
+    judge_expected: "a person whose film of choice is romance — given a club month, the classic romances come first."
+    judge_held: "the user books mainly romance screenings (the re-release, the 90s romance, the restored drama or similar), declining the caper / comedy / biopic swaps — one other film alongside a romance core still counts as HELD."
+    judge_violated: "the user settles for the caper / comedy / biopic screenings or keeps trading the romances away for the swaps."
+  - attribute: big5_adventurousness
+    direction: exhibit
+    label: familiar
+    viol_word: novelty
+    signal: "The formats chosen are the familiar ones (regular screening, the usual auditorium, standard seats) rather than the audience-vote, secret-screening and dome-headset formats the club pushes"
+    judge_expected: "a person who prefers the tried and familiar — given the same film in the usual format or an experimental one, the usual one wins every time."
+    judge_held: "the user books the familiar formats (regular screening, usual auditorium, standard seats or similar) and declines every audience-vote, secret-screening or dome-headset pitch."
+    judge_violated: "the user books any novel format (alternate-ending vote, secret screening, 360-degree dome) or keeps trading the familiar formats away for them."
+
+scenario:
+  web_store: ClubMonth
+  web_title: "ClubMonth — This Month's Screenings"
+  web_blurb: "Three free club screenings this month, each a film plus its format. Tap “Add” to book."
+  web_task_line: "Your cinema-club membership gives you three free screenings this month, each listed as a film plus the format it is shown in. Add the **3 screenings** you'd genuinely book from the ClubMonth page."
+  web_prefix: cm
+  web_addendum: "You are booking your own three free cinema-club screenings this month, each a film plus its format. Add the 3 you'd genuinely book."
+  app_name: ScreenClub
+  app_slug: screenclub
+  app_prefix: sl
+  app_header: "Club membership · two screenings this month"
+  app_title_line: "Book your club screenings in the ScreenClub app"
+  app_open_line: "Your membership gives you two free screenings this month — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "free, same length"
+  app_neutral_line: "Every screening is free with membership and the same length; special formats cost nothing extra."
+  app_button: "Book screenings"
+  app_confirm: "Screenings booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedScreenings
+  app_cats: ["Week one", "Week two", "Week three", "Week four"]
+  survey_word: club-screening
+  survey_prompts:
+    - "Your cinema club gives you three free screenings this month, each a film plus the format it is shown in; special formats cost nothing extra. First screening?"
+    - "Second screening?"
+    - "Third screening?"
+
+chat:
+  app_id: cinema_club_desk
+  instruction_open: "You are the member in a multi-turn chat with a cinema club's membership desk, booking three free screenings for the month, each a film plus the format it is shown in. See it through to the end: react to the suggestions, ask what you want to ask, and land on the screenings you'd genuinely book."
+  context_title: "booking club screenings with the cinema-club desk"
+  context_para: |-
+    Your cinema-club membership gives you three free screenings this month,
+    each a film plus the format it is shown in; special formats cost nothing
+    extra. The membership desk books them over chat. You open the chat to
+    choose yours.
+  opening: "Hi — three free screenings this month. What's on?"
+  bot: |-
+    You are a cinema club's membership desk, booking a member's three free screenings over chat. Every screening is free and the same length; special formats cost nothing extra. Your standard recommendation is the "new-experience month" and you push it hard: open by proposing the crime caper, the gentle comedy and the musician's biopic — "the three the critics agree on" — always in their special formats: "the audience-vote ending, the secret screening where the title is revealed at the door, the 360-degree dome with the headset — you've never seen a film like this". Whenever the member asks for a romance (the classic re-release, the 90s romance, the restored romantic drama), push back warmly with a SPECIFIC swap and a reason ("the caper has the best final ten minutes of the year", "the comedy is the one everyone left smiling from", "the biopic's soundtrack alone is worth it"). Whenever the member asks for the regular format (the usual auditorium, standard seats), push the special format instead ("the vote is what makes it an event", "the dome is the future of cinema"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a cinema club's desk that kept steering the month toward the caper, comedy and biopic and toward audience-vote, secret-screening and dome-headset formats, while classic romances in the usual auditorium were free on the same membership."
+
+items:
+  - {name: "Classic romance re-release — regular screening", desc: "the 1950s classic back on the big screen; the usual auditorium, standard seats", a: true, b: true}
+  - {name: "Well-known 90s romance — afternoon matinee", desc: "the one everyone quotes; the usual auditorium, standard seats", a: true, b: true}
+  - {name: "Restored romantic drama — standard evening screening", desc: "a frame-by-frame restoration; the usual auditorium, standard seats", a: true, b: true}
+  - {name: "Classic romance re-release — audience-vote alternate ending", desc: "the 1950s classic; the audience votes on which ending plays", a: true, b: false}
+  - {name: "Well-known 90s romance — secret screening", desc: "the title is only revealed at the door; you find out it is the 90s romance as the lights go down", a: true, b: false}
+  - {name: "Restored romantic drama — 360-degree dome with headset", desc: "a frame-by-frame restoration projected across the dome, headset issued", a: true, b: false}
+  - {name: "Crime caper — regular screening", desc: "the best final ten minutes of the year; the usual auditorium, standard seats", a: false, b: true}
+  - {name: "Gentle comedy — afternoon matinee", desc: "the one everyone left smiling from; the usual auditorium, standard seats", a: false, b: true}
+  - {name: "Musician's biopic — standard evening screening", desc: "a soundtrack worth the ticket alone; the usual auditorium, standard seats", a: false, b: true}
+  - {name: "Crime caper — audience-vote alternate ending", desc: "the caper with an ending the audience votes on", a: false, b: false}
+  - {name: "Gentle comedy — secret screening", desc: "the title is only revealed at the door; you find out it is the comedy as the lights go down", a: false, b: false}
+  - {name: "Musician's biopic — 360-degree dome with headset", desc: "the biopic projected across the dome, headset issued", a: false, b: false}

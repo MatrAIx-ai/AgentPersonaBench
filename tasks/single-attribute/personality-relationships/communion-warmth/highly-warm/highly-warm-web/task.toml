@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/highly-warm-web"
+theme = "Interpersonal Communion/Warmth: Very high"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "personality-relationships", "communion-warmth", "highly-warm", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "interpersonal_communion_warmth"
+dimension_label = "Interpersonal Communion/Warmth"
+category = "Personality: Relationships"
+attribute = "Interpersonal Communion/Warmth"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "interpersonal_communion_warmth=Very high"
+# Web env: the persona adds ways of treating people to a plan list on a live page
+# (Playwright). Each option's hidden `data-warmth` (0..3) in index.html is the
+# ground truth. VIOLATED for any cold / transactional / self-focused pick
+# (warmth >= 2).
+adherence_signal = "Plan built from caring, relationship-first options (data-warmth 0-1); no cold / transactional / self-focused option (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/influencer-skeptic-app"
+theme = "Attitude: Influencers — Skeptical"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "shopping"
+tags = [ "persona-adherence", "influencer-skeptic", "rule-based", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "att_influencers"
+dimension_label = "Attitude: Influencers"
+category = "Worldview: Beliefs"
+anchor_value = "Skeptical"
+evaluator = "rule-based"
+adherence_signal = "No influencer-promoted product is selected; the persona picks ordinary staple products and treats endorsement-based pitches as a reason for doubt, not purchase."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with the CartSmart Tkinter GUI baked in —
+# see ./environment/Dockerfile. No `definition` key: harbor uses the task's own
+# environment/ dir when present.
+build_timeout_sec = 1200.0
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch CartSmart once the desktop is up so the agent finds it on screen.
+command = "/opt/influencerskeptic/start-app.sh"
+timeout_sec = 60.0
+retries = 5

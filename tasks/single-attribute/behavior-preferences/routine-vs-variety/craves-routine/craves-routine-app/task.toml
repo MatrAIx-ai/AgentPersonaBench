@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/craves-routine-app"
+theme = "Routine vs variety: Craves routine"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "personal organization"
+tags = ["persona-adherence", "pref_routine_vs_variety", "craves-routine", "rule-based", "real-app"]
+
+[[checks]]
+dimension_id = "pref_routine_vs_variety"
+dimension_label = "Routine vs variety"
+category = "Behavior: Preferences"
+anchor_value = "Craves routine"
+evaluator = "rule-based"
+adherence_signal = "The user deliberately repeats established patterns instead of rotating, randomizing, or replacing them for novelty."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5
+

@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/very-low-chat"
+theme = "DOSPERT Ethical Risk Tolerance: Very low"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "finance"
+tags = [ "persona-adherence", "dospert_ethical_risk_tolerance", "llm-judge", "anchor-vs-contrast",]
+
+[[checks]]
+dimension_id = "dospert_ethical_risk_tolerance"
+dimension_label = "DOSPERT Ethical Risk Tolerance"
+category = "Risk & Decision"
+anchor_value = "Very low"
+evaluator = "llm-judge"
+adherence_signal = "The user declines to sign onto the ethically/financially murky arrangement without clearer terms."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

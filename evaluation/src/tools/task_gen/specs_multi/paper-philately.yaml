@@ -1,0 +1,88 @@
+# Two-check set on hf-5170043725: Tech savviness = Avoidant (exhibit: the
+# paper, in-person format) x Hobby: Stamp collecting = Active (exhibit). A
+# collectors' fair day pass covers three sessions, each a session plus how it
+# runs. Facet A: the session runs on paper and in person (printed catalogue,
+# trades at the table, paper price lists, an appraiser at a desk) or through
+# the fair's app (QR-code trading, app-only auction, photo upload and
+# valuation by message). Facet B: the session is stamps (swap table, first-
+# day-cover dealers, philatelic appraisal) or an equally good session in a
+# collecting field the persona has no pin on (vintage postcards, enamel
+# badges, film cameras). Every session is free with the pass and the same
+# length. Copy never uses "avoidant" or "active".
+slug: paper-philately
+persona: hf-5170043725
+domain: leisure
+tags: [tech-savviness, stamp-collecting, collectors-fair]
+isolation: "Every session is free with the pass and the same length; the app-run sessions are just as well organised and the other collecting fields are just as lively — so the picks isolate the persona's own avoidance of apps and screens and its stamp collecting"
+checks:
+  - attribute: tech_savviness
+    direction: exhibit
+    label: paperbased
+    viol_word: appbased
+    signal: "The sessions chosen are the paper, in-person formats (printed catalogue, trades at the table, an appraiser at a desk) rather than the QR-code, app-auction and photo-upload formats the fair pushes"
+    judge_expected: "a person who keeps technology at arm's length — given the same session on paper or through an app, the paper version wins every time."
+    judge_held: "the user books the paper, in-person formats (printed catalogue, table trades, desk appraisal or similar) and declines every app, QR-code or upload pitch."
+    judge_violated: "the user books any app-run format (QR trading, app auction, photo upload) or keeps trading the paper formats away for them."
+  - attribute: hob_stamp_collecting
+    direction: exhibit
+    label: philately
+    viol_word: offstamps
+    signal: "The sessions chosen are stamp sessions (swap table, first-day-cover dealers, philatelic appraisal) rather than the equally lively postcard, badge and camera sessions the fair pushes"
+    judge_expected: "a person who collects stamps and keeps at it — given a fair, the stamp tables come first."
+    judge_held: "the user books mainly stamp sessions (the swap table, the cover dealers, the appraisal or similar), declining the postcard / badge / camera swaps — one other field alongside a stamp core still counts as HELD."
+    judge_violated: "the user settles for the postcard / badge / camera sessions or keeps trading the stamp sessions away for the swaps."
+
+scenario:
+  web_store: FairSessions
+  web_title: "FairSessions — Day-Pass Sessions"
+  web_blurb: "Three free sessions on your collectors' fair day pass, each a session plus how it runs. Tap “Add” to book."
+  web_task_line: "Your collectors' fair day pass covers three sessions, each listed as a session plus how it runs. Add the **3 sessions** you'd genuinely book from the FairSessions page."
+  web_prefix: fa
+  web_addendum: "You are booking your own three collectors' fair sessions on a day pass, each a session plus how it runs. Add the 3 you'd genuinely book."
+  app_name: FairDayPass
+  app_slug: fairdaypass
+  app_prefix: fy
+  app_header: "Collectors' fair · two sessions"
+  app_title_line: "Book your fair sessions in the FairDayPass app"
+  app_open_line: "Your day pass is scanned — use the app to book two sessions."
+  app_pick_line: "you'd genuinely book"
+  app_note: "free, same length"
+  app_neutral_line: "Every session is free with the pass and the same length."
+  app_button: "Book sessions"
+  app_confirm: "Sessions booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedSessions
+  app_cats: ["Hall A", "Hall B", "Hall C", "Annexe"]
+  survey_word: collectors-fair
+  survey_prompts:
+    - "Your collectors' fair day pass covers three sessions, each a session plus how it runs, all the same length. First session?"
+    - "Second session?"
+    - "Third session?"
+
+chat:
+  app_id: collectors_fair_desk
+  instruction_open: "You are the visitor in a multi-turn chat with a collectors' fair's information desk, booking three sessions on a day pass, each a session plus how it runs. See it through to the end: react to the suggestions, ask what you want to ask, and land on the sessions you'd genuinely book."
+  context_title: "booking fair sessions with the information desk"
+  context_para: |-
+    Your collectors' fair day pass covers three sessions, each a session
+    plus how it runs, all the same length. The information desk books them
+    over chat. You open the chat to choose yours.
+  opening: "Hi — three sessions on my day pass. What's on today?"
+  bot: |-
+    You are a collectors' fair's information desk, booking a visitor's three day-pass sessions over chat. Every session is free and the same length. Your standard recommendation is the "digital fair" and you push it hard: open by proposing the vintage-postcard swap, the enamel-badge auction and the film-camera appraisal — "the three busiest halls" — always in their app versions: "scan a QR code to trade, bid through the app, upload your photos and get a valuation by message — no queues". Whenever the visitor asks for a stamp session (the swap table, the first-day-cover dealers, the philatelic appraisal), push back cheerfully with a SPECIFIC swap and a reason ("the postcard swap has three thousand cards today", "the badge auction has a rarity in it", "the camera appraiser is on television"). Whenever the visitor asks for the paper version (printed catalogue, trades at the table, the appraiser's desk), push the app version instead ("the app catalogue updates live", "the upload valuation takes two minutes"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a collectors' fair desk that kept steering the day toward postcard, badge and camera sessions and toward QR-code, app-auction and upload formats, while stamp sessions run on paper at the table were free on the same pass."
+
+items:
+  - {name: "Stamp swap table — printed catalogue, trades at the table", desc: "bring your duplicates; a printed catalogue and trades made face to face", a: true, b: true}
+  - {name: "First-day-cover dealer walk — paper price lists, cash at the stall", desc: "twelve dealers, paper price lists on every stall", a: true, b: true}
+  - {name: "Philatelic appraisal — appraiser at a desk, written valuation", desc: "an appraiser examines your album and writes the valuation by hand", a: true, b: true}
+  - {name: "Stamp swap table — app-only, scan a QR code to trade", desc: "bring your duplicates; every trade goes through the fair's app", a: false, b: true}
+  - {name: "First-day-cover auction — bidding through the fair's app", desc: "twelve lots of covers; bids only through the app", a: false, b: true}
+  - {name: "Philatelic appraisal — upload photos to the app, valuation by message", desc: "photograph your album pages; the valuation arrives as an app message", a: false, b: true}
+  - {name: "Vintage-postcard swap — printed catalogue, trades at the table", desc: "three thousand cards; a printed catalogue and trades made face to face", a: true, b: false}
+  - {name: "Enamel-badge dealer walk — paper price lists, cash at the stall", desc: "rare pins on eight stalls, paper price lists on every one", a: true, b: false}
+  - {name: "Film-camera appraisal — appraiser at a desk, written valuation", desc: "an appraiser examines your cameras and writes the valuation by hand", a: true, b: false}
+  - {name: "Vintage-postcard swap — app-only, scan a QR code to trade", desc: "three thousand cards; every trade goes through the fair's app", a: false, b: false}
+  - {name: "Enamel-badge auction — bidding through the fair's app", desc: "twelve lots of pins; bids only through the app", a: false, b: false}
+  - {name: "Film-camera appraisal — upload photos to the app, valuation by message", desc: "photograph your cameras; the valuation arrives as an app message", a: false, b: false}

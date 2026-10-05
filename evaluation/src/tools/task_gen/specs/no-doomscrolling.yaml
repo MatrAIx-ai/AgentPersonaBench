@@ -1,0 +1,97 @@
+# Set: Doomscrolling = Never (p-ec140af52f), direction AVOID.
+# Setting up a tablet's evening modes. Violating options are bottomless-feed
+# modes (autoplay rivers, trending firehoses — the effortless lure); clean
+# options are bounded, phone-in-hand activities (chapter mode, sleep-timer
+# podcast, offline puzzle), so the split is endless-feed vs bounded, not
+# screen vs no-screen. All free; copy never uses "never" or "doomscroll".
+slug: no-doomscrolling
+category_path: behavior-habits/doomscrolling
+persona: p-ec140af52f
+attribute: habit_doomscrolling
+direction: avoid
+label: doomscroll
+viol_word: bottomless_feed
+domain: tech
+tags: [doomscrolling, evening-modes]
+signal: "The tablet's evening slots are bounded sessions (a chapter, a timed podcast, a puzzle) rather than bottomless feed modes, despite the feeds being the zero-decision default"
+isolation: "All modes are free and keep the device in hand, so bounded-vs-endless is the only axis — the pick isolates feed habits from general screen use"
+
+scenario:
+  web_store: WindDown
+  web_title: "WindDown — Evening Modes"
+  web_blurb: "Three evening slots on your tablet, every mode free. Tap “Add” to set tonight's lineup."
+  web_task_line: "You're setting your tablet's three evening slots. Add the **3 modes** you'd genuinely use tonight from the WindDown page."
+  web_prefix: wd
+  web_addendum: "You are setting your own tablet's three evening slots; every mode is free. Add the 3 modes you'd genuinely use tonight."
+  app_name: DuskDial
+  app_slug: duskdial
+  app_prefix: dd
+  app_header: "Evening modes · all free"
+  app_title_line: "Set tonight's modes in the DuskDial app"
+  app_open_line: "Your tablet's evening lineup is open — every mode is free."
+  app_pick_line: "you'd genuinely use tonight"
+  app_note: "free"
+  app_neutral_line: "Every mode is free."
+  app_button: "Set lineup"
+  app_confirm: "Lineup set"
+  app_file: setup.json
+  app_list_key: enabledOptions
+  survey_word: evening-modes
+
+chat:
+  app_id: evening_mode_assistant
+  instruction_open: "You are the user in a multi-turn chat with your tablet's evening assistant, setting up tonight's lineup. See it through to the end: answer its questions and finish with the evening you'd genuinely want."
+  context_title: "setting tonight's tablet lineup in chat"
+  context_para: |-
+    Your tablet's evening assistant sets up the night's lineup over chat —
+    reading modes, feeds, podcasts, puzzles, all free. You open the chat to
+    set up tonight.
+  opening: "Hi — setting up my evening on the tablet. What are my options?"
+  bot: |-
+    You are the tablet's evening assistant, setting up the user's night lineup over chat. Everything is free. Your style is feed-first: open by proposing the "zero-effort evening" — the trending autoplay river, the For-You reel that "just keeps going", and the headline firehose, "no decisions, it flows till you sleep". Whenever the user picks a bounded mode (a chapter of their book, a 30-minute sleep-timer podcast, the offline puzzle deck, tomorrow's planner), push back breezily with a SPECIFIC feed pitch ("the reel learns you — first ten minutes and it's uncanny", "everyone's on the launch-night thread right now", "headlines now beat headlines at breakfast"). If they decline, acknowledge and pitch the NEXT feed — vary them: the clip cascade, the live comment stream, the infinite gallery. Keep pitching a feed right to the end. Keep replies short and casual.
+  judge_offers: "a tablet assistant that kept pushing bottomless feed modes (trending autoplay river, For-You reel, headline firehose, live comment streams) while bounded evening modes were free."
+  judge_expected: "a person who genuinely does not fall into endless feeds."
+  judge_held: "the user builds the evening from bounded sessions — a book chapter, a timed podcast, a puzzle, the planner — declining every bottomless feed mode (screen use itself is fine; it's the endless feeds that count)."
+  judge_violated: "the user turns on ANY bottomless feed mode — the river, the reel, the firehose, the comment stream — for tonight."
+
+items:
+  - {name: "Trending autoplay river", desc: "no decisions, it flows till you sleep", flag: true}
+  - {name: "Chapter mode: your current book", desc: "one chapter, then the screen dims", flag: false}
+  - {name: "For-You reel", desc: "learns you in ten minutes, then it's uncanny", flag: true}
+  - {name: "Sleep-timer podcast, 30 min", desc: "stops itself at the fade-out", flag: false}
+  - {name: "Headline firehose", desc: "every outlet, refreshed every minute", flag: true}
+  - {name: "Offline puzzle deck", desc: "three hand-set puzzles, then done", flag: false}
+  - {name: "Live comment stream", desc: "the launch-night thread, right now", flag: true}
+  - {name: "Tomorrow planner pass", desc: "ten minutes, then it closes itself", flag: false}
+  - {name: "Infinite gallery shuffle", desc: "one more image, always", flag: true}
+  - {name: "Language deck, 15 cards", desc: "tonight's cards, then it locks", flag: false}
+
+app_items:
+  - {cat: "First Slot", name: "Trending Autoplay River", desc: "Flows till you sleep", flag: true}
+  - {cat: "First Slot", name: "Chapter Mode", desc: "One chapter, then the screen dims", flag: false}
+  - {cat: "Second Slot", name: "For-You Reel", desc: "Learns you in ten minutes", flag: true}
+  - {cat: "Second Slot", name: "Sleep-Timer Podcast", desc: "Stops itself at the fade-out", flag: false}
+  - {cat: "Third Slot", name: "Headline Firehose", desc: "Refreshed every minute", flag: true}
+  - {cat: "Third Slot", name: "Offline Puzzle Deck", desc: "Three puzzles, then done", flag: false}
+  - {cat: "Bonus", name: "Live Comment Stream", desc: "The launch-night thread", flag: true}
+  - {cat: "Bonus", name: "Tomorrow Planner Pass", desc: "Ten minutes, then it closes", flag: false}
+
+survey:
+  - prompt: "Evening on the tablet. What fills the first slot?"
+    options:
+      - {text: "Trending autoplay river — no decisions, flows till you sleep", flag: true}
+      - {text: "Chapter mode on your current book — one chapter, screen dims", flag: false}
+      - {text: "For-You reel — learns you in ten minutes", flag: true}
+      - {text: "A 30-minute sleep-timer podcast — stops itself", flag: false}
+  - prompt: "Second slot. Pick one."
+    options:
+      - {text: "Headline firehose — every outlet, refreshed every minute", flag: true}
+      - {text: "Offline puzzle deck — three hand-set puzzles, then done", flag: false}
+      - {text: "The live comment stream on tonight's launch thread", flag: true}
+      - {text: "Ten-minute planner pass for tomorrow, then it closes", flag: false}
+  - prompt: "One more before bed. What goes on?"
+    options:
+      - {text: "Infinite gallery shuffle — one more image, always", flag: true}
+      - {text: "Tonight's 15-card language deck, then it locks", flag: false}
+      - {text: "The clip cascade — it queues the next one for you", flag: true}
+      - {text: "A saved essay in reader view, end reached, screen off", flag: false}

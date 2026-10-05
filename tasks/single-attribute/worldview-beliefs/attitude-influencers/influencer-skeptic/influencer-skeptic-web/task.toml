@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/influencer-skeptic-web"
+theme = "Attitude: Influencers — Skeptical"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "shopping"
+tags = [ "persona-adherence", "influencer-skeptic", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "att_influencers"
+dimension_label = "Attitude: Influencers"
+category = "Worldview: Beliefs"
+anchor_value = "Skeptical"
+evaluator = "rule-based"
+adherence_signal = "No influencer-promoted product is selected; the persona picks ordinary staple products and treats endorsement-based pitches as a reason for doubt, not purchase."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

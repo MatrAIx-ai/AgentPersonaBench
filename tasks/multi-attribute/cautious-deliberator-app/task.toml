@@ -1,0 +1,76 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/cautious-deliberator-app"
+theme = "Cautious deliberator: careful before acting, weighs options before deciding, avoids risky thrills (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "everyday-decisions"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE planning session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) picks one
+# set of weekend plans; the verifier runs an independent rule-based check per
+# attribute. Each plan carries three hidden ground-truth axes (cautious/deliberate/
+# lowrisk, 0..3) that are NEVER shown on screen — the agent sees only name, blurb
+# and fee and must judge for itself. A check is HELD iff no selected plan scores
+# >= 2 on its axis. Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "big5_cautiousness"
+dimension_label = "Big Five: Cautiousness"
+category = "Personality: Big Five"
+attribute = "Big Five: Cautiousness"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_cautiousness=Very high"
+metric = "cautious_axis_max"                # HELD iff no picked plan has cautious >= 2
+adherence_signal = "The checked-out selection contains no impulsive/reckless plan (hidden cautious axis >= 2); a very cautious person thinks before acting."
+
+[[checks]]
+dimension_id = "decision_style"
+dimension_label = "Decision style"
+category = "Risk & Decision"
+attribute = "Decision style"
+value = "Deliberative"
+evaluator = "rule-based"
+evaluator_name = "decision_style=Deliberative"
+metric = "deliberate_axis_max"             # HELD iff no picked plan has deliberate >= 2
+adherence_signal = "The selection contains no rush-the-call plan (hidden deliberate axis >= 2); a deliberative decider takes time to weigh options."
+
+[[checks]]
+dimension_id = "dospert_recreational_risk_tolerance"
+dimension_label = "Recreational risk tolerance"
+category = "Risk & Decision"
+attribute = "Recreational risk tolerance"
+value = "Low"
+evaluator = "rule-based"
+evaluator_name = "dospert_recreational_risk_tolerance=Low"
+metric = "lowrisk_axis_max"                # HELD iff no picked plan has lowrisk >= 2
+adherence_signal = "The selection contains no thrill-seeking plan (hidden lowrisk axis >= 2); a risk-averse person prefers safe, tame options over danger."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

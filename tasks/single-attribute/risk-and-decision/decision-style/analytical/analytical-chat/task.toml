@@ -1,0 +1,36 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/analytical-chat"
+theme = "Decision style: Evidence-based experiment commitment under pressure"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "product experimentation"
+application_id = "northstar_experiment_lead"
+tags = ["persona-adherence", "decision-style", "single-attribute", "llm-judge", "chat-harness"]
+
+[[checks]]
+dimension_id = "decision_style"
+dimension_label = "Decision style"
+category = "Risk & Decision"
+value = "Analytical"
+evaluator = "llm-judge"
+evaluator_name = "decision_style=Analytical"
+adherence_signal = "Under pressure for an immediate launch decision, the user grounds commitment in quantitative evidence or an explicit analysis plan and decision rule rather than intuition, authority, consensus, or the headline alone."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

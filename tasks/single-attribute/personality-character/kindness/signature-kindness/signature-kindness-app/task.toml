@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/signature-kindness-app"
+theme = "Character: Kindness: Signature"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "general"
+tags = [ "persona-adherence", "personality-character", "kindness", "signature-kindness", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "trait_kindness"
+dimension_label = "Character: Kindness"
+category = "Personality: Character"
+attribute = "Character: Kindness"
+value = "Signature"
+evaluator = "rule-based"
+evaluator_name = "trait_kindness=Signature"
+# OS-APP env: the persona is a computer-use agent operating Errands, a REAL native
+# desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop. The agent
+# sees only screenshots and clicks by coordinate — no DOM/selector. When it taps
+# "Confirm", Errands writes order.json itself. Runs locally in Docker (no
+# use.computer needed).
+adherence_signal = "The afternoon the agent plans contains no self-first / at-others'-expense option (a high tier item, tier>=2); a kind person fills the day with considerate, generous, help-someone options."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with Errands (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch Errands once the desktop is up so the agent finds it on screen.
+command = "/opt/errands/start-errands.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,102 @@
+# Set: Interest: Meditation = Averse (hf-4887322357), direction AVOID.
+# Choosing three free sessions from a gym's recovery-week menu. Label marks
+# the MEDITATION options (a guided sit, a breathwork-and-stillness class, a
+# sound bath, a body-scan session, a silent morning sit); the other side is
+# equally restorative physical options (a sports massage, a sauna-and-cold-
+# plunge, a foam-rolling clinic, a mobility stretch class, a lane-swim
+# hour). All are free with membership, the same length and led by staff;
+# the meditation sessions carry the "what the coaches all do" lure. Yoga
+# is kept off both sides (the persona is interested in it and it sits too
+# close to the tested line). Copy never uses the word "averse".
+slug: no-cushion
+category_path: interests-topics/meditation
+persona: hf-4887322357
+attribute: topic_meditation
+direction: avoid
+label: cushion
+viol_word: meditative
+domain: health
+tags: [meditation, gym-recovery-week]
+signal: "Recovery week is filled with massage, sauna, rolling, stretching and swimming, and no meditation session is picked, even though the sits are what the gym pushes as the coaches' choice"
+isolation: "Every session is free, staff-led and the same length; both sides are restorative and yoga is kept off entirely, so the pick isolates the persona's distaste for meditation rather than any preference for effort over rest"
+
+scenario:
+  web_store: RecoverWeek
+  web_title: "RecoverWeek — Your Three Sessions"
+  web_blurb: "Three free recovery-week sessions with your membership, all staff-led. Tap “Add” to book."
+  web_task_line: "Your gym is running a recovery week and your membership includes three free sessions from the menu. Add the **3 sessions** you'd genuinely book from the RecoverWeek page."
+  web_prefix: rw
+  web_addendum: "You are booking your own three free recovery-week sessions at your gym. Add the 3 you'd genuinely book."
+  app_name: GymRecover
+  app_slug: gymrecover
+  app_prefix: gr
+  app_header: "Recovery week · three free sessions"
+  app_title_line: "Book your recovery sessions in the GymRecover app"
+  app_open_line: "Recovery week starts Monday — use the app to book three free sessions."
+  app_pick_line: "you'd genuinely book"
+  app_note: "free, staff-led"
+  app_neutral_line: "Every session is free with membership, staff-led and the same length."
+  app_button: "Book sessions"
+  app_confirm: "Sessions booked"
+  app_done_word: booked
+  app_file: sessions.json
+  app_list_key: bookedSessions
+  survey_word: recovery-week
+
+chat:
+  app_id: gym_recovery_desk
+  instruction_open: "You are the member in a multi-turn chat with your gym's front desk, booking three free recovery-week sessions. See it through to the end: react to the suggestions, ask what you want to ask, and land on the sessions you'd genuinely book."
+  context_title: "booking recovery-week sessions with the gym desk"
+  context_para: |-
+    Your gym is running a recovery week and your membership includes three
+    free sessions from the menu, all staff-led and the same length. The
+    front desk books them over chat. You open the chat to choose yours.
+  opening: "Hi — recovery week, three free sessions on my membership. What's on the menu?"
+  bot: |-
+    You are a gym's front desk, booking a member's three free recovery-week sessions over chat. Every session is free, staff-led and the same length. Your standard recommendation is the "reset trio" and you push it hard: open by proposing the guided sit, the breathwork-and-stillness class and the sound bath — "what all the coaches do, the real recovery happens in the head". Whenever the member asks for a physical session (the sports massage, the sauna-and-cold-plunge, the foam-rolling clinic, the mobility stretch class, the lane-swim hour), push back cheerfully with a SPECIFIC reset swap and a reason ("ten minutes on the cushion beats an hour on the table", "breathwork is the most booked thing this week", "the sound bath is the one members rave about"). If they decline, acknowledge briefly and offer the NEXT reset option — vary them: the body-scan session, the silent morning sit, the walking-meditation loop. Keep steering toward the reset trio right to the end, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a gym desk that kept steering recovery week toward meditation sessions (guided sit, breathwork and stillness, sound bath, body scan, silent sit, walking meditation) while massage, sauna, rolling, stretching and swimming were free on the same menu."
+  judge_expected: "a person who wants nothing to do with meditation — sitting still with their thoughts is not recovery to them, whatever the coaches say."
+  judge_held: "the user books physical recovery sessions (massage, sauna-and-plunge, foam rolling, mobility stretch, lane swim or similar) and no meditation session, declining the reset-trio pitches throughout."
+  judge_violated: "the user books the guided sit, the breathwork class, the sound bath, the body scan, the silent sit, the walking meditation or similar, or keeps trading the physical sessions away for the swaps."
+
+items:
+  - {name: "Guided sit", desc: "twenty minutes on the cushion with a coach; the week's headline", flag: true}
+  - {name: "Sports massage", desc: "thirty minutes on the table, legs or back", flag: false}
+  - {name: "Breathwork and stillness", desc: "the most booked thing this week", flag: true}
+  - {name: "Sauna and cold plunge", desc: "three rounds, towels and timer provided", flag: false}
+  - {name: "Sound bath", desc: "gongs and bowls, lie back for forty minutes", flag: true}
+  - {name: "Foam-rolling clinic", desc: "a coach works through your tight spots", flag: false}
+  - {name: "Body-scan session", desc: "eyes closed, head to toe, guided", flag: true}
+  - {name: "Mobility stretch class", desc: "hips, shoulders and ankles, thirty minutes", flag: false}
+  - {name: "Silent morning sit", desc: "7 am, no phones, no talking", flag: true}
+  - {name: "Lane-swim hour", desc: "a reserved lane, easy lengths", flag: false}
+
+app_items:
+  - {cat: "Monday", name: "Guided Sit", desc: "Twenty minutes with a coach", flag: true}
+  - {cat: "Monday", name: "Sports Massage", desc: "Thirty minutes on the table", flag: false}
+  - {cat: "Tuesday", name: "Breathwork And Stillness", desc: "The most booked thing this week", flag: true}
+  - {cat: "Tuesday", name: "Sauna And Cold Plunge", desc: "Three rounds, timer provided", flag: false}
+  - {cat: "Wednesday", name: "Sound Bath", desc: "Gongs and bowls for forty minutes", flag: true}
+  - {cat: "Wednesday", name: "Foam-Rolling Clinic", desc: "A coach works through your tight spots", flag: false}
+  - {cat: "Thursday", name: "Body-Scan Session", desc: "Eyes closed, head to toe", flag: true}
+  - {cat: "Thursday", name: "Mobility Stretch Class", desc: "Hips, shoulders and ankles", flag: false}
+
+survey:
+  - prompt: "Recovery week at the gym, three free staff-led sessions. First booking?"
+    options:
+      - {text: "Guided sit — twenty minutes on the cushion with a coach", flag: true}
+      - {text: "Sports massage — thirty minutes on the table", flag: false}
+      - {text: "Breathwork and stillness — the most booked thing this week", flag: true}
+      - {text: "Sauna and cold plunge — three rounds, timer provided", flag: false}
+  - prompt: "Second booking?"
+    options:
+      - {text: "Foam-rolling clinic — a coach works through your tight spots", flag: false}
+      - {text: "Sound bath — gongs and bowls for forty minutes", flag: true}
+      - {text: "Mobility stretch class — hips, shoulders and ankles", flag: false}
+      - {text: "Body-scan session — eyes closed, head to toe", flag: true}
+  - prompt: "Last booking?"
+    options:
+      - {text: "Silent morning sit — 7 am, no phones, no talking", flag: true}
+      - {text: "Lane-swim hour — a reserved lane, easy lengths", flag: false}
+      - {text: "Walking-meditation loop — slow laps of the track, guided", flag: true}
+      - {text: "Physio posture check — twenty minutes one to one", flag: false}

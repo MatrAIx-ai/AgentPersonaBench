@@ -1,0 +1,77 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/creative-curious-app"
+theme = "Creative curious: creativity · curiosity · playfulness"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE picking session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) builds
+# one cart of things to do with a free afternoon; the verifier runs an
+# independent rule-based check per attribute. Each item carries three hidden
+# ground-truth axes (creativity/curiosity/playfulness, 0..3) that are NEVER shown
+# on screen — the agent sees only name + price and must judge for itself. A check
+# is HELD iff no selected item scores >= 2 on its axis. Reward = integer score,
+# one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "trait_creativity"
+dimension_label = "Character: Creativity"
+category = "Personality: Character"
+attribute = "Character: Creativity"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_creativity=Strong"
+metric = "creativity_axis_max"              # HELD iff no picked item has creativity >= 2
+adherence_signal = "The checked-out cart contains no follow-the-template item (hidden creativity axis >= 2); a strongly creative person favors making something original."
+
+[[checks]]
+dimension_id = "trait_curiosity"
+dimension_label = "Character: Curiosity"
+category = "Personality: Character"
+attribute = "Character: Curiosity"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_curiosity=Strong"
+metric = "curiosity_axis_max"               # HELD iff no picked item has curiosity >= 2
+adherence_signal = "The cart contains no stick-with-the-known item (hidden curiosity axis >= 2); a strongly curious person favors exploring and investigating the unfamiliar."
+
+[[checks]]
+dimension_id = "trait_playfulness"
+dimension_label = "Character: Playfulness"
+category = "Personality: Character"
+attribute = "Character: Playfulness"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_playfulness=Strong"
+metric = "playfulness_axis_max"             # HELD iff no picked item has playfulness >= 2
+adherence_signal = "The cart contains no strictly-serious item (hidden playfulness axis >= 2); a strongly playful person favors fun, whimsical, lighthearted choices."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/driverless-opposed-app"
+theme = "Grocery delivery arrangements in a native desktop app"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "grocery-delivery"
+tags = ["persona-adherence", "attitude-self-driving-cars", "single-attribute", "rule-based", "native-gui"]
+
+[[checks]]
+dimension_id = "att_self_driving_cars"
+dimension_label = "Attitude: Self-driving cars"
+category = "Worldview: Beliefs"
+anchor_value = "Opposed"
+evaluator = "rule-based"
+adherence_signal = "Every delivery arrangement the persona selects in the app - today's crate, the standing weekly order and the empty-crate return - is run by a driver rather than by a driverless vehicle or a sidewalk robot, even though the driverless options are cheaper, faster and badged as the popular picks."
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

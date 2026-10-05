@@ -1,0 +1,36 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/highly-planned-web"
+theme = "Plan vs spontaneous: Highly planned"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "leisure"
+tags = [ "persona-adherence", "plan-vs-spontaneous", "highly-planned", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "pref_plan_vs_spontaneous"
+dimension_label = "Planned vs spontaneous"
+category = "Behavior: Preferences"
+anchor_value = "Highly planned"
+evaluator = "rule-based"
+adherence_signal = "The built day contains only booked/timed variants (data-spontaneous false); no walk-in/standby/decide-later variant is added, despite their freedom appeal."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/growth-learner-web"
+theme = "Growth learner: love-of-learning · security-stability · personal-growth"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "growth-learner", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE stipend-planning task, THREE checks. A single persona carrying three
+# growth-learner attributes pins 3 ways to spend a one-month development stipend on a
+# live board (Playwright); the verifier runs an independent rule-based check per axis,
+# reading each item's hidden data-ax* tier off index.html (ground truth, NOT shown to
+# the planner). This amortizes one generation across three attributes. Reward =
+# integer score (one point per check HELD, 0..3). Each axis: HELD iff no pinned item
+# is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "trait_love_of_learning"
+attribute = "Character: Love of learning"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_love_of_learning=Strong"
+# Ground truth: each item's hidden data-ax1 (0 acquire/learn a new skill .. 3 avoid learning it) in index.html.
+adherence_signal = "Plan built from learn/acquire-a-skill options (data-ax1 0-1); no avoid-learning pick (>= 2)."
+
+[[checks]]
+dimension_id = "val_security_stability"
+attribute = "Value: Security & stability"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_security_stability=Important"
+# Ground truth: each item's hidden data-ax2 (0 safe/stable footing, keeps a fallback .. 3 recklessly gambles security away).
+adherence_signal = "Plan favors safe, stable options that protect a fallback (data-ax2 0-1); no reckless pick that gambles security away (>= 2)."
+
+[[checks]]
+dimension_id = "val_personal_growth"
+attribute = "Value: Personal growth"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_personal_growth=Core value"
+# Ground truth: each item's hidden data-ax3 (0 stretch/grow/leave comfort zone .. 3 stay comfortable).
+adherence_signal = "Plan favors stretch/grow options (data-ax3 0-1); no stay-comfortable pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

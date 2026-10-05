@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/master-painter-chat"
+theme = "Skill: Painting = Master"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "painting-studio"
+application_id = "canvasdesk_assistant"
+tags = [ "persona-adherence", "painting-skill", "studio-decisions", "llm-judge",]
+
+# Stimulus isolation:
+# Every option uses the same existing painting, materials budget, and open deadline; the tradeoff is deliberate studio control versus a faster immediately tidy result.
+[[checks]]
+dimension_id = "skill_painting"
+dimension_label = "Skill: Painting"
+category = "Expertise: Skills"
+anchor_value = "Master"
+evaluator = "llm-judge"
+adherence_signal = "The selected studio decisions consistently use controlled value, color, edge, surface, and revision workflows instead of fast cosmetic shortcuts. An LLM judge reads only the user's own turns."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

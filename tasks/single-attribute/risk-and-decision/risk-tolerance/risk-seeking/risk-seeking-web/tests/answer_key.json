@@ -1,0 +1,30 @@
+{
+  "threshold": 48,
+  "facet_threshold": 10,
+  "hands": {
+    "button_steal": {"facet": "initiative_and_aggression", "scores": {"bs04": 0, "bs27": 1, "bs61": 2, "bs90": 3}},
+    "river_bluff": {"facet": "initiative_and_aggression", "scores": {"rb95": 3, "rb73": 2, "rb42": 1, "rb18": 0}},
+    "squeeze_play": {"facet": "initiative_and_aggression", "scores": {"sq43": 1, "sq18": 0, "sq91": 3, "sq67": 2}},
+    "turn_overbet": {"facet": "initiative_and_aggression", "scores": {"to64": 2, "to88": 3, "to09": 0, "to31": 1}},
+    "check_raise": {"facet": "initiative_and_aggression", "scores": {"cb03": 0, "cb26": 1, "cb54": 2, "cb81": 3}},
+    "optional_straddle": {"facet": "initiative_and_aggression", "scores": {"st97": 3, "st68": 2, "st35": 1, "st13": 0}},
+    "nut_flush_draw": {"facet": "draw_commitment", "scores": {"nf52": 1, "nf07": 0, "nf86": 3, "nf41": 2}},
+    "open_ender": {"facet": "draw_commitment", "scores": {"oe71": 2, "oe93": 3, "oe16": 0, "oe48": 1}},
+    "combo_draw": {"facet": "draw_commitment", "scores": {"cd02": 0, "cd28": 1, "cd55": 2, "cd83": 3}},
+    "backdoor_attack": {"facet": "draw_commitment", "scores": {"bd89": 3, "bd62": 2, "bd37": 1, "bd14": 0}},
+    "pair_draw": {"facet": "draw_commitment", "scores": {"pd29": 1, "pd05": 0, "pd90": 3, "pd63": 2}},
+    "straight_draw": {"facet": "draw_commitment", "scores": {"sd59": 2, "sd84": 3, "sd10": 0, "sd36": 1}},
+    "runout_count": {"facet": "variance_and_settlement", "scores": {"ro06": 0, "ro24": 1, "ro57": 2, "ro92": 3}},
+    "allin_insurance": {"facet": "variance_and_settlement", "scores": {"in96": 3, "in73": 2, "in42": 1, "in18": 0}},
+    "cashout_offer": {"facet": "variance_and_settlement", "scores": {"co31": 1, "co09": 0, "co88": 3, "co64": 2}},
+    "final_table_deal": {"facet": "variance_and_settlement", "scores": {"ft67": 2, "ft91": 3, "ft18": 0, "ft43": 1}},
+    "bomb_pot": {"facet": "variance_and_settlement", "scores": {"bp11": 0, "bp32": 1, "bp54": 2, "bp79": 3}},
+    "stakes_shot": {"facet": "variance_and_settlement", "scores": {"ss94": 3, "ss72": 2, "ss46": 1, "ss15": 0}},
+    "satellite_bubble": {"facet": "tournament_pressure", "scores": {"sb29": 1, "sb05": 0, "sb90": 3, "sb63": 2}},
+    "bounty_call": {"facet": "tournament_pressure", "scores": {"bc59": 2, "bc84": 3, "bc10": 0, "bc36": 1}},
+    "reentry_choice": {"facet": "tournament_pressure", "scores": {"re13": 0, "re35": 1, "re68": 2, "re97": 3}},
+    "payjump_jam": {"facet": "tournament_pressure", "scores": {"pj86": 3, "pj52": 2, "pj41": 1, "pj07": 0}},
+    "heads_up_deal": {"facet": "tournament_pressure", "scores": {"hu37": 1, "hu14": 0, "hu89": 3, "hu62": 2}},
+    "last_longer": {"facet": "tournament_pressure", "scores": {"ll73": 2, "ll95": 3, "ll18": 0, "ll42": 1}}
+  }
+}

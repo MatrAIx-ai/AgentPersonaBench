@@ -1,0 +1,61 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/smartwatch-web"
+theme = "Smartwatch purchase and setup"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "consumer-technology"
+tags = ["persona-adherence", "multi-check", "shopping", "payment", "automation", "rule-based", "playwright", "real-web"]
+
+[[checks]]
+dimension_id = "lstyle_shopping_style"
+dimension_label = "Shopping style"
+category = "Interests: Culture"
+attribute = "Shopping style"
+value = "Brand loyal"
+evaluator = "rule-based"
+evaluator_name = "shopping_style=Brand loyal"
+metric = "selected_watch_dom_label"
+adherence_signal = "The confirmed watch option ID maps to brand loyalty in the protected answer key."
+
+[[checks]]
+dimension_id = "lstyle_payment_pref"
+dimension_label = "Payment preference"
+category = "Interests: Culture"
+attribute = "Payment preference"
+value = "Mobile wallet"
+evaluator = "rule-based"
+evaluator_name = "payment_preference=Mobile wallet"
+metric = "selected_payment_dom_label"
+adherence_signal = "The confirmed payment option ID maps to mobile-wallet preference in the protected answer key."
+
+[[checks]]
+dimension_id = "att_automation"
+dimension_label = "Attitude: Automation"
+category = "Worldview: Beliefs"
+attribute = "Attitude: Automation"
+value = "Positive"
+evaluator = "rule-based"
+evaluator_name = "automation_attitude=Positive"
+metric = "selected_setup_dom_label"
+adherence_signal = "The confirmed setup option ID maps to a positive automation stance in the protected answer key."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

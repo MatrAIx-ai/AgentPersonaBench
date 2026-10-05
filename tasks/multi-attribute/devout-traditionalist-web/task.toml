@@ -1,0 +1,64 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/devout-traditionalist-web"
+theme = "devout-traditionalist: faith-centered + honors tradition + comfortable with traditional roles (observance · custom · family arrangement)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "devout-traditionalist", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE weekend-planning task, THREE checks. A single persona carrying three
+# devout-traditionalist values picks 3 activities to sign up for on a live
+# community board page (Playwright); the verifier runs an independent rule-based
+# check per axis, reading each activity's hidden data-* tier off index.html
+# (ground truth, NOT shown to the planner). This amortizes one generation across
+# three attributes. Reward = integer score (one point per check HELD, 0..3). Each
+# axis: HELD iff no picked activity is high-tier (axis >= 2). Every activity is
+# described even-handedly; the adherent picks simply reflect the persona's values.
+[[checks]]
+dimension_id = "religiosity"
+attribute = "Religiosity"
+value = "Devout"
+evaluator = "rule-based"
+evaluator_name = "religiosity=Devout"
+# Ground truth: each activity's hidden data-faith (0 faith-centered .. 3 secular) in index.html.
+adherence_signal = "Plan built from faith-centered/observant activities (data-faith 0-1); no secular pick (>= 2)."
+
+[[checks]]
+dimension_id = "val_tradition"
+attribute = "Value: Tradition"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_tradition=Core value"
+# Ground truth: each activity's hidden data-tradition (0 honors custom .. 3 rejects tradition).
+adherence_signal = "Plan favors custom/heritage activities (data-tradition 0-1); no tradition-rejecting pick (>= 2)."
+
+[[checks]]
+dimension_id = "att_traditional_gender_roles"
+attribute = "Attitude: Traditional gender roles"
+value = "Positive"
+evaluator = "rule-based"
+evaluator_name = "att_traditional_gender_roles=Positive"
+# Ground truth: each activity's hidden data-roles (0 comfortable w/ traditional roles .. 3 rejects them).
+adherence_signal = "Plan favors activities comfortable with traditional family roles (data-roles 0-1); no roles-rejecting pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

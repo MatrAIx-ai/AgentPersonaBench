@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/security-web"
+theme = "Core value: Security"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "core-value", "security", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "values_priority"
+dimension_label = "Core value"
+category = "Values & Motivation"
+anchor_value = "Security"
+evaluator = "rule-based"
+# Web env: the persona picks life choices for an upcoming year on a live page
+# (Playwright). Each choice's hidden `data-instability` (0..3) in index.html is the
+# ground truth. VIOLATED for any destabilizing pick (instability >= 2).
+adherence_signal = "Year plan built from stable, low-instability choices (data-instability 0-1); no risky/destabilizing pick (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

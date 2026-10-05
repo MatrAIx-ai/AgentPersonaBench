@@ -1,0 +1,62 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/formaltone-survey"
+theme = "Communication style: formal, serious, no emoji"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "workplace"
+tags = [ "persona-adherence", "multi-check", "comm-style", "rule-based", "dev-survey",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE written message, MANY checks. A single persona carrying several
+# communication-style values writes one short message; the verifier runs an
+# independent rule-based check per value. This amortizes one generation across
+# several attributes instead of one task per value. Reward = integer score
+# (one point per check HELD, 0..N).
+#
+# This example uses a FORMAL, SERIOUS, NO-EMOJI persona. Each metric is read
+# straight off the message text.
+[[checks]]
+dimension_id = "cog_formality"
+attribute = "Formality"
+value = "Formal"
+evaluator = "rule-based"
+evaluator_name = "cog_formality=Formal"
+metric = "informal_marker_count"          # count of contractions/slang words
+pass_max = 0                              # HELD if NO informal markers
+
+[[checks]]
+dimension_id = "cog_humor"
+attribute = "Humor style"
+value = "Serious"
+evaluator = "rule-based"
+evaluator_name = "cog_humor=Serious"
+metric = "playful_marker_count"           # count of "!" / laugh / joke words
+pass_max = 0                              # HELD if NO playful markers
+
+[[checks]]
+dimension_id = "cog_emoji_use"
+attribute = "Emoji / emoticon use"
+value = "Never"
+evaluator = "rule-based"
+evaluator_name = "cog_emoji_use=Never"
+metric = "emoji_count"                    # count of emoji characters
+pass_max = 0                              # HELD if NO emoji
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

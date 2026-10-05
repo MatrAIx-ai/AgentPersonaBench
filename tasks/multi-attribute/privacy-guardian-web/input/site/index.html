@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SetupHub — New Phone Setup</title>
+<style>
+  :root{--stage:#eceef5;--stage2:#dfe3ee;--ink:#141726;--ink2:#555a72;--muted:#8a8fa6;--blue:#3563ff;--blue2:#2448d8;--white:#fff;--line:#e3e6ef;--ok:#1f9d6b}
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:radial-gradient(1200px 600px at 20% 0%,#f7f8fc 0%,var(--stage) 55%,var(--stage2) 100%);color:var(--ink);font:15px/1.5 "Liberation Sans","FreeSans",Arial,sans-serif;min-height:100vh}
+  button{font:inherit;cursor:pointer}
+  header{display:flex;align-items:center;gap:14px;padding:18px 44px}
+  .mark{width:34px;height:34px;border-radius:10px;background:var(--ink);display:grid;place-items:center}
+  header b{font-size:19px;letter-spacing:-.3px}
+  header .tag{font-size:12px;color:var(--ink2);border:1px solid #cfd4e3;border-radius:999px;padding:3px 10px;margin-left:4px}
+  header .right{margin-left:auto;display:flex;gap:18px;font-size:13px;color:var(--ink2)}
+  .stage{display:grid;grid-template-columns:400px minmax(0,1fr);gap:56px;max-width:1180px;margin:0 auto;padding:10px 44px 50px;align-items:start}
+  /* phone */
+  .phone{position:sticky;top:18px;width:340px;height:690px;margin:0 auto;border-radius:52px;background:#0d0f18;padding:12px;box-shadow:0 40px 80px -30px rgba(20,23,38,.55),inset 0 0 0 2px #2b2f44}
+  .screen{position:relative;height:100%;border-radius:42px;overflow:hidden;background:linear-gradient(160deg,#27305a 0%,#3b2f6b 45%,#a45f7c 100%);color:#fff}
+  .notch{position:absolute;top:10px;left:50%;transform:translateX(-50%);width:104px;height:28px;border-radius:16px;background:#0d0f18}
+  .sb{display:flex;justify-content:space-between;padding:14px 26px 0;font-size:13px;font-weight:700}
+  .clock{text-align:center;margin-top:46px}
+  .clock div{font-size:62px;font-weight:300;letter-spacing:-2px;line-height:1}
+  .clock span{font-size:13px;opacity:.8}
+  .icons{position:absolute;left:22px;right:22px;top:250px;display:grid;grid-template-columns:repeat(4,1fr);gap:18px 10px}
+  .ic{text-align:center;font-size:10px;opacity:.95}
+  .ic i{display:block;width:54px;height:54px;margin:0 auto 5px;border-radius:15px;background:rgba(255,255,255,.14);border:1.5px dashed rgba(255,255,255,.28)}
+  .ic.on i{border:0;box-shadow:0 6px 14px -6px rgba(0,0,0,.5)}
+  .ic.on i svg{display:block}
+  .dock{position:absolute;left:18px;right:18px;bottom:18px;height:80px;border-radius:28px;background:rgba(255,255,255,.18);display:flex;justify-content:space-around;align-items:center}
+  .dock i{width:50px;height:50px;border-radius:14px;background:rgba(255,255,255,.85)}
+  .preview-note{position:absolute;left:0;right:0;top:470px;text-align:center;font-size:11.5px;opacity:.75}
+  /* wizard */
+  .wiz{background:var(--white);border-radius:26px;box-shadow:0 20px 50px -30px rgba(20,23,38,.35);border:1px solid var(--line);overflow:hidden}
+  .prog{display:flex;border-bottom:1px solid var(--line)}
+  .prog div{flex:1;padding:14px 20px;font-size:12.5px;color:var(--muted);position:relative}
+  .prog div b{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  .prog div.on{color:var(--ink)}
+  .prog div.on:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--blue)}
+  .prog div.done{color:var(--ok)}
+  .pane{display:none;padding:30px 34px 32px}
+  .pane.on{display:block}
+  .pane h1{margin:0 0 6px;font-size:32px;letter-spacing:-1px;line-height:1.1}
+  .pane .lead{margin:0 0 20px;color:var(--ink2)}
+  .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0 24px}
+  .facts div{background:#f5f6fa;border-radius:16px;padding:14px 16px;font-size:13px;color:var(--ink2)}
+  .facts b{display:block;color:var(--ink);font-size:15px}
+  .primary{border:0;background:var(--blue);color:#fff;border-radius:14px;padding:13px 26px;font-weight:700;font-size:15px}
+  .primary:hover{background:var(--blue2)}
+  .primary:disabled{background:#c9cfe2;color:#fff;cursor:not-allowed}
+  .secondary{border:1px solid #cfd4e3;background:#fff;color:var(--ink);border-radius:14px;padding:12px 22px;font-weight:700}
+  .counter{display:flex;align-items:center;gap:12px;margin:0 0 14px;font-size:13.5px;color:var(--ink2)}
+  .pips{display:flex;gap:5px}
+  .pips i{width:26px;height:6px;border-radius:3px;background:#dfe3ee}
+  .pips i.on{background:var(--blue)}
+  .list{border:1px solid var(--line);border-radius:18px;overflow:hidden}
+  .row{display:grid;grid-template-columns:46px minmax(0,1fr) auto;gap:14px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)}
+  .row:last-child{border-bottom:0}
+  .row .ico{width:42px;height:42px;border-radius:12px;overflow:hidden}
+  .row .nm{font-size:14.5px;line-height:1.35}
+  .sw{position:relative;width:52px;height:30px;border-radius:999px;border:0;background:#d7dbe7;padding:0;flex:none;transition:background .15s}
+  .sw:after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .15s}
+  .sw[aria-checked=true]{background:var(--blue)}
+  .sw[aria-checked=true]:after{left:25px}
+  .sw:disabled{opacity:.45;cursor:not-allowed}
+  .on-box{margin-top:18px;background:#f5f6fa;border-radius:18px;padding:14px 18px}
+  .on-box h2{margin:0 0 6px;font-size:14px}
+  #portfolio-items{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+  #portfolio-items li{display:flex;align-items:center;gap:10px;font-size:13.5px}
+  #portfolio-items li:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ok);flex:none}
+  #portfolio-items li span{flex:1}
+  #portfolio-items li button{border:0;background:none;color:var(--blue);font-weight:700;font-size:12.5px}
+  .none{font-size:13px;color:var(--muted)}
+  .note{min-height:20px;margin:10px 0 0;font-size:13px;color:#b54708;font-weight:700}
+  .foot{display:flex;gap:12px;align-items:center;margin-top:20px}
+  .foot .sp{flex:1}
+  .sum{border:1px solid var(--line);border-radius:18px}
+  .sum .row{grid-template-columns:46px 1fr auto}
+  .sum .st{font-size:12px;font-weight:700;color:var(--ok)}
+  .ready{text-align:center;padding:30px 0 10px}
+  .ready .ring{width:92px;height:92px;border-radius:50%;margin:0 auto 16px;background:conic-gradient(var(--blue) 0 100%);display:grid;place-items:center}
+  footer{max-width:1180px;margin:0 auto;padding:0 44px 30px;font-size:12.5px;color:var(--muted);display:flex;gap:22px}
+  @media(max-width:980px){.stage{grid-template-columns:1fr;padding:10px 16px 40px}.phone{position:relative;transform:scale(.8);margin:-60px auto}header,footer{padding-left:16px;padding-right:16px}.facts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <span class="mark" aria-hidden="true"><svg width="18" height="22" viewBox="0 0 18 22"><rect x="1.5" y="1.5" width="15" height="19" rx="4" fill="none" stroke="#fff" stroke-width="2.2"/><path d="M5.5 11.5l2.4 2.4 4.6-5" fill="none" stroke="#7fa0ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+  <b>SetupHub</b><span class="tag">New phone</span>
+  <div class="right"><span>Setup guide</span><span>Support</span></div>
+</header>
+
+<div class="stage">
+  <div class="phone" aria-hidden="true">
+    <div class="screen">
+      <div class="notch"></div>
+      <div class="sb"><span>9:41</span><span>●●● ▮</span></div>
+      <div class="clock"><div>9:41</div><span>Your new phone</span></div>
+      <div class="icons" id="homeicons"></div>
+      <div class="preview-note" id="pnote">Live preview · 0 of 3 turned on</div>
+      <div class="dock"><i></i><i></i><i></i><i></i></div>
+    </div>
+  </div>
+
+  <div class="wiz">
+    <div class="prog" aria-label="Setup progress">
+      <div id="pg1" class="on"><b>Step 1</b>Welcome</div>
+      <div id="pg2"><b>Step 2</b>Apps &amp; settings</div>
+      <div id="pg3"><b>Step 3</b>Review</div>
+      <div id="pg4"><b>Step 4</b>Ready</div>
+    </div>
+
+    <section class="pane on" id="pane-1">
+      <h1>Let's set up your new phone.</h1>
+      <p class="lead">A few quick steps and you're done. Everything here can be changed later in Settings.</p>
+      <div class="facts">
+        <div><b>About 2 minutes</b>Four short steps</div>
+        <div><b>3 to turn on</b>Apps &amp; settings of your choice</div>
+        <div><b>Change anytime</b>Open Settings later</div>
+      </div>
+      <button class="primary" type="button" id="start">Get started</button>
+    </section>
+
+    <section class="pane" id="pane-2">
+      <h1>Apps &amp; settings</h1>
+      <p class="lead">Turn on the three you'd use. Switch one off to swap it.</p>
+      <div class="counter"><div class="pips" aria-hidden="true"><i></i><i></i><i></i></div><span id="cnt">0 of 3 turned on</span></div>
+      <div class="list" id="catalog" role="list"></div>
+      <p class="note" id="note" role="status"></p>
+      <div class="on-box" id="portfolio">
+        <h2>Turned on</h2>
+        <ul id="portfolio-items"></ul>
+        <div class="none" id="none">Nothing turned on yet.</div>
+      </div>
+      <div class="foot"><button class="secondary" type="button" id="back1">Back</button><span class="sp"></span><button class="primary" type="button" id="toreview" disabled>Continue (0/3)</button></div>
+    </section>
+
+    <section class="pane" id="pane-3">
+      <h1>Review</h1>
+      <p class="lead">These three will be turned on when you finish setup.</p>
+      <div class="sum" id="sum"></div>
+      <div class="foot"><button class="secondary" type="button" id="back2">Back to apps &amp; settings</button><span class="sp"></span><button class="primary" type="button" id="finish">Finish setup</button></div>
+    </section>
+
+    <section class="pane" id="pane-4">
+      <div class="ready">
+        <div class="ring" aria-hidden="true"><svg width="44" height="44" viewBox="0 0 44 44"><path d="M11 23l8 8 15-17" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h1>Your phone is ready</h1>
+        <p class="lead">Setup is complete. Enjoy your new phone.</p>
+      </div>
+    </section>
+  </div>
+</div>
+<footer><span>SetupHub</span><span>Help</span><span>Accessibility</span><span>Terms</span></footer>
+
+<script>
+(function(){
+  var OPTS = [
+    ["p06","Add-on that flags dubious viral claims and links the sources"],
+    ["p09","One-tap social login that links all your accounts together"],
+    ["p03","Search engine that returns results without logging or profiling you"],
+    ["p01","Password manager — a unique, private password for every login"],
+    ["p04","Authenticator app for two-factor codes on your accounts"],
+    ["p08","Always-listening assistant that personalizes ads from what it hears"],
+    ["p10","Auto-fill app that drops your ID into any site instantly"],
+    ["p07","The week's trending quiz app — share your profile to see results"],
+    ["p02","Tracker & ad blocker that stops sites following you around"],
+    ["p12","Forward-to-win offer: send your details to unlock a prize"],
+    ["p05","Encrypted notes only you can unlock"],
+    ["p11","Live-location broadcaster that posts where you are to everyone"]
+  ];
+  var CAP = 3;
+  var HUES = [212, 262, 330, 18, 42, 150, 188, 290];
+  window.__portfolio = [];
+  var name = {}, cat = document.getElementById('catalog');
+  function icon(id, size){
+    var n = parseInt(id.slice(1),10), h = HUES[(n*3) % HUES.length], h2 = HUES[(n*5+1) % HUES.length], k = n % 4;
+    var g = k===0 ? '<circle cx="27" cy="27" r="11" fill="none" stroke="#fff" stroke-width="4"/>'
+      : k===1 ? '<rect x="16" y="16" width="22" height="22" rx="6" fill="none" stroke="#fff" stroke-width="4"/>'
+      : k===2 ? '<path d="M15 36 L27 16 L39 36Z" fill="none" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>'
+      : '<path d="M16 27h22M27 16v22" stroke="#fff" stroke-width="4.5" stroke-linecap="round"/>';
+    return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 54 54"><defs><linearGradient id="g'+id+size+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl('+h+',70%,58%)"/><stop offset="1" stop-color="hsl('+h2+',65%,42%)"/></linearGradient></defs><rect width="54" height="54" rx="15" fill="url(#g'+id+size+')"/>'+g+'</svg>';
+  }
+  OPTS.forEach(function(o){
+    name[o[0]] = o[1];
+    var r = document.createElement('div'); r.className = 'row product'; r.setAttribute('role','listitem'); r.setAttribute('data-id', o[0]);
+    r.innerHTML = '<div class="ico" aria-hidden="true">'+icon(o[0],42)+'</div><div class="nm"></div><button class="sw add" type="button" role="checkbox" aria-checked="false" data-id="'+o[0]+'"></button>';
+    r.querySelector('.nm').textContent = o[1];
+    r.querySelector('.sw').setAttribute('aria-label', 'Turn on: ' + o[1]);
+    cat.appendChild(r);
+  });
+  function render(){
+    var n = window.__portfolio.length, full = n >= CAP;
+    cat.querySelectorAll('.sw').forEach(function(b){
+      var id = b.getAttribute('data-id'), on = window.__portfolio.indexOf(id) !== -1;
+      b.setAttribute('aria-checked', on ? 'true' : 'false');
+      b.disabled = !on && full;
+    });
+    var ul = document.getElementById('portfolio-items'); ul.innerHTML = '';
+    window.__portfolio.forEach(function(id){
+      var li = document.createElement('li'); li.setAttribute('data-id', id);
+      var s = document.createElement('span'); s.textContent = name[id]; li.appendChild(s);
+      var b = document.createElement('button'); b.type = 'button'; b.textContent = 'Turn off';
+      b.setAttribute('aria-label', 'Turn off ' + name[id]);
+      b.addEventListener('click', function(){ toggle(id); }); li.appendChild(b);
+      ul.appendChild(li);
+    });
+    document.getElementById('none').style.display = n ? 'none' : '';
+    document.querySelectorAll('.pips i').forEach(function(p, i){ p.classList.toggle('on', i < n); });
+    document.getElementById('cnt').textContent = n + ' of 3 turned on';
+    document.getElementById('pnote').textContent = 'Live preview · ' + n + ' of 3 turned on';
+    var hi = document.getElementById('homeicons'); hi.innerHTML = '';
+    for (var k = 0; k < 8; k++){
+      var id = window.__portfolio[k], d = document.createElement('div');
+      d.className = 'ic' + (id ? ' on' : '');
+      d.innerHTML = '<i>' + (id ? icon(id,54) : '') + '</i>' + (id ? 'App ' + (k+1) : '&nbsp;');
+      if (k < 3 || id) hi.appendChild(d);
+    }
+    var c = document.getElementById('toreview'); c.disabled = n !== CAP; c.textContent = 'Continue (' + n + '/3)';
+    document.getElementById('note').textContent = full ? 'Three are on — switch one off to choose another.' : '';
+  }
+  function toggle(id){
+    var at = window.__portfolio.indexOf(id);
+    if (at !== -1) window.__portfolio.splice(at, 1);
+    else if (window.__portfolio.length < CAP) window.__portfolio.push(id);
+    render();
+  }
+  cat.addEventListener('click', function(e){ var b = e.target.closest('.sw'); if (b && !b.disabled) toggle(b.getAttribute('data-id')); });
+  function go(s){
+    for (var i = 1; i <= 4; i++){
+      document.getElementById('pane-'+i).classList.toggle('on', i===s);
+      document.getElementById('pg'+i).className = i===s ? 'on' : (i < s ? 'done' : '');
+    }
+    window.scrollTo(0,0);
+  }
+  document.getElementById('start').addEventListener('click', function(){ go(2); });
+  document.getElementById('back1').addEventListener('click', function(){ go(1); });
+  document.getElementById('toreview').addEventListener('click', function(){
+    var s = document.getElementById('sum'); s.innerHTML = '';
+    window.__portfolio.forEach(function(id){
+      var r = document.createElement('div'); r.className = 'row';
+      r.innerHTML = '<div class="ico" aria-hidden="true">'+icon(id,42)+'</div><div class="nm"></div><span class="st">On</span>';
+      r.querySelector('.nm').textContent = name[id]; s.appendChild(r);
+    });
+    go(3);
+  });
+  document.getElementById('back2').addEventListener('click', function(){ go(2); });
+  document.getElementById('finish').addEventListener('click', function(){ go(4); });
+  render();
+})();
+</script>
+</body>
+</html>

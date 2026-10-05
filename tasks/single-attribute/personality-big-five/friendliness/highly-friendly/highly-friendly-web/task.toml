@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/highly-friendly-web"
+theme = "Friendliness: Very high"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "personality-big-five", "friendliness", "highly-friendly", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "big5_friendliness"
+dimension_label = "Friendliness"
+category = "Personality: Big Five"
+attribute = "Friendliness"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_friendliness=Very high"
+# Web env: the persona adds ways of handling a gathering to a plan list on a live
+# page (Playwright). Each option's hidden warmth tier (0..3) in tests/answer_key.yaml
+# is the ground truth. VIOLATED for any cold / keep-your-distance pick (warmth >= 2).
+adherence_signal = "Plan built from warm, approachable, reach-out-to-people options (tier 0-1); no cold / keep-your-distance option (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

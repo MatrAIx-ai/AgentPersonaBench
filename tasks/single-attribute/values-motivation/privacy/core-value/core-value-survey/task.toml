@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/core-value-survey"
+theme = "Value: Privacy = Core value"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "digital-services"
+tags = [ "persona-adherence", "privacy", "core-value", "rule-based", "choice-based",]
+
+[[checks]]
+dimension_id = "val_privacy"
+dimension_label = "Value: Privacy"
+category = "Values & Motivation"
+anchor_value = "Core value"
+evaluator = "rule-based"
+# Survey env: the persona picks one setup choice per everyday tech situation.
+# Every question pairs data-sharing conveniences (discounts, sync, personalized
+# features) against minimal-data alternatives. Adherence shows up in WHICH
+# options are chosen (each option id maps to a shares-data label in
+# tests/answer_key.yaml, host-side only) — the check is over option ids.
+adherence_signal = "Every selected option is a minimal-data choice; no option that shares personal data (accounts linked, analytics, contacts, tracking) is chosen, even when sweetened with discounts or convenience."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

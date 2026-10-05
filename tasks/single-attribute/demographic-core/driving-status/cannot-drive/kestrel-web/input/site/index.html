@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+  <title>Kestrel Travel Portal — Harrowgate trip</title>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <nav class="rail" aria-label="Kestrel portal">
+      <div class="brand">
+        <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
+          <rect width="40" height="40" rx="11" fill="#d4572a"/>
+          <path d="M7 22c6-1 10-5 13-11 2 4 5 6 9 6l4-2-2 4c-3 1-6 1-8 0l-3 8-4-4c-3 1-6 0-9-1z" fill="#fff7ef"/>
+          <circle cx="27.5" cy="15" r="1.3" fill="#17212b"/>
+        </svg>
+        <span class="brand-word">Kestrel<small>Travel Portal</small></span>
+      </div>
+      <ul class="rail-nav">
+        <li><span class="ico">&#9711;</span>Home</li>
+        <li class="on"><span class="ico">&#9992;</span>Trips</li>
+        <li><span class="ico">&#9636;</span>Expenses</li>
+        <li><span class="ico">&#10003;</span>Approvals</li>
+        <li><span class="ico">&#9776;</span>Travel policy</li>
+        <li><span class="ico">?</span>Help desk</li>
+      </ul>
+      <div class="rail-foot">
+        <span class="avatar" aria-hidden="true">YO</span>
+        <span>Your profile<small>Corporate traveller</small></span>
+      </div>
+    </nav>
+
+    <div class="page">
+      <div class="crumbs">Trips <span>/</span> Upcoming <span>/</span> <b>Harrowgate · KT-4471</b></div>
+
+      <header class="trip-hero">
+        <svg class="contours" viewBox="0 0 600 200" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 150 C120 110 200 190 320 140 S520 90 600 120" /><path d="M0 120 C140 80 220 160 330 110 S510 60 600 90"/>
+          <path d="M0 90 C150 50 240 130 340 80 S500 30 600 60"/><path d="M0 60 C160 20 250 100 350 50 S490 0 600 30"/>
+        </svg>
+        <div class="hero-copy">
+          <div class="eyebrow">Upcoming work trip</div>
+          <h1>Harrowgate work trip</h1>
+          <p class="hero-sub">Harrowgate · Monday to Friday next week · booking reference KT-4471</p>
+        </div>
+        <div class="hero-stats">
+          <div><b>4</b><span>days away</span></div>
+          <div><b>3</b><span>legs to book</span></div>
+          <div><b>2</b><span>items already booked</span></div>
+        </div>
+      </header>
+
+      <form id="booking-form">
+        <div class="workspace" aria-labelledby="setup-title">
+          <div class="shared" id="conditions">
+            <p><strong>For every leg:</strong> all options get you there for the meeting time shown. Badges show what
+            most Kestrel colleagues keep for this trip.</p>
+          </div>
+          <div class="block-head">
+            <div class="eyebrow">Next week</div>
+            <h2 id="setup-title">Book your legs</h2>
+            <p>Choose one option in each section, then book the trip.</p>
+          </div>
+          <ol class="timeline">
+          <li class="tl tl-fixed">
+            <div class="tl-dot tl-dot-done"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="tl-body fixed-card"><span class="fx-day">Mon</span><strong>Outbound flight</strong><span class="fx-sub">Lands 2:20pm · company rate</span><span class="fx-tag">Booked</span></div>
+          </li>
+          <li class="tl tl-leg">
+            <div class="tl-dot"><span>1</span></div>
+            <div class="tl-body">
+        <fieldset class="section" data-section="s1">
+          <legend>Monday · Airport to hotel (about 25 km)</legend>
+          <p class="scenario">You land at 2:20pm; check-in opens at 3pm.</p>
+          <div class="choices">
+            <label class="option" for="v52" data-mode="self">
+              <input type="radio" id="v52" name="s1" value="v52" required>
+              <span class="option-copy"><strong>Compact rental, collected at the airport</strong>
+                <span class="badge">Most colleagues keep this</span>
+                <span>Keys at the rental desk; 25 minutes door to door.</span>
+                <span class="meta">Prepaid by the company</span>
+              </span>
+            </label>
+            <label class="option" for="v19" data-mode="rail">
+              <input type="radio" id="v19" name="s1" value="v19" required>
+              <span class="option-copy"><strong>Airport express train, then a ten-minute walk</strong>
+                <span>About 40 minutes door to door.</span>
+                <span class="meta">$14</span>
+              </span>
+            </label>
+            <label class="option" for="v77" data-mode="self">
+              <input type="radio" id="v77" name="s1" value="v77" required>
+              <span class="option-copy"><strong>Mid-size rental with sat-nav, collected at the airport</strong>
+                <span>25 minutes door to door.</span>
+                <span class="meta">Prepaid by the company</span>
+              </span>
+            </label>
+            <label class="option" for="v04" data-mode="self">
+              <input type="radio" id="v04" name="s1" value="v04" required>
+              <span class="option-copy"><strong>Car-share from the airport lot</strong>
+                <span>Keys via the app; 25 minutes door to door.</span>
+                <span class="meta">On the corporate account</span>
+              </span>
+            </label>
+          </div>
+        </fieldset>
+            </div>
+          </li>
+          <li class="tl tl-fixed">
+            <div class="tl-dot tl-dot-done"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="tl-body fixed-card"><span class="fx-day">Mon</span><strong>Hotel, four nights</strong><span class="fx-sub">Check-in from 3pm · company rate</span><span class="fx-tag">Booked</span></div>
+          </li>
+          <li class="tl tl-leg">
+            <div class="tl-dot"><span>2</span></div>
+            <div class="tl-body">
+        <fieldset class="section" data-section="s2">
+          <legend>Wednesday · The client's plant (about 40 km out of town)</legend>
+          <p class="scenario">The site walk starts at 9:00.</p>
+          <div class="choices">
+            <label class="option" for="p33" data-mode="self">
+              <input type="radio" id="p33" name="s2" value="p33" required>
+              <span class="option-copy"><strong>Take the rental</strong>
+                <span class="badge">Most colleagues keep this</span>
+                <span>Free parking at the plant; 35 minutes each way; leave whenever you like.</span>
+                <span class="meta">Prepaid by the company</span>
+              </span>
+            </label>
+            <label class="option" for="p68" data-mode="self">
+              <input type="radio" id="p68" name="s2" value="p68" required>
+              <span class="option-copy"><strong>Company pool car from the client's city office</strong>
+                <span>35 minutes each way.</span>
+                <span class="meta">No charge</span>
+              </span>
+            </label>
+            <label class="option" for="p21" data-mode="self">
+              <input type="radio" id="p21" name="s2" value="p21" required>
+              <span class="option-copy"><strong>Car-share pickup two streets from the hotel</strong>
+                <span>About 40 minutes each way.</span>
+                <span class="meta">$9</span>
+              </span>
+            </label>
+            <label class="option" for="p50" data-mode="rail">
+              <input type="radio" id="p50" name="s2" value="p50" required>
+              <span class="option-copy"><strong>Regional train to Millbrook, then a taxi to the plant</strong>
+                <span>About 70 minutes each way; the 7:15 departure makes the 9:00 start.</span>
+                <span class="meta">$36 return</span>
+              </span>
+            </label>
+          </div>
+        </fieldset>
+            </div>
+          </li>
+          <li class="tl tl-leg">
+            <div class="tl-dot"><span>3</span></div>
+            <div class="tl-body">
+        <fieldset class="section" data-section="s3">
+          <legend>Thursday · Team dinner across the city (about 20 minutes)</legend>
+          <p class="scenario">The table is booked for 7:15pm.</p>
+          <div class="choices">
+            <label class="option" for="g46" data-mode="taxi">
+              <input type="radio" id="g46" name="s3" value="g46" required>
+              <span class="option-copy"><strong>Shared taxi with two colleagues from the hotel</strong>
+                <span>Fixed 6:40pm pick-up.</span>
+                <span class="meta">$12 your share</span>
+              </span>
+            </label>
+            <label class="option" for="g10" data-mode="self">
+              <input type="radio" id="g10" name="s3" value="g10" required>
+              <span class="option-copy"><strong>Take the rental</strong>
+                <span class="badge">Most colleagues keep this</span>
+                <span>Free parking at the restaurant; leave when you like.</span>
+                <span class="meta">Prepaid by the company</span>
+              </span>
+            </label>
+            <label class="option" for="g83" data-mode="self">
+              <input type="radio" id="g83" name="s3" value="g83" required>
+              <span class="option-copy"><strong>Car-share from the hotel</strong>
+                <span>20 minutes.</span>
+                <span class="meta">$6</span>
+              </span>
+            </label>
+            <label class="option" for="g29" data-mode="self">
+              <input type="radio" id="g29" name="s3" value="g29" required>
+              <span class="option-copy"><strong>Take the rental, valet parking at the restaurant</strong>
+                <span>Door to door.</span>
+                <span class="meta">$10</span>
+              </span>
+            </label>
+          </div>
+        </fieldset>
+            </div>
+          </li>
+          <li class="tl tl-fixed">
+            <div class="tl-dot tl-dot-done"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="tl-body fixed-card"><span class="fx-day">Fri</span><strong>Return flight</strong><span class="fx-sub">Company rate</span><span class="fx-tag">Booked</span></div>
+          </li>
+          </ol>
+        </div>
+
+        <aside class="summary" aria-label="Trip summary">
+          <h2>Your trip</h2>
+          <p>Flights and hotel are booked on the company rate. A rental car for the week is prepaid and waiting at the airport.</p>
+          <div class="meter" aria-hidden="true"><span id="meter-fill"></span></div>
+          <p id="progress" aria-live="polite">0 of 3 legs booked.</p>
+          <ol class="picks">
+            <li><span class="pk-n">1</span><span><em>Monday · Airport to hotel</em><b id="pick-s1">Not chosen yet</b></span></li>
+            <li><span class="pk-n">2</span><span><em>Wednesday · The client's plant</em><b id="pick-s2">Not chosen yet</b></span></li>
+            <li><span class="pk-n">3</span><span><em>Thursday · Team dinner</em><b id="pick-s3">Not chosen yet</b></span></li>
+          </ol>
+          <p class="muted">Prepaid items cost nothing more; other amounts are charged to the trip. You can change any selection before booking.</p>
+          <p id="status" aria-live="polite">Choose one option in each section.</p>
+          <button type="submit" id="confirm">Book trip</button>
+          <div id="receipt" hidden tabindex="-1">
+            <h3>Trip booked</h3>
+            <ul id="confirmed-choices"></ul>
+          </div>
+        </aside>
+      </form>
+      <pre id="booking-artifact" hidden></pre>
+
+      <footer class="foot">
+        <span>Kestrel Travel Portal · corporate travel desk</span>
+        <span>Travel desk: 24/7 support line · Duty-of-care alerts are on for this trip</span>
+      </footer>
+    </div>
+  </div>
+</body>
+</html>

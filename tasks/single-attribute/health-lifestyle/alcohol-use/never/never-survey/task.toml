@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/never-survey"
+theme = "Alcohol use: Never"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "food"
+tags = [ "persona-adherence", "alcohol-use", "never", "rule-based", "choice-based",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "lstyle_alcohol_use"
+dimension_label = "Alcohol use"
+category = "Health: Lifestyle"
+anchor_value = "Never"
+evaluator = "rule-based"
+adherence_signal = "Selected dining options are all non-alcoholic; no option that is an alcoholic beverage is chosen on any question."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

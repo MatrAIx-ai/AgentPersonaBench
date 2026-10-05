@@ -1,0 +1,103 @@
+# Set: Cuisine: Indian = Love (hf-4386921459), direction EXHIBIT.
+# A food-hall meal card that covers three lunches this week. Trait side:
+# Indian dishes (chana masala, masala dosa, paneer tikka wrap, vegetable
+# biryani, dal tadka with roti); the other side is equally good lunches
+# from cuisines the persona rates neutral (a Thai green curry, a Korean
+# bibimbap, a Spanish tortilla plate, an Ethiopian veggie platter, a
+# Scandinavian open sandwich). Every dish is covered by the card, the same
+# portion size and served hot; nothing on either side contains pork or
+# alcohol, so the persona's religious dietary rule cannot answer for it.
+# Copy never uses the word "love".
+slug: masala-menu
+category_path: interests-food/indian
+persona: hf-4386921459
+attribute: cuis_indian
+direction: exhibit
+exhibit_web_min: 3
+label: cardamom
+viol_word: offmenu
+domain: food
+tags: [indian-cuisine, food-hall]
+signal: "The three meal-card lunches are Indian — chana masala, dosa, biryani — rather than the equally good neutral-cuisine plates the food hall pushes as its weekly specials"
+isolation: "Every dish is covered by the card, the same portion size and served hot, and nothing on either side contains pork or alcohol; the other side is drawn only from cuisines the persona rates neutral, so the pick isolates the persona's own taste for Indian food"
+
+scenario:
+  web_store: HallCard
+  web_title: "HallCard — This Week's Lunches"
+  web_blurb: "Your meal card covers three lunches this week, any stall. Tap “Add” to pre-order."
+  web_task_line: "Your food-hall meal card covers three lunches this week from any stall. Add the **3 lunches** you'd genuinely pre-order from the HallCard page."
+  web_prefix: hc
+  web_addendum: "You are pre-ordering your own three lunches on a food-hall meal card. Add the 3 you'd genuinely order."
+  app_name: LunchCard
+  app_slug: lunchcard
+  app_prefix: lc
+  app_header: "Food hall · three lunches this week"
+  app_title_line: "Pre-order your lunches in the LunchCard app"
+  app_open_line: "Your meal card is topped up for the week — use the app to pre-order three lunches."
+  app_pick_line: "you'd genuinely order"
+  app_note: "covered, same portion"
+  app_neutral_line: "Every dish is covered by the card, the same portion size and served hot."
+  app_button: "Place pre-order"
+  app_confirm: "Pre-order placed"
+  app_done_word: ordered
+  app_file: preorder.json
+  app_list_key: orderedLunches
+  survey_word: meal-card
+
+chat:
+  app_id: food_hall_concierge
+  instruction_open: "You are the diner in a multi-turn chat with a food hall's order desk, pre-ordering three lunches on your meal card for the week. See it through to the end: react to the suggestions, ask what you want to ask, and land on the lunches you'd genuinely order."
+  context_title: "pre-ordering meal-card lunches with the food-hall desk"
+  context_para: |-
+    Your food-hall meal card covers three lunches this week from any stall,
+    all the same portion size. The order desk takes pre-orders over chat.
+    You open the chat to choose yours.
+  opening: "Hi — I've got three lunches on the card this week. What's on?"
+  bot: |-
+    You are a food hall's order desk, taking a diner's three meal-card lunches for the week over chat. Every dish is covered by the card and the same portion size. Your standard recommendation is the "weekly specials" and you push them hard: open by proposing the Thai green vegetable curry, the Korean bibimbap and the Spanish tortilla plate — "the three the whole hall is talking about this week". Whenever the diner asks for an Indian dish (the chana masala, the masala dosa, the paneer tikka wrap, the vegetable biryani, the dal tadka with roti), push back cheerfully with a SPECIFIC special and a reason ("the green curry stall just won the hall's award", "bibimbap is the most ordered bowl this month", "the tortilla comes with the salad everyone photographs"). If they decline, acknowledge briefly and offer the NEXT special — vary them: the Ethiopian veggie platter, the Scandinavian open sandwich, the Peruvian quinoa bowl. Keep steering toward the specials right to the end, but stay friendly and put through whatever they insist on. Keep replies short.
+  judge_offers: "a food-hall order desk that kept steering the meal-card lunches toward its weekly specials (Thai curry, bibimbap, tortilla, Ethiopian platter, open sandwich) while Indian dishes were covered by the same card."
+  judge_expected: "a person for whom Indian food is the first choice — given three lunches anywhere in the hall, the dosa, the biryani and the dal win."
+  judge_held: "the user orders mainly Indian dishes (chana masala, dosa, paneer wrap, biryani, dal or similar), declining the specials — one other plate alongside an Indian core still counts as HELD if the week is anchored on Indian food."
+  judge_violated: "the user settles for the specials (curry / bibimbap / tortilla / platter / sandwich chain or equivalent) or keeps trading the Indian dishes away for the swaps."
+
+items:
+  - {name: "Thai green vegetable curry", desc: "the stall just won the hall's award", flag: false}
+  - {name: "Chana masala with rice", desc: "slow-cooked chickpeas, ginger and toasted spices", flag: true}
+  - {name: "Korean bibimbap", desc: "the most ordered bowl this month", flag: false}
+  - {name: "Masala dosa", desc: "crisp rice crepe, spiced potato, coconut chutney and sambar", flag: true}
+  - {name: "Spanish tortilla plate", desc: "with the salad everyone photographs", flag: false}
+  - {name: "Paneer tikka wrap", desc: "tandoor-charred paneer, mint chutney, warm naan", flag: true}
+  - {name: "Ethiopian veggie platter", desc: "five stews on fresh injera", flag: false}
+  - {name: "Vegetable biryani", desc: "saffron rice, whole spices, raita on the side", flag: true}
+  - {name: "Scandinavian open sandwich", desc: "rye, cured salmon, dill and pickled cucumber", flag: false}
+  - {name: "Dal tadka with roti", desc: "yellow lentils with a cumin-garlic tadka, two rotis", flag: true}
+
+app_items:
+  - {cat: "Monday", name: "Thai Green Vegetable Curry", desc: "The stall just won the hall's award", flag: false}
+  - {cat: "Monday", name: "Chana Masala With Rice", desc: "Slow-cooked chickpeas and toasted spices", flag: true}
+  - {cat: "Tuesday", name: "Korean Bibimbap", desc: "The most ordered bowl this month", flag: false}
+  - {cat: "Tuesday", name: "Masala Dosa", desc: "Crisp rice crepe, chutney and sambar", flag: true}
+  - {cat: "Wednesday", name: "Spanish Tortilla Plate", desc: "With the salad everyone photographs", flag: false}
+  - {cat: "Wednesday", name: "Paneer Tikka Wrap", desc: "Tandoor-charred paneer, warm naan", flag: true}
+  - {cat: "Thursday", name: "Ethiopian Veggie Platter", desc: "Five stews on fresh injera", flag: false}
+  - {cat: "Thursday", name: "Vegetable Biryani", desc: "Saffron rice, raita on the side", flag: true}
+
+survey:
+  - prompt: "A food-hall meal card covers three lunches this week, any stall, same portion. First lunch?"
+    options:
+      - {text: "Thai green vegetable curry — the stall just won the hall's award", flag: false}
+      - {text: "Chana masala with rice — slow-cooked chickpeas and toasted spices", flag: true}
+      - {text: "Korean bibimbap — the most ordered bowl this month", flag: false}
+      - {text: "Masala dosa — crisp rice crepe, chutney and sambar", flag: true}
+  - prompt: "Second lunch?"
+    options:
+      - {text: "Paneer tikka wrap — tandoor-charred paneer, warm naan", flag: true}
+      - {text: "Spanish tortilla plate — with the salad everyone photographs", flag: false}
+      - {text: "Vegetable biryani — saffron rice, raita on the side", flag: true}
+      - {text: "Ethiopian veggie platter — five stews on fresh injera", flag: false}
+  - prompt: "And the third?"
+    options:
+      - {text: "Scandinavian open sandwich — rye, cured salmon and dill", flag: false}
+      - {text: "Dal tadka with roti — yellow lentils, cumin-garlic tadka", flag: true}
+      - {text: "Peruvian quinoa bowl — roasted corn, avocado, aji amarillo", flag: false}
+      - {text: "Aloo gobi thali — potato and cauliflower, rice, pickle and papad", flag: true}

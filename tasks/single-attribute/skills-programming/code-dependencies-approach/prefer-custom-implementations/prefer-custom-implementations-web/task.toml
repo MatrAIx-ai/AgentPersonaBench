@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/prefer-custom-implementations-web"
+theme = "Code dependencies approach: Prefer custom implementations"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "software"
+tags = [ "persona-adherence", "code-dependencies-approach", "custom-implementation", "rule-based", "playwright", "real-web",]
+
+# --- Single-attribute task ---------------------------------------------------- #
+# A developer persona that prefers custom implementations implements an HTTP
+# data-fetch helper in a live browser editor; the DOM-submitted code is scored
+# by one deterministic rule-based check reading the import list.
+# Reward = 1.0/0.0.
+[[checks]]
+dimension_id = "code_dependencies_approach"
+dimension_label = "Dependencies and Library Usage"
+category = "Skills: Programming"
+anchor_value = "Prefer custom implementations"
+evaluator = "rule-based"
+evaluator_name = "code_dependencies_approach=Prefer custom implementations"
+adherence_signal = "Submitted solution (solution/solution.py) imports stdlib-only (or nothing) — zero third-party dependencies."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

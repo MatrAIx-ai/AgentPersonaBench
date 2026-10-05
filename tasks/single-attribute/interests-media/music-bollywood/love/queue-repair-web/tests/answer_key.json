@@ -1,0 +1,23 @@
+{
+  "dimension_id": "musg_bollywood",
+  "value": "Love",
+  "final": {
+    "day": [
+      "h72"
+    ],
+    "evening": [
+      "f16"
+    ]
+  },
+  "draft": {
+    "day": [
+      "n17"
+    ],
+    "evening": [
+      "p29"
+    ]
+  },
+  "surface": "web",
+  "catalog_sha256": "dc39041c14e708aa69bc3ee4d336c55d62ee8b6e954f43560e90101146adb746",
+  "flow_sha256": "910949bc1fa50cfa2fe49d06193b102cb8d3c1310d1f5bafc44ace2a77838695"
+}

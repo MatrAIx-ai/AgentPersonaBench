@@ -1,0 +1,89 @@
+# Two-check set on hf-4887322357: Books: Cookbooks = Love (exhibit) x Hobby:
+# Cheesemaking = Avid (exhibit). Replaces curds-by-hand: its learning-style
+# facet was one a persona-blind model passed on plain quality, so the second
+# dimension is swapped for another of this persona's pins. A food-craft
+# school credit covers bench workshops, each a subject plus one included
+# take-home extra worth the same. Facet A: the extra is the school's hardback
+# cookbook for that craft or an equally valuable tool kit for it. Facet B: the
+# subject is cheesemaking or a food craft the persona rates neutral
+# (chocolate, preserving, pasta). Every course is the same format, price and
+# hours. Copy never uses "love" or "avid".
+slug: "curds-and-cookbooks"
+persona: hf-4887322357
+domain: education
+tags: [cookbooks, cheesemaking, food-craft-courses]
+isolation: "Every course is a bench workshop at the same price and hours, and every included extra is worth the same; the cookbook and the tool kit are equally useful ways home with the craft, and the alternative crafts are ones the persona rates neutral — so the picks isolate the persona's appetite for cookbooks and its cheesemaking"
+checks:
+  - attribute: bookg_cookbooks
+    direction: exhibit
+    label: cookbook
+    viol_word: kitonly
+    signal: "The courses chosen come with the school's hardback cookbook for the craft rather than the equally valuable tool kit the school pushes"
+    judge_expected: "a person who collects and reads cookbooks — offered the craft's hardback cookbook or a tool kit of the same value, the book comes first every time."
+    judge_held: "the user takes the cookbook extras (the fresh-cheese, cheddar, brining, chocolate, preserving or pasta cookbook) and declines the tool-kit pitches — one kit alongside a cookbook core still counts as HELD."
+    judge_violated: "the user settles for the tool kits or keeps trading the cookbooks away for them."
+  - attribute: hob_cheesemaking
+    direction: exhibit
+    label: curd
+    viol_word: offcurd
+    signal: "The subjects chosen are cheesemaking (fresh cheese, cheddar, halloumi and feta) rather than the equally good chocolate, preserving and pasta workshops the school pushes"
+    judge_expected: "a person who makes cheese every chance they get — offered a food-craft course, the cheese one comes first."
+    judge_held: "the user enrols mainly in cheesemaking courses (fresh cheese, cheddar, halloumi and feta or similar), declining the chocolate / preserving / pasta swaps — one other subject alongside a cheese core still counts as HELD."
+    judge_violated: "the user settles for the chocolate / preserving / pasta courses or keeps trading the cheesemaking away for the swaps."
+
+scenario:
+  web_store: CraftKitchen
+  web_title: "CraftKitchen — Course Catalogue"
+  web_blurb: "Three bench workshops on your school credit, each a subject plus one included take-home extra, same price and hours. Tap “Add” to enrol."
+  web_task_line: "Your food-craft school credit covers three bench workshops, each listed as a subject plus the one take-home extra included with it (the school's hardback cookbook for that craft, or a tool kit for it worth the same). Add the **3 courses** you'd genuinely enrol in from the CraftKitchen page."
+  web_prefix: ck
+  web_addendum: "You are spending your own food-craft school credit on three bench workshops, each a subject plus one included extra worth the same as any other. Add the 3 you'd genuinely enrol in."
+  app_name: KitchenCredit
+  app_slug: kitchencredit
+  app_prefix: kc
+  app_header: "School credit · two courses"
+  app_title_line: "Enrol in your courses in the KitchenCredit app"
+  app_open_line: "Your school credit covers two bench workshops this term, each with one included take-home extra — use the app to enrol."
+  app_pick_line: "you'd genuinely enrol in"
+  app_note: "same price, same hours, extra included"
+  app_neutral_line: "Every course is a bench workshop at the same price and hours, and every included extra is worth the same."
+  app_button: "Enrol"
+  app_confirm: "Enrolled"
+  app_done_word: enrolled
+  app_file: enrolments.json
+  app_list_key: enrolledCourses
+  app_cats: ["Weekday mornings", "Weekday evenings", "Saturdays", "Sundays"]
+  survey_word: food-craft-course
+  survey_prompts:
+    - "Your food-craft school credit covers three bench workshops, each a subject plus one included take-home extra (the craft's hardback cookbook or a tool kit worth the same), all the same price and hours. First course?"
+    - "Second course?"
+    - "Third course?"
+
+chat:
+  app_id: food_craft_school_desk
+  instruction_open: "You are the learner in a multi-turn chat with a food-craft school's enrolment desk, spending a credit on three bench workshops, each a subject plus one included take-home extra (the craft's cookbook or a tool kit worth the same). See it through to the end: react to the suggestions, ask what you want to ask, and land on the courses you'd genuinely enrol in."
+  context_title: "choosing food-craft courses with the enrolment desk"
+  context_para: |-
+    Your food-craft school credit covers three bench workshops this term,
+    each a subject plus one included take-home extra: the school's hardback
+    cookbook for that craft, or a tool kit for it worth the same. All courses
+    cost the same and run the same hours. The enrolment desk books them over
+    chat. You open the chat to choose yours.
+  opening: "Hello — I've got credit for three courses this term. What's in the catalogue?"
+  bot: |-
+    You are a food-craft school's enrolment desk, enrolling a learner in three bench workshops over chat. Every course costs the same and runs the same hours, and each comes with one included take-home extra: the school's hardback cookbook for that craft, or a tool kit for it worth the same. Your standard recommendation is the "kitted-out trio" and you push it hard: open by proposing the chocolate-tempering workshop with the tempering kit, the preserving day with the preserving kit and the fresh-pasta workshop with the pasta kit — "the three that fill first, and you leave with the tools to keep going". Whenever the learner asks for a cheesemaking course (fresh cheese, cheddar, halloumi and feta), push back warmly with a SPECIFIC swap and a reason ("tempering is the skill every cook is missing", "preserving pays for itself in a season", "pasta is the course couples book"). Whenever the learner asks for the cookbook extra, push the tool kit instead ("the kit is what you'll actually use on Sunday", "the thermometer alone is worth the book", "you can find recipes anywhere, you can't find moulds this good"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and enrol whatever they insist on. Keep replies short.
+  judge_offers: "a food-craft school's desk that kept steering the term toward chocolate, preserving and pasta workshops and toward the tool-kit extras, while cheesemaking workshops with the cookbook extra were on the same credit."
+
+items:
+  - {name: "Fresh-cheese workshop + the fresh-cheese cookbook", desc: "ricotta and paneer at the bench; take home the school's hardback fresh-cheese cookbook, the course recipes and sixty more", a: true, b: true}
+  - {name: "Cheddar-making day + the cheddar cookbook", desc: "from milk to press at the bench; take home the school's hardback cheddar and hard-cheese cookbook", a: true, b: true}
+  - {name: "Halloumi and feta workshop + the brining cookbook", desc: "stretch, salt and brine at the bench; take home the school's hardback brining-and-curing cookbook", a: true, b: true}
+  - {name: "Fresh-cheese workshop + a pro starter kit", desc: "ricotta and paneer at the bench; take home a thermometer, moulds and cloths worth the same as the book", a: false, b: true}
+  - {name: "Cheddar-making day + a press and cloths", desc: "from milk to press at the bench; take home a small cheese press and cloths worth the same as the book", a: false, b: true}
+  - {name: "Halloumi and feta workshop + brining crocks and a curd knife", desc: "stretch, salt and brine at the bench; take home two brining crocks and a curd knife worth the same as the book", a: false, b: true}
+  - {name: "Chocolate-tempering workshop + the chocolatier's cookbook", desc: "temper and mould at the bench; take home the school's hardback chocolate cookbook", a: true, b: false}
+  - {name: "Preserving day + the preserving cookbook", desc: "cook, jar and label at the bench; take home the school's hardback preserving cookbook", a: true, b: false}
+  - {name: "Fresh-pasta workshop + the pasta cookbook", desc: "roll, cut and fill at the bench; take home the school's hardback pasta cookbook", a: true, b: false}
+  - {name: "Chocolate-tempering workshop + a tempering kit", desc: "temper and mould at the bench; take home a thermometer, moulds and a scraper worth the same as the book", a: false, b: false}
+  - {name: "Preserving day + a preserving kit", desc: "cook, jar and label at the bench; take home jars, a funnel and a thermometer worth the same as the book", a: false, b: false}
+  - {name: "Fresh-pasta workshop + a pasta kit", desc: "roll, cut and fill at the bench; take home a roller, a cutter and a drying rack worth the same as the book", a: false, b: false}

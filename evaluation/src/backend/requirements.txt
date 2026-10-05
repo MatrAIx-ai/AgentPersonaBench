@@ -1,0 +1,35 @@
+# Playground — backend (API + service layer) runtime dependencies.
+#
+# These are the packages the FastAPI app and the pure-python service layer
+# need. They install cleanly into the canonical project .venv (the
+# uv-managed Python 3.9 env) on top of whatever the in-repo RecAI engine
+# already provides. The service lazy-imports
+# `recbot.interecagent_bridge.run_turn` at call time, so numpy / pandas / the
+# full RecAI stack are NOT required to import the API or to run the unit tests
+# (the tests mock `run_turn`).
+#
+# Install (into the project .venv — see ../README.md for provisioning).
+# From the repo root:
+#   .venv/bin/python -m pip install \
+#     -r application/playground/backend/requirements.txt
+#
+# Pins use lower bounds so the harness rides along with the env's existing
+# resolved versions; pydantic is pinned to v2 because schemas.py uses v2 APIs.
+
+fastapi>=0.110
+uvicorn[standard]>=0.27
+pydantic>=2
+
+# Playground reads persona definitions from YAML; playground/persona.py
+# imports `yaml` at startup, when the FastAPI app builds the playground service.
+PyYAML>=5.4
+# The task-owned item catalogs and feather bundle fallback need an Arrow engine
+# for pandas to read them at startup.
+pyarrow>=7
+
+# In-process Matraix Playground runners call model/provider SDKs from this backend process.
+openai>=1.66.0
+openai-agents>=0.17.6
+
+# PDF report downloads for batch / trial debriefs.
+fpdf2>=2.7.0

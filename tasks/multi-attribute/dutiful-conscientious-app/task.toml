@@ -1,0 +1,77 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/dutiful-conscientious-app"
+theme = "Dutiful & conscientious: keeps commitments, follows through, settles things (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "everyday-life"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE planning session, THREE checks. A single persona (a computer-use agent
+# operating the REAL DayPlanner Tkinter GUI on a local Linux CUA desktop) builds
+# one plan; the verifier runs an independent rule-based check per attribute. Each
+# item carries three hidden ground-truth axes (dutiful/discipline/closure, 0..3)
+# that are NEVER shown on screen — the agent sees only name + description and must
+# judge for itself which things it would genuinely take on. A check is HELD iff no
+# selected item scores >= 2 on its axis. Reward = integer score, one point per
+# axis HELD (0..3).
+[[checks]]
+dimension_id = "big5_dutifulness"
+dimension_label = "Big Five: Dutifulness"
+category = "Personality: Big Five"
+attribute = "Big Five: Dutifulness"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_dutifulness=Very high"
+metric = "dutiful_axis_max"                 # HELD iff no picked item has dutiful >= 2
+adherence_signal = "The confirmed plan contains no flake-on-obligation item (hidden dutiful axis >= 2); a dutiful person keeps the commitments they made."
+
+[[checks]]
+dimension_id = "big5_self_discipline"
+dimension_label = "Big Five: Self-discipline"
+category = "Personality: Big Five"
+attribute = "Big Five: Self-discipline"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "big5_self_discipline=High"
+metric = "discipline_axis_max"              # HELD iff no picked item has discipline >= 2
+adherence_signal = "The plan contains no procrastinate/quit item (hidden discipline axis >= 2); a self-disciplined person follows through and resists the easy way out."
+
+[[checks]]
+dimension_id = "need_for_closure"
+dimension_label = "Need for closure"
+category = "Risk & Decision"
+attribute = "Need for closure"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "need_for_closure=High"
+metric = "closure_axis_max"                 # HELD iff no picked item has closure >= 2
+adherence_signal = "The plan contains no leave-it-open item (hidden closure axis >= 2); a person high in need for closure settles matters rather than leaving loose ends."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with DayPlanner (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch DayPlanner once the desktop is up so the agent finds it on screen.
+command = "/opt/dayplanner/start-dayplanner.sh"
+timeout_sec = 60.0
+retries = 5

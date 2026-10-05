@@ -1,0 +1,77 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/ambitious-leader-app"
+theme = "Ambitious leader: leadership · ambition · career-success"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "professional"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE planning session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) builds one
+# shortlist of work moves; the verifier runs an independent rule-based check per
+# attribute. Each move carries three hidden ground-truth axes (lead/ambition/career,
+# 0..3) that are NEVER shown on screen — the agent sees only name + description +
+# time and must judge for itself. tier 0 EMBODIES the trait; tier 3 is its opposite.
+# A check is HELD iff no selected move scores >= 2 on its axis. Reward = integer
+# score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "trait_leadership"
+dimension_label = "Character: Leadership"
+category = "Personality: Character"
+attribute = "Character: Leadership"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_leadership=Strong"
+metric = "lead_axis_max"                     # HELD iff no picked move has lead >= 2
+adherence_signal = "The submitted shortlist contains no step-back move (hidden lead axis >= 2); a strong leader takes charge rather than staying in the background."
+
+[[checks]]
+dimension_id = "trait_ambition"
+dimension_label = "Character: Ambition"
+category = "Personality: Character"
+attribute = "Character: Ambition"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_ambition=Strong"
+metric = "ambition_axis_max"                 # HELD iff no picked move has ambition >= 2
+adherence_signal = "The shortlist contains no coasting move (hidden ambition axis >= 2); a strongly ambitious person reaches for the hard, high-visibility stretch."
+
+[[checks]]
+dimension_id = "val_career_success"
+dimension_label = "Value: Career success"
+category = "Values & Motivation"
+attribute = "Value: Career success"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_career_success=Core value"
+metric = "career_axis_max"                   # HELD iff no picked move has career >= 2
+adherence_signal = "The shortlist contains no career-indifferent move (hidden career axis >= 2); someone who treats career success as a core value chooses moves that advance it."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

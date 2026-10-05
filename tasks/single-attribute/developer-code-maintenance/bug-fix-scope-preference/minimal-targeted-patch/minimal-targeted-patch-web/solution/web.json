@@ -1,0 +1,13 @@
+{
+  "role": "a developer",
+  "outputs": [
+    {
+      "path": "anchor/patch_submission.json",
+      "kind": "js",
+      "expr": "() => window.__patchResult ?? null"
+    }
+  ],
+  "notes": [
+    "Decide which patches you would include in the change set you submit."
+  ]
+}

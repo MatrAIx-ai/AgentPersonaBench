@@ -1,0 +1,38 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/piano-performer-web"
+theme = "Familiarity: Music theory = Expert"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "music-practice"
+tags = [ "persona-adherence", "music-theory", "rehearsal-planning", "rule-based", "playwright", "real-web",]
+
+# Stimulus isolation:
+# Every card uses the same instrument, room, fee, and 60-minute duration; the tradeoff is depth of musical analysis versus immediate, low-preparation fluency.
+[[checks]]
+dimension_id = "fam_music_theory"
+dimension_label = "Familiarity: Music theory"
+category = "Expertise: Domains"
+anchor_value = "Expert"
+evaluator = "rule-based"
+adherence_signal = "The selected rehearsal methods consistently use harmonic function, voice leading, formal structure, and source comparison rather than surface imitation. Ground truth is each item's data-analytical attribute, read back from the real DOM after clicks."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

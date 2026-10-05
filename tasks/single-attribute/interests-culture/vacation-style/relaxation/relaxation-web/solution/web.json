@@ -1,0 +1,10 @@
+{
+  "role": "a traveller planning a short holiday",
+  "outputs": [
+    {
+      "path": "anchor/selection.json",
+      "kind": "js",
+      "expr": "() => window.__artifact"
+    }
+  ]
+}

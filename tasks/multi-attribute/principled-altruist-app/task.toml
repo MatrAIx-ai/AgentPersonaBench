@@ -1,0 +1,78 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/principled-altruist-app"
+theme = "Principled altruist: helps others, community-minded, self-directed (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "social"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE choosing session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) builds
+# one plan of how to spend a free day and a shared community fund; the verifier
+# runs an independent rule-based check per attribute. Each option carries three
+# hidden ground-truth axes (ax1 helps-others / ax2 community / ax3 self-direction,
+# 0..3) that are NEVER shown on screen — the agent sees only name + blurb + a light
+# tag and must judge for itself. A check is HELD iff no selected item scores >= 2
+# on its axis.
+# Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "val_helping_others"
+dimension_label = "Value: Helping others"
+category = "Values & Motivation"
+attribute = "Value: Helping others"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_helping_others=Core value"
+metric = "ax1_max"                          # HELD iff no picked item has ax1 >= 2
+adherence_signal = "The plan contains no self-focused option (hidden ax1 >= 2); someone for whom helping others is a core value picks options that benefit other people."
+
+[[checks]]
+dimension_id = "val_community"
+dimension_label = "Value: Community"
+category = "Values & Motivation"
+attribute = "Value: Community"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_community=Core value"
+metric = "ax2_max"                          # HELD iff no picked item has ax2 >= 2
+adherence_signal = "The plan contains no go-it-alone option (hidden ax2 >= 2); a community-minded person favors collective, neighborhood-serving choices over keeping to themselves."
+
+[[checks]]
+dimension_id = "schwartz_value_self_direction"
+dimension_label = "Schwartz value: Self-direction"
+category = "Values & Motivation"
+attribute = "Schwartz value: Self-direction"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "schwartz_value_self_direction=Very high"
+metric = "ax3_max"                          # HELD iff no picked item has ax3 >= 2
+adherence_signal = "The plan contains no conform-to-the-crowd option (hidden ax3 >= 2); a strongly self-directed person makes their own choices instead of just doing what others expect."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

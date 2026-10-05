@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/javascript-expert-web"
+theme = "Programming: JavaScript — Expert"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "software"
+tags = [ "persona-adherence", "javascript-expert", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "prog_javascript"
+dimension_label = "Programming: JavaScript"
+category = "Skills: Programming"
+anchor_value = "Expert"
+evaluator = "rule-based"
+adherence_signal = "The issues the persona claims are the JavaScript ones, chosen unprompted, even though the assistant only pushes backend work of the same size and priority."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

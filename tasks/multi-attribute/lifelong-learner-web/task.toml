@@ -1,0 +1,62 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/lifelong-learner-web"
+theme = "lifelong-learner: reading/writing learner + loves ideas & depth + reads daily (text/notes · dig deep · read regularly)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "learning"
+tags = [ "persona-adherence", "multi-check", "lifelong-learner", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE learning task, THREE checks. A single persona carrying three lifelong-learner
+# values picks 3 resources from a live resources page (Playwright); the verifier runs
+# an independent rule-based check per axis, reading each resource's hidden data-*
+# tier off index.html (ground truth, NOT shown to the learner). This amortizes one
+# generation across three attributes. Reward = integer score (one point per check
+# HELD, 0..3). Each axis: HELD iff no picked resource is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "learning_style"
+attribute = "Learning style"
+value = "Reading / writing"
+evaluator = "rule-based"
+evaluator_name = "learning_style=Reading / writing"
+# Ground truth: each resource's hidden data-readwrite (0 text/notes .. 3 avoids reading / passive) in index.html.
+adherence_signal = "Kit built from read-and-write resources (data-readwrite 0-1); no avoids-reading / handed-over pick (>= 2)."
+
+[[checks]]
+dimension_id = "big5_intellect"
+attribute = "Intellect"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_intellect=Very high"
+# Ground truth: each resource's hidden data-intellect (0 deep/challenging .. 3 shallow/incurious).
+adherence_signal = "Kit favors deep / challenging resources (data-intellect 0-1); no shallow/incurious pick (>= 2)."
+
+[[checks]]
+dimension_id = "habit_reading_before_bed"
+attribute = "Reading habit"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "habit_reading_before_bed=Daily"
+# Ground truth: each resource's hidden data-reading (0 reading-based .. 3 no reading at all).
+adherence_signal = "Kit favors reading-based resources (data-reading 0-1); no no-reading pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

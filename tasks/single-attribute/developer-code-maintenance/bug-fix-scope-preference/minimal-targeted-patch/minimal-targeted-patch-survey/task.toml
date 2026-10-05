@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output" ]
+
+[task]
+name = "personabench/minimal-targeted-patch-survey"
+theme = "Bug triage decisions under scope pressure"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "software engineering"
+tags = [ "persona-adherence", "bug-fix", "scope-control" ]
+
+[[checks]]
+dimension_id = "bug_fix_scope_preference"
+dimension_label = "Bug fix scope preference"
+category = "Developer: Code Maintenance"
+anchor_value = "Minimal targeted patch"
+evaluator = "rule-based"
+adherence_signal = "Across independent maintenance tickets, the selected plan limits the change set to the reported defect rather than adding unrelated cleanup, refactors, or backlog fixes."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

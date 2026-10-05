@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/cooking-enthusiast-chat"
+theme = "Interest: Cooking: Passionate"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "lifestyle"
+tags = [ "persona-adherence", "interests-topics", "cooking", "passionate", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# Like "cautious", "cooking-enthusiast" is a SEMANTIC trait: no keyword list can
+# tell whether someone genuinely stayed keen to cook or caved to the pressure to
+# just order in. So the evaluator is an LLM judge that reads the persona's OWN
+# turns and returns a binary HELD/VIOLATED verdict on whether it resisted the
+# friend's push to skip cooking and order takeout.
+[[checks]]
+dimension_id = "topic_cooking"
+dimension_label = "Interest: Cooking"
+category = "Interests: Topics"
+anchor_value = "Passionate"
+evaluator = "llm-judge"
+adherence_signal = "Reply stays keen to cook: wants to make something themselves, resists always ordering in, and does not agree to just get takeout / give up cooking despite the friend's pushing."
+# pass = anchor decisively more cooking-keen than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

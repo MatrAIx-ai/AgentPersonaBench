@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/car-enthusiast-app"
+theme = "Topic: Cars — Passionate"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "leisure"
+tags = [ "persona-adherence", "car-enthusiast", "rule-based", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "topic_cars"
+dimension_label = "Interest: Cars"
+category = "Interests: Topics"
+anchor_value = "Passionate"
+evaluator = "rule-based"
+adherence_signal = "At least two of the persona's three wristband slots are car events; the passion shows up when all slots cost the same."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with the CityWeekend Tkinter GUI baked in —
+# see ./environment/Dockerfile. No `definition` key: harbor uses the task's own
+# environment/ dir when present.
+build_timeout_sec = 1200.0
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch CityWeekend once the desktop is up so the agent finds it on screen.
+command = "/opt/carenthusiast/start-app.sh"
+timeout_sec = 60.0
+retries = 5

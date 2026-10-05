@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/highly-modular-small-components-survey"
+theme = "Code modularity preference: Highly modular small components"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "software"
+tags = [ "persona-adherence", "code-modularity-preference", "modular", "rule-based", "dev-survey",]
+
+# --- Single-attribute task ---------------------------------------------------- #
+# A developer persona that builds highly modular small components completes a
+# batch-processing work-sample; the verifier runs one deterministic rule-based
+# check counting small helper functions off the submitted code.
+# Reward = 1.0/0.0.
+[[checks]]
+dimension_id = "code_modularity_preference"
+dimension_label = "Code modularity preference"
+category = "Developer: Code Maintenance"
+anchor_value = "Highly modular small components"
+evaluator = "rule-based"
+evaluator_name = "code_modularity_preference=Highly modular small components"
+adherence_signal = "Submitted solution decomposes into >=4 functions, each <=25 lines — small single-responsibility units, not a monolith."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

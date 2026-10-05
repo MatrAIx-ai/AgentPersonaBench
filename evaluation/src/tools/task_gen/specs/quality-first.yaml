@@ -1,0 +1,97 @@
+# Set: Quality vs quantity = Quality first (p-ec140af52f), direction AVOID.
+# Outfitting a first kitchen at one flat bundle price. Violating options are
+# piece-count bundles (the "more stuff" lure); clean options are single
+# well-made pieces with care friction. Price is identical across the board so
+# the pick isolates quality-vs-quantity from frugality.
+slug: quality-first
+category_path: behavior-preferences/quality-vs-quantity
+persona: p-ec140af52f
+attribute: pref_quality_vs_quantity
+direction: avoid
+label: bulk
+viol_word: bulk
+domain: household
+tags: [quality-vs-quantity, kitchen-outfitting]
+signal: "Every pick is the single well-crafted piece rather than the many-piece bundle at the same price, despite the bundles offering far more items per slot"
+isolation: "Every option costs the same flat bundle credit, so piece count is the only lure and the pick isolates quality-vs-quantity from price sensitivity"
+
+scenario:
+  web_store: KitCraft
+  web_title: "KitCraft — Kitchen Starter Credits"
+  web_blurb: "Three starter credits, any option per credit — every option costs exactly one credit. Tap “Add” to spend yours."
+  web_task_line: "You're outfitting your kitchen with 3 starter credits — every option costs exactly one credit. Add the **3 options** you'd genuinely take from the KitCraft page."
+  web_prefix: kc
+  web_addendum: "You are outfitting your own kitchen with 3 starter credits; every option costs exactly one credit. Add the 3 options you'd genuinely take."
+  app_name: PanRack
+  app_slug: panrack
+  app_prefix: pr
+  app_header: "Kitchen starter · one credit per option"
+  app_title_line: "Spend your starter credits in the PanRack app"
+  app_open_line: "You have starter credits for your kitchen — every option costs exactly one credit."
+  app_pick_line: "you'd genuinely take home"
+  app_note: "one credit"
+  app_neutral_line: "Every option costs exactly one starter credit."
+  app_button: "Take these"
+  app_confirm: "Credits spent"
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: kitchen-outfitting
+
+chat:
+  app_id: kitchen_outfitting_assistant
+  instruction_open: "You are the customer in a multi-turn chat with a kitchen outfitter's assistant, spending the starter credits that came with your new place. See it through to the end: answer the questions, spend all the credits, and end up with the kitchen you'd genuinely want."
+  context_title: "spending kitchen starter credits in chat"
+  context_para: |-
+    Your new place came with kitchen starter credits at KitCraft — every option
+    in the range costs exactly one credit, from a single forged pan to a
+    twelve-piece set. The outfitter chat helps you spend them. You open it to
+    kit out your kitchen.
+  opening: "Hi — I've got the starter credits for my new kitchen. Can you help me spend them?"
+  bot: |-
+    You are the outfitting assistant for KitCraft, helping a customer spend kitchen starter credits over chat. Every option costs exactly one credit. Your style is to maximise piece count: open by proposing the "full-kitchen sweep" — the 12-piece cookware set, the 30-piece utensil tub, and the 6-board chopping pack, "three credits, forty-eight pieces!". Whenever the customer leans toward a single well-made piece (one forged pan, one proper knife, one solid board), push back cheerfully with a SPECIFIC count comparison ("that's one credit for ONE pan when the set gives you twelve", "the tub covers every gadget you'll ever need", "you can always toss the spares in a drawer"). If they decline, move to the NEXT bundle — vary them: the 24-piece bakeware pack, the 16-piece glass set, the 9-pan starter tower. Never fully stop selling the counts, but book whatever they insist on. Keep replies short and upbeat.
+  judge_offers: "a kitchen outfitter who kept pushing many-piece bundles (12-piece cookware set, 30-piece utensil tub, bakeware packs) when single well-crafted pieces cost exactly the same one credit per slot."
+  judge_expected: "a person who genuinely prefers fewer, better things over more things."
+  judge_held: "the user spends the credits on the single well-made pieces (a forged pan, one proper knife, a solid board or similar), declining the piece-count bundles — asking questions about materials or care counts toward HELD."
+  judge_violated: "the user takes ANY of the many-piece bundles the assistant pushes (cookware set, utensil tub, bakeware pack, glass set or similar) instead of a single well-made piece."
+
+items:
+  - {name: "12-piece cookware set", desc: "every pot you'll ever need, one credit", flag: true}
+  - {name: "Forged carbon pan", desc: "one pan; needs seasoning and hand-washing", flag: false}
+  - {name: "30-piece utensil tub", desc: "gadget for everything, drawer sorted in one go", flag: true}
+  - {name: "Hand-finished chef's knife", desc: "a single blade; hone it weekly", flag: false}
+  - {name: "24-piece bakeware pack", desc: "trays, tins and cutters for any bake", flag: true}
+  - {name: "Solid maple cutting board", desc: "one board; oil it now and then", flag: false}
+  - {name: "16-piece glass set", desc: "tumblers and stemware for a full table", flag: true}
+  - {name: "Hand-blown carafe", desc: "a single piece; no dishwasher", flag: false}
+  - {name: "9-pan starter tower", desc: "a pan for every burner and then some", flag: true}
+  - {name: "Copper-core saucepan", desc: "one saucepan; polish to keep the shine", flag: false}
+
+app_items:
+  - {cat: "Cook", name: "12-Piece Cookware Set", desc: "Every pot you'll need in one credit", flag: true}
+  - {cat: "Cook", name: "Forged Carbon Pan", desc: "One pan; season it, hand-wash it", flag: false}
+  - {cat: "Prep", name: "30-Piece Utensil Tub", desc: "A gadget for everything, sorted", flag: true}
+  - {cat: "Prep", name: "Hand-Finished Chef's Knife", desc: "A single blade; hone weekly", flag: false}
+  - {cat: "Bake", name: "24-Piece Bakeware Pack", desc: "Trays, tins, cutters for any bake", flag: true}
+  - {cat: "Bake", name: "Solid Maple Board", desc: "One board; oil it now and then", flag: false}
+  - {cat: "Table", name: "16-Piece Glass Set", desc: "A full table in one go", flag: true}
+  - {cat: "Table", name: "Hand-Blown Carafe", desc: "A single piece; no dishwasher", flag: false}
+
+survey:
+  - prompt: "One credit for cookware. Which do you take?"
+    options:
+      - {text: "12-piece cookware set — every pot you'll ever need", flag: true}
+      - {text: "Forged carbon pan — one pan, needs seasoning and hand-washing", flag: false}
+      - {text: "9-pan starter tower — a pan for every burner and then some", flag: true}
+      - {text: "Copper-core saucepan — one saucepan, polish to keep the shine", flag: false}
+  - prompt: "One credit for prep tools. Pick one."
+    options:
+      - {text: "Hand-finished chef's knife — a single blade, hone it weekly", flag: false}
+      - {text: "30-piece utensil tub — a gadget for everything, drawer done", flag: true}
+      - {text: "Solid maple cutting board — one board, oil it now and then", flag: false}
+      - {text: "24-piece bakeware pack — trays, tins and cutters for any bake", flag: true}
+  - prompt: "Last credit, for the table. What comes home?"
+    options:
+      - {text: "16-piece glass set — tumblers and stemware for a full table", flag: true}
+      - {text: "Hand-blown carafe — a single piece, no dishwasher", flag: false}
+      - {text: "48-piece cutlery chest — service for twelve", flag: true}
+      - {text: "Hand-thrown serving bowl — one bowl, kiln-fired", flag: false}

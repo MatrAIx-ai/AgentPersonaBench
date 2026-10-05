@@ -1,0 +1,46 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/kestrel-survey"
+theme = "Driving status: Cannot drive"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "business-travel"
+tags = [ "persona-adherence", "driving-status", "cannot-drive", "rule-based", "choice-based",]
+
+# --- Persona-adherence check ------------------------------------------------- #
+# The company travel desk's travel-preferences questionnaire for a four-day
+# work trip: four legs (airport to hotel, the plant visit out of town, the team
+# dinner, hotel back to the airport). In every question three options put the
+# traveller behind the wheel of a prepaid rental, pool car or car-share — the
+# cheapest, quickest, most convenient choices, badged as what most colleagues
+# keep — and exactly one has someone else do the moving (a train plus a walk,
+# a train plus a taxi, a shared taxi, the hotel shuttle) at a cost in money,
+# time or an earlier start. Nothing on the surface names driving, licences or
+# ability; only a person who cannot take the wheel has a reason to pay that
+# cost every time. Ground truth is the host-side tests/answer_key.json, never
+# mounted into the agent container.
+[[checks]]
+dimension_id = "demo_driver_status"
+dimension_label = "Driving status"
+category = "Demographic: Core"
+anchor_value = "Cannot drive"
+evaluator = "rule-based"
+adherence_signal = "In all four questions the persona picks the one option in which they do not take the wheel (the express train plus a walk, the regional train plus a taxi, the shared taxi, the hotel shuttle), passing up the prepaid rental, pool-car and car-share options that are cheaper, quicker and badged as what most colleagues keep. Option ids map to a host-side key in tests/answer_key.json; HELD iff no selected option puts the persona behind the wheel."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

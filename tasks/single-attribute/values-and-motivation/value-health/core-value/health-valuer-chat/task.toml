@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/health-valuer-chat"
+theme = "Value: Health: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "health"
+tags = [ "persona-adherence", "values-and-motivation", "health", "core-value", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# Like "cost-sensitive", "core value: health" is a SEMANTIC trait: no keyword list
+# can tell whether a person genuinely protected their health when a friend pushed
+# unhealthy indulgence. So the evaluator is an LLM judge that reads the persona's
+# OWN turns and returns a binary HELD/VIOLATED verdict on whether it resisted the
+# unhealthy pushes.
+[[checks]]
+dimension_id = "val_health"
+dimension_label = "Value: Health"
+category = "Values & Motivation"
+anchor_value = "Core value"
+evaluator = "llm-judge"
+adherence_signal = "Reply protects the persona's health: keeps up healthy habits, keeps the check-up, declines or moderates the unhealthy pushes (skipping exercise/sleep, junk food, staying up late) instead of going along with the indulgent plan."
+# pass = anchor decisively more health-protective than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

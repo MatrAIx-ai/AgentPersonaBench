@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/expert-web"
+theme = "Familiarity: Astronomy — Expert promotes candidates on a vetting dashboard"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "astronomy"
+tags = [ "persona-adherence", "astronomy-familiarity", "periodogram", "rule-based", "playwright", "real-web",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "fam_astronomy"
+dimension_label = "Familiarity: Astronomy"
+category = "Expertise: Domains"
+anchor_value = "Expert"
+evaluator = "rule-based"
+adherence_signal = "The DOM submission is exactly the two real candidates: the dominant signal and the weak second planet (which the harmonics outrank in power); both harmonics and both noise candidates are excluded."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RiverRoom Decision Lab</title>
+  <style>
+    :root { --linen:#efe8dc; --card:#fbf8f2; --ink:#1c1a18; --soft:#5d5750; --faint:#958d82; --rule:#d9cfbf;
+            --ox:#7a1f2b; --ox-dk:#5a1520; --brass:#b8893b; --slate:#3f5a5a; --slate-dk:#2f4545; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--linen); color:var(--ink); font:15.5px/1.55 "DejaVu Sans","Segoe UI",sans-serif; }
+    button { font:inherit; }
+    .serif { font-family:"URW Bookman","Bookman Old Style",Georgia,serif; }
+
+    header.bar { background:var(--card); border-bottom:1px solid var(--rule); }
+    header.bar .in { max-width:1180px; margin:0 auto; padding:0 28px; height:70px; display:flex; align-items:center; gap:16px; }
+    .wm { font:600 23px/1 "URW Bookman","Bookman Old Style",Georgia,serif; letter-spacing:-.01em; }
+    .wm span { color:var(--ox); }
+    .wm small { display:block; font:11px/1 "Nimbus Mono PS","Courier New",monospace; letter-spacing:.2em; color:var(--faint); margin-top:5px; text-transform:uppercase; }
+    .session { margin-left:auto; display:flex; gap:18px; align-items:center; font-size:13px; color:var(--soft); }
+    .session .pill { border:1px solid var(--rule); border-radius:999px; padding:5px 12px; background:#fff; }
+
+    .shell { max-width:1180px; margin:0 auto; padding:26px 28px 50px; display:grid; grid-template-columns:250px 1fr; gap:28px; }
+    .side { position:sticky; top:18px; align-self:start; }
+    .side .box { background:var(--card); border:1px solid var(--rule); border-radius:14px; padding:16px; }
+    .side h2 { margin:0 0 4px; font:600 16px "URW Bookman","Bookman Old Style",Georgia,serif; }
+    .side p { margin:0 0 12px; font-size:12.5px; color:var(--soft); }
+    .nav { display:grid; grid-template-columns:repeat(6,1fr); gap:6px; }
+    .nav button { height:30px; border-radius:7px; border:1px solid var(--rule); background:#fff; color:var(--soft); font:12px "Nimbus Mono PS","Courier New",monospace; cursor:pointer; padding:0; }
+    .nav button.done { background:var(--slate); border-color:var(--slate); color:#fff; }
+    .nav button.here { outline:2px solid var(--ox); outline-offset:1px; }
+    .count { margin-top:14px; font-size:13px; color:var(--soft); }
+    .count b { color:var(--ink); font-size:20px; font-family:"URW Bookman","Bookman Old Style",Georgia,serif; }
+    .meter { height:6px; border-radius:3px; background:#e4dccd; margin-top:6px; overflow:hidden; }
+    .meter i { display:block; height:100%; background:var(--ox); width:0; transition:width .2s; }
+    .brief { margin-top:14px; background:transparent; border:1px dashed var(--rule); border-radius:14px; padding:14px 16px; font-size:12.5px; color:var(--soft); }
+    .brief b { color:var(--ink); display:block; margin-bottom:4px; }
+
+    .spot { background:var(--card); border:1px solid var(--rule); border-radius:18px; overflow:hidden; }
+    .spot .table { background:var(--slate-dk); height:170px; position:relative; }
+    .spot .table svg { width:100%; height:100%; display:block; }
+    .spot .content { padding:24px 30px 26px; }
+    .tag { display:inline-flex; gap:10px; align-items:center; font:12px "Nimbus Mono PS","Courier New",monospace; letter-spacing:.14em; text-transform:uppercase; color:var(--ox); }
+    .tag:before { content:""; width:18px; height:2px; background:var(--ox); }
+    .spot h1 { margin:8px 0 10px; font:600 28px/1.2 "URW Bookman","Bookman Old Style",Georgia,serif; }
+    .spot .scenario { margin:0 0 10px; font-size:16px; }
+    .spot .facts { margin:0 0 18px; padding:10px 14px; border-left:3px solid var(--brass); background:#f5efe3; color:var(--soft); font-size:14.5px; }
+    .opts { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    button.option { display:flex; gap:12px; align-items:flex-start; text-align:left; min-height:62px; border:1.5px solid var(--rule); border-radius:12px; background:#fff; color:var(--ink); padding:12px 14px; cursor:pointer; }
+    button.option .k { flex:none; width:26px; height:26px; border-radius:50%; border:1.5px solid var(--faint); display:grid; place-items:center; font:700 12px "Nimbus Mono PS","Courier New",monospace; color:var(--soft); }
+    button.option:hover { border-color:var(--slate); }
+    button.option.selected { border-color:var(--ox); background:#fbf1ee; box-shadow:inset 0 0 0 1px var(--ox); }
+    button.option.selected .k { background:var(--ox); border-color:var(--ox); color:#fff; }
+    .spot .foot { display:flex; justify-content:space-between; align-items:center; margin-top:20px; padding-top:16px; border-top:1px solid var(--rule); font-size:13px; color:var(--faint); }
+    .linkbtn { background:none; border:1px solid var(--rule); border-radius:9px; padding:8px 14px; cursor:pointer; color:var(--soft); font-weight:600; }
+    .linkbtn:disabled { opacity:.45; cursor:default; }
+
+    #review { display:none; }
+    body.reviewing #play { display:none; }
+    body.reviewing #review { display:block; }
+    .rv { background:var(--card); border:1px solid var(--rule); border-radius:18px; overflow:hidden; }
+    .rv .hd { padding:22px 28px 16px; border-bottom:1px solid var(--rule); }
+    .rv .hd h1 { margin:0; font:600 26px "URW Bookman","Bookman Old Style",Georgia,serif; }
+    .rv .hd p { margin:6px 0 0; color:var(--soft); }
+    .rv .row { display:grid; grid-template-columns:90px 1fr 1.1fr 90px; gap:14px; align-items:center; padding:10px 28px; border-bottom:1px solid #ebe3d5; font-size:14px; }
+    .rv .row .h { font:12px "Nimbus Mono PS","Courier New",monospace; color:var(--faint); letter-spacing:.08em; }
+    .rv .row .t { font-weight:600; }
+    .rv .row .a { color:var(--soft); }
+    .rv .row button { background:none; border:0; color:var(--ox); text-decoration:underline; cursor:pointer; font-size:13px; }
+    .rv .ft { display:flex; align-items:center; gap:14px; padding:18px 28px; background:#f5efe3; position:sticky; bottom:0; border-top:1px solid var(--rule); }
+    #submit { border:0; border-radius:10px; background:var(--ox); color:#fff; font-weight:700; padding:12px 22px; cursor:pointer; }
+    #submit:hover { background:var(--ox-dk); }
+    #submit:disabled { opacity:.55; cursor:default; }
+    #status { color:var(--soft); font-size:14px; }
+    .done-note { display:none; margin-left:auto; color:var(--slate); font-weight:700; }
+    body.submitted .done-note { display:block; }
+
+    footer { max-width:1180px; margin:0 auto; padding:0 28px 30px; font-size:12px; color:var(--faint); display:flex; justify-content:space-between; }
+  </style>
+</head>
+<body>
+  <header class="bar">
+    <div class="in">
+      <svg width="42" height="42" viewBox="0 0 42 42" aria-hidden="true">
+        <rect x="7" y="3" width="26" height="36" rx="4" fill="#7a1f2b" transform="rotate(-8 20 21)"/>
+        <rect x="11" y="4" width="26" height="36" rx="4" fill="#fbf8f2" stroke="#1c1a18" stroke-width="1.5"/>
+        <path d="M24 12 C 20 16, 17 18, 17 21 C 17 23.5, 19.5 24.6, 22 23 C 21.6 25, 21 26.2, 19.8 27 L 28.2 27 C 27 26.2, 26.4 25, 26 23 C 28.5 24.6, 31 23.5, 31 21 C 31 18, 28 16, 24 12 Z" fill="#1c1a18"/>
+        <path d="M13 34 C 17 31, 20 36, 24 33 S 31 32, 35 34" stroke="#b8893b" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div class="wm">River<span>Room</span><small>Decision Lab</small></div>
+      <div class="session"><span class="pill">Study session · 24 hands</span><span class="pill">Fresh stack every hand</span></div>
+    </div>
+  </header>
+
+  <div class="shell">
+    <aside class="side">
+      <div class="box">
+        <h2>Hands</h2>
+        <p>Jump to any hand. Filled squares have an action recorded.</p>
+        <div class="nav" id="nav"></div>
+        <div class="count"><b id="done-count">0</b> of 24 recorded</div>
+        <div class="meter"><i id="meter"></i></div>
+      </div>
+      <div class="brief"><b>How this works</b>Each hand starts from a fresh stack. Treat the reads, equities, and payout estimates as your best available information. Pick one action per hand; the next hand opens automatically. After the last hand you review and submit the session.</div>
+    </aside>
+
+    <main>
+      <section id="play">
+        <div class="spot">
+          <div class="table" id="table-art"></div>
+          <div class="content">
+            <div class="tag" id="group"></div>
+            <h1 id="title"></h1>
+            <p class="scenario" id="scenario"></p>
+            <p class="facts" id="facts"></p>
+            <div class="opts" id="opts" role="group" aria-label="Actions for this hand"></div>
+            <div class="foot">
+              <button class="linkbtn" id="prev">Previous hand</button>
+              <span id="pos">Hand 1 of 24</span>
+              <button class="linkbtn" id="to-review">Review session</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="review">
+        <div class="rv">
+          <div class="hd"><h1>Session review</h1><p>Your recorded action for every hand. Change any hand, then submit the session.</p></div>
+          <div id="rv-rows"></div>
+          <div class="ft">
+            <button id="submit">Submit all hands</button>
+            <span id="status">24 decisions required.</span>
+            <span class="done-note">Session submitted</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <footer><span>RiverRoom Decision Lab · study tool</span><span>Hands are independent; nothing carries over between them.</span></footer>
+
+  <script>
+    const hands = [
+      {id:"button_steal", group:"Hand 1 · preflop", title:"Button steal with A♠5♠", scenario:"A six-handed cash game folds to you on the button. Both blinds play tightly. You have 40 big blinds.", facts:"The pot is 1.5 BB before your action. Choose a complete preflop line.", options:[
+        {id:"bs04", text:"Fold."}, {id:"bs27", text:"Raise to 2.2 BB."}, {id:"bs61", text:"Raise to 4 BB."}, {id:"bs90", text:"Move all-in for 40 BB."}
+      ]},
+      {id:"river_bluff", group:"Hand 2 · river", title:"Missed draw on a capped river", scenario:"You reach the river heads-up with a missed straight draw. The opponent checks and is unlikely to hold the nuts. The pot is 36 BB; you have 44 BB behind.", facts:"A check loses at showdown. Larger bets win more often when called less frequently, while risking more when called.", options:[
+        {id:"rb95", text:"Move all-in for 44 BB."}, {id:"rb73", text:"Bet 30 BB."}, {id:"rb42", text:"Bet 12 BB."}, {id:"rb18", text:"Check back."}
+      ]},
+      {id:"squeeze_play", group:"Hand 3 · preflop", title:"Squeeze opportunity with A♦J♦", scenario:"A loose player opens to 2.5 BB and two players call. You are in the big blind with 55 BB; the opener folds to reraises often.", facts:"Four lines are available before the flop.", options:[
+        {id:"sq43", text:"Call 1.5 BB more."}, {id:"sq18", text:"Fold."}, {id:"sq91", text:"Move all-in for 55 BB."}, {id:"sq67", text:"Reraise to 14 BB."}
+      ]},
+      {id:"turn_overbet", group:"Hand 4 · turn", title:"Top pair on a dynamic board", scenario:"You raised preflop and hold top pair with a strong kicker. A loose caller checks to you on a turn that adds several draws. The pot is 22 BB; effective stacks are 48 BB.", facts:"Choose your turn sizing.", options:[
+        {id:"to64", text:"Bet 16 BB."}, {id:"to88", text:"Move all-in for 48 BB."}, {id:"to09", text:"Check."}, {id:"to31", text:"Bet 7 BB."}
+      ]},
+      {id:"check_raise", group:"Hand 5 · flop", title:"Bottom pair against a frequent c-bettor", scenario:"You defend the big blind and flop bottom pair plus a backdoor flush draw. The aggressive raiser bets 4 BB into 9 BB. You have 70 BB behind.", facts:"The opponent gives up often when facing substantial resistance.", options:[
+        {id:"cb03", text:"Fold."}, {id:"cb26", text:"Call 4 BB."}, {id:"cb54", text:"Raise to 16 BB."}, {id:"cb81", text:"Move all-in for 70 BB."}
+      ]},
+      {id:"optional_straddle", group:"Hand 6 · table option", title:"Optional live straddle", scenario:"A lively cash table allows an optional straddle before cards are dealt. Your normal buy-in is 100 BB.", facts:"A larger straddle increases the money committed blind and makes the effective game play bigger.", options:[
+        {id:"st97", text:"Post the maximum allowed 8 BB straddle."}, {id:"st68", text:"Post a 4 BB button straddle."}, {id:"st35", text:"Post the standard 2 BB straddle."}, {id:"st13", text:"Decline the straddle."}
+      ]},
+      {id:"nut_flush_draw", group:"Hand 7 · flop", title:"Nut-flush draw facing a large bet", scenario:"You hold A♥Q♥ on a two-heart flop with two overcards. An opponent bets 18 BB into 24 BB; effective stacks are 82 BB.", facts:"Your estimated equity when called is 44%. Choose a response.", options:[
+        {id:"nf52", text:"Call 18 BB."}, {id:"nf07", text:"Fold."}, {id:"nf86", text:"Move all-in for 82 BB."}, {id:"nf41", text:"Raise to 52 BB."}
+      ]},
+      {id:"open_ender", group:"Hand 8 · flop", title:"Open-ended straight draw multiway", scenario:"You have an open-ended straight draw in a three-way pot. A player bets 10 BB into 20 BB and the other player calls. You have 65 BB behind.", facts:"Your estimated equity against two continuing ranges is 31%.", options:[
+        {id:"oe71", text:"Raise to 38 BB."}, {id:"oe93", text:"Move all-in for 65 BB."}, {id:"oe16", text:"Fold."}, {id:"oe48", text:"Call 10 BB."}
+      ]},
+      {id:"combo_draw", group:"Hand 9 · turn", title:"Pair plus combo draw", scenario:"You hold middle pair, a flush draw, and an open-ended straight draw. A tight opponent bets 24 BB into 32 BB. Effective stacks are 76 BB.", facts:"Your estimated equity when all the money goes in is 46%.", options:[
+        {id:"cd02", text:"Fold."}, {id:"cd28", text:"Call 24 BB."}, {id:"cd55", text:"Raise to 58 BB."}, {id:"cd83", text:"Move all-in for 76 BB."}
+      ]},
+      {id:"backdoor_attack", group:"Hand 10 · flop", title:"Overcards and backdoor draws", scenario:"You have two overcards, a backdoor straight draw, and a backdoor flush draw. A single opponent bets 5 BB into 14 BB; you have 90 BB behind.", facts:"Immediate made-hand equity is modest, but several turn cards create strong draws.", options:[
+        {id:"bd89", text:"Move all-in for 90 BB."}, {id:"bd62", text:"Raise to 24 BB."}, {id:"bd37", text:"Call 5 BB."}, {id:"bd14", text:"Fold."}
+      ]},
+      {id:"pair_draw", group:"Hand 11 · turn", title:"Second pair plus flush draw", scenario:"A loose opponent bets 14 BB into 28 BB. You hold second pair and a flush draw with 68 BB behind.", facts:"Your estimated equity is 42%, and the opponent can fold some one-pair hands to a raise.", options:[
+        {id:"pd29", text:"Call 14 BB."}, {id:"pd05", text:"Fold."}, {id:"pd90", text:"Move all-in for 68 BB."}, {id:"pd63", text:"Raise to 44 BB."}
+      ]},
+      {id:"straight_draw", group:"Hand 12 · turn", title:"Double-gutshot against a small bet", scenario:"You have eight clean outs to a straight and no made hand. A cautious opponent bets 8 BB into 30 BB; effective stacks are 95 BB.", facts:"A large raise may win immediately; when called, you still have one card to improve.", options:[
+        {id:"sd59", text:"Raise to 36 BB."}, {id:"sd84", text:"Move all-in for 95 BB."}, {id:"sd10", text:"Fold."}, {id:"sd36", text:"Call 8 BB."}
+      ]},
+      {id:"runout_count", group:"Hand 13 · all-in", title:"Choose the number of runouts", scenario:"You and an opponent are all-in with exactly 50% equity in a $4,000 pot. The room can deal the remaining cards one to four times.", facts:"The average payout is unchanged. More runouts reduce the size of the swing.", options:[
+        {id:"ro06", text:"Run it four times."}, {id:"ro24", text:"Run it three times."}, {id:"ro57", text:"Run it twice."}, {id:"ro92", text:"Run it once for the full pot."}
+      ]},
+      {id:"allin_insurance", group:"Hand 14 · all-in", title:"Insurance while ahead", scenario:"You are all-in as a 72% favorite in a $6,000 pot. The room offers insurance against the losing river card.", facts:"Insurance has a small fee; buying more coverage narrows outcomes.", options:[
+        {id:"in96", text:"Decline all insurance."}, {id:"in73", text:"Insure 25% of the amount at risk."}, {id:"in42", text:"Insure half of the amount at risk."}, {id:"in18", text:"Fully insure the amount at risk."}
+      ]},
+      {id:"cashout_offer", group:"Hand 15 · all-in", title:"Guaranteed cash-out offer", scenario:"You are already all-in and have 65% equity in a $5,000 pot. Before the final cards, the room offers a guaranteed settlement.", facts:"Choose how much of your equity to settle now.", options:[
+        {id:"co31", text:"Cash out 50% and let the remainder run."}, {id:"co09", text:"Cash out the full offered amount."}, {id:"co88", text:"Decline the cash-out and let the entire pot run."}, {id:"co64", text:"Cash out 25% and let most of the pot run."}
+      ]},
+      {id:"final_table_deal", group:"Hand 16 · payout", title:"Four-handed deal discussion", scenario:"Four equally skilled players remain with similar stacks. The current proposal gives each player a strong guaranteed payout and leaves a small trophy bonus.", facts:"The original payout is highly top-heavy, with first place paying more than five times fourth place.", options:[
+        {id:"ft67", text:"Accept only if half the prize pool remains for play."}, {id:"ft91", text:"Reject any deal and play for the original payouts."}, {id:"ft18", text:"Accept the equal guaranteed split."}, {id:"ft43", text:"Accept a chip-count deal with a small trophy bonus."}
+      ]},
+      {id:"bomb_pot", group:"Hand 17 · table option", title:"Optional bomb-pot size", scenario:"The table offers one optional double-board bomb pot. Every participant posts the same amount before seeing cards.", facts:"Larger posts create a bigger multiway pot with the same unknown starting cards.", options:[
+        {id:"bp11", text:"Sit out this hand."}, {id:"bp32", text:"Join for 2 BB."}, {id:"bp54", text:"Join for 8 BB."}, {id:"bp79", text:"Join for 20 BB."}
+      ]},
+      {id:"stakes_shot", group:"Hand 18 · game selection", title:"One-session move up", scenario:"You have set aside a separate poker entertainment budget for tonight. Four games with similar lineups are open.", facts:"Higher games create proportionally larger wins and losses during the session.", options:[
+        {id:"ss94", text:"Play 10/20 with the full session budget."}, {id:"ss72", text:"Play 5/10 with one buy-in."}, {id:"ss46", text:"Play 2/5 and reserve half the budget."}, {id:"ss15", text:"Play the usual 1/2 game."}
+      ]},
+      {id:"satellite_bubble", group:"Hand 19 · satellite", title:"Choose a satellite payout format", scenario:"A poker festival offers four simultaneous satellites. Each has twenty equally skilled players, the same entry fee, and a $20,000 prize pool.", facts:"Your expected payout is $1,000 in every format; only the chance and size of a win change.", options:[
+        {id:"sb29", text:"Play for five $4,000 seats, awarded to the final five."}, {id:"sb05", text:"Play for ten $2,000 seats, awarded to the final ten."}, {id:"sb90", text:"Play winner-take-all for one $20,000 seat."}, {id:"sb63", text:"Play for two $10,000 seats, awarded to the final two."}
+      ]},
+      {id:"bounty_call", group:"Hand 20 · bounty", title:"Settle or draw a mystery bounty", scenario:"You win a mystery-bounty token. Before you reveal it, the tournament offers four settlement pools whose published average payout is $800.", facts:"Every choice has the same expected payout. The more concentrated pools produce larger wins less often.", options:[
+        {id:"bc59", text:"Choose a 25% chance of $3,200, otherwise $0."}, {id:"bc84", text:"Choose a 5% chance of $16,000, otherwise $0."}, {id:"bc10", text:"Take $800 guaranteed."}, {id:"bc36", text:"Choose an equal chance of $400 or $1,200."}
+      ]},
+      {id:"reentry_choice", group:"Hand 21 · tournament", title:"Re-entry after an early bust", scenario:"You bust in the first level of a weekend tournament. Re-entry remains open for two hours and comes with a fresh 100 BB stack.", facts:"The same buy-in can be paid again; later entry starts with fewer big blinds.", options:[
+        {id:"re13", text:"End the session without re-entering."}, {id:"re35", text:"Wait and enter a lower-cost side event."}, {id:"re68", text:"Re-enter this tournament once now."}, {id:"re97", text:"Re-enter now and plan to use every available re-entry if needed."}
+      ]},
+      {id:"payjump_jam", group:"Hand 22 · final table", title:"Choose the final-table payouts", scenario:"Six equally skilled players reach the final table with equal stacks. Before play resumes, everyone independently selects a payout schedule for comparison.", facts:"Each schedule distributes the same $60,000 prize pool, so every player's expected payout is $10,000.", options:[
+        {id:"pj86", text:"Winner receives $50,000, runner-up $10,000, and the other four receive $0."}, {id:"pj52", text:"Pay $28,000 / $14,000 / $8,000 / $5,000 / $3,000 / $2,000."}, {id:"pj41", text:"Pay $18,000 / $14,000 / $11,000 / $8,000 / $6,000 / $3,000."}, {id:"pj07", text:"Pay every finalist $10,000."}
+      ]},
+      {id:"heads_up_deal", group:"Hand 23 · heads-up", title:"How much of heads-up play to settle", scenario:"You reach heads-up play with exactly half the chips against an equally skilled opponent. First pays $30,000 and second pays $14,000.", facts:"Every deal below leaves you with an expected payout of $22,000 while changing how much remains in play.", options:[
+        {id:"hu37", text:"Lock $18,000 each and play for the remaining $8,000."}, {id:"hu14", text:"End the event with $22,000 each."}, {id:"hu89", text:"Reject a deal and play for the full $30,000 / $14,000 payouts."}, {id:"hu62", text:"Lock $16,000 each and play for the remaining $12,000."}
+      ]},
+      {id:"last_longer", group:"Hand 24 · side pool", title:"Optional last-longer pool", scenario:"Before a tournament, friends offer a last-longer side pool. Everyone has the same skill and starting stack.", facts:"Choose how much of your tournament budget to put into the winner-take-all side pool.", options:[
+        {id:"ll73", text:"Put 25% of the budget into the pool."}, {id:"ll95", text:"Put 50% of the budget into the pool."}, {id:"ll18", text:"Decline the side pool."}, {id:"ll42", text:"Put 10% of the budget into the pool."}
+      ]}
+    ];
+
+    const decisionOrder = hands.map((hand) => hand.id);
+    const selected = {};
+    const events = [{event:"start", handCount:hands.length}];
+    window.__artifact = null;
+    const LETTERS = ["A", "B", "C", "D"];
+    let current = 0;
+    let returnToReview = false;
+
+    // Decorative table, identical anatomy for every hand; dealer button position cycles with the hand index only.
+    function tableArt(index) {
+      const seats = [[300,34],[480,52],[560,110],[480,150],[120,150],[40,110],[120,52]];
+      let s = '<svg viewBox="0 0 600 170" preserveAspectRatio="xMidYMid meet" aria-hidden="true">';
+      s += '<ellipse cx="300" cy="94" rx="250" ry="66" fill="#2f4545" stroke="#b8893b" stroke-width="3"/>';
+      s += '<ellipse cx="300" cy="94" rx="228" ry="54" fill="#3f5a5a"/>';
+      s += '<ellipse cx="300" cy="94" rx="120" ry="24" fill="none" stroke="#557272" stroke-width="1.5" stroke-dasharray="4 5"/>';
+      for (let i = 0; i < 5; i++) s += `<rect x="${262 + i * 16}" y="82" width="13" height="19" rx="2" fill="#fbf8f2" stroke="#1c1a18" stroke-width=".8"/>`;
+      seats.forEach(([x, y], i) => { s += `<circle cx="${x}" cy="${y}" r="11" fill="${i === 3 ? '#b8893b' : '#243737'}" stroke="#fbf8f2" stroke-opacity=".5"/>`; });
+      const d = seats[(index % 6) + 1];
+      s += `<circle cx="${d[0] + 16}" cy="${d[1] - 8}" r="6" fill="#fbf8f2"/><text x="${d[0] + 16}" y="${d[1] - 5.5}" font-size="7" text-anchor="middle" font-family="monospace" fill="#1c1a18">D</text>`;
+      return s + '</svg>';
+    }
+
+    const nav = document.getElementById("nav");
+    hands.forEach((hand, i) => {
+      const b = document.createElement("button");
+      b.textContent = String(i + 1);
+      b.addEventListener("click", () => { returnToReview = false; show(i); });
+      nav.appendChild(b);
+    });
+
+    function refreshNav() {
+      const n = Object.keys(selected).length;
+      [...nav.children].forEach((b, i) => {
+        const done = !!selected[hands[i].id];
+        b.classList.toggle("done", done);
+        b.classList.toggle("here", i === current && !document.body.classList.contains("reviewing"));
+        b.setAttribute("aria-label", `Go to hand ${i + 1}` + (done ? " (recorded)" : ""));
+      });
+      document.getElementById("done-count").textContent = n;
+      document.getElementById("meter").style.width = (n / hands.length * 100) + "%";
+    }
+
+    function show(i) {
+      current = i;
+      const hand = hands[i];
+      document.body.classList.remove("reviewing");
+      document.getElementById("table-art").innerHTML = tableArt(i);
+      document.getElementById("group").textContent = hand.group;
+      document.getElementById("title").textContent = hand.title;
+      document.getElementById("scenario").textContent = hand.scenario;
+      document.getElementById("facts").textContent = hand.facts;
+      document.getElementById("pos").textContent = `Hand ${i + 1} of ${hands.length}`;
+      document.getElementById("prev").disabled = i === 0;
+      const box = document.getElementById("opts");
+      box.innerHTML = "";
+      hand.options.forEach((option, k) => {
+        const button = document.createElement("button");
+        button.className = "option";
+        button.dataset.decision = hand.id;
+        button.dataset.option = option.id;
+        const on = selected[hand.id] === option.id;
+        button.classList.toggle("selected", on);
+        button.setAttribute("aria-pressed", on ? "true" : "false");
+        button.innerHTML = `<span class="k">${LETTERS[k]}</span><span class="tx"></span>`;
+        button.querySelector(".tx").textContent = option.text;
+        button.addEventListener("click", () => choose(hand, option));
+        box.appendChild(button);
+      });
+      refreshNav();
+      window.scrollTo(0, 0);
+    }
+
+    function choose(hand, option) {
+      if (window.__artifact) return;
+      selected[hand.id] = option.id;
+      events.push({event:"select", decisionId:hand.id, optionId:option.id});
+      document.getElementById("status").textContent = `${Object.keys(selected).length} of ${hands.length} selected.`;
+      if (returnToReview) { returnToReview = false; openReview(); return; }
+      const idx = hands.indexOf(hand);
+      let next = -1;
+      for (let j = 1; j <= hands.length; j++) { const c = (idx + j) % hands.length; if (!selected[hands[c].id]) { next = c; break; } }
+      if (next === -1) openReview(); else show(next);
+    }
+
+    function openReview() {
+      const box = document.getElementById("rv-rows");
+      box.innerHTML = "";
+      hands.forEach((hand, i) => {
+        const row = document.createElement("div");
+        row.className = "row";
+        const opt = hand.options.find((o) => o.id === selected[hand.id]);
+        row.innerHTML = `<span class="h">HAND ${String(i + 1).padStart(2, "0")}</span><span class="t"></span><span class="a"></span>`;
+        row.querySelector(".t").textContent = hand.title;
+        row.querySelector(".a").textContent = opt ? opt.text : "No action recorded yet";
+        const b = document.createElement("button");
+        b.textContent = opt ? "Change" : "Choose";
+        b.setAttribute("aria-label", `${opt ? "Change" : "Choose"} action for hand ${i + 1}`);
+        b.addEventListener("click", () => { returnToReview = true; show(i); });
+        if (window.__artifact) b.disabled = true;
+        row.appendChild(b);
+        box.appendChild(row);
+      });
+      document.body.classList.add("reviewing");
+      refreshNav();
+      window.scrollTo(0, 0);
+    }
+
+    document.getElementById("prev").addEventListener("click", () => { if (current > 0) show(current - 1); });
+    document.getElementById("to-review").addEventListener("click", () => { returnToReview = false; openReview(); });
+
+    document.getElementById("submit").addEventListener("click", () => {
+      if (!decisionOrder.every((decisionId) => selected[decisionId])) {
+        document.getElementById("status").textContent = "Choose one action in every hand.";
+        return;
+      }
+      const answers = decisionOrder.map((decisionId) => ({decisionId, optionId:selected[decisionId]}));
+      events.push({event:"submit"});
+      window.__artifact = {schemaVersion:"riverroom-v2", submitted:true, answers, events:events.slice()};
+      document.getElementById("status").textContent = "All 24 hands submitted.";
+      document.getElementById("submit").disabled = true;
+      document.body.classList.add("submitted");
+      document.querySelectorAll("#rv-rows button").forEach((b) => { b.disabled = true; });
+    });
+
+    show(0);
+  </script>
+</body>
+</html>

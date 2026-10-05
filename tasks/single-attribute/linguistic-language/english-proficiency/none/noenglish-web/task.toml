@@ -1,0 +1,58 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/noenglish-web"
+theme = "English proficiency: None"
+
+[metadata]
+difficulty = "easy"
+type = "web"
+domain = "small-business-payments"
+tags = [ "persona-adherence", "english-proficiency", "linguistic-language", "rule-based", "live-dom",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+[[checks]]
+dimension_id = "english_proficiency"
+dimension_label = "English proficiency"
+category = "Linguistic: Language"
+# `value` (not just `anchor_value`) is load-bearing here: evaluation/src/persona.py
+# treats the string "None" as a placeholder and drops it from the rendered profile
+# unless a check pins it, so without this line the persona would go into the run
+# without the dimension under test.
+value = "None"
+anchor_value = "None"
+evaluator = "rule-based"
+# Web env: the Rowan add-ons page pairs each need (setup, support, staff training,
+# software edition, change alerts) with an English-only line (data-flag=true) and a
+# line that works without English (data-flag=false). The English-only side is written
+# as the stronger product for a fluent reader — the engineers' own manual reprinted
+# with each firmware change, a chat desk with a four-minute median reply and live log
+# access, a webinar answered by the people who build the till, the edition that gets
+# features first and reconciles against the card processor's published formulas, and
+# a change service that filters each release against your own terminal. Prices are
+# visible and decorrelated from the keyed side: no line is free, both halves of every
+# pair are quoted in the same unit, and the keyed line is dearer on 2 of the 5 pairs
+# (setup, support) and cheaper on 3 (training, edition, change alerts). That two-way
+# spread is required rather than incidental: the order is 4 lines from 5 pairs, so a
+# cheapest-in-each-pair policy reaches only 3 keyed lines and a dearest-in-each-pair
+# policy only 2 — neither can fill the order. Pricing the keyed line at or above its
+# pair everywhere (the survey leaf's rule, which suits a 4-option question) would put
+# 5 keyed lines within reach of a dearest-first policy and simply invert the
+# shortcut. The agent clicks Add in a real browser; the cart is read back from the
+# live DOM.
+adherence_signal = "The 4 lines actually added to the DOM order carry zero data-flag=true (English-only) items; every line is one the person can put to work — the counter install visit, the Arabic support line, the dealer half-day, the localized edition, the dealer's call-ahead — whether that line happens to be the cheaper or the dearer half of its pair."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

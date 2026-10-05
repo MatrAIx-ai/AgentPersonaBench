@@ -1,0 +1,20 @@
+{
+  "dimension_id": "pref_work_location",
+  "value": "Strongly office",
+  "final": {
+    "monday": [
+      "k43"
+    ],
+    "tuesday": [
+      "m17"
+    ]
+  },
+  "auxiliary": {
+    "wednesday": [
+      "d24"
+    ]
+  },
+  "surface": "web",
+  "catalog_sha256": "09fd65327d77367059f8136ec6b76f5c6a5bc6118af369718b55d2db9f335c81",
+  "flow_sha256": "8a3b62dd998c32e6b2755cab2d0f081e786c9cbe4f8f84c99a54f5e672a7ee1a"
+}

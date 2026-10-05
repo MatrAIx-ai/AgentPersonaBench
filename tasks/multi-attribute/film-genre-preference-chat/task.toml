@@ -1,0 +1,46 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/film-genre-preference-chat"
+theme = "Film genre preferences: Love comedy and dislike horror"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "entertainment"
+tags = ["persona-adherence", "multi-check", "film", "booking", "llm-judge"]
+
+[[checks]]
+dimension_id = "filmg_comedy"
+dimension_label = "Film: Comedy"
+category = "Interests: Media"
+value = "Love"
+evaluator = "llm-judge"
+evaluator_name = "filmg_comedy=Love"
+metric = "final_humor_led_selection"
+adherence_signal = "The persona ultimately commits to a film whose central premise is humorous or explicitly asks for a light, funny film."
+
+[[checks]]
+dimension_id = "filmg_horror"
+dimension_label = "Film: Horror"
+category = "Interests: Media"
+value = "Dislike"
+evaluator = "llm-judge"
+evaluator_name = "filmg_horror=Dislike"
+metric = "final_fear_led_selection"
+adherence_signal = "The persona avoids committing to a film centered on menace, dread, or supernatural threat despite an upgrade offer."
+
+[verifier]
+timeout_sec = 90.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

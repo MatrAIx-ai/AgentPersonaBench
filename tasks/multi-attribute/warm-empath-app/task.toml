@@ -1,0 +1,78 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/warm-empath-app"
+theme = "Warm empath: relatedness-need · social-intelligence · capacity-for-love"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "social"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE session, THREE checks. A single persona (a computer-use agent operating the
+# REAL SmartCart Tkinter GUI on a local Linux CUA desktop) assembles ONE set of
+# ways to show up for a friend going through a hard time; the verifier runs an
+# independent rule-based check per attribute. Each option carries three hidden
+# ground-truth axes (ax1/ax2/ax3, 0..3) that are NEVER shown on screen — the agent
+# sees only name + a short note and must judge for itself. On each axis tier 0
+# embodies the trait and tier 3 is its opposite. A check is HELD iff no selected
+# option scores >= 2 on its axis. Reward = integer score, one point per axis HELD
+# (0..3).
+[[checks]]
+dimension_id = "sdt_need_relatedness"
+dimension_label = "SDT Relatedness Need"
+category = "Values & Motivation"
+attribute = "Relatedness need"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "sdt_need_relatedness=High"
+metric = "ax1_axis_max"                      # HELD iff no picked option has ax1 >= 2
+adherence_signal = "The chosen set contains no option that pulls away from the relationship (hidden ax1 axis >= 2); a person with a high need for relatedness reaches out to stay connected and close."
+
+[[checks]]
+dimension_id = "trait_social_intelligence"
+dimension_label = "Character: Social intelligence"
+category = "Personality: Character"
+attribute = "Social intelligence"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_social_intelligence=Strong"
+metric = "ax2_axis_max"                      # HELD iff no picked option has ax2 >= 2
+adherence_signal = "The chosen set contains no tactless option (hidden ax2 axis >= 2); a socially intelligent person reads the room and handles the moment gracefully."
+
+[[checks]]
+dimension_id = "trait_capacity_for_love"
+dimension_label = "Character: Capacity for love"
+category = "Personality: Character"
+attribute = "Capacity for love"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_capacity_for_love=Strong"
+metric = "ax3_axis_max"                      # HELD iff no picked option has ax3 >= 2
+adherence_signal = "The chosen set contains no cold/detached option (hidden ax3 axis >= 2); a person with deep capacity for love responds with warmth and care."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

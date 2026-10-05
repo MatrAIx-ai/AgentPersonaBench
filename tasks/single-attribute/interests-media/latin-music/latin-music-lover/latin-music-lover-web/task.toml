@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/latin-music-lover-web"
+theme = "Music genre: Latin — Love"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "music"
+tags = [ "persona-adherence", "latin-music-lover", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "musg_latin"
+dimension_label = "Music: Latin"
+category = "Interests: Media"
+anchor_value = "Love"
+evaluator = "rule-based"
+adherence_signal = "The acts the persona locks in are the Latin ones, chosen unprompted, even though the assistant only recommends guitar and folk bookings on the same wristband."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

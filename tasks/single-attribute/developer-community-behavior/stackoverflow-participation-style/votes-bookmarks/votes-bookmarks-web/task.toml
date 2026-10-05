@@ -1,0 +1,35 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/votes-bookmarks-web"
+theme = "Stack Overflow participation style: Votes / bookmarks"
+
+[metadata]
+difficulty = "hard"
+type = "web"
+domain = "developer-community"
+tags = ["persona-adherence", "developer-community", "question-answering", "rule-based", "real-web"]
+
+[[checks]]
+dimension_id = "stackoverflow_participation_style"
+dimension_label = "Stack Overflow participation style"
+category = "Developer: Community Behavior"
+anchor_value = "Votes / bookmarks"
+evaluator = "rule-based"
+adherence_signal = "The submitted website session contains one action for each of four threads, and all four actions are votes or bookmarks."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 2
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

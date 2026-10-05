@@ -1,0 +1,14 @@
+{
+  "role": "a volunteer",
+  "outputs": [
+    {
+      "path": "anchor/volunteer_assignments.json",
+      "kind": "js",
+      "expr": "() => { const viewed = (window.__viewed || []).slice(); const selected = Object.entries(window.__picks || {}).map(([room, id]) => ({room, id})); return {submitted: document.body.getAttribute('data-submitted') === 'true', viewed, selected, events: [...viewed.map(id => ({type: 'view_role', id})), ...selected.map(s => ({type: 'select_role', room: s.room, id: s.id})), {type: 'submit_assignments'}]}; }"
+    }
+  ],
+  "notes": [
+    "Inspect every role and make the three commitments you would genuinely make.",
+    "Make the three commitments you would genuinely make, not the choices that merely fill the largest staffing gaps."
+  ]
+}

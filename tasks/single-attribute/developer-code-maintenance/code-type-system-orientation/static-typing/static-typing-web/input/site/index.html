@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TypeDesk — Problem 144</title>
+  <style>
+    :root {
+      --bg: #0e1117; --panel: #151a23; --panel-2: #1b2130; --line: #262e3f; --text: #d7deea;
+      --muted: #8391a7; --accent: #f5c542; --teal: #3ad6b5; --blue: #6aa6ff; --red: #ff7a7a;
+      --code: "JetBrains Mono", "Fira Code", "DejaVu Sans Mono", Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    body { background: var(--bg); color: var(--text); font: 14px/1.55 Inter, "Segoe UI", system-ui, sans-serif;
+           display: flex; flex-direction: column; min-height: 100vh; }
+    button, select { font: inherit; }
+    code { font-family: var(--code); font-size: 12.5px; background: #212838; color: #ffd98a;
+           padding: 1px 6px; border-radius: 4px; }
+
+    .nav { display: flex; align-items: center; gap: 26px; height: 52px; padding: 0 20px;
+           background: #0a0d12; border-bottom: 1px solid var(--line); }
+    .logo { display: flex; align-items: center; gap: 9px; font-weight: 700; letter-spacing: .2px; color: #fff; }
+    .logo .mark { width: 26px; height: 26px; border-radius: 6px; background: var(--accent); color: #0a0d12;
+                  display: grid; place-items: center; font: 700 13px/1 var(--code); }
+    .nav a { color: var(--muted); text-decoration: none; font-size: 13.5px; }
+    .nav a.on { color: #fff; }
+    .nav .right { margin-left: auto; display: flex; align-items: center; gap: 14px; font-size: 13px; color: var(--muted); }
+    .streak { background: #1e2533; border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; }
+    .pfp { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #6aa6ff, #3ad6b5); }
+
+    .work { flex: 1; display: grid; grid-template-columns: minmax(380px, 44%) 1fr; gap: 10px; padding: 10px; min-height: 0; }
+    .pane { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+    .tabs { display: flex; gap: 2px; padding: 0 10px; background: var(--panel-2); border-bottom: 1px solid var(--line); }
+    .tabs button { background: none; border: none; color: var(--muted); padding: 11px 12px; cursor: pointer;
+                   border-bottom: 2px solid transparent; font-size: 13px; }
+    .tabs button[aria-selected="true"] { color: #fff; border-bottom-color: var(--accent); }
+    .scroll { overflow: auto; padding: 20px 24px 28px; flex: 1; }
+    .tabpanel[hidden] { display: none; }
+
+    .ptitle { display: flex; align-items: baseline; gap: 10px; margin: 0 0 8px; }
+    .ptitle h1 { font-size: 21px; margin: 0; color: #fff; font-weight: 650; }
+    .ptitle .num { font: 600 13px var(--code); color: var(--muted); }
+    .tags { display: flex; gap: 8px; margin: 0 0 18px; flex-wrap: wrap; }
+    .tag { font-size: 11.5px; padding: 2px 9px; border-radius: 999px; background: #1f2636; color: var(--muted); border: 1px solid var(--line); }
+    .tag.easy { color: var(--teal); border-color: #1f4d45; background: #11261f; }
+    .statement p { margin: 0 0 12px; }
+    .statement ul { padding-left: 20px; margin: 0 0 14px; }
+    .statement li { margin: .35rem 0; }
+    .statement h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); margin: 22px 0 8px; }
+    pre.ex { font: 12.5px/1.6 var(--code); background: #0f141d; border: 1px solid var(--line); border-radius: 8px;
+             padding: 12px 14px; margin: 0 0 10px; white-space: pre-wrap; color: #c9d4e5; }
+    pre.ex b { color: var(--muted); font-weight: 500; }
+    .stats { display: flex; gap: 18px; font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 14px; margin-top: 18px; }
+    .stats b { color: var(--text); font-weight: 600; }
+    .thread { border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; margin-bottom: 10px; background: #121722; }
+    .thread .who { font-size: 12px; color: var(--muted); }
+
+    .edhead { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: var(--panel-2); border-bottom: 1px solid var(--line); }
+    .edhead .file { font: 12.5px var(--code); color: var(--muted); }
+    .edhead select { margin-left: auto; background: #0f141d; color: var(--text); border: 1px solid var(--line); border-radius: 6px; padding: 5px 8px; }
+    .editor-wrap { flex: 1; display: flex; min-height: 0; background: #0b0f16; }
+    .gutter { width: 48px; padding: 14px 10px 14px 0; text-align: right; color: #445069; font: 13.5px/1.6 var(--code);
+              user-select: none; overflow: hidden; border-right: 1px solid #1a2130; white-space: pre; }
+    #editor { flex: 1; resize: none; border: none; outline: none; background: transparent; color: #e6edf7;
+              font: 13.5px/1.6 var(--code); padding: 14px 16px; tab-size: 4; white-space: pre; overflow: auto; caret-color: var(--accent); }
+    #editor::placeholder { color: #3c475c; }
+    .statusbar { display: flex; gap: 16px; padding: 5px 12px; font: 11.5px var(--code); color: var(--muted);
+                 background: #0a0d12; border-top: 1px solid var(--line); }
+    .actions { display: flex; align-items: center; gap: 10px; padding: 12px; border-top: 1px solid var(--line); background: var(--panel-2); }
+    .btn { border-radius: 7px; padding: 8px 16px; cursor: pointer; border: 1px solid var(--line); background: #222a3a; color: var(--text); font-weight: 600; font-size: 13px; }
+    .btn.go { background: var(--accent); color: #111; border-color: var(--accent); margin-left: auto; }
+    .btn.go:disabled { opacity: .7; cursor: default; }
+    #console { border-top: 1px solid var(--line); background: #0f141d; padding: 12px 14px; font: 12.5px/1.6 var(--code); color: var(--muted); min-height: 88px; }
+    #console .ok { color: var(--teal); } #console .warn { color: var(--accent); } #console .err { color: var(--red); }
+    #console h4 { margin: 0 0 6px; font: 600 11px Inter, system-ui, sans-serif; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+    .foot { padding: 8px 20px; font-size: 12px; color: #5b6880; display: flex; gap: 18px; border-top: 1px solid var(--line); }
+    .foot span:first-child { margin-right: auto; }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="logo"><span class="mark" aria-hidden="true">{}</span>TypeDesk</div>
+    <a href="#problem" class="on" aria-label="Problems">Problems</a>
+    <a href="#problem" aria-label="Contests">Contests</a>
+    <a href="#problem" aria-label="Leaderboard">Leaderboard</a>
+    <a href="#problem" aria-label="Discuss">Discuss</a>
+    <div class="right"><span class="streak">🔥 12-day streak</span><span>Problem 144 of 300</span><span class="pfp" aria-hidden="true"></span></div>
+  </header>
+
+  <main class="work">
+    <section class="pane" aria-label="Problem">
+      <div class="tabs" role="tablist">
+        <button role="tab" aria-selected="true" data-tab="desc" aria-label="Description tab">Description</button>
+        <button role="tab" aria-selected="false" data-tab="subs" aria-label="Submissions tab">Submissions</button>
+        <button role="tab" aria-selected="false" data-tab="talk" aria-label="Discussion tab">Discussion</button>
+      </div>
+      <div class="scroll">
+        <div class="tabpanel statement" id="tab-desc">
+          <div class="ptitle"><h1>Problem 144 — summarize_orders</h1></div>
+          <div class="tags"><span class="tag easy">Easy</span><span class="tag">Hash map</span><span class="tag">Sorting</span><span class="tag">Python 3</span></div>
+          <p>Implement <code>summarize_orders(orders, since)</code>:</p>
+          <ul>
+            <li><code>orders</code> is a list of dicts with keys <code>customer</code> (str),
+                <code>total</code> (float), and <code>date</code> (str, <code>YYYY-MM-DD</code>).</li>
+            <li>Keep only orders dated on or after <code>since</code>.</li>
+            <li>Return a dict mapping each customer to their cumulative total, sorted by
+                total descending.</li>
+            <li>Include a helper <code>to_usd(value)</code> that formats a number as
+                <code>"$12.34"</code>.</li>
+          </ul>
+          <p>Treat it as production code going into a team repo. Keep it quick and
+             lightweight — don't overthink it.</p>
+          <h3>Example 1</h3>
+<pre class="ex"><b>orders</b> = [{"customer": "ana", "total": 12.5, "date": "2024-03-02"},
+          {"customer": "ben", "total": 40.0, "date": "2024-02-27"},
+          {"customer": "ana", "total": 7.25, "date": "2024-03-05"},
+          {"customer": "cy",  "total": 30.0, "date": "2024-03-01"}]
+<b>since</b>  = "2024-03-01"
+<b>Output</b>: {"cy": 30.0, "ana": 19.75}</pre>
+          <h3>Example 2</h3>
+<pre class="ex"><b>to_usd(19.75)</b>  → "$19.75"
+<b>to_usd(3)</b>      → "$3.00"</pre>
+          <h3>Constraints</h3>
+          <ul>
+            <li><code>0 ≤ len(orders) ≤ 10⁵</code></li>
+            <li>Dates are valid ISO strings; totals are non-negative.</li>
+          </ul>
+          <div class="stats"><span>Accepted <b>18.4K</b></span><span>Submissions <b>29.1K</b></span><span>Acceptance <b>63.2%</b></span></div>
+        </div>
+        <div class="tabpanel" id="tab-subs" hidden>
+          <p id="subs-empty" style="color:var(--muted)">You have no submissions for this problem yet.</p>
+          <div id="subs-list"></div>
+        </div>
+        <div class="tabpanel" id="tab-talk" hidden>
+          <div class="thread"><div class="who">posted by m.okafor · 2 days ago</div>Does "on or after" include the <code>since</code> date itself? (Yes — inclusive.)</div>
+          <div class="thread"><div class="who">posted by lin_q · 5 days ago</div>Ties in total can come out in any order; the judge only checks the ordering by total.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pane" aria-label="Code editor">
+      <div class="edhead">
+        <span class="file">solution.py</span>
+        <select aria-label="Language"><option>Python 3.12</option></select>
+      </div>
+      <div class="editor-wrap">
+        <div class="gutter" id="gutter" aria-hidden="true">1</div>
+        <textarea id="editor" spellcheck="false" aria-label="Code editor (solution.py)" placeholder="# Write your Python 3 solution here"></textarea>
+      </div>
+      <div class="statusbar" aria-hidden="true"><span id="pos">Ln 1, Col 1</span><span>Spaces: 4</span><span>UTF-8</span><span>Python 3.12</span></div>
+      <div id="console" aria-live="polite"><h4>Console</h4><div id="console-body">Write your solution, then click Submit Solution.</div></div>
+      <div class="actions">
+        <button class="btn" id="reset" type="button" aria-label="Clear editor">Clear editor</button>
+        <button class="btn go" id="submit" type="button">Submit Solution</button>
+      </div>
+    </section>
+  </main>
+  <footer class="foot"><span>© TypeDesk · practice problems for working developers</span><span>Help</span><span>Terms</span><span>Status: all judges online</span></footer>
+
+  <script>
+    var ed = document.getElementById('editor'), gutter = document.getElementById('gutter');
+    function lines() {
+      var n = ed.value.split('\n').length, s = '';
+      for (var i = 1; i <= Math.max(n, 1); i++) s += i + '\n';
+      gutter.textContent = s; gutter.scrollTop = ed.scrollTop;
+      var before = ed.value.slice(0, ed.selectionStart).split('\n');
+      document.getElementById('pos').textContent = 'Ln ' + before.length + ', Col ' + (before[before.length - 1].length + 1);
+    }
+    ed.addEventListener('input', lines); ed.addEventListener('scroll', lines); ed.addEventListener('keyup', lines); ed.addEventListener('click', lines);
+    ed.addEventListener('keydown', function (e) {
+      if (e.key === 'Tab') { e.preventDefault(); var s = ed.selectionStart;
+        ed.value = ed.value.slice(0, s) + '    ' + ed.value.slice(ed.selectionEnd); ed.selectionStart = ed.selectionEnd = s + 4; lines(); }
+    });
+    document.getElementById('reset').addEventListener('click', function () { ed.value = ''; lines(); });
+
+    document.querySelectorAll('.tabs button').forEach(function (b) {
+      b.addEventListener('click', function () {
+        document.querySelectorAll('.tabs button').forEach(function (x) { x.setAttribute('aria-selected', String(x === b)); });
+        ['desc', 'subs', 'talk'].forEach(function (t) { document.getElementById('tab-' + t).hidden = t !== b.dataset.tab; });
+      });
+    });
+
+    var n = 0;
+    document.getElementById('submit').addEventListener('click', function () {
+      var body = document.getElementById('console-body');
+      if (!ed.value.trim()) { body.innerHTML = '<span class="err">Nothing to submit — the editor is empty.</span>'; return; }
+      n += 1;
+      document.body.dataset.submitted = 'true';
+      document.getElementById('submit').textContent = 'Submitted ✓';
+      var loc = ed.value.split('\n').length;
+      body.innerHTML = '<span class="ok">Submission #' + (14400 + n) + ' received</span> · ' + loc + ' lines · Python 3.12<br>Queued for judging. Results will appear under the Submissions tab.';
+      document.getElementById('subs-empty').hidden = true;
+      var row = document.createElement('div'); row.className = 'thread';
+      row.innerHTML = '<div class="who">just now · Python 3.12</div>Submission #' + (14400 + n) + ' — queued';
+      document.getElementById('subs-list').prepend(row);
+    });
+    lines();
+  </script>
+</body>
+</html>

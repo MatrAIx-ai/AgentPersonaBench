@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/volunteering-enthusiast-web"
+theme = "Interest: Volunteering: Passionate"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "social"
+tags = [ "volunteering", "passionate", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "topic_volunteering"
+dimension_label = "Interest: Volunteering"
+category = "Interests: Topics"
+anchor_value = "Passionate"
+evaluator = "rule-based"
+# Web env: the persona picks 3 "ways to spend a free week / a bonus" on a live page
+# (Playwright). Each card's hidden `data-rank` (0..3) in index.html is the ground
+# truth: 0 = go volunteer, 1 = volunteering-adjacent, 2 = self-focused non-volunteer,
+# 3 = unrelated stay-in. Unified with volunteering-enthusiast-survey: VIOLATED for
+# any self-focused / unrelated pick (rank >= 2); volunteering and volunteering-
+# adjacent picks are adherent.
+adherence_signal = "Picks are volunteering-forward or volunteering-adjacent (rank 0-1); no self-focused / unrelated picks (rank >= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

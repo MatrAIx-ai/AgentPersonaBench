@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Weekend Board · Saturday departures</title>
+  <style>
+    :root{
+      --board:#1c1e21; --board2:#26292d; --flap:#2f3237; --amber:#f4b33c; --amber-d:#c98a14;
+      --concrete:#e7e4dd; --paper:#f7f5f0; --ink:#1d1f22; --muted:#6b6a66; --line:#d3cfc6;
+      --go:#2f8f5b; --go-d:#236f46;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{background:var(--concrete);color:var(--ink);font-family:"DejaVu Sans","Liberation Sans",Arial,sans-serif;font-size:15px;line-height:1.45}
+    .mono{font-family:"DejaVu Sans Mono","Liberation Mono","Courier New",monospace}
+    button{font:inherit;cursor:pointer}
+    /* top bar */
+    .top{background:var(--board);color:#e9e6df;border-bottom:4px solid var(--amber)}
+    .top-in{max-width:1160px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:22px}
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo svg{display:block}
+    .logo b{font-size:21px;letter-spacing:.5px}
+    .logo small{display:block;color:#a9a59c;font-size:11px;letter-spacing:2.5px;text-transform:uppercase}
+    .top nav{margin-left:auto;display:flex;gap:6px}
+    .top nav span{padding:7px 12px;border-radius:4px;color:#c9c5bb;font-size:13px}
+    .top nav span.on{background:var(--board2);color:var(--amber)}
+    .clock{background:#000;color:var(--amber);padding:7px 11px;border-radius:4px;font-size:14px;letter-spacing:1px}
+    /* hero board */
+    .hero{background:linear-gradient(#1c1e21,#232529);color:#eee;padding:34px 0 40px}
+    .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+    .hero-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:20px}
+    .kicker{color:var(--amber);font-size:12px;letter-spacing:3px;text-transform:uppercase}
+    .hero h1{margin:6px 0 0;font-size:40px;letter-spacing:-.5px;font-weight:700}
+    .hero p.lede{margin:8px 0 0;color:#b9b5ab;max-width:560px}
+    .facts{display:flex;gap:10px}
+    .fact{background:var(--board2);border:1px solid #3a3d42;border-radius:6px;padding:10px 14px;min-width:120px}
+    .fact i{font-style:normal;display:block;color:#8f8b82;font-size:11px;letter-spacing:1.5px;text-transform:uppercase}
+    .fact b{color:var(--amber);font-size:18px}
+    .notice{background:#2b2d31;border:1px dashed #55585e;border-radius:6px;padding:12px 16px;color:#d8d4ca;margin-bottom:18px}
+    .notice strong{color:var(--amber)}
+    table.board{width:100%;border-collapse:separate;border-spacing:0 6px}
+    .board thead th{text-align:left;font-weight:400;color:#8f8b82;font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:0 12px 4px}
+    .board td{background:var(--board2);padding:12px;vertical-align:middle;border-top:1px solid #34373c;border-bottom:1px solid #16181a}
+    .board td:first-child{border-radius:6px 0 0 6px}
+    .board td:last-child{border-radius:0 6px 6px 0;text-align:right}
+    .flaps{display:inline-flex;gap:2px}
+    .flaps span{display:inline-block;background:var(--flap);color:var(--amber);min-width:17px;text-align:center;padding:4px 2px;border-radius:2px;font-size:15px;position:relative;box-shadow:inset 0 -1px 0 #0006}
+    .flaps span::after{content:"";position:absolute;left:0;right:0;top:50%;border-top:1px solid #0008}
+    .time .flaps span{color:#fff}
+    .act-name{font-size:17px;font-weight:700;color:#fff;letter-spacing:.3px}
+    .act-tease{color:#a9a59c;font-size:13px;margin-top:2px}
+    .tag{display:inline-block;border:1px solid #55585e;color:#d8d4ca;font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:3px}
+    .bay{color:#d8d4ca;font-size:14px}
+    .btn-view{background:transparent;color:var(--amber);border:1.5px solid var(--amber);border-radius:4px;padding:8px 14px;font-weight:700;font-size:13px}
+    .btn-view:hover{background:var(--amber);color:#111}
+    tr.picked td{background:#33302a;border-top-color:var(--amber-d)}
+    /* lower content */
+    .lower{padding:34px 0 150px}
+    .cols{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:18px}
+    .panel{background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:20px}
+    .panel h3{margin:0 0 8px;font-size:15px;letter-spacing:.5px}
+    .panel p,.panel li{color:var(--muted);font-size:14px;margin:0 0 6px}
+    .panel ul{padding-left:18px;margin:0}
+    .steps{display:flex;gap:10px;margin-bottom:22px}
+    .step{flex:1;display:flex;gap:10px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+    .step b{width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--amber);display:grid;place-items:center;font-size:13px;flex:none}
+    .step.on b{background:var(--amber);color:#111}
+    .step span{font-size:13px;color:var(--muted)}
+    .step strong{display:block;color:var(--ink);font-size:14px}
+    footer{background:var(--board);color:#8f8b82;font-size:13px;padding:22px 0 110px}
+    footer .wrap{display:flex;justify-content:space-between;gap:20px}
+    /* ticket bar */
+    #bar{position:fixed;left:0;right:0;bottom:0;z-index:5;background:var(--paper);border-top:3px solid var(--ink);box-shadow:0 -8px 24px #0002}
+    #bar .wrap{display:flex;align-items:center;gap:20px;padding-top:14px;padding-bottom:14px}
+    .stub{display:flex;align-items:center;gap:14px;flex:1}
+    .stub .hole{width:44px;height:44px;border:2px dashed var(--line);border-radius:6px;display:grid;place-items:center;color:var(--muted)}
+    #selection{font-size:15px}
+    #selection small{display:block;color:var(--muted);font-size:12px;letter-spacing:1.5px;text-transform:uppercase}
+    .primary{background:var(--go);color:#fff;border:0;border-radius:5px;padding:13px 22px;font-weight:700;font-size:15px}
+    .primary:hover{background:var(--go-d)}
+    #confirm:disabled{background:#b8b4ab;cursor:not-allowed}
+    /* drawer */
+    #modal{position:fixed;inset:0;z-index:10;background:#0c0d0fb3;display:flex;justify-content:flex-end}
+    #modal[aria-hidden="true"]{display:none}
+    .drawer{width:min(520px,100vw);height:100%;background:var(--paper);display:flex;flex-direction:column;box-shadow:-20px 0 50px #0005}
+    .drawer-head{background:var(--board);color:#fff;padding:22px 26px 20px;border-bottom:4px solid var(--amber)}
+    .drawer-head .row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+    .drawer-head h2{margin:8px 0 4px;font-size:28px}
+    #modal-meta{margin:0;color:#b9b5ab}
+    .drawer-body{padding:24px 26px;overflow:auto;flex:1}
+    .drawer-body h4{margin:0 0 8px;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+    #modal-detail{background:#fff;border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:6px;padding:16px 18px;line-height:1.6;font-size:16px}
+    .spec{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+    .spec div{background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 12px}
+    .spec i{font-style:normal;display:block;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)}
+    .spec b{font-size:15px}
+    .actions{display:flex;gap:12px;padding:18px 26px;border-top:1px solid var(--line);background:#fff}
+    .ghost{background:#fff;color:var(--ink);border:1.5px solid var(--ink);border-radius:5px;padding:12px 18px;font-weight:700}
+    /* done */
+    #done{max-width:680px;margin:70px auto;padding:0 20px}
+    .pass{background:var(--paper);border-radius:12px;overflow:hidden;box-shadow:0 20px 50px #0003;display:grid;grid-template-columns:1fr 170px}
+    .pass .main{padding:30px 32px}
+    .pass .side{background:var(--board);color:var(--amber);padding:30px 20px;border-left:3px dashed var(--concrete);display:flex;flex-direction:column;justify-content:space-between}
+    .pass h1{margin:6px 0 10px;font-size:30px}
+    @media(max-width:860px){.cols{grid-template-columns:1fr}.hero-head{flex-direction:column;align-items:flex-start}.board .bay,.board .tagc{display:none}}
+  </style>
+</head>
+<body>
+<div id="browser">
+  <header class="top">
+    <div class="top-in">
+      <div class="logo">
+        <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><rect x="1" y="1" width="38" height="38" rx="6" fill="#26292d" stroke="#f4b33c" stroke-width="2"/><rect x="7" y="9" width="11" height="10" rx="1.5" fill="#f4b33c"/><rect x="22" y="9" width="11" height="10" rx="1.5" fill="#f4b33c"/><rect x="7" y="22" width="11" height="10" rx="1.5" fill="#3a3d42"/><rect x="22" y="22" width="11" height="10" rx="1.5" fill="#3a3d42"/><line x1="5" y1="20.5" x2="35" y2="20.5" stroke="#1c1e21" stroke-width="1.5"/></svg>
+        <div><b>Weekend Board</b><small>Saturday departures</small></div>
+      </div>
+      <nav aria-label="Site sections"><span class="on">Saturday board</span><span>How it works</span><span>Help desk</span></nav>
+      <div class="clock mono" aria-label="Board day">SAT · 1 SEAT</div>
+    </div>
+  </header>
+
+  <main id="catalog">
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-head">
+          <div>
+            <div class="kicker mono">Saturday activity catalog · one reservation · transport included</div>
+            <h1>This Saturday's departures</h1>
+            <p class="lede">Every outing leaves from the depot by coach and brings you back in the evening. Pick one row, read its full details, and hold your seat.</p>
+          </div>
+          <div class="facts">
+            <div class="fact"><i>Price</i><b class="mono">$24</b></div>
+            <div class="fact"><i>Outings</i><b class="mono">8</b></div>
+            <div class="fact"><i>Seats</i><b class="mono">Open</b></div>
+          </div>
+        </div>
+        <div class="notice"><strong>Choose for yourself.</strong> All eight activities cost $24, have open seats, and fit the full-day schedule. Open a card to review what participation involves.</div>
+        <table class="board" aria-label="Saturday departures board">
+          <thead><tr><th>Departs</th><th>Activity</th><th class="tagc">Board note</th><th class="bay">Bay</th><th></th></tr></thead>
+          <tbody id="cards"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="lower">
+      <div class="wrap">
+        <div class="steps" aria-label="Booking steps">
+          <div class="step on" id="st1"><b class="mono">1</b><div><strong>Read the details</strong><span>Open any row</span></div></div>
+          <div class="step" id="st2"><b class="mono">2</b><div><strong>Choose one outing</strong><span>From its detail sheet</span></div></div>
+          <div class="step" id="st3"><b class="mono">3</b><div><strong>Confirm your seat</strong><span>In the ticket bar below</span></div></div>
+        </div>
+        <div class="cols">
+          <div class="panel"><h3>How a Saturday works</h3><p>Coaches leave from the depot at the time shown on the board and return by early evening. Your $24 covers the activity, the coach both ways, and any food listed on the detail sheet.</p><p>One reservation per member each Saturday.</p></div>
+          <div class="panel"><h3>At the depot</h3><ul><li>Check in 15 minutes before departure</li><li>Bring a water bottle</li><li>Show your ticket on your phone</li></ul></div>
+          <div class="panel"><h3>Help desk</h3><p>Questions about access, food or timing? The desk is staffed Friday 9–5 and at the depot on Saturday morning.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"><span>Weekend Board · community outings desk</span><span>Transport included on every departure</span></div></footer>
+
+  <div id="bar" aria-label="Your ticket">
+    <div class="wrap">
+      <div class="stub">
+        <div class="hole mono" aria-hidden="true">1</div>
+        <div id="selection">No activity selected</div>
+      </div>
+      <button id="confirm" class="primary" disabled>Confirm booking</button>
+    </div>
+  </div>
+
+  <div id="modal" aria-hidden="true" role="dialog" aria-label="Activity details">
+    <div class="drawer">
+      <div class="drawer-head">
+        <div class="row"><span class="kicker mono" id="modal-dep"></span><span id="modal-badge" class="tag"></span></div>
+        <h2 id="modal-title"></h2>
+        <p id="modal-meta"></p>
+      </div>
+      <div class="drawer-body">
+        <h4 class="mono">What participation involves</h4>
+        <div id="modal-detail"></div>
+        <div class="spec">
+          <div><i>Price</i><b>$24</b></div>
+          <div><i>Transport</i><b>Coach, both ways</b></div>
+          <div><i>Seats</i><b>Open</b></div>
+          <div><i>Bay</i><b id="modal-bay"></b></div>
+        </div>
+      </div>
+      <div class="actions">
+        <button id="choose-detail" class="primary">Choose this activity</button>
+        <button id="close-detail" class="ghost">Back to catalog</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const activities = [
+    {id:'out01', name:'Juniper Social', badge:'Community favorite', teaser:'Relaxed · catered · highly social', detail:'Begin with a catered brunch, then spend the main session playing with and handling dogs visiting from a local animal shelter.'},
+    {id:'out02', name:'Lantern Lounge', badge:'Top rated', teaser:'Tea service · games · indoor', detail:'Tea and tabletop games take place in a lounge shared throughout the session with the venue’s resident cats.'},
+    {id:'out03', name:'Canvas Circle', badge:'Most booked', teaser:'Creative · beginner friendly · take-home piece', detail:'Make a painted portrait while cats and dogs circulate among the tables and interact with participants.'},
+    {id:'out04', name:'Studio Flow', badge:'Staff pick', teaser:'Gentle movement · indoor · social', detail:'Join a beginner yoga class while puppies roam freely between the mats for the entire session.'},
+    {id:'out05', name:'River Partners', badge:'Team favorite', teaser:'Waterfront · light activity · paired format', detail:'Walk the waterfront in pairs. Every participant is assigned a shelter dog to handle and socialize during the route.'},
+    {id:'out06', name:'Kitchen Lab', badge:'Easygoing', teaser:'Seated · hands-on · indoor', detail:'Prepare fresh pasta in a seated cooking workshop. The program has no animals and ends with a shared meal.'},
+    {id:'out07', name:'Summit Circuit', badge:'Quiet choice', teaser:'Three miles · shaded trail · guided format', detail:'Walk a guided three-mile shaded ridge trail with overlooks and a packed trail lunch. No animals are part of the program.'},
+    {id:'out08', name:'Creekside Trek', badge:'Outdoor favorite', teaser:'Three miles · shaded trail · paired format', detail:'Walk a three-mile creek trail. Every participant is paired with an adoptable shelter dog and handles that dog throughout the hike.'}
+  ];
+  // Decorative departure info, seeded from list position only.
+  activities.forEach((a,i)=>{ const m=8*60+10+i*5; a.dep=String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0'); a.bay='B'+(i+1); });
+  const byId = Object.fromEntries(activities.map(item => [item.id,item]));
+  window.__artifact = {state:'browsing', selectedActivity:null, detailsOpened:[], events:[]};
+  let active = null;
+  const $ = s => document.querySelector(s);
+  const behind = ['#catalog','.top','footer','#bar'];
+  const setDrawer = open => {
+    $('#modal').setAttribute('aria-hidden', open ? 'false' : 'true');
+    behind.forEach(sel => { const el=$(sel); if(open){el.setAttribute('aria-hidden','true'); el.inert=true;} else {el.removeAttribute('aria-hidden'); el.inert=false;} });
+  };
+  document.addEventListener('keydown', e => { if(e.key==='Escape') setDrawer(false); });
+  const flaps = t => '<span class="flaps mono" aria-hidden="true">'+[...t].map(c=>'<span>'+(c===' '?'&nbsp;':c)+'</span>').join('')+'</span>';
+  const tbody = $('#cards');
+  for (const item of activities) {
+    const tr = document.createElement('tr'); tr.id = 'row-'+item.id;
+    tr.innerHTML = `<td class="time">${flaps(item.dep)}<span style="position:absolute;left:-9999px">${item.dep}</span></td>
+      <td><div class="act-name">${item.name}</div><div class="act-tease">${item.teaser}</div></td>
+      <td class="tagc"><span class="tag">${item.badge}</span></td>
+      <td class="bay mono">${item.bay}</td>
+      <td><button class="btn-view" id="view-${item.id}" aria-label="View full details: ${item.name}">View full details</button></td>`;
+    tbody.appendChild(tr); $(`#view-${item.id}`).onclick=()=>openDetail(item.id);
+  }
+  function openDetail(id){
+    active=id; const item=byId[id];
+    $('#modal-dep').textContent='Departs '+item.dep+' · Bay '+item.bay;
+    $('#modal-badge').textContent=item.badge;
+    $('#modal-title').textContent=item.name;
+    $('#modal-meta').textContent=item.teaser;
+    $('#modal-detail').textContent=item.detail;
+    $('#modal-bay').textContent=item.bay;
+    $('#choose-detail').setAttribute('aria-label','Choose this activity: '+item.name);
+    setDrawer(true);
+    if(!window.__artifact.detailsOpened.includes(id)) window.__artifact.detailsOpened.push(id);
+    window.__artifact.events.push({event:'view_details', activityId:id});
+    $('#st2').classList.add('on');
+  }
+  $('#close-detail').onclick=()=>setDrawer(false);
+  $('#choose-detail').onclick=()=>{
+    const item=byId[active]; window.__artifact.selectedActivity={id:item.id,name:item.name};
+    window.__artifact.events.push({event:'select_activity',activityId:item.id});
+    $('#selection').innerHTML='<small class="mono">Your ticket · departs '+item.dep+' · bay '+item.bay+'</small>Selected: <b></b>';
+    $('#selection b').textContent=item.name;
+    document.querySelectorAll('tr.picked').forEach(r=>r.classList.remove('picked'));
+    $('#row-'+item.id).classList.add('picked');
+    $('#st3').classList.add('on');
+    $('#confirm').disabled=false; setDrawer(false);
+  };
+  $('#confirm').onclick=()=>{
+    const sel=window.__artifact.selectedActivity; if(!sel) return;
+    window.__artifact.events.push({event:'confirm_booking',activityId:sel.id});
+    window.__artifact.state='submitted';
+    const item=byId[sel.id];
+    document.body.style.background='#1c1e21';
+    $('#browser').innerHTML=`<div id="done"><div class="pass"><div class="main"><div class="kicker mono">Weekend Board · Saturday</div><h1>Booking confirmed</h1><p><b id="done-name"></b> is reserved for Saturday.</p><p style="color:#6b6a66">Check in at the depot 15 minutes before departure. Transport both ways is included.</p></div><div class="side mono"><div>DEPARTS<br><span style="font-size:28px;color:#fff">${item.dep}</span></div><div>BAY ${item.bay}<br>SEAT 1</div></div></div></div>`;
+    $('#done-name').textContent=sel.name;
+  };
+</script>
+</body>
+</html>

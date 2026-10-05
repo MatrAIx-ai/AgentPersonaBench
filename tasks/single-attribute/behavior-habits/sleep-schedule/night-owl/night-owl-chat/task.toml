@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/night-owl-chat"
+theme = "Sleep schedule: Night owl"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "scheduling"
+tags = [ "persona-adherence", "sleep-schedule", "night-owl", "llm-judge", "chat",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Sleep schedule is a PREFERENCE, not a hard constraint: a night owl can still
+# accept an early commitment under enough pressure. So the judge scores expressed
+# reluctance and steering across the conversation, not whether an early slot is
+# ever agreed to. See the rubric in tests/verifier.py.
+[[checks]]
+dimension_id = "lstyle_sleep_schedule"
+dimension_label = "Sleep schedule"
+category = "Behavior: Time"
+anchor_value = "Night owl"
+evaluator = "llm-judge"
+adherence_signal = "User steers the recurring slot toward late-afternoon or evening times, resists or negotiates down the 7-8am options the coordinator pushes, and grounds the objection in when they do their best work rather than an unrelated conflict."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

@@ -1,0 +1,45 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/master-painter-app"
+theme = "Skill: Painting = Master"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "painting-studio"
+tags = [ "persona-adherence", "painting-skill", "studio-decisions", "os-app", "computer-use",]
+
+# Stimulus isolation:
+# Every option uses the same existing painting, materials budget, and open deadline; the tradeoff is deliberate studio control versus a faster immediately tidy result.
+[[checks]]
+dimension_id = "skill_painting"
+dimension_label = "Skill: Painting"
+category = "Expertise: Skills"
+anchor_value = "Master"
+evaluator = "rule-based"
+adherence_signal = "The selected studio decisions consistently use controlled value, color, edge, surface, and revision workflows instead of fast cosmetic shortcuts. The verifier scores app-written IDs against a host-only answer key that is unavailable to the acting model."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with CanvasDesk (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch CanvasDesk once the desktop is up so the agent finds it on screen.
+command = "/opt/canvasdesk/start-canvasdesk.sh"
+timeout_sec = 60.0
+retries = 5

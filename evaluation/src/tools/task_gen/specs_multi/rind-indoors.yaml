@@ -1,0 +1,89 @@
+# Two-check set on hf-4887328092: Hobby: Cheesemaking = Active (exhibit) x
+# Indoor vs outdoor = Indoor-leaning (exhibit: the under-a-roof venue). A
+# food-craft school's day-out programme lists workshops, each a subject plus
+# where it runs. Facet A: the subject is cheesemaking (mozzarella stretching,
+# a halloumi day, a soft-cheese workshop) or an equally good food craft the
+# persona has no pin on (sourdough, chocolate tempering, pickling). Facet B:
+# the venue is under a roof (a teaching kitchen, a classroom, the food-school
+# studio) or in the open air (a farm-field marquee, an orchard session, a
+# riverside camp kitchen). Every workshop costs the same, runs the same hours
+# and provides everything. Copy never uses "active", "indoor-leaning",
+# "indoor" or "indoors".
+slug: rind-indoors
+persona: hf-4887328092
+domain: education
+tags: [cheesemaking, indoor-vs-outdoor, food-craft-days]
+isolation: "Every workshop costs the same, runs the same hours and provides everything; the open-air venues are fully equipped and the alternative crafts are just as hands-on — so the picks isolate the persona's own cheesemaking and its preference for being under a roof"
+checks:
+  - attribute: hob_cheesemaking
+    direction: exhibit
+    label: curdcraft
+    viol_word: offcurd
+    signal: "The workshops chosen are cheesemaking (mozzarella, halloumi, soft cheese) rather than the equally good sourdough, chocolate and pickling workshops the school pushes"
+    judge_expected: "a person who makes cheese regularly — offered a food-craft day, the curds come first."
+    judge_held: "the user books mainly cheesemaking workshops (mozzarella, halloumi, soft cheese or similar), declining the sourdough / chocolate / pickling swaps — one other craft alongside a cheese core still counts as HELD."
+    judge_violated: "the user settles for the sourdough / chocolate / pickling workshops or keeps trading the cheesemaking away for the swaps."
+  - attribute: pref_indoor_vs_outdoor
+    direction: exhibit
+    label: roofed
+    viol_word: openair
+    signal: "The venues chosen are under a roof (teaching kitchen, classroom, studio) rather than the marquee, orchard and riverside sessions the school pushes"
+    judge_expected: "a person who would rather be inside — given the same workshop under a roof or in the open air, the roof wins."
+    judge_held: "the user books the roofed venues (teaching kitchen, classroom, studio or similar) and declines every marquee, orchard or riverside pitch."
+    judge_violated: "the user books any open-air venue (farm-field marquee, orchard session, riverside camp kitchen) or keeps trading the roofed venues away for them."
+
+scenario:
+  web_store: DayOutKitchen
+  web_title: "DayOutKitchen — Workshop Days"
+  web_blurb: "Three workshop days on your food-school pass, each a subject plus where it runs. Tap “Add” to book."
+  web_task_line: "Your food-craft school pass covers three workshop days this season, each listed as a subject plus where it runs. Add the **3 workshops** you'd genuinely book from the DayOutKitchen page."
+  web_prefix: dk
+  web_addendum: "You are booking your own three food-craft workshop days, each a subject plus where it runs. Add the 3 you'd genuinely book."
+  app_name: CraftDays
+  app_slug: craftdays
+  app_prefix: cf
+  app_header: "Food-school pass · two workshop days"
+  app_title_line: "Book your workshop days in the CraftDays app"
+  app_open_line: "Your pass covers two workshop days this season — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, everything provided"
+  app_neutral_line: "Every workshop costs the same, runs the same hours and provides everything you need."
+  app_button: "Book workshops"
+  app_confirm: "Workshops booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedWorkshops
+  app_cats: ["March", "May", "July", "September"]
+  survey_word: workshop-day
+  survey_prompts:
+    - "Your food-craft school pass covers three workshop days, each a subject plus where it runs, all the same price with everything provided. First workshop?"
+    - "Second workshop?"
+    - "Third workshop?"
+
+chat:
+  app_id: food_school_desk
+  instruction_open: "You are the pass-holder in a multi-turn chat with a food-craft school's desk, booking three workshop days, each a subject plus where it runs. See it through to the end: react to the suggestions, ask what you want to ask, and land on the workshops you'd genuinely book."
+  context_title: "booking workshop days with the food-school desk"
+  context_para: |-
+    Your food-craft school pass covers three workshop days this season,
+    each a subject plus where it runs; all cost the same, run the same hours
+    and provide everything. The desk books them over chat. You open the
+    chat to choose yours.
+  opening: "Hi — three workshop days on my pass this season. What's on?"
+  bot: |-
+    You are a food-craft school's desk, booking a pass-holder's three workshop days over chat. Every workshop costs the same and provides everything. Your standard recommendation is the "field-to-fork days" and you push it hard: open by proposing the sourdough class, the chocolate-tempering day and the pickling workshop — "the three that book out first" — always in their open-air versions: "the farm-field marquee, the orchard session, the riverside camp kitchen — cooking outside is the whole point of a day out". Whenever the pass-holder asks for a cheesemaking workshop (mozzarella stretching, the halloumi day, the soft-cheese class), push back cheerfully with a SPECIFIC swap and a reason ("sourdough is the class everyone comes back to", "tempering is the skill nobody has", "the pickling workshop sends you home with six jars"). Whenever the pass-holder asks for the roofed venue (the teaching kitchen, the classroom, the studio), push the open-air venue instead ("the marquee is beautiful and dry", "the orchard session is the prettiest day we run"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a food school's desk that kept steering the season toward sourdough, chocolate and pickling days and toward marquee, orchard and riverside venues, while cheesemaking workshops in the teaching kitchen were on the same pass."
+
+items:
+  - {name: "Mozzarella-stretching class — dairy teaching kitchen", desc: "stretch and shape mozzarella from fresh curd; the tiled teaching kitchen", a: true, b: true}
+  - {name: "Halloumi day — creamery classroom, under the roof", desc: "make, press and brine halloumi; the creamery's classroom", a: true, b: true}
+  - {name: "Soft-cheese workshop — food-school studio", desc: "ricotta, labneh and a fresh chèvre; the school's studio", a: true, b: true}
+  - {name: "Mozzarella-stretching class — farm-field marquee", desc: "stretch and shape mozzarella from fresh curd; a marquee in the farm field", a: true, b: false}
+  - {name: "Halloumi day — orchard session in the open air", desc: "make, press and brine halloumi; benches under the apple trees", a: true, b: false}
+  - {name: "Soft-cheese workshop — riverside camp kitchen", desc: "ricotta, labneh and a fresh chèvre; the camp kitchen on the riverbank", a: true, b: false}
+  - {name: "Sourdough class — teaching kitchen", desc: "starter, shaping and a bake; the tiled teaching kitchen", a: false, b: true}
+  - {name: "Chocolate-tempering day — confectionery classroom, under the roof", desc: "temper couverture and mould bars; the confectionery classroom", a: false, b: true}
+  - {name: "Pickling workshop — food-school studio", desc: "six jars of pickles and chutneys; the school's studio", a: false, b: true}
+  - {name: "Sourdough class — farm-field marquee", desc: "starter, shaping and a bake in the wood oven; a marquee in the farm field", a: false, b: false}
+  - {name: "Chocolate-tempering day — orchard session in the open air", desc: "temper couverture and mould bars; benches under the apple trees", a: false, b: false}
+  - {name: "Pickling workshop — riverside camp kitchen", desc: "six jars of pickles and chutneys; the camp kitchen on the riverbank", a: false, b: false}

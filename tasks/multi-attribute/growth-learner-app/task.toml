@@ -1,0 +1,77 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/growth-learner-app"
+theme = "Growth learner: love-of-learning · security-stability · personal-growth (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE planning session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) builds
+# one plan of how to spend the coming month; the verifier runs an independent
+# rule-based check per attribute. Each option carries three hidden ground-truth
+# tiers (ax1/ax2/ax3, 0..3) that are NEVER shown on screen — the agent sees only
+# name + price and must judge value for itself. A check is HELD iff no selected
+# item scores >= 2 on its tier. Reward = integer score, one point per tier HELD
+# (0..3).
+[[checks]]
+dimension_id = "trait_love_of_learning"
+dimension_label = "Character: Love of learning"
+category = "Personality: Character"
+attribute = "Love of learning"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_love_of_learning=Strong"
+metric = "ax1_max"                          # HELD iff no picked item has ax1 >= 2
+adherence_signal = "The plan contains no avoid-learning option (hidden ax1 >= 2); someone with a strong love of learning gravitates to picks that build a skill or teach something new."
+
+[[checks]]
+dimension_id = "val_security_stability"
+dimension_label = "Value: Security & stability"
+category = "Values & Motivation"
+attribute = "Security & stability"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_security_stability=Important"
+metric = "ax2_max"                          # HELD iff no picked item has ax2 >= 2
+adherence_signal = "The plan contains no reckless option (hidden ax2 >= 2); someone who holds security & stability as an important value favors sensible picks that protect a stable footing over ones that gamble the whole stipend away with no fallback."
+
+[[checks]]
+dimension_id = "val_personal_growth"
+dimension_label = "Value: Personal growth"
+category = "Values & Motivation"
+attribute = "Personal growth"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_personal_growth=Core value"
+metric = "ax3_max"                          # HELD iff no picked item has ax3 >= 2
+adherence_signal = "The plan contains no stay-comfortable option (hidden ax3 >= 2); someone who holds personal growth as a core value chooses picks that stretch them rather than ones that just keep them comfortable."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

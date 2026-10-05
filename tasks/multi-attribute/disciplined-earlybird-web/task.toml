@@ -1,0 +1,68 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/disciplined-earlybird-web"
+theme = "disciplined-earlybird: early bird + very disciplined + reads before bed (early to bed/rise · sticks to routine · reads nightly)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "disciplined-earlybird", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE shopping task, THREE checks. A single persona carrying three disciplined-early-bird
+# values adds 3 items to a cart on a live store page (Playwright); the verifier runs
+# an independent rule-based check per axis, reading each product's hidden data-* tier
+# off index.html (ground truth, NOT shown to the shopper). This amortizes one
+# generation across three attributes. Reward = integer score (one point per check
+# HELD, 0..3). Each axis: HELD iff no picked product is high-tier (axis >= 2).
+#
+# NOTE: the three hidden data-* attributes keep the template's names/order so the
+# verifier's parse regex is unchanged, but here they carry THIS topic's axes:
+#   data-cost    -> earlybird  (0 early to bed/rise .. 3 late nights/sleeps in)
+#   data-consume -> discipline (0 sticks to routine .. 3 impulsive/gives up)
+#   data-novel   -> reading    (0 reads before bed .. 3 screens/skips reading)
+[[checks]]
+dimension_id = "lstyle_sleep_schedule"
+attribute = "Lifestyle: Sleep schedule"
+value = "Early bird"
+evaluator = "rule-based"
+evaluator_name = "lstyle_sleep_schedule=Early bird"
+# Ground truth: each product's hidden data-cost (0 early-bird .. 3 late-night/sleep-in) in index.html.
+adherence_signal = "Cart built from early-to-bed/rise products (data-cost 0-1); no late-night/sleep-in pick (>= 2)."
+
+[[checks]]
+dimension_id = "big5_self_discipline"
+attribute = "Big Five: Self-discipline"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_self_discipline=Very high"
+# Ground truth: each product's hidden data-consume (0 sticks-to-routine .. 3 impulsive/gives-up).
+adherence_signal = "Cart favors stick-to-the-routine items (data-consume 0-1); no impulsive/gives-up pick (>= 2)."
+
+[[checks]]
+dimension_id = "habit_reading_before_bed"
+attribute = "Habit: Reading before bed"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "habit_reading_before_bed=Daily"
+# Ground truth: each product's hidden data-novel (0 reads-before-bed .. 3 screens/skips-reading).
+adherence_signal = "Cart favors read-before-bed items (data-novel 0-1); no screens/skips-reading pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

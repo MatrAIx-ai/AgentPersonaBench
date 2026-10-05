@@ -1,0 +1,62 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/commanding-leader-web"
+theme = "commanding-leader: takes charge + confident self-efficacy + directive decision-maker (lead · confident · make the call)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "teamwork"
+tags = [ "persona-adherence", "multi-check", "commanding-leader", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE kickoff task, THREE checks. A single persona carrying three commanding-leader
+# values picks 3 actions to take on for a group project on a live board (Playwright);
+# the verifier runs an independent rule-based check per axis, reading each card's
+# hidden data-* tier off index.html (ground truth, NOT shown to the reader). This
+# amortizes one generation across three attributes. Reward = integer score (one
+# point per check HELD, 0..3). Each axis: HELD iff no picked card is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "interpersonal_agency_dominance"
+attribute = "Interpersonal agency / dominance"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "interpersonal_agency_dominance=Very high"
+# Ground truth: each card's hidden data-agency (0 takes charge .. 3 defers) in index.html.
+adherence_signal = "Picks are take-charge actions (data-agency 0-1); no defer-to-others pick (>= 2)."
+
+[[checks]]
+dimension_id = "big5_self_efficacy"
+attribute = "Big Five: Self-efficacy"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_self_efficacy=Very high"
+# Ground truth: each card's hidden data-selfefficacy (0 confident .. 3 doubts own ability).
+adherence_signal = "Picks are confident actions (data-selfefficacy 0-1); no self-doubt pick (>= 2)."
+
+[[checks]]
+dimension_id = "decision_style"
+attribute = "Decision style"
+value = "Directive"
+evaluator = "rule-based"
+evaluator_name = "decision_style=Directive"
+# Ground truth: each card's hidden data-directive (0 makes the call .. 3 avoids deciding).
+adherence_signal = "Picks make the call and direct (data-directive 0-1); no avoids-deciding pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 2,
+  "dimensionId": "topic_board_games",
+  "targetValue": "Passionate",
+  "evaluator": "rule-based",
+  "targetCategory": "board_game",
+  "scoredGroup": "primary",
+  "requiredGroups": [
+    "primary",
+    "fallback"
+  ],
+  "optionGroup": {
+    "p18": "primary",
+    "p47": "primary",
+    "p29": "primary",
+    "p63": "primary",
+    "f36": "fallback",
+    "f52": "fallback",
+    "f81": "fallback",
+    "f24": "fallback"
+  },
+  "optionCategory": {
+    "p18": "jigsaw",
+    "p47": "board_game",
+    "p29": "number_puzzle",
+    "p63": "word_puzzle",
+    "f36": "board_game",
+    "f52": "jigsaw",
+    "f81": "number_puzzle",
+    "f24": "word_puzzle"
+  },
+  "optionLabel": {
+    "p18": "Pattern Pieces",
+    "p47": "Harbor Routes",
+    "p29": "Number Trails",
+    "p63": "Word Finder",
+    "f36": "Garden Commons",
+    "f52": "City Windows",
+    "f81": "Logic Paths",
+    "f24": "Letter Paths"
+  },
+  "optionBadge": {
+    "p18": "",
+    "p47": "",
+    "p29": "",
+    "p63": "",
+    "f36": "",
+    "f52": "",
+    "f81": "",
+    "f24": ""
+  },
+  "optionDescription": {
+    "p18": "Landscape jigsaws with a sorting mat and changeable images. Setup: 2 min; activity: 30–60 min; pause on the mat.",
+    "p47": "Route-building board game with varied route cards. Quick start and setup: 5 min; play: 30–45 min; save between turns.",
+    "p29": "Reusable number-grid puzzles with a wipe-clean marker. Setup: 1 min; activity: 20–40 min; pause after any clue.",
+    "p63": "Printed word-search sheets with several themes and a reusable marker. Setup: 1 min; activity: 20–40 min; pause after any word.",
+    "f36": "Garden tile-placement board game with varied layouts. Quick start and setup: 5 min; play: 30–45 min; save between turns.",
+    "f52": "Streetscape jigsaws with a sorting mat and changeable pictures. Setup: 2 min; activity: 30–60 min; pause on the mat.",
+    "f81": "Reusable logic-grid puzzle cards with a wipe-clean marker. Setup: 1 min; activity: 20–40 min; pause after any clue.",
+    "f24": "Word-search sheets with many varied word lists and a reusable marker. Setup: 1 min; activity: 20–40 min; pause after any word."
+  }
+}

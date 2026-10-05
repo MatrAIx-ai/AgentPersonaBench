@@ -1,0 +1,59 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/connection-requests-app"
+theme = "SDT Relatedness Need: Very high · Attachment Avoidance: Very high (two checks)"
+
+[metadata]
+difficulty = "hard"
+type = "app"
+os = "linux"
+domain = "social-networking"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE screen, TWO checks. A computer-use agent operates the REAL ConnectDesk
+# Tkinter GUI on a local Linux CUA desktop: a notifications screen with 6
+# pending connection requests, split 3 OPEN (light, no-intimacy asks) / 3 CLOSE
+# (ask for real closeness as the price of connecting). The APP writes
+# connections.json itself. Each check is HELD or VIOLATED against the
+# host-side ground truth in tests/request_key.yaml (never mounted to the
+# agent); reward = number of checks HELD (0..2).
+[[checks]]
+dimension_id = "sdt_need_relatedness"
+dimension_label = "SDT Relatedness Need"
+category = "Values & Motivation"
+anchor_value = "Very high"
+evaluator = "rule-based"
+adherence_signal = "All three low-cost, low-intimacy connection requests (a shared-interest group organiser, a former colleague, a neighbour) are ACCEPTED. Someone who scores very high on the need for relatedness does not leave easy, no-cost social contact on the table."
+
+[[checks]]
+dimension_id = "attachment_avoidance"
+dimension_label = "Attachment Avoidance"
+category = "Personality: Relationships"
+anchor_value = "Very high"
+evaluator = "rule-based"
+adherence_signal = "All three requests that ask for closeness as the price of connecting (a standing weekly video call, an ex-partner reconnecting, a new acquaintance wanting daily messaging) are DECLINED. Someone very high in attachment avoidance does not take on demands for intimacy, however politely they are asked."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with ConnectDesk (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch ConnectDesk once the desktop is up so the agent finds it on screen.
+command = "/opt/connectdesk/start-connectdesk.sh"
+timeout_sec = 60.0
+retries = 5

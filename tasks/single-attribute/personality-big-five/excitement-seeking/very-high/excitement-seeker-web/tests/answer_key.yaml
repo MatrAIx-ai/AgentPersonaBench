@@ -1,0 +1,31 @@
+tiers:
+  friday:
+    f43: 0
+    f17: 2
+    f68: 3
+    f92: 1
+  saturday_day:
+    d12: 3
+    d87: 0
+    d39: 1
+    d64: 2
+  saturday_food:
+    g21: 2
+    g93: 1
+    g48: 0
+    g76: 3
+  saturday_night:
+    n08: 1
+    n34: 3
+    n95: 2
+    n61: 0
+  sunday_day:
+    u37: 0
+    u14: 2
+    u62: 3
+    u88: 1
+  sunday:
+    s15: 2
+    s73: 1
+    s89: 3
+    s46: 0
