@@ -196,7 +196,7 @@ APB personas are synthetic diagnostic instruments. They are not statistical samp
 
 - Code (`evaluation/`, `leaderboard/compute.py`): [Apache License 2.0](LICENSE)
 - Benchmark data (`tasks/`, `tasks.csv`, `leaderboard/*.csv`): [CC BY 4.0](LICENSE-DATA)
-- `evaluation/src/harbor/` derives from [Harbor](https://github.com/laude-institute/harbor) (Apache 2.0). See [NOTICE](NOTICE).
+- Third-party notices: [NOTICE](NOTICE)
 
 ## Citation
 
