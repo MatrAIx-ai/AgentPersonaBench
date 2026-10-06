@@ -3,6 +3,7 @@
 <p align="center"><b>Benchmarking persona-driven user simulation: does a persona trait actually steer what an agent <i>does</i>?</b></p>
 
 <p align="center">
+  <a href="https://arxiv.org/abs/2610.04379"><img alt="arXiv: 2610.04379" src="https://img.shields.io/badge/arXiv-2610.04379-b31b1b.svg"></a>
   <a href="LICENSE"><img alt="Code: Apache 2.0" src="https://img.shields.io/badge/code-Apache%202.0-blue.svg"></a>
   <a href="LICENSE-DATA"><img alt="Data: CC BY 4.0" src="https://img.shields.io/badge/data-CC%20BY%204.0-lightgrey.svg"></a>
   <img alt="Tasks" src="https://img.shields.io/badge/tasks-2%2C460-6f42c1.svg">
@@ -199,16 +200,19 @@ APB personas are synthetic diagnostic instruments. They are not statistical samp
 
 ## Citation
 
+If you use AgentPersonaBench, please cite the [paper](https://arxiv.org/abs/2610.04379):
+
 ```bibtex
-@misc{apb2026,
-  title  = {AgentPersonaBench: Benchmarking Persona-Driven User Simulation},
-  author = {Huang, Jintao and Wang, Yifan and others},
-  year   = {2026},
-  url    = {https://github.com/MatrAIx-ai/AgentPersonaBench}
+@misc{huang2026agentpersonabenchbenchmarkingpersonadrivenuser,
+      title={AgentPersonaBench: Benchmarking Persona-Driven User Simulation}, 
+      author={Jintao Huang and Yifan Wang and Hongyu Shen and Yi Daniel Lu and Shirley Huang and Minsik Oh and Yewen Wang and Muhammad Ahmed Mohsin and Zhen Xu and Yilan Fan and Zichen Yuan and Ahsan Bilal and Zibu Wei and Sankalp Jajee and Henry Gagnier and Saksham Kapoor and Jicheng Wang and Qianfeng Wen and Yixuan He and Steven Dillmann and Jiashu He and Yucheng Lu and Linqiang Guo and Danyang Zhang and Shi Bo and Raunak Mondal and Haixiang Tang and Weihang Xiao and Allen Nie and Jing Tang and Yueying Li and Yifan Simon Liu and Jianheng Hou and Dianzhuo Wang and Qianyu Zhu and Zhixu Silvia Tao and Zhejian Peng and Zihan Wang and Ishan Gupta and Jinxuan Fan and Wanting Jiang and Shushu Liang and Chenxi Qiu and Yijun Wang and Xiaomin Li and Yuexing Hao},
+      year={2026},
+      eprint={2610.04379},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2610.04379}, 
 }
 ```
-
-The full author list is in [CITATION.cff](CITATION.cff).
 
 ## Contributing
 

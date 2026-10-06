@@ -108,6 +108,12 @@ preferred-citation:
   type: article
   title: "AgentPersonaBench: Benchmarking Persona-Driven User Simulation"
   year: 2026
+  journal: "arXiv preprint arXiv:2610.04379"
+  url: "https://arxiv.org/abs/2610.04379"
+  identifiers:
+    - type: other
+      value: "arXiv:2610.04379"
+      description: "arXiv eprint (cs.AI)"
   authors:
     - family-names: "Huang"
       given-names: "Jintao"
