@@ -3,7 +3,7 @@
 <p align="center"><b>Benchmarking persona-driven user simulation: does a persona trait actually steer what an agent <i>does</i>?</b></p>
 
 <p align="center">
-  <img alt="Python 3.12" src="https://img.shields.io/badge/python-3.12-3776ab.svg">
+  <a href="https://arxiv.org/abs/2610.04379"><img alt="arXiv: 2610.04379" src="https://img.shields.io/badge/arXiv-2610.04379-b31b1b.svg"></a>
 </p>
 
 <p align="center"><img src="assets/teaser.png" width="92%" alt="A whole persona, an everyday situation, and the behavior that reveals whether a trait held"></p>
