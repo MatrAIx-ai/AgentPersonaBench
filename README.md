@@ -3,10 +3,6 @@
 <p align="center"><b>Benchmarking persona-driven user simulation: does a persona trait actually steer what an agent <i>does</i>?</b></p>
 
 <p align="center">
-  <a href="https://arxiv.org/abs/2610.04379"><img alt="arXiv: 2610.04379" src="https://img.shields.io/badge/arXiv-2610.04379-b31b1b.svg"></a>
-  <a href="LICENSE"><img alt="Code: Apache 2.0" src="https://img.shields.io/badge/code-Apache%202.0-blue.svg"></a>
-  <a href="LICENSE-DATA"><img alt="Data: CC BY 4.0" src="https://img.shields.io/badge/data-CC%20BY%204.0-lightgrey.svg"></a>
-  <img alt="Tasks" src="https://img.shields.io/badge/tasks-2%2C460-6f42c1.svg">
   <img alt="Python 3.12" src="https://img.shields.io/badge/python-3.12-3776ab.svg">
 </p>
 
