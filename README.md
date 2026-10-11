@@ -10,7 +10,7 @@
 
 Language models are increasingly used to simulate users. Most persona benchmarks check how a model *talks* or what it *says about itself*. APB checks what it **does**.
 
-Each task pins one trait (or several, in multi-attribute tasks) inside a complete persona profile (up to about 1,300 attributes). The task never names the trait and never says it is a test. The agent does an ordinary errand, such as answering a survey, chatting with a shop assistant, using a website or operating a desktop app. A verifier then reads the outcome from the environment itself: option IDs, DOM state, files the app wrote. It does not ask the model.
+Each task pins one trait (or several, in multi-attribute tasks) inside a complete persona profile with hundreds of background attributes, drawn from a 1M-persona corpus. The task never names the trait and never says it is a test. The agent does an ordinary errand, such as answering a survey, chatting with a shop assistant, using a website or operating a desktop app. A verifier then reads the outcome from the environment itself: option IDs, DOM state, files the app wrote. It does not ask the model.
 
 - **2,460 tasks** on four surfaces, covering **867 traits** through **3,865 checks**. 78.5% of the checks are deterministic rules; the rest use one fixed LLM judge on free text.
 - **1,212 single-attribute** tasks (one binary verdict) and **1,248 multi-attribute** tasks (2–3 traits, one point per trait held).
