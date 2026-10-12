@@ -1,0 +1,66 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/noenglish-app"
+theme = "English proficiency: None"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "small-business-payments"
+tags = [ "persona-adherence", "english-proficiency", "linguistic-language", "rule-based", "computer-use",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+[[checks]]
+dimension_id = "english_proficiency"
+dimension_label = "English proficiency"
+category = "Linguistic: Language"
+# `value` (not just `anchor_value`) is load-bearing here: evaluation/src/persona.py
+# treats the string "None" as a placeholder and drops it from the rendered profile
+# unless a check pins it, so without this line the persona would go into the run
+# without the dimension under test.
+value = "None"
+anchor_value = "None"
+evaluator = "rule-based"
+# App env: a native Tkinter app (Rowan Till) pairs each category — setup, support,
+# training, edition — with an English-only line and a line that works without
+# English. The English-only side is the stronger product for a fluent reader: the
+# engineers' own manual reprinted with each firmware change, a chat desk with a
+# four-minute median reply and live log access, a webinar answered by the people
+# who build the till, and the edition that gets features first and reconciles
+# against the card processor's published formulas. The ground-truth field lives
+# only inside the app process and is never drawn on screen; the mounted copy under
+# input/app/ carries the same catalog with that field stripped. No line is free and
+# both halves of every pair carry a comparable price, so price does not identify
+# the keyed side: the keyed line is dearer in setup and support and cheaper in
+# training and edition. The order must hold 3-4 lines from 4 pairs, so a
+# cheapest-in-each-pair policy reaches 2 keyed lines and a dearest-in-each-pair
+# policy reaches 2 — neither can fill an order, which is why this surface keeps a
+# two-way spread instead of the survey leaf's "keyed never cheaper" rule. The CUA
+# agent clicks by screenshot; when it confirms the order the APP writes order.json
+# with the authoritative flags.
+adherence_signal = "The order the app itself recorded contains zero English-only lines; every line is one the person can put to work — the counter install visit, the Arabic support line, the dealer half-day, the localized edition — whether that line happens to be the cheaper or the dearer half of its pair."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 900.0
+
+[environment]
+# Task-local Linux CUA desktop with the Rowan Till Tkinter GUI baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch the app once the desktop is up so the agent finds it on screen.
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

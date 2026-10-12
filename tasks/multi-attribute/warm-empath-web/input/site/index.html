@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reach Out — Ways to Show Up</title>
+<style>
+:root{
+  --teal:#0f4c4a; --teal2:#16625f; --rose:#e7b2a3; --rose2:#f6dcd3; --cream:#fbf5ee;
+  --paper:#fffdf9; --ink:#1f2b2a; --muted:#5f6d6b; --line:#e6dcd0; --gold:#c9964f;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--cream);color:var(--ink);font:15px/1.5 "FreeSans","Liberation Sans",sans-serif}
+button{font:inherit;cursor:pointer}
+.topline{background:var(--teal);color:#cfe3e0;font-size:12.5px;letter-spacing:.04em;text-align:center;padding:6px 16px}
+header.site{background:var(--paper);border-bottom:1px solid var(--line)}
+.hwrap{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:28px;padding:14px 28px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--teal)}
+.brand b{font:700 26px/1 "Bitstream Charter",serif;letter-spacing:-.01em}
+.brand b i{color:#b86b58;font-weight:400}
+.brand small{display:block;font:11px/1.2 "FreeSans",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+nav.main{display:flex;gap:22px;margin-left:auto;font-size:14px}
+nav.main span{color:var(--muted)}
+nav.main span.on{color:var(--teal);font-weight:700;border-bottom:2px solid var(--rose);padding-bottom:3px}
+.steps{max-width:1180px;margin:0 auto;padding:18px 28px 0;display:flex;gap:10px;align-items:center;font-size:13px;color:var(--muted)}
+.steps .s{display:flex;align-items:center;gap:8px}
+.steps .n{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--muted);display:grid;place-items:center;font-size:12px}
+.steps .s.on{color:var(--teal);font-weight:700}
+.steps .s.on .n{background:var(--teal);border-color:var(--teal);color:#fff}
+.steps .s.done .n{background:var(--rose);border-color:var(--rose);color:var(--teal)}
+.steps .bar{flex:0 0 38px;height:1px;background:var(--line)}
+main{max-width:1180px;margin:0 auto;padding:18px 28px 40px;display:grid;grid-template-columns:1fr 330px;gap:30px}
+.hero{grid-column:1/-1;display:flex;gap:26px;align-items:center;background:linear-gradient(115deg,var(--teal) 0%,var(--teal2) 70%);color:#eef6f4;border-radius:18px;padding:26px 32px;position:relative;overflow:hidden}
+.hero h1{font:400 34px/1.15 "Bitstream Charter",serif;margin:0 0 6px}
+.hero h1 em{color:var(--rose)}
+.hero p{margin:0;max-width:560px;color:#cfe3e0}
+.hero svg{flex:0 0 auto}
+.pill{display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:99px;padding:3px 12px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;margin:4px 0 14px}
+.sec-h h2{font:400 22px/1.2 "Bitstream Charter",serif;margin:0;color:var(--teal)}
+.sec-h span{font-size:13px;color:var(--muted)}
+#catalog{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.product{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:16px 16px 14px;position:relative;display:flex;flex-direction:column;min-height:228px;box-shadow:0 1px 0 #eadfd2,0 8px 18px -14px rgba(15,76,74,.4)}
+.product .pc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.product .no{font:italic 13px "Bitstream Charter",serif;color:var(--muted)}
+.stamp{width:44px;height:52px;border:2px dashed #d6c7b6;border-radius:3px;display:grid;place-items:center;background:var(--cream)}
+.product .txt{font:17px/1.4 "Bitstream Charter",serif;color:var(--ink);flex:1;border-top:1px solid var(--line);padding-top:10px;background-image:repeating-linear-gradient(transparent 0 23px,#f0e7dc 23px 24px);background-position:0 9px}
+.product .sub{font-size:13.5px;color:var(--muted);margin-top:4px;font-family:"FreeSans",sans-serif}
+.product .act{display:flex;justify-content:flex-end;margin-top:12px}
+.product.picked{border-color:var(--teal);box-shadow:0 0 0 2px var(--teal) inset}
+button.add{background:var(--teal);color:#fff;border:0;border-radius:99px;padding:8px 16px;font-size:13.5px;font-weight:700}
+button.add:hover{background:var(--teal2)}
+button.add.rm{background:transparent;color:var(--teal);border:1.5px solid var(--teal)}
+button.add:disabled{background:#cfd6d5;color:#7c8987;cursor:not-allowed}
+aside.env{align-self:start;margin-top:42px}
+.envelope{background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.envelope .flap{height:46px;background:var(--rose2);clip-path:polygon(0 0,100% 0,50% 100%);}
+.envelope .body{padding:14px 20px 20px}
+.envelope h3{font:400 20px "Bitstream Charter",serif;margin:0 0 2px;color:var(--teal);text-align:center}
+.envelope .cnt{text-align:center;font-size:13px;color:var(--muted);margin-bottom:12px}
+#portfolio-items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+#portfolio-items li{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:8px;padding:9px 10px;background:var(--cream);font-size:13.5px}
+#portfolio-items li .k{flex:0 0 22px;height:22px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700}
+#portfolio-items li .t{flex:1}
+#portfolio-items li button{background:none;border:0;color:#9a4b39;font-size:12.5px;text-decoration:underline;padding:0}
+.slot{border:1.5px dashed #d8cbbb;border-radius:8px;padding:10px;color:#a39686;font-size:13px;text-align:center}
+.notice{font-size:12.5px;color:#9a4b39;background:#fbeae4;border-radius:8px;padding:8px 10px;margin-top:10px;display:none}
+.cta{width:100%;margin-top:14px;background:var(--rose);color:var(--teal);border:0;border-radius:99px;padding:11px;font-weight:700;font-size:14.5px}
+.cta:disabled{background:#eee6de;color:#a39686;cursor:not-allowed}
+.tip{margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--muted)}
+.tip b{color:var(--teal)}
+#review,#sent{display:none;grid-column:1/-1}
+.sheet{max-width:760px;margin:0 auto;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:30px 36px;box-shadow:0 18px 40px -30px rgba(15,76,74,.5)}
+.sheet h2{font:400 28px "Bitstream Charter",serif;color:var(--teal);margin:0 0 4px}
+.sheet p.lead{color:var(--muted);margin:0 0 18px}
+.rv{list-style:none;padding:0;margin:0 0 18px;counter-reset:r}
+.rv li{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);font:17px/1.4 "Bitstream Charter",serif}
+.rv li:before{counter-increment:r;content:counter(r);flex:0 0 30px;height:30px;border-radius:50%;background:var(--rose2);color:var(--teal);display:grid;place-items:center;font:700 14px "FreeSans",sans-serif}
+.sheet label{font-size:13px;font-weight:700;color:var(--teal);display:block;margin-bottom:6px}
+.sheet textarea{width:100%;min-height:74px;border:1px solid var(--line);border-radius:10px;padding:10px;font:14px "FreeSans",sans-serif;background:var(--cream)}
+.row{display:flex;gap:12px;justify-content:flex-end;margin-top:18px}
+.btn2{background:transparent;border:1.5px solid var(--teal);color:var(--teal);border-radius:99px;padding:10px 20px;font-weight:700}
+.btn1{background:var(--teal);border:0;color:#fff;border-radius:99px;padding:11px 24px;font-weight:700}
+.big-ok{text-align:center}
+.big-ok svg{margin:4px auto 10px;display:block}
+footer{background:var(--teal);color:#b9d3cf;font-size:13px;margin-top:10px}
+.fwrap{max-width:1180px;margin:0 auto;padding:26px 28px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:24px}
+footer h4{color:#fff;margin:0 0 8px;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+footer p{margin:0 0 4px}
+</style>
+</head>
+<body>
+<div class="topline">Small gestures, sent with care · Reach Out planner</div>
+<header class="site"><div class="hwrap">
+  <a class="brand" href="#" aria-label="Reach Out home" onclick="return false">
+    <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect x="2" y="8" width="40" height="28" rx="4" fill="#0f4c4a"/><path d="M3 10 L22 25 L41 10" fill="none" stroke="#e7b2a3" stroke-width="2.4"/><circle cx="34" cy="10" r="7" fill="#e7b2a3"/><path d="M31 10 l2 2 l4 -4" stroke="#0f4c4a" stroke-width="2" fill="none"/></svg>
+    <span><b>Reach <i>Out</i></b><small>ways to show up</small></span>
+  </a>
+  <nav class="main" aria-label="Sections"><span class="on">Plan a gesture</span><span>How it works</span><span>Help</span></nav>
+</div></header>
+
+<div class="steps" id="steps">
+  <div class="s on" id="st1"><span class="n">1</span>Choose 3 ways</div><div class="bar"></div>
+  <div class="s" id="st2"><span class="n">2</span>Review your envelope</div><div class="bar"></div>
+  <div class="s" id="st3"><span class="n">3</span>Saved</div>
+</div>
+
+<main>
+  <section class="hero" id="hero">
+    <div style="flex:1">
+      <span class="pill">Your plan</span>
+      <h1>A close friend is going through a <em>hard time.</em></h1>
+      <p>Browse the cards below and put the 3 ways you'd genuinely reach out into your envelope. You can swap a card out at any time before you save.</p>
+    </div>
+    <svg width="170" height="120" viewBox="0 0 170 120" aria-hidden="true"><rect x="20" y="22" width="120" height="82" rx="6" fill="#fffdf9" transform="rotate(-6 80 63)"/><rect x="34" y="16" width="120" height="82" rx="6" fill="#f6dcd3" transform="rotate(5 94 57)"/><rect x="118" y="24" width="24" height="28" rx="2" fill="none" stroke="#0f4c4a" stroke-dasharray="3 2" transform="rotate(5 94 57)"/><path d="M50 50 h50 M50 62 h60 M50 74 h40" stroke="#c7a597" stroke-width="3" stroke-linecap="round" transform="rotate(5 94 57)"/></svg>
+  </section>
+
+  <section id="browse">
+    <div class="sec-h"><h2>Ways you could respond</h2><span>12 cards</span></div>
+    <div id="catalog"></div>
+  </section>
+
+  <aside class="env" id="envside" aria-label="Your envelope">
+    <div class="envelope">
+      <div class="flap"></div>
+      <div class="body">
+        <h3>Your envelope</h3>
+        <div class="cnt" id="cnt">0 of 3 cards chosen</div>
+        <div id="portfolio">
+          <ul id="portfolio-items"></ul>
+          <div id="slots"></div>
+        </div>
+        <div class="notice" id="notice" role="status">Your envelope already holds 3 cards. Remove one to swap in another.</div>
+        <button class="cta" id="toReview" disabled>Review my envelope</button>
+      </div>
+    </div>
+    <div class="tip"><b>Good to know.</b> Nothing is sent to anyone from here — this is a private plan for you to keep.</div>
+  </aside>
+
+  <section id="review" aria-label="Review">
+    <div class="sheet">
+      <h2>Review your envelope</h2>
+      <p class="lead">These are the 3 ways you've chosen to reach out.</p>
+      <ol class="rv" id="rvList"></ol>
+      <label for="note">A note to yourself (optional)</label>
+      <textarea id="note" aria-label="Note to yourself (optional)" placeholder="Anything you want to remember…"></textarea>
+      <div class="row"><button class="btn2" id="backBtn">Back to the cards</button><button class="btn1" id="saveBtn">Save my plan</button></div>
+    </div>
+  </section>
+
+  <section id="sent" aria-label="Saved">
+    <div class="sheet big-ok">
+      <svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#f6dcd3"/><path d="M20 33 l8 8 l16 -18" stroke="#0f4c4a" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
+      <h2>Your plan is saved</h2>
+      <p class="lead">Your 3 ways to reach out are in your envelope. You're all set.</p>
+      <ol class="rv" id="doneList" style="text-align:left"></ol>
+    </div>
+  </section>
+</main>
+
+<footer><div class="fwrap">
+  <div><h4>Reach Out</h4><p>A quiet little planner for the moments that matter.</p></div>
+  <div><h4>Planner</h4><p>Choose cards</p><p>Your envelope</p></div>
+  <div><h4>Help</h4><p>How it works</p><p>Privacy</p></div>
+  <div><h4>About</h4><p>Made with care</p><p>© Reach Out</p></div>
+</div></footer>
+
+<script>
+var ITEMS = [
+  ["w04","Drop off a home-cooked meal and a warm hug"],
+  ["w01","Call to listen and let them know their feelings make complete sense"],
+  ["w02","Sit with them in person — no agenda, just be present"],
+  ["w10","Tell them to toughen up and stop dwelling on it"],
+  ["w12","Keep your distance — it's really not your problem to get involved"],
+  ["w07","Send a quick \"you'll be fine\" text and move on with your day"],
+  ["w09","Keep checking in on them, but only ever forward formal resources — nothing personal"],
+  ["w08","Throw them a surprise cheer-up party without asking, putting them on the spot"],
+  ["w11","Barge in with unsolicited blunt advice about what they did wrong"],
+  ["w06","Handle a few errands this once so they can rest, then step back and give them space"],
+  ["w05","Check in gently a few days later to see how they're really doing"],
+  ["w03","Write a heartfelt note telling them you love them and you're here"]
+];
+var CAP = 3;
+window.__portfolio = [];
+var NAME = {};
+function stampSvg(i){
+  // decorative stamp motif, chosen by card position only; same palette for every card
+  var m = i % 4, s = '<svg width="30" height="36" viewBox="0 0 30 36" aria-hidden="true">';
+  if (m===0) s += '<circle cx="15" cy="18" r="8" fill="none" stroke="#c9964f" stroke-width="2"/>';
+  if (m===1) s += '<path d="M5 26 L15 9 L25 26 Z" fill="none" stroke="#c9964f" stroke-width="2"/>';
+  if (m===2) s += '<rect x="7" y="10" width="16" height="16" fill="none" stroke="#c9964f" stroke-width="2"/>';
+  if (m===3) s += '<path d="M6 18 h18 M15 9 v18" stroke="#c9964f" stroke-width="2"/>';
+  return s + '</svg>';
+}
+function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+var cat = document.getElementById('catalog');
+ITEMS.forEach(function(it, i){
+  var id = it[0], full = it[1], k = full.indexOf(' — ');
+  var title = k > -1 ? full.slice(0,k) : full, sub = k > -1 ? full.slice(k+3) : '';
+  NAME[id] = full;
+  var d = document.createElement('div');
+  d.className = 'product'; d.setAttribute('data-id', id);
+  d.innerHTML = '<div class="pc-top"><span class="no">Card ' + (i+1) + ' of 12</span><span class="stamp">' + stampSvg(i) + '</span></div>' +
+    '<div class="txt">' + esc(title) + (sub ? '<div class="sub">' + esc(sub) + '</div>' : '') + '</div>' +
+    '<div class="act"><button class="add" data-id="' + id + '"></button></div>';
+  cat.appendChild(d);
+});
+function render(){
+  var P = window.__portfolio, full = P.length >= CAP;
+  document.querySelectorAll('button.add').forEach(function(b){
+    var id = b.getAttribute('data-id'), on = P.indexOf(id) !== -1, n = ITEMS.findIndex(function(x){return x[0]===id}) + 1;
+    b.classList.toggle('rm', on);
+    b.textContent = on ? 'In envelope — remove' : 'Add to envelope';
+    b.setAttribute('aria-label', (on ? 'Remove card ' : 'Add card ') + n + (on ? ' from envelope: ' : ' to envelope: ') + NAME[id]);
+    b.disabled = !on && full;
+    b.closest('.product').classList.toggle('picked', on);
+  });
+  var ul = document.getElementById('portfolio-items'); ul.innerHTML = '';
+  P.forEach(function(id, i){
+    var li = document.createElement('li'); li.setAttribute('data-id', id);
+    li.innerHTML = '<span class="k">' + (i+1) + '</span><span class="t">' + esc(NAME[id]) + '</span>';
+    var rb = document.createElement('button'); rb.textContent = 'Remove';
+    rb.setAttribute('aria-label', 'Remove from envelope: ' + NAME[id]);
+    rb.onclick = function(){ toggle(id); };
+    li.appendChild(rb); ul.appendChild(li);
+  });
+  var sl = document.getElementById('slots'); sl.innerHTML = '';
+  for (var j = P.length; j < CAP; j++){ var e = document.createElement('div'); e.className='slot'; e.style.marginTop='8px'; e.textContent = 'Empty slot ' + (j+1); sl.appendChild(e); }
+  document.getElementById('cnt').textContent = P.length + ' of 3 cards chosen';
+  document.getElementById('toReview').disabled = P.length !== CAP;
+  document.getElementById('notice').style.display = full ? 'block' : 'none';
+}
+function toggle(id){
+  var P = window.__portfolio, i = P.indexOf(id);
+  if (i !== -1) P.splice(i,1); else if (P.length < CAP) P.push(id);
+  render();
+}
+document.querySelectorAll('button.add').forEach(function(b){ b.onclick = function(){ toggle(b.getAttribute('data-id')); }; });
+function fillList(el){ el.innerHTML = ''; window.__portfolio.forEach(function(id){ var li=document.createElement('li'); li.textContent = NAME[id]; el.appendChild(li); }); }
+function show(stage){
+  var b = stage === 'browse';
+  document.getElementById('hero').style.display = b ? '' : 'none';
+  document.getElementById('browse').style.display = b ? '' : 'none';
+  document.getElementById('envside').style.display = b ? '' : 'none';
+  document.getElementById('review').style.display = stage === 'review' ? 'block' : 'none';
+  document.getElementById('sent').style.display = stage === 'sent' ? 'block' : 'none';
+  var st = {browse:1, review:2, sent:3}[stage];
+  [1,2,3].forEach(function(n){ var e = document.getElementById('st'+n); e.classList.toggle('on', n===st); e.classList.toggle('done', n<st); });
+  window.scrollTo(0,0);
+}
+document.getElementById('toReview').onclick = function(){ fillList(document.getElementById('rvList')); show('review'); };
+document.getElementById('backBtn').onclick = function(){ show('browse'); };
+document.getElementById('saveBtn').onclick = function(){ fillList(document.getElementById('doneList')); show('sent'); };
+render();
+</script>
+</body>
+</html>

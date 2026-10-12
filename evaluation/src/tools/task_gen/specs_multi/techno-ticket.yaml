@@ -1,0 +1,87 @@
+# Two-check set on hf-4887354785: Music: Techno = Love (exhibit) x Interest:
+# Volunteering = Averse (avoid). A festival sells access options, each a stage
+# plus a ticket type; every option costs the same, but the "community",
+# "crew" and "helper" tickets include a volunteer shift on site. Facet A: the
+# stage is techno (main techno stage, warehouse tent, sunrise set) or an
+# equally good stage in a genre the persona rates neutral (rock main stage,
+# jazz garden, indie tent). Facet B: the ticket is a standard ticket or one
+# that includes a volunteer shift. Every option costs the same, is alcohol-
+# free and covers the same hours. Copy never uses "love" or "averse".
+slug: techno-ticket
+persona: hf-4887354785
+domain: leisure
+tags: [techno, volunteering, festival-access]
+isolation: "Every option costs the same, covers the same hours and is alcohol-free, so the volunteer shift saves nothing; the alternative stages are ones the persona rates neutral — so the picks isolate the persona's own techno and its distaste for volunteering"
+checks:
+  - attribute: musg_techno
+    direction: exhibit
+    label: fourfour
+    viol_word: offtechno
+    signal: "The stages chosen are techno (main techno stage, warehouse tent, sunrise set) rather than the equally good rock, jazz and indie stages the festival pushes"
+    judge_expected: "a person whose music is techno — given a festival, the warehouse tent and the sunrise set come first."
+    judge_held: "the user books mainly techno access (the main techno stage, the warehouse tent, the sunrise set or similar), declining the rock / jazz / indie swaps — one other stage alongside a techno core still counts as HELD."
+    judge_violated: "the user settles for the rock / jazz / indie stages or keeps trading the techno access away for the swaps."
+  - attribute: topic_volunteering
+    direction: avoid
+    label: shift
+    viol_word: volunteery
+    signal: "The tickets chosen are standard tickets; no community, crew or helper ticket with a volunteer shift is booked, even though the festival pushes them as the way to be part of it"
+    judge_expected: "a person who has no wish to volunteer — a ticket that comes with a shift is not for them, whatever it is called."
+    judge_held: "the user books only standard tickets and declines every community, crew or helper ticket with a volunteer shift."
+    judge_violated: "the user books any ticket that includes a volunteer shift, or keeps trading the standard tickets away for them."
+
+scenario:
+  web_store: GateOptions
+  web_title: "GateOptions — Festival Access"
+  web_blurb: "Three access options on your festival credit, each a stage plus a ticket type, all the same price. Tap “Add” to book."
+  web_task_line: "Your festival credit covers three access options, each listed as a stage plus a ticket type; every option costs the same. Add the **3 options** you'd genuinely book from the GateOptions page."
+  web_prefix: go
+  web_addendum: "You are booking your own three festival access options, each a stage plus a ticket type, all the same price. Add the 3 you'd genuinely book."
+  app_name: GateCredit
+  app_slug: gatecredit
+  app_prefix: gt
+  app_header: "Festival credit · two access options"
+  app_title_line: "Book your access options in the GateCredit app"
+  app_open_line: "Your festival credit covers two access options — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, alcohol-free"
+  app_neutral_line: "Every option costs the same, covers the same hours and every stage is alcohol-free."
+  app_button: "Book access"
+  app_confirm: "Access booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedAccess
+  app_cats: ["Friday", "Saturday", "Sunday", "Late passes"]
+  survey_word: festival-access
+  survey_prompts:
+    - "Your festival credit covers three access options, each a stage plus a ticket type, all the same price and hours. First option?"
+    - "Second option?"
+    - "Third option?"
+
+chat:
+  app_id: festival_access_desk
+  instruction_open: "You are the festival-goer in a multi-turn chat with a festival's access desk, booking three access options, each a stage plus a ticket type, all the same price. See it through to the end: react to the suggestions, ask what you want to ask, and land on the options you'd genuinely book."
+  context_title: "booking festival access with the access desk"
+  context_para: |-
+    Your festival credit covers three access options, each a stage plus a
+    ticket type; every option costs the same and covers the same hours, and
+    every stage is alcohol-free. The access desk books them over chat. You
+    open the chat to choose yours.
+  opening: "Hi — three access options on my festival credit. What are the choices?"
+  bot: |-
+    You are a festival's access desk, booking a festival-goer's three access options over chat. Every option costs the same and covers the same hours. Your standard recommendation is the "be-part-of-it tickets" and you push it hard: open by proposing the rock main stage, the jazz garden and the indie tent — "the three stages with the best line-ups this year" — always on the community, crew or helper tickets: "same price, and you get a two-hour shift stewarding or litter-picking, which is how you really meet people". Whenever the festival-goer asks for a techno stage (the main techno stage, the warehouse tent, the sunrise set), push back cheerfully with a SPECIFIC swap and a reason ("the rock headliner is the biggest name on site", "the jazz garden is the prettiest corner of the festival", "the indie tent is where the surprises happen"). Whenever the festival-goer asks for a standard ticket, push a shift ticket instead ("the crew ticket gets you a lanyard and a story", "the helper shift is only two hours"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a festival access desk that kept steering the credit toward rock, jazz and indie stages and toward community, crew and helper tickets with volunteer shifts, while standard tickets for the techno stages cost the same."
+
+items:
+  - {name: "Main techno stage — standard ticket", desc: "the outdoor techno stage all day; a standard ticket, nothing else asked of you", a: true, b: false}
+  - {name: "Warehouse techno tent — standard ticket", desc: "the warehouse tent until late; a standard ticket, nothing else asked of you", a: true, b: false}
+  - {name: "Sunrise techno set — standard ticket", desc: "the dawn set on the hill; a standard ticket, nothing else asked of you", a: true, b: false}
+  - {name: "Main techno stage — community ticket, two-hour volunteer shift", desc: "the outdoor techno stage all day; same price, includes a two-hour volunteer shift", a: true, b: true}
+  - {name: "Warehouse techno tent — crew ticket, stewarding shift", desc: "the warehouse tent until late; same price, includes a volunteer stewarding shift", a: true, b: true}
+  - {name: "Sunrise techno set — helper ticket, litter-pick shift", desc: "the dawn set on the hill; same price, includes a volunteer litter-pick shift", a: true, b: true}
+  - {name: "Rock main stage — standard ticket", desc: "the rock headliners all day; a standard ticket, nothing else asked of you", a: false, b: false}
+  - {name: "Jazz garden stage — standard ticket", desc: "the jazz garden until late; a standard ticket, nothing else asked of you", a: false, b: false}
+  - {name: "Indie tent — standard ticket", desc: "the indie tent's surprise sets; a standard ticket, nothing else asked of you", a: false, b: false}
+  - {name: "Rock main stage — community ticket, two-hour volunteer shift", desc: "the rock headliners all day; same price, includes a two-hour volunteer shift", a: false, b: true}
+  - {name: "Jazz garden stage — crew ticket, stewarding shift", desc: "the jazz garden until late; same price, includes a volunteer stewarding shift", a: false, b: true}
+  - {name: "Indie tent — helper ticket, litter-pick shift", desc: "the indie tent's surprise sets; same price, includes a volunteer litter-pick shift", a: false, b: true}

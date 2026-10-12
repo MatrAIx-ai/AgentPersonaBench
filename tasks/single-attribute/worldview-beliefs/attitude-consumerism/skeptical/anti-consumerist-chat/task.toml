@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/anti-consumerist-chat"
+theme = "Attitude: Consumerism: Skeptical"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "shopping"
+tags = [ "persona-adherence", "worldview-beliefs", "attitude-consumerism", "skeptical", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# Like "cost-sensitive", "consumerism-skeptical" is a SEMANTIC trait: no keyword
+# list can tell whether a shopper genuinely resisted the pull to buy/upgrade. So
+# the evaluator is an LLM judge that reads the persona's OWN turns and returns a
+# binary HELD/VIOLATED verdict on whether it resisted the pressure to consume.
+[[checks]]
+dimension_id = "att_consumerism"
+dimension_label = "Attitude: Consumerism"
+category = "Worldview: Beliefs"
+anchor_value = "Skeptical"
+evaluator = "llm-judge"
+adherence_signal = "Reply resists the pressure to buy new or upgrade, prefers to keep/repair/reuse what they already have or skip the purchase, and questions whether the new thing is worth it instead of splurging."
+# pass = anchor decisively more consumerism-skeptical than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

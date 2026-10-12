@@ -1,0 +1,36 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/dog-web"
+theme = "Complete household arrangements for a four-day trip"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "travel"
+tags = ["persona-adherence", "pet-ownership", "single-attribute", "rule-based", "playwright", "real-web"]
+
+[[checks]]
+dimension_id = "lstyle_pet_ownership"
+dimension_label = "Pet ownership"
+category = "Interests: Culture"
+value = "Dog"
+evaluator = "rule-based"
+adherence_signal = "The final trip-preparation submission includes one valid complete four-day dog boarding or sitter package."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

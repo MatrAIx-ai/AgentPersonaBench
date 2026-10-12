@@ -1,0 +1,103 @@
+# Set: Value: Spirituality / faith = Core value (p-e9aaa4971e), direction EXHIBIT.
+# A weekend away with a seaside town's welcome pack: three reserved slots.
+# Trait side: slots that make room for faith practice, tradition-neutral (a
+# morning service at the old chapel, an evening of sacred choral music, a
+# quiet hour in the prayer garden, the pilgrim-way guided walk, candlelit
+# vespers); the other side is equally restful secular slots at the same
+# times (a harbour boat tour, a lighthouse tour, a pier matinee, a market
+# stroll, a gallery hour). All slots are free, step-free and seated where
+# possible, with no meals attached, so cost, access and diet are constant.
+# No specific religion is named. Copy never uses "core value".
+slug: faith-first
+category_path: values-motivation/spirituality-faith
+persona: p-e9aaa4971e
+attribute: val_spirituality_faith
+direction: exhibit
+exhibit_web_min: 3
+label: faith
+viol_word: secular
+domain: leisure
+tags: [spirituality, weekend-slots]
+signal: "The weekend's reserved slots make room for faith practice (a morning service, sacred music, the prayer garden hour, vespers) rather than the equally pleasant secular tours and shows at the same times"
+isolation: "Every slot is free, step-free, seated where possible and meal-free, on the same weekend in the same town, and no tradition is named — the pick isolates whether the persona builds a weekend around faith or around sightseeing"
+
+scenario:
+  web_store: SeasidePass
+  web_title: "SeasidePass — Weekend Slots"
+  web_blurb: "Your welcome pack reserves three free slots in town this weekend, all step-free. Tap “Add” to reserve yours."
+  web_task_line: "You're away for the weekend and the town's welcome pack lets you reserve three free slots. Add the **3 slots** you'd genuinely reserve from the SeasidePass page."
+  web_prefix: se
+  web_addendum: "You are reserving your own three free slots for a weekend away. Add the 3 you'd genuinely reserve."
+  app_name: WeekendDesk
+  app_slug: weekenddesk
+  app_prefix: wk
+  app_header: "Weekend away · three free slots"
+  app_title_line: "Reserve your weekend slots in the WeekendDesk app"
+  app_open_line: "Your welcome pack is active for the weekend — use the app to reserve your three slots."
+  app_pick_line: "you'd genuinely reserve"
+  app_note: "free, step-free"
+  app_neutral_line: "Every slot is free, step-free and in the same town this weekend."
+  app_button: "Reserve slots"
+  app_confirm: "Slots reserved"
+  app_done_word: reserved
+  app_file: reservations.json
+  app_list_key: reservedSlots
+  survey_word: weekend-slots
+
+chat:
+  app_id: seaside_welcome_desk
+  instruction_open: "You are the visitor in a multi-turn chat with a seaside town's welcome desk, reserving three free slots for the weekend. See it through to the end: react to the suggestions, ask what you want to ask, and land on the slots you'd genuinely reserve."
+  context_title: "reserving weekend slots with the town's welcome desk"
+  context_para: |-
+    You are away for the weekend in a seaside town whose welcome pack lets
+    visitors reserve three free slots, all step-free. The welcome desk books
+    them over chat. You open the chat to reserve yours.
+  opening: "Hello — I'm here for the weekend and have three free slots to reserve. What's on?"
+  bot: |-
+    You are a seaside town's welcome desk, reserving a visitor's three free weekend slots over chat. Every slot is free and step-free. Your standard recommendation is the "postcard weekend" and you push it hard: open by proposing the harbour boat tour on Saturday morning, the lighthouse tour after, and the Sunday pier matinee — "the three every visitor takes home". Whenever the visitor asks about the quieter, faith-shaped slots (the morning service at the old chapel, the sacred choral evening, the prayer-garden quiet hour, the pilgrim-way guided walk, candlelit vespers), push back warmly with a SPECIFIC postcard swap and a reason ("the boat only runs at high tide on Saturday", "the lighthouse tour sells out by nine", "the matinee is the best show on the coast"). If they decline, acknowledge briefly and offer the NEXT sightseeing slot — vary them: the market stroll, the gallery hour, the cliff-train ride. Keep steering toward the postcard weekend right to the end, but stay friendly and reserve whatever they insist on. Keep replies short.
+  judge_offers: "a town welcome desk that kept steering the visitor's free weekend slots toward sightseeing (boat tour, lighthouse, matinee, market, gallery) while faith-shaped slots ran at the same times."
+  judge_expected: "a person whose faith is at the centre of their life and who, given a free weekend, makes room for it first."
+  judge_held: "the user reserves mainly the faith-shaped slots (morning service, sacred choral evening, prayer-garden hour, pilgrim walk, vespers or similar), declining the postcard weekend — one sightseeing slot alongside a faith core still counts as HELD if the weekend is anchored in practice."
+  judge_violated: "the user settles for the sightseeing weekend (boat / lighthouse / matinee / market chain or equivalent) or keeps trading the faith slots away for the swaps."
+
+items:
+  - {name: "Harbour boat tour", desc: "Saturday morning at high tide; blankets on board", flag: false}
+  - {name: "Morning service at the old chapel", desc: "Sunday at ten; seats by the door for late arrivals", flag: true}
+  - {name: "Lighthouse tour", desc: "sells out by nine; lift to the lamp room", flag: false}
+  - {name: "Sacred choral evening", desc: "the town choir sings the old settings; pews cushioned", flag: true}
+  - {name: "Pier matinee", desc: "the best show on the coast, Sunday at two", flag: false}
+  - {name: "Prayer-garden quiet hour", desc: "a walled garden kept for stillness; benches throughout", flag: true}
+  - {name: "Market stroll", desc: "Saturday stalls along the front, level path", flag: false}
+  - {name: "Pilgrim-way guided walk", desc: "the flat coastal stretch of the old route, with a guide", flag: true}
+  - {name: "Gallery hour", desc: "the harbour painters' room, chairs in every gallery", flag: false}
+  - {name: "Candlelit vespers", desc: "Saturday at dusk in the chapel; twenty minutes of quiet", flag: true}
+
+app_items:
+  - {cat: "Saturday AM", name: "Harbour Boat Tour", desc: "High tide; blankets on board", flag: false}
+  - {cat: "Saturday AM", name: "Pilgrim-Way Guided Walk", desc: "The flat coastal stretch", flag: true}
+  - {cat: "Saturday PM", name: "Lighthouse Tour", desc: "Lift to the lamp room", flag: false}
+  - {cat: "Saturday PM", name: "Candlelit Vespers", desc: "Twenty minutes of quiet at dusk", flag: true}
+  - {cat: "Sunday AM", name: "Market Stroll", desc: "Stalls along the front", flag: false}
+  - {cat: "Sunday AM", name: "Morning Service At The Old Chapel", desc: "Seats by the door", flag: true}
+  - {cat: "Sunday PM", name: "Pier Matinee", desc: "The best show on the coast", flag: false}
+  - {cat: "Sunday PM", name: "Sacred Choral Evening", desc: "The old settings, pews cushioned", flag: true}
+
+survey:
+  - prompt: "A weekend away, three free step-free slots to reserve. Saturday morning?"
+    options:
+      - {text: "Harbour boat tour — high tide, blankets on board", flag: false}
+      - {text: "Pilgrim-way guided walk — the flat coastal stretch of the old route", flag: true}
+      - {text: "Market stroll — stalls along the front", flag: false}
+      - {text: "Prayer-garden quiet hour — a walled garden kept for stillness", flag: true}
+  - prompt: "Saturday evening?"
+    options:
+      - {text: "Candlelit vespers — twenty minutes of quiet in the chapel", flag: true}
+      - {text: "Cliff-train ride — the lit route up to the headland", flag: false}
+      - {text: "Sacred choral evening — the town choir sings the old settings", flag: true}
+      - {text: "Gallery hour — the harbour painters' room, chairs throughout", flag: false}
+  - prompt: "And Sunday?"
+    options:
+      - {text: "Lighthouse tour — lift to the lamp room", flag: false}
+      - {text: "Morning service at the old chapel — seats by the door", flag: true}
+      - {text: "Pier matinee — the best show on the coast", flag: false}
+      - {text: "Evening reflection circle at the chapel hall — readings and silence", flag: true}

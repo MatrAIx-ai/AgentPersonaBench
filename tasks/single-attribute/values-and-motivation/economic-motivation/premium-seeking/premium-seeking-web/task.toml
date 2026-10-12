@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/premium-seeking-web"
+theme = "Economic motivation: Premium-seeking"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "shopping"
+tags = [ "persona-adherence", "economic-motivation", "premium-seeking", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "economic_motivation"
+dimension_label = "Economic motivation"
+category = "Values & Motivation"
+anchor_value = "Premium-seeking"
+evaluator = "rule-based"
+# Web env: the persona adds items to a cart on a live store page (Playwright). Each
+# product's hidden `data-thrift` (0..3) in index.html is the ground truth (INVERTED
+# from cost-sensitive: 0 = premium/top-tier, 3 = cheapest bargain). VIOLATED for any
+# budget/bargain pick (thrift >= 2); a premium-seeker never buys the cheap tiers.
+adherence_signal = "Cart built from premium/top-tier products (data-thrift 0-1); no budget/bargain (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

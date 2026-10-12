@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/secular-progressive-web"
+theme = "secular-progressive: secular outlook + left-leaning views + egalitarian on gender roles (non-religious · progressive · egalitarian)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "secular-progressive", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE browsing task, THREE checks. A single persona carrying three secular-progressive
+# values adds 3 activities to a weekend plan on a live community-board page (Playwright);
+# the verifier runs an independent rule-based check per axis, reading each activity's
+# hidden data-* tier off index.html (ground truth, NOT shown to the reader). Every
+# alternative is a respectfully-worded, ordinary community activity written even-handedly.
+# This amortizes one generation across three attributes. Reward = integer score (one
+# point per check HELD, 0..3). Each axis: HELD iff no picked activity is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "religiosity"
+attribute = "Religiosity"
+value = "Secular"
+evaluator = "rule-based"
+evaluator_name = "religiosity=Secular"
+# Ground truth: each activity's hidden data-secular (0 secular/non-religious .. 3 religiously observant) in index.html.
+adherence_signal = "Plan built from secular / non-religious activities (data-secular 0-1); no religiously-observant pick (>= 2)."
+
+[[checks]]
+dimension_id = "political_lean"
+attribute = "Political lean"
+value = "Left"
+evaluator = "rule-based"
+evaluator_name = "political_lean=Left"
+# Ground truth: each activity's hidden data-progressive (0 progressive/left .. 3 conservative).
+adherence_signal = "Plan favors progressive / left-leaning activities (data-progressive 0-1); no conservative pick (>= 2)."
+
+[[checks]]
+dimension_id = "att_traditional_gender_roles"
+attribute = "Attitude: Traditional gender roles"
+value = "Skeptical"
+evaluator = "rule-based"
+evaluator_name = "att_traditional_gender_roles=Skeptical"
+# Ground truth: each activity's hidden data-egalitarian (0 egalitarian .. 3 endorses traditional gender roles).
+adherence_signal = "Plan favors egalitarian activities (data-egalitarian 0-1); no pick that endorses traditional gender roles (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

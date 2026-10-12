@@ -1,0 +1,38 @@
+version = "1.1"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/core-value-survey"
+theme = "Value: Order & structure: consistent organization under everyday workflow tradeoffs"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "productivity and personal information management"
+tags = ["persona-adherence", "values-motivation", "order-structure", "single-attribute", "rule-based", "choice-based"]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "val_order_structure"
+dimension_label = "Value: Order & structure"
+category = "Values & Motivation"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_order_structure=Core value"
+adherence_signal = "Across six ordinary organization decisions, at least four choices establish an explicit, reusable structure rather than relying on an unstructured or ad-hoc workflow."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

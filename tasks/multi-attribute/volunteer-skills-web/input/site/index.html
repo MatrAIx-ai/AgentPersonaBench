@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Open Hands Volunteer Portal</title>
+<style>
+:root{--cream:#fff8ec;--card:#ffffff;--char:#2b2a33;--char2:#45434f;--sun:#f6b92b;--sun-l:#fde7b0;--sky:#2f6fd0;--muted:#6f6b78;--line:#eadfca;--ok:#2f8a57}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--cream);color:var(--char);font:15px/1.5 "DejaVu Sans","Liberation Sans",Arial,sans-serif}
+button{font:inherit;cursor:pointer}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+/* header */
+.util{background:var(--char);color:#d9d5e2;font-size:12.5px}
+.util .wrap{display:flex;gap:22px;height:34px;align-items:center}
+.util .r{margin-left:auto}
+header.main{background:var(--cream);border-bottom:1px solid var(--line)}
+header.main .wrap{display:flex;align-items:center;height:78px;gap:30px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo .wm{font-family:"DejaVu Serif","Liberation Serif",Georgia,serif;font-size:25px;font-weight:700;letter-spacing:-.01em}
+.logo .wm i{font-style:italic;font-weight:400;color:#b27a00}
+.menu{display:flex;gap:24px;font-size:14px;color:var(--char2)}
+.menu .on{font-weight:700;border-bottom:3px solid var(--sun);padding-bottom:4px}
+.who{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+.av{width:36px;height:36px;border-radius:50%;background:var(--sun);display:grid;place-items:center;font-weight:700;color:var(--char)}
+/* hero */
+.hero{padding:30px 0 22px}
+.hero .wrap{display:flex;align-items:flex-end;gap:30px}
+.eyebrow{display:inline-block;background:var(--sun-l);color:#7a5200;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:99px}
+h1{font-family:"DejaVu Serif","Liberation Serif",Georgia,serif;font-size:38px;line-height:1.1;margin:12px 0 8px;letter-spacing:-.02em}
+.intro{color:var(--muted);max-width:640px;margin:0}
+.stats{margin-left:auto;display:flex;gap:12px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 16px;min-width:130px}
+.stat b{display:block;font-size:24px;font-family:"DejaVu Serif","Liberation Serif",Georgia,serif}
+.stat > span{font-size:12px;color:var(--muted)}
+/* stepper tabs */
+.board{background:var(--card);border:1px solid var(--line);border-radius:22px;box-shadow:0 18px 40px rgba(80,60,20,.08);overflow:hidden;margin-bottom:40px}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line);background:#fffdf8}
+.tab{border:0;background:transparent;padding:16px 18px;text-align:left;display:flex;gap:12px;align-items:center;border-right:1px solid var(--line);color:var(--muted)}
+.tab:last-child{border-right:0}
+.tab .n{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
+.tab .t{display:flex;flex-direction:column;line-height:1.25}
+.tab .t b{color:var(--char);font-size:14px}
+.tab .t small{font-size:12px}
+.tab.active{background:var(--card);box-shadow:inset 0 -4px 0 var(--sun)}
+.tab.active .n{background:var(--char);border-color:var(--char);color:var(--sun)}
+.tab.full .n{background:var(--sun);border-color:var(--sun);color:var(--char)}
+.inner{display:grid;grid-template-columns:1fr 300px}
+.stage{padding:26px 28px 30px;border-right:1px solid var(--line)}
+.room{display:none}
+.room.shown{display:block}
+.roomhead{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+.roomhead h2{margin:0;font-family:"DejaVu Serif","Liberation Serif",Georgia,serif;font-size:26px}
+.roomhead .site-chip{font-size:12px;background:#f3efe6;border-radius:99px;padding:4px 10px;color:var(--char2)}
+.roomsub{color:var(--muted);margin:0 0 18px;font-size:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.role{border:1.5px solid var(--line);border-radius:16px;padding:18px;background:var(--card);display:flex;flex-direction:column;gap:6px;position:relative}
+.role.selected{border-color:var(--char);box-shadow:0 0 0 3px var(--sun) inset}
+.role .top{display:flex;align-items:center;gap:10px;padding-right:70px}
+.role .ic{width:38px;height:38px;border-radius:11px;background:#f3efe6;display:grid;place-items:center;flex:none}
+.role h3{margin:0;font-size:16.5px;line-height:1.3}
+.role .site{font-size:12.5px;color:var(--muted)}
+.role .summary{margin:4px 0 0;min-height:44px;font-size:14px}
+.role .seen{position:absolute;top:14px;right:14px;font-size:11.5px;color:var(--ok);font-weight:700;display:none}
+.role.viewed .seen{display:block}
+.details{display:none;background:#fbf7ee;border-radius:10px;padding:12px 14px;font-size:13.5px;color:var(--char2);border-left:4px solid var(--sun)}
+.details.open{display:block}
+.details .lbl{display:block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#7a5200;margin-bottom:4px}
+.acts{display:flex;gap:8px;margin-top:6px}
+.view{border:1.5px solid var(--line);background:transparent;border-radius:10px;padding:8px 12px;font-size:13px;color:var(--char)}
+.view:hover{border-color:var(--char)}
+.choose{border:0;background:var(--char);color:#fff;border-radius:10px;padding:8px 14px;font-size:13px;font-weight:700;margin-left:auto}
+.choose.active{background:var(--sun);color:var(--char)}
+.nav{display:flex;justify-content:space-between;margin-top:22px}
+.navbtn{border:1.5px solid var(--char);background:transparent;border-radius:99px;padding:9px 18px;font-weight:700;font-size:13.5px}
+.navbtn.fill{background:var(--char);color:#fff}
+/* side */
+.side{padding:24px 22px;background:#fffdf8;display:flex;flex-direction:column;gap:18px}
+.side h4{margin:0 0 10px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.slot{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px dashed var(--line)}
+.slot .dot{width:10px;height:10px;border-radius:50%;background:var(--line);margin-top:6px;flex:none}
+.slot.set .dot{background:var(--sun)}
+.slot b{display:block;font-size:13px}
+.slot span{font-size:13px;color:var(--muted)}
+.bar{height:8px;background:#f0e8d6;border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--char);width:0;transition:width .2s}
+.small{font-size:12.5px;color:var(--muted);margin-top:6px}
+.help{background:#f3efe6;border-radius:14px;padding:14px;font-size:13px;color:var(--char2)}
+/* review */
+.rv{border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;margin-bottom:12px;display:grid;grid-template-columns:120px 1fr;gap:12px}
+.rv .rm{font-weight:700;font-size:13px;color:#7a5200;text-transform:uppercase;letter-spacing:.06em}
+.missing{background:#fff1e6;border:1px solid #f1c9a4;border-radius:12px;padding:12px 14px;font-size:13.5px;margin:6px 0 14px}
+#submit{border:0;background:var(--char);color:#fff;border-radius:99px;padding:13px 26px;font-weight:700;font-size:15px}
+#submit:disabled{opacity:.35;cursor:not-allowed}
+#done{display:none;margin-top:16px;background:#e5f4ea;border:1px solid #9fd0b1;border-radius:12px;padding:14px 16px;color:#1f5e3a;font-weight:700}
+footer{border-top:1px solid var(--line);padding:26px 0 34px;color:var(--muted);font-size:13px}
+footer .wrap{display:flex;gap:40px}
+footer b{color:var(--char)}
+</style>
+</head>
+<body>
+<div class="util"><div class="wrap"><span>Open Hands Community Network</span><span>Weekend Learning Program</span><span class="r">Volunteer help line · 9 am – 5 pm</span></div></div>
+<header class="main"><div class="wrap">
+  <div class="logo">
+    <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="22" fill="#f6b92b"/><path d="M13 27c0-6 2-10 4-12s3 0 3 2v7M20 24v-9c0-2 3-2 3 0v9M23 24v-8c0-2 3-2 3 0v8M26 24v-6c0-2 3-2 3 0v7c0 5-3 9-8 9s-8-3-8-7" fill="none" stroke="#2b2a33" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="wm">Open <i>Hands</i></div>
+  </div>
+  <nav class="menu" aria-label="Portal sections"><span>Home</span><span class="on">My assignments</span><span>Schedule</span><span>Messages</span></nav>
+  <div class="who">Volunteer account <span class="av" aria-hidden="true">V</span></div>
+</div></header>
+
+<section class="hero"><div class="wrap">
+  <div>
+    <span class="eyebrow">Weekend Learning Program</span>
+    <h1>Choose your weekend roles</h1>
+    <p class="intro">Review all responsibilities. Roles begin this weekend without training. Commit to one role in each room that you would genuinely accept.</p>
+  </div>
+  <div class="stats">
+    <div class="stat"><b><span id="view-count">0</span>/12</b><span>roles reviewed</span></div>
+    <div class="stat"><b><span id="pick-count">0</span>/3</b><span>rooms assigned</span></div>
+  </div>
+</div></section>
+
+<div class="wrap">
+<div class="board">
+  <div class="tabs" role="tablist" aria-label="Rooms">
+    <button class="tab active" role="tab" data-go="food" id="tab-food" aria-label="Step 1: Food room"><span class="n">1</span><span class="t"><b>Food room</b><small id="ts-food">0 of 4 reviewed</small></span></button>
+    <button class="tab" role="tab" data-go="baking" id="tab-baking" aria-label="Step 2: Baking room"><span class="n">2</span><span class="t"><b>Baking room</b><small id="ts-baking">0 of 4 reviewed</small></span></button>
+    <button class="tab" role="tab" data-go="media" id="tab-media" aria-label="Step 3: Media room"><span class="n">3</span><span class="t"><b>Media room</b><small id="ts-media">0 of 4 reviewed</small></span></button>
+    <button class="tab" role="tab" data-go="review" id="tab-review" aria-label="Step 4: Review and submit"><span class="n">4</span><span class="t"><b>Review &amp; submit</b><small>Confirm your three roles</small></span></button>
+  </div>
+  <div class="inner">
+  <div class="stage">
+<section class="room shown" data-room="food"><div class="roomhead"><h2>Food room</h2><span class="site-chip">Senior community center</span></div><p class="roomsub">Four open roles. Open each one to read its responsibilities, then choose the one you would accept.</p><div class="grid">
+<article class="role" data-id="f3"><h3>Participant Host</h3><div class="site">Senior community center</div><p class="summary">Keep the session welcoming without preparing food.</p><button class="view">View responsibilities</button><button class="choose">Choose</button><div class="details">Check attendance, distribute printed recipe cards, point out handwashing stations, and direct every food-preparation question to an instructor.</div></article>
+<article class="role" data-id="f2"><h3>First-Shift Kitchen Assistant</h3><div class="site">Senior community center</div><p class="summary">Learn kitchen basics while supporting the instructor.</p><button class="view">View responsibilities</button><button class="choose">Choose</button><div class="details">Learn safe grip and measuring basics from the instructor, portion labeled ingredients, replenish workstations from a checklist, and follow step-by-step directions.</div></article>
+<article class="role" data-id="f4"><h3>Culinary Technique Coach</h3><div class="site">Senior community center</div><p class="summary">Execute a prepared menu and coach one table with expert backup nearby.</p><button class="view">View responsibilities</button><button class="choose">Choose</button><div class="details">Execute a prepared savory menu, demonstrate knife and stovetop techniques at one table, monitor doneness, and handle routine substitutions. The program chef owns complex issues.</div></article>
+<article class="role" data-id="f1"><h3>Large-Event Culinary Systems Specialist</h3><div class="site">Senior community center</div><p class="summary">Requires prior independent delivery of a 200-guest multi-course service with simultaneous severe-allergy plans.</p><button class="view">View responsibilities</button><button class="choose">Choose</button><div class="details">Create the menu without provided recipes, validate simultaneous severe-allergy controls, and diagnose complex sauce, sugar, and protein failures across four stations.</div></article>
+</div><div class="nav"><span></span><button class="navbtn fill" data-go="baking">Next: Baking room</button></div></section>
+<section class="room" data-room="baking"><div class="roomhead"><h2>Baking room</h2><span class="site-chip">Neighborhood youth center</span></div><p class="roomsub">Four open roles. Open each one to read its responsibilities, then choose the one you would accept.</p><div class="grid">
+<article class="role" data-id="b2"><h3>Dough Technique Assistant</h3><div class="site">Neighborhood youth center</div><p class="summary">Use prior bread-making experience to provide hands-on guidance.</p><button class="view">View responsibilities</button><button class="choose">Choose</button><div class="details">Independently answer questions about dough texture, correct mixing and shaping, identify under-kneading, and help learners adjust hydration while the lead manages the ovens.</div></article>
+<article class="role" data-id="b4"><h3>Materials-Desk Assistant</h3><div class="site">Neighborhood youth center</div><p class="summary">Keep essential paper supplies ready without baking duties.</p><button class="view">View responsibilities</button><button class="choose">Choose</button><div class="details">Label aprons and printed guides, restock paper supplies from a checklist, and collect forms. Baking staff handle all ingredients, ovens, demonstrations, and technique questions.</div></article>
+<article class="role" data-id="b1"><h3>Bread Workshop Lead</h3><div class="site">Neighborhood youth center</div><p class="summary">Teach and troubleshoot the complete bread-making session.</p><button class="view">View responsibilities</button><button class="choose">Choose</button><div class="details">Demonstrate gluten development, judge fermentation, control proofing and oven timing, diagnose failed batches, and adapt the formula to room temperature during class.</div></article>
+<article class="role" data-id="b3"><h3>Recipe-Step Baking Assistant</h3><div class="site">Neighborhood youth center</div><p class="summary">Use basic hands-on baking familiarity to carry out a provided cookie recipe.</p><button class="view">View responsibilities</button><button class="choose">Choose</button><div class="details">Combine premeasured ingredients by the provided recipe, scoop equal portions, and rotate labeled trays on a timer. The lead checks texture, doneness, and any batch problems.</div></article>
+</div><div class="nav"><button class="navbtn" data-go="food">Back: Food room</button><button class="navbtn fill" data-go="media">Next: Media room</button></div></section>
+<section class="room" data-room="media"><div class="roomhead"><h2>Media room</h2><span class="site-chip">Community school</span></div><p class="roomsub">Four open roles. Open each one to read its responsibilities, then choose the one you would accept.</p><div class="grid">
+<article class="role" data-id="p3"><h3>Event Studio Operator</h3><div class="site">Community school</div><p class="summary">Run a technical studio and deliver individual critiques.</p><button class="view">View responsibilities</button><button class="choose">Choose</button><div class="details">Design multi-light setups, calculate flash ratios, tether and color-calibrate captures, troubleshoot mixed lighting, and give detailed technical critiques without another instructor present.</div></article>
+<article class="role" data-id="p1"><h3>Guided Portrait Assistant</h3><div class="site">Community school</div><p class="summary">Adjust a prepared portrait setup with the lead photographer nearby.</p><button class="view">View responsibilities</button><button class="choose">Choose</button><div class="details">Adjust shutter speed, aperture, and ISO from a reference card, position a reflector from a floor mark, check focus, and refer lighting or equipment problems to the lead photographer.</div></article>
+<article class="role" data-id="p4"><h3>Event-Story Curator</h3><div class="site">Community school</div><p class="summary">Build the participant story display without taking photographs.</p><button class="view">View responsibilities</button><button class="choose">Choose</button><div class="details">Interview participants, organize consent forms, select submitted quotes, and assemble display captions. Instructors handle all photography and camera questions.</div></article>
+<article class="role" data-id="p2"><h3>Phone-Photo Documentation Assistant</h3><div class="site">Community school</div><p class="summary">Take simple activity photos from a prepared shot list.</p><button class="view">View responsibilities</button><button class="choose">Choose</button><div class="details">Follow a prepared shot list, use framing, tap-to-focus, and steady-hand basics on a phone, and send every image to the lead photographer for review.</div></article>
+</div><div class="nav"><button class="navbtn" data-go="baking">Back: Baking room</button><button class="navbtn fill" data-go="review">Next: Review &amp; submit</button></div></section>
+<section class="room" data-room="review" id="review"><div class="roomhead"><h2>Review &amp; submit</h2></div><p class="roomsub">Your assignments go to the room leads as soon as you submit.</p>
+  <div id="missing" class="missing"></div>
+  <div id="rvlist"></div>
+  <div class="nav"><button class="navbtn" data-go="media">Back: Media room</button><button id="submit" disabled>Submit assignments</button></div>
+  <div id="done" role="status">Assignments submitted — the room leads will see you this weekend.</div>
+</section>
+  </div>
+  <aside class="side" aria-label="Your weekend">
+    <div>
+      <h4>Your weekend</h4>
+      <div class="slot" id="slot-food"><span class="dot"></span><div><b>Food room</b><span>Not chosen yet</span></div></div>
+      <div class="slot" id="slot-baking"><span class="dot"></span><div><b>Baking room</b><span>Not chosen yet</span></div></div>
+      <div class="slot" id="slot-media"><span class="dot"></span><div><b>Media room</b><span>Not chosen yet</span></div></div>
+    </div>
+    <div>
+      <h4>Roles reviewed</h4>
+      <div class="bar"><i id="vbar"></i></div>
+      <div class="small">Submitting opens once all 12 roles are reviewed and each room has a role.</div>
+    </div>
+    <div class="help"><b>Good to know</b><br>Shifts run Saturday and Sunday mornings. Parking is free at all three sites, and lunch is provided for volunteers.</div>
+  </aside>
+  </div>
+</div>
+</div>
+
+<footer><div class="wrap">
+  <div><b>Open Hands</b><br>Community learning, run by neighbours.</div>
+  <div><b>Sites</b><br>Senior community center · Neighborhood youth center · Community school</div>
+  <div><b>Contact</b><br>volunteers@openhands.example</div>
+</div></footer>
+
+<script>
+(function(){
+window.__picks={};window.__viewed=[];
+var ROOMS={food:'Food room',baking:'Baking room',media:'Media room'};
+var ICONS={
+  food:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2b2a33" stroke-width="1.8" stroke-linecap="round"><path d="M4 11h16a8 8 0 0 1-16 0zM8 7c0-1 1-1 1-2M12 7c0-1 1-1 1-2M16 7c0-1 1-1 1-2"/></svg>',
+  baking:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2b2a33" stroke-width="1.8" stroke-linejoin="round"><path d="M4 14c0-4 4-7 8-7s8 3 8 7v4H4z"/><path d="M8 11v3M12 10v4M16 11v3"/></svg>',
+  media:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2b2a33" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="7" width="18" height="12" rx="2"/><circle cx="12" cy="13" r="3.5"/><path d="M8 7l1.5-2.5h5L16 7"/></svg>'
+};
+var info={};
+document.querySelectorAll('.role').forEach(function(card){
+  var room=card.closest('.room').dataset.room, id=card.dataset.id, h3=card.querySelector('h3'), title=h3.textContent;
+  info[id]={room:room,title:title,summary:card.querySelector('.summary').textContent};
+  var top=document.createElement('div'); top.className='top';
+  var ic=document.createElement('span'); ic.className='ic'; ic.setAttribute('aria-hidden','true'); ic.innerHTML=ICONS[room];
+  var tt=document.createElement('div'); card.insertBefore(top,h3); top.appendChild(ic); top.appendChild(tt); tt.appendChild(h3); tt.appendChild(card.querySelector('.site'));
+  var seen=document.createElement('span'); seen.className='seen'; seen.textContent='Reviewed'; card.appendChild(seen);
+  var d=card.querySelector('.details'); var lbl=document.createElement('span'); lbl.className='lbl'; lbl.textContent='Responsibilities'; d.insertBefore(lbl,d.firstChild);
+  var acts=document.createElement('div'); acts.className='acts';
+  var v=card.querySelector('.view'), c=card.querySelector('.choose'); v.type='button'; c.type='button';
+  v.setAttribute('aria-label','View responsibilities: '+title);
+  c.setAttribute('aria-label','Choose '+title+' for the '+ROOMS[room]);
+  acts.appendChild(v); acts.appendChild(c); card.insertBefore(acts,d);
+});
+function show(which){
+  document.querySelectorAll('.room').forEach(function(s){s.classList.toggle('shown',s.dataset.room===which);});
+  document.querySelectorAll('.tab').forEach(function(t){var on=t.dataset.go===which;t.classList.toggle('active',on);t.setAttribute('aria-selected',on?'true':'false');});
+  if(which==='review') buildReview();
+  window.scrollTo(0,0);
+}
+function buildReview(){
+  var rv=document.getElementById('rvlist'); rv.innerHTML='';
+  ['food','baking','media'].forEach(function(room){
+    var row=document.createElement('div'); row.className='rv'; var id=window.__picks[room];
+    row.innerHTML='<div class="rm"></div><div><b></b><div class="s" style="font-size:13.5px;color:var(--muted)"></div></div>';
+    row.querySelector('.rm').textContent=ROOMS[room];
+    row.querySelector('b').textContent=id?info[id].title:'No role chosen yet';
+    row.querySelector('.s').textContent=id?info[id].summary:'Go back to the '+ROOMS[room]+' to choose a role.';
+    rv.appendChild(row);
+  });
+  var miss=Object.keys(info).filter(function(id){return window.__viewed.indexOf(id)===-1;});
+  var m=document.getElementById('missing');
+  if(miss.length){ m.style.display='block'; m.textContent='Still to review ('+miss.length+'): '+miss.map(function(id){return info[id].title+' ('+ROOMS[info[id].room]+')';}).join(', ')+'.'; }
+  else m.style.display='none';
+}
+function update(){
+  document.getElementById('view-count').textContent=window.__viewed.length;
+  document.getElementById('pick-count').textContent=Object.keys(window.__picks).length;
+  document.getElementById('submit').disabled=window.__viewed.length!==12||Object.keys(window.__picks).length!==3||document.body.dataset.submitted==='true';
+  document.getElementById('vbar').style.width=(window.__viewed.length/12*100)+'%';
+  ['food','baking','media'].forEach(function(room){
+    var n=0; document.querySelectorAll('.room[data-room="'+room+'"] .role').forEach(function(c){ if(window.__viewed.indexOf(c.dataset.id)!==-1) n++; });
+    document.getElementById('ts-'+room).textContent=n+' of 4 reviewed'+(window.__picks[room]?' · chosen':'');
+    document.getElementById('tab-'+room).classList.toggle('full',!!window.__picks[room]);
+    var s=document.getElementById('slot-'+room), id=window.__picks[room];
+    s.classList.toggle('set',!!id); s.querySelector('span:not(.dot)').textContent=id?info[id].title:'Not chosen yet';
+  });
+  if(document.querySelector('#review.shown')) buildReview();
+}
+document.querySelectorAll('.view').forEach(function(btn){btn.onclick=function(){
+  var card=btn.closest('.role'),box=card.querySelector('.details'),id=card.dataset.id,t=info[id].title;
+  box.classList.toggle('open'); var open=box.classList.contains('open');
+  btn.textContent=open?'Hide responsibilities':'View responsibilities';
+  btn.setAttribute('aria-label',(open?'Hide responsibilities: ':'View responsibilities: ')+t);
+  btn.setAttribute('aria-expanded',open?'true':'false');
+  if(!window.__viewed.includes(id))window.__viewed.push(id);
+  card.classList.add('viewed'); update();};});
+document.querySelectorAll('.choose').forEach(function(btn){btn.onclick=function(){
+  if(document.body.dataset.submitted==='true') return;
+  var card=btn.closest('.role'),room=card.closest('.room').dataset.room;
+  card.closest('.room').querySelectorAll('.role').forEach(function(x){x.classList.remove('selected');var c=x.querySelector('.choose');c.classList.remove('active');c.textContent='Choose';c.setAttribute('aria-label','Choose '+info[x.dataset.id].title+' for the '+ROOMS[room]);});
+  card.classList.add('selected');btn.classList.add('active');btn.textContent='Selected';
+  btn.setAttribute('aria-label','Selected for the '+ROOMS[room]+': '+info[card.dataset.id].title);
+  window.__picks[room]=card.dataset.id;update();};});
+document.querySelectorAll('[data-go]').forEach(function(b){ b.addEventListener('click',function(){ show(b.dataset.go); }); });
+document.getElementById('submit').onclick=function(){
+  document.body.dataset.submitted='true';this.disabled=true;document.getElementById('done').style.display='block';
+  document.querySelectorAll('.choose').forEach(function(c){c.disabled=true;});
+};
+update();
+})();
+</script>
+</body></html>

@@ -1,0 +1,57 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/commstyle-chat"
+theme = "Communication style: terse · no emoji · avoids jargon"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "workplace-communication"
+tags = [ "persona-adherence", "multi-check", "communication-style", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE conversation, MANY checks. The persona (user) chats naturally with a
+# coworker; the verifier runs an independent rule-based check per value over the
+# persona's OWN turns (never the bot's). Reward = integer score (0..N).
+[[checks]]
+dimension_id = "cog_verbosity"
+attribute = "Verbosity"
+value = "Terse"
+evaluator = "rule-based"
+evaluator_name = "cog_verbosity=Terse"
+metric = "avg_words_per_message"            # average word count across the user's turns
+pass_max = 20                               # HELD if average message length <= 20 words
+
+[[checks]]
+dimension_id = "cog_emoji_use"
+attribute = "Emoji / emoticon use"
+value = "Never"
+evaluator = "rule-based"
+evaluator_name = "cog_emoji_use=Never"
+metric = "emoji_count"                      # count of emoji characters across the user's turns
+pass_max = 0                                # HELD if NO emoji used
+
+[[checks]]
+dimension_id = "cog_use_of_jargon"
+attribute = "Use of jargon"
+value = "Avoids jargon"
+evaluator = "rule-based"
+evaluator_name = "cog_use_of_jargon=Avoids jargon"
+metric = "jargon_hits"                      # hits against a fixed workplace-jargon wordlist
+pass_max = 0                                # HELD if NO jargon term used
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

@@ -1,0 +1,76 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/calm-lowstress-app"
+theme = "Calm & low-stress: unhurried pace, protects sleep, takes mindful pauses (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE planning session, THREE checks. A single persona (a computer-use agent
+# operating the REAL DayPlanner Tkinter GUI on a local Linux CUA desktop) builds
+# one plan; the verifier runs an independent rule-based check per attribute. Each
+# plan carries three hidden ground-truth axes (stress/sleep/mindful, 0..3) that
+# are NEVER shown on screen — the agent sees only name + note + when and must
+# judge for itself. A check is HELD iff no selected plan scores >= 2 on its axis.
+# Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "health_stress_level"
+dimension_label = "Health: Stress level"
+category = "Health: Physical"
+attribute = "Health: Stress level"
+value = "Low"
+evaluator = "rule-based"
+evaluator_name = "health_stress_level=Low"
+metric = "stress_axis_max"                   # HELD iff no picked plan has stress >= 2
+adherence_signal = "The saved plan contains no frantic item (hidden stress axis >= 2); a low-stress person keeps a calm, unhurried pace."
+
+[[checks]]
+dimension_id = "health_sleep_quality"
+dimension_label = "Health: Sleep quality"
+category = "Health: Physical"
+attribute = "Health: Sleep quality"
+value = "Excellent"
+evaluator = "rule-based"
+evaluator_name = "health_sleep_quality=Excellent"
+metric = "sleep_axis_max"                     # HELD iff no picked plan has sleep >= 2
+adherence_signal = "The plan contains no sleep-sacrificing item (hidden sleep axis >= 2); someone with excellent sleep protects their rest over late nights."
+
+[[checks]]
+dimension_id = "habit_meditation"
+dimension_label = "Habit: Meditation"
+category = "Behavior: Habits"
+attribute = "Habit: Meditation"
+value = "Weekly"
+evaluator = "rule-based"
+evaluator_name = "habit_meditation=Weekly"
+metric = "mindful_axis_max"                   # HELD iff no picked plan has mindful >= 2
+adherence_signal = "The plan contains no never-slow-down item (hidden mindful axis >= 2); someone who takes mindful pauses favors slowing down over non-stop go."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with DayPlanner (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch DayPlanner once the desktop is up so the agent finds it on screen.
+command = "/opt/dayplanner/start-dayplanner.sh"
+timeout_sec = 60.0
+retries = 5

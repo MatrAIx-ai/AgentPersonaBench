@@ -1,0 +1,14 @@
+# host-side ground truth (per-id axis tiers) -- NOT mounted to the agent
+tiers:
+  p01: readwrite=0 intellect=0 reading=0
+  p02: readwrite=0 intellect=1 reading=0
+  p03: readwrite=0 intellect=0 reading=0
+  p04: readwrite=1 intellect=1 reading=0
+  p05: readwrite=0 intellect=1 reading=1
+  p06: readwrite=1 intellect=1 reading=1
+  p07: readwrite=2 intellect=0 reading=2
+  p08: readwrite=2 intellect=1 reading=2
+  p09: readwrite=3 intellect=3 reading=2
+  p10: readwrite=3 intellect=2 reading=3
+  p11: readwrite=3 intellect=3 reading=3
+  p12: readwrite=3 intellect=3 reading=2

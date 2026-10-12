@@ -1,0 +1,64 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/family-devoted-web"
+theme = "Family devoted: benevolence · open-mindedness · community"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "social"
+tags = [ "persona-adherence", "multi-check", "family-devoted", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE basket task, THREE checks. A single persona carrying three values adds 3
+# items to a basket on a live store page (Playwright); the verifier runs an
+# independent rule-based check per axis, reading each item's hidden data-* tier off
+# index.html (ground truth, NOT shown to the shopper). Each item embodies an
+# everyday choice that pits caring for close others, open-mindedness, and community
+# against self-interest or rigidity. This amortizes one generation across three
+# attributes. Reward = integer score (one point per check HELD, 0..3). Each axis:
+# HELD iff no picked item is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "schwartz_value_benevolence"
+attribute = "Schwartz Benevolence"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "schwartz_value_benevolence=High"
+# Ground truth: each item's hidden data-benevolence (0 cares for/helps close others .. 3 self-serving, neglects them) in index.html.
+adherence_signal = "Basket built from help-and-care items (data-benevolence 0-1); no pick that neglects the welfare of close others (>= 2)."
+
+[[checks]]
+dimension_id = "trait_open_mindedness"
+attribute = "Character: Open-mindedness"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_open_mindedness=Strong"
+# Ground truth: each item's hidden data-openness (0 open to new ideas/views .. 3 shuts them down, rigid).
+adherence_signal = "Basket favors stay-open items (data-openness 0-1); no pick that shuts down new ideas or viewpoints (>= 2)."
+
+[[checks]]
+dimension_id = "val_community"
+attribute = "Value: Community"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_community=Important"
+# Ground truth: each item's hidden data-community (0 shows up for community .. 3 skips out on it).
+adherence_signal = "Basket favors show-up-for-community items (data-community 0-1); no pick that skips out on it (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

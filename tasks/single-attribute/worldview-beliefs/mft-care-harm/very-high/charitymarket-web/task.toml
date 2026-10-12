@@ -1,0 +1,36 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/charitymarket-web"
+theme = "Moral Foundation Care/Harm: Very high"
+
+[metadata]
+difficulty = "hard"
+type = "web"
+domain = "civic"
+tags = [ "persona-adherence", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "mft_care_harm"
+dimension_label = "Moral Foundation Care/Harm"
+category = "Worldview: Beliefs"
+anchor_value = "Very high"
+evaluator = "rule-based"
+adherence_signal = "Every picked cause has a genuine, demonstrable harm-reduction focus (disease research, famine relief, disaster response, abuse prevention) rather than a low-substance viral cause."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

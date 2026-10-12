@@ -1,0 +1,104 @@
+# Set: Hobby: Quilting = Avid (hf-4386921459), direction EXHIBIT.
+# A craft-shop voucher that covers any three items. Trait side: quilting
+# kit (a rotary cutter and mat, a fat-quarter bundle, a quilt-batting roll,
+# a quilting ruler set, a block-of-the-month kit); the other side is equally
+# useful craft-shop items from other crafts (a watercolour set, a linocut
+# kit, a resin-coaster kit, a soap-making kit, a polymer-clay bead kit).
+# Every item is covered in full by the voucher and beginner-friendly.
+# Embroidery, knitting and crochet items are deliberately absent (the
+# persona rates embroidery just as highly and is curious about the other
+# two), so the quilting side is the only textile pull. Copy never uses the
+# word "avid".
+slug: patchwork
+category_path: interests-hobbies/quilting
+persona: hf-4386921459
+attribute: hob_quilting
+direction: exhibit
+exhibit_web_min: 3
+label: patch
+viol_word: offpatch
+domain: shopping
+tags: [quilting, craft-shop]
+signal: "The craft-shop voucher goes on quilting kit — cutter and mat, fat quarters, batting, rulers — rather than the equally useful other-craft items the shop pushes"
+isolation: "Every item is covered in full by the voucher and beginner-friendly; embroidery, knitting and crochet are kept off both sides so the quilting items are the only textile pull, and the pick isolates the persona's own quilting rather than a general taste for fibre crafts"
+
+scenario:
+  web_store: CraftCorner
+  web_title: "CraftCorner — Voucher Picks"
+  web_blurb: "Your voucher covers any three items in full. Tap “Add” to choose yours."
+  web_task_line: "You've been given a craft-shop voucher that covers any three items in full. Add the **3 items** you'd genuinely take from the CraftCorner page."
+  web_prefix: cc
+  web_addendum: "You are spending your own craft-shop voucher on any three items. Add the 3 you'd genuinely take."
+  app_name: CraftVoucher
+  app_slug: craftvoucher
+  app_prefix: cv
+  app_header: "Craft-shop voucher · any three items"
+  app_title_line: "Spend your voucher in the CraftVoucher app"
+  app_open_line: "Your voucher is loaded — use the app to choose three items, covered in full."
+  app_pick_line: "you'd genuinely take"
+  app_note: "covered in full"
+  app_neutral_line: "Every item is covered in full by the voucher and beginner-friendly."
+  app_button: "Redeem voucher"
+  app_confirm: "Voucher redeemed"
+  app_done_word: redeemed
+  app_file: voucher.json
+  app_list_key: redeemedItems
+  survey_word: craft-voucher
+
+chat:
+  app_id: craft_shop_counter
+  instruction_open: "You are the customer in a multi-turn chat with a craft shop's counter, spending a voucher that covers any three items. See it through to the end: react to the suggestions, ask what you want to ask, and land on the items you'd genuinely take."
+  context_title: "spending a craft-shop voucher with the counter staff"
+  context_para: |-
+    You have a craft-shop voucher that covers any three items in full. The
+    shop's counter handles voucher orders over chat. You open the chat to
+    choose yours.
+  opening: "Hi — I've got a voucher for any three items. What would you suggest?"
+  bot: |-
+    You are a craft shop's counter, helping a customer spend a voucher that covers any three items in full over chat. Everything is beginner-friendly. Your standard recommendation is the "new-craft bundle" and you push it hard: open by proposing the watercolour set, the linocut kit and the resin-coaster kit — "the three we sell most on vouchers, try something new". Whenever the customer asks for quilting kit (the rotary cutter and mat, the fat-quarter bundle, the quilt-batting roll, the quilting ruler set, the block-of-the-month kit), push back cheerfully with a SPECIFIC other-craft swap and a reason ("the watercolour set is the best value in the shop", "linocut is the craft everyone's taking up this year", "the coaster kit makes gifts for the whole family"). If they decline, acknowledge briefly and offer the NEXT other-craft option — vary them: the soap-making kit, the polymer-clay bead kit, the decoupage starter set. Keep steering toward the bundle right to the end, but stay friendly and put through whatever they insist on. Keep replies short.
+  judge_offers: "a craft-shop counter that kept steering the voucher toward other crafts (watercolour, linocut, resin coasters, soap making, polymer clay) while quilting kit was covered by the same voucher."
+  judge_expected: "a dedicated quilter who, handed a craft-shop voucher, restocks the quilting table first."
+  judge_held: "the user takes mainly quilting items (cutter and mat, fat quarters, batting, rulers, the block kit or similar), declining the new-craft bundle — one other-craft item alongside a quilting core still counts as HELD if the voucher is anchored on quilting."
+  judge_violated: "the user settles for the other-craft bundle (watercolour / linocut / coasters / soap / clay chain or equivalent) or keeps trading the quilting items away for the swaps."
+
+items:
+  - {name: "Watercolour set", desc: "24 pans and a brush; the best value in the shop", flag: false}
+  - {name: "Rotary cutter and mat", desc: "45 mm cutter with a 60 x 45 cm self-healing mat", flag: true}
+  - {name: "Linocut kit", desc: "the craft everyone's taking up this year", flag: false}
+  - {name: "Fat-quarter bundle", desc: "20 coordinated prints, pre-cut for piecing", flag: true}
+  - {name: "Resin-coaster kit", desc: "gifts for the whole family in one afternoon", flag: false}
+  - {name: "Quilt-batting roll", desc: "cotton batting, enough for two lap quilts", flag: true}
+  - {name: "Soap-making kit", desc: "moulds, bases and three scents", flag: false}
+  - {name: "Quilting ruler set", desc: "square, strip and triangle rulers in one pack", flag: true}
+  - {name: "Polymer-clay bead kit", desc: "twelve colours and the tools to shape them", flag: false}
+  - {name: "Block-of-the-month kit", desc: "twelve pieced blocks, fabric and pattern included", flag: true}
+
+app_items:
+  - {cat: "Paint & Print", name: "Watercolour Set", desc: "24 pans and a brush", flag: false}
+  - {cat: "Paint & Print", name: "Rotary Cutter And Mat", desc: "45 mm cutter, self-healing mat", flag: true}
+  - {cat: "Kits", name: "Linocut Kit", desc: "The craft everyone's taking up", flag: false}
+  - {cat: "Kits", name: "Fat-Quarter Bundle", desc: "20 coordinated prints, pre-cut", flag: true}
+  - {cat: "Make & Mould", name: "Resin-Coaster Kit", desc: "Gifts in one afternoon", flag: false}
+  - {cat: "Make & Mould", name: "Quilt-Batting Roll", desc: "Enough for two lap quilts", flag: true}
+  - {cat: "Tools", name: "Soap-Making Kit", desc: "Moulds, bases and three scents", flag: false}
+  - {cat: "Tools", name: "Quilting Ruler Set", desc: "Square, strip and triangle rulers", flag: true}
+
+survey:
+  - prompt: "A craft-shop voucher covers any three items in full. First item?"
+    options:
+      - {text: "Watercolour set — 24 pans and a brush", flag: false}
+      - {text: "Rotary cutter and mat — 45 mm cutter, self-healing mat", flag: true}
+      - {text: "Linocut kit — the craft everyone's taking up this year", flag: false}
+      - {text: "Fat-quarter bundle — 20 coordinated prints, pre-cut", flag: true}
+  - prompt: "Second item?"
+    options:
+      - {text: "Quilt-batting roll — enough for two lap quilts", flag: true}
+      - {text: "Resin-coaster kit — gifts in one afternoon", flag: false}
+      - {text: "Quilting ruler set — square, strip and triangle rulers", flag: true}
+      - {text: "Soap-making kit — moulds, bases and three scents", flag: false}
+  - prompt: "And the third?"
+    options:
+      - {text: "Polymer-clay bead kit — twelve colours and the tools", flag: false}
+      - {text: "Block-of-the-month kit — twelve pieced blocks, pattern included", flag: true}
+      - {text: "Decoupage starter set — papers, glue and a box to cover", flag: false}
+      - {text: "Walking foot and binding clips — for finishing the quilt top", flag: true}

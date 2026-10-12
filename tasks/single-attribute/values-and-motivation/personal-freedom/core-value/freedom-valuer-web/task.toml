@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/freedom-valuer-web"
+theme = "Personal freedom: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "personal-freedom", "core-value", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "val_personal_freedom"
+dimension_label = "Personal freedom"
+category = "Values & Motivation"
+attribute = "Personal freedom"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_personal_freedom=Core value"
+# Web env: the persona adds plans to a sign-up list on a live page (Playwright).
+# Each plan's hidden `data-tier` (0..3) in index.html is the ground truth.
+# VIOLATED for any pick that hands over control / locks into a rigid constraint
+# (tier >= 2).
+adherence_signal = "Sign-up list built from self-directed / flexible plans (data-tier 0-1); no control-ceding or locked-in pick (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

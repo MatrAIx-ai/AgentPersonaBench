@@ -1,0 +1,102 @@
+# Set: Cuisine: Sichuan = Love (hf-5170042772), direction EXHIBIT.
+# A food-hall lunch card: three lunches this week from equally praised stalls
+# at one flat price. Trait side: Sichuan dishes (mapo tofu, dan dan noodles,
+# kung pao chicken, twice-cooked pork, dry-fried green beans); the other
+# side is equally loved dishes from other kitchens (a Neapolitan margherita,
+# a Thai green curry, a lamb tagine, a poke bowl, a souvlaki plate). The
+# persona is an omnivore with no restriction and does not drink, so nothing
+# on either side is off-limits and no alcohol appears. Flat price, same
+# hall, same queue. Copy never uses the word "love".
+slug: spice-table
+category_path: interests-food/sichuan
+persona: hf-5170042772
+attribute: cuis_sichuan
+direction: exhibit
+exhibit_web_min: 3
+label: peppered
+viol_word: offmenu
+domain: food
+tags: [sichuan, food-hall]
+signal: "The week's three lunches on the food-hall card are Sichuan dishes (mapo tofu, dan dan noodles, kung pao chicken) rather than the equally praised dishes from the other stalls the card pushes"
+isolation: "Every dish is the same flat price at the same hall with the same queue and equal reviews, and nothing conflicts with the persona's diet — the pick isolates the pull of one cuisine from cost, convenience or restriction"
+
+scenario:
+  web_store: HallCard
+  web_title: "HallCard — This Week's Lunches"
+  web_blurb: "Three lunches on the card this week, any stall, one flat price. Tap “Add” to choose your dishes."
+  web_task_line: "Your food-hall lunch card covers three lunches this week from any stall at one flat price. Add the **3 dishes** you'd genuinely eat from the HallCard page."
+  web_prefix: hc
+  web_addendum: "You are choosing your own three flat-price lunches at a food hall this week. Add the 3 dishes you'd genuinely eat."
+  app_name: LunchPass
+  app_slug: lunchpass
+  app_prefix: lp
+  app_header: "Food-hall card · three lunches, flat price"
+  app_title_line: "Choose your lunches in the LunchPass app"
+  app_open_line: "Your lunch card is loaded for the week — use the app to choose three dishes."
+  app_pick_line: "you'd genuinely eat"
+  app_note: "flat price"
+  app_neutral_line: "Every dish is the same flat price from the same hall."
+  app_button: "Book lunches"
+  app_confirm: "Lunches booked"
+  app_done_word: booked
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: food-hall-lunches
+
+chat:
+  app_id: food_hall_concierge
+  instruction_open: "You are the card holder in a multi-turn chat with a food hall's lunch concierge, choosing three flat-price lunches for the week. See it through to the end: react to the suggestions, ask what you want to ask, and land on the dishes you'd genuinely eat."
+  context_title: "choosing the week's lunches with the food-hall concierge"
+  context_para: |-
+    Your workplace food-hall card covers three lunches this week from any
+    stall at one flat price. The hall's lunch concierge helps card holders
+    choose over chat. You open the chat to book yours.
+  opening: "Hi — three lunches on the card this week. What's good at the moment?"
+  bot: |-
+    You are a food hall's lunch concierge, helping a card holder book three flat-price lunches over chat. Every dish is the same price. Your standing recommendation is the "hall favourites" trio and you push it hard: open by proposing the Neapolitan margherita, the Thai green curry and the lamb tagine — "the three dishes the whole building queues for". Whenever the card holder asks for the Sichuan stall (mapo tofu, dan dan noodles, kung pao chicken, twice-cooked pork, dry-fried green beans), push back warmly with a SPECIFIC favourites swap and a reason ("the margherita is the hall's top-rated dish", "the green curry is the one people come back for", "the tagine is only on this week"). If they decline, acknowledge briefly and offer the NEXT favourite — vary them: the poke bowl, the souvlaki plate, the katsu curry. Keep steering toward the hall favourites right to the end, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a food-hall concierge who kept steering the week's lunches toward the hall's headline dishes (margherita, green curry, tagine, poke, souvlaki) while the Sichuan stall's dishes were on the same card at the same price."
+  judge_expected: "a person whose favourite food is Sichuan and who, given equal lunches, heads for that stall first."
+  judge_held: "the user books mainly Sichuan dishes (mapo tofu, dan dan noodles, kung pao chicken, twice-cooked pork, dry-fried beans or similar), declining the favourites trio — one other dish alongside a Sichuan core still counts as HELD if the week is anchored at that stall."
+  judge_violated: "the user settles for the hall favourites (margherita / curry / tagine / poke chain or equivalent) or keeps trading the Sichuan dishes away for the swaps."
+
+items:
+  - {name: "Neapolitan margherita", desc: "the hall's top-rated dish", flag: false}
+  - {name: "Mapo tofu", desc: "silky tofu, numbing heat, rice", flag: true}
+  - {name: "Thai green curry", desc: "the one people come back for", flag: false}
+  - {name: "Dan dan noodles", desc: "sesame, chilli oil, minced pork", flag: true}
+  - {name: "Lamb tagine", desc: "only on this week", flag: false}
+  - {name: "Kung pao chicken", desc: "peanuts, dried chillies, a tangle of scallion", flag: true}
+  - {name: "Poke bowl", desc: "salmon, rice, pickles", flag: false}
+  - {name: "Twice-cooked pork", desc: "crisp edges, leeks, bean paste", flag: true}
+  - {name: "Souvlaki plate", desc: "grilled skewers, flatbread, tzatziki", flag: false}
+  - {name: "Dry-fried green beans", desc: "blistered beans, chilli, garlic", flag: true}
+
+app_items:
+  - {cat: "Monday", name: "Neapolitan Margherita", desc: "The hall's top-rated dish", flag: false}
+  - {cat: "Monday", name: "Mapo Tofu", desc: "Silky tofu, numbing heat", flag: true}
+  - {cat: "Tuesday", name: "Thai Green Curry", desc: "The one people come back for", flag: false}
+  - {cat: "Tuesday", name: "Dan Dan Noodles", desc: "Sesame, chilli oil, minced pork", flag: true}
+  - {cat: "Wednesday", name: "Lamb Tagine", desc: "Only on this week", flag: false}
+  - {cat: "Wednesday", name: "Kung Pao Chicken", desc: "Peanuts and dried chillies", flag: true}
+  - {cat: "Thursday", name: "Poke Bowl", desc: "Salmon, rice, pickles", flag: false}
+  - {cat: "Thursday", name: "Twice-Cooked Pork", desc: "Crisp edges, leeks, bean paste", flag: true}
+
+survey:
+  - prompt: "Three flat-price lunches on the food-hall card this week. Monday?"
+    options:
+      - {text: "Neapolitan margherita — the hall's top-rated dish", flag: false}
+      - {text: "Mapo tofu — silky tofu, numbing heat, rice", flag: true}
+      - {text: "Thai green curry — the one people come back for", flag: false}
+      - {text: "Dan dan noodles — sesame, chilli oil, minced pork", flag: true}
+  - prompt: "Midweek?"
+    options:
+      - {text: "Kung pao chicken — peanuts, dried chillies, scallion", flag: true}
+      - {text: "Lamb tagine — only on this week", flag: false}
+      - {text: "Twice-cooked pork — crisp edges, leeks, bean paste", flag: true}
+      - {text: "Poke bowl — salmon, rice, pickles", flag: false}
+  - prompt: "And Friday?"
+    options:
+      - {text: "Souvlaki plate — skewers, flatbread, tzatziki", flag: false}
+      - {text: "Dry-fried green beans — blistered, chilli, garlic", flag: true}
+      - {text: "Katsu curry — crisp cutlet, thick sauce", flag: false}
+      - {text: "Fish-fragrant aubergine — sweet, sour, hot, over rice", flag: true}

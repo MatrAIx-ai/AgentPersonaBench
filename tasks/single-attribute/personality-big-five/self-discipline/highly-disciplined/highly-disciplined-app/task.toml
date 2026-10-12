@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/highly-disciplined-app"
+theme = "Self-discipline: Very high"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "general"
+tags = [ "persona-adherence", "personality-big-five", "self-discipline", "highly-disciplined", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "big5_self_discipline"
+dimension_label = "Self-discipline"
+category = "Personality: Big Five"
+attribute = "Self-discipline"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_self_discipline=Very high"
+# OS-APP env: the persona is a computer-use agent operating Momentum, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Confirm", Momentum writes order.json itself. Runs locally in
+# Docker (no use.computer needed).
+adherence_signal = "The week the agent plans contains no lapse-of-self-control approach (a high-tier item, tier>=2); a highly-disciplined person fills the week with stick-to-the-plan, finish-what-you-start approaches."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with Momentum (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch Momentum once the desktop is up so the agent finds it on screen.
+command = "/opt/momentum/start-momentum.sh"
+timeout_sec = 60.0
+retries = 5

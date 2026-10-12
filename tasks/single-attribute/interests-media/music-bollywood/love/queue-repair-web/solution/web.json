@@ -1,0 +1,20 @@
+{
+  "role": "a user",
+  "outputs": [
+    {
+      "path": "observed.json",
+      "kind": "js",
+      "expr": "() => { const m = document.querySelector('#workspace'); if (!m || !m.dataset.sessionId) return null; return {session_id: m.dataset.sessionId, stage: m.dataset.stage, revision: parseInt(m.dataset.revision, 10), submitted: m.dataset.submitted === 'true', selected: Object.fromEntries(Array.from(document.querySelectorAll('#receipt [data-slot]')).map(el => [el.dataset.slot, el.dataset.selectionId]))}; }"
+    }
+  ],
+  "server": {
+    "cmd": [
+      "python3",
+      "server.py",
+      "--port",
+      "0",
+      "--output",
+      "/app/output"
+    ]
+  }
+}

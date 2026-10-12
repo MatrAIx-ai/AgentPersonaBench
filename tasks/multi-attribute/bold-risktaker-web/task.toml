@@ -1,0 +1,64 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/bold-risktaker-web"
+theme = "Bold risktaker: risk-seeking · competence · stimulation"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "bold-risktaker", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE booking task, THREE checks. A single persona carrying three bold-risktaker
+# values books 3 experiences on a live catalog page (Playwright); the verifier runs
+# an independent rule-based check per axis, reading each card's hidden data-* tier
+# off index.html (ground truth, NOT shown to the shopper). This amortizes one
+# generation across three attributes. Reward = integer score (one point per check
+# HELD, 0..3). Tier convention is INVERTED vs an avoidant persona: tier 0 EMBODIES
+# the persona's value, tier 3 is its opposite. Each axis: HELD iff no picked card
+# is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "risk_tolerance"
+attribute = "Risk tolerance"
+value = "Risk-seeking"
+evaluator = "rule-based"
+evaluator_name = "risk_tolerance=Risk-seeking"
+# Ground truth: each card's hidden data-ax1 (0 bold high-stakes .. 3 play-it-safe) in index.html.
+adherence_signal = "Cart built from bold/high-stakes experiences (data-ax1 0-1); no play-it-safe pick (>= 2)."
+
+[[checks]]
+dimension_id = "sdt_need_competence"
+attribute = "SDT Competence Need"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "sdt_need_competence=High"
+# Ground truth: each card's hidden data-ax2 (0 seeks mastery/stretches ability .. 3 coasts/no-skill/passive).
+adherence_signal = "Cart favors experiences that build and prove skill/mastery (data-ax2 0-1); no coast/no-mastery pick (>= 2)."
+
+[[checks]]
+dimension_id = "schwartz_value_stimulation"
+attribute = "Schwartz Stimulation"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "schwartz_value_stimulation=High"
+# Ground truth: each card's hidden data-ax3 (0 novel/thrilling .. 3 routine/familiar).
+adherence_signal = "Cart favors novel/thrilling experiences (data-ax3 0-1); no routine/familiar pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,103 @@
+# Set: Film: Animation = Love (real-human-survey-e8ec306b9cdb), direction
+# EXHIBIT. A cinema membership month with three free screening picks.
+# Trait side: animated features (a hand-drawn Japanese feature, a stop-
+# motion feature, a CG family adventure, an animated shorts programme, a
+# rotoscoped indie feature); the other side is equally well-reviewed live-
+# action films in genres the persona rates neutral (a thriller, a science-
+# fiction film, a documentary, a crime drama, a historical epic). Every
+# screening is free with membership, the same length and in the same
+# evening slot. Genres the persona strongly likes or dislikes are kept off
+# the live-action side. Copy never uses the word "love".
+slug: drawn-frames
+category_path: interests-media/films/animation
+persona: real-human-survey-e8ec306b9cdb
+attribute: filmg_animation
+direction: exhibit
+exhibit_web_min: 3
+label: drawn
+viol_word: liveaction
+domain: leisure
+tags: [animation, cinema-membership]
+signal: "The three member screenings are animated — the hand-drawn feature, the stop-motion, the shorts programme — rather than the equally well-reviewed live-action films the cinema pushes"
+isolation: "Every screening is free with membership, the same length and in the same slot; the live-action side is drawn only from genres the persona rates neutral, so the pick isolates the persona's own passion for animation rather than a dislike of what it is set against"
+
+scenario:
+  web_store: ReelPass
+  web_title: "ReelPass — Your Three Screenings"
+  web_blurb: "Three free member screenings this month, all in the 7 pm slot. Tap “Add” to book."
+  web_task_line: "Your cinema membership gives you three free screenings this month, all in the 7 pm slot. Add the **3 screenings** you'd genuinely book from the ReelPass page."
+  web_prefix: rp
+  web_addendum: "You are booking your own three free member screenings for the month. Add the 3 you'd genuinely book."
+  app_name: ScreenPick
+  app_slug: screenpick
+  app_prefix: sk
+  app_header: "Cinema membership · three free screenings"
+  app_title_line: "Book your member screenings in the ScreenPick app"
+  app_open_line: "Your membership renewed today — use the app to book three free screenings this month."
+  app_pick_line: "you'd genuinely book"
+  app_note: "free, 7 pm slot"
+  app_neutral_line: "Every screening is free with membership, the same length and in the 7 pm slot."
+  app_button: "Book screenings"
+  app_confirm: "Screenings booked"
+  app_done_word: booked
+  app_file: screenings.json
+  app_list_key: bookedScreenings
+  survey_word: member-screenings
+
+chat:
+  app_id: cinema_members_desk
+  instruction_open: "You are the member in a multi-turn chat with your cinema's members' desk, booking three free screenings for the month. See it through to the end: react to the suggestions, ask what you want to ask, and land on the screenings you'd genuinely book."
+  context_title: "booking member screenings with the cinema desk"
+  context_para: |-
+    Your cinema membership gives you three free screenings this month, all
+    the same length and in the 7 pm slot. The members' desk books them over
+    chat. You open the chat to choose yours.
+  opening: "Hi — three free member screenings this month. What's showing?"
+  bot: |-
+    You are a cinema's members' desk, booking a member's three free screenings over chat. Every screening is free with membership and in the 7 pm slot. Your standard recommendation is the "critics' three" and you push it hard: open by proposing the thriller, the science-fiction film and the documentary — "the three the reviews are unanimous on, proper cinema". Whenever the member asks for an animated film (the hand-drawn Japanese feature, the stop-motion feature, the CG family adventure, the animated shorts programme, the rotoscoped indie feature), push back cheerfully with a SPECIFIC critics' swap and a reason ("the thriller has the best final twenty minutes of the year", "the sci-fi is the one to see on a big screen", "the documentary just won at three festivals"). If they decline, acknowledge briefly and offer the NEXT critics' pick — vary them: the crime drama, the historical epic, the western. Keep steering toward the critics' three right to the end, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a cinema members' desk that kept steering the free screenings toward live-action films (thriller, sci-fi, documentary, crime drama, historical epic, western) while animated features were free on the same membership."
+  judge_expected: "a person for whom animation is the first thing to see — given three free screenings, the drawn, the stop-motion and the shorts win."
+  judge_held: "the user books mainly animated screenings (the hand-drawn feature, the stop-motion, the CG adventure, the shorts programme, the rotoscoped feature or similar), declining the critics' three — one live-action film alongside an animated core still counts as HELD if the month is anchored on animation."
+  judge_violated: "the user settles for the critics' month (thriller / sci-fi / documentary / crime / historical chain or equivalent) or keeps trading the animated screenings away for the swaps."
+
+items:
+  - {name: "The thriller", desc: "the best final twenty minutes of the year", flag: false}
+  - {name: "Hand-drawn Japanese feature", desc: "two hours of painted backgrounds and pencil-line animation", flag: true}
+  - {name: "The science-fiction film", desc: "the one to see on a big screen", flag: false}
+  - {name: "Stop-motion feature", desc: "puppets, clay and eleven years of shooting", flag: true}
+  - {name: "The documentary", desc: "just won at three festivals", flag: false}
+  - {name: "CG family adventure", desc: "the big animated release of the season", flag: true}
+  - {name: "The crime drama", desc: "a slow burn with an ending nobody saw coming", flag: false}
+  - {name: "Animated shorts programme", desc: "nine shorts from six countries, ninety minutes", flag: true}
+  - {name: "The historical epic", desc: "three hours, a cast of thousands", flag: false}
+  - {name: "Rotoscoped indie feature", desc: "live performances traced frame by frame into animation", flag: true}
+
+app_items:
+  - {cat: "Week 1", name: "The Thriller", desc: "The best final twenty minutes of the year", flag: false}
+  - {cat: "Week 1", name: "Hand-Drawn Japanese Feature", desc: "Painted backgrounds, pencil-line animation", flag: true}
+  - {cat: "Week 2", name: "The Science-Fiction Film", desc: "The one to see on a big screen", flag: false}
+  - {cat: "Week 2", name: "Stop-Motion Feature", desc: "Puppets, clay, eleven years of shooting", flag: true}
+  - {cat: "Week 3", name: "The Documentary", desc: "Just won at three festivals", flag: false}
+  - {cat: "Week 3", name: "CG Family Adventure", desc: "The big animated release of the season", flag: true}
+  - {cat: "Week 4", name: "The Crime Drama", desc: "An ending nobody saw coming", flag: false}
+  - {cat: "Week 4", name: "Animated Shorts Programme", desc: "Nine shorts from six countries", flag: true}
+
+survey:
+  - prompt: "Three free member screenings this month, all in the 7 pm slot. First booking?"
+    options:
+      - {text: "The thriller — the best final twenty minutes of the year", flag: false}
+      - {text: "Hand-drawn Japanese feature — painted backgrounds, pencil-line animation", flag: true}
+      - {text: "The science-fiction film — the one to see on a big screen", flag: false}
+      - {text: "Stop-motion feature — puppets, clay, eleven years of shooting", flag: true}
+  - prompt: "Second booking?"
+    options:
+      - {text: "CG family adventure — the big animated release of the season", flag: true}
+      - {text: "The documentary — just won at three festivals", flag: false}
+      - {text: "Animated shorts programme — nine shorts from six countries", flag: true}
+      - {text: "The crime drama — an ending nobody saw coming", flag: false}
+  - prompt: "And the third?"
+    options:
+      - {text: "The historical epic — three hours, a cast of thousands", flag: false}
+      - {text: "Rotoscoped indie feature — live performances traced into animation", flag: true}
+      - {text: "The western — one town, one long summer", flag: false}
+      - {text: "Anime series marathon — the first six episodes back to back", flag: true}

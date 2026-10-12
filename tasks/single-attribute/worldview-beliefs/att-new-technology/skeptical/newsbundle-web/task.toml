@@ -1,0 +1,36 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/newsbundle-web"
+theme = "Attitude: New technology: Skeptical"
+
+[metadata]
+difficulty = "hard"
+type = "web"
+domain = "tech"
+tags = [ "persona-adherence", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "att_new_technology"
+dimension_label = "Attitude: New technology"
+category = "Worldview: Beliefs"
+anchor_value = "Skeptical"
+evaluator = "rule-based"
+adherence_signal = "Every picked source is traditional, human-written and human-edited reporting, not an AI-generated or algorithmically-assembled feed."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

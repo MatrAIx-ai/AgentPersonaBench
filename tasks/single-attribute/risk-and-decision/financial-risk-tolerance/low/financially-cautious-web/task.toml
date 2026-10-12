@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/financially-cautious-web"
+theme = "Money decisions: plays it safe"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "risk-and-decision", "financial-risk-tolerance", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "dospert_financial_risk_tolerance"
+dimension_label = "Financial risk tolerance"
+category = "Risk & Decision"
+attribute = "dospert_financial_risk_tolerance"
+value = "Low"
+evaluator = "rule-based"
+evaluator_name = "dospert_financial_risk_tolerance=Low"
+# Web env: the persona adds money moves to a plan on a live page (Playwright).
+# Each move's hidden `data-rank` (0..3) in index.html is the ground truth.
+# VIOLATED for any notable-risk pick (rank >= 2).
+adherence_signal = "Money plan built from safe/prudent moves (data-rank 0-1); no notable financial risk (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

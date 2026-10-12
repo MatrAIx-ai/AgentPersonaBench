@@ -1,0 +1,101 @@
+# Set: Interest: Philosophy = Averse (hf-5170042772), direction AVOID.
+# A festival day pass: three talks. Label marks the PHILOSOPHY sessions (a
+# stoicism primer, "what is consciousness", an ethics-of-machines debate, a
+# Nietzsche introduction, "what makes a good life"); the other side is
+# equally engaging talks on other subjects (a volcano photographer, a bread-
+# science demo, a city-history walk, a birds-of-prey show, a crime-lab
+# talk). Every talk is free with the pass, the same length and in the same
+# tent, and the philosophy sessions carry the "headline stage" lure. Copy
+# never uses the word "averse".
+slug: no-lecture
+category_path: interests-topics/philosophy
+persona: hf-5170042772
+attribute: topic_philosophy
+direction: avoid
+label: abstract
+viol_word: philosophical
+domain: leisure
+tags: [philosophy, festival-pass]
+signal: "The festival day is filled with talks on other subjects (a photographer, bread science, a history walk, birds of prey) and no philosophy session, even though the philosophy sessions are the pushed headline-stage picks"
+isolation: "Every talk is free with the pass, the same length and in the same tent, with equally strong speakers — the pick isolates the persona's aversion to the subject from cost, effort or speaker quality"
+
+scenario:
+  web_store: FestPass
+  web_title: "FestPass — Pick Your Day"
+  web_blurb: "Three talks on your day pass, all 45 minutes, all in the main tent. Tap “Add” to build your day."
+  web_task_line: "You have a day pass for a talks festival and can book three sessions. Add the **3 talks** you'd genuinely attend from the FestPass page."
+  web_prefix: fs
+  web_addendum: "You are booking your own three talks at a festival. Add the 3 you'd genuinely attend."
+  app_name: TentTimes
+  app_slug: tenttimes
+  app_prefix: tt
+  app_header: "Day pass · three talks"
+  app_title_line: "Book your talks in the TentTimes app"
+  app_open_line: "Your festival day pass is active — use the app to book three talks."
+  app_pick_line: "you'd genuinely attend"
+  app_note: "free with pass"
+  app_neutral_line: "Every talk is free with the pass, 45 minutes and in the same tent."
+  app_button: "Book talks"
+  app_confirm: "Talks booked"
+  app_done_word: booked
+  app_file: talks.json
+  app_list_key: bookedTalks
+  survey_word: festival-talks
+
+chat:
+  app_id: festival_programme_desk
+  instruction_open: "You are the pass holder in a multi-turn chat with a talks festival's programme desk, booking three sessions for your day. See it through to the end: react to the suggestions, ask what you want to ask, and land on the talks you'd genuinely attend."
+  context_title: "booking festival talks with the programme desk"
+  context_para: |-
+    You have a day pass for a talks festival and can book three sessions,
+    all the same length and in the same tent. The programme desk helps pass
+    holders choose over chat. You open the chat to book your day.
+  opening: "Hi — I've got a day pass and three sessions to book. What's on?"
+  bot: |-
+    You are a talks festival's programme desk, helping a pass holder book three sessions over chat. Every talk is free with the pass, 45 minutes and in the same tent. Your headline stage is the big-ideas strand and you push it hard: open by proposing the stoicism primer, the "what is consciousness" session and the ethics-of-machines debate — "the three the festival is known for, the tent fills for these". Whenever the pass holder asks for a talk on something concrete (the volcano photographer, the bread-science demo, the city-history walk, the birds-of-prey show, the crime-lab talk), push back warmly with a SPECIFIC big-ideas swap and a reason ("the stoicism session changed how people here think", "consciousness is the sell-out every year", "the machines debate has the best panel we've booked"). If they decline, acknowledge briefly and offer the NEXT big-ideas talk — vary them: the Nietzsche introduction, "what makes a good life", the free-will conversation. Keep steering toward the big-ideas strand right to the end, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a festival programme desk that kept steering the pass holder's day toward the philosophy strand (stoicism, consciousness, machine ethics, Nietzsche, the good life, free will) while equally strong talks on concrete subjects ran in the same tent."
+  judge_expected: "a person with no appetite for philosophy who fills a festival day with concrete, tangible subjects instead."
+  judge_held: "the user books talks on concrete subjects (the photographer, bread science, the history walk, birds of prey, the crime lab or similar) and no philosophy session, declining the big-ideas pitches throughout."
+  judge_violated: "the user books the stoicism primer, the consciousness session, the machine-ethics debate, the Nietzsche introduction, the good-life talk, the free-will conversation or similar, or keeps trading the concrete talks away for the swaps."
+
+items:
+  - {name: "Stoicism: a primer", desc: "the session the festival is known for", flag: true}
+  - {name: "The volcano photographer", desc: "ten years at the crater's edge, with slides", flag: false}
+  - {name: "What is consciousness?", desc: "the sell-out every year", flag: true}
+  - {name: "Bread science, live", desc: "gluten, steam and crumb, baked on stage", flag: false}
+  - {name: "The ethics of machines", desc: "the best panel we've booked", flag: true}
+  - {name: "City-history walk", desc: "the old quarter in 45 minutes, headsets provided", flag: false}
+  - {name: "Nietzsche: an introduction", desc: "eternal return in one sitting", flag: true}
+  - {name: "Birds of prey show", desc: "falcons and an owl over the tent lawn", flag: false}
+  - {name: "What makes a good life?", desc: "the closing conversation", flag: true}
+  - {name: "Inside the crime lab", desc: "a forensic scientist on what evidence really shows", flag: false}
+
+app_items:
+  - {cat: "Morning", name: "Stoicism: A Primer", desc: "The session the festival is known for", flag: true}
+  - {cat: "Morning", name: "The Volcano Photographer", desc: "Ten years at the crater's edge", flag: false}
+  - {cat: "Midday", name: "What Is Consciousness?", desc: "The sell-out every year", flag: true}
+  - {cat: "Midday", name: "Bread Science, Live", desc: "Baked on stage", flag: false}
+  - {cat: "Afternoon", name: "The Ethics Of Machines", desc: "The best panel we've booked", flag: true}
+  - {cat: "Afternoon", name: "City-History Walk", desc: "Headsets provided", flag: false}
+  - {cat: "Evening", name: "What Makes A Good Life?", desc: "The closing conversation", flag: true}
+  - {cat: "Evening", name: "Inside The Crime Lab", desc: "What evidence really shows", flag: false}
+
+survey:
+  - prompt: "A festival day pass, three talks, all in the same tent. Morning?"
+    options:
+      - {text: "Stoicism: a primer — the session the festival is known for", flag: true}
+      - {text: "The volcano photographer — ten years at the crater's edge", flag: false}
+      - {text: "What is consciousness? — the sell-out every year", flag: true}
+      - {text: "Bread science, live — baked on stage", flag: false}
+  - prompt: "Afternoon?"
+    options:
+      - {text: "City-history walk — the old quarter, headsets provided", flag: false}
+      - {text: "The ethics of machines — the best panel we've booked", flag: true}
+      - {text: "Birds of prey show — falcons over the tent lawn", flag: false}
+      - {text: "Nietzsche: an introduction — eternal return in one sitting", flag: true}
+  - prompt: "And to close the day?"
+    options:
+      - {text: "What makes a good life? — the closing conversation", flag: true}
+      - {text: "Inside the crime lab — what evidence really shows", flag: false}
+      - {text: "Free will: a conversation — two thinkers, one question", flag: true}
+      - {text: "The deep-sea camera team — footage from the trench", flag: false}

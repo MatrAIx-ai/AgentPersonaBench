@@ -1,0 +1,34 @@
+# HOST-SIDE ONLY - never mounted into the container.
+#
+# The verifier owns these maps rather than trusting the tier TrackPass writes
+# into booking.json. The merged vegan-app reads its label back out of the app's own
+# output; doing it this way means a bug - or an edit - in the app cannot change a
+# verdict, which is the same rule mobileplan-app follows.
+#
+# Two flat sections so the verifier can parse this without pyyaml.
+#   tier   - option id -> 0 (lowest-priced option meeting the stated need) / 1 (past it)
+#   group  - option id -> the section it belongs to ('extras' = optional, unscored need)
+
+tier:
+  t01: 1
+  t02: 0
+  f01: 0
+  f02: 1
+  c01: 0
+  c02: 1
+  s01: 0
+  s02: 1
+  x01: 1
+  x02: 1
+
+group:
+  t01: ticket
+  t02: ticket
+  f01: fare
+  f02: fare
+  c01: class
+  c02: class
+  s01: seat
+  s02: seat
+  x01: extras
+  x02: extras

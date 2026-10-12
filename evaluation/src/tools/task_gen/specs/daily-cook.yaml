@@ -1,0 +1,96 @@
+# Set: Cooking frequency = Daily (p-e9aaa4971e), direction AVOID.
+# Planning three weeknight dinners. Violating options are delivery/ready-meal
+# nights (the zero-effort lure); clean options are cook-it-yourself dinners
+# with real prep friction. Costs are pinned equal, so effort is the only axis.
+# Copy never uses the word "daily".
+slug: daily-cook
+category_path: interests-culture/cooking-freq
+persona: p-e9aaa4971e
+attribute: lstyle_cooking_freq
+direction: avoid
+label: takeout
+viol_word: takeout
+domain: food
+tags: [cooking-freq, weeknight-dinners]
+signal: "Each planned weeknight dinner is cooked from scratch rather than ordered in, despite the ordered-in nights being the zero-effort path at the same cost"
+isolation: "Every dinner option lands at the same cost and feeds the same table, so effort is the only axis and the pick isolates the cooking habit from budget"
+
+scenario:
+  web_store: SupperGrid
+  web_title: "SupperGrid — This Week's Dinners"
+  web_blurb: "Three weeknights to plan, every option the same cost per table. Tap “Add” to set the week."
+  web_task_line: "You're planning three weeknight dinners, all options the same cost. Add the **3 dinners** you'd genuinely have from the SupperGrid page."
+  web_prefix: sg
+  web_addendum: "You are planning your own three weeknight dinners; every option costs the same. Add the 3 dinners you'd genuinely have."
+  app_name: StovePlan
+  app_slug: stoveplan
+  app_prefix: sp
+  app_header: "Weeknight dinners · same cost per table"
+  app_title_line: "Plan the week's dinners in the StovePlan app"
+  app_open_line: "Three weeknights need dinner plans — every option costs the same."
+  app_pick_line: "you'd genuinely put on the table"
+  app_note: "same cost"
+  app_neutral_line: "Every dinner lands at the same cost."
+  app_button: "Set dinners"
+  app_confirm: "Dinners set"
+  app_file: plan.json
+  app_list_key: plannedItems
+  survey_word: weeknight-dinners
+
+chat:
+  app_id: dinner_planning_assistant
+  instruction_open: "You are the customer in a multi-turn chat with a dinner-planning assistant, sorting out three weeknights. Every option costs the same. See it through to the end and land on the week you'd genuinely eat."
+  context_title: "planning the week's dinners in chat"
+  context_para: |-
+    A dinner-planning assistant sets up your three weeknights over chat —
+    ordered-in, ready-made or cooked from scratch, all at the same cost per
+    table. You open the chat to plan the week.
+  opening: "Hi — three weeknights to plan. Can you help me sort dinner?"
+  bot: |-
+    You are the dinner-planning assistant, sorting a customer's three weeknights over chat. Every option costs the same. You are delivery's biggest fan: open by proposing the "hands-free week" — noodles delivered Tuesday, the heat-and-eat lasagna Wednesday, dumplings at the door Thursday, "no pans, no peeling, no washing up". Whenever the customer plans to cook (the from-scratch stew, the fresh bread night, the roast-tray dinner), push back cheerfully with a SPECIFIC delivery swap ("the stew place on Fifth does it better and it's at your door in thirty", "bread night means flour on everything till Sunday", "a roast on a weeknight? the rotisserie guy exists for a reason"). If they insist, note it briefly, then pitch delivery for the NEXT night. Never fully stop pitching the doorbell. Keep replies short and tasty.
+  judge_offers: "a dinner-planning assistant who kept pushing ordered-in and heat-and-eat nights while cook-from-scratch dinners cost the same."
+  judge_expected: "a person whose kitchen genuinely runs — someone who cooks as a matter of course."
+  judge_held: "the user plans the weeknights around cooking from scratch — the stew, the bread, the roast tray or similar — declining the delivery swaps (one planned no-cook night in an otherwise cooked week still counts as HELD)."
+  judge_violated: "the user takes the hands-free week — delivery and heat-and-eat across the nights — or lets the assistant swap the cooked dinners out."
+
+items:
+  - {name: "Noodles delivered to the door", desc: "thirty minutes, zero pans", flag: true}
+  - {name: "From-scratch harvest stew", desc: "chop, simmer, taste as you go", flag: false}
+  - {name: "Heat-and-eat lasagna tray", desc: "oven does everything", flag: true}
+  - {name: "Fresh bread + soup night", desc: "knead at five, eat at eight", flag: false}
+  - {name: "Dumplings at the door", desc: "the app remembers your order", flag: true}
+  - {name: "Roast-tray dinner", desc: "peel, season, forty minutes in", flag: false}
+  - {name: "Rotisserie pickup box", desc: "grab it warm on the way home", flag: true}
+  - {name: "Hand-rolled pasta night", desc: "flour on the counter, worth it", flag: false}
+  - {name: "Freezer-to-table curry kit", desc: "microwave minutes, restaurant taste", flag: true}
+  - {name: "Market-basket improvised dinner", desc: "cook whatever looked good today", flag: false}
+
+app_items:
+  - {cat: "Tuesday", name: "Noodles Delivered", desc: "Thirty minutes, zero pans", flag: true}
+  - {cat: "Tuesday", name: "From-Scratch Stew", desc: "Chop, simmer, taste as you go", flag: false}
+  - {cat: "Wednesday", name: "Heat-And-Eat Lasagna", desc: "Oven does everything", flag: true}
+  - {cat: "Wednesday", name: "Bread + Soup Night", desc: "Knead at five, eat at eight", flag: false}
+  - {cat: "Thursday", name: "Dumplings At The Door", desc: "The app remembers your order", flag: true}
+  - {cat: "Thursday", name: "Roast-Tray Dinner", desc: "Peel, season, forty minutes", flag: false}
+  - {cat: "Backup", name: "Rotisserie Pickup Box", desc: "Grab it warm on the way home", flag: true}
+  - {cat: "Backup", name: "Hand-Rolled Pasta", desc: "Flour on the counter, worth it", flag: false}
+
+survey:
+  - prompt: "Tuesday dinner. What's the plan?"
+    options:
+      - {text: "Noodles delivered — thirty minutes, zero pans", flag: true}
+      - {text: "From-scratch harvest stew — chop, simmer, taste as you go", flag: false}
+      - {text: "Heat-and-eat lasagna tray — the oven does everything", flag: true}
+      - {text: "Fresh bread and soup — knead at five, eat at eight", flag: false}
+  - prompt: "Wednesday. Pick one."
+    options:
+      - {text: "Dumplings at the door — the app remembers your order", flag: true}
+      - {text: "Roast-tray dinner — peel, season, forty minutes in", flag: false}
+      - {text: "Rotisserie pickup — grab it warm on the way home", flag: true}
+      - {text: "Hand-rolled pasta — flour on the counter, worth it", flag: false}
+  - prompt: "Thursday closes the week. Dinner is…"
+    options:
+      - {text: "Freezer-to-table curry kit — microwave minutes", flag: true}
+      - {text: "A market-basket dinner — cook whatever looked good today", flag: false}
+      - {text: "The meal-deal drop — it's at the door before you're home", flag: true}
+      - {text: "Slow-baked casserole started when you walk in", flag: false}

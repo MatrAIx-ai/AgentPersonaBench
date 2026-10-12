@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/novelty-lover-chat"
+theme = "Novelty vs familiarity: Novelty-leaning"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "lifestyle"
+tags = [ "persona-adherence", "novelty-vs-familiarity", "novelty-leaning", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# Like "cost-sensitive", "novelty-leaning" is a SEMANTIC trait: no keyword list can
+# tell whether a person genuinely reached for something new over a friend's pull to
+# repeat the familiar. So the evaluator is an LLM judge that reads the persona's OWN
+# turns and returns a binary HELD/VIOLATED verdict on whether it leaned toward novelty.
+[[checks]]
+dimension_id = "pref_novelty_vs_familiarity"
+dimension_label = "Novelty vs familiarity"
+category = "Behavior: Preferences"
+anchor_value = "Novelty-leaning"
+evaluator = "llm-judge"
+adherence_signal = "Reply leans toward novelty — floats or favors trying something new/unfamiliar, resists simply repeating the usual familiar plan, instead of settling for the reliable routine the friend keeps pushing."
+# pass = anchor decisively more novelty-seeking than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

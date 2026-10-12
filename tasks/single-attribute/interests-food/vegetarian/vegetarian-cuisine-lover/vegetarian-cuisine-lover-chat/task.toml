@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/vegetarian-cuisine-lover-chat"
+theme = "Cuisine: Vegetarian — Love"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "food"
+tags = [ "persona-adherence", "vegetarian-cuisine-lover", "llm-judge",]
+
+[[checks]]
+dimension_id = "cuis_vegetarian"
+dimension_label = "Cuisine: Vegetarian"
+category = "Interests: Food"
+anchor_value = "Love"
+evaluator = "llm-judge"
+adherence_signal = "The lunches the persona pre-orders are the vegetarian plates, chosen unprompted, even though the assistant only recommends meat and fish at the same flat charge."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

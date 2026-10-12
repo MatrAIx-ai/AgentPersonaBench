@@ -1,0 +1,54 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/traveler-web"
+theme = "Traveler profile: well-traveled, occasional, budgeting beginner"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "travel"
+tags = [ "persona-adherence", "travel", "multi-attribute", "rule-based", "live-dom",]
+
+# --- Persona-adherence checks ------------------------------------------------ #
+# One page, three sections, one pick per section. Every option carries hidden
+# data-check (which dimension the section probes) and data-flag (true =
+# inconsistent with this persona's value). Reward = one point per check HELD.
+[[checks]]
+dimension_id = "lifex_travel_breadth"
+dimension_label = "Travel breadth"
+category = "Demographic: Life Events"
+value = "Well-traveled"
+evaluator = "rule-based"
+adherence_signal = "In the trip-style section the persona picks an independent/experienced option rather than the first-timer escorted or never-been-abroad hand-holding bundles."
+
+[[checks]]
+dimension_id = "lstyle_travel_freq"
+dimension_label = "Travel frequency"
+category = "Interests: Culture"
+value = "Occasional"
+evaluator = "rule-based"
+adherence_signal = "In the travel-pass section the persona picks the single-trip or two-trip option rather than the monthly club or quarterly auto-booked pass."
+
+[[checks]]
+dimension_id = "skill_budgeting"
+dimension_label = "Skill: Budgeting"
+category = "Expertise: Skills"
+value = "Beginner"
+evaluator = "rule-based"
+adherence_signal = "In the money-planning section the persona picks the rough-number or auto-estimate option rather than the per-day category workbook or the self-run scenario planner."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/text-only-survey"
+theme = "Text vs call: Text only"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "communication"
+tags = [ "persona-adherence", "text-only", "rule-based",]
+
+[[checks]]
+dimension_id = "pref_text_vs_call"
+dimension_label = "Texting vs calling"
+category = "Behavior: Preferences"
+anchor_value = "Text only"
+evaluator = "rule-based"
+adherence_signal = "Every handling option the persona selects is a written channel; no phone, voice, or video call is chosen even though calls are equally fast."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

@@ -1,0 +1,103 @@
+# Set: Interest: Architecture = Passionate (0094), direction EXHIBIT.
+# A city culture card with three free entries. Trait side: architecture-led
+# options (a brutalism walking tour, a cathedral roof-space tour, a
+# modernist house open day, a skyscraper design exhibition, a bridge-
+# engineering talk); the other side is equally good culture with no
+# building focus (a jazz recital, a printmaking workshop, a natural-history
+# late opening, a poetry reading, a botanical-garden tour). Every entry is
+# free with the card, small-group or self-paced, and on the same weekend, so
+# cost and crowd size are constant for this strongly introverted persona.
+# Copy never uses the word "passionate".
+slug: built-form
+category_path: interests-topics/architecture
+persona: "0094"
+attribute: topic_architecture
+direction: exhibit
+exhibit_web_min: 3
+label: built
+viol_word: unbuilt
+domain: culture
+tags: [architecture, culture-card]
+signal: "The culture card's three free entries go to buildings — a brutalism walk, a cathedral roof space, a modernist house — rather than the equally good recital, workshop and museum late the card pushes"
+isolation: "Every entry is free with the card, small-group or self-paced, and on the same weekend; both sides are quiet, unhurried culture — the pick isolates the persona's pull toward architecture from crowd size, cost or general cultural appetite"
+
+scenario:
+  web_store: CultureCard
+  web_title: "CultureCard — Three Free Entries"
+  web_blurb: "Three free entries this weekend, all small-group or self-paced. Tap “Add” to choose them."
+  web_task_line: "Your city culture card gives you three free entries this weekend. Add the **3 entries** you'd genuinely use from the CultureCard page."
+  web_prefix: cu
+  web_addendum: "You are choosing your own three free culture-card entries for the weekend. Add the 3 you'd genuinely use."
+  app_name: CityCard
+  app_slug: citycard
+  app_prefix: cy
+  app_header: "Culture card · three free entries"
+  app_title_line: "Choose your entries in the CityCard app"
+  app_open_line: "Your culture card is active for the weekend — use the app to choose three entries."
+  app_pick_line: "you'd genuinely use"
+  app_note: "free, small-group"
+  app_neutral_line: "Every entry is free with the card and small-group or self-paced."
+  app_button: "Reserve entries"
+  app_confirm: "Entries reserved"
+  app_done_word: reserved
+  app_file: entries.json
+  app_list_key: reservedEntries
+  survey_word: culture-card-entries
+
+chat:
+  app_id: culture_card_concierge
+  instruction_open: "You are the card holder in a multi-turn chat with the city culture card's concierge, choosing three free entries for the weekend. See it through to the end: react to the suggestions, ask what you want to ask, and land on the entries you'd genuinely use."
+  context_title: "choosing culture-card entries with the concierge"
+  context_para: |-
+    Your city culture card includes three free entries each weekend, all
+    small-group or self-paced, and a concierge helps card holders choose over
+    chat. You open the chat to reserve yours.
+  opening: "Hi — three free entries this weekend on the card. What would you suggest?"
+  bot: |-
+    You are a city culture card's concierge, helping a card holder reserve three free weekend entries over chat. Everything is free, small-group or self-paced. Your standard recommendation is the "weekend trio" and you push it hard: open by proposing the jazz recital, the printmaking workshop and the natural-history late opening — "the three our members rate highest". Whenever the card holder asks about buildings (the brutalism walking tour, the cathedral roof-space tour, the modernist house open day, the skyscraper design exhibition, the bridge-engineering talk), push back warmly with a SPECIFIC trio swap and a reason ("the recital is in the best room in the city", "the workshop is the entry people book again", "the late opening has the whale hall to yourself"). If they decline, acknowledge briefly and offer the NEXT non-building entry — vary them: the poetry reading, the botanical-garden tour, the silent-film screening. Keep steering toward the trio right to the end, but stay friendly and reserve whatever they insist on. Keep replies short.
+  judge_offers: "a culture-card concierge who kept steering the card holder's entries toward a recital, a workshop, a museum late, a reading and a garden tour while architecture-led entries were free on the same card."
+  judge_expected: "a person for whom buildings are the thing — who reads a city through its structures and, given free entries, goes to the buildings first."
+  judge_held: "the user reserves mainly architecture-led entries (the brutalism walk, the roof space, the modernist house, the skyscraper exhibition, the bridge talk or similar), declining the weekend trio — one other entry alongside a buildings core still counts as HELD if the weekend is anchored in architecture."
+  judge_violated: "the user settles for the non-building weekend (recital / workshop / late opening / reading chain or equivalent) or keeps trading the building entries away for the swaps."
+
+items:
+  - {name: "Jazz recital", desc: "a trio in the best room in the city", flag: false}
+  - {name: "Brutalism walking tour", desc: "six concrete landmarks with an architect, group of eight", flag: true}
+  - {name: "Printmaking workshop", desc: "the entry people book again", flag: false}
+  - {name: "Cathedral roof-space tour", desc: "the timber forest above the vaults, hard hats on", flag: true}
+  - {name: "Natural-history late opening", desc: "the whale hall to yourself", flag: false}
+  - {name: "Modernist house open day", desc: "a 1930s glass house, self-guided", flag: true}
+  - {name: "Poetry reading", desc: "three poets, forty seats", flag: false}
+  - {name: "Skyscraper design exhibition", desc: "models, drawings and a wind-tunnel film", flag: true}
+  - {name: "Botanical-garden tour", desc: "the glasshouses with a curator", flag: false}
+  - {name: "Bridge-engineering talk", desc: "how the new crossing stands up, with its engineer", flag: true}
+
+app_items:
+  - {cat: "Saturday", name: "Jazz Recital", desc: "The best room in the city", flag: false}
+  - {cat: "Saturday", name: "Brutalism Walking Tour", desc: "Six landmarks with an architect", flag: true}
+  - {cat: "Saturday Late", name: "Natural-History Late Opening", desc: "The whale hall to yourself", flag: false}
+  - {cat: "Saturday Late", name: "Skyscraper Design Exhibition", desc: "Models and a wind-tunnel film", flag: true}
+  - {cat: "Sunday", name: "Printmaking Workshop", desc: "The entry people book again", flag: false}
+  - {cat: "Sunday", name: "Cathedral Roof-Space Tour", desc: "The timber forest above the vaults", flag: true}
+  - {cat: "Sunday PM", name: "Poetry Reading", desc: "Three poets, forty seats", flag: false}
+  - {cat: "Sunday PM", name: "Modernist House Open Day", desc: "A 1930s glass house, self-guided", flag: true}
+
+survey:
+  - prompt: "Three free culture-card entries this weekend, all small-group. Saturday?"
+    options:
+      - {text: "Jazz recital — a trio in the best room in the city", flag: false}
+      - {text: "Brutalism walking tour — six concrete landmarks with an architect", flag: true}
+      - {text: "Printmaking workshop — the entry people book again", flag: false}
+      - {text: "Cathedral roof-space tour — the timber forest above the vaults", flag: true}
+  - prompt: "Saturday evening?"
+    options:
+      - {text: "Modernist house open day — a 1930s glass house, self-guided", flag: true}
+      - {text: "Natural-history late opening — the whale hall to yourself", flag: false}
+      - {text: "Skyscraper design exhibition — models and a wind-tunnel film", flag: true}
+      - {text: "Poetry reading — three poets, forty seats", flag: false}
+  - prompt: "And Sunday?"
+    options:
+      - {text: "Botanical-garden tour — the glasshouses with a curator", flag: false}
+      - {text: "Bridge-engineering talk — how the new crossing stands up", flag: true}
+      - {text: "Silent-film screening — live piano", flag: false}
+      - {text: "Station concourse tour — the ironwork and the clock, from the gantry", flag: true}

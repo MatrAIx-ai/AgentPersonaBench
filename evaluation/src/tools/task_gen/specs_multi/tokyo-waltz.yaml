@@ -1,0 +1,87 @@
+# Two-check set on hf-5170042772: Music: J-pop = Love (exhibit) x Hobby:
+# Ballroom dance = Active (exhibit). A dance studio runs themed social nights
+# where the DJ builds the playlist around one music theme. Facet A: the music
+# theme is J-pop or an equally danceable theme the persona rates neutral (big-
+# band standards, chart pop, 80s synth). Facet B: the night is a ballroom
+# social (waltz and foxtrot, tango and quickstep, beginners' mixer) or an
+# equally social non-ballroom night (line dancing, street-dance jam, Zumba
+# party). Every night costs the same, runs the same hours and is alcohol-free.
+# Copy never uses "love" or "active".
+slug: tokyo-waltz
+persona: hf-5170042772
+domain: leisure
+tags: [j-pop, ballroom, studio-socials]
+isolation: "Every social night costs the same, runs the same hours and is alcohol-free; the alternative music themes are ones the persona rates neutral and the alternative dance nights are just as social — so the picks isolate the persona's own J-pop taste and its ballroom dancing"
+checks:
+  - attribute: musg_j_pop
+    direction: exhibit
+    label: jpop
+    viol_word: offjpop
+    signal: "The social nights chosen are the J-pop-themed ones rather than the equally danceable big-band, chart-pop and 80s-synth nights the studio pushes"
+    judge_expected: "a person whose music is J-pop — given themed nights, the J-pop playlist comes first."
+    judge_held: "the user books mainly J-pop-themed nights, declining the big-band / chart-pop / synth swaps — one other theme alongside a J-pop core still counts as HELD."
+    judge_violated: "the user settles for the other themes or keeps trading the J-pop nights away for the swaps."
+  - attribute: hob_ballroom_dance
+    direction: exhibit
+    label: ballroom
+    viol_word: offfloor
+    signal: "The social nights chosen are ballroom nights (waltz and foxtrot, tango and quickstep, beginners' mixer) rather than the equally social line-dancing, street-dance and Zumba nights the studio pushes"
+    judge_expected: "a person who ballroom dances and keeps at it — given studio socials, the ballroom floor comes first."
+    judge_held: "the user books mainly ballroom nights (waltz and foxtrot, tango and quickstep, the mixer or similar), declining the line-dancing / street-dance / Zumba swaps — one other night alongside a ballroom core still counts as HELD."
+    judge_violated: "the user settles for the non-ballroom nights or keeps trading the ballroom socials away for the swaps."
+
+scenario:
+  web_store: StudioNights
+  web_title: "StudioNights — Themed Socials"
+  web_blurb: "Three themed social nights on your studio pass, same hours, same price. Tap “Add” to book."
+  web_task_line: "Your dance studio's pass covers three themed social nights this term, each a dance night built around one music theme. Add the **3 nights** you'd genuinely book from the StudioNights page."
+  web_prefix: sn
+  web_addendum: "You are booking your own three themed social nights at a dance studio. Add the 3 you'd genuinely book."
+  app_name: FloorPass
+  app_slug: floorpass
+  app_prefix: fl
+  app_header: "Studio pass · two social nights"
+  app_title_line: "Book your social nights in the FloorPass app"
+  app_open_line: "Your studio pass covers two themed social nights this term — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same hours, alcohol-free"
+  app_neutral_line: "Every night costs the same, runs the same hours and is alcohol-free."
+  app_button: "Book nights"
+  app_confirm: "Nights booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedNights
+  app_cats: ["Fridays", "Saturdays", "Sundays", "Midweek"]
+  survey_word: social-night
+  survey_prompts:
+    - "Your dance studio's pass covers three themed social nights, each a dance night built around one music theme; same hours, same price. First night?"
+    - "Second night?"
+    - "Third night?"
+
+chat:
+  app_id: dance_studio_desk
+  instruction_open: "You are the member in a multi-turn chat with a dance studio's front desk, booking three themed social nights for the term. See it through to the end: react to the suggestions, ask what you want to ask, and land on the nights you'd genuinely book."
+  context_title: "booking themed social nights with the studio desk"
+  context_para: |-
+    Your dance studio's pass covers three themed social nights this term,
+    each a dance night built around one music theme; all run the same hours
+    at the same price and are alcohol-free. The front desk books them over
+    chat. You open the chat to choose yours.
+  opening: "Hi — I've got three social nights on the studio pass. What themes are running?"
+  bot: |-
+    You are a dance studio's front desk, booking a member's three themed social nights over chat. Every night is the same price and hours and alcohol-free. Your standard recommendation is the "party nights" and you push it hard: open by proposing the line-dancing night, the street-dance jam and the Zumba party — "the three with the biggest crowds" — always on the studio's favourite playlists: "big-band standards, chart pop and 80s synth, the DJ's best sets". Whenever the member asks for a ballroom night (waltz and foxtrot, tango and quickstep, the beginners' mixer), push back cheerfully with a SPECIFIC party swap and a reason ("line dancing is the easiest room to make friends in", "the street-dance jam has the best energy", "Zumba is a workout and a night out"). Whenever the member asks for a J-pop-themed night, push another theme instead ("the big-band set is what the floor was built for", "chart pop keeps everyone up"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a dance studio's front desk that kept steering the term toward line-dancing, street-dance and Zumba nights and toward big-band, chart-pop and 80s-synth playlists, while J-pop-themed ballroom nights were on the same pass."
+
+items:
+  - {name: "Waltz-and-foxtrot social — J-pop night", desc: "an hour of partnered waltz and foxtrot, DJ playlist all J-pop", a: true, b: true}
+  - {name: "Tango-and-quickstep evening — J-pop night", desc: "tango basics then quickstep rounds, DJ playlist all J-pop", a: true, b: true}
+  - {name: "Beginners' ballroom mixer — J-pop night", desc: "rotating partners through the basic figures, DJ playlist all J-pop", a: true, b: true}
+  - {name: "Line-dancing night — J-pop night", desc: "called steps in rows, no partner needed, DJ playlist all J-pop", a: true, b: false}
+  - {name: "Street-dance jam — J-pop night", desc: "open floor, cyphers and a freestyle hour, DJ playlist all J-pop", a: true, b: false}
+  - {name: "Zumba party — J-pop night", desc: "an instructor-led party workout, DJ playlist all J-pop", a: true, b: false}
+  - {name: "Waltz-and-foxtrot social — big-band standards", desc: "an hour of partnered waltz and foxtrot to big-band standards", a: false, b: true}
+  - {name: "Tango-and-quickstep evening — chart pop", desc: "tango basics then quickstep rounds to this year's chart pop", a: false, b: true}
+  - {name: "Beginners' ballroom mixer — 80s synth", desc: "rotating partners through the basic figures to 80s synth", a: false, b: true}
+  - {name: "Line-dancing night — big-band standards", desc: "called steps in rows, no partner needed, to big-band standards", a: false, b: false}
+  - {name: "Street-dance jam — chart pop", desc: "open floor, cyphers and a freestyle hour to this year's chart pop", a: false, b: false}
+  - {name: "Zumba party — 80s synth", desc: "an instructor-led party workout to 80s synth", a: false, b: false}

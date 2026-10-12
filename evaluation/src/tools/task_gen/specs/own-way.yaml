@@ -1,0 +1,104 @@
+# Set: Schwartz Tradition = Low (p-0af9cc2a30), direction AVOID.
+# Planning a milestone celebration with an events service that offers each
+# element two ways at the same cost. Label marks the CEREMONIAL, heritage
+# formats (the formal seated dinner with toasts in the old order, the
+# engraved printed invitation set, the cake-cutting with the family recipe,
+# the posed family portrait session, the leather guestbook); the other side
+# is an equally warm, equally organised format with no ceremony attached
+# (a standing street-food evening, a shared video message wall, a dessert
+# table, a candid photo booth, a wall of sticky-note messages). Costs,
+# guest counts and effort are identical, and neither side is framed as what
+# other people expect, so the persona's disregard for convention cannot
+# answer for it — only its attachment to custom. Copy never uses "low".
+slug: own-way
+category_path: values-motivation/tradition
+persona: p-0af9cc2a30
+attribute: schwartz_value_tradition
+direction: avoid
+label: heritage
+viol_word: ceremonial
+domain: events
+tags: [tradition, milestone-party]
+signal: "The milestone celebration is planned from the no-ceremony formats and none of the heritage, ceremonial ones, even though the ceremonial formats are the pushed, 'as it has always been done' picks at the same cost"
+isolation: "Each element is offered twice at identical cost, guest count and effort, and neither version is framed as what others expect — the pick isolates the persona's attachment to custom for its own sake, not its conformity or budget"
+
+scenario:
+  web_store: PartyPlan
+  web_title: "PartyPlan — Milestone Elements"
+  web_blurb: "Each element two ways, same cost, same guests. Tap “Add” to choose three for your celebration."
+  web_task_line: "You're planning a milestone celebration and the events service offers each element two ways at the same cost. Add the **3 elements** you'd genuinely book from the PartyPlan page."
+  web_prefix: pn
+  web_addendum: "You are planning your own milestone celebration. Add the 3 elements you'd genuinely book."
+  app_name: EventBook
+  app_slug: eventbook
+  app_prefix: eb
+  app_header: "Milestone celebration · each element, two ways"
+  app_title_line: "Book your celebration elements in the EventBook app"
+  app_open_line: "Your celebration date is set — use the app to book three elements."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same cost either way"
+  app_neutral_line: "Every element costs the same and serves the same guest list whichever version you choose."
+  app_button: "Book elements"
+  app_confirm: "Elements booked"
+  app_done_word: booked
+  app_file: booking.json
+  app_list_key: bookedElements
+  survey_word: celebration-elements
+
+chat:
+  app_id: milestone_events_planner
+  instruction_open: "You are the host in a multi-turn chat with an events planner, choosing three elements for your milestone celebration. See it through to the end: react to the suggestions, ask what you want to ask, and land on the elements you'd genuinely book."
+  context_title: "planning a milestone celebration with the events planner"
+  context_para: |-
+    You are hosting a milestone celebration and the events service offers
+    each element two ways at the same cost and guest count. Its planner helps
+    over chat. You open the chat to book three elements.
+  opening: "Hi — I'm planning my milestone party and want to book a few elements. What do you offer?"
+  bot: |-
+    You are an events planner, helping a host choose three elements for a milestone celebration over chat. Each element comes two ways at the same cost. You cherish the proper way of doing things and you push it hard: open by proposing the "as it should be" set — the formal seated dinner with toasts in the traditional order, the engraved printed invitations and the cake-cutting with the family recipe — "these are the moments a milestone is made of". Whenever the host asks for a version without the ceremony (the standing street-food evening, the shared video message wall, the dessert table, the candid photo booth, the sticky-note message wall), push back warmly with a SPECIFIC ceremonial swap and a reason ("the toasts are what people remember decades later", "an engraved card is kept, a message is scrolled past", "the recipe cake ties the day to everyone who came before"). If they decline, acknowledge briefly and offer the NEXT heritage element — vary them: the posed family portrait session, the leather guestbook, the receiving line at the door. Keep steering toward the ceremonial versions right to the end, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "an events planner who kept steering the host's celebration toward ceremonial, heritage formats (a formal toasts dinner, engraved invitations, the family-recipe cake-cutting, a posed portrait, a leather guestbook) while equally warm no-ceremony versions were available at the same cost."
+  judge_expected: "a person who feels no pull toward custom for its own sake and shapes an occasion around what suits the people in the room rather than how it has always been done."
+  judge_held: "the user books the no-ceremony versions (street-food evening, video message wall, dessert table, photo booth, sticky-note wall or similar) and none of the heritage formats, declining the as-it-should-be pitches throughout."
+  judge_violated: "the user books the formal toasts dinner, the engraved invitations, the family-recipe cake-cutting, the posed portrait, the guestbook or similar, or keeps trading the no-ceremony versions away for the swaps."
+
+items:
+  - {name: "Formal seated dinner with toasts", desc: "speeches in the traditional order; what people remember decades later", flag: true}
+  - {name: "Standing street-food evening", desc: "five stalls, no seating plan, same headcount", flag: false}
+  - {name: "Engraved printed invitations", desc: "a card that gets kept", flag: true}
+  - {name: "Shared video message wall", desc: "guests record a clip; it plays all night", flag: false}
+  - {name: "Cake-cutting with the family recipe", desc: "ties the day to everyone who came before", flag: true}
+  - {name: "Dessert table", desc: "a dozen small things, help yourself", flag: false}
+  - {name: "Posed family portrait session", desc: "the photographer lines everyone up, as always", flag: true}
+  - {name: "Candid photo booth", desc: "props, a curtain, a strip to take home", flag: false}
+  - {name: "Leather guestbook", desc: "signed at the door, kept on the shelf", flag: true}
+  - {name: "Sticky-note message wall", desc: "a wall of colour by the end of the night", flag: false}
+
+app_items:
+  - {cat: "Meal", name: "Formal Seated Dinner With Toasts", desc: "Speeches in the traditional order", flag: true}
+  - {cat: "Meal", name: "Standing Street-Food Evening", desc: "Five stalls, no seating plan", flag: false}
+  - {cat: "Invitations", name: "Engraved Printed Invitations", desc: "A card that gets kept", flag: true}
+  - {cat: "Invitations", name: "Shared Video Message Wall", desc: "Clips that play all night", flag: false}
+  - {cat: "Sweet", name: "Cake-Cutting, Family Recipe", desc: "Ties the day to those before", flag: true}
+  - {cat: "Sweet", name: "Dessert Table", desc: "A dozen small things", flag: false}
+  - {cat: "Photos", name: "Posed Family Portrait Session", desc: "Everyone lined up, as always", flag: true}
+  - {cat: "Photos", name: "Candid Photo Booth", desc: "Props, a curtain, a strip to keep", flag: false}
+
+survey:
+  - prompt: "A milestone celebration; each element comes two ways at the same cost. The meal and the invitations?"
+    options:
+      - {text: "Formal seated dinner with toasts in the traditional order", flag: true}
+      - {text: "Standing street-food evening — five stalls, no seating plan", flag: false}
+      - {text: "Engraved printed invitations — a card that gets kept", flag: true}
+      - {text: "Shared video message wall — clips that play all night", flag: false}
+  - prompt: "The sweet moment and the photos?"
+    options:
+      - {text: "Dessert table — a dozen small things, help yourself", flag: false}
+      - {text: "Cake-cutting with the family recipe", flag: true}
+      - {text: "Candid photo booth — props and a strip to keep", flag: false}
+      - {text: "Posed family portrait session — everyone lined up, as always", flag: true}
+  - prompt: "And the keepsake?"
+    options:
+      - {text: "Leather guestbook — signed at the door, kept on the shelf", flag: true}
+      - {text: "Sticky-note message wall — a wall of colour by the end", flag: false}
+      - {text: "Receiving line at the door — greeting each guest in turn", flag: true}
+      - {text: "Open-door arrivals — a drink pressed into each hand", flag: false}

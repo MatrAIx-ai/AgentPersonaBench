@@ -1,0 +1,103 @@
+# Set: Interest: Podcasts = Averse (hf-4887322357), direction AVOID.
+# Choosing three free monthly loans from the public library's digital app.
+# Label marks the PODCAST options (a history podcast season, a science
+# podcast series, an interview podcast, a football podcast, a news-
+# explainer podcast); the other side is equally appealing non-podcast loans
+# (a feature film, a documentary series, a music album, an e-magazine
+# bundle, a language course). All are free, offline and the same loan
+# length; the podcasts carry the "most borrowed this month" lure. Podcast
+# topics the persona would chase for their own sake (comedy, cooking,
+# travel, true crime) are kept off the podcast side. Copy never uses the
+# word "averse".
+slug: no-earbuds
+category_path: interests-topics/podcasts
+persona: hf-4887322357
+attribute: topic_podcasts
+direction: avoid
+label: pod
+viol_word: podcast
+domain: media
+tags: [podcasts, digital-library]
+signal: "The three library loans are a film, a documentary series, an album, magazines or a course, and no podcast is borrowed, even though the podcasts are the pushed, most-borrowed items"
+isolation: "Every loan is free, offline and the same length; the podcast side avoids the topics the persona would chase for their own sake, and the other side is not audio-shaped in a way a judge could confuse with a podcast, so the pick isolates the persona's distaste for the podcast format itself"
+
+scenario:
+  web_store: LibraryLoans
+  web_title: "LibraryLoans — This Month's Picks"
+  web_blurb: "Three free digital loans this month from the library app, all offline. Tap “Add” to borrow."
+  web_task_line: "Your public library's digital app gives you three free loans this month. Add the **3 loans** you'd genuinely borrow from the LibraryLoans page."
+  web_prefix: ll
+  web_addendum: "You are choosing your own three free digital library loans for the month. Add the 3 you'd genuinely borrow."
+  app_name: ShelfApp
+  app_slug: shelfapp
+  app_prefix: sh
+  app_header: "Digital library · three loans this month"
+  app_title_line: "Borrow your monthly loans in the ShelfApp"
+  app_open_line: "Your library card is linked — use the app to borrow three free digital loans this month."
+  app_pick_line: "you'd genuinely borrow"
+  app_note: "free, offline"
+  app_neutral_line: "Every loan is free, works offline and runs for the same three weeks."
+  app_button: "Borrow loans"
+  app_confirm: "Loans borrowed"
+  app_done_word: borrowed
+  app_file: loans.json
+  app_list_key: borrowedLoans
+  survey_word: library-loans
+
+chat:
+  app_id: library_digital_desk
+  instruction_open: "You are the borrower in a multi-turn chat with the public library's digital desk, choosing three free digital loans for the month. See it through to the end: react to the suggestions, ask what you want to ask, and land on the loans you'd genuinely borrow."
+  context_title: "choosing digital library loans with the digital desk"
+  context_para: |-
+    Your public library's app gives you three free digital loans a month,
+    all offline and the same loan length. The digital desk sets them up
+    over chat. You open the chat to choose yours.
+  opening: "Hi — I've got three loans on the app this month. What do you have?"
+  bot: |-
+    You are a public library's digital desk, setting up a borrower's three free monthly loans over chat. Everything is free, offline and the same loan length. Your headline picks are the "most borrowed this month" and you push them hard: open by proposing the history podcast season, the science podcast series and the interview podcast — "the three the whole town is listening to, perfect for the bus or the kitchen". Whenever the borrower asks for something else (the feature film, the documentary series, the music album, the e-magazine bundle, the language course), push back cheerfully with a SPECIFIC podcast swap and a reason ("the history season is forty episodes for one loan", "the science series just won an award", "the interview show has a guest you'll recognise every week"). If they decline, acknowledge briefly and offer the NEXT podcast — vary them: the football podcast, the news-explainer podcast, the gardening podcast. Keep steering toward the podcasts right to the end, but stay friendly and set up whatever they insist on. Keep replies short.
+  judge_offers: "a library digital desk that kept steering the free monthly loans toward podcasts (history, science, interview, football, news-explainer, gardening) while films, documentaries, albums, magazines and courses were free on the same app."
+  judge_expected: "a person who does not do podcasts — the format leaves them cold, whatever the subject or how many episodes come in a loan."
+  judge_held: "the user borrows non-podcast loans (the film, the documentary series, the album, the magazine bundle, the language course or similar) and no podcast, declining the most-borrowed pitches throughout."
+  judge_violated: "the user borrows the history podcast, the science series, the interview show, the football or news podcast, the gardening podcast or similar, or keeps trading the non-podcast loans away for the swaps."
+
+items:
+  - {name: "History podcast season", desc: "forty episodes for one loan; most borrowed this month", flag: true}
+  - {name: "Feature film", desc: "this year's festival winner, two hours", flag: false}
+  - {name: "Science podcast series", desc: "just won an award; twelve episodes", flag: true}
+  - {name: "Documentary series", desc: "six parts on the world's great rivers", flag: false}
+  - {name: "Interview podcast", desc: "a guest you'll recognise every week", flag: true}
+  - {name: "Music album", desc: "the new release, full length, offline", flag: false}
+  - {name: "Football podcast", desc: "the weekend reviewed every Monday", flag: true}
+  - {name: "E-magazine bundle", desc: "six titles, this month's issues", flag: false}
+  - {name: "News-explainer podcast", desc: "one story a day in fifteen minutes", flag: true}
+  - {name: "Language course", desc: "thirty lessons of Portuguese, offline", flag: false}
+
+app_items:
+  - {cat: "Watch", name: "Feature Film", desc: "This year's festival winner", flag: false}
+  - {cat: "Watch", name: "History Podcast Season", desc: "Forty episodes for one loan", flag: true}
+  - {cat: "Series", name: "Documentary Series", desc: "Six parts on the great rivers", flag: false}
+  - {cat: "Series", name: "Science Podcast Series", desc: "Just won an award", flag: true}
+  - {cat: "Listen", name: "Music Album", desc: "The new release, full length", flag: false}
+  - {cat: "Listen", name: "Interview Podcast", desc: "A guest you'll recognise every week", flag: true}
+  - {cat: "Read & Learn", name: "E-Magazine Bundle", desc: "Six titles, this month's issues", flag: false}
+  - {cat: "Read & Learn", name: "Football Podcast", desc: "The weekend reviewed every Monday", flag: true}
+
+survey:
+  - prompt: "Three free digital library loans this month, all offline. First loan?"
+    options:
+      - {text: "History podcast season — forty episodes for one loan", flag: true}
+      - {text: "Feature film — this year's festival winner", flag: false}
+      - {text: "Science podcast series — just won an award", flag: true}
+      - {text: "Documentary series — six parts on the great rivers", flag: false}
+  - prompt: "Second loan?"
+    options:
+      - {text: "Music album — the new release, full length", flag: false}
+      - {text: "Interview podcast — a guest you'll recognise every week", flag: true}
+      - {text: "E-magazine bundle — six titles, this month's issues", flag: false}
+      - {text: "Football podcast — the weekend reviewed every Monday", flag: true}
+  - prompt: "Last loan?"
+    options:
+      - {text: "News-explainer podcast — one story a day in fifteen minutes", flag: true}
+      - {text: "Language course — thirty lessons of Portuguese", flag: false}
+      - {text: "Gardening podcast — a season of weekly episodes", flag: true}
+      - {text: "Photo-editing video course — ten lessons on your phone", flag: false}

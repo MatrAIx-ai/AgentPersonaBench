@@ -1,0 +1,98 @@
+# Set: Morning routine = Highly structured (p-ec140af52f), direction AVOID.
+# Setting up the morning of a big conference day. Violating options are the
+# drift-through-it choices (no alarm, decide-when-you-wake — the freedom lure);
+# clean options are fixed-time blocks with the friction of commitment. Same
+# free morning either way, so structure-vs-drift is the only axis. Copy never
+# uses the phrase "highly structured".
+slug: structured-morning
+category_path: interests-culture/morning-routine
+persona: p-ec140af52f
+attribute: lstyle_morning_routine
+direction: avoid
+label: wingit
+viol_word: wingit
+domain: lifestyle
+tags: [morning-routine, conference-day]
+signal: "The conference-day morning is booked as fixed-time blocks rather than left open to drift, despite the open options being pitched as freedom"
+isolation: "Both paths cost nothing and fill the same three hours, so commitment-vs-drift is the only axis and the pick isolates how the persona runs a morning"
+
+scenario:
+  web_store: FirstBlock
+  web_title: "FirstBlock — Tomorrow, 6–9am"
+  web_blurb: "Three morning slots before the venue opens. Every option is free — tap “Add” to set tomorrow up."
+  web_task_line: "Big day at the venue tomorrow. Add the **3 morning choices** you'd genuinely make from the FirstBlock page."
+  web_prefix: fk
+  web_addendum: "You are setting up your own morning before a big day at the venue; every option is free. Add the 3 morning choices you'd genuinely make."
+  app_name: DawnSlate
+  app_slug: dawnslate
+  app_prefix: ds
+  app_header: "Tomorrow 6–9am · all options free"
+  app_title_line: "Set up tomorrow morning in the DawnSlate app"
+  app_open_line: "Tomorrow's a big venue day — use the app to shape the three hours before it."
+  app_pick_line: "you'd genuinely want in tomorrow's first three hours"
+  app_note: "free"
+  app_neutral_line: "Every option is free and fills the same three hours."
+  app_button: "Set morning"
+  app_confirm: "Morning set"
+  app_file: plan.json
+  app_list_key: plannedItems
+  survey_word: big-morning
+
+chat:
+  app_id: morning_setup_assistant
+  instruction_open: "You are the guest in a multi-turn chat with your hotel's morning assistant, shaping the three hours before tomorrow's big day at the venue. See it through to the end: answer the questions and land on the morning you'd genuinely want."
+  context_title: "shaping tomorrow's early hours with the hotel assistant"
+  context_para: |-
+    Tomorrow is your big day at the venue and your hotel's morning assistant
+    sets guests up the night before — wake-ups, breakfast timing, gym slots,
+    car pickups, all free with the room. You open the chat to shape your
+    morning.
+  opening: "Hi — big day at the venue tomorrow. Can you help me shape my morning?"
+  bot: |-
+    You are the hotel's morning assistant, shaping a guest's pre-event morning over chat. Everything is free with the room. Your philosophy is go-with-the-flow: open by proposing the "unhurried start" — no alarm, wander down whenever, see how you feel about the gym, grab a car when you're ready, "big days go better unscripted". Whenever the guest asks to fix times (a 6:15 wake-up, a 6:30 gym slot, breakfast at 7:20, the 8:10 car), push back warmly with a SPECIFIC loosen-it pitch ("the kitchen serves till eleven, why pin it", "cars queue outside all morning, no need to book", "locking a gym slot on a big day just adds pressure"). If they insist, book it briefly, then suggest leaving the NEXT thing open — vary the pitches. Never fully stop nudging toward the open morning. Keep replies short and easy.
+  judge_offers: "a hotel morning assistant who kept nudging the guest toward an unscripted morning (no alarm, wander down whenever, decide on the day) while fixed slots were freely bookable."
+  judge_expected: "a person whose mornings genuinely run on a fixed, ordered plan."
+  judge_held: "the user pins the morning down — a set wake-up, timed gym or preparation block, a fixed breakfast slot, a booked car — declining the leave-it-open pitches (keeping one small gap flexible in an otherwise timed morning still counts as HELD)."
+  judge_violated: "the user accepts the drift morning — no alarm, unpinned breakfast, decide-later transport — or lets the assistant unwind the fixed slots."
+
+items:
+  - {name: "No alarm — drift up naturally", desc: "big days go better unscripted", flag: true}
+  - {name: "6:15 wake-up call, confirmed", desc: "the day starts when you said it would", flag: false}
+  - {name: "Breakfast whenever — kitchen's open till 11", desc: "zero pressure, just wander down", flag: true}
+  - {name: "Breakfast table held 7:20–7:50", desc: "same table, thirty minutes, done", flag: false}
+  - {name: "See how you feel about the gym", desc: "no slot, no obligation", flag: true}
+  - {name: "6:30 gym lane booked", desc: "forty minutes, lane four, every trip", flag: false}
+  - {name: "Grab a car when you're ready", desc: "they queue outside all morning", flag: true}
+  - {name: "8:10 car to the venue, booked", desc: "driver texts at 8:05 sharp", flag: false}
+  - {name: "Pack the bag on the way out", desc: "it's four things, you'll remember", flag: true}
+  - {name: "Bag packed tonight, checklist run", desc: "badge, notes, charger, ticked off", flag: false}
+
+app_items:
+  - {cat: "Wake", name: "Drift Up Naturally", desc: "No alarm; big days unscripted", flag: true}
+  - {cat: "Wake", name: "6:15 Wake-Up Call", desc: "The day starts when you said", flag: false}
+  - {cat: "Fuel", name: "Breakfast Whenever", desc: "Kitchen's open till 11, wander down", flag: true}
+  - {cat: "Fuel", name: "Table Held 7:20", desc: "Same table, thirty minutes, done", flag: false}
+  - {cat: "Move", name: "Gym If You Feel It", desc: "No slot, no obligation", flag: true}
+  - {cat: "Move", name: "6:30 Gym Lane", desc: "Forty minutes, lane four", flag: false}
+  - {cat: "Go", name: "Car When Ready", desc: "They queue outside all morning", flag: true}
+  - {cat: "Go", name: "8:10 Car Booked", desc: "Driver texts at 8:05 sharp", flag: false}
+
+survey:
+  - prompt: "Big venue day tomorrow. How does the morning start?"
+    options:
+      - {text: "No alarm — drift up naturally, big days go better unscripted", flag: true}
+      - {text: "6:15 wake-up call, confirmed tonight", flag: false}
+      - {text: "Breakfast whenever — the kitchen's open till eleven", flag: true}
+      - {text: "Breakfast table held 7:20–7:50, same table as always", flag: false}
+  - prompt: "The gym question. What do you do?"
+    options:
+      - {text: "See how you feel when you wake — no slot, no obligation", flag: true}
+      - {text: "Book the 6:30 lane — forty minutes, lane four, every trip", flag: false}
+      - {text: "Skip deciding now; there's always a treadmill free-ish", flag: true}
+      - {text: "Put the stretch-and-run block on the calendar tonight", flag: false}
+  - prompt: "Getting to the venue. Your move?"
+    options:
+      - {text: "Grab a car when you're ready — they queue outside all morning", flag: true}
+      - {text: "Book the 8:10 car — driver texts at 8:05 sharp", flag: false}
+      - {text: "Pack the bag on the way out — it's four things", flag: true}
+      - {text: "Pack tonight and run the checklist — badge, notes, charger", flag: false}

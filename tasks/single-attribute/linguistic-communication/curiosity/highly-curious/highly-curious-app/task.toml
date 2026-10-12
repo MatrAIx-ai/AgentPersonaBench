@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/highly-curious-app"
+theme = "Curiosity: Very high"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "general"
+tags = [ "persona-adherence", "linguistic-communication", "curiosity", "highly-curious", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "cog_curiosity"
+dimension_label = "Curiosity"
+category = "Linguistic: Communication"
+attribute = "Curiosity"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "cog_curiosity=Very high"
+# OS-APP env: the persona is a computer-use agent operating Wander, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Confirm", Wander writes order.json itself. Runs locally in
+# Docker (no use.computer needed).
+adherence_signal = "The day the agent plans contains no bare-minimum approach (a high curiosity-tier item, tier>=2); a highly-curious person fills the day with dig-deeper, ask-why, explore-more approaches."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with Wander (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch Wander once the desktop is up so the agent finds it on screen.
+command = "/opt/wander/start-wander.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,108 @@
+:root{--ivory:#fbf7f0;--paper:#fffdf9;--slate:#2d3140;--slate2:#454a5c;--muted:#6f6a61;--line:#e6ddcd;--ribbon:#c8384f;--ribbon2:#9e2238;--tint:#f4ece0;--sel:#fbeef0;--focus:#d8892b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ivory);color:var(--slate);font:15px/1.55 "Liberation Sans","FreeSans",Arial,sans-serif}
+.top{background:var(--slate);color:var(--ivory)}
+.bar{max-width:1240px;margin:auto;display:flex;gap:14px;align-items:center;padding:14px 28px}
+.logo{display:flex}
+#brand{font:700 23px/1 "Bitstream Charter","Charter","FreeSerif",Georgia,serif;letter-spacing:.01em}
+.sep{width:1px;height:22px;background:#5b6072}
+#subtitle{color:#c9c6bd;font-size:14px}
+#progress{margin-left:auto;background:var(--ribbon);color:#fff;font-size:12.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:6px 12px;border-radius:999px}
+.shell{max-width:1240px;margin:auto;display:grid;grid-template-columns:210px 1fr;gap:34px;padding:28px 28px 48px}
+.rail{border-right:1px solid var(--line);padding-right:18px;font-size:14px}
+.rail-h{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#a0968a;margin:6px 0 8px}
+.rail-i{padding:8px 12px;border-radius:6px;color:var(--slate2);margin-bottom:2px}
+.rail-i.on{background:var(--tint);color:var(--slate);font-weight:700;box-shadow:inset 3px 0 0 var(--ribbon)}
+.rail-h+.rail-card{margin-top:0}
+.rail-card{margin-top:4px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-weight:700;font-size:13px}
+.rail-card span{font-weight:400;color:var(--muted);font-size:12px}
+.rail-i+.rail-h{margin-top:22px}
+main{min-width:0}
+h1{font:400 34px/1.15 "Bitstream Charter","FreeSerif",Georgia,serif;margin:0 0 10px;letter-spacing:-.01em}
+h2{font:400 24px/1.2 "Bitstream Charter","FreeSerif",Georgia,serif;margin:0 0 8px}
+p{max-width:74ch;margin:0 0 12px}
+.lede{color:var(--slate2);font-size:16px}
+.muted{color:var(--muted)}
+.eyebrow{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ribbon2);font-weight:700;margin-bottom:6px}
+.notice{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;margin:16px 0 22px;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--ribbon);border-radius:8px;color:#4a4540;font-size:14px}
+.notice .ni{flex:none;width:26px;height:26px;border-radius:50%;background:var(--tint);display:grid;place-items:center;font:700 13px "Bitstream Charter",serif;color:var(--ribbon2)}
+/* covers */
+.cover{position:relative;aspect-ratio:2/3;border-radius:3px 6px 6px 3px;overflow:hidden;box-shadow:0 1px 0 rgba(0,0,0,.08),0 8px 18px -8px rgba(45,49,64,.45)}
+.cover svg{display:block;width:100%;height:100%}
+.cover.empty{box-shadow:none;border:2px dashed #cfc3ae;background:repeating-linear-gradient(135deg,#f7f1e6 0 10px,#f3ecdf 10px 20px);display:grid;place-items:center;color:#a0968a;font-size:12.5px;text-align:center;padding:10px}
+/* board */
+.board{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.slot{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.slot .who{display:flex;align-items:center;gap:10px}
+.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;background:var(--slate2);flex:none}
+.slot .who strong{display:block;font:400 19px/1.2 "Bitstream Charter",serif}
+.slot .who small{color:var(--muted);font-size:12.5px}
+.slot .brief{font-size:13.5px;color:var(--slate2);margin:0;min-height:42px}
+.slot .cover{width:124px;align-self:center}
+.slot .pick{font-size:13.5px;text-align:center;margin:0}
+.slot .pick b{font:400 16px "Bitstream Charter",serif}
+.templ{margin-top:22px;display:flex;align-items:center;gap:18px;background:var(--slate);color:var(--ivory);border-radius:12px;padding:18px 22px}
+.templ .stack{display:flex;flex:none}
+.templ .stack span{width:30px;height:44px;border-radius:2px 4px 4px 2px;margin-right:-12px;border:2px solid var(--slate)}
+.templ p{margin:0;color:#d9d5cc;font-size:14px}
+.templ strong{display:block;font:400 19px "Bitstream Charter",serif;color:#fff}
+.templ .grow{flex:1}
+.tail{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+/* catalog */
+.crumbs{font-size:13px;color:var(--muted);margin-bottom:10px}
+.shelf{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:18px;padding-bottom:24px;border-bottom:10px solid #d9c9ad;box-shadow:0 12px 0 -6px #c4b394}
+.book{display:flex;flex-direction:column;gap:8px}
+.book[data-selected="true"] .cover{outline:3px solid var(--ribbon);outline-offset:3px}
+.book .bt{font:400 17px/1.25 "Bitstream Charter",serif}
+.book .bs{font-size:12.5px;color:var(--muted)}
+.book .cur{font-size:11.5px;font-weight:700;color:var(--ribbon2);text-transform:uppercase;letter-spacing:.1em;min-height:16px}
+/* detail */
+.detail{display:grid;grid-template-columns:230px 1fr;gap:34px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:28px;max-width:900px}
+.detail h2{font-size:32px}
+.detail .blurb{font-size:17px;line-height:1.6;color:#3b3a38}
+.facts{display:flex;gap:26px;margin:14px 0 4px;font-size:13px;color:var(--muted)}
+.facts b{display:block;color:var(--slate);font-size:14px}
+/* import */
+.imp{background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden;max-width:980px}
+.imp-h{padding:20px 22px;border-bottom:1px solid var(--line);background:var(--tint)}
+.imp-h p{margin:6px 0 0;font-size:14px;color:#4a4540}
+.imp table{width:100%;border-collapse:collapse;font-size:14px}
+.imp th{text-align:left;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#a0968a;padding:12px 18px;border-bottom:1px solid var(--line)}
+.imp td{padding:14px 18px;border-bottom:1px solid var(--line);vertical-align:middle}
+.imp tr:last-child td{border-bottom:0}
+.imp tr[data-selected="false"] td{color:#aaa196}
+.imp .arrow{color:var(--ribbon);font-weight:700;padding:0 6px}
+.state{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:4px 9px;border-radius:999px;background:#e8f1ea;color:#2f6a45;white-space:nowrap}
+tr[data-selected="false"] .state{background:#efe9df;color:#8a8175}
+/* review / receipt */
+.receipt{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:8px 24px;max-width:900px}
+.receipt dl{margin:0}
+.rrow{display:grid;grid-template-columns:70px 1fr;gap:18px;padding:18px 0;border-bottom:1px dashed var(--line)}
+.rrow:last-child{border-bottom:0}
+.rrow .cover{width:70px}
+.receipt dt{color:var(--muted);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+.receipt dd{margin:2px 0 0;font:400 20px/1.25 "Bitstream Charter",serif}
+.receipt dd.muted{font:14px/1.5 "Liberation Sans",Arial,sans-serif;color:var(--slate2);margin-top:6px}
+.done{display:flex;gap:14px;align-items:center;background:#eef5ef;border:1px solid #cfe2d3;border-radius:10px;padding:14px 18px;max-width:900px;margin:10px 0 18px;color:#2f5a3c}
+.done .ck{width:30px;height:30px;border-radius:50%;background:#2f6a45;color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
+/* buttons */
+button{border:1px solid var(--slate);background:var(--paper);color:var(--slate);font:700 14px/1.3 "Liberation Sans",Arial,sans-serif;border-radius:8px;min-height:42px;padding:10px 16px;cursor:pointer;transition:background .15s ease-out}
+button:hover{background:var(--tint)}
+button:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+button.primary{background:var(--ribbon);border-color:var(--ribbon);color:#fff}
+button.primary:hover{background:var(--ribbon2)}
+button.light{background:var(--ivory);border-color:var(--ivory);color:var(--slate)}
+button.small{min-height:34px;padding:7px 12px;font-size:13px}
+button:disabled{opacity:.6;cursor:wait}
+.slot button{width:100%}
+.book button{width:100%}
+.actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:22px}
+.foot{max-width:1240px;margin:auto;padding:18px 28px 28px;color:#a0968a;font-size:12.5px;border-top:1px solid var(--line)}
+#error{position:fixed;bottom:16px;left:16px;right:16px;max-width:760px;margin:auto;padding:14px;background:#fff2ec;border:1px solid #a13c20;color:#7e2b15;border-radius:8px}
+@media(max-width:900px){.shell{grid-template-columns:1fr}.rail{display:none}.board{grid-template-columns:1fr}.shelf{grid-template-columns:repeat(2,1fr)}.detail{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){button{transition:none}}
+.book .cover{width:150px}
+.shelf{align-items:end}
+.imp td:first-child{min-width:200px}
+.imp td:last-child{white-space:nowrap}
+.imp td:nth-child(2){min-width:130px}

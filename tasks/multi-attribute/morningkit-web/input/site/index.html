@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KitStart — Your morning kit</title>
+  <style>
+    :root {
+      --paper: #f3f0e8; --paper-2: #e9e5da; --ink: #121212; --ink-2: #4a4843; --ink-3: #8a877f;
+      --line: #121212; --hair: #cfcabd; --red: #ff4a1c; --red-ink: #c73200; --white: #fffdf8;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body { background: var(--paper); color: var(--ink); font: 15px/1.5 "Liberation Sans", "FreeSans", Arial, sans-serif; }
+    button { font: inherit; color: inherit; }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+    /* ---------- masthead ---------- */
+    header.top { border-bottom: 2px solid var(--line); background: var(--paper); }
+    header.top .wrap { display: flex; align-items: stretch; height: 64px; }
+    .brand { display: flex; align-items: center; gap: 12px; padding-right: 28px; border-right: 1px solid var(--line); }
+    .brand svg { display: block; }
+    .brand b { font-size: 22px; letter-spacing: -.02em; font-weight: 700; }
+    .brand b span { color: var(--red); }
+    nav.meta { display: flex; margin-left: auto; }
+    nav.meta a { display: flex; align-items: center; padding: 0 20px; border-left: 1px solid var(--line);
+                 color: var(--ink); text-decoration: none; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; }
+    nav.meta a:hover { background: var(--ink); color: var(--paper); }
+    .acct { display: flex; align-items: center; gap: 10px; padding-left: 20px; border-left: 1px solid var(--line); font-size: 13px; }
+    .acct i { width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: var(--paper); display: grid; place-items: center; font-style: normal; font-weight: 700; font-size: 12px; }
+
+    /* ---------- hero ---------- */
+    .hero { display: grid; grid-template-columns: 1fr 360px; gap: 0; border-bottom: 1px solid var(--line); }
+    .hero h1 { margin: 0; padding: 40px 0 28px; font-size: 64px; line-height: .95; letter-spacing: -.045em; font-weight: 700; }
+    .hero h1 em { font-style: normal; color: var(--red); }
+    .hero .lede { border-left: 1px solid var(--line); padding: 44px 0 28px 28px; color: var(--ink-2); font-size: 15px; }
+    .hero .lede strong { color: var(--ink); display: block; font-size: 12px; text-transform: uppercase; letter-spacing: .12em; margin-bottom: 8px; }
+
+    /* ---------- stepper ---------- */
+    .stepper { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 2px solid var(--line); }
+    .stepper button { all: unset; box-sizing: border-box; cursor: pointer; padding: 14px 18px 14px 0; display: flex; gap: 14px; align-items: baseline;
+                      border-right: 1px solid var(--hair); }
+    .stepper button + button { padding-left: 18px; }
+    .stepper button:last-child { border-right: 0; }
+    .stepper .n { font-size: 30px; font-weight: 700; letter-spacing: -.04em; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+    .stepper .t { font-size: 13px; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); }
+    .stepper button.active .n { color: var(--red); }
+    .stepper button.active .t { color: var(--ink); font-weight: 700; }
+    .stepper button.done .n { color: var(--ink); }
+    .stepper button:focus-visible { outline: 2px solid var(--red); outline-offset: -2px; }
+
+    /* ---------- layout ---------- */
+    .grid { display: grid; grid-template-columns: 1fr 360px; gap: 0; }
+    main.stage { padding: 30px 32px 56px 0; border-right: 1px solid var(--line); min-height: 520px; }
+    .panel-head { display: flex; justify-content: space-between; align-items: end; margin-bottom: 18px; }
+    .panel-head h2 { margin: 0; font-size: 30px; letter-spacing: -.03em; line-height: 1.05; }
+    .panel-head p { margin: 6px 0 0; color: var(--ink-2); max-width: 520px; }
+    .kicker { font: 700 12px/1 "Liberation Mono", monospace; letter-spacing: .08em; color: var(--red-ink); text-transform: uppercase; margin-bottom: 10px; }
+    .count { font: 12px "Liberation Mono", monospace; color: var(--ink-3); white-space: nowrap; }
+
+    /* option rows (blocks) */
+    .section { border-top: 1px solid var(--line); }
+    .choice { display: grid; grid-template-columns: 64px 76px 1fr auto; align-items: center; gap: 18px;
+              padding: 16px 0; border-bottom: 1px solid var(--line); background: transparent; transition: background .15s; }
+    .choice .idx { font-size: 38px; font-weight: 700; letter-spacing: -.05em; color: var(--ink); text-align: left; }
+    .choice .art { width: 76px; height: 56px; background: var(--white); border: 1px solid var(--line); display: block; }
+    .choice .title { font-size: 18px; font-weight: 700; letter-spacing: -.01em; line-height: 1.25; }
+    .choice .sub { color: var(--ink-2); font-size: 14px; margin-top: 2px; }
+    .choice .meta { font: 12px "Liberation Mono", monospace; color: var(--ink-3); margin-top: 6px; }
+    button.pick { cursor: pointer; min-width: 118px; height: 40px; border: 2px solid var(--ink); background: var(--white);
+                  font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; padding: 0 16px; }
+    button.pick:hover { background: var(--ink); color: var(--paper); }
+    .choice.selected { background: var(--white); box-shadow: inset 6px 0 0 var(--red); }
+    .choice.selected .idx { color: var(--red); padding-left: 14px; }
+    .choice.selected button.pick { background: var(--red); border-color: var(--red); color: #fff; }
+
+    /* widgets as tiles */
+    #widgets.section { border-top: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-left: 1px solid var(--line); border-top: 1px solid var(--line); }
+    #widgets .choice { grid-template-columns: 1fr; gap: 12px; padding: 20px; border-right: 1px solid var(--line); align-items: start; }
+    #widgets .choice .top { display: flex; justify-content: space-between; align-items: center; }
+    #widgets .choice .idx { font-size: 14px; font: 700 12px "Liberation Mono", monospace; letter-spacing: .08em; padding-left: 0; }
+    #widgets .choice .art { width: 100%; height: 96px; }
+    #widgets .choice.selected { box-shadow: inset 0 6px 0 var(--red); }
+    #widgets .choice button.pick { justify-self: start; }
+
+    .nav-row { display: flex; justify-content: space-between; align-items: center; margin-top: 26px; }
+    .btn { cursor: pointer; height: 48px; padding: 0 24px; border: 2px solid var(--ink); background: transparent; font-weight: 700;
+           text-transform: uppercase; letter-spacing: .08em; font-size: 13px; }
+    .btn.primary { background: var(--ink); color: var(--paper); }
+    .btn.primary:hover { background: var(--red); border-color: var(--red); }
+    .btn:disabled { opacity: .35; cursor: not-allowed; }
+    .hint { font-size: 13px; color: var(--ink-3); }
+
+    /* review */
+    .review { border-top: 1px solid var(--line); }
+    .review .row { display: grid; grid-template-columns: 160px 1fr auto; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--line); align-items: center; }
+    .review .row .k { font: 700 12px "Liberation Mono", monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-2); }
+    .review .row .v { font-size: 18px; font-weight: 700; }
+    .review .row .v.empty { color: var(--ink-3); font-weight: 400; font-style: italic; }
+    .review .row button { cursor: pointer; background: none; border: 0; border-bottom: 2px solid var(--ink); padding: 2px 0; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: .08em; }
+    .prefs { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--hair); background: var(--white); }
+    .prefs div { padding: 14px 16px; font-size: 13px; color: var(--ink-2); }
+    .prefs div + div { border-left: 1px solid var(--hair); }
+    .prefs b { display: block; color: var(--ink); font-size: 14px; }
+    .done-card { border: 2px solid var(--ink); background: var(--white); padding: 32px; }
+    .done-card .big { font-size: 48px; font-weight: 700; letter-spacing: -.04em; line-height: 1; margin: 6px 0 12px; }
+    .done-card .big span { color: var(--red); }
+
+    /* summary rail */
+    aside.rail { padding: 30px 0 40px 28px; }
+    #summary { position: sticky; top: 20px; }
+    #summary h2 { margin: 0 0 4px; font-size: 13px; text-transform: uppercase; letter-spacing: .12em; }
+    #summary .ticket { border: 2px solid var(--ink); background: var(--white); margin-top: 12px; }
+    #summary .ticket .hd { display: flex; justify-content: space-between; padding: 12px 16px; border-bottom: 1px dashed var(--ink); font: 12px "Liberation Mono", monospace; }
+    #summary-items { list-style: none; margin: 0; padding: 0; min-height: 40px; }
+    #summary-items li { padding: 12px 16px 12px 16px; border-bottom: 1px solid var(--hair); font-size: 14px; font-weight: 700; line-height: 1.35; }
+    #summary-items li .lab { display: block; font: 400 11px "Liberation Mono", monospace; color: var(--ink-3); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 3px; }
+    .ticket .empty { padding: 14px 16px; color: var(--ink-3); font-size: 13px; }
+    .ticket .ft { padding: 12px 16px; font: 12px "Liberation Mono", monospace; display: flex; justify-content: space-between; }
+    .ticket .ft b { color: var(--red-ink); }
+    .rail .note { margin-top: 22px; font-size: 13px; color: var(--ink-2); border-top: 1px solid var(--line); padding-top: 14px; }
+    .rail .note h3 { margin: 0 0 6px; font-size: 13px; text-transform: uppercase; letter-spacing: .1em; }
+    .rail .note p { margin: 0 0 8px; }
+
+    footer { border-top: 2px solid var(--line); margin-top: 0; }
+    footer .wrap { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 24px; padding: 28px 32px 40px; font-size: 13px; color: var(--ink-2); }
+    footer h4 { margin: 0 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .12em; color: var(--ink); }
+    footer p { margin: 0 0 4px; }
+    footer .big { font-size: 40px; font-weight: 700; letter-spacing: -.04em; color: var(--ink); line-height: 1; }
+    footer .big span { color: var(--red); }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <div class="brand">
+        <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
+          <rect x="1" y="1" width="32" height="32" fill="#121212"/>
+          <rect x="7" y="7" width="9" height="20" fill="#f3f0e8"/>
+          <circle cx="23" cy="12" r="5" fill="#ff4a1c"/>
+          <rect x="19" y="20" width="8" height="7" fill="#f3f0e8"/>
+        </svg>
+        <b>Kit<span>Start</span></b>
+      </div>
+      <nav class="meta" aria-label="Account">
+        <a href="#help-notes">Help</a>
+        <a href="#footer-info">About</a>
+      </nav>
+      <div class="acct"><i aria-hidden="true">ME</i><span>Setup in progress</span></div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <section class="hero">
+      <h1>Build the <em>morning</em><br>you'll keep.</h1>
+      <div class="lede">
+        <strong>Account setup · final part</strong>
+        Two quick picks to finish setup: choose your every-morning activity block and your one always-on tracker widget, then confirm.
+      </div>
+    </section>
+
+    <div class="stepper" role="tablist" aria-label="Setup steps">
+      <button type="button" role="tab" data-step="1" aria-label="Step 01 — Activity block"><span class="n">01</span><span class="t">Activity block</span></button>
+      <button type="button" role="tab" data-step="2" aria-label="Step 02 — Tracker widget"><span class="n">02</span><span class="t">Tracker widget</span></button>
+      <button type="button" role="tab" data-step="3" aria-label="Step 03 — Review and confirm"><span class="n">03</span><span class="t">Review &amp; confirm</span></button>
+    </div>
+
+    <div class="grid">
+      <main class="stage">
+        <!-- STEP 1 -->
+        <section class="panel" data-panel="1">
+          <div class="panel-head">
+            <div>
+              <div class="kicker">Step 01 of 03</div>
+              <h2>Your every-morning activity block</h2>
+              <p>This block opens your morning timeline. Choose one; picking another replaces it.</p>
+            </div>
+            <div class="count">4 options · choose 1</div>
+          </div>
+          <div class="section" id="blocks">
+            <div class="choice" data-id="b01" data-pick="false">
+              <span class="idx">A</span><span class="art" data-art="b01"></span>
+              <div><span class="title">Balcony coffee and podcast, seated</span><div class="meta">Block A · 1 of 4</div></div>
+              <button class="pick" data-id="b01" aria-label="Choose block A: Balcony coffee and podcast, seated">Choose</button></div>
+            <div class="choice" data-id="b02" data-pick="false">
+              <span class="idx">B</span><span class="art" data-art="b02"></span>
+              <div><span class="title">Ten minutes of stationary-bike intervals</span><div class="meta">Block B · 2 of 4</div></div>
+              <button class="pick" data-id="b02" aria-label="Choose block B: Ten minutes of stationary-bike intervals">Choose</button></div>
+            <div class="choice" data-id="b03" data-pick="true">
+              <span class="idx">C</span><span class="art" data-art="b03"></span>
+              <div><span class="title">Neighborhood walk — 25 minutes outside before the day starts</span><div class="meta">Block C · 3 of 4</div></div>
+              <button class="pick" data-id="b03" aria-label="Choose block C: Neighborhood walk — 25 minutes outside before the day starts">Choose</button></div>
+            <div class="choice" data-id="b04" data-pick="false">
+              <span class="idx">D</span><span class="art" data-art="b04"></span>
+              <div><span class="title">Stretch routine on the living-room mat</span><div class="meta">Block D · 4 of 4</div></div>
+              <button class="pick" data-id="b04" aria-label="Choose block D: Stretch routine on the living-room mat">Choose</button></div>
+          </div>
+          <div class="nav-row">
+            <span class="hint" id="hint-1">Choose one block to continue.</span>
+            <button type="button" class="btn primary" id="next-1" disabled>Continue to tracker widget</button>
+          </div>
+        </section>
+
+        <!-- STEP 2 -->
+        <section class="panel" data-panel="2" hidden>
+          <div class="panel-head">
+            <div>
+              <div class="kicker">Step 02 of 03</div>
+              <h2>Your one always-on tracker widget</h2>
+              <p>This widget stays pinned to your home screen. One slot; picking another replaces it.</p>
+            </div>
+            <div class="count">4 options · choose 1</div>
+          </div>
+          <div class="section" id="widgets">
+            <div class="choice" data-id="w01" data-pick="false">
+              <div class="top"><span class="idx">WIDGET 01</span></div>
+              <span class="art" data-art="w01"></span>
+              <div><span class="title">Screen-time tracker</span><div class="sub">daily usage report</div></div>
+              <button class="pick" data-id="w01" aria-label="Choose widget 01: Screen-time tracker — daily usage report">Choose</button></div>
+            <div class="choice" data-id="w02" data-pick="false">
+              <div class="top"><span class="idx">WIDGET 02</span></div>
+              <span class="art" data-art="w02"></span>
+              <div><span class="title">Spending tracker</span><div class="sub">logs daily purchases</div></div>
+              <button class="pick" data-id="w02" aria-label="Choose widget 02: Spending tracker — logs daily purchases">Choose</button></div>
+            <div class="choice" data-id="w03" data-pick="true">
+              <div class="top"><span class="idx">WIDGET 03</span></div>
+              <span class="art" data-art="w03"></span>
+              <div><span class="title">Water intake tracker</span><div class="sub">log every glass through the day</div></div>
+              <button class="pick" data-id="w03" aria-label="Choose widget 03: Water intake tracker — log every glass through the day">Choose</button></div>
+            <div class="choice" data-id="w04" data-pick="false">
+              <div class="top"><span class="idx">WIDGET 04</span></div>
+              <span class="art" data-art="w04"></span>
+              <div><span class="title">Sleep-length tracker</span><div class="sub">nightly duration graph</div></div>
+              <button class="pick" data-id="w04" aria-label="Choose widget 04: Sleep-length tracker — nightly duration graph">Choose</button></div>
+          </div>
+          <div class="nav-row">
+            <button type="button" class="btn" id="back-2">Back to activity block</button>
+            <button type="button" class="btn primary" id="next-2" disabled>Continue to review</button>
+          </div>
+        </section>
+
+        <!-- STEP 3 -->
+        <section class="panel" data-panel="3" hidden>
+          <div class="panel-head">
+            <div>
+              <div class="kicker">Step 03 of 03</div>
+              <h2>Review your kit</h2>
+              <p>Check both picks, then confirm to finish setup. You can change either one before confirming.</p>
+            </div>
+          </div>
+          <div class="review">
+            <div class="row"><span class="k">Activity block</span><span class="v" id="rv-blocks"></span><button type="button" id="chg-blocks">Change block</button></div>
+            <div class="row"><span class="k">Tracker widget</span><span class="v" id="rv-widgets"></span><button type="button" id="chg-widgets">Change widget</button></div>
+          </div>
+          <div class="prefs">
+            <div><b>Home screen</b>Your widget appears in the top slot.</div>
+            <div><b>Timeline</b>Your block opens the morning timeline.</div>
+          </div>
+          <div class="nav-row">
+            <button type="button" class="btn" id="back-3">Back to tracker widget</button>
+            <button type="button" class="btn primary" id="confirm" disabled>Confirm setup</button>
+          </div>
+        </section>
+
+        <!-- DONE -->
+        <section class="panel" data-panel="4" hidden>
+          <div class="done-card">
+            <div class="kicker">Setup complete</div>
+            <div class="big">Your kit is <span>set.</span></div>
+            <p>Your activity block and tracker widget are saved to your account. Setup is finished — nothing else to do here.</p>
+          </div>
+        </section>
+      </main>
+
+      <aside class="rail">
+        <div id="summary">
+          <h2>Your kit</h2>
+          <div class="hint">Updates as you choose.</div>
+          <div class="ticket">
+            <div class="hd"><span>KITSTART</span><span id="kit-status">DRAFT</span></div>
+            <ul id="summary-items"></ul>
+            <div class="empty" id="summary-empty">Nothing chosen yet.</div>
+            <div class="ft"><span>Picks</span><b id="kit-count">0 / 2</b></div>
+          </div>
+          <div class="note" id="help-notes">
+            <h3>Help</h3>
+            <p>One block and one widget per account. Picking again within a step swaps your choice.</p>
+            <p>You can revisit any step with the numbered tabs above.</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <footer id="footer-info">
+    <div class="wrap">
+      <div><div class="big">Kit<span>Start</span></div><p style="margin-top:10px">Routines, set up once.</p></div>
+      <div><h4>Product</h4><p>Timeline</p><p>Widgets</p><p>Account</p></div>
+      <div><h4>Support</h4><p>Help centre</p><p>Contact</p><p>Status</p></div>
+      <div><h4>Legal</h4><p>Privacy</p><p>Terms</p><p>© KitStart</p></div>
+    </div>
+  </footer>
+
+  <script>
+    // Neutral decorative art: geometric compositions seeded from the option id only.
+    (function () {
+      function rng(seed) { var h = 2166136261; for (var i = 0; i < seed.length; i++) { h ^= seed.charCodeAt(i); h = Math.imul(h, 16777619); }
+        return function () { h ^= h << 13; h ^= h >>> 17; h ^= h << 5; return ((h >>> 0) % 1000) / 1000; }; }
+      document.querySelectorAll('[data-art]').forEach(function (el) {
+        var r = rng(el.getAttribute('data-art')), w = 200, h = 100, s = '';
+        var n = 3 + Math.floor(r() * 3);
+        for (var i = 0; i < n; i++) {
+          var x = Math.floor(r() * 150), y = Math.floor(r() * 60), sz = 20 + Math.floor(r() * 40), k = r();
+          var fill = i === 0 ? '#ff4a1c' : (k < .5 ? '#121212' : '#cfcabd');
+          if (k < .33) s += '<circle cx="' + (x + sz / 2) + '" cy="' + (y + sz / 2) + '" r="' + sz / 2 + '" fill="' + fill + '"/>';
+          else if (k < .66) s += '<rect x="' + x + '" y="' + y + '" width="' + sz + '" height="' + sz + '" fill="' + fill + '"/>';
+          else s += '<rect x="' + x + '" y="' + (y + sz / 3) + '" width="' + (sz * 1.6) + '" height="' + Math.max(6, sz / 4) + '" fill="' + fill + '"/>';
+        }
+        el.innerHTML = '<svg viewBox="0 0 ' + w + ' ' + h + '" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden="true">' + s + '</svg>';
+      });
+    })();
+
+    // One selection per section; picking again replaces it. State lives in the
+    // DOM (#summary-items li[data-section][data-id]) so Playwright can read it back.
+    window.__kit = {};
+    var step = 1, confirmed = false;
+    function titleOf(id) {
+      var c = document.querySelector('.choice[data-id="' + id + '"]');
+      var t = c.querySelector('.title').textContent, sub = c.querySelector('.sub');
+      return sub ? t + ' — ' + sub.textContent : t;
+    }
+    function render() {
+      document.querySelectorAll('[data-panel]').forEach(function (p) { p.hidden = String(step) !== p.getAttribute('data-panel'); });
+      document.querySelectorAll('.stepper button').forEach(function (b) {
+        var n = +b.getAttribute('data-step');
+        b.classList.toggle('active', n === step);
+        b.setAttribute('aria-selected', n === step ? 'true' : 'false');
+        b.disabled = confirmed;
+        b.classList.toggle('done', (n === 1 && window.__kit.blocks) || (n === 2 && window.__kit.widgets) || (n === 3 && confirmed));
+      });
+      document.querySelectorAll('button.pick').forEach(function (b) {
+        var on = b.closest('.choice').classList.contains('selected');
+        b.textContent = on ? 'Chosen' : 'Choose';
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      var list = document.getElementById('summary-items');
+      list.innerHTML = '';
+      ['blocks', 'widgets'].forEach(function (sec) {
+        var sid = window.__kit[sec];
+        if (!sid) return;
+        var li = document.createElement('li');
+        li.setAttribute('data-section', sec);
+        li.setAttribute('data-id', sid);
+        var lab = document.createElement('span'); lab.className = 'lab';
+        lab.textContent = sec === 'blocks' ? 'Activity block' : 'Tracker widget';
+        li.appendChild(lab); li.appendChild(document.createTextNode(titleOf(sid)));
+        list.appendChild(li);
+      });
+      var n = list.children.length;
+      document.getElementById('summary-empty').hidden = n > 0;
+      document.getElementById('kit-count').textContent = n + ' / 2';
+      document.getElementById('kit-status').textContent = confirmed ? 'CONFIRMED' : 'DRAFT';
+      document.getElementById('next-1').disabled = !window.__kit.blocks;
+      document.getElementById('hint-1').textContent = window.__kit.blocks ? 'Block chosen.' : 'Choose one block to continue.';
+      document.getElementById('next-2').disabled = !window.__kit.widgets;
+      ['blocks', 'widgets'].forEach(function (sec) {
+        var v = document.getElementById('rv-' + sec);
+        v.textContent = window.__kit[sec] ? titleOf(window.__kit[sec]) : 'Not chosen yet';
+        v.classList.toggle('empty', !window.__kit[sec]);
+      });
+      document.getElementById('confirm').disabled = !(window.__kit.blocks && window.__kit.widgets);
+    }
+    document.querySelectorAll('button.pick').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var item = btn.closest('.choice'), section = btn.closest('.section');
+        section.querySelectorAll('.choice').forEach(function (c) { c.classList.remove('selected'); });
+        item.classList.add('selected');
+        window.__kit[section.id] = btn.getAttribute('data-id');
+        confirmed = false;
+        render();
+      });
+    });
+    function go(n) { if (!confirmed) { step = n; render(); window.scrollTo(0, 0); } }
+    document.querySelectorAll('.stepper button').forEach(function (b) { b.addEventListener('click', function () { go(+b.getAttribute('data-step')); }); });
+    document.getElementById('next-1').addEventListener('click', function () { go(2); });
+    document.getElementById('back-2').addEventListener('click', function () { go(1); });
+    document.getElementById('next-2').addEventListener('click', function () { go(3); });
+    document.getElementById('back-3').addEventListener('click', function () { go(2); });
+    document.getElementById('chg-blocks').addEventListener('click', function () { go(1); });
+    document.getElementById('chg-widgets').addEventListener('click', function () { go(2); });
+    document.getElementById('confirm').addEventListener('click', function () {
+      if (!(window.__kit.blocks && window.__kit.widgets)) return;
+      confirmed = true; step = 4; render();
+    });
+    render();
+  </script>
+</body>
+</html>

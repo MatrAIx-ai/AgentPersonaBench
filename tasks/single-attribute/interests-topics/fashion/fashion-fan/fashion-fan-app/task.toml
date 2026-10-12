@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/fashion-fan-app"
+theme = "Topic: Fashion — Passionate"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "media"
+tags = [ "persona-adherence", "fashion-fan", "rule-based", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "topic_fashion"
+dimension_label = "Interest: Fashion"
+category = "Interests: Topics"
+anchor_value = "Passionate"
+evaluator = "rule-based"
+adherence_signal = "At least two of the persona's three bundle titles are fashion magazines; the passion shows up when all titles cost the same."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with the KioskDigest Tkinter GUI baked in —
+# see ./environment/Dockerfile. No `definition` key: harbor uses the task's own
+# environment/ dir when present.
+build_timeout_sec = 1200.0
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch KioskDigest once the desktop is up so the agent finds it on screen.
+command = "/opt/fashionfan/start-app.sh"
+timeout_sec = 60.0
+retries = 5

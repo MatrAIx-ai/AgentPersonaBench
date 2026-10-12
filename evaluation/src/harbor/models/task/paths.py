@@ -1,0 +1,263 @@
+import tomllib
+from pathlib import Path
+from pathlib import PurePosixPath
+from typing import TYPE_CHECKING
+
+from harbor.utils.scripts import discover_script
+
+if TYPE_CHECKING:
+    from harbor.models.task.config import TaskOS
+
+
+class TaskPaths:
+    """
+    Represents the file paths for a task with the following directory structure:
+
+    ├── instruction.md
+    ├── task.toml
+    ├── environment/
+    │   ├── [docker-compose.yaml | Dockerfile | singularity-compose.yaml | etc.]
+    │   └── ...
+    ├── solution/         # copied to container @ /solution by OracleAgent
+    │   ├── solve.{sh,bat}
+    │   └── ...
+    └── tests/            # copied to container @ /tests by Evaluator
+        ├── test.{sh,bat}
+        └── ...
+
+    Scripts are discovered in priority order: .sh > .bat (first match wins).
+    """
+
+    CONFIG_FILENAME = "task.toml"
+
+    TASK_ENVIRONMENTS_ROOT = Path("evaluation") / "src" / "environment" / "task-environments"
+
+    def __init__(
+        self,
+        task_dir: Path | str,
+        environment_definition: str | None = None,
+    ):
+        """
+        Initialize TaskPaths from a directory path.
+
+        Args:
+            task_dir: Path to the task directory
+            environment_definition: Optional repo-level environment definition
+                identifier under environment/task-environments.
+        """
+        self.task_dir = Path(task_dir).resolve()
+        self.environment_definition = (
+            self._normalize_environment_definition(environment_definition)
+            if environment_definition
+            else None
+        )
+
+    @classmethod
+    def from_task_dir(cls, task_dir: Path | str) -> "TaskPaths":
+        """Create config-aware paths for a task directory when task.toml exists."""
+        paths = cls(task_dir)
+        try:
+            raw_config = tomllib.loads(paths.config_path.read_text())
+        except (OSError, tomllib.TOMLDecodeError):
+            return paths
+        raw_environment = raw_config.get("environment")
+        if not isinstance(raw_environment, dict):
+            return paths
+        definition = raw_environment.get("definition")
+        if not isinstance(definition, str):
+            return paths
+        return cls(task_dir, environment_definition=definition)
+
+    @staticmethod
+    def _normalize_environment_definition(definition: str) -> str:
+        clean = definition.strip()
+        posix_path = PurePosixPath(clean)
+        if (
+            not clean
+            or "\\" in clean
+            or posix_path.is_absolute()
+            or any(part in {"", ".", ".."} for part in posix_path.parts)
+        ):
+            raise ValueError(
+                "[environment].definition must be a relative POSIX path under "
+                "environment/task-environments."
+            )
+        return posix_path.as_posix()
+
+    def _find_repository_root(self) -> Path | None:
+        for candidate in (self.task_dir, *self.task_dir.parents):
+            if (candidate / self.TASK_ENVIRONMENTS_ROOT).exists():
+                return candidate
+            if (candidate / "pyproject.toml").exists():
+                return candidate
+        return None
+
+    @property
+    def instruction_path(self) -> Path:
+        """Path to the instruction.md file."""
+        return self.task_dir / "instruction.md"
+
+    @property
+    def readme_path(self) -> Path:
+        """Path to the README.md file."""
+        return self.task_dir / "README.md"
+
+    @property
+    def gitignore_path(self) -> Path:
+        """Path to the .gitignore file."""
+        return self.task_dir / ".gitignore"
+
+    @property
+    def config_path(self) -> Path:
+        """Path to the task.toml configuration file."""
+        return self.task_dir / self.CONFIG_FILENAME
+
+    @property
+    def environment_dir(self) -> Path:
+        """Path to the task environment definition directory."""
+        local_environment_dir = self.task_dir / "environment"
+        if self.environment_definition is None or local_environment_dir.exists():
+            return local_environment_dir
+
+        repo_root = self._find_repository_root()
+        if repo_root is not None:
+            return (
+                repo_root
+                / self.TASK_ENVIRONMENTS_ROOT
+                / self.environment_definition
+            ).resolve()
+
+        return local_environment_dir
+
+    @property
+    def solution_dir(self) -> Path:
+        """Path to the solution/ directory."""
+        return self.task_dir / "solution"
+
+    @property
+    def solve_path(self) -> Path:
+        """Default path to the solve script (solve.sh).
+
+        Always returns a concrete ``Path`` suitable for writing.  Use
+        :pyattr:`discovered_solve_path` when you need to locate an *existing*
+        script at runtime.
+        """
+        return self.solution_dir / "solve.sh"
+
+    def solve_path_for(self, task_os: "TaskOS | None") -> Path:
+        """Default solve script path for the target OS."""
+        from harbor.models.task.config import TaskOS
+
+        if task_os == TaskOS.WINDOWS:
+            return self.solution_dir / "solve.bat"
+        return self.solve_path
+
+    @property
+    def discovered_solve_path(self) -> Path | None:
+        """Discover an existing solve script (solve.sh or solve.bat).
+
+        Returns ``None`` when no matching script exists. This property tries
+        all supported extensions; use :meth:`discovered_solve_path_for` to
+        filter by the target OS.
+        """
+        return discover_script(self.solution_dir, "solve")
+
+    def discovered_solve_path_for(self, task_os: "TaskOS | None") -> Path | None:
+        """Discover an existing solve script restricted to *task_os* extensions."""
+        return discover_script(self.solution_dir, "solve", task_os=task_os)
+
+    @property
+    def tests_dir(self) -> Path:
+        """Path to the tests/ directory."""
+        return self.task_dir / "tests"
+
+    @property
+    def test_path(self) -> Path:
+        """Default path to the test script (test.sh).
+
+        Always returns a concrete ``Path`` suitable for writing.  Use
+        :pyattr:`discovered_test_path` when you need to locate an *existing*
+        script at runtime.
+        """
+        return self.tests_dir / "test.sh"
+
+    def test_path_for(self, task_os: "TaskOS | None") -> Path:
+        """Default test script path for the target OS."""
+        from harbor.models.task.config import TaskOS
+
+        if task_os == TaskOS.WINDOWS:
+            return self.tests_dir / "test.bat"
+        return self.test_path
+
+    @property
+    def discovered_test_path(self) -> Path | None:
+        """Discover an existing test script (test.sh or test.bat).
+
+        Returns ``None`` when no matching script exists. This property tries
+        all supported extensions; use :meth:`discovered_test_path_for` to
+        filter by the target OS.
+        """
+        return discover_script(self.tests_dir, "test")
+
+    def discovered_test_path_for(self, task_os: "TaskOS | None") -> Path | None:
+        """Discover an existing test script restricted to *task_os* extensions."""
+        return discover_script(self.tests_dir, "test", task_os=task_os)
+
+    @property
+    def steps_dir(self) -> Path:
+        """Path to the steps/ directory."""
+        return self.task_dir / "steps"
+
+    def step_dir(self, step_name: str) -> Path:
+        """Path to a step directory."""
+        return self.steps_dir / step_name
+
+    def step_instruction_path(self, step_name: str) -> Path:
+        """Path to a step instruction.md file."""
+        return self.step_dir(step_name) / "instruction.md"
+
+    def step_tests_dir(self, step_name: str) -> Path:
+        """Path to a step tests/ directory."""
+        return self.step_dir(step_name) / "tests"
+
+    def step_test_path_for(self, step_name: str, task_os: "TaskOS | None") -> Path:
+        """Default step test script path for the target OS."""
+        from harbor.models.task.config import TaskOS
+
+        if task_os == TaskOS.WINDOWS:
+            return self.step_tests_dir(step_name) / "test.bat"
+        return self.step_tests_dir(step_name) / "test.sh"
+
+    def discovered_step_test_path_for(
+        self, step_name: str, task_os: "TaskOS | None"
+    ) -> Path | None:
+        """Discover an existing step test script restricted to *task_os* extensions."""
+        return discover_script(self.step_tests_dir(step_name), "test", task_os=task_os)
+
+    def step_solution_dir(self, step_name: str) -> Path:
+        """Path to a step solution/ directory."""
+        return self.step_dir(step_name) / "solution"
+
+    def step_solve_path_for(self, step_name: str, task_os: "TaskOS | None") -> Path:
+        """Default step solve script path for the target OS."""
+        from harbor.models.task.config import TaskOS
+
+        if task_os == TaskOS.WINDOWS:
+            return self.step_solution_dir(step_name) / "solve.bat"
+        return self.step_solution_dir(step_name) / "solve.sh"
+
+    def discovered_step_solve_path_for(
+        self, step_name: str, task_os: "TaskOS | None"
+    ) -> Path | None:
+        """Discover an existing step solve script restricted to *task_os* extensions."""
+        return discover_script(
+            self.step_solution_dir(step_name), "solve", task_os=task_os
+        )
+
+    def has_configured_steps(self) -> bool:
+        """True if task.toml declares a non-empty [[steps]] array."""
+        try:
+            config = tomllib.loads(self.config_path.read_text())
+        except (OSError, tomllib.TOMLDecodeError):
+            return False
+        return bool(config.get("steps"))

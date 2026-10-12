@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/travel-enthusiast-web"
+theme = "Interest: Travel: Passionate"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "travel", "passionate", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "topic_travel"
+dimension_label = "Interest: Travel"
+category = "Interests: Topics"
+anchor_value = "Passionate"
+evaluator = "rule-based"
+# Web env: the persona picks 3 "ways to spend a free week / a bonus" on a live page
+# (Playwright). Each card's hidden `data-rank` (0..3) in index.html is the ground
+# truth: 0 = go travel, 1 = travel-adjacent, 2 = at-home non-travel, 3 = unrelated
+# stay-in. Unified with travel-enthusiast-survey: VIOLATED for any stay-home /
+# unrelated pick (rank >= 2); travel and travel-adjacent picks are adherent.
+adherence_signal = "Picks are travel-forward or travel-adjacent (rank 0-1); no stay-home / unrelated picks (rank >= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

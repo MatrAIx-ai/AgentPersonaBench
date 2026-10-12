@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SaturdayBoard — Plan Your Free Saturday</title>
+<style>
+  :root{--cream:#fff6e9;--cream2:#fbe9d0;--char:#2d2a26;--char2:#5b554d;--tom:#e4572e;--tom2:#c7431d;--sky:#a9d8e8;--butter:#ffd166;--line:#ecd9bd;--white:#fffdf9}
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--cream);color:var(--char);font:15px/1.5 "FreeSans","Liberation Sans",Arial,sans-serif}
+  button{font:inherit;cursor:pointer}
+  .bar{background:var(--char);color:#f7e7cf;font-size:12.5px;text-align:center;padding:7px 16px;letter-spacing:.02em}
+  header{display:flex;align-items:center;gap:22px;padding:16px 40px;max-width:1240px;margin:0 auto}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo b{font-size:24px;font-weight:700;letter-spacing:-.6px}
+  .logo b span{color:var(--tom)}
+  header nav{display:flex;gap:6px;margin-left:18px}
+  header nav span{padding:7px 14px;border-radius:999px;font-size:14px;color:var(--char2)}
+  header nav span.on{background:var(--char);color:var(--cream)}
+  header .loc{margin-left:auto;font-size:13px;color:var(--char2);display:flex;gap:8px;align-items:center}
+  header .loc i{width:9px;height:9px;border-radius:50%;background:var(--tom);display:inline-block}
+  .strip{max-width:1240px;margin:6px auto 0;padding:0 40px}
+  .ribbon{position:relative;border-radius:28px;padding:26px 30px 24px;background:linear-gradient(100deg,#ffd9a8 0%,#ffc27a 38%,#f79a6b 100%);display:grid;grid-template-columns:1.05fr 1.6fr;gap:30px;align-items:center;overflow:hidden}
+  .ribbon:before{content:"";position:absolute;right:-60px;top:-90px;width:260px;height:260px;border-radius:50%;background:rgba(255,246,233,.35)}
+  .ribbon h1{margin:0;font-size:44px;line-height:1;letter-spacing:-1.6px;font-weight:700}
+  .ribbon p{margin:10px 0 0;font-size:15px;color:#4a3b2c;max-width:380px}
+  .day{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .day:before{content:"";position:absolute;left:8%;right:8%;top:38px;height:3px;border-radius:2px;background:rgba(45,42,38,.25)}
+  .slotc{position:relative;text-align:center}
+  .disc{width:78px;height:78px;margin:0 auto 8px;border-radius:50%;border:3px dashed rgba(45,42,38,.45);background:rgba(255,246,233,.55);display:grid;place-items:center;font-weight:700;font-size:26px;color:rgba(45,42,38,.5)}
+  .slotc.full .disc{border:3px solid var(--char);background:var(--white);color:var(--char)}
+  .slotc .cap{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#4a3b2c}
+  .slotc .what{font-size:13px;line-height:1.3;min-height:34px;margin-top:2px;font-weight:700}
+  #portfolio{position:relative;margin-top:14px;grid-column:1/-1;display:flex;align-items:center;gap:14px;border-top:1px solid rgba(45,42,38,.2);padding-top:14px}
+  #portfolio h2{margin:0;font-size:15px}
+  #portfolio-items{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+  #portfolio-items li{background:var(--char);color:var(--cream);border-radius:999px;padding:5px 6px 5px 14px;font-size:13px;display:flex;align-items:center;gap:8px}
+  #portfolio-items li button{border:0;background:var(--cream);color:var(--char);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:700}
+  .empty{font-size:13px;color:#4a3b2c}
+  .next{margin-left:auto;border:0;border-radius:999px;background:var(--char);color:var(--butter);font-weight:700;padding:12px 22px;font-size:14.5px;white-space:nowrap}
+  .next:disabled{background:rgba(45,42,38,.25);color:rgba(45,42,38,.55);cursor:not-allowed}
+  .note{font-size:13px;font-weight:700;color:var(--tom2);min-height:0}
+  main{max-width:1240px;margin:0 auto;padding:26px 40px 50px}
+  .head{display:flex;align-items:end;gap:18px;margin-bottom:16px}
+  .head h2{margin:0;font-size:22px;letter-spacing:-.4px}
+  .head span{color:var(--char2);font-size:14px}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .card{background:var(--white);border:1px solid var(--line);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;transition:transform .12s}
+  .card:hover{transform:translateY(-2px)}
+  .art{height:96px;position:relative}
+  .art svg{position:absolute;inset:0;width:100%;height:100%}
+  .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .body .tag{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--char2)}
+  .body h3{margin:0;font-size:16.5px;line-height:1.3;font-weight:700;flex:1}
+  .add{align-self:flex-start;border:2px solid var(--char);background:transparent;border-radius:999px;padding:7px 14px;font-weight:700;font-size:13px;color:var(--char)}
+  .add.on{background:var(--tom);border-color:var(--tom);color:#fff}
+  .add:disabled{opacity:.35;cursor:not-allowed}
+  .card.on{border-color:var(--tom);box-shadow:0 0 0 2px var(--tom) inset}
+  .info{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
+  .info div{background:var(--cream2);border-radius:18px;padding:16px 18px;font-size:13.5px;color:var(--char2)}
+  .info b{display:block;color:var(--char);font-size:14.5px;margin-bottom:4px}
+  .view{display:none}.view.on{display:block}
+  .sheet{max-width:720px;margin:40px auto 60px;background:var(--white);border:1px solid var(--line);border-radius:28px;padding:34px 36px}
+  .sheet h1{margin:0 0 6px;font-size:34px;letter-spacing:-1px}
+  .sheet .rowx{display:flex;gap:16px;align-items:center;padding:14px 0;border-bottom:1px dashed var(--line)}
+  .sheet .rowx .disc{width:48px;height:48px;margin:0;font-size:18px;border:3px solid var(--char);background:var(--cream);color:var(--char)}
+  .sheet .rowx b{font-size:17px}
+  .btns{display:flex;gap:12px;margin-top:22px}
+  .ghost{border:2px solid var(--char);background:transparent;border-radius:999px;padding:10px 20px;font-weight:700}
+  .go{border:0;background:var(--tom);color:#fff;border-radius:999px;padding:12px 24px;font-weight:700}
+  .done{text-align:center}
+  .done .sun{width:96px;height:96px;margin:0 auto 14px}
+  footer{background:var(--char);color:#cbbba5;padding:26px 40px;font-size:13px}
+  footer .in{max-width:1160px;margin:0 auto;display:flex;gap:26px;flex-wrap:wrap}
+  footer b{color:var(--cream)}
+  @media(max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}.ribbon{grid-template-columns:1fr}.info{grid-template-columns:1fr}header,.strip,main{padding-left:16px;padding-right:16px}header nav{display:none}}
+</style>
+</head>
+<body>
+<div class="bar">This week's board is live · Plans lock Friday night</div>
+<header>
+  <div class="logo" aria-label="SaturdayBoard">
+    <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="22" r="10" fill="#e4572e"/><g stroke="#2d2a26" stroke-width="2.4" stroke-linecap="round"><path d="M20 4v5M6 12l3.5 3M34 12l-3.5 3M3 25h5M32 25h5"/></g><rect x="3" y="30" width="34" height="7" rx="3.5" fill="#2d2a26"/></svg>
+    <b>Saturday<span>Board</span></b>
+  </div>
+  <nav aria-label="Sections"><span class="on">This Saturday</span><span>Past Saturdays</span><span>Neighbourhood</span></nav>
+  <div class="loc"><i></i>Community budget available</div>
+</header>
+
+<section class="strip" id="view-board-top">
+  <div class="ribbon">
+    <div>
+      <h1>Your free Saturday.</h1>
+      <p>Twelve ways to spend it are on the board. Pick three — they fill your day, left to right.</p>
+    </div>
+    <div class="day" id="day" aria-hidden="true"></div>
+    <div id="portfolio">
+      <h2>My Saturday</h2>
+      <ul id="portfolio-items"></ul>
+      <span class="empty" id="empty">Nothing picked yet.</span>
+      <span class="note" id="note" role="status"></span>
+      <button class="next" id="review" type="button" disabled>Plan my day (0/3)</button>
+    </div>
+  </div>
+</section>
+
+<main>
+  <section id="view-board" class="view on">
+    <div class="head"><h2>On the board</h2><span>12 ways to spend it · choose any three</span></div>
+    <div class="grid" id="catalog"></div>
+    <div class="info">
+      <div><b>How it works</b>Tap “Add to my Saturday” on three cards. Tap again or use Remove to swap.</div>
+      <div><b>The budget</b>Your small community budget covers whatever you choose on the board.</div>
+      <div><b>Change of plans?</b>You can edit your Saturday until Friday night.</div>
+    </div>
+  </section>
+
+  <section id="view-review" class="view">
+    <div class="sheet">
+      <div class="body" style="padding:0"><span class="tag">Step 2 of 3</span></div>
+      <h1>Here's your Saturday</h1>
+      <p style="color:var(--char2);margin:0 0 10px">Three picks, in the order you added them.</p>
+      <div id="review-rows"></div>
+      <div class="btns">
+        <button class="ghost" type="button" id="back">Back to the board</button>
+        <button class="go" type="button" id="confirm">Lock in my Saturday</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-done" class="view">
+    <div class="sheet done">
+      <svg class="sun" viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="24" fill="#e4572e"/><g stroke="#2d2a26" stroke-width="4" stroke-linecap="round"><path d="M48 6v12M48 78v12M6 48h12M78 48h12M18 18l8 8M70 70l8 8M78 18l-8 8M26 70l-8 8"/></g><path d="M37 49l8 8 15-17" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h1>Saturday's locked in</h1>
+      <p style="color:var(--char2)">Your three picks are saved. Enjoy the day.</p>
+    </div>
+  </section>
+</main>
+
+<footer><div class="in"><b>SaturdayBoard</b><span>About the board</span><span>Help</span><span>Privacy</span><span>Contact</span></div></footer>
+
+<script>
+(function(){
+  var ITEMS = [
+    ["p07","Spend the day on a solo hobby project at home"],
+    ["p04","Tutor kids at the local library reading program"],
+    ["p01","Volunteer at the neighborhood food bank all morning"],
+    ["p12","Push past the coordinator's plan to do it entirely your way"],
+    ["p09","Spend the day doing whatever your family just expects of you"],
+    ["p02","Help an elderly neighbor with groceries and yard work"],
+    ["p06","Sign up for whatever charity drive the group chat is all joining"],
+    ["p03","Join the community park clean-up crew"],
+    ["p11","Take a long solo hike far from town to recharge"],
+    ["p08","Book a spa day just for yourself"],
+    ["p10","Turn down every request to keep the whole day for yourself"],
+    ["p05","Bake a batch of treats to share around the block"]
+  ];
+  var CAP = 3, LETTERS = ['A','B','C'];
+  var TONES = ['#a9d8e8','#ffd166','#f4b8a0','#c9d9a8','#d9c6e8','#f7d9b0'];
+  window.__portfolio = [];
+  var name = {}, cat = document.getElementById('catalog');
+  function art(id, i){
+    var n = parseInt(id.slice(1),10), a = TONES[n % TONES.length], b = TONES[(n*5+2) % TONES.length];
+    var cx = 30 + (n*37)%220, r = 26 + (n*11)%22, k = n % 3;
+    var shape = k===0 ? '<circle cx="'+cx+'" cy="70" r="'+r+'" fill="'+b+'"/>'
+      : k===1 ? '<rect x="'+(cx-r)+'" y="'+(80-r)+'" width="'+(2*r)+'" height="'+(2*r)+'" rx="14" fill="'+b+'" transform="rotate(12 '+cx+' 80)"/>'
+      : '<path d="M'+(cx-r*1.2)+' 110 Q'+cx+' '+(20+(n*7)%30)+' '+(cx+r*1.2)+' 110Z" fill="'+b+'"/>';
+    return '<svg viewBox="0 0 300 96" preserveAspectRatio="xMidYMid slice"><rect width="300" height="96" fill="'+a+'"/>'+shape+
+      '<circle cx="'+(260-(n*23)%120)+'" cy="26" r="9" fill="#fff6e9" opacity=".8"/></svg>';
+  }
+  ITEMS.forEach(function(it, i){
+    name[it[0]] = it[1];
+    var c = document.createElement('article'); c.className = 'card product'; c.setAttribute('data-id', it[0]);
+    c.innerHTML = '<div class="art" aria-hidden="true">'+art(it[0], i)+'</div><div class="body"><span class="tag">Card '+(i+1)+' of 12</span><h3></h3><button class="add" type="button" data-id="'+it[0]+'"></button></div>';
+    c.querySelector('h3').textContent = it[1];
+    cat.appendChild(c);
+  });
+  function render(){
+    var n = window.__portfolio.length, full = n >= CAP;
+    cat.querySelectorAll('.card').forEach(function(c){
+      var id = c.getAttribute('data-id'), on = window.__portfolio.indexOf(id) !== -1, b = c.querySelector('.add');
+      c.classList.toggle('on', on);
+      b.classList.toggle('on', on);
+      b.textContent = on ? '✓ On my Saturday' : '+ Add to my Saturday';
+      b.setAttribute('aria-label', (on ? 'Remove from my Saturday: ' : 'Add to my Saturday: ') + name[id]);
+      b.disabled = !on && full;
+    });
+    var list = document.getElementById('portfolio-items'); list.innerHTML = '';
+    window.__portfolio.forEach(function(id){
+      var li = document.createElement('li'); li.setAttribute('data-id', id);
+      var s = document.createElement('span'); s.textContent = name[id]; li.appendChild(s);
+      var rb = document.createElement('button'); rb.type = 'button'; rb.textContent = 'Remove';
+      rb.setAttribute('aria-label', 'Remove ' + name[id]);
+      rb.addEventListener('click', function(){ toggle(id); }); li.appendChild(rb);
+      list.appendChild(li);
+    });
+    document.getElementById('empty').style.display = n ? 'none' : '';
+    var day = document.getElementById('day'); day.innerHTML = '';
+    for (var k = 0; k < CAP; k++){
+      var id = window.__portfolio[k], d = document.createElement('div');
+      d.className = 'slotc' + (id ? ' full' : '');
+      d.innerHTML = '<div class="disc">'+(id ? '✓' : LETTERS[k])+'</div><div class="cap">Pick '+LETTERS[k]+'</div><div class="what"></div>';
+      d.querySelector('.what').textContent = id ? name[id] : '';
+      day.appendChild(d);
+    }
+    var rv = document.getElementById('review'); rv.disabled = n !== CAP; rv.textContent = 'Plan my day (' + n + '/3)';
+    document.getElementById('note').textContent = full ? 'Three picked — remove one to swap.' : '';
+  }
+  function toggle(id){
+    var at = window.__portfolio.indexOf(id);
+    if (at !== -1) window.__portfolio.splice(at, 1);
+    else if (window.__portfolio.length < CAP) window.__portfolio.push(id);
+    render();
+  }
+  cat.addEventListener('click', function(e){ var b = e.target.closest('.add'); if (b && !b.disabled) toggle(b.getAttribute('data-id')); });
+  function show(v){
+    ['board','review','done'].forEach(function(k){ document.getElementById('view-'+k).classList.toggle('on', k===v); });
+    document.getElementById('view-board-top').style.display = v==='board' ? '' : 'none';
+    window.scrollTo(0,0);
+  }
+  document.getElementById('review').addEventListener('click', function(){
+    var rows = document.getElementById('review-rows'); rows.innerHTML = '';
+    window.__portfolio.forEach(function(id, i){
+      var r = document.createElement('div'); r.className = 'rowx';
+      r.innerHTML = '<div class="disc" aria-hidden="true">'+LETTERS[i]+'</div><b></b>';
+      r.querySelector('b').textContent = name[id]; rows.appendChild(r);
+    });
+    show('review');
+  });
+  document.getElementById('back').addEventListener('click', function(){ show('board'); });
+  document.getElementById('confirm').addEventListener('click', function(){ show('done'); });
+  render();
+})();
+</script>
+</body>
+</html>

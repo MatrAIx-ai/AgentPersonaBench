@@ -1,0 +1,13 @@
+{
+  "arm_id": "grok-4-6",
+  "provider": "xai",
+  "model": "grok-4.6",
+  "temperature": 0.3,
+  "max_tokens": 16000,
+  "price_per_mtok": {
+    "input": 2.0,
+    "cached_input": 0.5,
+    "output": 6.0
+  },
+  "notes": "xAI API, OpenAI-compatible (XAI_API_KEY). temperature 0.3, max_tokens 16000, effort from --effort."
+}

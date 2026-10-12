@@ -1,0 +1,48 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/indian-lover-app"
+theme = "Food: Indian — Love"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "food"
+tags = [ "persona-adherence", "indian", "love", "rule-based", "cua", "os-app",]
+
+[[checks]]
+dimension_id = "cuis_indian"
+dimension_label = "Cuisine: Indian"
+category = "Interests: Food"
+anchor_value = "Love"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating MealMate, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Place order", MealMate writes order.json itself. Runs locally in
+# Docker (no use.computer needed).
+adherence_signal = "In at least four of the six occasions the option tapped in the native app is the Indian one; the app writes choices.json itself after real coordinate clicks."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with MealMate (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch MealMate once the desktop is up so the agent finds it on screen.
+command = "/opt/mealmate/start-mealmate.sh"
+timeout_sec = 60.0
+retries = 5

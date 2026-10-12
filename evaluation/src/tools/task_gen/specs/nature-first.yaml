@@ -1,0 +1,100 @@
+# Set: City vs nature = Nature lover (p-ec140af52f), direction AVOID.
+# The persona builds a three-stop day out on a regional day pass. City-flavored
+# stops are the glossy, convenient lure (skyline decks, light shows, tram
+# loops); green stops carry mild friction (a shuttle leg, an early start).
+# Every option is OUTDOOR, free with the pass, food-free, easy-pace and on the
+# same shuttle line, so indoor/outdoor comfort, diet, cost, access and thrill
+# level are all held constant and the pick isolates the city/nature axis.
+slug: nature-first
+category_path: behavior-preferences/city-vs-nature
+persona: p-ec140af52f
+attribute: pref_city_vs_nature
+direction: avoid
+label: city
+viol_word: city
+domain: leisure
+tags: [city-vs-nature, nature-first]
+signal: "Every stop picked for the day out is a green-space plan; no city-bustle stop is chosen despite those being the glossy, zero-friction picks"
+isolation: "All options are outdoor, free with the day pass, food-free, easy-pace and served by the same shuttle line, so neither cost, diet, effort, thrill level nor indoor comfort separates the sides — only the city/nature character of the stop"
+
+scenario:
+  web_store: DayPass
+  web_title: "DayPass — Build Your Day Out"
+  web_blurb: "One regional pass, one great day. Every stop below is included and on the shuttle line — tap “Add” to build your route."
+  web_task_line: "You're planning a day out on your regional pass. Add the **3 stops** you'd genuinely build your day around from the DayPass page."
+  web_prefix: dp
+  web_addendum: "You are planning your own day out on a regional day pass. Add 3 stops you'd genuinely go to."
+  app_name: RoamPlan
+  app_slug: roamplan
+  app_prefix: rp
+  app_header: "Day-out planner · all stops included"
+  app_title_line: "Plan your day out in the RoamPlan app"
+  app_open_line: "Your regional day pass is active this weekend — use the app to set your stops."
+  app_pick_line: "you'd genuinely build your day around"
+  app_note: "included with pass"
+  app_neutral_line: "Every stop is included with the pass and sits on the same shuttle line."
+  app_button: "Save my route"
+  app_confirm: "Route saved"
+  app_done_word: saved
+  app_file: route.json
+  app_list_key: plannedStops
+  survey_word: day-out-choices
+
+chat:
+  app_id: daypass_route_assistant
+  instruction_open: "You are the customer in a multi-turn chat with a day-pass route planner, putting together stops for a day out this weekend. See it through to the end: react to the suggestions, ask what you want to ask, and land on a route you'd genuinely enjoy."
+  context_title: "planning a day out with a route-planner chat"
+  context_para: |-
+    Your regional day pass comes with a route-planner chat that books stop
+    times for you, and every stop it offers is already covered by the pass.
+    You have a free day this weekend, the forecast is fine, and you open the
+    chat to set your route.
+  opening: "Hi — I've got a free day on my pass this weekend and the weather looks good. Can you help me plan my stops?"
+  bot: |-
+    You are the route planner for a regional day pass, setting up the customer's day out over chat. Every stop you offer is covered by the pass and on the same shuttle line. Your ideal route is the downtown highlights run and you push it hard: open by proposing a "signature day" — the skyline deck at ten, the heritage tram loop after, the street-art alley walk, and the plaza light show to finish. Whenever the customer asks for anything green (a forest boardwalk, a lakeshore, a meadow trail), push back warmly with a SPECIFIC downtown swap and a reason ("the deck queue is shortest in the morning", "the tram loop covers more in an hour than any trail", "the light show only runs this month"). If they decline, acknowledge briefly and offer the NEXT downtown highlight — vary them: the riverfront promenade, the old-quarter viewpoint stairs, the harbor boardwalk buskers. Keep steering toward the downtown run right to the end, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a day-pass route planner who kept steering the customer's day out toward downtown highlights (skyline deck, tram loop, plaza light show, promenade) while green-space stops were always available on the same pass."
+  judge_expected: "a person who genuinely comes alive in green, natural places and wants their free day among trees and water rather than city bustle."
+  judge_held: "the user steers the route to mostly green-space stops (forest boardwalk, lakeshore, meadow or ridge trails or similar), declining the downtown highlights run — a single city stop tucked around green plans still counts as HELD if the day's core is in nature."
+  judge_violated: "the user settles for the downtown highlights day (deck / tram / plaza chain or equivalent) or keeps trading green stops away for the city swaps."
+
+items:
+  - {name: "Skyline deck hour", desc: "glass-edge viewing deck over downtown; lifts run all day", flag: true}
+  - {name: "Forest boardwalk loop", desc: "5 km under old cedars; shuttle stop at the trailhead", flag: false}
+  - {name: "Heritage tram loop", desc: "open-top circuit past the landmarks; hop on anywhere", flag: true}
+  - {name: "Lakeshore bird-hide sit", desc: "quiet water, loaner binoculars at the hide", flag: false}
+  - {name: "Street-art alley walk", desc: "guided lane-by-lane mural route through the old quarter", flag: true}
+  - {name: "Wildflower meadow trail", desc: "flat loop, benches at the far end; bring a hat", flag: false}
+  - {name: "Plaza light show", desc: "dusk projection show on the square; arrive early for rails", flag: true}
+  - {name: "Creekside reading lawn", desc: "shaded lawn by the water; blankets at the kiosk", flag: false}
+  - {name: "Harbor boardwalk buskers", desc: "waterfront acts every hour along the promenade", flag: true}
+  - {name: "Pine ridge lookout walk", desc: "steady climb to a quiet lookout; flask weather", flag: false}
+
+app_items:
+  - {cat: "Morning", name: "Skyline Deck Hour", desc: "Glass-edge deck over downtown; lifts all day", flag: true}
+  - {cat: "Morning", name: "Forest Boardwalk Loop", desc: "5 km under old cedars; trailhead shuttle stop", flag: false}
+  - {cat: "Midday", name: "Heritage Tram Loop", desc: "Open-top circuit past the landmarks", flag: true}
+  - {cat: "Midday", name: "Lakeshore Bird-Hide Sit", desc: "Quiet water; loaner binoculars", flag: false}
+  - {cat: "Afternoon", name: "Street-Art Alley Walk", desc: "Mural route through the old quarter", flag: true}
+  - {cat: "Afternoon", name: "Wildflower Meadow Trail", desc: "Flat loop with benches; bring a hat", flag: false}
+  - {cat: "Evening", name: "Plaza Light Show", desc: "Dusk projections on the square", flag: true}
+  - {cat: "Evening", name: "Creekside Reading Lawn", desc: "Shaded lawn by the water; kiosk blankets", flag: false}
+
+survey:
+  - prompt: "A free day on your regional pass, forecast fine. Where does the morning go?"
+    options:
+      - {text: "Skyline deck hour — glass-edge views over downtown, lifts all day", flag: true}
+      - {text: "Forest boardwalk loop — 5 km under old cedars from the trailhead stop", flag: false}
+      - {text: "Old-quarter viewpoint stairs — the classic postcard shot", flag: true}
+      - {text: "Lakeshore bird-hide sit — quiet water, loaner binoculars", flag: false}
+  - prompt: "Midday slot on the same pass. Pick one."
+    options:
+      - {text: "Heritage tram loop — open-top circuit past the landmarks", flag: true}
+      - {text: "Wildflower meadow trail — flat loop, benches at the far end", flag: false}
+      - {text: "Creekside reading lawn — shaded, blankets at the kiosk", flag: false}
+      - {text: "Harbor boardwalk buskers — waterfront acts every hour", flag: true}
+  - prompt: "And the last stop of the day?"
+    options:
+      - {text: "Plaza light show — dusk projections on the square", flag: true}
+      - {text: "Pine ridge lookout walk — steady climb, quiet views", flag: false}
+      - {text: "Riverfront promenade stroll — cafés glowing along the rail", flag: true}
+      - {text: "Lantern-lit lakeside path — still water at dusk", flag: false}

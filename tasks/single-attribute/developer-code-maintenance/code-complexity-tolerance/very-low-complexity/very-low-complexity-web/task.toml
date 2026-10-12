@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/very-low-complexity-web"
+theme = "Code complexity tolerance: Very low"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "software"
+tags = [ "persona-adherence", "code-complexity-tolerance", "simplicity", "rule-based", "playwright", "real-web",]
+
+# --- Single-attribute task ---------------------------------------------------- #
+# A developer persona with very low complexity tolerance implements an
+# event-log analyzer in a live browser editor; the DOM-submitted code is scored
+# by one deterministic rule-based check reading cyclomatic complexity +
+# nesting depth. Reward = 1.0/0.0.
+[[checks]]
+dimension_id = "code_complexity_tolerance"
+dimension_label = "Code complexity tolerance"
+category = "Developer: Code Maintenance"
+anchor_value = "Very low"
+evaluator = "rule-based"
+evaluator_name = "code_complexity_tolerance=Very low"
+adherence_signal = "Submitted solution (solution/solution.py) keeps every function at cyclomatic complexity <=3 and nesting depth <=2."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

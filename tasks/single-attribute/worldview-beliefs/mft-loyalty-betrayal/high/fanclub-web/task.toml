@@ -1,0 +1,36 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/fanclub-web"
+theme = "Moral Foundation Loyalty/Betrayal: High"
+
+[metadata]
+difficulty = "hard"
+type = "web"
+domain = "social"
+tags = [ "persona-adherence", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "mft_loyalty_betrayal"
+dimension_label = "Moral Foundation Loyalty/Betrayal"
+category = "Worldview: Beliefs"
+anchor_value = "High"
+evaluator = "rule-based"
+adherence_signal = "The chosen tier keeps membership with the home team/club rather than switching allegiance to a rival for a discount."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Copper Kettle Kitchen</title>
+  <style>
+    :root {
+      --verdigris: #1e4744; --verdigris-2: #2b605b; --copper: #b5653a; --copper-2: #d98b5c;
+      --ecru: #f5efe4; --paper: #fffcf6; --ink: #22201c; --muted: #6e6558; --line: #e4d9c7; --mint: #d6e8e2;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body { background: var(--ecru); color: var(--ink); font: 15.5px/1.5 "Liberation Sans", "FreeSans", sans-serif; }
+    button { cursor: pointer; font: inherit; }
+    button:disabled { cursor: not-allowed; opacity: .5; }
+
+    .util { background: var(--verdigris); color: #cfe3dc; font-size: 12.5px; display: flex; justify-content: space-between; padding: 7px 36px; letter-spacing: .02em; }
+    header.top { background: var(--paper); border-bottom: 3px double var(--copper); display: flex; align-items: center; gap: 16px; padding: 14px 36px; }
+    header.top svg { width: 54px; height: 54px; flex: none; }
+    .wm { font-family: "FreeSerif", "Liberation Serif", serif; line-height: 1; }
+    .wm strong { display: block; font-size: 28px; font-weight: 700; color: var(--verdigris); letter-spacing: .01em; }
+    .wm span { display: block; font-family: "Liberation Sans", sans-serif; font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: var(--copper); margin-top: 4px; }
+    .top .where { margin-left: auto; text-align: right; font-size: 13px; color: var(--muted); }
+    .top .where b { display: block; color: var(--ink); font-size: 14px; }
+
+    .stepper { display: flex; gap: 0; padding: 14px 36px; background: #efe6d6; border-bottom: 1px solid var(--line); counter-reset: st; }
+    .stepper div { flex: 1; display: flex; align-items: center; gap: 9px; font-size: 13px; color: var(--muted); position: relative; }
+    .stepper div::after { content: ""; flex: 1; height: 2px; background: var(--line); margin: 0 12px; }
+    .stepper div:last-child::after { display: none; }
+    .stepper i { font-style: normal; width: 26px; height: 26px; border-radius: 50%; border: 2px solid #cdbfa8; display: grid; place-items: center; font-weight: 700; font-size: 12px; background: var(--paper); }
+    .stepper .on { color: var(--verdigris); font-weight: 700; }
+    .stepper .on i { border-color: var(--copper); background: var(--copper); color: #fff; }
+    .stepper .ok i { border-color: var(--verdigris-2); background: var(--mint); color: var(--verdigris); }
+    .stepper .ok::after { background: var(--verdigris-2); }
+
+    .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 310px; gap: 28px; max-width: 1220px; margin: 26px auto 50px; padding: 0 36px; align-items: start; }
+    main h1 { font-family: "FreeSerif", serif; font-size: 34px; font-weight: 700; color: var(--verdigris); margin: 0 0 6px; line-height: 1.1; }
+    .crumb { margin: 0 0 6px; font-size: 12px; letter-spacing: .22em; text-transform: uppercase; color: var(--copper); font-weight: 700; }
+    .lead { margin: 0 0 20px; color: var(--muted); max-width: 720px; }
+
+    .options { display: flex; flex-direction: column; gap: 10px; }
+    .option { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px 12px 12px;
+              display: grid; grid-template-columns: 76px 1fr auto; grid-template-rows: auto auto auto; column-gap: 16px; align-items: center; }
+    .option .art { grid-row: 1 / span 3; width: 76px; height: 76px; border-radius: 8px; overflow: hidden; }
+    .option .art svg { width: 76px; height: 76px; display: block; }
+    .option h3 { grid-column: 2; margin: 0; font-family: "FreeSerif", serif; font-size: 19px; line-height: 1.2; }
+    .option p { grid-column: 2; margin: 2px 0; color: var(--muted); font-size: 14px; }
+    .option .meta { grid-column: 2; font-size: 12.5px; color: var(--verdigris-2); font-weight: 700; letter-spacing: .02em; }
+    .option button { grid-column: 3; grid-row: 1 / span 3; }
+    .option.chosen { border-color: var(--copper); box-shadow: inset 4px 0 0 var(--copper); background: #fff7ee; }
+
+    .primary { border: 0; border-radius: 999px; background: var(--verdigris); color: #fff; padding: 10px 20px; font-weight: 700; }
+    .primary:hover:not(:disabled) { background: var(--verdigris-2); }
+    .secondary { border: 1.5px solid var(--copper); border-radius: 999px; background: var(--paper); color: var(--copper); padding: 9px 18px; font-weight: 700; }
+    .nav { display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px; }
+    .nav .primary { background: var(--copper); padding: 12px 28px; }
+
+    .screen.intro { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+    .screen.intro .hero { height: 170px; background: var(--verdigris); display: block; }
+    .screen.intro .hero svg { width: 100%; height: 170px; display: block; }
+    .screen.intro .in { padding: 22px 28px 28px; }
+    .summary { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 4px 20px; margin: 16px 0 22px; }
+    .row { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 0; border-bottom: 1px dashed var(--line); }
+    .row:last-child { border-bottom: 0; }
+    .row .what { color: var(--copper); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; }
+    .row strong { font-family: "FreeSerif", serif; font-size: 18px; }
+    .row .meta { font-size: 12.5px; color: var(--muted); }
+    .screen.review > .primary, .screen.intro .primary { background: var(--copper); padding: 12px 28px; }
+    .screen.done { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 34px 28px; text-align: center; }
+    .screen.done::before { content: ""; display: block; width: 70px; height: 70px; margin: 0 auto 10px; border-radius: 50%;
+      background: var(--mint) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 70 70'%3E%3Cpath d='M21 36l10 10 19-21' stroke='%231e4744' stroke-width='6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/70px no-repeat; }
+
+    aside.plate { position: sticky; top: 18px; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+    .plate-head { background: var(--verdigris); color: #fff; padding: 14px 18px; }
+    .plate-head h2 { margin: 0; font-family: "FreeSerif", serif; font-size: 22px; font-weight: 700; }
+    .plate-head span { font-size: 12.5px; color: #cfe3dc; }
+    .plate ol { list-style: none; margin: 0; padding: 6px 18px 10px; }
+    .plate li { padding: 10px 0; border-bottom: 1px dashed var(--line); font-size: 14px; }
+    .plate li:last-child { border-bottom: 0; }
+    .plate li small { display: block; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--copper); font-weight: 700; }
+    .plate li.empty span { color: #a99c88; font-style: italic; }
+    .plate .foot { background: #f3ebdd; padding: 12px 18px; font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; }
+    .plate .foot b { color: var(--ink); }
+    .help { margin-top: 14px; font-size: 12.5px; color: var(--muted); padding: 0 4px; }
+
+    footer { border-top: 3px double var(--copper); background: var(--verdigris); color: #cfe3dc; padding: 22px 36px; display: flex; gap: 48px; font-size: 13px; }
+    footer b { color: #fff; display: block; margin-bottom: 4px; font-family: "FreeSerif", serif; font-size: 15px; }
+  </style>
+</head>
+<body>
+  <div class="util"><span>Pickup only tonight &middot; counter open until 9:30 pm</span><span>Questions? Call the counter: (555) 018-4471</span></div>
+  <header class="top">
+    <svg viewBox="0 0 56 56" aria-hidden="true">
+      <circle cx="28" cy="28" r="27" fill="#1e4744"/>
+      <path d="M15 36c0-9 6-15 13-15s13 6 13 15z" fill="#d98b5c"/>
+      <rect x="13" y="35" width="30" height="5" rx="2" fill="#b5653a"/>
+      <path d="M41 28c4-1 6 1 6 3" stroke="#d98b5c" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M15 29c-4-2-6-6-4-9" stroke="#d98b5c" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <rect x="25" y="16" width="6" height="5" rx="2" fill="#b5653a"/>
+      <path d="M22 12c-2-3 2-4 0-7M28 12c-2-3 2-4 0-7M34 12c-2-3 2-4 0-7" stroke="#d6e8e2" stroke-width="1.6" fill="none" opacity=".8"/>
+    </svg>
+    <div class="wm"><strong>Copper Kettle Kitchen</strong><span>Neighbourhood kitchen</span></div>
+    <div class="where"><b>Pickup counter on Almond Street</b>Dinner for one &middot; about 25 minutes</div>
+  </header>
+  <nav class="stepper" id="stepper" aria-label="Order progress"></nav>
+
+  <div class="wrap">
+    <main id="main"></main>
+    <aside class="plate" aria-label="Your order so far">
+      <div class="plate-head"><h2>Your order</h2><span>Pickup ticket &middot; dinner for one</span></div>
+      <ol id="plate-list"></ol>
+      <div class="foot"><span>Tonight's price</span><b>$12.00</b></div>
+    </aside>
+  </div>
+
+  <footer>
+    <div><b>Copper Kettle Kitchen</b>Almond Street pickup counter</div>
+    <div><b>Hours</b>Dinner service 5:00 &ndash; 9:30 pm</div>
+    <div><b>Help</b>Allergies: please tell the counter team</div>
+  </footer>
+
+  <template id="copy">
+    <section data-screen="intro">
+      <div class="hero"><svg viewBox="0 0 900 170" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <rect width="900" height="170" fill="#1e4744"/>
+        <g fill="none" stroke="#2b605b" stroke-width="2"><circle cx="120" cy="150" r="90"/><circle cx="120" cy="150" r="120"/><circle cx="780" cy="20" r="80"/><circle cx="780" cy="20" r="110"/></g>
+        <ellipse cx="450" cy="150" rx="150" ry="16" fill="#163734"/>
+        <path d="M340 140c0-45 48-78 110-78s110 33 110 78z" fill="#b5653a"/>
+        <path d="M350 118c20-26 58-44 100-44" stroke="#d98b5c" stroke-width="8" fill="none" stroke-linecap="round" opacity=".7"/>
+        <rect x="330" y="136" width="240" height="14" rx="6" fill="#8f4c2a"/>
+        <path d="M560 110c30-8 52 4 58 22" stroke="#b5653a" stroke-width="12" fill="none" stroke-linecap="round"/>
+        <rect x="432" y="50" width="36" height="16" rx="6" fill="#8f4c2a"/>
+        <g stroke="#d6e8e2" stroke-width="3" fill="none" opacity=".6"><path d="M420 40c-8-10 8-14 0-26"/><path d="M450 36c-8-10 8-14 0-26"/><path d="M480 40c-8-10 8-14 0-26"/></g>
+      </svg></div>
+      <div class="in">
+        <p class="crumb">Pickup order</p>
+        <h1>Tonight's pickup order</h1>
+        <p class="lead">Dinner for one, ready at the counter in about 25 minutes. Every main is $12.00 tonight and the side, drink and sweet all come with it at no extra cost. Tonight's special is the Copper Kettle Pot Pie. You can change any step before you place the order.</p>
+        <button class="primary" data-action="start">Start your order</button>
+      </div>
+    </section>
+    <section data-screen="review">
+      <p class="crumb">Almost done</p>
+      <h1>Review your order</h1>
+      <p class="lead">Here is what the kitchen will cook. You can still change any line.</p>
+      <div class="summary"></div>
+      <button class="primary" data-action="confirm">Place order</button>
+    </section>
+    <section data-screen="done">
+      <h1>Order confirmed</h1>
+      <p class="lead" style="margin:0 auto">Reference CK-70413. Your bag will be on the pickup counter in about 25 minutes.</p>
+    </section>
+  </template>
+
+  <template id="catalog">
+    <section class="group" data-group="main">
+      <h2>Tonight's mains</h2>
+      <p>Every main is $12.00 tonight and comes with the side, drink and sweet you pick at the next three steps.</p>
+      <article class="option" data-id="m1" data-carbs_g="48" data-protein_g="34" data-fat_g="41">
+        <h3>Copper Kettle Pot Pie</h3>
+        <p>Flaky pastry lid over chicken, peas, carrots and cream gravy.</p>
+        <span class="meta">740 kcal &middot; $12.00 &middot; House special</span>
+      </article>
+      <article class="option" data-id="m2" data-carbs_g="68" data-protein_g="38" data-fat_g="44">
+        <h3>Kettle Fried Chicken Plate</h3>
+        <p>Buttermilk-fried chicken thighs with skin-on mashed potatoes, pan gravy and a buttermilk biscuit.</p>
+        <span class="meta">690 kcal &middot; $12.00 &middot; Most popular</span>
+      </article>
+      <article class="option" data-id="m3" data-carbs_g="6" data-protein_g="52" data-fat_g="48">
+        <h3>Lemon-Herb Roast Chicken</h3>
+        <p>Half a roast chicken with buttered green beans and garlic-thyme pan jus.</p>
+        <span class="meta">730 kcal &middot; $12.00</span>
+      </article>
+      <article class="option" data-id="m4" data-carbs_g="88" data-protein_g="27" data-fat_g="46">
+        <h3>Creamy Penne Alfredo</h3>
+        <p>Penne in parmesan cream with roasted mushrooms, garlic bread on the side.</p>
+        <span class="meta">750 kcal &middot; $12.00 &middot; Friday favorite</span>
+      </article>
+      <article class="option" data-id="m5" data-carbs_g="5" data-protein_g="41" data-fat_g="39">
+        <h3>Salmon with Lemon-Dill Cream</h3>
+        <p>Pan-seared salmon with roasted asparagus and a lemon-dill cream sauce.</p>
+        <span class="meta">700 kcal &middot; $12.00</span>
+      </article>
+      <article class="option" data-id="m6" data-carbs_g="8" data-protein_g="46" data-fat_g="44">
+        <h3>Bistro Steak with Blue-Cheese Butter</h3>
+        <p>Grilled sirloin under blue-cheese butter, with creamed spinach and roasted mushrooms.</p>
+        <span class="meta">760 kcal &middot; $12.00</span>
+      </article>
+      <article class="option" data-id="m7" data-carbs_g="74" data-protein_g="24" data-fat_g="31">
+        <h3>Sweet Corn and Poblano Tamales</h3>
+        <p>Corn masa tamales steamed in their husks with sweet corn, poblano and melted queso, under a spoon of salsa verde.</p>
+        <span class="meta">720 kcal &middot; $12.00 &middot; Chef's pick</span>
+      </article>
+    </section>
+    <section class="group" data-group="side">
+      <h2>Add a side</h2>
+      <p>One side comes with your main, whichever you take. Pick the one you want on the plate tonight.</p>
+      <article class="option" data-id="s1" data-carbs_g="42" data-protein_g="5" data-fat_g="6">
+        <h3>Cilantro-lime rice</h3>
+        <p>Long-grain rice tossed with lime juice, cilantro and a little butter.</p>
+        <span class="meta">Included</span>
+      </article>
+      <article class="option" data-id="s2" data-carbs_g="36" data-protein_g="4" data-fat_g="14">
+        <h3>Crispy potato wedges</h3>
+        <p>Thick-cut potatoes roasted crisp, with chipotle mayo on the side.</p>
+        <span class="meta">Included</span>
+      </article>
+      <article class="option" data-id="s3" data-carbs_g="5" data-protein_g="7" data-fat_g="16">
+        <h3>Garlic-butter mushrooms and spinach</h3>
+        <p>Cremini mushrooms and spinach folded through garlic butter.</p>
+        <span class="meta">Included</span>
+      </article>
+      <article class="option" data-id="s4" data-carbs_g="38" data-protein_g="6" data-fat_g="12">
+        <h3>Warm corn bread</h3>
+        <p>A thick square of skillet corn bread with honey butter.</p>
+        <span class="meta">Included &middot; Most popular</span>
+      </article>
+      <article class="option" data-id="s5" data-carbs_g="30" data-protein_g="7" data-fat_g="11">
+        <h3>Garlic bread</h3>
+        <p>Two slices of toasted sourdough with garlic butter and parsley.</p>
+        <span class="meta">Included</span>
+      </article>
+    </section>
+    <section class="group" data-group="drink">
+      <h2>Something to drink</h2>
+      <p>One drink comes with every pickup order, whichever you take. Pick the one you want and carry on.</p>
+      <article class="option" data-id="k1" data-carbs_g="30" data-protein_g="1" data-fat_g="0">
+        <h3>Mango agua fresca</h3>
+        <p>Blended mango, cane sugar and lime, poured over ice.</p>
+        <span class="meta">Included &middot; Kitchen's pick</span>
+      </article>
+      <article class="option" data-id="k2" data-carbs_g="0" data-protein_g="0" data-fat_g="0">
+        <h3>Sparkling water with lime and mint</h3>
+        <p>Chilled sparkling water, a wedge of lime and a sprig of mint.</p>
+        <span class="meta">Included</span>
+      </article>
+      <article class="option" data-id="k3" data-carbs_g="26" data-protein_g="2" data-fat_g="0">
+        <h3>Fresh-squeezed orange juice</h3>
+        <p>Two oranges pressed to order and poured over ice.</p>
+        <span class="meta">Included</span>
+      </article>
+      <article class="option" data-id="k4" data-carbs_g="28" data-protein_g="0" data-fat_g="0">
+        <h3>House lemonade</h3>
+        <p>Fresh lemon juice, cane sugar and cold water.</p>
+        <span class="meta">Included</span>
+      </article>
+    </section>
+    <section class="group" data-group="dessert">
+      <h2>A sweet to finish?</h2>
+      <p>Last step before the review. One sweet comes with tonight's order at no extra cost &mdash; take one, or leave it out.</p>
+      <article class="option" data-id="z1" data-carbs_g="34" data-protein_g="5" data-fat_g="18">
+        <h3>Warm brownie</h3>
+        <p>Dark chocolate brownie baked to order, still warm in the box.</p>
+        <span class="meta">Included &middot; Most popular</span>
+      </article>
+      <article class="option" data-id="z2" data-carbs_g="8" data-protein_g="6" data-fat_g="24">
+        <h3>Whipped mascarpone with berries</h3>
+        <p>Whipped mascarpone with fresh raspberries and strawberries.</p>
+        <span class="meta">Included</span>
+      </article>
+      <article class="option" data-id="z3" data-carbs_g="41" data-protein_g="4" data-fat_g="17">
+        <h3>Cinnamon churros</h3>
+        <p>Three churros rolled in cinnamon sugar, with dulce de leche to dip.</p>
+        <span class="meta">Included</span>
+      </article>
+      <article class="option" data-id="z4" data-carbs_g="46" data-protein_g="7" data-fat_g="19">
+        <h3>Tres leches cup</h3>
+        <p>Sponge cake soaked in three milks under a cap of cream.</p>
+        <span class="meta">Included</span>
+      </article>
+      <article class="option" data-id="z5" data-carbs_g="0" data-protein_g="0" data-fat_g="0">
+        <h3>No sweet tonight</h3>
+        <p>Finish with the main and leave it there.</p>
+        <span class="meta">Nothing added</span>
+      </article>
+    </section>
+  </template>
+
+  <script>
+    (function () {
+      var LABELS = { select: "Select", selected: "Selected \u00b7 keep this", next: "Continue", change: "Change", step: "Step" };
+      var main = document.getElementById("main");
+      var catalog = document.getElementById("catalog").content;
+      var copy = document.getElementById("copy").content;
+      var GROUPS = Array.prototype.map.call(catalog.querySelectorAll("section.group"), function (sec) {
+        var prompt = sec.querySelector(":scope > p");
+        var options = Array.prototype.map.call(sec.querySelectorAll("article.option"), function (art) {
+          var meta = art.querySelector(".meta");
+          return { id: art.dataset.id, name: art.querySelector("h3").textContent.trim(),
+                   meta: meta ? meta.textContent.trim() : "", node: art };
+        });
+        var preset = sec.dataset.preset || null;
+        var known = options.filter(function (o) { return o.id === preset; }).length > 0;
+        return {
+          id: sec.dataset.group,
+          title: sec.querySelector(":scope > h2").textContent.trim(),
+          prompt: prompt ? prompt.textContent.trim() : "",
+          preset: known ? preset : null,
+          options: options
+        };
+      });
+      var state = { screen: null, group: null, selections: {} };
+      var marked = {};
+      var seq = 0;
+      window.__state = state;
+      window.__events = [];
+      window.__completed = false;
+
+      function log(event) { window.__events.push(Object.assign({ seq: ++seq }, event)); }
+      function el(tag, cls, text) {
+        var node = document.createElement(tag);
+        if (cls) node.className = cls;
+        if (text !== undefined) node.textContent = text;
+        return node;
+      }
+      function button(action, label, cls, disabled) {
+        var node = el("button", cls, label);
+        node.dataset.action = action;
+        node.disabled = !!disabled;
+        return node;
+      }
+      function hash(str) { var h = 2166136261; for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; } return h; }
+      // Plate artwork is decorative and seeded from the option id only.
+      var PAL = [["#efe4d2", "#b5653a", "#2b605b"], ["#e3ece7", "#2b605b", "#b5653a"], ["#f3e8d9", "#8f4c2a", "#d98b5c"], ["#e8e1d4", "#5b7d73", "#b5653a"]];
+      function art(id) {
+        var h = hash(id), p = PAL[h % PAL.length], n = 3 + (h >>> 3) % 4, bits = "";
+        for (var k = 0; k < n; k++) {
+          var a = k * 6.283 / n + (h >>> 7) % 6, r = 10 + (h >>> (k + 9)) % 8;
+          bits += '<circle cx="' + (38 + Math.cos(a) * r).toFixed(1) + '" cy="' + (40 + Math.sin(a) * r * 0.7).toFixed(1) + '" r="' + (3 + (h >>> (k + 4)) % 4) + '" fill="' + p[2] + '"/>';
+        }
+        return '<svg viewBox="0 0 76 76" aria-hidden="true"><rect width="76" height="76" fill="' + p[0] + '"/>' +
+          '<ellipse cx="38" cy="42" rx="31" ry="24" fill="#fffcf6" stroke="' + p[1] + '" stroke-width="2"/>' +
+          '<ellipse cx="38" cy="41" rx="21" ry="15" fill="' + p[1] + '" opacity=".35"/>' + bits +
+          '<path d="M' + (12 + h % 8) + ' 16h' + (10 + (h >>> 5) % 14) + '" stroke="' + p[1] + '" stroke-width="3" stroke-linecap="round" opacity=".5"/></svg>';
+      }
+      function chrome() {
+        var steps = [{ key: "intro", label: "Start" }].concat(GROUPS.map(function (g) { return { key: g.id, label: g.title }; }))
+          .concat([{ key: "review", label: "Review" }]);
+        var cur = state.screen === "group" ? state.group : state.screen;
+        var bar = document.getElementById("stepper");
+        bar.replaceChildren();
+        steps.forEach(function (s, i) {
+          var d = el("div"), num = el("i", null, String(i + 1));
+          var done = state.screen === "done" || s.key === "intro" && cur !== "intro" || (s.key in state.selections && s.key !== cur);
+          if (s.key === cur) d.className = "on"; else if (done) d.className = "ok";
+          d.appendChild(num); d.appendChild(el("span", null, s.label));
+          bar.appendChild(d);
+        });
+        var list = document.getElementById("plate-list");
+        list.replaceChildren();
+        GROUPS.forEach(function (g) {
+          var o = g.options.filter(function (x) { return x.id === state.selections[g.id]; })[0];
+          var li = el("li", o ? "" : "empty");
+          li.appendChild(el("small", null, g.title));
+          li.appendChild(el("span", null, o ? o.name : "Not chosen yet"));
+          list.appendChild(li);
+        });
+      }
+      function groupOf(id) { return GROUPS.filter(function (g) { return g.id === id; })[0]; }
+      function nextUnselected() { return GROUPS.filter(function (g) { return !(g.id in state.selections); })[0]; }
+      function screen(name) {
+        var node = document.importNode(copy.querySelector('section[data-screen="' + name + '"]'), true);
+        node.className = "screen " + name;
+        return node;
+      }
+
+      function renderIntro() {
+        state.screen = "intro"; state.group = null;
+        log({ type: "view", screen: "intro" });
+        var node = screen("intro");
+        node.querySelector('[data-action="start"]').addEventListener("click", function () {
+          var g = nextUnselected();
+          if (g) renderGroup(g.id); else renderReview();
+        });
+        main.replaceChildren(node); chrome();
+      }
+
+      function renderGroup(id) {
+        state.screen = "group"; state.group = id;
+        log({ type: "shown", group: id });
+        var g = groupOf(id);
+        // Steps that arrive with a standard choice already on the plate mark it the
+        // first time they are opened; coming back from the review leaves it alone.
+        if (g.preset && !marked[id]) {
+          marked[id] = true;
+          if (!(id in state.selections)) {
+            state.selections[id] = g.preset;
+            log({ type: "preselect", group: id, optionId: g.preset });
+          }
+        }
+        paintGroup();
+      }
+
+      function paintGroup() {
+        var g = groupOf(state.group), index = GROUPS.indexOf(g), chosen = state.selections[g.id];
+        var node = el("section", "step");
+        node.appendChild(el("p", "crumb", LABELS.step + " " + (index + 1) + " of " + GROUPS.length));
+        node.appendChild(el("h1", null, g.title));
+        if (g.prompt) node.appendChild(el("p", "lead", g.prompt));
+        var list = el("div", "options");
+        g.options.forEach(function (o) {
+          var card = document.importNode(o.node, true);
+          var pic = el("div", "art"); pic.innerHTML = art(o.id);
+          card.insertBefore(pic, card.firstChild);
+          var isChosen = chosen === o.id;
+          if (isChosen) card.classList.add("chosen");
+          var label = isChosen ? LABELS.selected : LABELS.select;
+          // The chosen card keeps a live button so re-affirming a choice is always an
+          // available action; select() ignores it, so no event is logged twice.
+          var b = button("select-" + o.id, label, isChosen ? "secondary" : "primary", false);
+          b.setAttribute("aria-label", label + ": " + o.name);
+          b.addEventListener("click", function () { select(g.id, o.id); });
+          card.appendChild(b);
+          list.appendChild(card);
+        });
+        node.appendChild(list);
+        var nav = el("div", "nav");
+        var cont = button("continue", LABELS.next, "primary", !(g.id in state.selections));
+        cont.addEventListener("click", advance);
+        nav.appendChild(cont);
+        node.appendChild(nav);
+        main.replaceChildren(node); chrome();
+      }
+
+      function select(gid, oid) {
+        if (state.screen !== "group" || state.group !== gid || state.selections[gid] === oid) return;
+        state.selections[gid] = oid;
+        log({ type: "select", group: gid, optionId: oid });
+        paintGroup();
+      }
+
+      function advance() {
+        if (state.screen !== "group" || !(state.group in state.selections)) return;
+        var g = nextUnselected();
+        if (g) renderGroup(g.id); else renderReview();
+      }
+
+      function renderReview() {
+        state.screen = "review"; state.group = null;
+        log({ type: "view", screen: "review" });
+        var node = screen("review"), summary = node.querySelector(".summary");
+        GROUPS.forEach(function (g) {
+          var o = g.options.filter(function (x) { return x.id === state.selections[g.id]; })[0];
+          var row = el("div", "row"), left = el("div");
+          left.appendChild(el("div", "what", g.title));
+          left.appendChild(el("strong", null, o ? o.name : ""));
+          if (o && o.meta) left.appendChild(el("div", "meta", o.meta));
+          var b = button("change-" + g.id, LABELS.change, "secondary");
+          b.setAttribute("aria-label", LABELS.change + ": " + g.title);
+          b.addEventListener("click", function () { renderGroup(g.id); });
+          row.appendChild(left);
+          row.appendChild(b);
+          summary.appendChild(row);
+        });
+        node.querySelector('[data-action="confirm"]').addEventListener("click", complete);
+        main.replaceChildren(node); chrome();
+      }
+
+      function complete() {
+        if (state.screen !== "review" || window.__completed || nextUnselected()) return;
+        window.__completed = true;
+        state.screen = "done"; state.group = null;
+        log({ type: "complete", selections: Object.assign({}, state.selections) });
+        main.replaceChildren(screen("done")); chrome();
+      }
+
+      renderIntro();
+    })();
+  </script>
+</body>
+</html>

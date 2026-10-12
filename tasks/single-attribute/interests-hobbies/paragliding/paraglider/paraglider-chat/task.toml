@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/paraglider-chat"
+theme = "Hobby: Paragliding — Active"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "travel"
+tags = [ "persona-adherence", "paraglider", "llm-judge",]
+
+[[checks]]
+dimension_id = "hob_paragliding"
+dimension_label = "Hobby: Paragliding"
+category = "Interests: Hobbies"
+anchor_value = "Active"
+evaluator = "llm-judge"
+adherence_signal = "The persona books the paragliding days, raising that interest unprompted, even though the assistant only pushes ground-based activities."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

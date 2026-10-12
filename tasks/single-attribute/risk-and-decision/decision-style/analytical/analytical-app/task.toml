@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/analytical-app"
+theme = "Decision style: Analytical experiment decisions"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "product experimentation"
+tags = ["persona-adherence", "decision-style", "single-attribute", "rule-based", "real-app"]
+
+[[checks]]
+dimension_id = "decision_style"
+dimension_label = "Decision style"
+category = "Risk & Decision"
+value = "Analytical"
+evaluator = "rule-based"
+evaluator_name = "decision_style=Analytical"
+adherence_signal = "Across three native-app experiment cards, at least two chosen next steps use explicit quantitative evidence or planned analysis rather than intuition, authority, or a stakeholder vote."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 900.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/northstar/start-northstar.sh"
+timeout_sec = 60.0
+retries = 5

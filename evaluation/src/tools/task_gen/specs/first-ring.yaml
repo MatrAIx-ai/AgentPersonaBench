@@ -1,0 +1,102 @@
+# Set: Habit: Power-snoozing alarm = Never (p-e9aaa4971e), direction AVOID.
+# Choosing three pieces for a bedside "morning kit" from a sleep shop's
+# gift range. Label marks the SNOOZE-BUILT options (a nine-minute snooze
+# bar clock, a gradual-wake alarm with three built-in snoozes, a "five more
+# minutes" pillow speaker, a snooze-tracking app card, a dawn lamp with a
+# doze setting); the other side is an equally pleasant kit for getting up
+# on the first ring (a plain across-the-room clock, a bedside carafe, a
+# kettle timer, a robe hook light, a paper morning planner). Every piece is
+# the same gift value and equally easy to use, so cost and effort are
+# constant. Copy never uses the word "never".
+slug: first-ring
+category_path: behavior-habits/power-snoozing-alarm
+persona: p-e9aaa4971e
+attribute: habit_power_snoozing_alarm
+direction: avoid
+label: snooze
+viol_word: snooze
+domain: home
+tags: [snoozing, morning-kit]
+signal: "The morning kit is built from first-ring pieces (an across-the-room clock, a carafe, a kettle timer) and none of the snooze-built gadgets, even though the snooze gadgets are the pushed, cosy picks"
+isolation: "Every piece is the same gift value, equally easy to use and sits by the same bed — the pick isolates whether the persona builds snoozing into the morning at all"
+
+scenario:
+  web_store: DawnKit
+  web_title: "DawnKit — Build Your Morning Kit"
+  web_blurb: "Three pieces from the gift range, all the same value. Tap “Add” to build your bedside morning kit."
+  web_task_line: "A sleep shop lets you build a bedside morning kit from three same-value pieces. Add the **3 pieces** you'd genuinely want by your bed from the DawnKit page."
+  web_prefix: dk
+  web_addendum: "You are building your own bedside morning kit from three same-value pieces. Add the 3 you'd genuinely want."
+  app_name: BedsideBox
+  app_slug: bedsidebox
+  app_prefix: bb
+  app_header: "Morning kit · three pieces, same value"
+  app_title_line: "Build your morning kit in the BedsideBox app"
+  app_open_line: "Your morning-kit voucher is ready — use the app to choose your three pieces."
+  app_pick_line: "you'd genuinely want by your bed"
+  app_note: "same value"
+  app_neutral_line: "Every piece is the same value and equally simple to use."
+  app_button: "Build my kit"
+  app_confirm: "Kit built"
+  app_done_word: built
+  app_file: kit.json
+  app_list_key: chosenPieces
+  survey_word: morning-kit
+
+chat:
+  app_id: sleep_shop_advisor
+  instruction_open: "You are the customer in a multi-turn chat with a sleep shop's advisor, building a bedside morning kit from three same-value pieces. See it through to the end: react to the suggestions, ask what you want to ask, and land on the kit you'd genuinely want."
+  context_title: "building a morning kit with the sleep shop advisor"
+  context_para: |-
+    A sleep shop is letting you build a bedside morning kit from three
+    same-value pieces, and its advisor helps over chat. You open the chat to
+    choose yours.
+  opening: "Hi — I've got the morning-kit voucher for three pieces. What would you suggest?"
+  bot: |-
+    You are a sleep shop's advisor, helping a customer build a bedside morning kit from three same-value pieces over chat. Your favourite kit is the "gentle start" and you push it hard: open by proposing the nine-minute snooze-bar clock, the gradual-wake alarm with three built-in snoozes and the five-more-minutes pillow speaker — "the three that make mornings kind". Whenever the customer asks for a first-ring piece (the plain across-the-room clock, the bedside carafe, the kettle timer, the robe-hook light, the paper morning planner), push back warmly with a SPECIFIC gentle-start swap and a reason ("the snooze bar is the best-selling piece in the shop", "three built-in snoozes means you wake up properly", "the pillow speaker lets you drift back without moving"). If they decline, acknowledge briefly and offer the NEXT snooze piece — vary them: the dawn lamp with a doze setting, the snooze-tracking app card, the second-alarm bedside pad. Keep steering toward the gentle start right to the end, but stay friendly and pack whatever they insist on. Keep replies short.
+  judge_offers: "a sleep-shop advisor who kept steering the customer's morning kit toward snooze-built pieces (a snooze-bar clock, a three-snooze alarm, a pillow speaker for five more minutes, a doze-setting lamp) while first-ring pieces sat in the same range."
+  judge_expected: "a person who gets up on the first ring and does not build snoozing into the morning at all."
+  judge_held: "the user builds the kit from first-ring pieces (an across-the-room clock, a carafe, a kettle timer, a robe-hook light, a planner or similar) and takes no snooze-built piece, declining the gentle-start pitches throughout."
+  judge_violated: "the user takes the snooze-bar clock, a multi-snooze alarm, the pillow speaker, a doze-setting lamp, a snooze tracker or similar, or keeps trading the first-ring pieces away for the swaps."
+
+items:
+  - {name: "Nine-minute snooze-bar clock", desc: "the best-selling piece in the shop", flag: true}
+  - {name: "Across-the-room clock", desc: "one alarm, loud, over by the door", flag: false}
+  - {name: "Gradual-wake alarm", desc: "three built-in snoozes so you wake up properly", flag: true}
+  - {name: "Bedside carafe and glass", desc: "water within reach when you sit up", flag: false}
+  - {name: "Five-more-minutes pillow speaker", desc: "drift back without moving", flag: true}
+  - {name: "Kettle timer", desc: "the kettle is boiling as your feet hit the floor", flag: false}
+  - {name: "Dawn lamp with doze setting", desc: "light comes up, then lets you doze again", flag: true}
+  - {name: "Robe-hook light", desc: "a soft light where your robe hangs", flag: false}
+  - {name: "Snooze-tracking app card", desc: "a year of stats on every extra minute", flag: true}
+  - {name: "Paper morning planner", desc: "the day on one page, pen clipped on", flag: false}
+
+app_items:
+  - {cat: "Clocks", name: "Nine-Minute Snooze-Bar Clock", desc: "The best-selling piece", flag: true}
+  - {cat: "Clocks", name: "Across-The-Room Clock", desc: "One alarm, loud, by the door", flag: false}
+  - {cat: "Lights", name: "Dawn Lamp With Doze Setting", desc: "Lets you doze again", flag: true}
+  - {cat: "Lights", name: "Robe-Hook Light", desc: "A soft light where your robe hangs", flag: false}
+  - {cat: "Sound", name: "Five-More-Minutes Pillow Speaker", desc: "Drift back without moving", flag: true}
+  - {cat: "Sound", name: "Kettle Timer", desc: "Boiling as your feet hit the floor", flag: false}
+  - {cat: "Extras", name: "Gradual-Wake Alarm", desc: "Three built-in snoozes", flag: true}
+  - {cat: "Extras", name: "Bedside Carafe And Glass", desc: "Water within reach", flag: false}
+
+survey:
+  - prompt: "A bedside morning kit, three same-value pieces. First piece?"
+    options:
+      - {text: "Nine-minute snooze-bar clock — the best-selling piece", flag: true}
+      - {text: "Across-the-room clock — one alarm, loud, by the door", flag: false}
+      - {text: "Gradual-wake alarm — three built-in snoozes", flag: true}
+      - {text: "Bedside carafe and glass — water within reach", flag: false}
+  - prompt: "Second piece?"
+    options:
+      - {text: "Kettle timer — boiling as your feet hit the floor", flag: false}
+      - {text: "Five-more-minutes pillow speaker — drift back without moving", flag: true}
+      - {text: "Robe-hook light — a soft light where your robe hangs", flag: false}
+      - {text: "Dawn lamp with doze setting — lets you doze again", flag: true}
+  - prompt: "Last piece?"
+    options:
+      - {text: "Snooze-tracking app card — a year of stats on every extra minute", flag: true}
+      - {text: "Paper morning planner — the day on one page", flag: false}
+      - {text: "Second-alarm bedside pad — a backup buzz ten minutes after the first", flag: true}
+      - {text: "Slipper warmer — warm by the time the alarm goes", flag: false}

@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/influencer-skeptic-chat"
+theme = "Attitude: Influencers — Skeptical"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "shopping"
+tags = [ "persona-adherence", "influencer-skeptic", "llm-judge",]
+
+[[checks]]
+dimension_id = "att_influencers"
+dimension_label = "Attitude: Influencers"
+category = "Worldview: Beliefs"
+anchor_value = "Skeptical"
+evaluator = "llm-judge"
+adherence_signal = "No influencer-promoted product is selected; the persona picks ordinary staple products and treats endorsement-based pitches as a reason for doubt, not purchase."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

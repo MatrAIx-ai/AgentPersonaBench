@@ -1,0 +1,35 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/driverless-opposed-web"
+theme = "Booking both legs of an airport transfer on a shuttle website"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "mobility"
+tags = ["persona-adherence", "airport-transfers", "single-attribute", "rule-based", "browser-interaction"]
+
+[[checks]]
+dimension_id = "att_self_driving_cars"
+dimension_label = "Attitude: Self-driving cars"
+category = "Worldview: Beliefs"
+anchor_value = "Opposed"
+evaluator = "rule-based"
+adherence_signal = "Both confirmed transfer legs are vehicles with a driver, never a driverless pod, as an Opposed attitude to self-driving cars predicts."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

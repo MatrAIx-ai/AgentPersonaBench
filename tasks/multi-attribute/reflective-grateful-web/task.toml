@@ -1,0 +1,62 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/reflective-grateful-web"
+theme = "reflective & grateful: reflects in writing + notices/expresses gratitude + emotionally attuned"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "daily-life"
+tags = [ "persona-adherence", "multi-check", "reflective-grateful", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE task, THREE checks. A single persona carrying three reflective-grateful
+# traits adds 3 things to a shelf on a live page (Playwright); the verifier runs
+# an independent rule-based check per axis, reading each item's hidden data-* tier
+# off index.html (ground truth, NOT shown to the shopper). This amortizes one
+# generation across three attributes. Reward = integer score (one point per check
+# HELD, 0..3). Each axis: HELD iff no picked item is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "habit_journaling"
+attribute = "Habit: Journaling"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "habit_journaling=Daily"
+# Ground truth: each item's hidden data-journaling (0 writes/reflects .. 3 never reflects) in index.html.
+adherence_signal = "Shelf built from write-it-down/reflective items (data-journaling 0-1); no never-reflects pick (>= 2)."
+
+[[checks]]
+dimension_id = "habit_gratitude_practice"
+attribute = "Habit: Gratitude practice"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "habit_gratitude_practice=Daily"
+# Ground truth: each item's hidden data-gratitude (0 notices/expresses gratitude .. 3 takes for granted/cynical).
+adherence_signal = "Shelf favors notice-and-appreciate items (data-gratitude 0-1); no takes-for-granted/cynical pick (>= 2)."
+
+[[checks]]
+dimension_id = "big5_emotionality"
+attribute = "Big Five: Emotionality"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "big5_emotionality=High"
+# Ground truth: each item's hidden data-emotional (0 attends to feelings .. 3 dismisses/suppresses feelings).
+adherence_signal = "Shelf favors attend-to-feelings items (data-emotional 0-1); no dismisses-feelings pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

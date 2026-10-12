@@ -1,0 +1,12 @@
+# Hidden ground-truth for the avoids-jargon-app verifier. Lives under tests/ (never
+# mounted into the app container), so the jargon label is not readable from the
+# desktop terminal — the agent picks drafts by their visible text alone.
+has_jargon:
+  r01: false
+  r02: true
+  r03: false
+  r04: true
+  r05: false
+  r06: true
+  r07: false
+  r08: true

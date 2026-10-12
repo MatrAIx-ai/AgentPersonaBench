@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/news-avoider-chat"
+theme = "News consumption: Avoids news"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "media"
+tags = [ "persona-adherence", "news-avoider", "llm-judge",]
+
+[[checks]]
+dimension_id = "lstyle_news_freq"
+dimension_label = "News consumption"
+category = "Interests: Culture"
+anchor_value = "Avoids news"
+evaluator = "llm-judge"
+adherence_signal = "No news, headlines, politics, or current-affairs show is selected for any listening slot; every subscription is a news-free show."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

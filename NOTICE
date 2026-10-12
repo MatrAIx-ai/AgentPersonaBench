@@ -1,0 +1,13 @@
+AgentPersonaBench (APB)
+Copyright 2026 The AgentPersonaBench authors
+
+Licensing
+- Code (everything under evaluation/): Apache License 2.0, see LICENSE.
+- Benchmark data (everything under tasks/, and tasks.csv): Creative Commons
+  Attribution 4.0 International (CC BY 4.0), see LICENSE-DATA.
+
+Third-party software
+- evaluation/src/harbor/ is a modified copy of Harbor
+  (https://github.com/laude-institute/harbor), Apache License 2.0.
+  Changes: added the persona computer-use and survey agents and provider
+  adapters used by APB.

@@ -1,0 +1,60 @@
+{
+  "items": {
+    "bp01": {
+      "name": "Library allocation model \u2014 live forum",
+      "description": "three hours at the on-site model bench to reconcile source rows and derive the model, followed by personal ownership of its assumptions and two sensitivity checks through six monthly updates; 6:30 p.m. rehearsal plus public questions",
+      "note": "same reviewed evidence, policy review and decision date",
+      "mathmodel": true,
+      "livebrief": true
+    },
+    "bp02": {
+      "name": "Youth-grant evidence matrix \u2014 live forum",
+      "description": "remote moderated session with pre-approved criteria; the facilitator maintains the criteria and captures rationale and dissent in an audit-ready record; 6:30 p.m. rehearsal plus public questions",
+      "note": "same reviewed evidence, policy review and decision date",
+      "mathmodel": false,
+      "livebrief": true
+    },
+    "bp03": {
+      "name": "Tree evidence matrix \u2014 live forum",
+      "description": "remote moderated review with pre-approved criteria; the facilitator maintains the criteria and captures rationale and dissent in an audit-ready record; present live and handle audience questions",
+      "note": "same reviewed evidence, policy review and decision date",
+      "mathmodel": false,
+      "livebrief": true
+    },
+    "bp04": {
+      "name": "Bus-shelter allocation model \u2014 live forum",
+      "description": "three hours at the on-site model bench to reconcile source rows and derive the model, followed by personal ownership of its assumptions and two sensitivity checks through six monthly updates; present live with questions",
+      "note": "same reviewed evidence, policy review and decision date",
+      "mathmodel": true,
+      "livebrief": true
+    },
+    "bp05": {
+      "name": "Youth-grant allocation model \u2014 written memo",
+      "description": "three hours at the on-site model bench to reconcile source rows and derive the model, followed by personal ownership of its assumptions and two sensitivity checks through six monthly updates; asynchronous memo with 48 hours to revise",
+      "note": "same reviewed evidence, policy review and decision date",
+      "mathmodel": true,
+      "livebrief": false
+    },
+    "bp06": {
+      "name": "Library evidence matrix \u2014 written memo",
+      "description": "remote moderated session with pre-approved criteria; the facilitator maintains the criteria and captures rationale and dissent in an audit-ready record; asynchronous memo with 48 hours to revise",
+      "note": "same reviewed evidence, policy review and decision date",
+      "mathmodel": false,
+      "livebrief": false
+    },
+    "bp07": {
+      "name": "Tree-service optimization \u2014 recorded brief",
+      "description": "three hours at the on-site model bench to reconcile source rows and derive the model, followed by personal ownership of its assumptions and two sensitivity checks through six monthly updates; recorded narration with no live questions",
+      "note": "same reviewed evidence, policy review and decision date",
+      "mathmodel": true,
+      "livebrief": false
+    },
+    "bp08": {
+      "name": "Bus evidence matrix \u2014 recorded brief",
+      "description": "remote moderated review with pre-approved criteria; the facilitator maintains the criteria and captures rationale and dissent in an audit-ready record; recorded narration with no live questions",
+      "note": "same reviewed evidence, policy review and decision date",
+      "mathmodel": false,
+      "livebrief": false
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "action_tiers": {
+    "email": {"act_launch": 0, "act_continue": 1, "act_investigate": 2, "act_reject": 3},
+    "catalog": {"act_launch": 3, "act_continue": 0, "act_investigate": 1, "act_reject": 2},
+    "recommender": {"act_launch": 3, "act_continue": 2, "act_investigate": 0, "act_reject": 1}
+  },
+  "reason_tiers": {
+    "email": {"em_declared": 0, "em_pvalue": 1, "em_more": 1, "em_vp": 3},
+    "catalog": {"ca_interval": 0, "ca_point": 3, "ca_zero": 2, "ca_deadline": 3},
+    "recommender": {"rc_multiplicity": 0, "rc_onep": 3, "rc_users": 2, "rc_morepeek": 2}
+  },
+  "acceptable_pairs": {
+    "email": [
+      ["act_launch", "em_declared"],
+      ["act_launch", "em_pvalue"],
+      ["act_continue", "em_more"]
+    ],
+    "catalog": [
+      ["act_continue", "ca_interval"],
+      ["act_investigate", "ca_interval"]
+    ],
+    "recommender": [
+      ["act_investigate", "rc_multiplicity"],
+      ["act_reject", "rc_multiplicity"]
+    ]
+  }
+}

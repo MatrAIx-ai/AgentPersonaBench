@@ -1,0 +1,14 @@
+# host-side ground truth (per-id axis tiers) -- NOT mounted to the agent
+tiers:
+  p01: influence=0 status=1 authority=0
+  p02: influence=1 status=0 authority=1
+  p03: influence=0 status=1 authority=0
+  p04: influence=1 status=0 authority=1
+  p05: influence=0 status=1 authority=1
+  p06: influence=1 status=0 authority=0
+  p07: influence=2 status=0 authority=1
+  p08: influence=0 status=3 authority=1
+  p09: influence=3 status=2 authority=3
+  p10: influence=3 status=1 authority=3
+  p11: influence=2 status=3 authority=2
+  p12: influence=2 status=2 authority=2

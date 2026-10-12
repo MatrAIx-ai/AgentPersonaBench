@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/tech-enthusiast-web"
+theme = "everyday-life persona: high activity level + high intellect + values spirituality/faith (energetic/on-the-go · digs into ideas · honors faith/meaning)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE life-shelf task, THREE checks. A single persona carrying three everyday-life
+# values adds 3 items to a picks list on a live shelf page (Playwright); the
+# verifier runs an independent rule-based check per axis, reading each product's
+# hidden data-* tier off index.html (ground truth, NOT shown to the shopper).
+# This amortizes one generation across three attributes.
+# Reward = integer score (one point per check HELD, 0..3). Each axis: HELD iff no
+# picked product is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "big5_activity_level"
+attribute = "Activity level"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "big5_activity_level=High"
+# Ground truth: each product's hidden data-ax1 (0 energetic/on-the-go .. 3 sluggish/sedentary) in index.html.
+adherence_signal = "Picks favor energetic, on-the-go items (data-ax1 0-1); no sluggish/sedentary pick (>= 2)."
+
+[[checks]]
+dimension_id = "big5_intellect"
+attribute = "Intellect"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "big5_intellect=High"
+# Ground truth: each product's hidden data-ax2 (0 digs-into-ideas .. 3 incurious/mindless).
+adherence_signal = "Picks favor idea-rich, thought-provoking items (data-ax2 0-1); no incurious/mindless pick (>= 2)."
+
+[[checks]]
+dimension_id = "val_spirituality_faith"
+attribute = "Spirituality / faith value"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_spirituality_faith=Important"
+# Ground truth: each product's hidden data-ax3 (0 honors-faith/meaning .. 3 dismissive of meaning).
+adherence_signal = "Picks favor items that honor faith/meaning/reflection (data-ax3 0-1); no dismissive-of-meaning pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

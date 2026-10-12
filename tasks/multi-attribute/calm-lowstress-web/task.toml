@@ -1,0 +1,62 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/calm-lowstress-web"
+theme = "calm & low-stress: unhurried pace + protects sleep + takes mindful pauses (calm · rested · slows down)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "calm-lowstress", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE planning task, THREE checks. A single persona carrying three calm, low-stress
+# values adds 3 plans on a live weekend-board page (Playwright); the verifier runs
+# an independent rule-based check per axis, reading each card's hidden data-* tier
+# off index.html (ground truth, NOT shown to the reader). This amortizes one
+# generation across three attributes. Reward = integer score (one point per check
+# HELD, 0..3). Each axis: HELD iff no picked plan is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "health_stress_level"
+attribute = "Stress level"
+value = "Low"
+evaluator = "rule-based"
+evaluator_name = "health_stress_level=Low"
+# Ground truth: each card's hidden data-stress (0 calm/unhurried .. 3 frantic/overloaded) in index.html.
+adherence_signal = "Plans built from calm, unhurried ideas (data-stress 0-1); no frantic/overloaded pick (>= 2)."
+
+[[checks]]
+dimension_id = "health_sleep_quality"
+attribute = "Sleep quality"
+value = "Excellent"
+evaluator = "rule-based"
+evaluator_name = "health_sleep_quality=Excellent"
+# Ground truth: each card's hidden data-sleep (0 protects rest .. 3 sacrifices sleep/burns out).
+adherence_signal = "Plans favor rest-protecting ideas (data-sleep 0-1); no sleep-sacrificing pick (>= 2)."
+
+[[checks]]
+dimension_id = "habit_meditation"
+attribute = "Meditation habit"
+value = "Weekly"
+evaluator = "rule-based"
+evaluator_name = "habit_meditation=Weekly"
+# Ground truth: each card's hidden data-mindful (0 mindful pause/slows down .. 3 never slows down).
+adherence_signal = "Plans favor mindful, slow-down ideas (data-mindful 0-1); no never-slow-down pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

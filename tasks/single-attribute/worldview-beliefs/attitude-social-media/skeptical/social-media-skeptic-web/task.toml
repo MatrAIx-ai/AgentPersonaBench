@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/social-media-skeptic-web"
+theme = "Attitude: Social media: Skeptical"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "worldview-beliefs", "social-media", "skeptical", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "att_social_media"
+dimension_label = "Attitude: Social media"
+category = "Worldview: Beliefs"
+anchor_value = "Skeptical"
+evaluator = "rule-based"
+# Web env: the persona adds apps to a new phone on a live app-store page (Playwright).
+# Each app's hidden `data-rank` (0..3) in index.html is the ground truth. Unified with
+# social-media-skeptic-survey tier semantics: VIOLATED for any attention-maximizing
+# social pick (rank >= 2); rank 0/1 privacy-minded / occasional-use utility picks are
+# adherent.
+adherence_signal = "Picks are low-engagement / privacy-minded apps (rank 0-1); no attention-maximizing social apps (rank >= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

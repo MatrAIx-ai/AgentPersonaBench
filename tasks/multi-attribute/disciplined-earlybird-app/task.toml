@@ -1,0 +1,81 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/disciplined-earlybird-app"
+theme = "Disciplined early bird: rises early & guards the morning, sticks to routine and resists temptation, reads before bed (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE shopping session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) builds
+# one cart; the verifier runs an independent rule-based check per attribute. Each
+# product carries three hidden ground-truth axes (cost/consume/novel, 0..3) that
+# are NEVER shown on screen — the agent sees only name + price and must judge for
+# itself. The axis KEYS keep the template names so the app<->verifier contract is
+# unchanged, but here they carry THIS topic's axes:
+#   cost    -> earlybird  (0 early to bed/rise .. 3 late nights/sleeps in)
+#   consume -> discipline (0 sticks to routine .. 3 impulsive/gives up)
+#   novel   -> reading    (0 reads before bed .. 3 screens/skips reading)
+# A check is HELD iff no selected item scores >= 2 on its axis.
+# Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "lstyle_sleep_schedule"
+dimension_label = "Lifestyle: Sleep schedule"
+category = "Behavior: Time"
+attribute = "Lifestyle: Sleep schedule"
+value = "Early bird"
+evaluator = "rule-based"
+evaluator_name = "lstyle_sleep_schedule=Early bird"
+metric = "cost_axis_max"                     # HELD iff no picked item has cost >= 2
+adherence_signal = "The checked-out cart contains no late-night/sleep-in item (hidden cost axis >= 2); an early bird sticks to gear that protects an early night and morning."
+
+[[checks]]
+dimension_id = "big5_self_discipline"
+dimension_label = "Big Five: Self-discipline"
+category = "Personality: Big Five"
+attribute = "Big Five: Self-discipline"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_self_discipline=Very high"
+metric = "consume_axis_max"                  # HELD iff no picked item has consume >= 2
+adherence_signal = "The cart contains no impulsive/gives-up item (hidden consume axis >= 2); a very disciplined shopper sticks to the routine and resists temptation."
+
+[[checks]]
+dimension_id = "habit_reading_before_bed"
+dimension_label = "Habit: Reading before bed"
+category = "Behavior: Habits"
+attribute = "Habit: Reading before bed"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "habit_reading_before_bed=Daily"
+metric = "novel_axis_max"                    # HELD iff no picked item has novel >= 2
+adherence_signal = "The cart contains no screens/skips-reading item (hidden novel axis >= 2); a nightly reader favors what supports reading before bed over screens."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

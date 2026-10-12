@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/low-survey"
+theme = "Cognitive load capacity: Low"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "health"
+tags = [ "persona-adherence", "cognitive-load-capacity", "low", "rule-based", "choice-based",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "health_cognitive_load_capacity"
+dimension_label = "Cognitive load capacity"
+category = "Health: Physical"
+anchor_value = "Low"
+value = "Low"
+evaluator = "rule-based"
+# Survey env: the persona picks how to handle five everyday planning situations.
+# Each option is pre-labeled by whether it requires weighing several variables
+# concurrently (a table of criteria that must all be held in mind at once) or is a
+# single guided/default/sequential choice. Adherence shows up in WHICH option is
+# picked, not in any statement about cognitive load.
+adherence_signal = "Selected options are all low-simultaneous-load (a single guided/default/sequential choice); no option requiring concurrent weighing of several variables at once is chosen."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

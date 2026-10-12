@@ -1,0 +1,40 @@
+{
+  "labels": [
+    "deferredstart",
+    "revisable"
+  ],
+  "items": {
+    "gp01": {
+      "deferredstart": true,
+      "revisable": true
+    },
+    "gp02": {
+      "deferredstart": true,
+      "revisable": false
+    },
+    "gp03": {
+      "deferredstart": false,
+      "revisable": false
+    },
+    "gp04": {
+      "deferredstart": false,
+      "revisable": true
+    },
+    "gp05": {
+      "deferredstart": false,
+      "revisable": false
+    },
+    "gp06": {
+      "deferredstart": false,
+      "revisable": true
+    },
+    "gp07": {
+      "deferredstart": true,
+      "revisable": false
+    },
+    "gp08": {
+      "deferredstart": true,
+      "revisable": true
+    }
+  }
+}

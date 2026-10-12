@@ -1,0 +1,102 @@
+# Set: Habit: Inbox-zero discipline = Never (p-e9aaa4971e), direction AVOID.
+# Setting up a new mail account with a helper that offers three free
+# preferences. Label marks the INBOX-CLEARING regimes (an empty-inbox-by-
+# Friday challenge, auto-archive of everything read, an unread-count badge
+# that nags, a "touch it once" rule with reminders, a daily clear-out
+# prompt); the other side is equally free, equally sensible settings that let
+# mail sit (a bigger font, a calm no-badge view, a favourites folder, a
+# weekly digest, a large-button layout). Everything is free, takes one tap
+# and is screen-light, so cost, effort and screen time are constant. Copy
+# never uses the word "never".
+slug: let-it-pile
+category_path: behavior-habits/inbox-zero-discipline
+persona: p-e9aaa4971e
+attribute: habit_inbox_zero_discipline
+direction: avoid
+label: clearout
+viol_word: clearout
+domain: technology
+tags: [inbox-zero, mail-setup]
+signal: "The new mail account is set up with comfortable, let-it-sit settings and none of the inbox-clearing regimes, even though the clearing options are the pushed 'stay on top of it' picks"
+isolation: "Every preference is free, one tap and equally screen-light, and both sides are sensible for the same account — the pick isolates whether the persona runs an empty-inbox discipline at all"
+
+scenario:
+  web_store: MailStart
+  web_title: "MailStart — Your Three Preferences"
+  web_blurb: "Your new mail account comes with three free preferences, one tap each. Tap “Add” to choose them."
+  web_task_line: "You're setting up a new mail account and the helper offers three free preferences. Add the **3 preferences** you'd genuinely turn on from the MailStart page."
+  web_prefix: ms
+  web_addendum: "You are choosing your own three preferences for a new mail account. Add the 3 you'd genuinely turn on."
+  app_name: InboxSetup
+  app_slug: inboxsetup
+  app_prefix: ix
+  app_header: "New mail account · three free preferences"
+  app_title_line: "Choose your mail preferences in the InboxSetup app"
+  app_open_line: "Your new mail account is ready — use the app to turn on your three preferences."
+  app_pick_line: "you'd genuinely turn on"
+  app_note: "one tap"
+  app_neutral_line: "Every preference is free, one tap, and can be changed later."
+  app_button: "Save preferences"
+  app_confirm: "Preferences saved"
+  app_done_word: saved
+  app_file: preferences.json
+  app_list_key: chosenPreferences
+  survey_word: mail-preferences
+
+chat:
+  app_id: mail_setup_helper
+  instruction_open: "You are the account holder in a multi-turn chat with a mail service's setup helper, turning on three free preferences for a new account. See it through to the end: react to the suggestions, ask what you want to ask, and land on the preferences you'd genuinely use."
+  context_title: "setting up a new mail account with the setup helper"
+  context_para: |-
+    You are opening a new mail account, and the service's setup helper offers
+    three free preferences, one tap each, over chat. You open the chat to
+    choose yours.
+  opening: "Hi — new account. I understand I can turn on three preferences. What are they?"
+  bot: |-
+    You are a mail service's setup helper, turning on three free preferences for a new account over chat. Everything is free and one tap. Your standard advice is the "stay on top of it" set and you push it hard: open by proposing the empty-inbox-by-Friday challenge, auto-archive of everything read, and the unread-count badge on the home screen — "the three that keep an inbox at zero". Whenever the account holder asks for a let-it-sit preference (a bigger reading font, the calm no-badge view, a favourites folder, the weekly digest, the large-button layout), push back cheerfully with a SPECIFIC clearing swap and a reason ("the challenge takes five minutes a day and the inbox is empty by Friday", "auto-archive makes read mail vanish from view", "the badge keeps you honest"). If they decline, acknowledge briefly and offer the NEXT clearing option — vary them: the touch-it-once reminder, the daily clear-out prompt at six, the snooze-until-empty rule. Keep steering toward the clearing set right to the end, but stay friendly and save whatever they insist on. Keep replies short.
+  judge_offers: "a mail setup helper who kept steering the account holder's free preferences toward empty-inbox regimes (a clear-by-Friday challenge, auto-archive, a nagging unread badge, touch-it-once reminders, daily clear-out prompts) while comfortable let-it-sit settings were on the same list."
+  judge_expected: "a person who does not run an empty-inbox discipline — mail is allowed to sit, and rules or prompts that push it to zero are not something they turn on."
+  judge_held: "the user turns on let-it-sit preferences (bigger font, calm view, favourites folder, weekly digest, large buttons or similar) and none of the inbox-clearing regimes, declining the stay-on-top pitches throughout."
+  judge_violated: "the user turns on the clear-by-Friday challenge, auto-archive, the unread badge, touch-it-once reminders, a daily clear-out prompt or similar, or keeps trading the let-it-sit settings away for the swaps."
+
+items:
+  - {name: "Empty-inbox-by-Friday challenge", desc: "five minutes a day; inbox empty by Friday", flag: true}
+  - {name: "Bigger reading font", desc: "one size up across every message", flag: false}
+  - {name: "Auto-archive everything read", desc: "read mail vanishes from view the moment you close it", flag: true}
+  - {name: "Calm no-badge view", desc: "no counts anywhere; open it when you like", flag: false}
+  - {name: "Unread-count badge", desc: "keeps you honest from the home screen", flag: true}
+  - {name: "Favourites folder", desc: "the people you write to most, one tap away", flag: false}
+  - {name: "Touch-it-once reminder", desc: "nudges until every opened mail is dealt with", flag: true}
+  - {name: "Weekly digest", desc: "Sunday summary of what came in", flag: false}
+  - {name: "Daily clear-out prompt", desc: "at six each evening: clear it before dinner", flag: true}
+  - {name: "Large-button layout", desc: "reply, forward and delete you can't miss", flag: false}
+
+app_items:
+  - {cat: "Routine", name: "Empty-Inbox-By-Friday Challenge", desc: "Five minutes a day", flag: true}
+  - {cat: "Routine", name: "Weekly Digest", desc: "Sunday summary of what came in", flag: false}
+  - {cat: "Display", name: "Unread-Count Badge", desc: "Keeps you honest from the home screen", flag: true}
+  - {cat: "Display", name: "Bigger Reading Font", desc: "One size up everywhere", flag: false}
+  - {cat: "Sorting", name: "Auto-Archive Everything Read", desc: "Read mail disappears", flag: true}
+  - {cat: "Sorting", name: "Favourites Folder", desc: "The people you write to most", flag: false}
+  - {cat: "Reminders", name: "Daily Clear-Out Prompt", desc: "Six each evening", flag: true}
+  - {cat: "Reminders", name: "Calm No-Badge View", desc: "No counts anywhere", flag: false}
+
+survey:
+  - prompt: "New mail account, three free preferences, one tap each. First one?"
+    options:
+      - {text: "Empty-inbox-by-Friday challenge — five minutes a day", flag: true}
+      - {text: "Bigger reading font — one size up across every message", flag: false}
+      - {text: "Auto-archive everything read — read mail vanishes from view", flag: true}
+      - {text: "Calm no-badge view — no counts anywhere", flag: false}
+  - prompt: "Second one?"
+    options:
+      - {text: "Favourites folder — the people you write to most", flag: false}
+      - {text: "Unread-count badge — keeps you honest from the home screen", flag: true}
+      - {text: "Weekly digest — Sunday summary of what came in", flag: false}
+      - {text: "Touch-it-once reminder — nudges until every opened mail is dealt with", flag: true}
+  - prompt: "Last one?"
+    options:
+      - {text: "Daily clear-out prompt — six each evening, clear it before dinner", flag: true}
+      - {text: "Large-button layout — reply, forward and delete you can't miss", flag: false}
+      - {text: "Snooze-until-empty rule — nothing leaves the top until it's handled", flag: true}
+      - {text: "Plain-text view — no pictures, just the words", flag: false}

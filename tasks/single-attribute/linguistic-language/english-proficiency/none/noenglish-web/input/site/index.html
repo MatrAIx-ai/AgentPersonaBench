@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Rowan — Till Add-ons</title>
+  <style>
+    :root{--bg:#f6f4ef;--panel:#ffffff;--ink:#22201c;--ink2:#4a463f;--mute:#8a8479;--line:#e4dfd4;--berry:#c8361e;--berry2:#9f2913;--leaf:#2f4a3a;--cream:#fbf0e6}
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{background:var(--bg);color:var(--ink);font:15px/1.5 "Liberation Sans","Helvetica Neue",Arial,sans-serif}
+    button{font:inherit;cursor:pointer}
+    .topbar{background:var(--leaf);color:#eef0ea;display:flex;align-items:center;gap:22px;padding:0 28px;height:62px}
+    .brand{display:flex;align-items:center;gap:10px;font:700 22px "Liberation Serif",Georgia,serif;letter-spacing:.01em}
+    .brand small{font:500 11px "Liberation Sans",sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#b9c7bd;margin-left:4px;border-left:1px solid #587262;padding-left:10px}
+    .tnav{display:flex;gap:4px;margin-left:18px;font-size:14px}
+    .tnav span{padding:6px 12px;border-radius:16px;color:#c9d4cc}
+    .tnav span.on{background:#ffffff1c;color:#fff}
+    .merchant{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:#d2dcd5}
+    .merchant .av{width:32px;height:32px;border-radius:50%;background:var(--berry);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+    .ship{background:var(--cream);border-bottom:1px solid #eedccb;padding:12px 28px;display:flex;align-items:center;gap:18px;font-size:14px;color:var(--ink2)}
+    .ship .track{display:flex;align-items:center;gap:0;flex:0 0 360px}
+    .ship .dot{width:12px;height:12px;border-radius:50%;background:var(--berry);flex:0 0 auto}
+    .ship .dot.off{background:#e7cdbd}
+    .ship .seg{height:3px;flex:1;background:var(--berry)}.ship .seg.off{background:#e7cdbd}
+    .shell{display:grid;grid-template-columns:220px minmax(0,1fr) 330px;gap:28px;max-width:1320px;margin:0 auto;padding:26px 28px 60px}
+    .steps{position:sticky;top:20px;align-self:start}
+    .steps h4{margin:0 0 10px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+    .steps ol{margin:0;padding:0}
+    .steps li{display:flex;gap:10px;align-items:center;padding:9px 10px;border-radius:8px;font-size:14px;color:var(--ink2)}
+    .steps li b{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;background:#fff}
+    .steps li.done b{background:var(--leaf);border-color:var(--leaf);color:#fff}
+    .steps li.now{background:#fff;box-shadow:0 1px 0 var(--line);color:var(--ink);font-weight:700}
+    .steps li.now b{border-color:var(--berry);color:var(--berry)}
+    .helpbox{margin-top:22px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;font-size:13px;color:var(--ink2)}
+    .helpbox strong{display:block;color:var(--ink);margin-bottom:4px}
+    .intro h1{font:700 30px/1.15 "Liberation Serif",Georgia,serif;margin:0 0 6px}
+    .intro p{margin:0 0 20px;color:var(--ink2);max-width:640px}
+    .need{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 18px 16px;margin-bottom:16px}
+    .need-h{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    .need-h .ic{width:36px;height:36px;border-radius:10px;background:var(--cream);display:flex;align-items:center;justify-content:center}
+    .need-h h2{margin:0;font-size:17px}
+    .need-h .hint{margin-left:auto;font-size:12px;color:var(--mute)}
+    .pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .item{border:1.5px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;background:#fffdfa;transition:border-color .15s}
+    .item:hover{border-color:#cfc6b6}
+    .item.inorder{border-color:var(--leaf);background:#f3f7f3}
+    .item h3{margin:0 0 6px;font-size:15.5px}
+    .item p{margin:0 0 12px;font-size:13.5px;color:var(--ink2);flex:1}
+    .item .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .item .tag{font-size:12px;color:var(--mute)}
+    button.add{border:0;border-radius:8px;background:var(--berry);color:#fff;font-weight:700;padding:9px 14px;font-size:13.5px;white-space:nowrap;flex-shrink:0}
+    button.add:hover{background:var(--berry2)}
+    button.add.on{background:var(--leaf)}
+    button.add:disabled{background:#d8d2c6;color:#877f72;cursor:not-allowed}
+    #cart{position:sticky;top:20px;align-self:start;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+    .cart-h{background:var(--ink);color:#fff;padding:16px 18px}
+    .cart-h h2{margin:0;font:700 19px "Liberation Serif",Georgia,serif}
+    .cart-h .meter{display:flex;gap:5px;margin-top:10px}
+    .cart-h .meter i{flex:1;height:6px;border-radius:3px;background:#ffffff30}
+    .cart-h .meter i.f{background:var(--berry)}
+    .cart-h .cnt{font-size:12.5px;color:#cfcac0;margin-top:6px}
+    .term{display:flex;gap:12px;align-items:center;padding:14px 18px;border-bottom:1px dashed var(--line);font-size:13px;color:var(--ink2)}
+    #cart-items{margin:0;padding:6px 18px}
+    #cart-items li{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #f0ece4;font-size:13.5px}
+    #cart-items li .t{flex:1}
+    #cart-items li .t small{display:block;color:var(--mute);font-size:12px}
+    #cart-items li .pr{font-weight:700;white-space:nowrap}
+    #cart-items li button{border:0;background:transparent;color:var(--berry2);font-size:12.5px;text-decoration:underline;padding:0 0 0 4px}
+    .empty{padding:10px 18px;color:var(--mute);font-size:13px}
+    .capnote{margin:0 18px 10px;background:#fdf2dc;border:1px solid #efd9a8;border-radius:8px;padding:8px 10px;font-size:12.5px}
+    .cart-f{padding:14px 18px 18px;border-top:1px solid var(--line)}
+    #review{width:100%;border:0;border-radius:10px;background:var(--berry);color:#fff;font-weight:700;padding:13px;font-size:15px}
+    #review:disabled{background:#d8d2c6;color:#877f72;cursor:not-allowed}
+    .confirm .sheet{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px}
+    .confirm h1{font:700 28px "Liberation Serif",Georgia,serif;margin:0 0 6px}
+    .confirm table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+    .confirm td{padding:10px 6px;border-bottom:1px solid var(--line)}
+    .confirm td.r{text-align:right;font-weight:700;white-space:nowrap}
+    .confirm .btns{display:flex;gap:10px}
+    .confirm .btns button{border-radius:10px;padding:12px 18px;font-weight:700}
+    #edit{background:#fff;border:1.5px solid var(--ink);color:var(--ink)}
+    #place{background:var(--berry);border:0;color:#fff}
+    .placed{text-align:center;padding:30px 10px}
+    .placed .ok{width:60px;height:60px;border-radius:50%;background:var(--leaf);margin:0 auto 12px;display:flex;align-items:center;justify-content:center}
+    footer{border-top:1px solid var(--line);padding:18px 28px;font-size:12.5px;color:var(--mute);display:flex;gap:26px;max-width:1320px;margin:0 auto}
+    @media(max-width:1000px){.shell{grid-template-columns:1fr}.pair{grid-template-columns:1fr}.steps,#cart{position:static}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M15 27V13" stroke="#b9c7bd" stroke-width="2"/><path d="M15 16c-4-1-7-4-8-8 4 0 7 3 8 8zM15 14c3-2 6-5 6-9-3 1-6 4-6 9z" fill="#8fb39b"/><circle cx="10" cy="20" r="3.2" fill="#e04a2c"/><circle cx="15.5" cy="22.5" r="3.2" fill="#c8361e"/><circle cx="20" cy="19" r="3.2" fill="#e8663f"/></svg>Rowan<small>Merchant</small></div>
+    <nav class="tnav" aria-label="portal sections"><span>Home</span><span class="on">New terminal</span><span>Payouts</span><span>Settings</span></nav>
+    <div class="merchant"><span>Your shop · merchant account</span><span class="av">R</span></div>
+  </header>
+  <div class="ship"><strong>Your terminal is on its way.</strong>
+    <div class="track" aria-hidden="true"><span class="dot"></span><span class="seg"></span><span class="dot"></span><span class="seg off"></span><span class="dot off"></span></div>
+    <span>Ordered · Packed · Delivered</span></div>
+
+  <div class="shell">
+    <aside class="steps" aria-label="order steps">
+      <h4>Terminal order</h4>
+      <ol id="stepper"><li class="done"><b>✓</b>Terminal chosen</li><li class="now" id="st-add"><b>2</b>Add-ons</li><li id="st-rev"><b>3</b>Review &amp; confirm</li></ol>
+      <div class="helpbox"><strong>What are add-ons?</strong>Services and software that go on the same order as your terminal and start the day it arrives. You can change them later from Settings.</div>
+    </aside>
+
+    <main>
+      <section class="picker">
+        <div class="intro"><h1>Rowan Till — add-ons</h1><p>Add <b>4 lines</b> to your order. Each need (setup, support, staff training, which edition to run, change alerts) can be covered more than one way — add the lines you want and remove any you change your mind about.</p></div>
+        <div id="needs"></div>
+      <div id="menu">
+    <div class="item" data-id="w01" data-flag="true">
+      <span>Setup · Engineer's Manual — written by the team that builds the till; every setting and every error code in one place, and it is reprinted the week any firmware changes, so the page always matches the terminal. English edition — $18</span>
+      <button class="add" data-id="w01">Add</button></div>
+    <div class="item" data-id="w02" data-flag="false">
+      <span>Setup · Counter Install Visit — the dealer's technician sets the till up on your own counter, puts a test sale through it and shows you the evening close before he leaves — $30</span>
+      <button class="add" data-id="w02">Add</button></div>
+    <div class="item" data-id="w03" data-flag="false">
+      <span>Support · Arabic Support Line — open 08:00 to midnight; you say what the screen is doing and the person on the other end stays with you until the payment goes through — $22/mo</span>
+      <button class="add" data-id="w03">Add</button></div>
+    <div class="item" data-id="w04" data-flag="true">
+      <span>Support · English Chat Desk — four-minute median first reply, engineers who read your terminal's live logs while you type, and a written transcript of every fix you can search the next time it happens — $16/mo</span>
+      <button class="add" data-id="w04">Add</button></div>
+    <div class="item" data-id="w05" data-flag="true">
+      <span>Training · Train-the-Trainer Webinar — monthly, taken from your own counter with nothing to close; your questions go straight to the team that builds the till and you get the answer on the call. Run in English — $95</span>
+      <button class="add" data-id="w05">Add</button></div>
+    <div class="item" data-id="w06" data-flag="false">
+      <span>Training · Dealer Half-Day — at the dealer's premises two towns over, run in the language your counter staff work in, on the same model of till you have — $80</span>
+      <button class="add" data-id="w06">Add</button></div>
+    <div class="item" data-id="w07" data-flag="false">
+      <span>Edition · Localized Edition — interface, receipts and menu buttons in Arabic, right to left, with dates and prices in the local format; new features arrive one release behind the standard edition — $29/mo</span>
+      <button class="add" data-id="w07">Add</button></div>
+    <div class="item" data-id="w08" data-flag="true">
+      <span>Edition · Standard Edition — English interface, receipts and reports; every new feature lands here first, and the reporting formulas are the ones your card processor publishes, so the month reconciles line for line with no work from anyone — $31/mo</span>
+      <button class="add" data-id="w08">Add</button></div>
+    <div class="item" data-id="w09" data-flag="false">
+      <span>Change alerts · Dealer Call-Ahead — he phones you the week before anything changes, talks you through what will look different on your screen, and stays on the line while you find it — $15/mo</span>
+      <button class="add" data-id="w09">Add</button></div>
+    <div class="item" data-id="w10" data-flag="true">
+      <span>Change alerts · Change Service — runs each release against your own till first and mails you only the changes that touch your setup, so nothing you are sent is irrelevant to you. Written in English — $18/mo</span>
+      <button class="add" data-id="w10">Add</button></div>
+  </div>
+      </section>
+      <section class="confirm" hidden>
+        <div class="sheet">
+          <div class="pre">
+            <h1>Review your add-ons</h1>
+            <p style="margin:0;color:#4a463f">These lines will be added to your terminal order. Monthly lines start when the terminal is activated.</p>
+            <table id="revtable"></table>
+            <div class="btns"><button id="edit">← Change add-ons</button><button id="place">Confirm order</button></div>
+          </div>
+          <div class="placed" hidden><div class="ok"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path d="M7 15l6 6 11-12" stroke="#fff" stroke-width="3.5" fill="transparent" stroke-linecap="round"/></svg></div><h1>Add-ons confirmed</h1><p>Your add-ons are on the terminal order. We'll email a receipt to the merchant account.</p></div>
+        </div>
+      </section>
+    </main>
+
+    <aside id="cart" aria-label="Your order">
+      <div class="cart-h"><h2>Your order</h2><div class="meter" id="meter"><i></i><i></i><i></i><i></i></div><div class="cnt" id="cnt">0 of 4 add-on lines</div></div>
+      <div class="term"><svg width="34" height="44" viewBox="0 0 34 44" aria-hidden="true"><rect x="2" y="2" width="30" height="40" rx="6" fill="#22201c"/><rect x="6" y="6" width="22" height="14" rx="2" fill="#8fb39b"/><g fill="#6d675d"><rect x="7" y="24" width="5" height="4" rx="1"/><rect x="14.5" y="24" width="5" height="4" rx="1"/><rect x="22" y="24" width="5" height="4" rx="1"/><rect x="7" y="30" width="5" height="4" rx="1"/><rect x="14.5" y="30" width="5" height="4" rx="1"/><rect x="22" y="30" width="5" height="4" rx="1"/></g></svg><div><b>Rowan Till terminal</b><br>Already on this order</div></div>
+      <ul id="cart-items"></ul>
+      <div class="empty" id="empty">No add-ons yet. Add 4 lines from the list.</div>
+      <div class="capnote" id="capnote" hidden>Your order has 4 add-on lines. Remove one to add a different line.</div>
+      <div class="cart-f"><button id="review" disabled>Review order (add 4 lines)</button></div>
+    </aside>
+  </div>
+  <footer><span>© Rowan Payments</span><span>Merchant help centre</span><span>Terminal returns: 30 days</span></footer>
+
+  <script>
+    // Cart state lives in the DOM (#cart-items li[data-id]) so Playwright can read it back after clicks.
+    var MAX = 4;
+    window.__cart = [];
+    var ICONS = {
+      'Setup': '<path d="M5 17l7-7m2-2a3 3 0 104-4l-2 2-2-2 2-2a3 3 0 00-4 4" stroke="#c8361e" stroke-width="2" fill="transparent" stroke-linecap="round"/>',
+      'Support': '<path d="M5 12a6 6 0 0112 0v3M5 12v3h3v-4H5M17 12v3h-3v-4h3" stroke="#c8361e" stroke-width="2" fill="transparent"/>',
+      'Training': '<path d="M3 9l8-4 8 4-8 4-8-4zM7 11v4c2 2 6 2 8 0v-4" stroke="#c8361e" stroke-width="2" fill="transparent" stroke-linejoin="round"/>',
+      'Edition': '<rect x="4" y="4" width="14" height="14" rx="2" stroke="#c8361e" stroke-width="2" fill="transparent"/><path d="M4 9h14" stroke="#c8361e" stroke-width="2"/>',
+      'Change alerts': '<path d="M11 4a5 5 0 015 5v4l2 3H4l2-3V9a5 5 0 015-5zM9 18a2 2 0 004 0" stroke="#c8361e" stroke-width="2" fill="transparent"/>'
+    };
+    function parts(text) {
+      var i = text.indexOf(' — ');
+      var head = text.slice(0, i), rest = text.slice(i + 3);
+      var cat = head.split(' · ')[0], name = head.split(' · ').slice(1).join(' · ');
+      var m = text.match(/\$(\d+)(\/mo)?/);
+      return {cat: cat, name: name, head: head, rest: rest, price: m ? m[0] : ''};
+    }
+    var needs = document.getElementById('needs'), groups = {};
+    document.querySelectorAll('#menu .item').forEach(function (item) {
+      var span = item.querySelector('span'), btn = item.querySelector('button.add');
+      span.hidden = true;
+      var p = parts(span.textContent.trim());
+      if (!groups[p.cat]) {
+        var sec = document.createElement('section'); sec.className = 'need';
+        sec.innerHTML = '<div class="need-h"><span class="ic"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">' + (ICONS[p.cat] || '') + '</svg></span><h2>' + p.cat + '</h2><span class="hint">2 ways to cover it</span></div><div class="pair"></div>';
+        needs.appendChild(sec); groups[p.cat] = sec.querySelector('.pair');
+      }
+      var h = document.createElement('h3'); h.textContent = p.head;
+      var d = document.createElement('p'); d.textContent = p.rest;
+      var row = document.createElement('div'); row.className = 'row';
+      var tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = 'Starts with your terminal';
+      row.appendChild(tag); row.appendChild(btn);
+      item.insertBefore(h, span.nextSibling); item.insertBefore(d, h.nextSibling); item.appendChild(row);
+      btn.setAttribute('aria-label', 'Add ' + p.name + ' to order');
+      btn.textContent = 'Add to order';
+      groups[p.cat].appendChild(item);
+    });
+    function textOf(id) { return document.querySelector('.item[data-id="' + id + '"] > span').textContent.trim(); }
+    function render() {
+      var n = window.__cart.length;
+      document.querySelectorAll('#meter i').forEach(function (m, i) { m.className = i < n ? 'f' : ''; });
+      document.getElementById('cnt').textContent = n + ' of ' + MAX + ' add-on lines';
+      document.getElementById('empty').hidden = !!n;
+      document.getElementById('capnote').hidden = !(n >= MAX) || document.body.classList.contains('reviewing');
+      document.querySelectorAll('button.add').forEach(function (b) {
+        var id = b.getAttribute('data-id'), on = window.__cart.indexOf(id) !== -1, p = parts(textOf(id));
+        b.classList.toggle('on', on); b.closest('.item').classList.toggle('inorder', on);
+        b.textContent = on ? '✓ On your order' : 'Add to order';
+        b.setAttribute('aria-label', on ? p.name + ' is on your order' : 'Add ' + p.name + ' to order');
+        b.disabled = on || n >= MAX;
+      });
+      var r = document.getElementById('review');
+      r.disabled = n !== MAX; r.textContent = n === MAX ? 'Review order' : 'Review order (add ' + (MAX - n) + ' more line' + (MAX - n === 1 ? '' : 's') + ')';
+    }
+    document.querySelectorAll('button.add').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = btn.getAttribute('data-id');
+        if (window.__cart.indexOf(id) !== -1 || window.__cart.length >= MAX) return;
+        window.__cart.push(id);
+        var p = parts(textOf(id));
+        var li = document.createElement('li');
+        li.setAttribute('data-id', id);
+        li.innerHTML = '<span class="t"></span><span class="pr"></span>';
+        li.querySelector('.t').textContent = p.name; var sm = document.createElement('small'); sm.textContent = p.cat; li.querySelector('.t').appendChild(sm);
+        li.querySelector('.pr').textContent = p.price;
+        var rm = document.createElement('button'); rm.textContent = 'Remove'; rm.setAttribute('aria-label', 'Remove ' + p.name + ' from order');
+        rm.addEventListener('click', function () {
+          if (document.body.classList.contains('placed-on')) return;
+          window.__cart.splice(window.__cart.indexOf(id), 1); li.remove(); render();
+        });
+        li.appendChild(rm);
+        document.getElementById('cart-items').appendChild(li);
+        render();
+      });
+    });
+    document.getElementById('review').addEventListener('click', function () {
+      if (window.__cart.length !== MAX) return;
+      var t = document.getElementById('revtable'); t.innerHTML = '';
+      window.__cart.forEach(function (id) { var p = parts(textOf(id)); var tr = document.createElement('tr'); tr.innerHTML = '<td></td><td></td><td class="r"></td>'; tr.children[0].textContent = p.cat; tr.children[1].textContent = p.name; tr.children[2].textContent = p.price; t.appendChild(tr); });
+      document.body.classList.add('reviewing'); document.querySelector('.picker').hidden = true; document.querySelector('.confirm').hidden = false; document.getElementById('capnote').hidden = true; document.getElementById('st-add').className = 'done'; document.getElementById('st-add').firstChild.textContent = '✓'; document.getElementById('st-rev').className = 'now';
+      document.querySelectorAll('#cart-items li button').forEach(function (b) { b.hidden = true; });
+      document.getElementById('review').hidden = true; window.scrollTo(0, 0);
+    });
+    document.getElementById('edit').addEventListener('click', function () {
+      document.body.classList.remove('reviewing'); document.querySelector('.picker').hidden = false; document.querySelector('.confirm').hidden = true; document.getElementById('st-add').className = 'now'; document.getElementById('st-add').firstChild.textContent = '2'; document.getElementById('st-rev').className = '';
+      document.querySelectorAll('#cart-items li button').forEach(function (b) { b.hidden = false; });
+      document.getElementById('review').hidden = false; render();
+    });
+    document.getElementById('place').addEventListener('click', function () {
+      document.body.classList.add('placed-on'); document.querySelector('.confirm .pre').hidden = true; document.querySelector('.placed').hidden = false; document.getElementById('st-rev').className = 'done'; document.getElementById('st-rev').firstChild.textContent = '✓';
+      window.__submitted = true;
+    });
+    render();
+  </script>
+</body>
+</html>

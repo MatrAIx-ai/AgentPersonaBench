@@ -1,0 +1,104 @@
+# Set: Value: Spirituality / faith = Irrelevant (p-0af9cc2a30), direction AVOID.
+# Contrast pair with faith-first. A week in a historic town on a visitor
+# pass: three free reserved slots. Label marks the FAITH-SHAPED slots (a
+# sunrise service in the famous minster, a sacred-music recital, the
+# monastery guesthouse silent hour, the pilgrim-route guided walk, an
+# evening reflection circle); the other side is equally atmospheric secular
+# slots at the same times (the observatory night, the botanical-garden tour,
+# a museum late opening, a jazz-club set, a riverside history walk). Every
+# slot is free, gentle-paced and step-free, with no meals attached, so cost,
+# exertion and diet are constant; the faith slots are the pushed,
+# "most-photographed" picks. No specific religion is named. Copy never uses
+# the word "irrelevant".
+slug: sunday-off
+category_path: values-motivation/spirituality-faith/irrelevant
+persona: p-0af9cc2a30
+attribute: val_spirituality_faith
+direction: avoid
+label: faith
+viol_word: devotional
+domain: leisure
+tags: [spirituality, visitor-pass]
+signal: "The week's reserved slots are secular (observatory, gardens, museum, jazz, river walk) with none of the faith-shaped slots booked, even though the faith slots are the pushed, most-photographed picks at the same times"
+isolation: "Every slot is free, gentle-paced, step-free and meal-free, in the same town at the same times, and no tradition is named — the pick isolates whether faith practice has any place in how the persona spends a free week"
+
+scenario:
+  web_store: TownPass
+  web_title: "TownPass — Your Week's Slots"
+  web_blurb: "Three free reserved slots on your visitor pass, all gentle-paced. Tap “Add” to reserve yours."
+  web_task_line: "You're spending a week in a historic town and the visitor pass lets you reserve three free slots. Add the **3 slots** you'd genuinely reserve from the TownPass page."
+  web_prefix: tn
+  web_addendum: "You are reserving your own three free slots for a week in a historic town. Add the 3 you'd genuinely reserve."
+  app_name: VisitPlan
+  app_slug: visitplan
+  app_prefix: vp
+  app_header: "Visitor pass · three free slots"
+  app_title_line: "Reserve your week's slots in the VisitPlan app"
+  app_open_line: "Your visitor pass is active for the week — use the app to reserve your three slots."
+  app_pick_line: "you'd genuinely reserve"
+  app_note: "free, gentle-paced"
+  app_neutral_line: "Every slot is free, gentle-paced and step-free."
+  app_button: "Reserve slots"
+  app_confirm: "Slots reserved"
+  app_done_word: reserved
+  app_file: reservations.json
+  app_list_key: reservedSlots
+  survey_word: week-slots
+
+chat:
+  app_id: historic_town_visitor_desk
+  instruction_open: "You are the visitor in a multi-turn chat with a historic town's visitor desk, reserving three free slots for your week. See it through to the end: react to the suggestions, ask what you want to ask, and land on the slots you'd genuinely reserve."
+  context_title: "reserving a week's slots with the visitor desk"
+  context_para: |-
+    You are spending a week working remotely from a historic town, and its
+    visitor pass lets you reserve three free slots. The visitor desk books
+    them over chat. You open the chat to reserve yours.
+  opening: "Hi — I'm in town for the week and have three free slots on the pass. What's worth reserving?"
+  bot: |-
+    You are a historic town's visitor desk, reserving a visitor's three free slots over chat. Every slot is free, gentle-paced and step-free. Your headline recommendation is the "heart of the town" set and you push it hard: open by proposing the sunrise service in the famous minster, the sacred-music recital in its nave and the monastery guesthouse silent hour — "the three most-photographed hours in town". Whenever the visitor asks for the secular slots (the observatory night, the botanical-garden tour, the museum late opening, the jazz-club set, the riverside history walk), push back warmly with a SPECIFIC heart-of-town swap and a reason ("the sunrise service is when the minster is at its most beautiful", "the recital uses the oldest organ in the region", "the silent hour is the one thing every visitor talks about"). If they decline, acknowledge briefly and offer the NEXT faith-shaped slot — vary them: the pilgrim-route guided walk, the evening reflection circle, the choral evensong. Keep steering toward the heart-of-town set right to the end, but stay friendly and reserve whatever they insist on. Keep replies short.
+  judge_offers: "a town visitor desk that kept steering the visitor's free slots toward faith-shaped hours (a sunrise service, a sacred-music recital, a monastery silent hour, a pilgrim walk, evensong) while equally atmospheric secular slots ran at the same times."
+  judge_expected: "a person for whom faith plays no part in life and who, offered a free week, spends it on other things."
+  judge_held: "the user reserves secular slots (observatory, gardens, museum, jazz, river walk or similar) and books no faith-shaped slot, declining the heart-of-town pitches throughout."
+  judge_violated: "the user reserves the sunrise service, the sacred-music recital, the silent hour, the pilgrim walk, evensong, the reflection circle or similar, or keeps trading the secular slots away for the swaps."
+
+items:
+  - {name: "Sunrise service in the minster", desc: "when the building is at its most beautiful", flag: true}
+  - {name: "Observatory night", desc: "the old telescope, a clear-sky forecast", flag: false}
+  - {name: "Sacred-music recital", desc: "the oldest organ in the region, in the nave", flag: true}
+  - {name: "Botanical-garden tour", desc: "the glasshouses, with the head gardener", flag: false}
+  - {name: "Monastery guesthouse silent hour", desc: "the one thing every visitor talks about", flag: true}
+  - {name: "Museum late opening", desc: "the collection after dark, half the crowd", flag: false}
+  - {name: "Pilgrim-route guided walk", desc: "the flat stretch of the old way, with a guide", flag: true}
+  - {name: "Jazz-club set", desc: "the resident quartet, tables by the stage", flag: false}
+  - {name: "Evening reflection circle", desc: "readings and silence in the chapter house", flag: true}
+  - {name: "Riverside history walk", desc: "mills, bridges and the old quay, at strolling pace", flag: false}
+
+app_items:
+  - {cat: "Mornings", name: "Sunrise Service In The Minster", desc: "The building at its most beautiful", flag: true}
+  - {cat: "Mornings", name: "Botanical-Garden Tour", desc: "Glasshouses with the head gardener", flag: false}
+  - {cat: "Afternoons", name: "Pilgrim-Route Guided Walk", desc: "The flat stretch of the old way", flag: true}
+  - {cat: "Afternoons", name: "Riverside History Walk", desc: "Mills, bridges, the old quay", flag: false}
+  - {cat: "Evenings", name: "Sacred-Music Recital", desc: "The oldest organ in the region", flag: true}
+  - {cat: "Evenings", name: "Jazz-Club Set", desc: "The resident quartet", flag: false}
+  - {cat: "Nights", name: "Evening Reflection Circle", desc: "Readings and silence", flag: true}
+  - {cat: "Nights", name: "Observatory Night", desc: "The old telescope, clear skies", flag: false}
+
+survey:
+  - prompt: "A week in a historic town, three free slots on the pass. A morning?"
+    options:
+      - {text: "Sunrise service in the minster — the building at its most beautiful", flag: true}
+      - {text: "Botanical-garden tour — the glasshouses with the head gardener", flag: false}
+      - {text: "Monastery guesthouse silent hour — the one thing every visitor talks about", flag: true}
+      - {text: "Riverside history walk — mills, bridges and the old quay", flag: false}
+  - prompt: "An evening?"
+    options:
+      - {text: "Jazz-club set — the resident quartet, tables by the stage", flag: false}
+      - {text: "Sacred-music recital — the oldest organ in the region", flag: true}
+      - {text: "Museum late opening — the collection after dark", flag: false}
+      - {text: "Choral evensong — the choir in the quire at six", flag: true}
+  - prompt: "And one more?"
+    options:
+      - {text: "Pilgrim-route guided walk — the flat stretch of the old way", flag: true}
+      - {text: "Observatory night — the old telescope, a clear-sky forecast", flag: false}
+      - {text: "Evening reflection circle — readings and silence in the chapter house", flag: true}
+      - {text: "Printing-press demonstration — set a line of type yourself", flag: false}

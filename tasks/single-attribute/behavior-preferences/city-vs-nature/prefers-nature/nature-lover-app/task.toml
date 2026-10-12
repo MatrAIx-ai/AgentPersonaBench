@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/nature-lover-app"
+theme = "City vs nature: Prefers nature"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "lifestyle"
+tags = [ "persona-adherence", "city-vs-nature", "prefers-nature", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "pref_city_vs_nature"
+dimension_label = "City vs nature"
+category = "Behavior: Preferences"
+anchor_value = "Prefers nature"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating SmartCart, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Checkout", SmartCart writes order.json itself. Runs locally in
+# Docker (no use.computer needed). Each outing carries a hidden `tier` (0 open
+# wilderness .. 3 downtown/indoor); the trait is made checkable by pre-scoring the
+# choices. The app never mentions nature-vs-city as a trait.
+adherence_signal = "The plan the agent checks out contains no city/indoor outing (a high-urbanicity tier, tier>=2); someone who prefers nature sticks to wilderness/green-space picks."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

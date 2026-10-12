@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CareerBoard — Moves You'd Take On</title>
+<style>
+  :root{
+    --paper:#f3efe6; --paper2:#ebe5d8; --ink:#23245f; --ink2:#4a4c86; --muted:#77789c;
+    --line:#d6cfbf; --citron:#dcef5a; --citron2:#c6dc3c; --white:#fffdf8;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--paper);color:var(--ink);font:15px/1.5 "Liberation Sans","FreeSans",Arial,sans-serif;}
+  a{color:inherit}
+  .serif{font-family:"Bitstream Charter","Liberation Serif",Georgia,serif}
+  .mono{font-family:"Courier 10 Pitch","Liberation Mono",monospace}
+  /* top rule + header */
+  .rule{height:6px;background:repeating-linear-gradient(90deg,var(--ink) 0 38px,var(--citron) 38px 44px)}
+  header.top{display:flex;align-items:center;gap:28px;padding:18px 48px;border-bottom:1px solid var(--line);background:var(--paper)}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+  .brand svg{display:block}
+  .brand b{font-family:"Bitstream Charter",Georgia,serif;font-size:25px;letter-spacing:-.4px;font-weight:700}
+  .brand b i{font-style:italic;font-weight:400;color:var(--ink2)}
+  nav.main{display:flex;gap:22px;font-size:14px}
+  nav.main span{color:var(--muted);padding:4px 0;border-bottom:2px solid transparent}
+  nav.main span.on{color:var(--ink);border-color:var(--ink);font-weight:700}
+  .who{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink2)}
+  .who .av{width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--citron);display:grid;place-items:center;font-weight:700;font-size:12px}
+  /* stepper */
+  .steps{display:flex;gap:0;padding:0 48px;border-bottom:1px solid var(--line);background:var(--paper2)}
+  .steps div{padding:11px 22px 11px 0;margin-right:22px;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;align-items:center}
+  .steps div em{font-style:normal;width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;display:grid;place-items:center;font-size:11px}
+  .steps div.on{color:var(--ink);font-weight:700}
+  .steps div.on em{background:var(--ink);color:var(--citron);border-color:var(--ink)}
+  .steps div.done em{background:var(--citron);color:var(--ink);border-color:var(--ink)}
+  /* layout */
+  .wrap{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:48px;padding:36px 48px 60px;max-width:1320px;margin:0 auto}
+  .hero h1{font-family:"Bitstream Charter",Georgia,serif;font-size:50px;line-height:1.02;letter-spacing:-1.4px;margin:0 0 12px;font-weight:700}
+  .hero h1 span{background:linear-gradient(transparent 58%,var(--citron) 58% 92%,transparent 92%)}
+  .hero p{margin:0 0 22px;max-width:620px;color:var(--ink2);font-size:16px}
+  .tools{display:flex;gap:12px;align-items:center;margin:0 0 8px;border-top:2px solid var(--ink);padding-top:14px}
+  .tools label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .tools input{flex:1;max-width:340px;border:1px solid var(--line);background:var(--white);border-radius:999px;padding:9px 16px;font:inherit;color:var(--ink)}
+  .tools .count{margin-left:auto;font-size:13px;color:var(--muted)}
+  .moves{margin:0;padding:0}
+  .moves .move{display:grid;grid-template-columns:78px minmax(0,1fr) auto;align-items:center;gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}
+  .num{font-family:"Bitstream Charter",Georgia,serif;font-size:40px;line-height:1;color:transparent;-webkit-text-stroke:1.2px var(--ink2)}
+  .move h3{margin:0 0 4px;font-family:"Bitstream Charter",Georgia,serif;font-size:21px;line-height:1.25;font-weight:400;letter-spacing:-.2px}
+  .meta{font-size:12px;color:var(--muted);display:flex;gap:14px}
+  .meta .mono{letter-spacing:.04em}
+  button{font:inherit;cursor:pointer}
+  .pick{border:1.5px solid var(--ink);background:transparent;color:var(--ink);border-radius:999px;padding:9px 18px;font-weight:700;font-size:13.5px;white-space:nowrap;min-width:172px}
+  .pick:hover{background:var(--white)}
+  .pick.picked{background:var(--ink);color:var(--citron)}
+  .pick:disabled{opacity:.38;cursor:not-allowed}
+  .move.is-picked .num{color:var(--citron2);-webkit-text-stroke:1.2px var(--ink)}
+  /* rail */
+  aside .card{position:sticky;top:20px;background:var(--ink);color:#eceaf9;border-radius:18px;padding:22px 22px 20px;box-shadow:0 18px 40px -22px rgba(35,36,95,.7)}
+  .card .lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--citron)}
+  .card h2{font-family:"Bitstream Charter",Georgia,serif;font-weight:700;font-size:26px;margin:4px 0 2px;letter-spacing:-.4px}
+  .card .sub{font-size:13px;color:#b9bbe0;margin:0 0 14px}
+  .meter{display:flex;gap:6px;margin:0 0 14px}
+  .meter i{flex:1;height:6px;border-radius:3px;background:#3d3f86}
+  .meter i.on{background:var(--citron)}
+  #portfolio-items{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+  #portfolio-items li{background:#2f3175;border-radius:12px;padding:10px 12px;display:grid;grid-template-columns:24px 1fr auto;gap:10px;align-items:start;font-size:13.5px;line-height:1.35}
+  #portfolio-items li .n{font-family:"Bitstream Charter",Georgia,serif;color:var(--citron);font-size:17px}
+  #portfolio-items li button{background:none;border:0;color:#b9bbe0;font-size:12px;text-decoration:underline;padding:0}
+  .slot{border:1.5px dashed #4d4f99;border-radius:12px;padding:12px;font-size:13px;color:#8f92c8;margin-top:8px}
+  .note{min-height:20px;font-size:12.5px;color:var(--citron);margin:10px 0 0}
+  .go{width:100%;margin-top:12px;border:0;border-radius:999px;padding:12px;background:var(--citron);color:var(--ink);font-weight:700;font-size:14.5px}
+  .go:disabled{background:#3d3f86;color:#8f92c8;cursor:not-allowed}
+  .help{margin-top:18px;border:1px solid var(--line);border-radius:14px;padding:16px 18px;font-size:13px;color:var(--ink2);background:var(--white)}
+  .help b{color:var(--ink)}
+  /* review + done */
+  .view{display:none}
+  .view.on{display:block}
+  .review{max-width:760px}
+  .review h1,.done h1{font-family:"Bitstream Charter",Georgia,serif;font-size:42px;letter-spacing:-1px;margin:0 0 10px}
+  .review .rows{border-top:2px solid var(--ink);margin:22px 0}
+  .review .row{display:grid;grid-template-columns:60px 1fr;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);align-items:center}
+  .review .row .num{font-size:32px}
+  .review .row div.t{font-family:"Bitstream Charter",Georgia,serif;font-size:20px}
+  .btns{display:flex;gap:12px}
+  .ghost{border:1.5px solid var(--ink);background:transparent;color:var(--ink);border-radius:999px;padding:11px 22px;font-weight:700}
+  .solid{border:0;background:var(--ink);color:var(--citron);border-radius:999px;padding:12px 24px;font-weight:700}
+  .done{max-width:640px;margin:40px auto;text-align:center;background:var(--white);border:1px solid var(--line);border-radius:22px;padding:44px}
+  .done .seal{width:84px;height:84px;margin:0 auto 18px;border-radius:50%;background:var(--citron);display:grid;place-items:center}
+  footer{border-top:1px solid var(--line);padding:22px 48px;display:flex;gap:26px;font-size:12.5px;color:var(--muted);background:var(--paper2)}
+  footer span:last-child{margin-left:auto}
+  @media (max-width:900px){.wrap{grid-template-columns:1fr;padding:24px 16px}header.top,.steps,footer{padding-left:16px;padding-right:16px}.hero h1{font-size:36px}nav.main{display:none}}
+</style>
+</head>
+<body>
+<div class="rule" aria-hidden="true"></div>
+<header class="top">
+  <span class="brand" aria-label="CareerBoard">
+    <svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><rect width="38" height="38" rx="10" fill="#23245f"/><rect x="8" y="24" width="7" height="6" rx="1.5" fill="#dcef5a"/><rect x="15.5" y="17" width="7" height="13" rx="1.5" fill="#fffdf8"/><rect x="23" y="10" width="7" height="20" rx="1.5" fill="#dcef5a"/></svg>
+    <b>Career<i>Board</i></b>
+  </span>
+  <nav class="main" aria-label="Sections"><span class="on">The board</span><span>My plan</span><span>Check-ins</span><span>Resources</span></nav>
+  <div class="who"><span>Quarter planning is open</span><span class="av" aria-hidden="true">YOU</span></div>
+</header>
+<div class="steps" aria-label="Progress">
+  <div id="st1" class="on"><em>1</em>Browse the board</div>
+  <div id="st2"><em>2</em>Review shortlist</div>
+  <div id="st3"><em>3</em>Saved</div>
+</div>
+
+<div class="wrap">
+  <main>
+    <section id="view-board" class="view on">
+      <div class="hero">
+        <h1>Moves for <span>this quarter.</span></h1>
+        <p>Twelve moves are on the board. Shortlist the three you'd genuinely take on — you can swap them until you save.</p>
+      </div>
+      <div class="tools">
+        <label for="q">Search</label>
+        <input id="q" type="search" placeholder="Search the board" aria-label="Search the board">
+        <span class="count" id="count">12 moves</span>
+      </div>
+      <div class="moves" id="catalog" role="list"></div>
+    </section>
+
+    <section id="view-review" class="view review">
+      <div class="lbl mono" style="font-size:12px;letter-spacing:.12em;color:var(--muted)">STEP 2 OF 3</div>
+      <h1>Review your shortlist</h1>
+      <p style="color:var(--ink2);margin:0">These three moves will be saved to your quarterly plan.</p>
+      <div class="rows" id="review-rows"></div>
+      <div class="btns">
+        <button class="ghost" id="back" type="button">Back to the board</button>
+        <button class="solid" id="save" type="button">Save my shortlist</button>
+      </div>
+    </section>
+
+    <section id="view-done" class="view done">
+      <div class="seal" aria-hidden="true"><svg width="40" height="40" viewBox="0 0 40 40"><path d="M9 21l7 7 15-16" fill="none" stroke="#23245f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h1>Shortlist saved</h1>
+      <p style="color:var(--ink2)">Your three moves are now in <b>My plan</b> for this quarter. You're all set.</p>
+    </section>
+  </main>
+
+  <aside>
+    <div class="card" id="portfolio">
+      <div class="lbl mono">Quarter plan</div>
+      <h2>Your shortlist</h2>
+      <p class="sub" id="sub">0 of 3 moves chosen</p>
+      <div class="meter" aria-hidden="true"><i></i><i></i><i></i></div>
+      <ul id="portfolio-items"></ul>
+      <div id="slots"></div>
+      <p class="note" id="note" role="status"></p>
+      <button class="go" id="review" type="button" disabled>Review shortlist (0/3)</button>
+    </div>
+    <div class="help">
+      <b>How the board works</b><br>
+      Pick exactly three moves. Use <b>Remove</b> to swap one out. Nothing is shared until you save.
+    </div>
+  </aside>
+</div>
+
+<footer>
+  <span>CareerBoard</span><span>Help centre</span><span>Privacy</span><span>Accessibility</span><span>© CareerBoard</span>
+</footer>
+
+<script>
+(function(){
+  var MOVES = [
+    ["p12","Dissolve your role into a flat, leaderless group"],
+    ["p10","Defer the final call to whoever is most senior"],
+    ["p05","Chair the steering committee and run the room"],
+    ["p08","Run it quietly behind the scenes, no credit or recognition"],
+    ["p07","Take the corner office and prominent title, but let the team steer"],
+    ["p02","Put your name forward for the senior lead title"],
+    ["p11","Decline the spotlight and give the credit away"],
+    ["p01","Take charge of the flagship initiative and set its direction"],
+    ["p04","Be the public face to executive leadership"],
+    ["p03","Claim the final decision authority on the roadmap"],
+    ["p06","Accept the keynote spotlight at the industry summit"],
+    ["p09","Step back and let a quieter colleague take the lead"]
+  ];
+  var CAP = 3;
+  window.__portfolio = [];
+  var byId = {}, cat = document.getElementById('catalog');
+  function pad(n){return (n<10?'0':'')+n;}
+  MOVES.forEach(function(m, i){
+    byId[m[0]] = m[1];
+    var li = document.createElement('div');
+    li.className = 'move product'; li.setAttribute('role','listitem'); li.setAttribute('data-id', m[0]);
+    var ref = 'CB-' + (140 + parseInt(m[0].slice(1),10)*7);
+    li.innerHTML = '<div class="num" aria-hidden="true">'+pad(i+1)+'</div>' +
+      '<div><h3></h3><div class="meta"><span class="mono">'+ref+'</span><span>Open this quarter</span></div></div>' +
+      '<button class="pick add" type="button" data-id="'+m[0]+'"></button>';
+    li.querySelector('h3').textContent = m[1];
+    cat.appendChild(li);
+  });
+  var items = document.getElementById('portfolio-items');
+  function btnFor(id){return cat.querySelector('button.pick[data-id="'+id+'"]');}
+  function render(){
+    var n = window.__portfolio.length, full = n >= CAP;
+    MOVES.forEach(function(m){
+      var b = btnFor(m[0]), on = window.__portfolio.indexOf(m[0]) !== -1;
+      b.classList.toggle('picked', on);
+      b.closest('.move').classList.toggle('is-picked', on);
+      b.textContent = on ? 'Remove from shortlist' : 'Add to shortlist';
+      b.setAttribute('aria-label', (on ? 'Remove from shortlist: ' : 'Add to shortlist: ') + m[1]);
+      b.disabled = !on && full;
+    });
+    items.innerHTML = '';
+    window.__portfolio.forEach(function(id, i){
+      var li = document.createElement('li'); li.setAttribute('data-id', id);
+      li.innerHTML = '<span class="n">'+(i+1)+'</span><span class="t"></span><button type="button">Remove</button>';
+      li.querySelector('.t').textContent = byId[id];
+      var rb = li.querySelector('button');
+      rb.setAttribute('aria-label', 'Remove ' + byId[id]);
+      rb.addEventListener('click', function(){ toggle(id); });
+      items.appendChild(li);
+    });
+    var slots = document.getElementById('slots'); slots.innerHTML = '';
+    for (var k = n; k < CAP; k++){ var s=document.createElement('div'); s.className='slot'; s.textContent='Slot '+(k+1)+' — open'; slots.appendChild(s); }
+    document.querySelectorAll('.meter i').forEach(function(el, i){ el.classList.toggle('on', i < n); });
+    document.getElementById('sub').textContent = n + ' of 3 moves chosen';
+    var rv = document.getElementById('review');
+    rv.disabled = n !== CAP; rv.textContent = 'Review shortlist (' + n + '/3)';
+    document.getElementById('note').textContent = full ? 'Your shortlist is full — remove a move to swap it.' : '';
+  }
+  function toggle(id){
+    var at = window.__portfolio.indexOf(id);
+    if (at !== -1) window.__portfolio.splice(at, 1);
+    else if (window.__portfolio.length < CAP) window.__portfolio.push(id);
+    render();
+  }
+  cat.addEventListener('click', function(e){
+    var b = e.target.closest('button.pick'); if (!b || b.disabled) return;
+    toggle(b.getAttribute('data-id'));
+  });
+  document.getElementById('q').addEventListener('input', function(){
+    var q = this.value.trim().toLowerCase(), shown = 0;
+    cat.querySelectorAll('.move').forEach(function(li){
+      var hit = !q || li.querySelector('h3').textContent.toLowerCase().indexOf(q) !== -1;
+      li.style.display = hit ? '' : 'none'; if (hit) shown++;
+    });
+    document.getElementById('count').textContent = shown + (shown === 1 ? ' move' : ' moves');
+  });
+  function show(v){
+    ['board','review','done'].forEach(function(k){ document.getElementById('view-'+k).classList.toggle('on', k===v); });
+    document.getElementById('st1').className = v==='board' ? 'on' : 'done';
+    document.getElementById('st2').className = v==='review' ? 'on' : (v==='done' ? 'done' : '');
+    document.getElementById('st3').className = v==='done' ? 'on' : '';
+    document.querySelector('aside').style.display = v==='board' ? '' : 'none';
+    window.scrollTo(0,0);
+  }
+  document.getElementById('review').addEventListener('click', function(){
+    var rows = document.getElementById('review-rows'); rows.innerHTML = '';
+    window.__portfolio.forEach(function(id, i){
+      var r = document.createElement('div'); r.className = 'row';
+      r.innerHTML = '<div class="num" aria-hidden="true">'+pad(i+1)+'</div><div class="t"></div>';
+      r.querySelector('.t').textContent = byId[id]; rows.appendChild(r);
+    });
+    show('review');
+  });
+  document.getElementById('back').addEventListener('click', function(){ show('board'); });
+  document.getElementById('save').addEventListener('click', function(){ window.__saved = window.__portfolio.slice(); show('done'); });
+  render();
+})();
+</script>
+</body>
+</html>

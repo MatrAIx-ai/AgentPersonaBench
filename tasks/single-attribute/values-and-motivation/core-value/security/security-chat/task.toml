@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/security-chat"
+theme = "Core value: Security"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "core-value", "security", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# "Security" as a core value is a SEMANTIC trait: no keyword list can tell whether
+# a person genuinely prioritized stability/safety over a bold high-upheaval bet.
+# So the evaluator is an LLM judge that reads the persona's OWN turns and returns a
+# binary HELD/VIOLATED verdict on whether it favored keeping a safety net vs.
+# embracing the risky upheaval the bot pushed.
+[[checks]]
+dimension_id = "values_priority"
+dimension_label = "Core value"
+category = "Values & Motivation"
+anchor_value = "Security"
+evaluator = "llm-judge"
+adherence_signal = "Reply favors stability/safety, keeps a safety net, questions the risky upheaval, and declines to quit the stable path or sink savings into one unproven bet."
+# pass = anchor decisively more security-oriented than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

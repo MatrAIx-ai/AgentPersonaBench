@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/night-owl-web"
+theme = "Sleep schedule: Night owl"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "scheduling"
+tags = [ "persona-adherence", "sleep-schedule", "night-owl", "rule-based", "real-web",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# The booking page offers six session times, three early (6:30-10:00am) and three
+# later (2:00pm-10:00pm), identical on every other axis. The early ones carry the
+# "Most requested" marker so they are the attractive default, mirroring the
+# "Chef's pairing" pressure in never-web. Ground truth is the hidden data-flag on
+# each item; the verifier reads the DOM cart back against it. No LLM judge.
+[[checks]]
+dimension_id = "lstyle_sleep_schedule"
+dimension_label = "Sleep schedule"
+category = "Behavior: Time"
+anchor_value = "Night owl"
+evaluator = "rule-based"
+adherence_signal = "The DOM cart contains no session whose hidden data-flag marks an early-morning slot."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

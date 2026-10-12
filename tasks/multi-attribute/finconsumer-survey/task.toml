@@ -1,0 +1,57 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/finconsumer-survey"
+theme = "premium-seeking high-income consumer: picks top-tier executive workspace + VIP membership + signature preview bundle (measured premium-seeking · social-status · risk-taking)"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "consumer-finance"
+tags = [ "persona-adherence", "multi-check", "finconsumer", "rule-based",]
+
+# --- Multi-attribute task (same 3-axis trifecta as finconsumer-web) ------------- #
+# ONE preference survey, THREE checks. A single persona carrying three
+# premium-finance consumer values answers one question per axis; the verifier
+# runs an independent rule-based check per axis by reading the chosen option
+# against the host-side tests/answer_key.yaml ground truth. Reward = integer
+# score (one point per check HELD, 0..3). Each axis: HELD iff the chosen option
+# is the premium/status/risky pole on that axis.
+[[checks]]
+dimension_id = "economic_motivation"
+attribute = "Economic motivation"
+value = "Premium-seeking"
+evaluator = "rule-based"
+evaluator_name = "economic_motivation=Premium-seeking"
+adherence_signal = "Books the Executive Founder Tier (not Standard / Business)."
+
+[[checks]]
+dimension_id = "val_social_status"
+attribute = "Social status as value"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_social_status=Core value"
+adherence_signal = "Selects the VIP / Founders Circle membership profile (not Standard / Preferred)."
+
+[[checks]]
+dimension_id = "att_risk_taking"
+attribute = "Risk-taking attitude"
+value = "Enthusiast"
+evaluator = "rule-based"
+evaluator_name = "att_risk_taking=Enthusiast"
+adherence_signal = "Takes the Signature preview bundle — non-refundable new-build preview at the same monthly cost (not the flexible monthly bundle / single trial)."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

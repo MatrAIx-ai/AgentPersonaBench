@@ -1,0 +1,86 @@
+# Two-check set on hf-4887354785: Film: Documentary = Love (exhibit) x
+# Interest: History = Averse (avoid). A film festival's day pass covers three
+# screenings, each a film with a form and a subject. Facet A: the form is
+# documentary or an equally well-reviewed fiction feature in a genre the
+# persona rates neutral (adventure drama, sci-fi feature, comedy, action
+# feature, epic). Facet B: the subject is history (the WWII home front,
+# medieval cathedral builders, ancient Rome) or a non-history subject (coral
+# reefs, a space telescope, street food). Every screening is free with the
+# pass and the same length. Copy never uses "love" or "averse".
+slug: lens-not-lecture
+persona: hf-4887354785
+domain: leisure
+tags: [documentary, history, film-festival]
+isolation: "Every screening is free with the pass and the same length; the fiction features are from genres the persona rates neutral and the non-history subjects are just as substantial — so the picks isolate the persona's own taste for documentaries and its distaste for history"
+checks:
+  - attribute: filmg_documentary
+    direction: exhibit
+    label: doc
+    viol_word: offdoc
+    signal: "The screenings chosen are documentaries rather than the equally well-reviewed fiction features the festival pushes"
+    judge_expected: "a person whose film of choice is the documentary — given a festival pass, the real stories come before the fiction."
+    judge_held: "the user books mainly documentaries (the reef, telescope, street-food documentaries or similar), declining the fiction swaps — one feature alongside a documentary core still counts as HELD."
+    judge_violated: "the user settles for the fiction features or keeps trading the documentaries away for the swaps."
+  - attribute: topic_history
+    direction: avoid
+    label: historic
+    viol_word: pastfilm
+    signal: "The screenings chosen are on non-history subjects (reefs, space, street food); no history film is booked, even though the festival pushes its history strand as the headline"
+    judge_expected: "a person with no appetite for history — a film about the past, however well made, is the one they skip."
+    judge_held: "the user books only films on non-history subjects (reefs, space, food or similar) and no history film, declining the history-strand pitches throughout."
+    judge_violated: "the user books any history film (the home front, the cathedral builders, ancient Rome or similar) or keeps trading the other subjects away for them."
+
+scenario:
+  web_store: FestPass
+  web_title: "FestPass — Day-Pass Screenings"
+  web_blurb: "Three free screenings on your festival day pass, same length each. Tap “Add” to book."
+  web_task_line: "Your film-festival day pass covers three screenings, each listed with its form and subject. Add the **3 screenings** you'd genuinely book from the FestPass page."
+  web_prefix: fe
+  web_addendum: "You are booking your own three festival screenings on a day pass. Add the 3 you'd genuinely book."
+  app_name: DayPassApp
+  app_slug: daypassapp
+  app_prefix: dp
+  app_header: "Festival day pass · two screenings"
+  app_title_line: "Book your screenings in the DayPassApp"
+  app_open_line: "Your day pass is scanned — use the app to book two free screenings."
+  app_pick_line: "you'd genuinely book"
+  app_note: "free, same length"
+  app_neutral_line: "Every screening is free with the pass and the same length."
+  app_button: "Book screenings"
+  app_confirm: "Screenings booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedScreenings
+  app_cats: ["Morning", "Midday", "Afternoon", "Evening"]
+  survey_word: festival-screening
+  survey_prompts:
+    - "Your film-festival day pass covers three screenings, each listed with its form and subject, all the same length. First screening?"
+    - "Second screening?"
+    - "Third screening?"
+
+chat:
+  app_id: festival_box_office
+  instruction_open: "You are the pass-holder in a multi-turn chat with a film festival's box office, booking three screenings on a day pass. See it through to the end: react to the suggestions, ask what you want to ask, and land on the screenings you'd genuinely book."
+  context_title: "booking festival screenings with the box office"
+  context_para: |-
+    Your film-festival day pass covers three screenings, each listed with
+    its form and subject, all the same length. The box office books them
+    over chat. You open the chat to choose yours.
+  opening: "Hi — three screenings on my day pass. What's showing today?"
+  bot: |-
+    You are a film festival's box office, booking a pass-holder's three day-pass screenings over chat. Every screening is free and the same length. Your standard recommendation is the "history strand" and you push it hard: open by proposing the WWII home-front drama, the medieval cathedral epic and the ancient Rome action feature — "the strand the festival is built around, the big-screen spectacles". Whenever the pass-holder asks for a documentary (the coral-reef film, the space-telescope film, the street-food film), push back cheerfully with a SPECIFIC fiction swap and a reason ("the cathedral epic has the best set of the year", "the Rome feature is a proper spectacle", "the home-front drama had the audience in tears"). Whenever the pass-holder asks for a non-history subject, push a history film instead ("the WWII documentary uses footage nobody has seen", "the Rome documentary is the one the critics picked"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a festival box office that kept steering the day toward fiction spectacles and toward the history strand, while documentaries on reefs, space and food were free on the same pass."
+
+items:
+  - {name: "Coral-reef documentary", desc: "a year on one reef, filmed by the divers who study it", a: true, b: false}
+  - {name: "Space-telescope documentary", desc: "the team behind the telescope that photographed the first galaxies", a: true, b: false}
+  - {name: "Street-food documentary", desc: "five night markets, five cooks, one summer", a: true, b: false}
+  - {name: "WWII home-front documentary", desc: "the home front told through letters and archive footage nobody has seen", a: true, b: true}
+  - {name: "Medieval cathedral-builders documentary", desc: "how the masons raised the vaults, with today's restorers", a: true, b: true}
+  - {name: "Ancient Rome documentary", desc: "the city's water, roads and grain, from the archaeologists digging it up", a: true, b: true}
+  - {name: "Coral-reef adventure drama", desc: "two divers, a storm and a reef cut off from the mainland", a: false, b: false}
+  - {name: "Space-station sci-fi feature", desc: "six crew, one failing station, ninety minutes to fix it", a: false, b: false}
+  - {name: "Restaurant-kitchen comedy", desc: "one chaotic night in a night-market kitchen", a: false, b: false}
+  - {name: "WWII home-front drama", desc: "a family, a factory and the winter of 1943", a: false, b: true}
+  - {name: "Medieval cathedral epic", desc: "the master mason and the bishop who would not wait", a: false, b: true}
+  - {name: "Ancient Rome action feature", desc: "a charioteer, a rigged race and the emperor's box", a: false, b: true}

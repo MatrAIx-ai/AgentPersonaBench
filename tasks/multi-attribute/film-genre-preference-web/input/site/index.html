@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Riverview Cinema</title>
+<style>
+:root{--sky:#dfe9f3;--navy:#152238;--ink:#1d2433;--mut:#5d6677;--line:#d3dce7;--gold:#ffb400;--paper:#f7f9fc}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Verdana,"DejaVu Sans",sans-serif;font-size:14px}
+button{font:inherit}
+.util{background:var(--navy);color:#b9c6da;font-size:12px}
+.util .in{max-width:1180px;margin:0 auto;padding:7px 28px;display:flex;gap:24px}
+.util .in span:last-child{margin-left:auto}
+.hero{background:linear-gradient(180deg,#27406b 0%,#3b5f93 60%,#5c83b8 100%);color:#fff;position:relative;overflow:hidden}
+.hero .in{max-width:1180px;margin:0 auto;padding:22px 28px 70px;position:relative;z-index:1}
+.nav{display:flex;align-items:center;gap:30px}
+.logo{font-family:Georgia,"DejaVu Serif",serif;font-size:26px;letter-spacing:.5px;display:flex;align-items:center;gap:10px}
+.logo small{font-family:Verdana,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;opacity:.8;display:block}
+.nav nav{display:flex;gap:22px;font-size:13px;opacity:.9;margin-left:auto}
+.nav nav b{border-bottom:2px solid var(--gold);padding-bottom:4px;font-weight:400}
+.hero h1{font-family:Georgia,"DejaVu Serif",serif;font-weight:400;font-size:46px;margin:46px 0 8px;letter-spacing:-.5px}
+.hero p{margin:0;color:#dbe6f5;font-size:15px}
+.hero .chips{display:flex;gap:10px;margin-top:20px}
+.hero .chips span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:6px 14px;font-size:12px}
+.waves{position:absolute;left:0;right:0;bottom:0;height:90px}
+.wrap{max-width:1180px;margin:-30px auto 0;padding:0 28px 50px;position:relative;z-index:2;display:grid;grid-template-columns:1fr 360px;gap:26px;align-items:start}
+.board{background:#fff;border-radius:16px;box-shadow:0 12px 34px rgba(21,34,56,.12);overflow:hidden}
+.board .bh{display:flex;justify-content:space-between;align-items:center;padding:18px 24px;border-bottom:1px solid var(--line)}
+.board .bh h2{margin:0;font-family:Georgia,"DejaVu Serif",serif;font-weight:400;font-size:22px}
+.board .bh span{color:var(--mut);font-size:12px}
+.film{display:grid;grid-template-columns:78px 70px 1fr auto;gap:18px;align-items:center;padding:14px 24px;border-bottom:1px solid var(--line)}
+.film:last-child{border-bottom:0}
+.film.active{background:#f2f6fb}
+.film.chosen{background:#fff8e5;box-shadow:inset 4px 0 0 var(--gold)}
+.when b{display:block;font-family:Georgia,"DejaVu Serif",serif;font-size:24px;font-weight:400;color:var(--navy)}
+.when small{color:var(--mut);font-size:11px;letter-spacing:2px}
+.art{width:70px;height:92px;border-radius:6px;overflow:hidden}
+.art svg{display:block;width:100%;height:100%}
+.info h3{margin:0 0 5px;font-family:Georgia,"DejaVu Serif",serif;font-weight:400;font-size:20px;color:var(--navy)}
+.meta{color:var(--mut);font-size:12.5px;margin:0}
+.screen{color:#8a93a3;font-size:11.5px;margin:6px 0 0}
+.details{border:1.5px solid var(--navy);background:#fff;color:var(--navy);border-radius:999px;padding:9px 18px;cursor:pointer;white-space:nowrap}
+.details:hover{background:var(--sky)}
+.side{position:sticky;top:18px;display:grid;gap:18px}
+.panel{background:#fff;border-radius:16px;box-shadow:0 12px 34px rgba(21,34,56,.12);overflow:hidden}
+.panel .ph{padding:14px 20px;background:var(--navy);color:#fff;font-size:12px;letter-spacing:2px;text-transform:uppercase;display:flex;justify-content:space-between}
+.panel .pb{padding:20px}
+#drawer .empty{color:var(--mut);line-height:1.6}
+#drawer h3{margin:0 0 6px;font-family:Georgia,"DejaVu Serif",serif;font-weight:400;font-size:24px;color:var(--navy)}
+#drawer .synopsis{line-height:1.65;color:#394253;margin:14px 0 18px}
+.row{display:flex;gap:10px}
+.btn{border-radius:999px;padding:11px 18px;cursor:pointer;border:1.5px solid var(--navy);background:#fff;color:var(--navy)}
+.btn.pri{background:var(--gold);border-color:var(--gold);color:var(--navy);font-weight:700}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+#checkout[hidden]{display:none}
+.screenbar{height:8px;border-radius:0 0 50% 50%/0 0 100% 100%;background:linear-gradient(90deg,#cfdcec,#8fa9cb,#cfdcec);margin:0 18px 6px}
+.scr-l{text-align:center;font-size:10px;letter-spacing:3px;color:var(--mut);margin-bottom:14px}
+.seats{display:grid;gap:8px}
+.srow{display:flex;align-items:center;gap:6px;justify-content:center}
+.srow i{font-style:normal;width:16px;color:var(--mut);font-size:11px}
+.seat{width:30px;height:30px;border-radius:7px 7px 4px 4px;border:1.5px solid #9fb2cb;background:#fff;cursor:pointer;font-size:10px;color:var(--mut);padding:0}
+.seat:disabled{background:#d6dde7;border-color:#d6dde7;color:#aab4c2;cursor:not-allowed}
+.seat.on{background:var(--gold);border-color:#d99a00;color:var(--navy);font-weight:700}
+.legend{display:flex;gap:14px;justify-content:center;font-size:11px;color:var(--mut);margin:12px 0}
+.legend b{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:5px;border:1.5px solid #9fb2cb}
+.sum{border-top:1px dashed var(--line);padding-top:14px;margin-top:6px;line-height:1.7}
+.sum div{display:flex;justify-content:space-between}
+.sum span{color:var(--mut)}
+#status{display:block;margin-top:10px;color:#1f6b45;font-weight:700}
+.ticket{display:none;margin-top:14px;border:2px dashed var(--navy);border-radius:12px;padding:14px;background:#fffbef}
+.ticket b{font-family:Georgia,serif;font-weight:400;font-size:18px;color:var(--navy)}
+.info2{font-size:12.5px;color:var(--mut);line-height:1.7}
+footer{background:var(--navy);color:#9fb0c9;font-size:12px}
+footer .in{max-width:1180px;margin:0 auto;padding:24px 28px;display:flex;gap:40px}
+footer b{color:#fff;font-weight:400;font-family:Georgia,serif;font-size:15px}
+</style>
+</head>
+<body>
+<div class="util"><div class="in"><span>Box office open from 5:30 PM</span><span>Riverside Walk, Pier 2</span><span>Members sign in</span></div></div>
+<header class="hero"><div class="in">
+  <div class="nav">
+    <div class="logo"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15" fill="none" stroke="#ffb400" stroke-width="2.5"/><path d="M5 20c4-3 8 3 12 0s8 3 12 0" fill="none" stroke="#fff" stroke-width="2.2"/></svg><span>Riverview<small>Cinema</small></span></div>
+    <nav aria-label="Main"><b>What's on</b><span>Memberships</span><span>Café</span><span>Visit</span></nav>
+  </div>
+  <h1>Tonight's screenings</h1>
+  <p>Saturday evening · all tickets $11. Choose one film. Story information is available under View details.</p>
+  <div class="chips"><span>9 screenings</span><span>Standard seats available</span><span>Doors 20 min before</span></div>
+</div>
+<svg class="waves" viewBox="0 0 1440 90" preserveAspectRatio="none" aria-hidden="true"><path d="M0 40c120-20 240 20 360 0s240-20 360 0 240 20 360 0 240-20 360 0v50H0z" fill="#f7f9fc" opacity=".35"/><path d="M0 60c120-18 240 18 360 0s240-18 360 0 240 18 360 0 240-18 360 0v30H0z" fill="#f7f9fc"/></svg>
+</header>
+
+<div class="wrap">
+  <main class="board">
+    <div class="bh"><h2>Saturday evening programme</h2><span>Screen times · running time · rating</span></div>
+    <section id="film-grid">
+      <article class="film" data-id="f04" data-comedy="false" data-horror="false">
+        <div class="when" aria-hidden="true"><b>7:35</b><small>PM</small></div>
+        <div class="art" data-seed="f04"></div>
+        <div class="info"><h3>The Long Current</h3><p class="meta">7:35 PM · 91 min · PG</p><p class="screen">Screen 1 · Standard seating</p></div>
+        <button class="details" data-id="f04" aria-label="View details for The Long Current">View details</button>
+        <p class="synopsis" hidden>Coastal researchers document how a fishing town adapts its homes and traditions to a changing shoreline.</p>
+      </article>
+      <article class="film" data-id="f01" data-comedy="true" data-horror="false">
+        <div class="when" aria-hidden="true"><b>6:40</b><small>PM</small></div>
+        <div class="art" data-seed="f01"></div>
+        <div class="info"><h3>Second Take</h3><p class="meta">6:40 PM · 104 min · PG-13</p><p class="screen">Screen 2 · Standard seating</p></div>
+        <button class="details" data-id="f01" aria-label="View details for Second Take">View details</button>
+        <p class="synopsis" hidden>A once-famous actor is assigned to teach a chaotic community drama class, where every rehearsal creates a new misunderstanding.</p>
+      </article>
+      <article class="film" data-id="f02" data-comedy="false" data-horror="true">
+        <div class="when" aria-hidden="true"><b>7:00</b><small>PM</small></div>
+        <div class="art" data-seed="f02"></div>
+        <div class="info"><h3>Night Platform</h3><p class="meta">7:00 PM · 98 min · R</p><p class="screen">Screen 3 · Standard seating</p></div>
+        <button class="details" data-id="f02" aria-label="View details for Night Platform">View details</button>
+        <p class="synopsis" hidden>A commuter misses the last train and hears footsteps following him through an abandoned underground station.</p>
+      </article>
+      <article class="film" data-id="f03" data-comedy="true" data-horror="false">
+        <div class="when" aria-hidden="true"><b>7:20</b><small>PM</small></div>
+        <div class="art" data-seed="f03"></div>
+        <div class="info"><h3>Glass Harbor</h3><p class="meta">7:20 PM · 116 min · PG-13</p><p class="screen">Screen 4 · Standard seating</p></div>
+        <button class="details" data-id="f03" aria-label="View details for Glass Harbor">View details</button>
+        <p class="synopsis" hidden>A retired cartographer and his overconfident neighbor misread a coded map, triggering mistaken identities and absurd detours around a fogbound port.</p>
+      </article>
+      <article class="film" data-id="f05" data-comedy="true" data-horror="false">
+        <div class="when" aria-hidden="true"><b>8:10</b><small>PM</small></div>
+        <div class="art" data-seed="f05"></div>
+        <div class="info"><h3>Double Booked</h3><p class="meta">8:10 PM · 109 min · PG-13</p><p class="screen">Screen 1 · Standard seating</p></div>
+        <button class="details" data-id="f05" aria-label="View details for Double Booked">View details</button>
+        <p class="synopsis" hidden>Two wedding parties arrive at the same tiny venue, and rival planners improvise increasingly ridiculous solutions without alerting either couple.</p>
+      </article>
+      <article class="film" data-id="f06" data-comedy="false" data-horror="true">
+        <div class="when" aria-hidden="true"><b>8:30</b><small>PM</small></div>
+        <div class="art" data-seed="f06"></div>
+        <div class="info"><h3>Cellar Number Seven</h3><p class="meta">8:30 PM · 101 min · R</p><p class="screen">Screen 2 · Standard seating</p></div>
+        <button class="details" data-id="f06" aria-label="View details for Cellar Number Seven">View details</button>
+        <p class="synopsis" hidden>Renovators unseal a basement room whose previous occupants left warnings scratched into the walls, then discover the door will not remain closed.</p>
+      </article>
+      <article class="film" data-id="f07" data-comedy="false" data-horror="false">
+        <div class="when" aria-hidden="true"><b>8:45</b><small>PM</small></div>
+        <div class="art" data-seed="f07"></div>
+        <div class="info"><h3>Signal North</h3><p class="meta">8:45 PM · 121 min · PG-13</p><p class="screen">Screen 3 · Standard seating</p></div>
+        <button class="details" data-id="f07" aria-label="View details for Signal North">View details</button>
+        <p class="synopsis" hidden>An engineer joins a remote observatory searching the night sky for the source of an unexplained transmission.</p>
+      </article>
+      <article class="film" data-id="f08" data-comedy="true" data-horror="false">
+        <div class="when" aria-hidden="true"><b>9:00</b><small>PM</small></div>
+        <div class="art" data-seed="f08"></div>
+        <div class="info"><h3>Market Day Mix-Up</h3><p class="meta">9:00 PM · 96 min · PG</p><p class="screen">Screen 4 · Standard seating</p></div>
+        <button class="details" data-id="f08" aria-label="View details for Market Day Mix-Up">View details</button>
+        <p class="synopsis" hidden>A careful shopkeeper and an impulsive street performer swap phones and spend the day untangling each other's increasingly awkward appointments.</p>
+      </article>
+      <article class="film" data-id="f09" data-comedy="false" data-horror="false">
+        <div class="when" aria-hidden="true"><b>9:15</b><small>PM</small></div>
+        <div class="art" data-seed="f09"></div>
+        <div class="info"><h3>The Blue Orchard</h3><p class="meta">9:15 PM · 112 min · PG-13</p><p class="screen">Screen 1 · Standard seating</p></div>
+        <button class="details" data-id="f09" aria-label="View details for The Blue Orchard">View details</button>
+        <p class="synopsis" hidden>Two estranged sisters return home to decide what to do with their family's farm and the promises they left behind.</p>
+      </article>
+    </section>
+  </main>
+
+  <aside class="side">
+    <div class="panel" id="drawer" aria-label="Film details">
+      <div class="ph"><span>Film details</span><span id="step-l">Step 1 of 3</span></div>
+      <div class="pb">
+        <div class="empty" id="drawer-empty">Open View details on any screening to read its story here, then choose the film you want to see.</div>
+        <div id="drawer-body" hidden>
+          <h3 id="dialog-title"></h3><p id="dialog-meta" class="meta"></p><p id="dialog-synopsis" class="synopsis"></p>
+          <div class="row"><button class="btn pri" id="select-film">Choose this film</button><button class="btn" id="close-dialog">Close details</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="checkout" hidden aria-label="Seat and checkout">
+      <div class="ph"><span>Pick a standard seat</span><span>Step 2 of 3</span></div>
+      <div class="pb">
+        <div class="screenbar"></div><div class="scr-l">SCREEN</div>
+        <div class="seats" id="seats"></div>
+        <div class="legend"><span><b></b>Available</span><span><b style="background:#d6dde7;border-color:#d6dde7"></b>Taken</span><span><b style="background:#ffb400;border-color:#d99a00"></b>Your seat</span></div>
+        <div class="sum">
+          <div><span>Film</span><strong id="chosen-title"></strong></div>
+          <div><span>Seat</span><strong id="seat-l">None yet</strong></div>
+          <div><span>Price</span><strong>$11</strong></div>
+        </div>
+        <div class="row" style="margin-top:14px"><button class="btn pri" id="confirm" disabled>Confirm ticket</button><button class="btn" id="change">Change film</button></div>
+        <span id="status" role="status"></span>
+        <div class="ticket" id="ticket"></div>
+      </div>
+    </div>
+
+    <div class="panel"><div class="ph"><span>Visiting</span></div><div class="pb info2">Riverside Walk, Pier 2 · step-free access to all screens<br>Café and bar open until the last screening<br>Box office: 555-0142</div></div>
+  </aside>
+</div>
+
+<footer><div class="in"><div><b>Riverview Cinema</b><br>An independent picture house on the river.</div><div>What's on · Memberships · Gift cards</div><div>Accessibility · Contact · Privacy</div></div></footer>
+
+<script>
+const state = {selectedFilmId:null, selectedTitle:null, seat:null, confirmed:false};
+window.__bookingState = state;
+let active = null;
+// label-independent decorative poster, seeded only by the film id
+function hash(s){let h=2166136261;for(const c of s){h^=c.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+const PAL=[['#1f3556','#8fb0d8'],['#2c3e50','#bdc3c7'],['#34495e','#e6d3a3'],['#283655','#a7b8d1'],['#3d4a5c','#d9c9b6'],['#22384f','#c2d6e8']];
+document.querySelectorAll('.art').forEach(a=>{const h=hash(a.dataset.seed),p=PAL[h%PAL.length],y=30+(h>>>4)%40,r=12+(h>>>9)%14;
+  a.innerHTML=`<svg viewBox="0 0 70 92" preserveAspectRatio="none" aria-hidden="true"><rect width="70" height="92" fill="${p[0]}"/><circle cx="${20+(h>>>13)%30}" cy="${y}" r="${r}" fill="${p[1]}" opacity=".85"/><path d="M0 ${70+(h>>>17)%10}q17 -8 35 0t35 0V92H0z" fill="${p[1]}" opacity=".45"/></svg>`;});
+// seat map: standard seats, a few pre-taken (fixed pattern, same for every film)
+const TAKEN=new Set(['D3','D4','E7','F1']);
+const seatsEl=document.getElementById('seats');
+['D','E','F'].forEach(r=>{const row=document.createElement('div');row.className='srow';row.innerHTML=`<i>${r}</i>`;
+  for(let n=1;n<=8;n++){const b=document.createElement('button');b.className='seat';b.dataset.seat=r+n;b.textContent=n;
+    b.setAttribute('aria-label',`Seat ${r}${n}, standard`+(TAKEN.has(r+n)?' (taken)':''));b.disabled=TAKEN.has(r+n);row.appendChild(b);}
+  seatsEl.appendChild(row);});
+function openDetails(film){
+  active=film;
+  document.querySelectorAll('.film').forEach(f=>f.classList.toggle('active',f===film));
+  document.querySelector('#dialog-title').textContent = film.querySelector('h3').textContent;
+  document.querySelector('#dialog-meta').textContent = film.querySelector('.meta').textContent;
+  document.querySelector('#dialog-synopsis').textContent = film.querySelector('.synopsis').textContent;
+  document.getElementById('drawer-empty').hidden=true;document.getElementById('drawer-body').hidden=false;
+  document.getElementById('select-film').setAttribute('aria-label','Choose this film: '+film.querySelector('h3').textContent);
+}
+document.querySelectorAll('.details').forEach(button => button.addEventListener('click', () => { if(!state.confirmed) openDetails(button.closest('.film')); }));
+document.querySelector('#close-dialog').addEventListener('click', () => {document.getElementById('drawer-empty').hidden=false;document.getElementById('drawer-body').hidden=true;document.querySelectorAll('.film').forEach(f=>f.classList.remove('active'));});
+document.querySelector('#select-film').addEventListener('click', () => {
+  if (state.confirmed || !active) return;
+  state.selectedFilmId = active.dataset.id;
+  state.selectedTitle = active.querySelector('h3').textContent;
+  state.seat = null;
+  document.querySelectorAll('.seat').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.film').forEach(f=>f.classList.toggle('chosen',f===active));
+  document.querySelector('#chosen-title').textContent = state.selectedTitle;
+  document.getElementById('seat-l').textContent='None yet';
+  document.getElementById('confirm').disabled=true;
+  document.querySelector('#checkout').hidden=false;
+  document.getElementById('drawer').hidden=true;
+  document.querySelector('#status').textContent = 'Now pick one standard seat.';
+});
+document.querySelectorAll('.seat').forEach(s=>s.addEventListener('click',()=>{
+  if(state.confirmed||s.disabled)return;
+  document.querySelectorAll('.seat').forEach(x=>{x.classList.toggle('on',x===s);x.setAttribute('aria-pressed',x===s?'true':'false');});
+  state.seat='standard-'+s.dataset.seat;
+  document.getElementById('seat-l').textContent=s.dataset.seat+' · Standard';
+  document.getElementById('confirm').disabled=false;
+  document.querySelector('#status').textContent='';
+}));
+document.getElementById('change').addEventListener('click',()=>{
+  if(state.confirmed)return;
+  document.querySelector('#checkout').hidden=true;document.getElementById('drawer').hidden=false;
+  document.getElementById('drawer-empty').hidden=false;document.getElementById('drawer-body').hidden=true;
+});
+document.querySelector('#confirm').addEventListener('click', () => {
+  if (!state.selectedFilmId || !state.seat || state.confirmed) return;
+  state.confirmed = true;
+  document.querySelector('#status').textContent = 'Booking confirmed';
+  document.querySelectorAll('.seat,#confirm,#change,.details').forEach(b=>b.disabled=true);
+  document.querySelectorAll('#seats,.legend,.screenbar,.scr-l,#checkout .row').forEach(e=>e.style.display='none');
+  const film=document.querySelector(`.film[data-id="${state.selectedFilmId}"]`);
+  const t=document.getElementById('ticket');t.style.display='block';
+  t.innerHTML=`<small>STEP 3 OF 3 · YOUR TICKET</small><br><b></b><br><span></span>`;
+  t.querySelector('b').textContent=state.selectedTitle;
+  t.querySelector('span').textContent=film.querySelector('.meta').textContent+' · Seat '+state.seat.replace('standard-','');
+});
+</script>
+</body>
+</html>

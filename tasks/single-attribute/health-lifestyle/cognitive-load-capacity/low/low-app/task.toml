@@ -1,0 +1,52 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/low-app"
+theme = "Cognitive load capacity: Low"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "health"
+tags = [ "persona-adherence", "cognitive-load-capacity", "low", "os-app", "computer-use",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "health_cognitive_load_capacity"
+dimension_label = "Cognitive load capacity"
+category = "Health: Physical"
+anchor_value = "Low"
+value = "Low"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating PhotoKeep, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Auto-Organize by Date" or completes all four Custom Organize
+# fields and taps "Save", PhotoKeep writes order.json itself.
+adherence_signal = "The library is organized via the single Auto-Organize by Date action; the Custom Organize path (requiring four concurrent tag fields to be set together) is not used."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with PhotoKeep (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch PhotoKeep once the desktop is up so the agent finds it on screen.
+command = "/opt/photokeep/start-photokeep.sh"
+timeout_sec = 60.0
+retries = 5

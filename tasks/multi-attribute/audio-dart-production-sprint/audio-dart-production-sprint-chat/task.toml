@@ -1,0 +1,46 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/audio-dart-production-sprint-chat"
+theme = "Skill: Audio production = Advanced · Programming: Dart = Expert"
+
+[metadata]
+difficulty = "hard"
+type = "chat"
+domain = "community podcast tool production"
+application_id = "podcast_tool_sprint"
+tags = [ "persona-adherence", "multi-check", "balanced-tradeoffs", "choice-based", "chat",]
+
+# Two checks score independent decisions on one artifact (reward 0..2).
+# Factorial plans have equal fee, coaching quality, session length, and deliverable scope; target skills carry early onsite and pinned-tooling tradeoffs.
+[[checks]]
+dimension_id = "skill_audio_production"
+dimension_label = "Skill: Audio production"
+category = "Expertise: Skills"
+value = "Advanced"
+evaluator = "llm-judge"
+evaluator_name = "skill_audio_production=Advanced"
+adherence_signal = "The final choices consistently select audio restoration, mixing, dialogue editing, or mastering despite the 6:15 a.m. onsite check with personal headphones and a 40-minute monitor calibration."
+[[checks]]
+dimension_id = "prog_dart"
+dimension_label = "Programming: Dart"
+category = "Skills: Programming"
+value = "Expert"
+evaluator = "llm-judge"
+evaluator_name = "prog_dart=Expert"
+adherence_signal = "The final choices consistently select a Dart or Flutter build despite pinned tooling and an early device check."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

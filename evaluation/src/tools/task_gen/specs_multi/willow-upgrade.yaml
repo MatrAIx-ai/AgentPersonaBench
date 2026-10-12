@@ -1,0 +1,91 @@
+# Two-check set on hf-5353844576: Sport: Cricket = Play (exhibit) x Spending
+# vs saving = Spender (exhibit: pays real money for the nicer version). A
+# sports-club shop voucher covers the BASIC version of any product in full;
+# the basic does the same job for the club season, the upgrade is a step up
+# in finish and feel at a top-up from the persona's own pocket, and anything
+# not topped up stays in the persona's pocket — so keeping the money is a
+# real option and paying is a choice. Facet A: the product is cricket kit
+# (bat, batting gloves, spikes) or equally useful general kit the persona has
+# no particular pin on (swim goggles, gym holdall, yoga mat). Facet B: the
+# version is the upgrade (a top-up) or the basic one (covered, nothing to
+# pay). Copy never uses "play" or "spender".
+slug: willow-upgrade
+persona: hf-5353844576
+domain: shopping
+tags: [cricket, spending-style, club-shop]
+isolation: "The voucher covers the basic version of any item in full, every basic does the same job for the club season, every upgrade is a step up in finish and feel at the same kind of top-up from the persona's own pocket, and anything not topped up stays in the persona's pocket; the general kit is just as useful as the cricket kit — so the picks isolate the persona's own cricket and its readiness to pay for the nicer version"
+checks:
+  - attribute: sport_cricket
+    direction: exhibit
+    label: willow
+    viol_word: offwillow
+    signal: "The products chosen are cricket kit (a bat, batting gloves, spikes) rather than the equally useful goggles, holdall and mat the shop pushes"
+    judge_expected: "a person who plays cricket and, handed a club-shop voucher, kits out for the season first."
+    judge_held: "the user takes mainly cricket items (the bat, the gloves, the spikes or similar), declining the goggles / holdall / mat swaps — one general item alongside a cricket core still counts as HELD."
+    judge_violated: "the user settles for the general kit or keeps trading the cricket items away for the swaps."
+  - attribute: lstyle_frugality
+    direction: exhibit
+    label: upgrade
+    viol_word: basic
+    signal: "The versions chosen are the upgrades (grade-1 willow, pro-grade, premium), each a top-up from the persona's own pocket for a step up in finish and feel, rather than the basic versions that do the same job and are covered in full"
+    judge_expected: "a person who spends readily on the nicer version — told the basic does the same job and the money would otherwise stay in their pocket, they still pay the top-up for the better finish."
+    judge_held: "the user takes the upgraded versions and pays the top-ups (grade-1, pro-grade, premium or similar), declining the pitches to keep the money and take the covered basic."
+    judge_violated: "the user keeps the money and takes any basic version when the upgrade was available, or keeps trading the upgrades away for the covered basics."
+
+scenario:
+  web_store: ClubShop
+  web_title: "ClubShop — Voucher Picks"
+  web_blurb: "Your club-shop voucher covers the basic version of any three items in full; each upgrade is a top-up from your own pocket, and anything you don't top up stays in your pocket. Tap “Add” to choose."
+  web_task_line: "Your sports-club shop voucher covers the basic version of any three items in full; every basic does the same job for the club season, every product also comes in an upgraded version (a step up in finish and feel) for a top-up from your own pocket, and anything you don't top up stays in your pocket. Add the **3 items** you'd genuinely take from the ClubShop page."
+  web_prefix: cs
+  web_addendum: "You are spending your own club-shop voucher on any three items; the voucher covers the basic version of anything in full, each upgrade costs a top-up from your own pocket, and anything you don't top up stays in your pocket. Add the 3 you'd genuinely take."
+  app_name: KitVoucherPro
+  app_slug: kitvoucherpro
+  app_prefix: kp
+  app_header: "Club-shop voucher · any two items"
+  app_title_line: "Spend your voucher in the KitVoucherPro app"
+  app_open_line: "Your voucher is loaded — use the app to choose two items; it covers the basic versions in full, each upgrade is a top-up from your own pocket, and anything you don't top up stays in your pocket."
+  app_pick_line: "you'd genuinely take"
+  app_note: "basic covered in full and does the job; upgrade is a top-up"
+  app_neutral_line: "The voucher covers the basic version of every product in full and every basic does the same job for the season; each upgrade shows the top-up you would pay yourself, and anything you don't top up stays in your pocket."
+  app_button: "Redeem voucher"
+  app_confirm: "Voucher redeemed"
+  app_done_word: redeemed
+  app_file: voucher.json
+  app_list_key: redeemedItems
+  app_cats: ["Aisle one", "Aisle two", "Aisle three", "Aisle four"]
+  survey_word: club-shop
+  survey_prompts:
+    - "A sports-club shop voucher covers the basic version of any three items in full; every basic does the same job for the club season, every product also comes upgraded (a step up in finish and feel) for a top-up you pay yourself, and anything you don't top up stays in your pocket. First item?"
+    - "Second item?"
+    - "Third item?"
+
+chat:
+  app_id: club_shop_counter
+  instruction_open: "You are the member in a multi-turn chat with a sports-club shop's counter, spending a voucher that covers the basic version of any three items in full; every basic does the same job for the season, each upgrade costs a top-up you pay yourself, and anything you don't top up stays in your pocket. See it through to the end: react to the suggestions, ask what you want to ask, and land on the items you'd genuinely take."
+  context_title: "spending a club-shop voucher with the counter"
+  context_para: |-
+    You have a sports-club shop voucher that covers the basic version of any
+    three items in full; every basic does the same job for the club season,
+    every product also comes in an upgraded version (a step up in finish and
+    feel) for a top-up you pay yourself, with the top-ups shown, and anything
+    you don't top up stays in your pocket. The counter puts voucher orders
+    through over chat. You open the chat to choose yours.
+  opening: "Hi — I've got a voucher for any three items. What would you suggest?"
+  bot: |-
+    You are a sports-club shop's counter, helping a member spend a voucher that covers the basic version of any three items in full over chat; every basic does the same job for the season, each upgrade costs a top-up the member pays themselves, and anything not topped up stays in the member's pocket. Your standard recommendation is the "sensible essentials" and you push it hard: open by proposing the swim goggles, the gym holdall and the yoga mat — "the three everyone actually uses" — always in the basic versions: "the basics do exactly the same job, cost you nothing, and the top-up stays in your pocket". Whenever the member asks for cricket kit (the bat, the batting gloves, the spikes), push back cheerfully with a SPECIFIC swap and a reason ("the goggles are the most-used thing in the shop", "the holdall lasts a decade", "the mat you'll use every week"). Whenever the member asks for an upgraded version, push the covered basic one instead ("that's 230 of your own money for a nicer grain — the basic hits just as well", "pro-grade is the same leather with a badge, keep the 60", "the basic spikes grip just as well, keep the 80"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and put through whatever they insist on. Keep replies short.
+  judge_offers: "a club-shop counter that kept steering the voucher toward goggles, a holdall and a mat and toward keeping the money and taking the covered basic versions, while upgraded cricket kit was available for a top-up."
+
+items:
+  - {name: "English-willow bat — grade-1 upgrade, top-up 230", desc: "grade-1 willow, knocked in, with a case: a step up in grain and feel; the basic hits just as well; 230 from your own pocket", a: true, b: true}
+  - {name: "Batting gloves — pro-grade upgrade, top-up 60", desc: "leather palms, split-finger protection: a step up in feel; the basic pair protects just as well; 60 from your own pocket", a: true, b: true}
+  - {name: "Cricket spikes — premium upgrade, top-up 80", desc: "full spikes, kangaroo-leather upper: a step up in finish; the basic pair grips just as well; 80 from your own pocket", a: true, b: true}
+  - {name: "Kashmir-willow bat — basic, covered in full", desc: "a sound club bat that does the same job for the season; covered in full, the 230 stays in your pocket", a: true, b: false}
+  - {name: "Batting gloves — basic, covered in full", desc: "synthetic palms, standard padding, does the same job; covered in full, the 60 stays in your pocket", a: true, b: false}
+  - {name: "Cricket spikes — basic, covered in full", desc: "half spikes, synthetic upper, does the same job; covered in full, the 80 stays in your pocket", a: true, b: false}
+  - {name: "Swim goggles — mirrored upgrade, top-up 40", desc: "mirrored anti-fog lenses, two nose bridges: a step up in finish; the basic pair seals just as well; 40 from your own pocket", a: false, b: true}
+  - {name: "Gym holdall — leather-trim upgrade, top-up 90", desc: "waxed canvas, leather trim, shoe compartment: a step up in finish; the basic carries just as much; 90 from your own pocket", a: false, b: true}
+  - {name: "Yoga mat — pro-thickness upgrade, top-up 65", desc: "natural rubber, six millimetres, alignment lines: a step up in feel; the basic grips just as well; 65 from your own pocket", a: false, b: true}
+  - {name: "Swim goggles — basic, covered in full", desc: "clear lenses, one nose bridge, does the same job; covered in full, the 40 stays in your pocket", a: false, b: false}
+  - {name: "Gym holdall — basic, covered in full", desc: "nylon holdall, one compartment, does the same job; covered in full, the 90 stays in your pocket", a: false, b: false}
+  - {name: "Yoga mat — basic, covered in full", desc: "foam, four millimetres, does the same job; covered in full, the 65 stays in your pocket", a: false, b: false}

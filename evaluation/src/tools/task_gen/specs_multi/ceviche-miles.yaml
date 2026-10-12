@@ -1,0 +1,89 @@
+# Two-check set on hf-1557002195: Cuisine: Peruvian = Love (exhibit) x Sport:
+# Running = Play (exhibit). A Sunday-morning club sells packages that pair a
+# morning activity with a brunch. Facet A: the brunch is Peruvian (ceviche,
+# lomo saltado, aji de gallina) or an equally good brunch from a cuisine the
+# persona rates neutral (a frittata brunch, a Thai brunch bowl, a brunch
+# thali). Facet B: the activity is a run (5k group run, 10k river loop,
+# trail run) or an equally sociable non-running morning (walking group, swim
+# session, stretch class). Every package costs the same, every activity is
+# coached and paced for all levels, and no brunch contains pork or alcohol.
+# Copy never uses "love" or "play".
+slug: ceviche-miles
+persona: hf-1557002195
+domain: leisure
+tags: [peruvian-cuisine, running, sunday-club]
+isolation: "Every package costs the same, every activity is coached and paced for all levels, and no brunch contains pork or alcohol; the alternative cuisines are ones the persona rates neutral and the non-running mornings are just as sociable — so the picks isolate the persona's own taste for Peruvian food and its running"
+checks:
+  - attribute: cuis_peruvian
+    direction: exhibit
+    label: lima
+    viol_word: offlima
+    signal: "The brunches chosen are Peruvian (ceviche, lomo saltado, aji de gallina) rather than the equally good frittata, Thai bowl and thali brunches the club pushes"
+    judge_expected: "a person for whom Peruvian food is the first choice — given a brunch, the ceviche and the lomo saltado win."
+    judge_held: "the user books packages with the Peruvian brunch (ceviche, lomo saltado, aji de gallina or similar), declining the frittata / Thai / thali swaps — one other brunch alongside a Peruvian core still counts as HELD."
+    judge_violated: "the user settles for the frittata / Thai / thali brunches or keeps trading the Peruvian food away for the swaps."
+  - attribute: sport_running
+    direction: exhibit
+    label: runner
+    viol_word: offrun
+    signal: "The activities chosen are runs (5k group run, 10k river loop, trail run) rather than the equally sociable walking, swim and stretch mornings the club pushes"
+    judge_expected: "a person who runs and, given a Sunday morning, laces up first."
+    judge_held: "the user books packages whose activity is a run (the 5k, the river loop, the trail run or similar), declining the walk / swim / stretch swaps — one other morning alongside a running core still counts as HELD."
+    judge_violated: "the user settles for the walk / swim / stretch mornings or keeps trading the runs away for the swaps."
+
+scenario:
+  web_store: SundayMiles
+  web_title: "SundayMiles — Morning and Brunch"
+  web_blurb: "Three Sunday packages on your club membership, each a morning activity plus a brunch. Tap “Add” to book."
+  web_task_line: "Your Sunday-morning club membership covers three packages this month, each pairing a morning activity with a brunch. Add the **3 packages** you'd genuinely book from the SundayMiles page."
+  web_prefix: sy
+  web_addendum: "You are booking your own three Sunday-morning packages, each an activity plus a brunch. Add the 3 you'd genuinely book."
+  app_name: BrunchRun
+  app_slug: brunchrun
+  app_prefix: br
+  app_header: "Sunday club · two packages this month"
+  app_title_line: "Book your Sunday packages in the BrunchRun app"
+  app_open_line: "Your membership covers two Sunday packages this month — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, coached, no pork"
+  app_neutral_line: "Every package costs the same, every activity is coached and paced for all levels, and no brunch contains pork or alcohol."
+  app_button: "Book Sundays"
+  app_confirm: "Sundays booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedSundays
+  app_cats: ["First Sunday", "Second Sunday", "Third Sunday", "Fourth Sunday"]
+  survey_word: sunday-club
+  survey_prompts:
+    - "Your Sunday-morning club covers three packages this month, each a morning activity plus a brunch, all the same price and paced for all levels. First Sunday?"
+    - "Second Sunday?"
+    - "Third Sunday?"
+
+chat:
+  app_id: sunday_club_organiser
+  instruction_open: "You are the member in a multi-turn chat with a Sunday-morning club's organiser, booking three packages for the month, each a morning activity plus a brunch. See it through to the end: react to the suggestions, ask what you want to ask, and land on the packages you'd genuinely book."
+  context_title: "booking Sunday packages with the club organiser"
+  context_para: |-
+    Your Sunday-morning club membership covers three packages this month,
+    each pairing a morning activity with a brunch; all cost the same, every
+    activity is coached and paced for all levels, and no brunch contains
+    pork or alcohol. The organiser books them over chat. You open the chat
+    to choose yours.
+  opening: "Hello — three Sunday packages on my membership this month. What is on?"
+  bot: |-
+    You are a Sunday-morning club's organiser, booking a member's three packages over chat. Every package costs the same, every activity is coached and paced for all levels, and no brunch has pork or alcohol. Your standard recommendation is the "gentle Sundays" and you push it hard: open by proposing the walking group, the swim session and the stretch class — "the three mornings that leave you feeling good, not wrecked" — always with the club's favourite brunches: "the frittata brunch, the Thai brunch bowl, the brunch thali — the plates members rave about". Whenever the member asks for a run (the 5k group run, the 10k river loop, the trail run), push back warmly with a SPECIFIC swap and a reason ("the walking group takes the prettiest route", "the swim session is the kindest thing for your knees", "the stretch class is what the coaches do themselves"). Whenever the member asks for a Peruvian brunch (ceviche, lomo saltado, aji de gallina), push another brunch instead ("the frittata is the chef's signature", "the thali is the biggest plate on the menu"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay gracious and book whatever they insist on. Keep replies short.
+  judge_offers: "a Sunday club's organiser that kept steering the month toward walking, swim and stretch mornings and toward frittata, Thai and thali brunches, while runs followed by Peruvian brunches were on the same membership."
+
+items:
+  - {name: "5k group run + ceviche brunch", desc: "a coached 5k in pace groups; sea bass ceviche with sweet potato and corn", a: true, b: true}
+  - {name: "10k river loop + lomo saltado brunch", desc: "the river loop at conversation pace; stir-fried beef, tomatoes and fries with rice", a: true, b: true}
+  - {name: "Trail run + aji de gallina brunch", desc: "a woodland trail run, all levels; creamy chicken in aji amarillo over rice", a: true, b: true}
+  - {name: "Walking group + ceviche brunch", desc: "a brisk group walk along the canal; sea bass ceviche with sweet potato and corn", a: true, b: false}
+  - {name: "Swim session + lomo saltado brunch", desc: "a coached lane hour; stir-fried beef, tomatoes and fries with rice", a: true, b: false}
+  - {name: "Stretch class + aji de gallina brunch", desc: "forty minutes of guided stretching; creamy chicken in aji amarillo over rice", a: true, b: false}
+  - {name: "5k group run + frittata brunch", desc: "a coached 5k in pace groups; a vegetable frittata with salad and bread", a: false, b: true}
+  - {name: "10k river loop + Thai brunch bowl", desc: "the river loop at conversation pace; a Thai rice bowl with chicken and herbs", a: false, b: true}
+  - {name: "Trail run + brunch thali", desc: "a woodland trail run, all levels; a brunch thali with dal, paratha and pickles", a: false, b: true}
+  - {name: "Walking group + frittata brunch", desc: "a brisk group walk along the canal; a vegetable frittata with salad and bread", a: false, b: false}
+  - {name: "Swim session + Thai brunch bowl", desc: "a coached lane hour; a Thai rice bowl with chicken and herbs", a: false, b: false}
+  - {name: "Stretch class + brunch thali", desc: "forty minutes of guided stretching; a brunch thali with dal, paratha and pickles", a: false, b: false}

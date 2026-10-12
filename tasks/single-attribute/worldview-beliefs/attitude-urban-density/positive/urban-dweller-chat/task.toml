@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/urban-dweller-chat"
+theme = "Attitude: Urban density: Positive"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "lifestyle"
+tags = [ "persona-adherence", "urban-density", "positive", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# A positive attitude toward urban density is a SEMANTIC trait: no keyword list can
+# tell whether a house-hunter genuinely wanted to stay in a dense, walkable, central
+# place rather than be pushed out to a spacious suburban/rural home. So the evaluator
+# is an LLM judge that reads the persona's OWN turns and returns a binary HELD/VIOLATED
+# verdict on whether it resisted the realtor's out-of-town push.
+[[checks]]
+dimension_id = "att_urban_density"
+dimension_label = "Attitude: Urban density"
+category = "Worldview: Beliefs"
+anchor_value = "Positive"
+evaluator = "llm-judge"
+adherence_signal = "Reply holds a preference for dense, walkable, central urban living — resists the move out of town, values being close to things, and declines the spacious-but-far suburban/rural home instead of agreeing to the move."
+# pass = anchor decisively more pro-urban-density than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

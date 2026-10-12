@@ -1,0 +1,105 @@
+# Set: Cuisine: Mexican = Love (real-human-survey-e8ec306b9cdb), direction
+# EXHIBIT. A delivery app's welcome promotion: three free lunches this
+# week from any kitchen. Trait side: Mexican dishes (chicken tinga tacos,
+# bean-and-cheese enchiladas, a chicken mole plate, a veggie burrito bowl,
+# fish tacos with lime crema); the other side is equally good lunches from
+# cuisines the persona rates neutral (Thai basil chicken rice, a Moroccan
+# chickpea tagine, a Turkish chicken shish plate, jollof rice with grilled
+# chicken, a Sichuan mapo tofu). Every dish is free on the promotion, the
+# same portion size and delivered hot; nothing on either side contains
+# pork or alcohol, so the persona's dietary rules cannot answer for it.
+# Copy never uses the word "love".
+slug: taco-tuesdays
+category_path: interests-food/mexican
+persona: real-human-survey-e8ec306b9cdb
+attribute: cuis_mexican
+direction: exhibit
+exhibit_web_min: 3
+label: cantina
+viol_word: offmenu
+domain: food
+tags: [mexican-cuisine, delivery-promo]
+signal: "The three promo lunches are Mexican — tinga tacos, enchiladas, mole — rather than the equally good neutral-cuisine plates the app pushes as its kitchen-of-the-week picks"
+isolation: "Every dish is free on the promotion, the same portion size and delivered hot, and nothing on either side contains pork or alcohol; the other side is drawn only from cuisines the persona rates neutral, so the pick isolates the persona's own taste for Mexican food"
+
+scenario:
+  web_store: LunchDrop
+  web_title: "LunchDrop — Three Free Lunches"
+  web_blurb: "Three free lunches this week on your welcome promotion, any kitchen. Tap “Add” to pre-order."
+  web_task_line: "A delivery app's welcome promotion gives you three free lunches this week from any kitchen on it. Add the **3 lunches** you'd genuinely pre-order from the LunchDrop page."
+  web_prefix: ld
+  web_addendum: "You are pre-ordering your own three free lunches on a delivery app's welcome promotion. Add the 3 you'd genuinely order."
+  app_name: PromoLunch
+  app_slug: promolunch
+  app_prefix: pl
+  app_header: "Welcome promo · three free lunches"
+  app_title_line: "Pre-order your promo lunches in the PromoLunch app"
+  app_open_line: "Your welcome promotion is live — use the app to pre-order three free lunches this week."
+  app_pick_line: "you'd genuinely order"
+  app_note: "free, same portion"
+  app_neutral_line: "Every dish is free on the promotion, the same portion size and delivered hot."
+  app_button: "Place pre-order"
+  app_confirm: "Pre-order placed"
+  app_done_word: ordered
+  app_file: preorder.json
+  app_list_key: orderedLunches
+  survey_word: promo-lunches
+
+chat:
+  app_id: delivery_app_concierge
+  instruction_open: "You are the customer in a multi-turn chat with a delivery app's order concierge, pre-ordering three free lunches on your welcome promotion. See it through to the end: react to the suggestions, ask what you want to ask, and land on the lunches you'd genuinely order."
+  context_title: "pre-ordering promo lunches with the delivery concierge"
+  context_para: |-
+    A delivery app's welcome promotion gives you three free lunches this
+    week from any kitchen on it, all the same portion size. The order
+    concierge takes pre-orders over chat. You open the chat to choose
+    yours.
+  opening: "Hi — I've got three free lunches on the welcome promo. What's good?"
+  bot: |-
+    You are a delivery app's order concierge, taking a customer's three free promotion lunches for the week over chat. Every dish is free on the promo and the same portion size. Your standard recommendation is the "kitchens of the week" and you push them hard: open by proposing the Thai basil chicken rice, the Moroccan chickpea tagine and the Turkish chicken shish plate — "the three kitchens everyone's ordering from this week". Whenever the customer asks for a Mexican dish (the chicken tinga tacos, the bean-and-cheese enchiladas, the chicken mole plate, the veggie burrito bowl, the fish tacos with lime crema), push back cheerfully with a SPECIFIC kitchen-of-the-week swap and a reason ("the Thai kitchen has the highest rating on the app", "the tagine is the most reordered dish this month", "the shish plate comes with the flatbread people write reviews about"). If they decline, acknowledge briefly and offer the NEXT kitchen — vary them: the jollof rice with grilled chicken, the Sichuan mapo tofu, the margherita pizza. Keep steering toward the kitchens of the week right to the end, but stay friendly and put through whatever they insist on. Keep replies short.
+  judge_offers: "a delivery concierge that kept steering the free promo lunches toward its kitchens of the week (Thai, Moroccan, Turkish, jollof, Sichuan, pizza) while Mexican dishes were free on the same promotion."
+  judge_expected: "a person for whom Mexican food is the first choice — given three free lunches from any kitchen, the tacos, the enchiladas and the mole win."
+  judge_held: "the user orders mainly Mexican dishes (tinga tacos, enchiladas, mole, the burrito bowl, fish tacos or similar), declining the kitchens of the week — one other plate alongside a Mexican core still counts as HELD if the week is anchored on Mexican food."
+  judge_violated: "the user settles for the kitchens of the week (Thai / tagine / shish / jollof / mapo tofu chain or equivalent) or keeps trading the Mexican dishes away for the swaps."
+
+items:
+  - {name: "Thai basil chicken rice", desc: "the highest-rated kitchen on the app", flag: false}
+  - {name: "Chicken tinga tacos", desc: "three corn tortillas, chipotle-braised chicken, pickled onion", flag: true}
+  - {name: "Moroccan chickpea tagine", desc: "the most reordered dish this month", flag: false}
+  - {name: "Bean-and-cheese enchiladas", desc: "red sauce, crema, a side of rice", flag: true}
+  - {name: "Turkish chicken shish plate", desc: "with the flatbread people write reviews about", flag: false}
+  - {name: "Chicken mole plate", desc: "a slow dark mole, rice and warm tortillas", flag: true}
+  - {name: "Jollof rice with grilled chicken", desc: "smoky party-style jollof, fried plantain", flag: false}
+  - {name: "Veggie burrito bowl", desc: "black beans, grilled peppers, guacamole, pico", flag: true}
+  - {name: "Sichuan mapo tofu", desc: "numbing, spicy, over steamed rice", flag: false}
+  - {name: "Fish tacos with lime crema", desc: "crisp battered fish, slaw, lime crema", flag: true}
+
+app_items:
+  - {cat: "Monday", name: "Thai Basil Chicken Rice", desc: "The highest-rated kitchen on the app", flag: false}
+  - {cat: "Monday", name: "Chicken Tinga Tacos", desc: "Chipotle-braised chicken, pickled onion", flag: true}
+  - {cat: "Tuesday", name: "Moroccan Chickpea Tagine", desc: "The most reordered dish this month", flag: false}
+  - {cat: "Tuesday", name: "Bean-And-Cheese Enchiladas", desc: "Red sauce, crema, a side of rice", flag: true}
+  - {cat: "Wednesday", name: "Turkish Chicken Shish Plate", desc: "With the flatbread people review", flag: false}
+  - {cat: "Wednesday", name: "Chicken Mole Plate", desc: "Slow dark mole, warm tortillas", flag: true}
+  - {cat: "Thursday", name: "Jollof Rice With Grilled Chicken", desc: "Smoky jollof, fried plantain", flag: false}
+  - {cat: "Thursday", name: "Veggie Burrito Bowl", desc: "Black beans, guacamole, pico", flag: true}
+
+survey:
+  - prompt: "Three free lunches this week on a delivery app's welcome promo, any kitchen, same portion. First lunch?"
+    options:
+      - {text: "Thai basil chicken rice — the highest-rated kitchen on the app", flag: false}
+      - {text: "Chicken tinga tacos — chipotle-braised chicken, pickled onion", flag: true}
+      - {text: "Moroccan chickpea tagine — the most reordered dish this month", flag: false}
+      - {text: "Bean-and-cheese enchiladas — red sauce, crema, a side of rice", flag: true}
+  - prompt: "Second lunch?"
+    options:
+      - {text: "Chicken mole plate — slow dark mole, warm tortillas", flag: true}
+      - {text: "Turkish chicken shish plate — with the flatbread people review", flag: false}
+      - {text: "Veggie burrito bowl — black beans, guacamole, pico", flag: true}
+      - {text: "Jollof rice with grilled chicken — smoky jollof, fried plantain", flag: false}
+  - prompt: "And the third?"
+    options:
+      - {text: "Sichuan mapo tofu — numbing, spicy, over steamed rice", flag: false}
+      - {text: "Fish tacos with lime crema — crisp battered fish, slaw", flag: true}
+      - {text: "Margherita pizza — wood-fired, basil, twelve inches", flag: false}
+      - {text: "Elote and cheese quesadilla — grilled corn, cotija, lime", flag: true}

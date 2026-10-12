@@ -1,0 +1,77 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/patient-mentor-app"
+theme = "Patient mentor: patient and unhurried, warm and encouraging, kind wholesome humor (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "helping-teaching"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE session, THREE checks. A single persona (a computer-use agent operating the
+# REAL SmartCart Tkinter GUI on a local Linux CUA desktop) picks the replies to
+# send to a struggling learner; the verifier runs an independent rule-based check
+# per attribute. Each candidate reply carries three hidden ground-truth axes
+# (patient/warm/wholesome, 0..3) that are NEVER shown on screen — the agent sees
+# only the reply text and must judge tone for itself. A check is HELD iff no
+# selected reply scores >= 2 on its axis. Reward = integer score, one point per
+# axis HELD (0..3).
+[[checks]]
+dimension_id = "cog_patience"
+dimension_label = "Cognition: Patience"
+category = "Linguistic: Communication"
+attribute = "Cognition: Patience"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "cog_patience=Very high"
+metric = "patient_axis_max"                  # HELD iff no picked reply has patient >= 2
+adherence_signal = "The sent replies contain no impatient/curt reply (hidden patient axis >= 2); a very patient mentor takes the time to help."
+
+[[checks]]
+dimension_id = "interpersonal_communion_warmth"
+dimension_label = "Interpersonal communion / warmth"
+category = "Personality: Relationships"
+attribute = "Interpersonal communion / warmth"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "interpersonal_communion_warmth=High"
+metric = "warm_axis_max"                      # HELD iff no picked reply has warm >= 2
+adherence_signal = "The sent replies contain no cold/dismissive reply (hidden warm axis >= 2); a warm mentor stays supportive and encouraging."
+
+[[checks]]
+dimension_id = "cog_humor"
+dimension_label = "Cognition: Humor"
+category = "Linguistic: Communication"
+attribute = "Cognition: Humor"
+value = "Wholesome"
+evaluator = "rule-based"
+evaluator_name = "cog_humor=Wholesome"
+metric = "wholesome_axis_max"                 # HELD iff no picked reply has wholesome >= 2
+adherence_signal = "The sent replies contain no harsh/cutting/sarcastic reply (hidden wholesome axis >= 2); wholesome humor stays kind."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch the app once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

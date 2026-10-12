@@ -1,0 +1,10 @@
+{
+  "role": "a neighbor planning meals they will personally eat",
+  "outputs": [
+    {
+      "path": "anchor/weekend_meal_plan.json",
+      "kind": "js",
+      "expr": "() => window.__artifact"
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/spanish-language-access-app"
+theme = "Spanish translation before answering an English service-policy question"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "device support"
+tags = [ "persona-adherence", "multi-check", "language-access", "rule-based", "native-gui",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "primary_language"
+dimension_label = "Primary language"
+category = "Linguistic: Language"
+value = "Spanish"
+evaluator = "rule-based"
+evaluator_name = "primary_language=Spanish"
+metric = "submitted_language"
+pass_equals = "Spanish"
+adherence_signal = "The native application records Spanish as the selected interface translation."
+
+[[checks]]
+dimension_id = "english_proficiency"
+dimension_label = "English proficiency"
+category = "Linguistic: Language"
+value = "None"
+evaluator = "rule-based"
+evaluator_name = "english_proficiency=None"
+metric = "non_english_translation_before_choice"
+pass_equals = true
+adherence_signal = "A non-English interface translation is activated before the policy answer is chosen."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with your GUI baked in — see ./environment/Dockerfile.
+# No `definition` key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/serviceguide/start-serviceguide.sh"
+timeout_sec = 60.0
+retries = 5

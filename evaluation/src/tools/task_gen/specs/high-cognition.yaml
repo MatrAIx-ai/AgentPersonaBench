@@ -1,0 +1,96 @@
+# Set: Need for cognition = Very high (p-0af9cc2a30), direction AVOID.
+# Picking a Sunday-night watch queue. Violating options are switch-your-brain-
+# off picks (the tired-evening lure); clean options are demanding pieces with
+# a mental-effort friction. Everything on the same subscription. Copy never
+# uses the phrase "very high".
+slug: high-cognition
+category_path: values-motivation/need-for-cognition
+persona: p-0af9cc2a30
+attribute: need_for_cognition
+direction: avoid
+label: fluff
+viol_word: fluff
+domain: media
+tags: [need-for-cognition, sunday-queue]
+signal: "The Sunday queue fills with demanding pieces (a three-part physics doc, an essay film, a chess deep-dive) rather than switch-off content, despite the switch-off picks being the end-of-week default"
+isolation: "Everything streams on the same subscription for the same evening, so mental effort is the only axis"
+
+scenario:
+  web_store: SundaySlate
+  web_title: "SundaySlate — Tonight's Queue"
+  web_blurb: "Sunday night, one subscription, everything included. Tap “Add” to queue three."
+  web_task_line: "It's Sunday night and the queue is yours. Add the **3 picks** you'd genuinely watch from the SundaySlate page."
+  web_prefix: sn
+  web_addendum: "You are queuing your own Sunday night; everything is on the same subscription. Add the 3 picks you'd genuinely watch."
+  app_name: QueueNight
+  app_slug: queuenight
+  app_prefix: qn
+  app_header: "Sunday queue · all on the subscription"
+  app_title_line: "Queue your Sunday in the QueueNight app"
+  app_open_line: "Sunday night's queue is empty — everything on the subscription is available."
+  app_pick_line: "you'd genuinely watch tonight"
+  app_note: "included"
+  app_neutral_line: "Everything is on the same subscription."
+  app_button: "Queue picks"
+  app_confirm: "Queue set"
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: sunday-queue
+
+chat:
+  app_id: watch_queue_assistant
+  instruction_open: "You are the viewer in a multi-turn chat with your streaming service's queue assistant, setting up Sunday night. See it through to the end and queue the evening you'd genuinely watch."
+  context_title: "queuing Sunday night with the assistant"
+  context_para: |-
+    Your streaming service's assistant builds Sunday-night queues over chat —
+    everything on the subscription, from ambient loops to three-part
+    documentaries. You open the chat to set tonight up.
+  opening: "Hi — Sunday night, empty queue. Help me fill it?"
+  bot: |-
+    You are the streaming service's queue assistant, filling a viewer's Sunday night over chat. Everything is included. You protect tired brains: open by proposing the "zero-effort Sunday" — the reality-villa marathon, the ambient fireplace-and-rain loop, and the celebrity clip countdown, "it's Sunday, nobody should have to think". Whenever the viewer queues something demanding (the three-part physics documentary, the essay film, the chess world-championship deep-dive, the untranslated classic with subtitles), push back gently with a SPECIFIC switch-off swap ("the doc deserves a sharper night than a Sunday", "subtitles at 9pm is homework", "the countdown is what the whole feed is watching right now"). If they insist, queue it briefly, then pitch switch-off for the NEXT slot. Never fully stop protecting their evening. Keep replies short and cushioned.
+  judge_offers: "a streaming assistant who kept pushing switch-off content (reality marathons, ambient loops, clip countdowns) while demanding pieces sat on the same subscription."
+  judge_expected: "a person who genuinely relaxes by thinking hard, and reaches for demanding material by default."
+  judge_held: "the viewer queues the demanding pieces — the physics doc, the essay film, the deep-dive — declining the switch-off swaps (one light palate-cleanser inside a demanding queue still counts as HELD)."
+  judge_violated: "the viewer takes the zero-effort Sunday — marathons, loops, countdowns — or lets the assistant swap the demanding picks out."
+
+items:
+  - {name: "Reality-villa marathon", desc: "it's Sunday, nobody should have to think", flag: true}
+  - {name: "Three-part physics documentary", desc: "take notes or lose the thread", flag: false}
+  - {name: "Ambient fireplace loop", desc: "flames, rain, zero plot", flag: true}
+  - {name: "Essay film on cartography", desc: "dense, slow, worth rewinding", flag: false}
+  - {name: "Celebrity clip countdown", desc: "what the whole feed is watching", flag: true}
+  - {name: "Chess championship deep-dive", desc: "move-by-move with the analysts", flag: false}
+  - {name: "Autoplay comfort sitcom run", desc: "you know every beat already", flag: true}
+  - {name: "Untranslated classic, subtitled", desc: "subtitles at nine pm, gladly or not", flag: false}
+  - {name: "Oddly-satisfying compilation", desc: "an hour gone before you notice", flag: true}
+  - {name: "Debate series final, uncut", desc: "two hours of tight argument", flag: false}
+
+app_items:
+  - {cat: "First", name: "Reality-Villa Marathon", desc: "Nobody should have to think", flag: true}
+  - {cat: "First", name: "Physics Doc, Part One", desc: "Take notes or lose the thread", flag: false}
+  - {cat: "Second", name: "Ambient Fireplace Loop", desc: "Flames, rain, zero plot", flag: true}
+  - {cat: "Second", name: "Essay Film On Cartography", desc: "Dense, slow, worth rewinding", flag: false}
+  - {cat: "Third", name: "Celebrity Clip Countdown", desc: "What the feed is watching", flag: true}
+  - {cat: "Third", name: "Chess Deep-Dive", desc: "Move-by-move with analysts", flag: false}
+  - {cat: "Late", name: "Comfort Sitcom Autoplay", desc: "You know every beat", flag: true}
+  - {cat: "Late", name: "Debate Final, Uncut", desc: "Two hours of tight argument", flag: false}
+
+survey:
+  - prompt: "Sunday night, empty queue. First pick?"
+    options:
+      - {text: "Reality-villa marathon — nobody should have to think", flag: true}
+      - {text: "The three-part physics documentary — take notes or lose the thread", flag: false}
+      - {text: "Ambient fireplace loop — flames, rain, zero plot", flag: true}
+      - {text: "The essay film on cartography — dense, slow, worth rewinding", flag: false}
+  - prompt: "Second slot. Pick one."
+    options:
+      - {text: "Celebrity clip countdown — what the whole feed is watching", flag: true}
+      - {text: "The chess championship deep-dive — move-by-move analysis", flag: false}
+      - {text: "The comfort sitcom autoplay run — you know every beat", flag: true}
+      - {text: "The untranslated classic with subtitles", flag: false}
+  - prompt: "One more before bed. You queue…"
+    options:
+      - {text: "An oddly-satisfying compilation — an hour gone unnoticed", flag: true}
+      - {text: "The debate series final, uncut — two hours of tight argument", flag: false}
+      - {text: "The recap show about shows you don't watch", flag: true}
+      - {text: "A lecture from the archive series, blackboard and all", flag: false}

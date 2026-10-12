@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/cooking-enthusiast-app"
+theme = "Interest: Cooking: Passionate"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "lifestyle"
+tags = [ "persona-adherence", "interests-topics", "cooking", "passionate", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "topic_cooking"
+dimension_label = "Interest: Cooking"
+category = "Interests: Topics"
+anchor_value = "Passionate"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating SmartCart, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Checkout", SmartCart writes order.json itself. Runs locally in
+# Docker (no use.computer needed). Each option carries a hidden per-item tier
+# (0 = cook from scratch, 1 = cooking-adjacent, 2 = eat out / convenience,
+# 3 = unrelated to food); passion for cooking = never falling back to tier>=2.
+adherence_signal = "The cart the agent checks out contains only cook-from-scratch or cooking-adjacent options (tier 0/1); it never picks an eat-out/delivery/convenience or unrelated option (tier>=2) — a passionate cook handles the week's meals by cooking."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

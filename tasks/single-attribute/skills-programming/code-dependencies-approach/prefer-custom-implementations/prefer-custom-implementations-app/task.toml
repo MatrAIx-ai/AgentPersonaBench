@@ -1,0 +1,46 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/prefer-custom-implementations-app"
+theme = "Code dependencies approach: Prefer custom implementations"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "software"
+tags = [ "persona-adherence", "code-dependencies-approach", "custom-implementation", "rule-based", "real-app",]
+
+# --- Single-attribute task ---------------------------------------------------- #
+# A developer persona that prefers custom implementations implements an HTTP
+# data-fetch helper in the native LibDesk editor; the app-written code is scored
+# by one deterministic rule-based check reading the import list.
+# Reward = 1.0/0.0.
+[[checks]]
+dimension_id = "code_dependencies_approach"
+dimension_label = "Dependencies and Library Usage"
+category = "Skills: Programming"
+anchor_value = "Prefer custom implementations"
+evaluator = "rule-based"
+evaluator_name = "code_dependencies_approach=Prefer custom implementations"
+adherence_signal = "Submitted solution (solution/solution.py) imports stdlib-only (or nothing) — zero third-party dependencies."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with LibDesk (Tkinter GUI) baked in — see
+# ./environment/Dockerfile. harbor uses the task's own environment/ dir.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

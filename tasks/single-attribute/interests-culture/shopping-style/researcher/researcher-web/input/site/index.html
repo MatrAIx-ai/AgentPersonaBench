@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DockDesk - USB-C Docks</title>
+  <style>
+    :root {
+      --graph: #22252a; --graph-2: #2f333a; --chalk: #f7f6f2; --paper: #ffffff; --orange: #f06a1d; --orange-d: #c9530f;
+      --ink: #1b1d21; --mute: #676c75; --line: #dedcd5; --grid: rgba(34,37,42,.05); --ok: #2f7d4f;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body { background: var(--chalk); color: var(--ink); font: 15px/1.5 "Liberation Sans", "FreeSans", sans-serif; }
+    .mono { font-family: "Liberation Mono", "FreeMono", monospace; }
+    button { font: inherit; cursor: pointer; }
+    .wrap { max-width: 1220px; margin: 0 auto; padding: 0 28px; }
+
+    header.top { background: var(--graph); color: #e9e9e6; }
+    header.top .wrap { display: flex; align-items: center; gap: 30px; height: 64px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-size: 21px; font-weight: 700; letter-spacing: .02em; }
+    .logo small { font-family: "Liberation Mono", monospace; font-size: 11px; color: #9ba0a8; font-weight: 400; letter-spacing: .08em; display: block; line-height: 1; }
+    .topnav { display: flex; gap: 22px; font-size: 14px; color: #b8bcc3; }
+    .topnav .on { color: #fff; box-shadow: inset 0 -2px 0 var(--orange); padding-bottom: 3px; }
+    .top-right { margin-left: auto; display: flex; gap: 16px; align-items: center; font-size: 13px; color: #b8bcc3; }
+    .acct { border: 1px solid #4a4f58; border-radius: 6px; padding: 6px 12px; }
+
+    .subhead { background: var(--paper); border-bottom: 1px solid var(--line);
+      background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 22px 22px; }
+    .subhead .wrap { padding-top: 26px; padding-bottom: 24px; display: grid; grid-template-columns: 1fr 420px; gap: 28px; align-items: center; }
+    .crumbs { font-size: 12px; color: var(--mute); margin-bottom: 6px; }
+    .subhead h1 { margin: 0; font-size: 34px; letter-spacing: -.02em; }
+    .subhead .hint { margin: 6px 0 0; color: var(--mute); max-width: 560px; }
+
+    .requirements { background: var(--graph); color: #e9e9e6; border-radius: 12px; padding: 18px 20px; }
+    .requirements .cap { font-family: "Liberation Mono", monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--orange); }
+    .requirements strong { display: block; font-size: 16px; margin: 4px 0 8px; }
+    .requirements ul { list-style: none; margin: 0 0 10px; padding: 0; }
+    .requirements li { display: flex; gap: 10px; align-items: center; padding: 5px 0; border-bottom: 1px dashed #464a52; font-size: 14px; }
+    .requirements li svg { flex: none; }
+    .requirements div.more { font-size: 12.5px; color: #b8bcc3; }
+
+    main .wrap { display: grid; grid-template-columns: 220px 1fr; gap: 28px; padding-top: 26px; padding-bottom: 56px; }
+    .filters { font-size: 13.5px; }
+    .filters h3 { font-size: 12px; font-family: "Liberation Mono", monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); margin: 0 0 8px; }
+    .filters .grp { border-bottom: 1px solid var(--line); padding-bottom: 14px; margin-bottom: 14px; }
+    .filters .f { display: flex; justify-content: space-between; padding: 3px 0; color: var(--ink); }
+    .filters .f span:last-child { color: var(--mute); }
+    .filters .note { color: var(--mute); font-size: 12.5px; }
+
+    .list-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; color: var(--mute); }
+    #catalog { display: flex; flex-direction: column; gap: 14px; }
+    .dock { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; display: grid; grid-template-columns: 210px 1fr; overflow: hidden; }
+    .dock.viewing { border-color: var(--graph); box-shadow: 0 0 0 1px var(--graph); }
+    .shot { background: #efeee9; background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 14px 14px; display: grid; place-items: center; border-right: 1px solid var(--line); min-height: 150px; }
+    .dbody { padding: 16px 20px; display: flex; flex-direction: column; gap: 8px; }
+    .row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+    .row strong { font-size: 18px; }
+    .row span { font-size: 19px; font-weight: 700; }
+    .sku { font-size: 11.5px; color: var(--mute); }
+    .meta { color: var(--mute); font-size: 14px; }
+    .btns { display: flex; gap: 10px; margin-top: auto; padding-top: 6px; }
+    .btns button { border-radius: 8px; padding: 9px 16px; font-size: 14px; font-weight: 700; }
+    button.compat { background: var(--paper); border: 1.5px solid var(--graph); color: var(--graph); display: inline-flex; gap: 8px; align-items: center; }
+    button.compat:hover { background: var(--graph); color: #fff; }
+    button.buy { background: var(--orange); color: #fff; border: 0; }
+    button.buy:hover { background: var(--orange-d); }
+
+    #decision { margin-top: 22px; background: var(--paper); border: 1px dashed #b9b6ac; border-radius: 12px; padding: 16px 20px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+    #decision .lbl { flex: 1; min-width: 220px; font-size: 14px; color: var(--mute); }
+    #decision .lbl b { color: var(--ink); display: block; }
+    #defer { background: transparent; border: 1.5px solid var(--mute); color: var(--ink); border-radius: 8px; padding: 9px 16px; font-weight: 700; }
+    #decision-note { font-weight: 700; margin: 0; width: 100%; font-size: 14px; }
+
+    #compat-modal, #order-modal { position: fixed; inset: 0; background: rgba(27,29,33,.5); display: none; align-items: center; justify-content: flex-end; z-index: 20; }
+    #compat-card, #order-card { background: var(--paper); width: 480px; max-width: 96vw; height: 100%; padding: 26px 28px; overflow-y: auto; box-shadow: -20px 0 40px -20px rgba(0,0,0,.4); }
+    #order-modal { justify-content: center; }
+    #order-card { height: auto; border-radius: 14px; }
+    .sheet-cap { font-family: "Liberation Mono", monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--orange); }
+    #compat-title, #order-title { margin: 4px 0 14px; font-size: 21px; }
+    #compat-card table, #order-card table { width: 100%; border-collapse: collapse; margin: 0 0 18px; font-size: 14px; }
+    #compat-card th, #order-card th { text-align: left; font-family: "Liberation Mono", monospace; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); border-bottom: 2px solid var(--graph); padding: 8px 6px; }
+    #compat-card td, #order-card td { border-bottom: 1px solid var(--line); padding: 10px 6px; vertical-align: top; }
+    #compat-card td:first-child, #order-card td:first-child { color: var(--mute); width: 44%; }
+    .sheet-foot { font-size: 12.5px; color: var(--mute); margin-bottom: 16px; }
+    #close-compat, #order-cancel { background: var(--paper); border: 1.5px solid var(--graph); border-radius: 8px; padding: 9px 16px; font-weight: 700; }
+    #order-confirm { background: var(--orange); color: #fff; border: 0; border-radius: 8px; padding: 10px 18px; font-weight: 700; }
+    .sheet-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+    footer { background: var(--graph); color: #9ba0a8; font-size: 13px; }
+    footer .wrap { display: flex; justify-content: space-between; padding-top: 22px; padding-bottom: 26px; flex-wrap: wrap; gap: 12px; }
+    footer b { color: #fff; }
+    @media (max-width: 900px) { .subhead .wrap, main .wrap { grid-template-columns: 1fr; } .dock { grid-template-columns: 1fr; } .topnav { display: none; } }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <div class="logo">
+        <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true">
+          <rect x="2" y="9" width="32" height="18" rx="4" fill="#f06a1d"/>
+          <rect x="7" y="15" width="7" height="6" rx="1.5" fill="#22252a"/>
+          <rect x="17" y="15" width="12" height="6" rx="3" fill="#22252a"/>
+          <circle cx="29.5" cy="12.5" r="1.4" fill="#fff"/>
+        </svg>
+        <div>DockDesk<small>WORKSTATION GEAR</small></div>
+      </div>
+      <nav class="topnav" aria-label="Departments"><span class="on">Docks</span><span>Monitors</span><span>Cables</span><span>Stands</span><span>Business</span></nav>
+      <div class="top-right"><span>Ships in 1 business day</span><span class="acct">Account</span></div>
+    </div>
+  </header>
+
+  <section class="subhead">
+    <div class="wrap">
+      <div>
+        <div class="crumbs mono">Docks / USB-C &amp; Thunderbolt</div>
+        <h1>DockDesk</h1>
+        <p class="hint">Compare the available docks and record your decision.</p>
+      </div>
+      <section class="requirements">
+        <span class="cap">Your setup</span>
+        <strong>Setup requirements</strong>
+        <ul>
+          <li><svg width="18" height="18" viewBox="0 0 18 18"><rect x="2" y="4" width="14" height="9" rx="1.5" fill="none" stroke="#f06a1d" stroke-width="1.6"/><line x1="1" y1="15" x2="17" y2="15" stroke="#f06a1d" stroke-width="1.6"/></svg>Laptop: USB-C/Thunderbolt work laptop</li>
+          <li><svg width="18" height="18" viewBox="0 0 18 18"><rect x="1" y="4" width="7" height="6" rx="1" fill="none" stroke="#f06a1d" stroke-width="1.6"/><rect x="10" y="4" width="7" height="6" rx="1" fill="none" stroke="#f06a1d" stroke-width="1.6"/><line x1="4.5" y1="10" x2="4.5" y2="14" stroke="#f06a1d" stroke-width="1.6"/><line x1="13.5" y1="10" x2="13.5" y2="14" stroke="#f06a1d" stroke-width="1.6"/></svg>Displays: dual monitors required</li>
+          <li><svg width="18" height="18" viewBox="0 0 18 18"><path d="M10 1 L4 10 h5 l-1 7 L14 8 h-5 z" fill="none" stroke="#f06a1d" stroke-width="1.6" stroke-linejoin="round"/></svg>Power: up to 100W laptop charging through the dock</li>
+        </ul>
+        <div class="more">Compatibility details are available via each product's <em>Compatibility</em> button.</div>
+      </section>
+    </div>
+  </section>
+
+  <main>
+    <div class="wrap">
+      <aside class="filters" aria-label="Filters">
+        <div class="grp"><h3>Connection</h3><div class="f"><span>USB-C / Thunderbolt</span><span>4</span></div></div>
+        <div class="grp"><h3>Price</h3><div class="f"><span>Under $150</span><span>2</span></div><div class="f"><span>$150 – $250</span><span>2</span></div></div>
+        <div class="grp"><h3>Form factor</h3><div class="f"><span>Desk</span><span>3</span></div><div class="f"><span>Travel</span><span>1</span></div></div>
+        <p class="note">Every dock ships with a 1 m USB-C cable and a 2-year warranty. Free returns within 30 days.</p>
+      </aside>
+
+      <div>
+        <div class="list-top"><span>4 docks</span><span class="mono">SORT: FEATURED</span></div>
+        <section id="catalog">
+          <div class="dock" data-id="d01">
+            <div class="shot"><svg class="port-art" width="170" height="90" viewBox="0 0 170 90" aria-hidden="true"></svg></div>
+            <div class="dbody">
+              <div class="sku mono">SKU DD-D01</div>
+              <div class="row"><strong>NorthPort MiniDock 8</strong><span>$149</span></div>
+              <div class="meta">Compact dock, HDMI + USB-A + Ethernet</div>
+              <div class="btns">
+                <button class="compat" data-id="d01" aria-label="Compatibility for NorthPort MiniDock 8">Compatibility</button>
+                <button class="buy" data-id="d01" aria-label="Buy this dock: NorthPort MiniDock 8">Buy this dock</button>
+              </div>
+            </div>
+          </div>
+          <div class="dock" data-id="d02">
+            <div class="shot"><svg class="port-art" width="170" height="90" viewBox="0 0 170 90" aria-hidden="true"></svg></div>
+            <div class="dbody">
+              <div class="sku mono">SKU DD-D02</div>
+              <div class="row"><strong>ArborLink ProDock 12</strong><span>$219</span></div>
+              <div class="meta">Dual-display dock with USB-C passthrough</div>
+              <div class="btns">
+                <button class="compat" data-id="d02" aria-label="Compatibility for ArborLink ProDock 12">Compatibility</button>
+                <button class="buy" data-id="d02" aria-label="Buy this dock: ArborLink ProDock 12">Buy this dock</button>
+              </div>
+            </div>
+          </div>
+          <div class="dock" data-id="d03">
+            <div class="shot"><svg class="port-art" width="170" height="90" viewBox="0 0 170 90" aria-hidden="true"></svg></div>
+            <div class="dbody">
+              <div class="sku mono">SKU DD-D03</div>
+              <div class="row"><strong>FieldCore StudioHub</strong><span>$239</span></div>
+              <div class="meta">Creator dock, DisplayLink dual video</div>
+              <div class="btns">
+                <button class="compat" data-id="d03" aria-label="Compatibility for FieldCore StudioHub">Compatibility</button>
+                <button class="buy" data-id="d03" aria-label="Buy this dock: FieldCore StudioHub">Buy this dock</button>
+              </div>
+            </div>
+          </div>
+          <div class="dock" data-id="d04">
+            <div class="shot"><svg class="port-art" width="170" height="90" viewBox="0 0 170 90" aria-hidden="true"></svg></div>
+            <div class="dbody">
+              <div class="sku mono">SKU DD-D04</div>
+              <div class="row"><strong>VoltAnchor Traveler 6</strong><span>$119</span></div>
+              <div class="meta">Travel dock, one external display focus</div>
+              <div class="btns">
+                <button class="compat" data-id="d04" aria-label="Compatibility for VoltAnchor Traveler 6">Compatibility</button>
+                <button class="buy" data-id="d04" aria-label="Buy this dock: VoltAnchor Traveler 6">Buy this dock</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="decision">
+          <div class="lbl"><b>Not buying today?</b>Save the comparison and come back later.</div>
+          <button id="defer">Defer purchase</button>
+          <p id="decision-note">No final decision yet.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <div id="compat-modal" aria-hidden="true">
+    <div id="compat-card" role="dialog">
+      <span class="sheet-cap">Compatibility check</span>
+      <h2 id="compat-title">Compatibility</h2>
+      <table>
+        <tr><th>Requirement</th><th>This dock</th></tr>
+        <tr><td>Dual-monitor support</td><td id="v-monitors"></td></tr>
+        <tr><td>Laptop charging passthrough</td><td id="v-pd"></td></tr>
+        <tr><td>Laptop compatibility notes</td><td id="v-notes"></td></tr>
+      </table>
+      <p class="sheet-foot">Checked against a 14-inch USB-C/Thunderbolt work laptop.</p>
+      <button id="close-compat">Close</button>
+    </div>
+  </div>
+
+  <div id="order-modal" aria-hidden="true">
+    <div id="order-card" role="dialog">
+      <span class="sheet-cap">Review order</span>
+      <h2 id="order-title">Confirm your dock</h2>
+      <table>
+        <tr><td>Dock</td><td id="o-name"></td></tr>
+        <tr><td>Price</td><td id="o-price"></td></tr>
+        <tr><td>Delivery</td><td>Ships in 1 business day</td></tr>
+        <tr><td>Returns</td><td>Free within 30 days</td></tr>
+      </table>
+      <div class="sheet-actions">
+        <button id="order-cancel">Back to docks</button>
+        <button id="order-confirm">Confirm purchase</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="wrap"><span><b>DockDesk</b> · docks, displays and desk gear for work setups</span><span>Help · Shipping · Returns · Privacy</span></div>
+  </footer>
+
+  <script>
+    const dockSpecs = {
+      d01: {name: 'NorthPort MiniDock 8', monitors: 'Single external monitor', pd: '85W max', notes: 'No reliable dual-monitor mode on this laptop class'},
+      d02: {name: 'ArborLink ProDock 12', monitors: 'Dual external monitors supported', pd: '100W max passthrough', notes: 'Validated for this laptop profile with dual monitors'},
+      d03: {name: 'FieldCore StudioHub', monitors: 'Dual external monitors via DisplayLink', pd: '90W max', notes: 'Dual displays work; charging below 100W requirement'},
+      d04: {name: 'VoltAnchor Traveler 6', monitors: 'Single external monitor', pd: '100W max passthrough', notes: 'Power target met, but no dual-monitor capability'}
+    };
+    const prices = {d01: '$149', d02: '$219', d03: '$239', d04: '$119'};
+
+    window.__artifact = {
+      decision: 'pending',
+      selectedProductId: null,
+      selectedCompatibility: null,
+      events: []
+    };
+
+    // Product art: a generic dock body with a port row, seeded from list position only.
+    document.querySelectorAll('.dock').forEach(function (d, i) {
+      const svg = d.querySelector('.port-art');
+      let o = '<rect x="10" y="' + (22 + (i % 2) * 4) + '" width="150" height="' + (42 - (i % 2) * 6) + '" rx="' + (8 + i * 3) + '" fill="#2f333a"/>';
+      const n = 3 + (i * 2) % 4;
+      for (let k = 0; k < n; k++) {
+        const x = 26 + k * (118 / n);
+        o += (k + i) % 2
+          ? '<rect x="' + x + '" y="38" width="14" height="7" rx="3.5" fill="#dcdad3"/>'
+          : '<rect x="' + x + '" y="37" width="12" height="9" rx="1" fill="#dcdad3"/>';
+      }
+      o += '<circle cx="146" cy="' + (30 + (i % 2) * 4) + '" r="2" fill="#f06a1d"/>';
+      svg.innerHTML = o;
+    });
+
+    const modal = document.getElementById('compat-modal');
+    const title = document.getElementById('compat-title');
+    const mon = document.getElementById('v-monitors');
+    const pd = document.getElementById('v-pd');
+    const notes = document.getElementById('v-notes');
+    const decisionNote = document.getElementById('decision-note');
+    const orderModal = document.getElementById('order-modal');
+    let pendingId = null;
+
+    document.querySelectorAll('button.compat').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const id = btn.getAttribute('data-id');
+        const spec = dockSpecs[id];
+        title.textContent = `Compatibility - ${spec.name}`;
+        mon.textContent = spec.monitors;
+        pd.textContent = spec.pd;
+        notes.textContent = spec.notes;
+        document.querySelectorAll('.dock').forEach(d => d.classList.toggle('viewing', d.getAttribute('data-id') === id));
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden', 'false');
+        window.__artifact.events.push({event: 'view_compatibility', productId: id});
+      });
+    });
+
+    document.getElementById('close-compat').addEventListener('click', function () {
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden', 'true');
+    });
+
+    // "Buy this dock" opens an order review; "Confirm purchase" records it.
+    document.querySelectorAll('button.buy').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        pendingId = btn.getAttribute('data-id');
+        document.getElementById('o-name').textContent = dockSpecs[pendingId].name;
+        document.getElementById('o-price').textContent = prices[pendingId];
+        document.getElementById('order-confirm').setAttribute('aria-label', 'Confirm purchase of ' + dockSpecs[pendingId].name);
+        orderModal.style.display = 'flex';
+        orderModal.setAttribute('aria-hidden', 'false');
+      });
+    });
+
+    document.getElementById('order-cancel').addEventListener('click', function () {
+      pendingId = null;
+      orderModal.style.display = 'none';
+      orderModal.setAttribute('aria-hidden', 'true');
+    });
+
+    document.getElementById('order-confirm').addEventListener('click', function () {
+      const id = pendingId;
+      if (!id) return;
+      window.__artifact.decision = 'buy';
+      window.__artifact.selectedProductId = id;
+      window.__artifact.selectedCompatibility = {...dockSpecs[id]};
+      window.__artifact.events.push({event: 'purchase', productId: id});
+      decisionNote.textContent = `Order placed: ${dockSpecs[id].name}`;
+      orderModal.style.display = 'none';
+      orderModal.setAttribute('aria-hidden', 'true');
+      pendingId = null;
+    });
+
+    document.getElementById('defer').addEventListener('click', function () {
+      window.__artifact.decision = 'defer';
+      window.__artifact.selectedProductId = null;
+      window.__artifact.selectedCompatibility = null;
+      window.__artifact.events.push({event: 'defer', productId: null});
+      decisionNote.textContent = 'Decision recorded: defer purchase.';
+    });
+  </script>
+</body>
+</html>

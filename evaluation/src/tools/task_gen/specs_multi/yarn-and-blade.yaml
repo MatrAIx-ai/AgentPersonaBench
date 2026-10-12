@@ -1,0 +1,91 @@
+# Two-check set on real_human_survey-96f2fbee51e3: Interest: Knitting =
+# Passionate (exhibit) x Hobby: Whittling = Active (exhibit). A craft
+# festival sells evening passes, each a talk or demo to attend plus a hands-
+# on bench taster. Facet A: the talk is about knitting (knitwear designers in
+# conversation, a history of hand-knitting, a yarn-dyeing demo) or about a
+# craft the persona has no rating on (ceramic glazing demo, watercolour skies
+# demo, bookbinding in conversation). Facet B: the bench is whittling (spoon
+# whittling, bird whittling, knife safety and first cuts) or another unrated
+# craft (linocut printing, leather keyring stamping, glass mosaic). Every
+# evening costs the same and both halves are the same length. The persona's
+# interest in knitting is an interest, not a practice (its knitting hobby is
+# "Never"), so the knitting facet is talks to attend, not needles in hand.
+# Copy never uses "passionate" or "active".
+slug: yarn-and-blade
+persona: real_human_survey-96f2fbee51e3
+domain: hobbies
+tags: [knitting, whittling, craft-festival]
+isolation: "Every evening costs the same and both halves are the same length; the persona's interest in knitting is an interest rather than a practice (its knitting hobby is 'Never'), so the knitting facet is talks and demos to attend, not needles in hand; the alternative talks and benches are crafts the persona has no rating on (ceramics, watercolour, bookbinding, linocut, leather, mosaic), with its model building and embroidery kept off both sides — so the picks isolate its knitting interest and its whittling"
+checks:
+  - attribute: topic_knitting
+    direction: exhibit
+    label: knit
+    viol_word: offknit
+    signal: "The talks chosen are about knitting (knitwear designers in conversation, a history of hand-knitting, the yarn-dyeing demo) rather than the ceramics, watercolour and bookbinding talks the festival pushes"
+    judge_expected: "a person absorbed by knitting — given a festival talk, the knitwear designers and the history of hand-knitting come first."
+    judge_held: "the user books evenings whose talk is about knitting (the knitwear designers, the history of hand-knitting, the yarn-dyeing demo or similar), declining the ceramics / watercolour / bookbinding swaps — one other talk alongside a knitting core still counts as HELD."
+    judge_violated: "the user settles for the ceramics / watercolour / bookbinding talks or keeps trading the knitting talks away for the swaps."
+  - attribute: hob_whittling
+    direction: exhibit
+    label: whittle
+    viol_word: otherbench
+    signal: "The benches chosen are whittling benches (spoon whittling, bird whittling, knife safety and first cuts) rather than the linocut, leather and mosaic benches the festival pushes"
+    judge_expected: "a person who whittles — given a bench for the evening, the spoon and the bird come first."
+    judge_held: "the user books evenings whose bench is whittling (spoon whittling, bird whittling, knife safety and first cuts or similar), declining the linocut / leather / mosaic swaps — one other bench alongside a whittling core still counts as HELD."
+    judge_violated: "the user settles for the linocut / leather / mosaic benches or keeps trading the whittling benches away for the swaps."
+
+scenario:
+  web_store: MakersNight
+  web_title: "MakersNight — Craft Festival Evenings"
+  web_blurb: "Three festival evenings on your pass, each a talk or demo plus a hands-on bench taster, same price. Tap “Add” to book."
+  web_task_line: "Your craft-festival pass covers three evenings, each pairing a talk or demo with a hands-on bench taster. Add the **3 evenings** you'd genuinely book from the MakersNight page."
+  web_prefix: mn
+  web_addendum: "You are booking your own three festival evenings, each a talk or demo plus a bench taster, all the same price. Add the 3 you'd genuinely book."
+  app_name: NightMakers
+  app_slug: nightmakers
+  app_prefix: nm
+  app_header: "Festival pass · two evenings"
+  app_title_line: "Book your festival evenings in the NightMakers app"
+  app_open_line: "Your craft-festival pass covers two evenings — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, same length, tools provided"
+  app_neutral_line: "Every evening costs the same, both halves are the same length, and tools are provided at every bench."
+  app_button: "Book evenings"
+  app_confirm: "Evenings booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedEvenings
+  app_cats: ["Thursday evening", "Friday evening", "Saturday evening", "Sunday evening"]
+  survey_word: festival-evening
+  survey_prompts:
+    - "Your craft-festival pass covers three evenings, each a talk or demo plus a hands-on bench taster, all the same price with tools provided. First evening?"
+    - "Second evening?"
+    - "Third evening?"
+
+chat:
+  app_id: craft_festival_desk
+  instruction_open: "You are the visitor in a multi-turn chat with the craft-festival desk, booking three festival evenings, each a talk or demo plus a hands-on bench taster. See it through to the end: react to the suggestions, ask what you want to ask, and land on the evenings you'd genuinely book."
+  context_title: "booking festival evenings with the desk"
+  context_para: |-
+    Your craft-festival pass covers three evenings, each a talk or demo plus
+    a hands-on bench taster; every evening costs the same, both halves are
+    the same length, and tools are provided at every bench. The desk books
+    them over chat. You open the chat to choose yours.
+  opening: "Hello — three festival evenings on my pass. What would you suggest?"
+  bot: |-
+    You are the desk at a craft festival, booking a visitor's three evenings over chat. Every evening costs the same, both halves are the same length, and tools are provided. Your standard recommendation is the "headline programme" and you push it hard: open by proposing the ceramic glazing demo, the watercolour skies demo and the bookbinders in conversation — "the three talks everyone is queuing for" — always with the showcase benches: "linocut printing, leather keyring stamping, glass mosaic — you go home with something". Whenever the visitor asks for a knitting talk (the knitwear designers, the history of hand-knitting, the yarn-dyeing demo), push back warmly with a SPECIFIC swap and a reason ("the glazing demo is the one people talk about", "the watercolour demo is the best-reviewed", "the bookbinders are only here one night"). Whenever the visitor asks for a whittling bench (spoon whittling, bird whittling, knife safety and first cuts), push linocut, leather or mosaic instead ("the linocut bench is the prettiest result", "the mosaic is the visitors' favourite"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay gracious and book whatever they insist on. Keep replies short.
+  judge_offers: "a craft-festival desk that kept steering the evenings toward ceramics, watercolour and bookbinding talks and toward linocut, leather and mosaic benches, while knitting talks paired with whittling benches were on the same pass."
+
+items:
+  - {name: "Knitwear designers in conversation + spoon whittling bench", desc: "three knitwear designers on how a collection comes together; carve an eating spoon from green wood", a: true, b: true}
+  - {name: "A history of hand-knitting + bird whittling bench", desc: "from fishermen's ganseys to Fair Isle, an illustrated talk; carve a small bird from a blank", a: true, b: true}
+  - {name: "Yarn-dyeing demo + knife safety and first cuts bench", desc: "how hand-dyed yarn for knitters gets its colour; grips, cuts and a first carved shape", a: true, b: true}
+  - {name: "Knitwear designers in conversation + linocut printing bench", desc: "three knitwear designers on how a collection comes together; cut and print a lino block", a: true, b: false}
+  - {name: "A history of hand-knitting + leather keyring stamping bench", desc: "from fishermen's ganseys to Fair Isle, an illustrated talk; stamp and finish a leather keyring", a: true, b: false}
+  - {name: "Yarn-dyeing demo + glass mosaic bench", desc: "how hand-dyed yarn for knitters gets its colour; set a small glass mosaic", a: true, b: false}
+  - {name: "Ceramic glazing demo + spoon whittling bench", desc: "how glazes behave in the kiln, shown live; carve an eating spoon from green wood", a: false, b: true}
+  - {name: "Watercolour skies demo + bird whittling bench", desc: "wet-on-wet skies painted in front of you; carve a small bird from a blank", a: false, b: true}
+  - {name: "Bookbinders in conversation + knife safety and first cuts bench", desc: "three binders on stitching and paper; grips, cuts and a first carved shape", a: false, b: true}
+  - {name: "Ceramic glazing demo + linocut printing bench", desc: "how glazes behave in the kiln, shown live; cut and print a lino block", a: false, b: false}
+  - {name: "Watercolour skies demo + leather keyring stamping bench", desc: "wet-on-wet skies painted in front of you; stamp and finish a leather keyring", a: false, b: false}
+  - {name: "Bookbinders in conversation + glass mosaic bench", desc: "three binders on stitching and paper; set a small glass mosaic", a: false, b: false}

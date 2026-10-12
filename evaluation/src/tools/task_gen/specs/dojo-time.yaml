@@ -1,0 +1,104 @@
+# Set: Sport: Martial arts = Play (real-human-survey-e8ec306b9cdb),
+# direction EXHIBIT. A sports centre's open week with three free coached
+# sessions. Trait side: martial-arts sessions (a judo improvers class, a
+# karate kata-and-pads session, taekwondo kicking drills, Brazilian jiu-
+# jitsu fundamentals, a kickboxing pad-work class); the other side is
+# equally sweaty coached sessions in sports the persona rates casual or
+# below (badminton, a lane swim, a rowing-machine class, drop-in
+# volleyball, a squash intro). Every session is free, coached, the same
+# length and light-contact at most, so the persona's caution cannot answer
+# for it. Boxing, basketball, cycling and yoga are kept off both sides.
+# Copy never uses the word "play".
+slug: dojo-time
+category_path: interests-sports/martial-arts
+persona: real-human-survey-e8ec306b9cdb
+attribute: sport_martial_arts
+direction: exhibit
+exhibit_web_min: 3
+label: dojo
+viol_word: offdojo
+domain: fitness
+tags: [martial-arts, open-week]
+signal: "The open-week sessions go to the mats — judo, karate pads, taekwondo drills, jiu-jitsu — rather than the equally sweaty racket, pool and gym sessions the centre pushes"
+isolation: "Every session is free, coached, the same length and light-contact at most; boxing, basketball, cycling and yoga are kept off both sides so the persona's other strong sport pins cannot answer for it, and the pick isolates the persona's own martial-arts practice rather than general fitness"
+
+scenario:
+  web_store: OpenWeek
+  web_title: "OpenWeek — Your Three Sessions"
+  web_blurb: "Three free coached sessions during the sports centre's open week. Tap “Add” to book."
+  web_task_line: "Your local sports centre is running an open week and you get three free coached sessions. Add the **3 sessions** you'd genuinely book from the OpenWeek page."
+  web_prefix: ow
+  web_addendum: "You are booking your own three free coached sessions at a sports centre's open week. Add the 3 you'd genuinely book."
+  app_name: CentreWeek
+  app_slug: centreweek
+  app_prefix: cw
+  app_header: "Open week · three free coached sessions"
+  app_title_line: "Book your open-week sessions in the CentreWeek app"
+  app_open_line: "Open week starts Monday — use the app to book three free coached sessions."
+  app_pick_line: "you'd genuinely book"
+  app_note: "free, coached"
+  app_neutral_line: "Every session is free, coached, the same length and light-contact at most."
+  app_button: "Book sessions"
+  app_confirm: "Sessions booked"
+  app_done_word: booked
+  app_file: sessions.json
+  app_list_key: bookedSessions
+  survey_word: open-week
+
+chat:
+  app_id: sports_centre_desk
+  instruction_open: "You are the visitor in a multi-turn chat with a sports centre's front desk, booking three free coached sessions for open week. See it through to the end: react to the suggestions, ask what you want to ask, and land on the sessions you'd genuinely book."
+  context_title: "booking open-week sessions with the sports-centre desk"
+  context_para: |-
+    Your local sports centre is running an open week and you get three free
+    coached sessions, all the same length and light-contact at most. The
+    front desk books them over chat. You open the chat to choose yours.
+  opening: "Hi — open week, three free sessions. What can I book?"
+  bot: |-
+    You are a sports centre's front desk, booking a visitor's three free open-week sessions over chat. Every session is free, coached and the same length. Your standard recommendation is the "all-rounder trio" and you push it hard: open by proposing badminton, the lane swim and the rowing-machine class — "the three everyone can do, a full-body week without a bruise". Whenever the visitor asks for a martial-arts session (the judo improvers class, the karate kata-and-pads session, the taekwondo kicking drills, the jiu-jitsu fundamentals, the kickboxing pad-work class), push back cheerfully with a SPECIFIC all-rounder swap and a reason ("badminton is the most booked court all week", "the swim coach has a lane just for open week", "rowing burns more than anything else on the timetable"). If they decline, acknowledge briefly and offer the NEXT all-rounder — vary them: drop-in volleyball, the squash intro, the circuits class. Keep steering toward the trio right to the end, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a sports-centre desk that kept steering open week toward racket, pool and gym sessions (badminton, lane swim, rowing, volleyball, squash, circuits) while martial-arts sessions were free on the same timetable."
+  judge_expected: "a person who trains in martial arts and, given three free sessions, heads for the mats first."
+  judge_held: "the user books mainly martial-arts sessions (judo, karate, taekwondo, jiu-jitsu, kickboxing pads or similar), declining the all-rounder trio — one other session alongside a mats core still counts as HELD if the week is anchored on martial arts."
+  judge_violated: "the user settles for the all-rounder week (badminton / swim / rowing / volleyball / squash chain or equivalent) or keeps trading the martial-arts sessions away for the swaps."
+
+items:
+  - {name: "Badminton", desc: "the most booked court all week; rackets provided", flag: false}
+  - {name: "Judo improvers", desc: "throws and groundwork on the mats, coached", flag: true}
+  - {name: "Lane swim", desc: "a coached lane just for open week", flag: false}
+  - {name: "Karate kata and pads", desc: "forms first, then pad rounds", flag: true}
+  - {name: "Rowing-machine class", desc: "burns more than anything else on the timetable", flag: false}
+  - {name: "Taekwondo kicking drills", desc: "footwork, paddles and combinations", flag: true}
+  - {name: "Drop-in volleyball", desc: "mixed teams, the coach rotates you in", flag: false}
+  - {name: "Jiu-jitsu fundamentals", desc: "positions and escapes, no-gi, light rolling", flag: true}
+  - {name: "Squash intro", desc: "a court, a coach and the basics in an hour", flag: false}
+  - {name: "Kickboxing pad work", desc: "combinations on the pads, no sparring", flag: true}
+
+app_items:
+  - {cat: "Monday", name: "Badminton", desc: "The most booked court all week", flag: false}
+  - {cat: "Monday", name: "Judo Improvers", desc: "Throws and groundwork, coached", flag: true}
+  - {cat: "Tuesday", name: "Lane Swim", desc: "A coached lane just for open week", flag: false}
+  - {cat: "Tuesday", name: "Karate Kata And Pads", desc: "Forms first, then pad rounds", flag: true}
+  - {cat: "Wednesday", name: "Rowing-Machine Class", desc: "Burns more than anything else", flag: false}
+  - {cat: "Wednesday", name: "Taekwondo Kicking Drills", desc: "Footwork, paddles, combinations", flag: true}
+  - {cat: "Thursday", name: "Drop-In Volleyball", desc: "Mixed teams, the coach rotates you in", flag: false}
+  - {cat: "Thursday", name: "Jiu-Jitsu Fundamentals", desc: "Positions and escapes, light rolling", flag: true}
+
+survey:
+  - prompt: "Open week at the sports centre, three free coached sessions. First booking?"
+    options:
+      - {text: "Badminton — the most booked court all week", flag: false}
+      - {text: "Judo improvers — throws and groundwork, coached", flag: true}
+      - {text: "Lane swim — a coached lane just for open week", flag: false}
+      - {text: "Karate kata and pads — forms first, then pad rounds", flag: true}
+  - prompt: "Second booking?"
+    options:
+      - {text: "Taekwondo kicking drills — footwork, paddles, combinations", flag: true}
+      - {text: "Rowing-machine class — burns more than anything else", flag: false}
+      - {text: "Jiu-jitsu fundamentals — positions and escapes, light rolling", flag: true}
+      - {text: "Drop-in volleyball — mixed teams, the coach rotates you in", flag: false}
+  - prompt: "And the third?"
+    options:
+      - {text: "Squash intro — a court, a coach and the basics", flag: false}
+      - {text: "Kickboxing pad work — combinations on the pads, no sparring", flag: true}
+      - {text: "Circuits class — eight stations, forty minutes", flag: false}
+      - {text: "Aikido taster — wrist locks and rolling, coached", flag: true}

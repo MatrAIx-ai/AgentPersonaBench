@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CareerSpring — Book expert support</title>
+<style>
+:root{--paper:#fcfbf7;--ink:#14213d;--ink-2:#2b3a5c;--leaf:#3f9a55;--leaf-soft:#e4f3e4;--saffron:#f4a259;--line:#e5e1d6;--muted:#5d6477;--card:#ffffff}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:"Liberation Sans","FreeSans",Arial,sans-serif;font-size:15px;line-height:1.5}
+.util{background:var(--ink);color:#c9d0e0;font-size:12.5px}
+.util .in{max-width:1180px;margin:0 auto;padding:7px 28px;display:flex;justify-content:space-between}
+.mast{border-bottom:1px solid var(--line);background:#fff}
+.mast .in{max-width:1180px;margin:0 auto;padding:16px 28px;display:flex;align-items:center;gap:30px}
+.brand{display:flex;align-items:center;gap:11px}
+.brand .wm{font-family:"Bitstream Charter","Liberation Serif",Georgia,serif;font-size:24px;font-weight:700;letter-spacing:-.3px}
+.brand .wm i{font-style:italic;color:var(--leaf);font-weight:400}
+.menu{display:flex;gap:22px;font-size:14px;color:var(--muted)}
+.menu .on{color:var(--ink);font-weight:700}
+.acct{margin-left:auto;font-size:13.5px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.acct b{width:32px;height:32px;border-radius:50%;background:var(--leaf-soft);color:var(--leaf);display:inline-flex;align-items:center;justify-content:center}
+.wrap{max-width:1180px;margin:0 auto;padding:30px 28px 60px;display:grid;grid-template-columns:230px 1fr;gap:34px;align-items:start}
+.rail{position:sticky;top:18px}
+.rail h2{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+.rail ol{list-style:none;margin:0;padding:0;border-left:2px solid var(--line)}
+.rail li{position:relative;padding:0 0 22px 22px;font-size:14px;color:var(--muted)}
+.rail li::before{content:attr(data-n);position:absolute;left:-13px;top:-1px;width:24px;height:24px;border-radius:50%;background:var(--paper);border:2px solid var(--line);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.rail li.on{color:var(--ink);font-weight:700}
+.rail li.on::before{border-color:var(--ink);background:var(--ink);color:#fff}
+.rail li.done::before{content:"✓";border-color:var(--leaf);background:var(--leaf);color:#fff}
+.rail li small{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+.railnote{margin-top:6px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;font-size:13px;color:var(--muted)}
+.railnote strong{color:var(--ink)}
+.kicker{font-size:12.5px;letter-spacing:1.4px;text-transform:uppercase;color:var(--leaf);font-weight:700;margin:0 0 4px}
+h1.page{font-family:"Bitstream Charter","Liberation Serif",Georgia,serif;font-size:34px;line-height:1.12;margin:0 0 8px;letter-spacing:-.4px}
+.lede{color:var(--muted);margin:0 0 16px;max-width:680px}
+.notice{background:#fff6ea;border:1px solid #f1d2ad;border-left:4px solid var(--saffron);padding:11px 14px;border-radius:8px;font-size:14px;margin-bottom:22px}
+section.step{display:none}section.step.on{display:block}
+.sechead{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:12px}
+.sechead h2{font-family:"Bitstream Charter","Liberation Serif",Georgia,serif;font-size:24px;margin:0}
+.sub{color:var(--muted);margin:2px 0 0}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.plan-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 18px 16px;display:flex;flex-direction:column;position:relative}
+.plan-card .av{width:36px;height:36px;border-radius:10px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;font-family:"Bitstream Charter",Georgia,serif;font-weight:700;color:#14213d;font-size:17px}
+.plan-card h3{margin:0 0 4px;font-size:19px;font-family:"Bitstream Charter","Liberation Serif",Georgia,serif}
+.plan-card .price{margin:0 0 4px;font-weight:700;font-size:16px;color:var(--ink-2)}
+.plan-card .teaser{margin:0 0 14px;color:var(--muted);font-size:13.5px;flex:1}
+.plan-card button{font:inherit;font-size:14px;border-radius:9px;padding:9px 12px;cursor:pointer}
+.plan-card .btns{display:flex;gap:8px}
+.plan-card .details{background:#fff;border:1.5px solid var(--line);color:var(--ink);flex:1}
+.plan-card .details:hover{border-color:var(--ink)}
+.plan-card .choose{background:var(--ink);border:1.5px solid var(--ink);color:#fff;font-weight:700;flex:1}
+.plan-card.sel{border-color:var(--leaf);box-shadow:0 0 0 3px var(--leaf-soft)}
+.plan-card .choose.selected{background:var(--leaf);border-color:var(--leaf)}
+.stepnav{display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+.btn{font:inherit;font-weight:700;font-size:15px;border:0;border-radius:10px;padding:12px 22px;cursor:pointer;background:var(--ink);color:#fff}
+.btn:disabled{background:#c7cad3;cursor:not-allowed}
+.btn.alt{background:#fff;color:var(--ink);border:1.5px solid var(--ink)}
+.hint{font-size:13.5px;color:var(--muted)}
+.review{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.review .r{display:grid;grid-template-columns:170px 1fr auto;gap:16px;align-items:center;padding:16px 18px;border-top:1px solid var(--line)}
+.review .r:first-child{border-top:0}
+.review .r .what{font-size:12.5px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted)}
+.review .r strong{font-family:"Bitstream Charter","Liberation Serif",Georgia,serif;font-size:18px;display:block}
+#summary{font-size:13.5px;color:var(--muted);margin:14px 0 0}
+.drawer{display:none;margin-top:16px;background:#fff;border:1px solid var(--line);border-left:5px solid var(--saffron);border-radius:12px;padding:20px 22px;box-shadow:0 8px 22px rgba(20,33,61,.08)}
+.drawer.open{display:block}
+.drawer .kicker{color:#b86a1f}
+.drawer h3{font-family:"Bitstream Charter","Liberation Serif",Georgia,serif;font-size:22px;margin:0 0 2px}
+.drawer #dialog-price{font-weight:700;margin:0 0 14px}
+.terms{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:14px;line-height:1.55}
+.terms p{margin:0}
+.drawer .row{display:flex;gap:8px;margin-top:18px}
+.done{background:#fff;border:1px solid var(--line);border-radius:16px;padding:44px;text-align:center}
+.done h2{font-family:"Bitstream Charter","Liberation Serif",Georgia,serif;font-size:32px;margin:10px 0 6px}
+footer{border-top:1px solid var(--line);background:#fff;color:var(--muted);font-size:13px}
+footer .in{max-width:1180px;margin:0 auto;padding:24px 28px;display:flex;justify-content:space-between;gap:20px}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}.rail{position:static}.grid{grid-template-columns:1fr}.review .r{grid-template-columns:1fr}}
+</style></head><body>
+<div class="util"><div class="in"><span>Coaches available this week in every time zone</span><span>Help · Contact</span></div></div>
+<header class="mast"><div class="in">
+  <div class="brand" aria-label="CareerSpring">
+    <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="11" fill="#14213d"/><path d="M20 31V17" stroke="#fcfbf7" stroke-width="2.4" stroke-linecap="round"/><path d="M20 20c-6 0-9-4-9-9 6 0 9 4 9 9z" fill="#3f9a55"/><path d="M20 17c0-6 4-9 10-9 0 6-4 9-10 9z" fill="#f4a259"/><path d="M12 31h16" stroke="#fcfbf7" stroke-width="2.4" stroke-linecap="round"/></svg>
+    <span class="wm">Career<i>Spring</i></span>
+  </div>
+  <nav class="menu"><span class="on">Book support</span><span>Coaches</span><span>Resources</span><span>My sessions</span></nav>
+  <div class="acct"><span>Signed in</span><b>A</b></div>
+</div></header>
+
+<div class="wrap">
+  <aside class="rail">
+    <h2>Your booking</h2>
+    <ol>
+      <li id="r1" data-n="1" class="on">Profile review<small id="r1s">Not chosen yet</small></li>
+      <li id="r2" data-n="2">Mock interview<small id="r2s">Not chosen yet</small></li>
+      <li id="r3" data-n="3">Review &amp; checkout<small>Confirm your booking</small></li>
+    </ol>
+    <div class="railnote"><strong>How booking works</strong><br>After checkout you pick a time with a coach from your field. Feedback arrives in your dashboard.</div>
+  </aside>
+
+  <main>
+    <p class="kicker">Book expert support for your next application</p>
+    <h1 class="page">Your profile review &amp; mock interview</h1>
+    <div class="notice">Choose exactly one option from each section. Service quality and appointment availability are identical within each section. Open Details for complete billing terms.</div>
+
+    <section class="step on" id="step-profile" data-section="profile">
+      <div class="sechead"><div><h2>Profile review</h2><p class="sub">A 45-minute review with written feedback</p></div><span class="hint">Step 1 of 3</span></div>
+      <div class="grid">
+<article class="plan-card" data-id="p01" data-section="profile" data-billing="recurring"><h3>Launch</h3><p class="price">$9 today</p><p class="teaser">Immediate booking · future review access</p><button class="details" data-id="p01">Details</button><button class="choose" data-id="p01">Select</button><template><p>Includes today's review. After the first month, $19 is charged every month automatically until you cancel.</p></template></article>
+<article class="plan-card" data-id="p02" data-section="profile" data-billing="recurring"><h3>Momentum</h3><p class="price">$16 today</p><p class="teaser">Immediate booking · flexible follow-ups</p><button class="details" data-id="p02">Details</button><button class="choose" data-id="p02">Select</button><template><p>Includes today's review and one follow-up each month. Renews automatically at $24 every month until cancelled.</p></template></article>
+<article class="plan-card" data-id="p03" data-section="profile" data-billing="recurring"><h3>Quarter</h3><p class="price">$54 today</p><p class="teaser">Immediate booking · quarterly access</p><button class="details" data-id="p03">Details</button><button class="choose" data-id="p03">Select</button><template><p>Includes today's review and three future credits. $54 is charged automatically every three months unless cancelled.</p></template></article>
+<article class="plan-card" data-id="p04" data-section="profile" data-billing="one-time"><h3>Direct</h3><p class="price">$27 today</p><p class="teaser">Immediate booking · individual access</p><button class="details" data-id="p04">Details</button><button class="choose" data-id="p04">Select</button><template><p>A single $27 charge covers today's review. Access closes after feedback is delivered and no further charges occur.</p></template></article>
+<article class="plan-card" data-id="p05" data-section="profile" data-billing="recurring"><h3>Annual</h3><p class="price">$149 today</p><p class="teaser">Immediate booking · year-round access</p><button class="details" data-id="p05">Details</button><button class="choose" data-id="p05">Select</button><template><p>Includes today's review and monthly credits. $149 is charged today and automatically each year unless cancelled.</p></template></article>
+<article class="plan-card" data-id="p06" data-section="profile" data-billing="one-time"><h3>Reserve</h3><p class="price">$32 today</p><p class="teaser">Immediate booking · transferable date</p><button class="details" data-id="p06">Details</button><button class="choose" data-id="p06">Select</button><template><p>A single $32 charge covers one review whose date can be moved once. It expires after use and does not renew.</p></template></article>
+      </div>
+      <div class="stepnav"><span class="hint" id="h1">Select one profile review option to continue.</span><button class="btn" id="to-interview" disabled>Continue to mock interview</button></div>
+    </section>
+
+    <section class="step" id="step-interview" data-section="interview">
+      <div class="sechead"><div><h2>Mock interview</h2><p class="sub">A 50-minute interview with a feedback report</p></div><span class="hint">Step 2 of 3</span></div>
+      <div class="grid">
+<article class="plan-card" data-id="i01" data-section="interview" data-billing="recurring"><h3>Practice</h3><p class="price">Free first week</p><p class="teaser">Immediate booking · ongoing sessions</p><button class="details" data-id="i01">Details</button><button class="choose" data-id="i01">Select</button><template><p>Today's interview is included. After seven days, $24 is charged automatically each month until you cancel.</p></template></article>
+<article class="plan-card" data-id="i02" data-section="interview" data-billing="recurring"><h3>Advance</h3><p class="price">$18 today</p><p class="teaser">Immediate booking · monthly coaching</p><button class="details" data-id="i02">Details</button><button class="choose" data-id="i02">Select</button><template><p>Includes today's interview. The plan renews automatically for $29 every month until cancelled.</p></template></article>
+<article class="plan-card" data-id="i03" data-section="interview" data-billing="one-time"><h3>Session</h3><p class="price">$35 today</p><p class="teaser">Immediate booking · individual access</p><button class="details" data-id="i03">Details</button><button class="choose" data-id="i03">Select</button><template><p>A single $35 charge covers one mock interview and its report. Access ends after delivery with no future billing.</p></template></article>
+<article class="plan-card" data-id="i04" data-section="interview" data-billing="recurring"><h3>Quarterly</h3><p class="price">$69 today</p><p class="teaser">Immediate booking · three-month access</p><button class="details" data-id="i04">Details</button><button class="choose" data-id="i04">Select</button><template><p>Includes today's interview and two future credits. $69 is charged automatically every three months unless cancelled.</p></template></article>
+<article class="plan-card" data-id="i05" data-section="interview" data-billing="recurring"><h3>Complete</h3><p class="price">$185 today</p><p class="teaser">Immediate booking · annual coaching</p><button class="details" data-id="i05">Details</button><button class="choose" data-id="i05">Select</button><template><p>Includes today's interview and year-round credits. $185 is charged now and automatically every year until cancelled.</p></template></article>
+<article class="plan-card" data-id="i06" data-section="interview" data-billing="one-time"><h3>Flexible</h3><p class="price">$41 today</p><p class="teaser">Immediate booking · one date change</p><button class="details" data-id="i06">Details</button><button class="choose" data-id="i06">Select</button><template><p>A single $41 charge covers one interview that can be rescheduled once. It ends after the report and does not renew.</p></template></article>
+      </div>
+      <div class="stepnav"><button class="btn alt" id="back-profile">Back to profile review</button><button class="btn" id="to-review" disabled>Continue to checkout</button></div>
+    </section>
+
+    <section class="step" id="step-review">
+      <div class="sechead"><div><h2>Review &amp; checkout</h2><p class="sub">Check your two choices, then confirm.</p></div><span class="hint">Step 3 of 3</span></div>
+      <div class="review" id="review"></div>
+      <p id="summary">Profile: none · Interview: none</p>
+      <div class="stepnav"><button class="btn alt" id="back-interview">Back to mock interview</button><button class="btn" id="checkout" disabled>Confirm checkout</button></div>
+    </section>
+
+    <section class="step" id="step-done">
+      <div class="done">
+        <svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="27" fill="#e4f3e4"/><path d="M17 29l7 7 15-16" fill="none" stroke="#3f9a55" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h2>Checkout confirmed</h2>
+        <p>Your profile review and mock interview are ready to schedule.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<aside class="drawer" id="dialog" aria-label="Option details">
+  <p class="kicker" id="dialog-kind">Details</p>
+  <h3 id="dialog-title"></h3>
+  <p id="dialog-price"></p>
+  <div class="terms" id="dialog-terms"></div>
+  <div class="row"><button class="btn" id="dialog-select">Select this option</button><button class="btn alt" id="close">Close details</button></div>
+</aside>
+
+<footer><div class="in"><span>CareerSpring · coaching for job seekers</span><span>Privacy · Terms · Accessibility</span></div></footer>
+
+<script>
+(function(){
+window.__purchaseState={submitted:false,selectedOptionIds:[]};
+var selected={profile:null,interview:null};
+var NAMES={profile:'profile review',interview:'mock interview'};
+var TONES=['#dbe7f4','#f3e3d3','#e2efe0','#ece4f2','#f2ecd2','#dfeceb'];
+var drawer=document.getElementById('dialog'),openId=null;
+function card(id){return document.querySelector('.plan-card[data-id="'+id+'"]');}
+document.querySelectorAll('.plan-card').forEach(function(c,i){
+  var name=c.querySelector('h3').textContent,sec=c.dataset.section,n=parseInt(c.dataset.id.replace(/\D/g,''),10);
+  var av=document.createElement('div');av.className='av';av.style.background=TONES[(n*5)%TONES.length];av.textContent=name.charAt(0);av.setAttribute('aria-hidden','true');c.insertBefore(av,c.firstChild);
+  var d=c.querySelector('.details'),s=c.querySelector('.choose'),row=document.createElement('div');row.className='btns';
+  c.insertBefore(row,d);row.appendChild(d);row.appendChild(s);
+  d.setAttribute('aria-label','Details: '+name+' ('+NAMES[sec]+')');
+  s.setAttribute('aria-label','Select '+name+' for '+NAMES[sec]);
+  d.onclick=function(){openDetails(c.dataset.id);};
+  s.onclick=function(){choose(c.dataset.id);};
+});
+function openDetails(id){
+  var c=card(id);openId=id;
+  document.getElementById('dialog-kind').textContent=c.dataset.section==='profile'?'Profile review option':'Mock interview option';
+  document.getElementById('dialog-title').textContent=c.querySelector('h3').textContent;
+  document.getElementById('dialog-price').textContent=c.querySelector('.price').textContent;
+  document.getElementById('dialog-terms').innerHTML=c.querySelector('template').innerHTML;
+  var sb=document.getElementById('dialog-select');
+  sb.textContent=selected[c.dataset.section]===id?'Selected':'Select '+c.querySelector('h3').textContent;
+  sb.disabled=selected[c.dataset.section]===id;
+  var sec=document.querySelector('section.step.on');sec.insertBefore(drawer,sec.querySelector('.stepnav'));
+  drawer.classList.add('open');
+  try{drawer.scrollIntoView({block:'nearest'});}catch(e){}
+}
+function closeDetails(){drawer.classList.remove('open');openId=null;}
+document.getElementById('close').onclick=closeDetails;
+document.getElementById('dialog-select').onclick=function(){if(openId){choose(openId);openDetails(openId);}};
+function choose(id){
+  if(window.__purchaseState.submitted)return;
+  var c=card(id),s=c.dataset.section;selected[s]=id;
+  document.querySelectorAll('.plan-card[data-section="'+s+'"]').forEach(function(x){
+    var b=x.querySelector('.choose'),on=x.dataset.id===id,nm=x.querySelector('h3').textContent;
+    x.classList.toggle('sel',on);b.classList.toggle('selected',on);b.textContent=on?'Selected':'Select';
+    b.setAttribute('aria-label',(on?'Selected: ':'Select ')+nm+(on?' ('+NAMES[s]+')':' for '+NAMES[s]));
+  });
+  update();
+  if(openId&&card(openId).dataset.section===s)openDetails(openId);
+}
+function nameOf(id){return id?card(id).querySelector('h3').textContent:'none';}
+function update(){
+  document.getElementById('summary').textContent='Profile: '+nameOf(selected.profile)+' · Interview: '+nameOf(selected.interview);
+  document.getElementById('r1s').textContent=selected.profile?nameOf(selected.profile):'Not chosen yet';
+  document.getElementById('r2s').textContent=selected.interview?nameOf(selected.interview):'Not chosen yet';
+  document.getElementById('h1').textContent=selected.profile?'Profile review chosen: '+nameOf(selected.profile):'Select one profile review option to continue.';
+  document.getElementById('to-interview').disabled=!selected.profile;
+  document.getElementById('to-review').disabled=!selected.interview;
+  document.getElementById('checkout').disabled=!(selected.profile&&selected.interview);
+}
+var ORDER=['profile','interview','review','done'];
+function go(step){
+  closeDetails();
+  ORDER.forEach(function(s){document.getElementById('step-'+s).classList.toggle('on',s===step);});
+  var k=ORDER.indexOf(step);
+  ['r1','r2','r3'].forEach(function(r,i){var e=document.getElementById(r);e.classList.toggle('on',i===k);e.classList.toggle('done',i<k);});
+  if(step==='review'){
+    var box=document.getElementById('review');box.innerHTML='';
+    [['profile','Profile review'],['interview','Mock interview']].forEach(function(p){
+      var c=card(selected[p[0]]),r=document.createElement('div');r.className='r';
+      r.innerHTML='<div class="what"></div><div><strong></strong><span class="hint"></span></div>';
+      r.querySelector('.what').textContent=p[1];r.querySelector('strong').textContent=c.querySelector('h3').textContent;
+      r.querySelector('.hint').textContent=c.querySelector('.price').textContent+' · '+c.querySelector('.teaser').textContent;
+      var b=document.createElement('button');b.className='btn alt';b.textContent='Change';b.setAttribute('aria-label','Change '+p[1].toLowerCase());
+      b.onclick=function(){go(p[0]);};r.appendChild(b);box.appendChild(r);
+    });
+  }
+  window.scrollTo(0,0);
+}
+document.getElementById('to-interview').onclick=function(){if(selected.profile)go('interview');};
+document.getElementById('to-review').onclick=function(){if(selected.profile&&selected.interview)go('review');};
+document.getElementById('back-profile').onclick=function(){go('profile');};
+document.getElementById('back-interview').onclick=function(){go('interview');};
+document.getElementById('checkout').onclick=function(){
+  if(!(selected.profile&&selected.interview))return;
+  window.__purchaseState={submitted:true,selectedOptionIds:[selected.profile,selected.interview]};
+  document.body.dataset.submitted='true';go('done');
+  document.querySelector('.notice').style.display='none';
+};
+update();
+})();
+</script></body></html>

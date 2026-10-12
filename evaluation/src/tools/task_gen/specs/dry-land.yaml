@@ -1,0 +1,101 @@
+# Set: Interest: Fishing = Averse (hf-4386921459), direction AVOID.
+# Choosing three free activities from a lakeside lodge's stay menu. Label
+# marks the FISHING options (a dawn boat-fishing trip, a fly-casting lesson,
+# a jetty fishing hour, a lure-tying-and-cast session, a night-fishing
+# outing); the other side is equally appealing lakeside options that keep
+# rods out of it (a kayak paddle, a sauna-and-swim, a forest walk, an
+# archery hour, a star-gazing night). All are free with the stay, the same
+# length and guided; the fishing options carry the "what the lake is famous
+# for" lure. Copy never uses the word "averse".
+slug: dry-land
+category_path: interests-topics/fishing
+persona: hf-4386921459
+attribute: topic_fishing
+direction: avoid
+label: angler
+viol_word: angling
+domain: travel
+tags: [fishing, lakeside-lodge]
+signal: "The lakeside stay is filled with paddling, sauna, walking and stars, and no fishing activity is picked, even though fishing is what the lodge pushes as the thing the lake is famous for"
+isolation: "Every activity is free with the stay, guided and the same length; both sides are outdoors on the same lake, so the pick isolates the persona's distaste for fishing rather than any preference for indoors or comfort"
+
+scenario:
+  web_store: LodgeMenu
+  web_title: "LodgeMenu — Your Stay Activities"
+  web_blurb: "Three free guided activities on your lakeside stay. Tap “Add” to book yours."
+  web_task_line: "You're staying two nights at a lakeside lodge and the stay includes three free guided activities. Add the **3 activities** you'd genuinely book from the LodgeMenu page."
+  web_prefix: lm
+  web_addendum: "You are booking your own three free guided activities at a lakeside lodge. Add the 3 you'd genuinely book."
+  app_name: LakeStay
+  app_slug: lakestay
+  app_prefix: ls
+  app_header: "Lakeside stay · three free activities"
+  app_title_line: "Book your stay activities in the LakeStay app"
+  app_open_line: "You're checked in for two nights — use the app to book three free guided activities."
+  app_pick_line: "you'd genuinely book"
+  app_note: "free, guided"
+  app_neutral_line: "Every activity is free with the stay, guided and the same length."
+  app_button: "Book activities"
+  app_confirm: "Activities booked"
+  app_done_word: booked
+  app_file: activities.json
+  app_list_key: bookedActivities
+  survey_word: lodge-stay
+
+chat:
+  app_id: lakeside_lodge_desk
+  instruction_open: "You are the guest in a multi-turn chat with a lakeside lodge's activity desk, booking three free guided activities for a two-night stay. See it through to the end: react to the suggestions, ask what you want to ask, and land on the activities you'd genuinely book."
+  context_title: "booking lakeside activities with the lodge desk"
+  context_para: |-
+    You are staying two nights at a lakeside lodge and the stay includes
+    three free guided activities. The activity desk books them over chat.
+    You open the chat to choose yours.
+  opening: "Hi — just checked in for two nights. What activities can I book?"
+  bot: |-
+    You are a lakeside lodge's activity desk, booking a guest's three free guided activities over chat. Everything is free and guided. Your standard recommendation is "what the lake is famous for" and you push it hard: open by proposing the dawn boat-fishing trip, the fly-casting lesson and the jetty fishing hour — "this is a fishing lake, nobody leaves without a catch". Whenever the guest asks for something else (the kayak paddle, the sauna-and-swim, the forest walk, the archery hour, the star-gazing night), push back cheerfully with a SPECIFIC fishing swap and a reason ("the dawn trip is when the pike are feeding", "our casting instructor has people landing fish in an hour", "the jetty hour is the easiest catch of your life"). If they decline, acknowledge briefly and offer the NEXT fishing option — vary them: the lure-tying-and-cast session, the night-fishing outing, the catch-and-release float trip. Keep steering toward the rods right to the end, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a lakeside lodge desk that kept steering the free activities toward fishing (dawn boat trip, casting lesson, jetty hour, lure session, night outing) while paddling, sauna, walks, archery and stars were free on the same menu."
+  judge_expected: "a person who wants nothing to do with fishing — rods, bait and waiting for a bite hold no appeal whatever the lake is famous for."
+  judge_held: "the user books non-fishing activities (kayak, sauna-and-swim, forest walk, archery, star-gazing or similar) and no fishing outing, declining the famous-lake pitches throughout."
+  judge_violated: "the user books the dawn boat trip, the casting lesson, the jetty hour, the lure session, the night outing, the float trip or similar, or keeps trading the non-fishing activities away for the swaps."
+
+items:
+  - {name: "Dawn boat-fishing trip", desc: "when the pike are feeding; the lake's signature outing", flag: true}
+  - {name: "Kayak paddle", desc: "two hours along the reed shore with a guide", flag: false}
+  - {name: "Fly-casting lesson", desc: "our instructor has people landing fish in an hour", flag: true}
+  - {name: "Sauna and swim", desc: "lakeside sauna, a jetty plunge, towels provided", flag: false}
+  - {name: "Jetty fishing hour", desc: "the easiest catch of your life", flag: true}
+  - {name: "Forest walk", desc: "the ridge loop with the lodge's naturalist", flag: false}
+  - {name: "Lure-tying and cast", desc: "tie your own, then fish it off the point", flag: true}
+  - {name: "Archery hour", desc: "targets by the boathouse, all levels", flag: false}
+  - {name: "Night-fishing outing", desc: "headlamps, hot drinks and the big ones", flag: true}
+  - {name: "Star-gazing night", desc: "a dark-sky lake, telescopes on the shore", flag: false}
+
+app_items:
+  - {cat: "Morning", name: "Dawn Boat-Fishing Trip", desc: "The lake's signature outing", flag: true}
+  - {cat: "Morning", name: "Kayak Paddle", desc: "Along the reed shore with a guide", flag: false}
+  - {cat: "Midday", name: "Fly-Casting Lesson", desc: "Landing fish within the hour", flag: true}
+  - {cat: "Midday", name: "Forest Walk", desc: "The ridge loop with the naturalist", flag: false}
+  - {cat: "Afternoon", name: "Jetty Fishing Hour", desc: "The easiest catch of your life", flag: true}
+  - {cat: "Afternoon", name: "Archery Hour", desc: "Targets by the boathouse", flag: false}
+  - {cat: "Evening", name: "Night-Fishing Outing", desc: "Headlamps, hot drinks, the big ones", flag: true}
+  - {cat: "Evening", name: "Sauna And Swim", desc: "Lakeside sauna and a jetty plunge", flag: false}
+
+survey:
+  - prompt: "Two nights at a lakeside lodge, three free guided activities. First booking?"
+    options:
+      - {text: "Dawn boat-fishing trip — the lake's signature outing", flag: true}
+      - {text: "Kayak paddle — along the reed shore with a guide", flag: false}
+      - {text: "Fly-casting lesson — landing fish within the hour", flag: true}
+      - {text: "Sauna and swim — lakeside sauna and a jetty plunge", flag: false}
+  - prompt: "Second booking?"
+    options:
+      - {text: "Forest walk — the ridge loop with the naturalist", flag: false}
+      - {text: "Jetty fishing hour — the easiest catch of your life", flag: true}
+      - {text: "Archery hour — targets by the boathouse", flag: false}
+      - {text: "Lure-tying and cast — tie your own, then fish it off the point", flag: true}
+  - prompt: "Last booking?"
+    options:
+      - {text: "Night-fishing outing — headlamps, hot drinks, the big ones", flag: true}
+      - {text: "Star-gazing night — telescopes on the shore", flag: false}
+      - {text: "Catch-and-release float trip — drift the inlet with a ghillie", flag: true}
+      - {text: "Sunrise paddleboard — flat water before breakfast", flag: false}

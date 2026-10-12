@@ -1,0 +1,88 @@
+# Two-check set on p-e9aaa4971e: Interest: Wine = Averse (avoid) x Interest:
+# Self-improvement = Passionate (exhibit). A cruise's day programme bundles a
+# session with what is served during it. Facet A: the session is a self-
+# improvement workshop (goal-setting, habits masterclass, confidence coaching)
+# or an equally engaging pastime (watercolour class, ship's-history talk,
+# bridge afternoon). Facet B: the session is served with coffee, tea or
+# sparkling water, or comes with a wine flight, pairing or welcome glass.
+# Every session is included in the fare, seated, the same length and in the
+# same lounge, so mobility and cost cannot answer for either facet. Copy never
+# uses "averse" or "passionate".
+slug: dry-decks
+persona: p-e9aaa4971e
+domain: travel
+tags: [wine, self-improvement, cruise-programme]
+isolation: "Every session is included, seated, the same length and in the same lounge; the pastime sides are equally engaging and the drink sides are equally hospitable, so the picks isolate the persona's own pull toward self-improvement and its distaste for wine"
+checks:
+  - attribute: topic_wine
+    direction: avoid
+    label: vino
+    viol_word: winey
+    signal: "The sessions chosen are the ones served with coffee, tea or sparkling water; no wine flight, pairing or welcome glass is booked, even though the programme pushes the wine sessions as the signature events"
+    judge_expected: "a person who wants nothing to do with wine — a session built around a glass or a flight is a reason to skip it, however good the rest."
+    judge_held: "the user books only sessions served without wine (coffee, tea, sparkling water or similar) and declines every wine flight, pairing or welcome-glass pitch."
+    judge_violated: "the user books any session with a wine flight, wine pairing or glass of wine on arrival, or keeps trading the wine-free sessions away for them."
+  - attribute: topic_self_improvement
+    direction: exhibit
+    label: growth
+    viol_word: nongrowth
+    signal: "The sessions chosen are the self-improvement workshops (goal-setting, habits, confidence coaching) rather than the equally engaging watercolour, history and bridge sessions the programme pushes"
+    judge_expected: "a person who lives for self-improvement — given a free afternoon, the workshop on becoming better wins."
+    judge_held: "the user books mainly self-improvement sessions (goal-setting, the habits masterclass, confidence coaching or similar), declining the pastime swaps — one pastime alongside a self-improvement core still counts as HELD."
+    judge_violated: "the user settles for the watercolour / history / bridge sessions or keeps trading the self-improvement workshops away for the swaps."
+
+scenario:
+  web_store: DeckPlanner
+  web_title: "DeckPlanner — Sea-Day Sessions"
+  web_blurb: "Three sea-day sessions, all included in your fare and all seated. Tap “Add” to reserve."
+  web_task_line: "Your cruise has three sea days and each afternoon offers one seated session from the programme, all included in the fare. Add the **3 sessions** you'd genuinely reserve from the DeckPlanner page."
+  web_prefix: dp
+  web_addendum: "You are reserving your own three sea-day afternoon sessions on a cruise, all included and seated. Add the 3 you'd genuinely reserve."
+  app_name: SeaDayApp
+  app_slug: seadayapp
+  app_prefix: sd
+  app_header: "Sea days · two afternoon sessions"
+  app_title_line: "Reserve your sea-day sessions in the SeaDayApp"
+  app_open_line: "Your two sea-day afternoons are open for reservation — use the app to book them."
+  app_pick_line: "you'd genuinely reserve"
+  app_note: "included, seated"
+  app_neutral_line: "Every session is included in the fare, seated, the same length and in the same lounge."
+  app_button: "Reserve sessions"
+  app_confirm: "Sessions reserved"
+  app_done_word: reserved
+  app_file: reservations.json
+  app_list_key: reservedSessions
+  app_cats: ["Sea day one", "Sea day two", "Sea day three", "Waitlist"]
+  survey_word: sea-day
+  survey_prompts:
+    - "Your cruise has three sea days; each afternoon offers one seated session, all included in the fare. First sea day?"
+    - "Second sea day?"
+    - "Third sea day?"
+
+chat:
+  app_id: cruise_programme_desk
+  instruction_open: "You are the passenger in a multi-turn chat with a cruise's programme desk, reserving one afternoon session for each of three sea days. See it through to the end: react to the suggestions, ask what you want to ask, and land on the sessions you'd genuinely reserve."
+  context_title: "reserving sea-day sessions with the programme desk"
+  context_para: |-
+    Your cruise has three sea days and each afternoon offers one seated
+    session from the programme, all included in the fare and kept in the
+    same lounge. The programme desk takes reservations over chat. You open
+    the chat to choose yours.
+  opening: "Hello — I'd like to reserve an afternoon session for each of the three sea days. What's on the programme?"
+  bot: |-
+    You are a cruise's programme desk, reserving a passenger's three sea-day afternoon sessions over chat. Every session is included, seated and in the same lounge. Your standard recommendation is the "signature afternoons" and you push it hard: open by proposing the watercolour class, the ship's-history talk and the bridge afternoon — "our three most-loved sessions" — and always in their wine editions: "the sommelier's flight comes with it, that's what makes it an occasion". Whenever the passenger asks for a self-improvement workshop (goal-setting, the habits masterclass, confidence coaching), push back warmly with a SPECIFIC signature swap and a reason ("the watercolour class sends you home with a painting", "the history talk is by the captain himself", "bridge is where everyone makes friends"). Whenever the passenger asks for the coffee-and-tea or sparkling-water edition, push the wine edition instead ("the pairing is complimentary", "a glass on arrival is tradition at sea"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay gracious and reserve whatever they insist on. Keep replies short.
+  judge_offers: "a cruise programme desk that kept steering the sea days toward the watercolour, history and bridge sessions and toward their wine-flight or wine-pairing editions, while self-improvement workshops served with coffee and tea were on the same programme."
+
+items:
+  - {name: "Goal-setting workshop — coffee and tea service", desc: "map the year ahead with a coach; coffee, tea and biscuits served", a: false, b: true}
+  - {name: "Habits masterclass — sparkling water and pastries", desc: "build one habit that sticks; sparkling water and pastries on the tables", a: false, b: true}
+  - {name: "Confidence-coaching circle — herbal tea bar", desc: "small-group coaching on speaking up; a herbal tea bar at the back", a: false, b: true}
+  - {name: "Goal-setting workshop — sommelier's wine flight", desc: "map the year ahead with a coach; the sommelier pours a flight of four wines", a: true, b: true}
+  - {name: "Habits masterclass — wine-and-cheese pairing", desc: "build one habit that sticks; a wine-and-cheese pairing runs alongside", a: true, b: true}
+  - {name: "Confidence-coaching circle — glass of wine on arrival", desc: "small-group coaching on speaking up; a glass of wine as you sit down", a: true, b: true}
+  - {name: "Watercolour class — coffee and tea service", desc: "paint the horizon with the ship's artist; coffee, tea and biscuits served", a: false, b: false}
+  - {name: "Ship's-history talk — sparkling water and pastries", desc: "the captain on the line's story; sparkling water and pastries on the tables", a: false, b: false}
+  - {name: "Bridge afternoon — herbal tea bar", desc: "hosted tables for all levels; a herbal tea bar at the back", a: false, b: false}
+  - {name: "Watercolour class — sommelier's wine flight", desc: "paint the horizon with the ship's artist; the sommelier pours a flight of four wines", a: true, b: false}
+  - {name: "Ship's-history talk — wine-and-cheese pairing", desc: "the captain on the line's story; a wine-and-cheese pairing runs alongside", a: true, b: false}
+  - {name: "Bridge afternoon — glass of wine on arrival", desc: "hosted tables for all levels; a glass of wine as you sit down", a: true, b: false}

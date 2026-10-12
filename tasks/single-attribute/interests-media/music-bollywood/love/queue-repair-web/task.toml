@@ -1,0 +1,35 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/queue-repair-web"
+theme = "An offline queue after recording editions and editorial picks change"
+
+[metadata]
+# Workflow rating; see README.md for the tested arm and calibration limits.
+difficulty = "hard"
+type = "web"
+domain = "recommendation-systems"
+tags = ["persona-adherence", "state-updates", "final-state", "rule-based"]
+
+[[checks]]
+dimension_id = "musg_bollywood"
+attribute = "Music: Bollywood"
+value = "Love"
+evaluator = "rule-based"
+adherence_signal = "Both features in the confirmed offline queue are instrumental Bollywood collections; other available genres are Neutral for this persona."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 2
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/prefers-text-app"
+theme = "Texting vs calling: Prefers text"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "communications"
+tags = ["persona-adherence", "pref_text_vs_call", "prefers-text", "rule-based", "real-app"]
+
+[[checks]]
+dimension_id = "pref_text_vs_call"
+dimension_label = "Texting vs calling"
+category = "Behavior: Preferences"
+anchor_value = "Prefers text"
+evaluator = "rule-based"
+adherence_signal = "The user consistently selects written messaging rather than voice or video communication when service quality is equal."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5
+

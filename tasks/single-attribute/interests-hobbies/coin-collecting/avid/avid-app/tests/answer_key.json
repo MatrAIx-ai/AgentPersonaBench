@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "check": {
+    "dimension_id": "hob_coin_collecting",
+    "anchor_value": "Avid",
+    "evaluator": "rule-based"
+  },
+  "scoredField": "pack",
+  "targetCategory": "coin_collecting",
+  "packCategory": {
+    "b29": "scrapbooking",
+    "b73": "coin_collecting",
+    "b46": "origami",
+    "b85": "jigsaw"
+  },
+  "packs": {
+    "b29": {
+      "name": "Page Layout Pack",
+      "description": "Page-layout mat, reusable paper organizer and illustrated arrangement guide for scrapbooking. No photographs or artistic skill required.",
+      "materials": [
+        "Page-layout mat",
+        "Reusable paper organizer",
+        "Illustrated arrangement guide"
+      ]
+    },
+    "b73": {
+      "name": "Coin Collection Pack",
+        "description": "Coin-viewing mat, reusable coin pockets and illustrated grouping guide for arranging chosen coins. No appraisal or log required.",
+      "materials": [
+        "Coin-viewing mat",
+        "Reusable coin pockets",
+        "Illustrated grouping guide"
+      ]
+    },
+    "b46": {
+      "name": "Fold & Keep Pack",
+      "description": "Folding mat, reusable paper organizer and diagram cards for origami. No advanced techniques or finished project required.",
+      "materials": [
+        "Folding mat",
+        "Reusable paper organizer",
+        "Clear diagram cards"
+      ]
+    },
+    "b85": {
+      "name": "Piece & Pause Pack",
+      "description": "Sorting mat, covered piece organizer and a short illustrated pause/resume guide for jigsaw puzzles. No timed challenge or completion target.",
+      "materials": [
+        "Sorting mat",
+        "Covered piece organizer",
+        "Pause/resume guide"
+      ]
+    }
+  },
+  "options": {
+    "workspace": {
+      "w14": "One full fold-out panel",
+      "w62": "Two smaller linked panels"
+    },
+    "case": {
+      "c83": "Reusable zip folio",
+      "c25": "Shallow carry box"
+    },
+    "pickup": {
+      "r45": "Staffed desk",
+      "r82": "Collection locker"
+    }
+  },
+  "pickupInstructions": {
+    "r45": "Prepare for collection at the staffed desk during the shared opening hours. No fee or contact details are needed. This local reservation has not been sent to another service.",
+    "r82": "Prepare for collection from a collection locker during the shared opening hours. No fee or contact details are needed. This local reservation has not been sent to another service."
+  }
+}

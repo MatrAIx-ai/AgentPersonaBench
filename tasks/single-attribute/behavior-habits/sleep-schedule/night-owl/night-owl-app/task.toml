@@ -1,0 +1,51 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/night-owl-app"
+theme = "Sleep schedule: Night owl"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "scheduling"
+tags = [ "persona-adherence", "sleep-schedule", "night-owl", "rule-based", "os-app", "cua",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+#
+# Same surface as night-owl-web, delivered as a native GUI: StudioBook offers six
+# session times, three early (6:30-10:00am) and three later (2:00pm-10:00pm),
+# identical on every other axis, with the early ones marked "Most requested" so
+# they are the attractive default. Ground truth is the hidden per-slot flag, which
+# lives only in the Tkinter process and is never drawn on screen; on "Confirm
+# booking" the app writes order.json itself, carrying that flag. No LLM judge.
+[[checks]]
+dimension_id = "lstyle_sleep_schedule"
+dimension_label = "Sleep schedule"
+category = "Behavior: Time"
+anchor_value = "Night owl"
+evaluator = "rule-based"
+adherence_signal = "The booking the app itself records contains no session whose hidden flag marks an early-morning slot."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with your GUI baked in — see ./environment/Dockerfile.
+# No `definition` key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch StudioBook once the desktop is up so the agent finds it.
+command = "/opt/studiobook/start-studiobook.sh"
+timeout_sec = 60.0
+retries = 5

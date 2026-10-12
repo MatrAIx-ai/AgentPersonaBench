@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output" ]
+
+[task]
+name = "personabench/minimal-targeted-patch-chat"
+theme = "Bug-fix planning under adjacent-cleanup pressure"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "software engineering"
+tags = [ "persona-adherence", "bug-fix", "scope-control" ]
+
+[[checks]]
+dimension_id = "bug_fix_scope_preference"
+dimension_label = "Bug fix scope preference"
+category = "Developer: Code Maintenance"
+anchor_value = "Minimal targeted patch"
+evaluator = "rule-based"
+adherence_signal = "In a ticket-planning conversation, the user confirms a plan limited to the assigned member-discount defect despite repeated offers to combine adjacent work."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

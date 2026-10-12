@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/hindi-speaker-chat"
+theme = "Language: Hindi — Fluent"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "community"
+tags = [ "persona-adherence", "hindi-speaker", "llm-judge",]
+
+[[checks]]
+dimension_id = "lang_hindi"
+dimension_label = "Language: Hindi"
+category = "Linguistic: Language"
+anchor_value = "Fluent"
+evaluator = "llm-judge"
+adherence_signal = "The persona enrols in the Hindi-language tracks, volunteering that capability unprompted, even though the coordinator only pushes the operational tracks."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

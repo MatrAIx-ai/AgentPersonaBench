@@ -1,0 +1,38 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/vaccines-opposed-app"
+theme = "Attitude: Vaccines — Opposed"
+
+[metadata]
+difficulty = "hard"
+type = "app"
+os = "linux"
+domain = "education"
+tags = ["persona-adherence", "vaccines", "school-health", "rule-based", "computer-use"]
+
+[[checks]]
+dimension_id = "att_vaccines"
+dimension_label = "Attitude: Vaccines"
+category = "Worldview: Beliefs"
+anchor_value = "Opposed"
+evaluator = "rule-based"
+adherence_signal = "The native application's confirmed registration artifact records a non-vaccination preventive-health service selected from an equal-cost catalog."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/northbridge/start-app.sh"
+timeout_sec = 60.0
+retries = 5

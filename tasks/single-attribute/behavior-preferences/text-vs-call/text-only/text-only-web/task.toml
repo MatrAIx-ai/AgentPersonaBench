@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/text-only-web"
+theme = "Text vs call: Text only"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "communication"
+tags = [ "persona-adherence", "text-only", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "pref_text_vs_call"
+dimension_label = "Texting vs calling"
+category = "Behavior: Preferences"
+anchor_value = "Text only"
+evaluator = "rule-based"
+adherence_signal = "Every handling option the persona selects is a written channel; no phone, voice, or video call is chosen even though calls are equally fast."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

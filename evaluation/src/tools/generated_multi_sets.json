@@ -1,0 +1,1394 @@
+[
+  {
+    "name": "archive-not-away",
+    "base": "tasks/multi-attribute/archive-not-away",
+    "persona": "hf-4386921459",
+    "checks": [
+      {
+        "attribute": "bookg_history",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "chronicle"
+      },
+      {
+        "attribute": "lstyle_travel_freq",
+        "value": "Homebody",
+        "direction": "exhibit",
+        "label": "local"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "readersdiary.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedEvents"
+  },
+  {
+    "name": "basil-and-encore",
+    "base": "tasks/multi-attribute/basil-and-encore",
+    "persona": "hf-4887328092",
+    "checks": [
+      {
+        "attribute": "cuis_thai",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "thaimenu"
+      },
+      {
+        "attribute": "topic_live_concerts",
+        "value": "Passionate",
+        "direction": "exhibit",
+        "label": "livegig"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "nightplanner.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedNights"
+  },
+  {
+    "name": "bayou-boil",
+    "base": "tasks/multi-attribute/bayou-boil",
+    "persona": "hf-4386921459",
+    "checks": [
+      {
+        "attribute": "cuis_seafood",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "ocean"
+      },
+      {
+        "attribute": "cuis_cajun",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "bayou"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "chefcard.py",
+    "app_file": "preorder.json",
+    "app_list": "orderedLunches"
+  },
+  {
+    "name": "binge-not-jog",
+    "base": "tasks/multi-attribute/binge-not-jog",
+    "persona": "hf-6283061910",
+    "checks": [
+      {
+        "attribute": "topic_tv_series",
+        "value": "Passionate",
+        "direction": "exhibit",
+        "label": "episodes"
+      },
+      {
+        "attribute": "topic_running",
+        "value": "Averse",
+        "direction": "avoid",
+        "label": "jog"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "clubweekend.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedWeekends"
+  },
+  {
+    "name": "board-alone",
+    "base": "tasks/multi-attribute/board-alone",
+    "persona": "hf-4887322357",
+    "checks": [
+      {
+        "attribute": "pref_team_vs_solo",
+        "value": "Strongly solo",
+        "direction": "exhibit",
+        "label": "alone"
+      },
+      {
+        "attribute": "hob_paddleboarding",
+        "value": "Active",
+        "direction": "exhibit",
+        "label": "paddle"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "launchpass.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedSessions"
+  },
+  {
+    "name": "boots-and-brisket",
+    "base": "tasks/multi-attribute/boots-and-brisket",
+    "persona": "hf-4386921459",
+    "checks": [
+      {
+        "attribute": "musg_country",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "twang"
+      },
+      {
+        "attribute": "cuis_american_bbq",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "smokehouse"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "barnticket.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedNights"
+  },
+  {
+    "name": "ceviche-miles",
+    "base": "tasks/multi-attribute/ceviche-miles",
+    "persona": "hf-1557002195",
+    "checks": [
+      {
+        "attribute": "cuis_peruvian",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "lima"
+      },
+      {
+        "attribute": "sport_running",
+        "value": "Play",
+        "direction": "exhibit",
+        "label": "runner"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "brunchrun.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedSundays"
+  },
+  {
+    "name": "classic-hearts",
+    "base": "tasks/multi-attribute/classic-hearts",
+    "persona": "hf-4386921459",
+    "checks": [
+      {
+        "attribute": "filmg_romance",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "heart"
+      },
+      {
+        "attribute": "big5_adventurousness",
+        "value": "Low",
+        "direction": "exhibit",
+        "label": "familiar"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "screenclub.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedScreenings"
+  },
+  {
+    "name": "cornbread-and-indie",
+    "base": "tasks/multi-attribute/cornbread-and-indie",
+    "persona": "hf-2050687254",
+    "checks": [
+      {
+        "attribute": "cuis_southern_soul_food",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "soulfood"
+      },
+      {
+        "attribute": "musg_indie",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "indieband"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "clubsupper.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedNights"
+  },
+  {
+    "name": "crag-and-kitchen",
+    "base": "tasks/multi-attribute/crag-and-kitchen",
+    "persona": "p-ec140af52f",
+    "checks": [
+      {
+        "attribute": "sport_climbing",
+        "value": "Play",
+        "direction": "exhibit",
+        "label": "crag"
+      },
+      {
+        "attribute": "lstyle_cooking_freq",
+        "value": "Rarely",
+        "direction": "avoid",
+        "label": "cookit"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "peakplanner.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedPackages"
+  },
+  {
+    "name": "crowd-and-quest",
+    "base": "tasks/multi-attribute/crowd-and-quest",
+    "persona": "real-human-survey-e8ec306b9cdb",
+    "checks": [
+      {
+        "attribute": "lstyle_social_battery",
+        "value": "Strong extrovert",
+        "direction": "exhibit",
+        "label": "party"
+      },
+      {
+        "attribute": "filmg_adventure",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "quest"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "watchclub.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedEvents"
+  },
+  {
+    "name": "curds-and-cookbooks",
+    "base": "tasks/multi-attribute/curds-and-cookbooks",
+    "persona": "hf-4887322357",
+    "checks": [
+      {
+        "attribute": "bookg_cookbooks",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "cookbook"
+      },
+      {
+        "attribute": "hob_cheesemaking",
+        "value": "Avid",
+        "direction": "exhibit",
+        "label": "curd"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "kitchencredit.py",
+    "app_file": "enrolments.json",
+    "app_list": "enrolledCourses"
+  },
+  {
+    "name": "dough-and-type",
+    "base": "tasks/multi-attribute/dough-and-type",
+    "persona": "hf-4386938224",
+    "checks": [
+      {
+        "attribute": "hob_bread_baking",
+        "value": "Active",
+        "direction": "exhibit",
+        "label": "loaf"
+      },
+      {
+        "attribute": "hob_letterpress",
+        "value": "Avid",
+        "direction": "exhibit",
+        "label": "press"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "makersfair.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedDays"
+  },
+  {
+    "name": "drawn-clues",
+    "base": "tasks/multi-attribute/drawn-clues",
+    "persona": "real-human-survey-e8ec306b9cdb",
+    "checks": [
+      {
+        "attribute": "learning_style",
+        "value": "Visual",
+        "direction": "exhibit",
+        "label": "pictorial"
+      },
+      {
+        "attribute": "bookg_mystery",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "whodunit"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "loanshelf.py",
+    "app_file": "loans.json",
+    "app_list": "borrowedLoans"
+  },
+  {
+    "name": "dry-decks",
+    "base": "tasks/multi-attribute/dry-decks",
+    "persona": "p-e9aaa4971e",
+    "checks": [
+      {
+        "attribute": "topic_wine",
+        "value": "Averse",
+        "direction": "avoid",
+        "label": "vino"
+      },
+      {
+        "attribute": "topic_self_improvement",
+        "value": "Passionate",
+        "direction": "exhibit",
+        "label": "growth"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "seadayapp.py",
+    "app_file": "reservations.json",
+    "app_list": "reservedSessions"
+  },
+  {
+    "name": "ears-on-court",
+    "base": "tasks/multi-attribute/ears-on-court",
+    "persona": "0094",
+    "checks": [
+      {
+        "attribute": "sport_basketball",
+        "value": "Play",
+        "direction": "exhibit",
+        "label": "hoops"
+      },
+      {
+        "attribute": "learning_style",
+        "value": "Auditory",
+        "direction": "exhibit",
+        "label": "audio"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "skillcredit.py",
+    "app_file": "enrolments.json",
+    "app_list": "enrolledCourses"
+  },
+  {
+    "name": "fish-not-thai",
+    "base": "tasks/multi-attribute/fish-not-thai",
+    "persona": "hf-5353844576",
+    "checks": [
+      {
+        "attribute": "lstyle_diet_type",
+        "value": "Pescatarian",
+        "direction": "avoid",
+        "label": "landmeat"
+      },
+      {
+        "attribute": "cuis_thai",
+        "value": "Avoid",
+        "direction": "avoid",
+        "label": "thai"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "cluborder.py",
+    "app_file": "order.json",
+    "app_list": "orderedLunches"
+  },
+  {
+    "name": "foil-not-phrasebook",
+    "base": "tasks/multi-attribute/foil-not-phrasebook",
+    "persona": "hf-4887322357",
+    "checks": [
+      {
+        "attribute": "sport_fencing",
+        "value": "Play",
+        "direction": "exhibit",
+        "label": "piste"
+      },
+      {
+        "attribute": "topic_languages",
+        "value": "Averse",
+        "direction": "avoid",
+        "label": "lingo"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "centrecard.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedBundles"
+  },
+  {
+    "name": "forge-and-wall",
+    "base": "tasks/multi-attribute/forge-and-wall",
+    "persona": "hf-5170042772",
+    "checks": [
+      {
+        "attribute": "hob_bouldering",
+        "value": "Avid",
+        "direction": "exhibit",
+        "label": "boulder"
+      },
+      {
+        "attribute": "hob_metalworking",
+        "value": "Avid",
+        "direction": "exhibit",
+        "label": "forge"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "forgeandfloor.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedPasses"
+  },
+  {
+    "name": "front-and-memoir",
+    "base": "tasks/multi-attribute/front-and-memoir",
+    "persona": "real-human-survey-e8ec306b9cdb",
+    "checks": [
+      {
+        "attribute": "filmg_war",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "frontline"
+      },
+      {
+        "attribute": "bookg_biography",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "lifestory"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "reelandpage.py",
+    "app_file": "pairings.json",
+    "app_list": "takenPairings"
+  },
+  {
+    "name": "front-row-afrobeats",
+    "base": "tasks/multi-attribute/front-row-afrobeats",
+    "persona": "hf-4887322357",
+    "checks": [
+      {
+        "attribute": "lstyle_frugality",
+        "value": "Splurger",
+        "direction": "exhibit",
+        "label": "premium"
+      },
+      {
+        "attribute": "musg_afrobeats",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "afrobeats"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "gigpicks.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedTickets"
+  },
+  {
+    "name": "gloves-not-gigs",
+    "base": "tasks/multi-attribute/gloves-not-gigs",
+    "persona": "0094",
+    "checks": [
+      {
+        "attribute": "sport_boxing",
+        "value": "Play",
+        "direction": "exhibit",
+        "label": "ring"
+      },
+      {
+        "attribute": "topic_live_concerts",
+        "value": "Averse",
+        "direction": "avoid",
+        "label": "gig"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "fridaypass.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedFridays"
+  },
+  {
+    "name": "halloumi-mezze",
+    "base": "tasks/multi-attribute/halloumi-mezze",
+    "persona": "real_human_survey-96f2fbee51e3",
+    "checks": [
+      {
+        "attribute": "cuis_middle_eastern",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "levant"
+      },
+      {
+        "attribute": "cuis_vegetarian",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "veggie"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "clublunch.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedLunches"
+  },
+  {
+    "name": "hammock-and-moqueca",
+    "base": "tasks/multi-attribute/hammock-and-moqueca",
+    "persona": "real-human-survey-e8ec306b9cdb",
+    "checks": [
+      {
+        "attribute": "lstyle_vacation_style",
+        "value": "Relaxation",
+        "direction": "exhibit",
+        "label": "unwind"
+      },
+      {
+        "attribute": "cuis_brazilian",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "brasil"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "weekaway.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedPackages"
+  },
+  {
+    "name": "home-kiln",
+    "base": "tasks/multi-attribute/home-kiln",
+    "persona": "hf-2050687254",
+    "checks": [
+      {
+        "attribute": "lstyle_vacation_style",
+        "value": "Staycation",
+        "direction": "exhibit",
+        "label": "homebase"
+      },
+      {
+        "attribute": "hob_pottery",
+        "value": "Active",
+        "direction": "exhibit",
+        "label": "clay"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "leaveweeks.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedCourses"
+  },
+  {
+    "name": "hoop-not-app",
+    "base": "tasks/multi-attribute/hoop-not-app",
+    "persona": "hf-4386921459",
+    "checks": [
+      {
+        "attribute": "hob_embroidery",
+        "value": "Avid",
+        "direction": "exhibit",
+        "label": "needle"
+      },
+      {
+        "attribute": "tech_savviness",
+        "value": "Cautious adopter",
+        "direction": "exhibit",
+        "label": "printed"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "kitvoucher.py",
+    "app_file": "voucher.json",
+    "app_list": "redeemedKits"
+  },
+  {
+    "name": "indoor-joinery",
+    "base": "tasks/multi-attribute/indoor-joinery",
+    "persona": "hf-6283061910",
+    "checks": [
+      {
+        "attribute": "pref_indoor_vs_outdoor",
+        "value": "Strongly indoor",
+        "direction": "exhibit",
+        "label": "roofed"
+      },
+      {
+        "attribute": "topic_woodworking",
+        "value": "Passionate",
+        "direction": "exhibit",
+        "label": "timber"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "benchbooker.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedSessions"
+  },
+  {
+    "name": "known-repertoire",
+    "base": "tasks/multi-attribute/known-repertoire",
+    "persona": "hf-6283061910",
+    "checks": [
+      {
+        "attribute": "musg_classical",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "orchestral"
+      },
+      {
+        "attribute": "big5_adventurousness",
+        "value": "Very low",
+        "direction": "exhibit",
+        "label": "familiar"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "concertpick.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedConcerts"
+  },
+  {
+    "name": "laughs-delivered",
+    "base": "tasks/multi-attribute/laughs-delivered",
+    "persona": "hf-5170035775",
+    "checks": [
+      {
+        "attribute": "lstyle_cooking_freq",
+        "value": "Never",
+        "direction": "avoid",
+        "label": "cookit"
+      },
+      {
+        "attribute": "filmg_comedy",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "laughs"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "supperstream.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedBundles"
+  },
+  {
+    "name": "lens-not-lecture",
+    "base": "tasks/multi-attribute/lens-not-lecture",
+    "persona": "hf-4887354785",
+    "checks": [
+      {
+        "attribute": "filmg_documentary",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "doc"
+      },
+      {
+        "attribute": "topic_history",
+        "value": "Averse",
+        "direction": "avoid",
+        "label": "historic"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "daypassapp.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedScreenings"
+  },
+  {
+    "name": "lift-for-paws",
+    "base": "tasks/multi-attribute/lift-for-paws",
+    "persona": "hf-4386938224",
+    "checks": [
+      {
+        "attribute": "sport_weightlifting",
+        "value": "Play",
+        "direction": "exhibit",
+        "label": "barbell"
+      },
+      {
+        "attribute": "topic_pets",
+        "value": "Passionate",
+        "direction": "exhibit",
+        "label": "animalcause"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "liftgive.py",
+    "app_file": "signups.json",
+    "app_list": "signedUpEvents"
+  },
+  {
+    "name": "low-carb-not-tokyo",
+    "base": "tasks/multi-attribute/low-carb-not-tokyo",
+    "persona": "hf-5170043725",
+    "checks": [
+      {
+        "attribute": "lstyle_diet_type",
+        "value": "Keto/low-carb",
+        "direction": "avoid",
+        "label": "carbheavy"
+      },
+      {
+        "attribute": "cuis_japanese",
+        "value": "Avoid",
+        "direction": "avoid",
+        "label": "japanese"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "boxorder.py",
+    "app_file": "order.json",
+    "app_list": "orderedMeals"
+  },
+  {
+    "name": "museum-and-cape",
+    "base": "tasks/multi-attribute/museum-and-cape",
+    "persona": "hf-4887328092",
+    "checks": [
+      {
+        "attribute": "lstyle_vacation_style",
+        "value": "Culture",
+        "direction": "exhibit",
+        "label": "galleries"
+      },
+      {
+        "attribute": "filmg_superhero",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "cape"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "weekendplanner.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedWeekends"
+  },
+  {
+    "name": "nib-and-nozzle",
+    "base": "tasks/multi-attribute/nib-and-nozzle",
+    "persona": "hf-1557002195",
+    "checks": [
+      {
+        "attribute": "hob_calligraphy",
+        "value": "Avid",
+        "direction": "exhibit",
+        "label": "nib"
+      },
+      {
+        "attribute": "topic_3d_printing",
+        "value": "Passionate",
+        "direction": "exhibit",
+        "label": "printer"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "stationpass.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedPasses"
+  },
+  {
+    "name": "no-gyros-no-capes",
+    "base": "tasks/multi-attribute/no-gyros-no-capes",
+    "persona": "0094",
+    "checks": [
+      {
+        "attribute": "cuis_greek",
+        "value": "Avoid",
+        "direction": "avoid",
+        "label": "hellenic"
+      },
+      {
+        "attribute": "filmg_superhero",
+        "value": "Dislike",
+        "direction": "avoid",
+        "label": "caped"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "screensupper.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedDeals"
+  },
+  {
+    "name": "paper-philately",
+    "base": "tasks/multi-attribute/paper-philately",
+    "persona": "hf-5170043725",
+    "checks": [
+      {
+        "attribute": "tech_savviness",
+        "value": "Avoidant",
+        "direction": "exhibit",
+        "label": "paperbased"
+      },
+      {
+        "attribute": "hob_stamp_collecting",
+        "value": "Active",
+        "direction": "exhibit",
+        "label": "philately"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "fairdaypass.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedSessions"
+  },
+  {
+    "name": "paws-and-caches",
+    "base": "tasks/multi-attribute/paws-and-caches",
+    "persona": "hf-5353844576",
+    "checks": [
+      {
+        "attribute": "lstyle_pet_ownership",
+        "value": "Multiple pets",
+        "direction": "exhibit",
+        "label": "petsok"
+      },
+      {
+        "attribute": "hob_geocaching",
+        "value": "Active",
+        "direction": "exhibit",
+        "label": "cache"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "letfinder.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedCottages"
+  },
+  {
+    "name": "pitch-and-plate",
+    "base": "tasks/multi-attribute/pitch-and-plate",
+    "persona": "hf-5170042772",
+    "checks": [
+      {
+        "attribute": "sport_soccer",
+        "value": "Play",
+        "direction": "exhibit",
+        "label": "pitch"
+      },
+      {
+        "attribute": "cuis_vegan",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "plantmenu"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "squadsunday.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedSundays"
+  },
+  {
+    "name": "podcast-and-pliers",
+    "base": "tasks/multi-attribute/podcast-and-pliers",
+    "persona": "hf-5170035775",
+    "checks": [
+      {
+        "attribute": "lstyle_podcast_listening",
+        "value": "Daily",
+        "direction": "exhibit",
+        "label": "earbuds"
+      },
+      {
+        "attribute": "hob_jewelry_making",
+        "value": "Avid",
+        "direction": "exhibit",
+        "label": "jeweller"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "clubkit.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedKits"
+  },
+  {
+    "name": "powder-and-rope",
+    "base": "tasks/multi-attribute/powder-and-rope",
+    "persona": "hf-4386921459",
+    "checks": [
+      {
+        "attribute": "sport_snowboarding",
+        "value": "Play",
+        "direction": "exhibit",
+        "label": "board"
+      },
+      {
+        "attribute": "hob_rock_climbing",
+        "value": "Active",
+        "direction": "exhibit",
+        "label": "rope"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "peakpass.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedPasses"
+  },
+  {
+    "name": "quiet-frames",
+    "base": "tasks/multi-attribute/quiet-frames",
+    "persona": "0094",
+    "checks": [
+      {
+        "attribute": "filmg_art_house",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "arthouse"
+      },
+      {
+        "attribute": "lstyle_social_battery",
+        "value": "Strong introvert",
+        "direction": "exhibit",
+        "label": "quiet"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "seasonscreen.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedScreenings"
+  },
+  {
+    "name": "rind-indoors",
+    "base": "tasks/multi-attribute/rind-indoors",
+    "persona": "hf-4887328092",
+    "checks": [
+      {
+        "attribute": "hob_cheesemaking",
+        "value": "Active",
+        "direction": "exhibit",
+        "label": "curdcraft"
+      },
+      {
+        "attribute": "pref_indoor_vs_outdoor",
+        "value": "Indoor-leaning",
+        "direction": "exhibit",
+        "label": "roofed"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "craftdays.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedWorkshops"
+  },
+  {
+    "name": "safe-for-whiskers",
+    "base": "tasks/multi-attribute/safe-for-whiskers",
+    "persona": "hf-4887354785",
+    "checks": [
+      {
+        "attribute": "lstyle_pet_ownership",
+        "value": "Cat",
+        "direction": "exhibit",
+        "label": "pawproof"
+      },
+      {
+        "attribute": "hob_bonsai",
+        "value": "Active",
+        "direction": "exhibit",
+        "label": "dwarftree"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "leafvoucher.py",
+    "app_file": "voucher.json",
+    "app_list": "redeemedPlants"
+  },
+  {
+    "name": "salsa-no-sunrise",
+    "base": "tasks/multi-attribute/salsa-no-sunrise",
+    "persona": "real-human-survey-e8ec306b9cdb",
+    "checks": [
+      {
+        "attribute": "musg_latin",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "clave"
+      },
+      {
+        "attribute": "topic_yoga",
+        "value": "Averse",
+        "direction": "avoid",
+        "label": "mat"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "staypass.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedPasses"
+  },
+  {
+    "name": "scream-and-scroll",
+    "base": "tasks/multi-attribute/scream-and-scroll",
+    "persona": "real_human_survey-96f2fbee51e3",
+    "checks": [
+      {
+        "attribute": "filmg_horror",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "scare"
+      },
+      {
+        "attribute": "topic_social_media",
+        "value": "Passionate",
+        "direction": "exhibit",
+        "label": "livepost"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "passfest.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedScreenings"
+  },
+  {
+    "name": "seated-soul",
+    "base": "tasks/multi-attribute/seated-soul",
+    "persona": "hf-1557002195",
+    "checks": [
+      {
+        "attribute": "musg_soul",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "soulset"
+      },
+      {
+        "attribute": "topic_dance",
+        "value": "Averse",
+        "direction": "avoid",
+        "label": "dancefloor"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "seasonnights.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedNights"
+  },
+  {
+    "name": "socratic-sofa",
+    "base": "tasks/multi-attribute/socratic-sofa",
+    "persona": "hf-5170035775",
+    "checks": [
+      {
+        "attribute": "topic_philosophy",
+        "value": "Passionate",
+        "direction": "exhibit",
+        "label": "thinker"
+      },
+      {
+        "attribute": "topic_fitness",
+        "value": "Averse",
+        "direction": "avoid",
+        "label": "workout"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "dayretreat.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedDays"
+  },
+  {
+    "name": "spin-to-riffs",
+    "base": "tasks/multi-attribute/spin-to-riffs",
+    "persona": "hf-2050687254",
+    "checks": [
+      {
+        "attribute": "sport_cycling",
+        "value": "Play",
+        "direction": "exhibit",
+        "label": "saddle"
+      },
+      {
+        "attribute": "musg_rock",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "riff"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "classcredits.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedClasses"
+  },
+  {
+    "name": "tapas-and-romance",
+    "base": "tasks/multi-attribute/tapas-and-romance",
+    "persona": "hf-5170003955",
+    "checks": [
+      {
+        "attribute": "cuis_spanish",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "iberian"
+      },
+      {
+        "attribute": "bookg_romance",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "heart"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "novelsupper.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedPairings"
+  },
+  {
+    "name": "taverna-strings",
+    "base": "tasks/multi-attribute/taverna-strings",
+    "persona": "hf-1557002195",
+    "checks": [
+      {
+        "attribute": "cuis_greek",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "taverna"
+      },
+      {
+        "attribute": "musg_folk",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "folkband"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "supperseason.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedNights"
+  },
+  {
+    "name": "techno-ticket",
+    "base": "tasks/multi-attribute/techno-ticket",
+    "persona": "hf-4887354785",
+    "checks": [
+      {
+        "attribute": "musg_techno",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "fourfour"
+      },
+      {
+        "attribute": "topic_volunteering",
+        "value": "Averse",
+        "direction": "avoid",
+        "label": "shift"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "gatecredit.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedAccess"
+  },
+  {
+    "name": "terrace-biryani",
+    "base": "tasks/multi-attribute/terrace-biryani",
+    "persona": "hf-5170003955",
+    "checks": [
+      {
+        "attribute": "cuis_pakistani",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "karahi"
+      },
+      {
+        "attribute": "pref_indoor_vs_outdoor",
+        "value": "Outdoor-leaning",
+        "direction": "exhibit",
+        "label": "alfresco"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "tableweek.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedTables"
+  },
+  {
+    "name": "tokyo-waltz",
+    "base": "tasks/multi-attribute/tokyo-waltz",
+    "persona": "hf-5170042772",
+    "checks": [
+      {
+        "attribute": "musg_j_pop",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "jpop"
+      },
+      {
+        "attribute": "hob_ballroom_dance",
+        "value": "Active",
+        "direction": "exhibit",
+        "label": "ballroom"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "floorpass.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedNights"
+  },
+  {
+    "name": "two-stage-pass",
+    "base": "tasks/multi-attribute/two-stage-pass",
+    "persona": "hf-5353844576",
+    "checks": [
+      {
+        "attribute": "musg_hip_hop",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "hiphop"
+      },
+      {
+        "attribute": "musg_trance",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "tranceset"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "stageplanner.py",
+    "app_file": "reservations.json",
+    "app_list": "reservedEvenings"
+  },
+  {
+    "name": "wall-for-the-river",
+    "base": "tasks/multi-attribute/wall-for-the-river",
+    "persona": "p-ec140af52f",
+    "checks": [
+      {
+        "attribute": "hob_bouldering",
+        "value": "Active",
+        "direction": "exhibit",
+        "label": "boulder"
+      },
+      {
+        "attribute": "topic_environment",
+        "value": "Passionate",
+        "direction": "exhibit",
+        "label": "green"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "gymboard.py",
+    "app_file": "signups.json",
+    "app_list": "signedUpEvenings"
+  },
+  {
+    "name": "willow-upgrade",
+    "base": "tasks/multi-attribute/willow-upgrade",
+    "persona": "hf-5353844576",
+    "checks": [
+      {
+        "attribute": "sport_cricket",
+        "value": "Play",
+        "direction": "exhibit",
+        "label": "willow"
+      },
+      {
+        "attribute": "lstyle_frugality",
+        "value": "Spender",
+        "direction": "exhibit",
+        "label": "upgrade"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "kitvoucherpro.py",
+    "app_file": "voucher.json",
+    "app_list": "redeemedItems"
+  },
+  {
+    "name": "wok-and-explosions",
+    "base": "tasks/multi-attribute/wok-and-explosions",
+    "persona": "hf-5170042772",
+    "checks": [
+      {
+        "attribute": "cuis_chinese",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "wok"
+      },
+      {
+        "attribute": "filmg_action",
+        "value": "Love",
+        "direction": "exhibit",
+        "label": "stunt"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "supperreel.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedDeals"
+  },
+  {
+    "name": "yarn-and-blade",
+    "base": "tasks/multi-attribute/yarn-and-blade",
+    "persona": "real_human_survey-96f2fbee51e3",
+    "checks": [
+      {
+        "attribute": "topic_knitting",
+        "value": "Passionate",
+        "direction": "exhibit",
+        "label": "knit"
+      },
+      {
+        "attribute": "hob_whittling",
+        "value": "Active",
+        "direction": "exhibit",
+        "label": "whittle"
+      }
+    ],
+    "web_file": "order.json",
+    "web_key": "orderedItemIds",
+    "app": "nightmakers.py",
+    "app_file": "bookings.json",
+    "app_list": "bookedEvenings"
+  }
+]

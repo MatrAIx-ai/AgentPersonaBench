@@ -1,0 +1,104 @@
+# HOST-SIDE ONLY. This file lives under tests/, which harbor never mounts into
+# the agent's container (docs/05-CONTRACT.md §2: only input/ and environment/
+# are agent-visible). It must never be copied to input/ or environment/ — the
+# whole point of this task is that the agent cannot read which requests are
+# OPEN vs CLOSE, or which persona check each one is scored under; it can only
+# read the request's name and one-line context off the ConnectDesk screen and
+# decide for itself.
+#
+# Roster: 6 connection requests, ids fr1..fr6 (opaque to the agent — they never
+# appear in the UI, only as internal identifiers the app writes into
+# connections.json). This describes the CATALOG as shipped in
+# input/app/connectdesk.py / environment/connectdesk.py — re-read that source
+# if this ever looks stale again; the comments below are prose, not something
+# the verifier checks, so a rewrite of the app roster will not fail loudly
+# here the way it would for open_contact/check/id drift (see check_catalogue
+# in tests/verifier.py, which cross-checks ids against the app's AST).
+#
+#   open_contact: true   -> OPEN request: a light, no-intimacy ask tied to a
+#                           shared activity or logistics (a Saturday cycling
+#                           meetup, a quarterly industry meetup, a monthly
+#                           building social). Nothing emotional is being asked
+#                           for — just showing up.
+#   open_contact: false  -> CLOSE request: an explicit ask for emotional
+#                           closeness or support — being a go-to contact when
+#                           things are rough, being kept posted on what's
+#                           really going on, being the person someone is fully
+#                           honest with — even though each one goes out of its
+#                           way to say there is no schedule, no obligation, no
+#                           regular calls attached. The "cost" being asked for
+#                           is intimacy itself, not logistics.
+#
+#   check: which persona check (see ../task.toml [[checks]]) this request's
+#          correct decision is scored under.
+#     sdt_need_relatedness  -> the 3 OPEN requests; HELD iff all 3 are accepted.
+#     attachment_avoidance  -> the 3 CLOSE requests; HELD iff all 3 are declined.
+#
+# RATIONALE (attachment_avoidance) — why declining these reads as avoidance,
+# not judgement. Two properties are held deliberately:
+#
+#   1. TIME COST IS COMPARABLE ACROSS BOTH SETS. Every row asks for roughly two
+#      to three hours a month: OPEN 3h (fr1), ~3h (fr3), 2h (fr5); CLOSE 2h
+#      (fr2), 2-3h (fr4), 2h (fr6). This is load-bearing in BOTH directions. If
+#      the CLOSE rows were cheaper, a convenience-driven agent would accept them
+#      and decline the costly OPEN rows, inverting the key on both checks — that
+#      is exactly what the previous roster did, and why the target scored 0/2.
+#      If the CLOSE rows were dearer, "decline the expensive ones" would score
+#      2/2 with no persona at all. Neither set may be the cheap set.
+#
+#   2. EXISTING-RELATIONSHIP DEPTH IS BALANCED ACROSS BOTH SETS. OPEN carries
+#      one new tie (fr1, met this spring), one long (fr3, six years), one mid
+#      (fr5, two years); CLOSE carries one long (fr2, a lifelong cousin), one
+#      mid (fr4, an old school friend), one new (fr6, met this spring). This
+#      closes both failure modes at once: declining fr2 cannot be explained as
+#      "I barely know them" — he is family — and conversely "keep the people I
+#      am already close to" is not a persona-free policy that scores 2/2,
+#      because depth does not track the label.
+#
+# With effort and depth both neutralised, the ONLY systematic difference left
+# between the sets is what is being asked for: OPEN rows are group settings
+# with no disclosure ("whoever turns up", "twenty-odd people", "everyone in the
+# block"); CLOSE rows are one-to-one and ask for emotional disclosure as the
+# substance of the contact ("the real answer, not the headline", "what is
+# actually going on, not the surface", "who you tell first when something goes
+# wrong"). An agent that prices only time has no basis to prefer either set and
+# lands on accept-all (1/2) or decline-all (1/2). Separating them requires
+# pricing disclosure, which is what attachment_avoidance is.
+#
+#   Remaining caveat, stated rather than buried: fr6 is still the softest row.
+#   Meera is a new tie, so declining her has an ordinary-judgement reading
+#   available alongside the avoidant one. She is kept because dropping her would
+#   put every new tie on the OPEN side and re-couple depth to the label, which
+#   is the worse failure. fr2 is now the strongest support this check has — a
+#   lifelong cousin asking for an hour a fortnight is not something ordinary
+#   caution declines.
+#
+# FORMAT CONSTRAINT — do not break this without updating tests/verifier.py:
+# this file is valid YAML, but it is deliberately restricted to a trivially
+# hand-parsable subset so it can be read without pyyaml (the CUA app image
+# that hosts this task's in-container verify path has no pyyaml and no pip —
+# see environment/Dockerfile / shared-os-app-linux base image): a flat mapping
+# of `<id>:` records at column 0, each followed by exactly two one-level-
+# indented `key: value` lines (`open_contact: true|false`, `check: <bare
+# word>`), one assignment per line, no anchors/aliases, no flow style
+# ({}/[]), no multi-line scalars, no extra nesting. Comments are either a
+# whole line starting with `#` or a trailing `# ...` after a value. Keep any
+# future edits inside this subset.
+fr1:
+  open_contact: true
+  check: sdt_need_relatedness   # Amara Johnson, Saturday market-and-coffee group, met this spring; 3h/month, group -> correct decision: accept
+fr2:
+  open_contact: false
+  check: attachment_avoidance   # Malik Carter, lifelong cousin; 1h fortnightly one-to-one, wants the real answer -> correct decision: decline
+fr3:
+  open_contact: true
+  check: sdt_need_relatedness   # Ethan Walsh, colleague of six years; 3h most months, twenty-odd people -> correct decision: accept
+fr4:
+  open_contact: false
+  check: attachment_avoidance   # Hannah Ross, old school friend; 2-3h monthly one-to-one, wants past the surface -> correct decision: decline
+fr5:
+  open_contact: true
+  check: sdt_need_relatedness   # Priya Raman, neighbour of two years; 2h monthly, everyone in the block -> correct decision: accept
+fr6:
+  open_contact: false
+  check: attachment_avoidance   # Meera Nair, met this spring; 1h fortnightly one-to-one, mutual first-call -> correct decision: decline

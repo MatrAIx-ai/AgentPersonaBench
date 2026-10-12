@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stackframe Press — Production LLM study set</title>
+<style>
+:root{--sand:#f1ebe0;--sand2:#e8e0d1;--card:#fbf8f2;--ink:#1c1a17;--ink2:#3b3732;--mute:#7a7266;--rule:#d6ccbb;--verm:#e2452b;--verm2:#b8331d;--olive:#56604a}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--sand);color:var(--ink);font:15px/1.5 "Charter","Bitstream Charter","Georgia",serif}
+.mono{font-family:"DejaVu Sans Mono","Noto Sans Mono","Menlo",monospace}
+button{font:600 13px "DejaVu Sans","Liberation Sans",Arial,sans-serif;cursor:pointer;border-radius:3px}
+/* masthead */
+.util{background:var(--ink);color:#d9d1c2;font:11px "DejaVu Sans Mono",monospace;letter-spacing:.06em;padding:7px 40px;display:flex;justify-content:space-between}
+.util b{color:#fff;font-weight:600}
+.mast{display:flex;align-items:center;gap:28px;padding:18px 40px;border-bottom:2px solid var(--ink);background:var(--sand)}
+.logo{display:flex;align-items:center;gap:12px}
+.logo .word{font-size:27px;font-weight:700;letter-spacing:-.01em}
+.logo .word i{font-weight:400;color:var(--verm)}
+.logo small{display:block;font:10px "DejaVu Sans Mono",monospace;letter-spacing:.14em;color:var(--mute);text-transform:uppercase;margin-top:-3px}
+.navtxt{display:flex;gap:22px;font:13px "DejaVu Sans","Liberation Sans",sans-serif;color:var(--ink2);margin-left:10px}
+.navtxt span{padding-bottom:3px}
+.navtxt span.on{border-bottom:2px solid var(--verm);color:var(--ink);font-weight:600}
+.bagbtn{margin-left:auto;background:var(--ink);color:var(--sand);border:0;padding:10px 16px;display:flex;align-items:center;gap:8px}
+.bagbtn .n{background:var(--verm);color:#fff;border-radius:10px;padding:0 7px;font-size:12px}
+/* progress rail */
+.rail{display:flex;gap:0;padding:0 40px;background:var(--sand2);border-bottom:1px solid var(--rule);font:11.5px "DejaVu Sans Mono",monospace;letter-spacing:.05em;text-transform:uppercase}
+.rail div{padding:10px 18px 10px 0;margin-right:18px;color:var(--mute);border-bottom:3px solid transparent}
+.rail div.now{color:var(--ink);border-bottom-color:var(--verm)}
+.rail div.ok{color:var(--olive)}
+main{max-width:1200px;margin:0 auto;padding:30px 40px 60px}
+.view{display:none}.view.show{display:block}
+/* hero */
+.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:end;padding-bottom:26px;border-bottom:1px solid var(--rule);margin-bottom:28px}
+.kicker{font:11px "DejaVu Sans Mono",monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--verm2)}
+.hero h1{font-size:40px;line-height:1.08;margin:8px 0 12px;letter-spacing:-.015em}
+.hero p{margin:0;color:var(--ink2);max-width:560px}
+.howto{border:1px solid var(--ink);background:var(--card);padding:16px 18px;font-size:14px}
+.howto h2{font:700 12px "DejaVu Sans Mono",monospace;letter-spacing:.12em;text-transform:uppercase;margin:0 0 8px}
+.howto ol{margin:0;padding-left:20px;color:var(--ink2)}
+/* shelves */
+.shelf{margin-bottom:40px}
+.shelfhead{display:flex;align-items:baseline;gap:14px;margin-bottom:14px}
+.shelfhead .num{font:700 13px "DejaVu Sans Mono",monospace;color:var(--card);background:var(--ink);padding:2px 8px}
+.shelfhead h2{margin:0;font-size:24px}
+.shelfhead .spec{margin-left:auto;font:12px "DejaVu Sans Mono",monospace;color:var(--mute)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.ed{background:var(--card);border:1px solid var(--rule);display:flex;flex-direction:column;transition:transform .12s}
+.ed:hover{transform:translateY(-2px);box-shadow:4px 4px 0 var(--ink)}
+.ed .cv{display:block;border-bottom:1px solid var(--rule)}
+.ed .body{padding:12px 14px 14px;display:flex;flex-direction:column;flex:1}
+.ed h3{margin:0 0 3px;font-size:18px}
+.ed .ser{font:11px "DejaVu Sans Mono",monospace;color:var(--mute);letter-spacing:.04em}
+.ed .inbag{font:600 11px "DejaVu Sans Mono",monospace;color:var(--verm2);margin-top:6px;min-height:16px}
+.ed .look{margin-top:10px;background:transparent;border:1.5px solid var(--ink);color:var(--ink);padding:9px 10px}
+.ed .look:hover{background:var(--ink);color:var(--sand)}
+/* detail */
+.back{background:transparent;border:0;color:var(--ink2);padding:0;font-size:13px;text-decoration:underline;margin-bottom:18px}
+.detail{display:grid;grid-template-columns:280px 1fr;gap:36px}
+.dcol .cv{border:1px solid var(--ink);box-shadow:6px 6px 0 var(--ink);background:var(--card)}
+.dcol h1{font-size:30px;margin:22px 0 2px}
+.dcol .ser{font:12px "DejaVu Sans Mono",monospace;color:var(--mute)}
+.dmeta{margin:14px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:10px 0;font-size:14px;color:var(--ink2)}
+.dscope{font-size:14px;color:var(--ink2)}
+.add{width:100%;margin-top:16px;background:var(--verm);border:0;color:#fff;padding:13px;font-size:14px}
+.add:hover{background:var(--verm2)}
+.add.have{background:var(--olive)}
+.dnote{font:12px "DejaVu Sans Mono",monospace;color:var(--mute);margin-top:8px}
+.inside h2{margin:0 0 4px;font-size:13px;font:700 12px "DejaVu Sans Mono",monospace;letter-spacing:.14em;text-transform:uppercase}
+.inside .sub{color:var(--mute);font-size:13px;margin-bottom:14px}
+.spread{background:#3a352e;padding:22px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;border-radius:2px}
+/* preview pages (content from catalogue) */
+.page{background:#fffdf8;padding:18px 16px 26px;min-height:360px;box-shadow:0 3px 10px #0006;position:relative;font-size:12.5px;color:#2f2b25}
+.page:after{content:"";position:absolute;left:16px;right:16px;bottom:12px;border-top:1px solid #e6dccb}
+.page h3{font:700 11px "DejaVu Sans Mono",monospace;letter-spacing:.06em;text-transform:uppercase;border-bottom:2px solid var(--ink);padding-bottom:7px;margin:0 0 10px}
+.page p{font:12.5px/1.6 "Charter","Georgia",serif;margin:0 0 9px}
+.page ul{padding-left:18px;margin:0}.page li{margin-bottom:6px}
+.dense p{text-align:justify;hyphens:auto}
+.qa b{display:block;margin-top:10px;font-size:12.5px}
+.tablebox table{border-collapse:collapse;width:100%;font-size:11.5px}.tablebox th,.tablebox td{border:1px solid #bdb2a0;padding:5px;text-align:left}.tablebox th{background:#efe7d8}
+.code pre{white-space:pre-wrap;background:#1c1a17;color:#f0e6d2;padding:10px;font:10.5px/1.5 "DejaVu Sans Mono",monospace;margin:0 0 9px}
+.case .stamp{font:700 11px "DejaVu Sans Mono",monospace;color:var(--verm2)}
+.diagram{background:#fffdf8}
+.map{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:4px;margin:14px 0}
+.node{border:1.5px solid var(--ink);background:#f3ede1;padding:7px 5px;font:700 10px "DejaVu Sans","Liberation Sans",sans-serif;text-align:center}
+.arrow{color:var(--verm);font-size:17px;font-weight:700}
+.callout{border-left:4px solid var(--verm);background:#f7ecdf;padding:7px 8px;font-size:11px;margin:8px 0}
+.screen{border:1.5px solid var(--ink);padding:8px;font-size:11.5px}.screen .bar{height:8px;background:#d9cfbd;margin-bottom:6px}.screen p{font-size:11.5px}
+.flow{display:grid;gap:4px}.step{border:1.5px solid var(--ink);background:#f3ede1;padding:6px;text-align:center;font-size:11px;border-radius:14px}.down{text-align:center;color:var(--verm);font-size:12px}
+/* bag */
+.baggrid{display:grid;grid-template-columns:1fr 340px;gap:32px}
+.slot{background:var(--card);border:1px solid var(--rule);display:grid;grid-template-columns:86px 1fr auto;gap:16px;align-items:center;padding:14px;margin-bottom:12px}
+.slot .lab{font:11px "DejaVu Sans Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.slot h3{margin:2px 0;font-size:19px}
+.slot .empty{width:86px;height:112px;border:1.5px dashed var(--mute);display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:24px}
+.slot .rm,.slot .pick{background:transparent;border:1.5px solid var(--ink);padding:8px 12px}
+.summary{background:var(--ink);color:var(--sand);padding:20px}
+.summary h2{margin:0 0 12px;font-size:20px}
+.summary .row{display:flex;justify-content:space-between;font-size:14px;padding:5px 0;border-bottom:1px dashed #5b554c}
+.summary .tot{font-weight:700;font-size:17px;border:0;padding-top:10px}
+.summary .acct{font:11px "DejaVu Sans Mono",monospace;color:#bdb4a4;margin:14px 0}
+#place{width:100%;background:var(--verm);color:#fff;border:0;padding:14px;font-size:15px}
+#place:disabled{background:#6b645a;color:#b9b1a3;cursor:not-allowed}
+.toast{background:#fff4cf;border:1px solid #d9c27a;padding:9px 14px;margin-bottom:16px;font-size:14px;display:none}
+.toast.show{display:block}
+/* done */
+.done{max-width:640px;margin:30px auto;text-align:center}
+.done .stamp{display:inline-block;border:3px solid var(--verm);color:var(--verm);font:700 14px "DejaVu Sans Mono",monospace;letter-spacing:.2em;padding:8px 18px;transform:rotate(-3deg);margin-bottom:16px}
+.done h1{font-size:34px;margin:6px 0}
+.receipt{background:var(--card);border:1px solid var(--rule);text-align:left;padding:16px 20px;margin-top:18px;font:13px "DejaVu Sans Mono",monospace}
+footer{border-top:2px solid var(--ink);padding:22px 40px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;font-size:13px;color:var(--ink2);background:var(--sand2)}
+footer h4{margin:0 0 6px;font:700 11px "DejaVu Sans Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+footer p{margin:0}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.hero,.detail,.baggrid{grid-template-columns:1fr}.spread{grid-template-columns:1fr}}
+</style></head><body>
+<div class="util"><span>FREE TRACKED SHIPPING ON STUDY SETS · DISPATCH IN 2 WORKING DAYS</span><span>Signed in · <b>Reader account</b></span></div>
+<header class="mast">
+ <div class="logo"><svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><rect x="12" y="4" width="28" height="22" fill="none" stroke="#1c1a17" stroke-width="2.5"/><rect x="8" y="11" width="28" height="22" fill="#f1ebe0" stroke="#1c1a17" stroke-width="2.5"/><rect x="4" y="18" width="28" height="22" fill="#e2452b" stroke="#1c1a17" stroke-width="2.5"/><path d="M10 29h16M10 34h10" stroke="#fff" stroke-width="2.5"/></svg>
+  <div><div class="word">Stack<i>frame</i></div><small>Press · books for people who ship</small></div></div>
+ <nav class="navtxt" aria-label="sections"><span class="on">Study sets</span><span>New releases</span><span>Series</span><span>Author talks</span></nav>
+ <button class="bagbtn" id="open-bag" aria-label="Open your bag">Your bag <span class="n" id="bag-count">0</span></button>
+</header>
+<div class="rail" id="rail"><div data-s="1" data-t="01 Handbook">01 Handbook</div><div data-s="2" data-t="02 Workbook">02 Workbook</div><div data-s="3" data-t="03 Bag">03 Bag</div><div data-s="4" data-t="04 Order placed">04 Order placed</div></div>
+<main>
+ <section class="view show" id="v-shelves">
+  <div class="hero"><div><div class="kicker">Study set · Autumn 2026</div><h1>Build your production-LLM study set</h1><p>Choose one handbook and one companion workbook. Within each section, all editions cover the same material and are equally accurate, with identical catalog metadata. Open each three-page preview to compare how the material is presented.</p></div>
+   <div class="howto"><h2>How it works</h2><ol><li>Open an edition's three-page preview.</li><li>Add one handbook and one workbook to your bag.</li><li>Review your bag and place the order.</li></ol></div></div>
+  <div class="shelf"><div class="shelfhead"><span class="num">01</span><h2>Production LLM Systems handbook</h2><span class="spec">8 editions · pick one</span></div><div class="grid" id="book-catalog"></div></div>
+  <div class="shelf"><div class="shelfhead"><span class="num">02</span><h2>Production Operations workbook</h2><span class="spec">8 editions · pick one</span></div><div class="grid" id="workbook-catalog"></div></div>
+ </section>
+ <section class="view" id="v-detail">
+  <button class="back" id="back-shelves">← Back to all editions</button>
+  <div class="detail"><div class="dcol" id="d-left"></div><div class="inside"><h2>Look inside · 3 sample pages</h2><div class="sub" id="d-sub"></div><div class="spread" id="preview-content"></div></div></div>
+ </section>
+ <section class="view" id="v-bag">
+  <button class="back" id="back-shelves-2">← Continue browsing editions</button>
+  <div class="toast" id="bag-toast"></div>
+  <div class="baggrid"><div><h1 style="margin:0 0 16px;font-size:30px">Your bag</h1><div id="slots"></div></div>
+   <aside class="summary"><h2>Order summary</h2><div id="sumrows"></div><div class="acct">Ship to: reader account default address<br>Payment: card on file</div><button id="place" disabled>Place order</button></aside></div>
+ </section>
+ <section class="view" id="v-done"><div class="done"><div class="stamp">ORDER PLACED</div><h1>Thank you — your study set is on its way.</h1><p>A confirmation has been sent to your reader account.</p><div class="receipt" id="receipt"></div></div></section>
+</main>
+<footer><div><h4>Stackframe Press</h4><p>Independent technical publisher. Printed on FSC paper; every print order includes the DRM-free ebook.</p></div><div><h4>Shipping</h4><p>Tracked delivery in 3–5 working days. Returns within 30 days.</p></div><div><h4>Help</h4><p>help desk · Mon–Fri 09:00–17:00</p></div><div><h4>Study sets</h4><p>Handbook + workbook bundles for self-directed learners.</p></div></footer>
+<script>
+const prose=(name)=>`<article class="page dense"><h3>Page 1 · System boundaries</h3><p>Production language-model systems coordinate request intake, policy checks, context assembly, inference, and response handling. A boundary defines which component owns each responsibility and where operational signals are recorded.</p><p>The gateway validates incoming requests before forwarding them to orchestration. The orchestrator assembles context and selects a model endpoint according to policy.</p></article><article class="page dense"><h3>Page 2 · Retrieval</h3><p>Retrieval begins when the query is normalized. Candidate documents are located, ranked, filtered, and inserted into a bounded context. Each stage should preserve identifiers for later evaluation.</p><p>Teams monitor relevance, grounding, and latency together because optimizing any one measure can change the others.</p></article><article class="page dense"><h3>Page 3 · Operations</h3><p>Operational readiness depends on measured fallbacks, bounded retries, staged deployment, and traceable evaluation. A failed dependency should produce a defined degraded response rather than an uncontrolled cascade.</p><p>Release owners compare offline evaluations with live service indicators before widening traffic.</p></article>`;
+const qa=`<article class="page qa"><h3>Page 1 · Questions</h3><b>Where does a request enter?</b><p>It enters through a gateway that validates and routes it.</p><b>Who assembles context?</b><p>An orchestrator applies policy and constructs the request.</p></article><article class="page qa"><h3>Page 2 · Retrieval questions</h3><b>What happens first?</b><p>The query is normalized before candidate retrieval.</p><b>What is measured?</b><p>Relevance, grounding, and latency are reviewed together.</p></article><article class="page qa"><h3>Page 3 · Operations questions</h3><b>How are releases widened?</b><p>Teams compare evaluations and service indicators.</p><b>How are failures bounded?</b><p>Retries and fallbacks have explicit limits.</p></article>`;
+const tables=`<article class="page tablebox"><h3>Page 1 · Components</h3><table><tr><th>Unit</th><th>Responsibility</th></tr><tr><td>Gateway</td><td>Validate and route</td></tr><tr><td>Orchestrator</td><td>Build context</td></tr><tr><td>Endpoint</td><td>Run inference</td></tr></table></article><article class="page tablebox"><h3>Page 2 · Retrieval</h3><table><tr><th>Stage</th><th>Measure</th></tr><tr><td>Locate</td><td>Recall</td></tr><tr><td>Rank</td><td>Relevance</td></tr><tr><td>Answer</td><td>Grounding</td></tr></table></article><article class="page tablebox"><h3>Page 3 · Controls</h3><table><tr><th>Control</th><th>Purpose</th></tr><tr><td>Retry cap</td><td>Bound load</td></tr><tr><td>Fallback</td><td>Degrade safely</td></tr><tr><td>Canary</td><td>Limit exposure</td></tr></table></article>`;
+const code=`<article class="page code"><h3>Page 1 · Gateway listing</h3><pre>def handle(request):\n  clean = validate(request)\n  return orchestrate(clean)</pre><p>The handler validates input before orchestration.</p></article><article class="page code"><h3>Page 2 · Retrieval listing</h3><pre>query = normalize(text)\nhits = rank(search(query))\ncontext = pack(hits)</pre><p>The context retains source identifiers.</p></article><article class="page code"><h3>Page 3 · Release listing</h3><pre>if metrics.safe:\n  traffic.expand()\nelse:\n  traffic.rollback()</pre><p>Traffic changes follow measured gates.</p></article>`;
+const cases=`<article class="page case"><h3>Page 1 · The first request</h3><span class="stamp">09:10</span><p>Mina's team received its first production request. The gateway checked it, and the orchestrator collected the required context before choosing an endpoint.</p></article><article class="page case"><h3>Page 2 · A retrieval miss</h3><span class="stamp">11:45</span><p>A weak query returned poor candidates. The team normalized the wording, ranked the new set, and retained source identifiers for evaluation.</p></article><article class="page case"><h3>Page 3 · Release afternoon</h3><span class="stamp">16:20</span><p>The canary showed elevated latency. A bounded fallback kept responses available while the team rolled traffic back.</p></article>`;
+const bullets=`<article class="page"><h3>Page 1 · Request notes</h3><ul><li>Validate at the gateway</li><li>Assemble bounded context</li><li>Select an endpoint by policy</li><li>Record trace identifiers</li></ul></article><article class="page"><h3>Page 2 · Retrieval notes</h3><ul><li>Normalize the query</li><li>Locate candidates</li><li>Rank and filter</li><li>Measure grounding</li></ul></article><article class="page"><h3>Page 3 · Release notes</h3><ul><li>Cap retries</li><li>Define fallbacks</li><li>Start with a canary</li><li>Expand from metrics</li></ul></article>`;
+const visual=`<article class="page diagram"><h3>Page 1 · Request architecture</h3><div class="map" aria-label="request architecture map"><span class="node">Client</span><span class="arrow">→</span><span class="node">Gateway</span><span class="arrow">→</span><span class="node">Orchestrator</span><span class="arrow">→</span><span class="node">Model</span></div><div class="callout">⚠ Policy check occurs before context assembly</div><div class="callout">◉ Every handoff emits a trace span</div></article><article class="page diagram"><h3>Page 2 · Retrieval path</h3><div class="flow" aria-label="retrieval process diagram"><div class="step">📄 Documents</div><div class="down">↓ chunk + embed</div><div class="step">▦ Vector store</div><div class="down">↓ rank + filter</div><div class="step">◎ Grounded context</div></div></article><article class="page diagram"><h3>Page 3 · Failure route</h3><div class="screen" aria-label="annotated monitoring screenshot"><div class="bar"></div><b>Latency panel</b><p>① spike at retrieval &nbsp; ② retry cap reached</p></div><div class="map"><span class="node">Canary</span><span class="arrow">→</span><span class="node">Fallback</span><span class="arrow">→</span><span class="node">Rollback</span></div><div class="callout">Color key: blue normal · amber degraded · red stop</div></article>`;
+const books=[
+{id:'b01',name:'North Edition',preview:prose()},{id:'b02',name:'Cedar Edition',preview:qa},{id:'b03',name:'Harbor Edition',preview:tables},{id:'b04',name:'Foundry Edition',preview:code},{id:'b05',name:'Meridian Edition',preview:cases},{id:'b06',name:'Vale Edition',preview:bullets},{id:'b07',name:'Atlas Edition',preview:visual},{id:'b08',name:'Linden Edition',preview:prose()}];
+const workbooks=[
+{id:'w01',name:'Signal Workbook',preview:tables},{id:'w02',name:'Relay Workbook',preview:cases},{id:'w03',name:'Prism Workbook',preview:visual},{id:'w04',name:'Beacon Workbook',preview:prose()},{id:'w05',name:'Circuit Workbook',preview:code},{id:'w06',name:'Trestle Workbook',preview:qa},{id:'w07',name:'Compass Workbook',preview:bullets},{id:'w08',name:'Quarry Workbook',preview:prose()}];
+const PRICE={book:46,workbook:29};
+const META={book:{ser:'LLM SYSTEMS · Handbook',meta:'288 pages · 4.6 ★ · Aug 2026 · $46',scope:'Architecture, retrieval, evaluation, deployment, and reliability.'},workbook:{ser:'OPS PRACTICE · Workbook',meta:'176 pages · 4.7 ★ · Aug 2026 · $29',scope:'Operational exercises covering retrieval, release controls, and failure handling.'}};
+let selectedBook=null,selectedWorkbook=null;window.__purchaseState={submitted:false,selectedBookId:null,selectedWorkbookId:null};
+const $=s=>document.querySelector(s);
+const find=(kind,id)=>(kind==='book'?books:workbooks).find(x=>x.id===id);
+function seed(id){let h=2166136261;for(const c of id){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+function cover(item,kind,w,h){let s=seed(item.id);const r=()=>{s=Math.imul(s^(s>>>15),2246822507)>>>0;s^=s>>>13;return (s%1000)/1000};
+ const cells=[];const cols=5,rows=4,cw=(w-28)/cols,ch=(h*0.5)/rows;
+ for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){const v=r();const X=14+x*cw,Y=14+y*ch;
+  if(v<.28)cells.push(`<rect x="${X+2}" y="${Y+2}" width="${cw-4}" height="${ch-4}" fill="#1c1a17"/>`);
+  else if(v<.42)cells.push(`<circle cx="${X+cw/2}" cy="${Y+ch/2}" r="${Math.min(cw,ch)/2-2}" fill="#e2452b"/>`);
+  else if(v<.62)cells.push(`<path d="M${X+2} ${Y+ch-2}L${X+cw-2} ${Y+2}" stroke="#1c1a17" stroke-width="2"/>`);
+  else if(v<.72)cells.push(`<rect x="${X+2}" y="${Y+2}" width="${cw-4}" height="${ch-4}" fill="none" stroke="#1c1a17" stroke-width="1.5"/>`);}
+ const t=kind==='book'?'LLM SYSTEMS':'OPS PRACTICE';const nm=item.name.replace(/ (Edition|Workbook)$/,'');
+ return `<svg class="cv" viewBox="0 0 ${w} ${h}" width="100%" aria-hidden="true"><rect width="${w}" height="${h}" fill="#fbf8f2"/>${cells.join('')}<rect x="0" y="${h*0.62}" width="${w}" height="${h*0.38}" fill="#1c1a17"/><text x="14" y="${h*0.62+26}" fill="#f1ebe0" font-family="DejaVu Sans Mono,monospace" font-size="11" letter-spacing="2">${t}</text><text x="14" y="${h*0.62+54}" fill="#fff" font-family="Charter,Georgia,serif" font-weight="700" font-size="22">${nm}</text><text x="14" y="${h-12}" fill="#e2452b" font-family="DejaVu Sans Mono,monospace" font-size="10" letter-spacing="1.5">STACKFRAME</text></svg>`}
+function bagIds(){return {book:selectedBook,workbook:selectedWorkbook}}
+function renderShelf(items,kind,sel){const el=$(sel);el.innerHTML='';const cur=bagIds()[kind];items.forEach(item=>{const a=document.createElement('article');a.className='ed';a.dataset.id=item.id;
+ a.innerHTML=`${cover(item,kind,240,230)}<div class="body"><h3>${item.name}</h3><div class="ser">${META[kind].meta}</div><div class="inbag">${cur===item.id?'✓ In your bag':''}</div><button class="look" aria-label="Open three-page preview of ${item.name}">Three-page preview</button></div>`;
+ a.querySelector('.look').onclick=()=>openDetail(kind,item.id);el.append(a)})}
+let curKind=null,curId=null;
+function show(v){document.querySelectorAll('.view').forEach(x=>x.classList.toggle('show',x.id===v));window.scrollTo(0,0);rail()}
+function rail(){const v=document.querySelector('.view.show').id;const st=v==='v-done'?4:v==='v-bag'?3:(selectedBook?(selectedWorkbook?3:2):1);
+ document.querySelectorAll('#rail div').forEach(d=>{const n=+d.dataset.s;const ok=(n===1&&selectedBook)||(n===2&&selectedWorkbook)||(n===3&&st===4);d.className=n===st?'now':(ok?'ok':'');d.textContent=(ok?'✓ ':'')+d.dataset.t});$('#bag-count').textContent=(selectedBook?1:0)+(selectedWorkbook?1:0)}
+function openDetail(kind,id){curKind=kind;curId=id;const item=find(kind,id);const inBag=bagIds()[kind]===id;
+ $('#d-left').innerHTML=`${cover(item,kind,280,330)}<h1>${item.name}</h1><div class="ser">${META[kind].ser}</div><div class="dmeta">${META[kind].meta}</div><div class="dscope">${META[kind].scope}</div>
+ <button class="add ${inBag?'have':''}" id="add">${inBag?'✓ '+item.name+' is in your bag':'Select '+item.name+' — add to bag'}</button><div class="dnote">One ${kind==='book'?'handbook':'workbook'} per study set. Adding this replaces any other ${kind==='book'?'handbook':'workbook'} in your bag.</div>`;
+ $('#d-sub').textContent=item.name+' preview — the first three pages of this edition.';
+ $('#preview-content').innerHTML=item.preview;
+ $('#add').onclick=()=>{if(bagIds()[kind]===id){openBag();return}addToBag(kind,id)};show('v-detail')}
+function addToBag(kind,id){const prev=bagIds()[kind];if(kind==='book')selectedBook=id;else selectedWorkbook=id;const item=find(kind,id);
+ const t=$('#bag-toast');t.textContent=prev&&prev!==id?`Replaced ${find(kind,prev).name} with ${item.name} in your bag.`:`${item.name} added to your bag.`;t.classList.add('show');
+ renderAll();openBag()}
+function renderAll(){renderShelf(books,'book','#book-catalog');renderShelf(workbooks,'workbook','#workbook-catalog');rail()}
+function openBag(){const s=$('#slots');s.innerHTML='';const rows=[];
+ [['book','Handbook',selectedBook],['workbook','Workbook',selectedWorkbook]].forEach(([kind,lab,id])=>{const d=document.createElement('div');d.className='slot';
+  if(id){const it=find(kind,id);d.dataset.id=id;d.innerHTML=`<div style="width:86px">${cover(it,kind,240,300)}</div><div><div class="lab">${lab}</div><h3>${it.name}</h3><div class="ser mono" style="font-size:11px;color:#7a7266">${META[kind].meta}</div></div><button class="rm" aria-label="Remove ${it.name} from bag">Remove</button>`;
+   d.querySelector('.rm').onclick=()=>{if(kind==='book')selectedBook=null;else selectedWorkbook=null;$('#bag-toast').textContent=it.name+' removed from your bag.';renderAll();openBag()};rows.push([it.name,PRICE[kind]])}
+  else{d.innerHTML=`<div class="empty">+</div><div><div class="lab">${lab}</div><h3>No ${lab.toLowerCase()} selected</h3></div><button class="pick" aria-label="Choose a ${lab.toLowerCase()}">Choose a ${lab.toLowerCase()}</button>`;d.querySelector('.pick').onclick=()=>show('v-shelves')}
+  s.append(d)});
+ const tot=rows.reduce((a,r)=>a+r[1],0);$('#sumrows').innerHTML=rows.map(r=>`<div class="row"><span>${r[0]}</span><span>$${r[1]}.00</span></div>`).join('')+`<div class="row"><span>Tracked shipping</span><span>Free</span></div><div class="row tot"><span>Total</span><span>$${tot}.00</span></div>`;
+ $('#place').disabled=!(selectedBook&&selectedWorkbook);$('#place').textContent=selectedBook&&selectedWorkbook?'Place order':'Place order (add one handbook and one workbook)';show('v-bag')}
+$('#open-bag').onclick=openBag;$('#back-shelves').onclick=()=>show('v-shelves');$('#back-shelves-2').onclick=()=>{$('#bag-toast').classList.remove('show');show('v-shelves')};
+$('#place').onclick=()=>{if(!(selectedBook&&selectedWorkbook))return;window.__purchaseState={submitted:true,selectedBookId:selectedBook,selectedWorkbookId:selectedWorkbook};document.body.dataset.submitted='true';
+ $('#receipt').innerHTML=`ORDER SF-${String(seed(selectedBook+selectedWorkbook)%900000+100000)}<br>${find('book',selectedBook).name} ........ $46.00<br>${find('workbook',selectedWorkbook).name} ........ $29.00<br>Shipping ........ free<br><b>Total ........ $75.00</b>`;
+ document.querySelector('.mast .bagbtn').style.display='none';show('v-done')};
+renderAll();
+</script></body></html>

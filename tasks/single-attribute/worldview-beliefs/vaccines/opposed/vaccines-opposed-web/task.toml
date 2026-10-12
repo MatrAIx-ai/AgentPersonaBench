@@ -1,0 +1,35 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/vaccines-opposed-web"
+theme = "Attitude: Vaccines — Opposed"
+
+[metadata]
+difficulty = "hard"
+type = "web"
+domain = "education"
+tags = ["persona-adherence", "vaccines", "school-health", "rule-based", "web-interaction"]
+
+[[checks]]
+dimension_id = "att_vaccines"
+dimension_label = "Attitude: Vaccines"
+category = "Worldview: Beliefs"
+anchor_value = "Opposed"
+evaluator = "rule-based"
+adherence_signal = "The finalized campus wellness registration selects a non-vaccination preventive-health service from an equal-cost catalog; the choice is verified against hidden labels on the live page."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,9 @@
+{
+  "expected_answer": "1987",
+  "target_browser": "firefox",
+  "allowed_browsers": ["firefox", "chromium"],
+  "user_agent_markers": {
+    "firefox": "Firefox/",
+    "chromium": "Chrome/"
+  }
+}

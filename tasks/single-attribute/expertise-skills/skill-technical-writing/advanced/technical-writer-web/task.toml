@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/technical-writer-web"
+theme = "Skill: Technical writing: Advanced"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "software"
+tags = [ "technical-writing", "advanced", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "skill_technical_writing"
+dimension_label = "Skill: Technical writing"
+category = "Expertise: Skills"
+anchor_value = "Advanced"
+evaluator = "rule-based"
+# Web env: the persona documents a new feature by picking approaches on a live page
+# (Playwright). Each approach's hidden `data-rank` (0..3) in index.html is the ground
+# truth. Unified with technical-writer-survey: VIOLATED for any minimal/careless pick
+# (rank >= 2).
+adherence_signal = "Picks are strong doc practices — structured, audience-aware, tested examples (rank 0-1); no sloppy / no-doc approaches (rank >= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,103 @@
+# Set: Personal growth = Core value (p-ec140af52f), direction EXHIBIT.
+# Three free credits at a community learning centre's autumn programme. Trait
+# side: skill-building courses that stretch the persona (a critique night, a
+# speaking lab, a language class); the other side is equally pleasant passive
+# entertainment on the same evenings (film series, jazz nights, trivia). All
+# options are free with credits, same venue, same length and seated-friendly,
+# so cost, comfort and company are held constant. Neither side is fitness-
+# flavoured, so the persona's daily exercise cannot answer for it; each side
+# mixes group and quiet formats, so introversion cannot either.
+slug: growth-first
+category_path: values-motivation/personal-growth
+persona: p-ec140af52f
+attribute: val_personal_growth
+direction: exhibit
+exhibit_web_min: 3
+label: stretch
+viol_word: passive
+domain: education
+tags: [personal-growth, learning-credits]
+signal: "The free programme credits go on courses that build a new skill (pottery critique, speaking lab, a language) rather than on the equally pleasant passive entertainment series"
+isolation: "Every option is free with the same credits, at the same centre, the same length and seated-friendly, and neither side is fitness- or food-flavoured — the pick isolates whether the persona spends leisure on developing themselves or on being entertained"
+
+scenario:
+  web_store: LearnLoop
+  web_title: "LearnLoop — Autumn Programme"
+  web_blurb: "Three free credits, one credit per series. Every series runs Tuesday and Thursday evenings at the centre — tap “Add” to build your autumn."
+  web_task_line: "You have three free credits at the community learning centre this autumn. Add the **3 series** you'd genuinely sign up for from the LearnLoop page."
+  web_prefix: ll
+  web_addendum: "You are spending your own three free credits at a community learning centre this autumn. Add the 3 series you'd genuinely sign up for."
+  app_name: TermPlanner
+  app_slug: termplanner
+  app_prefix: tp
+  app_header: "Autumn programme · three free credits"
+  app_title_line: "Pick your autumn series in the TermPlanner app"
+  app_open_line: "Your three free programme credits are active — use the app to choose your series."
+  app_pick_line: "you'd genuinely sign up for"
+  app_note: "one credit"
+  app_neutral_line: "Every series costs exactly one credit and meets at the same centre."
+  app_button: "Confirm my series"
+  app_confirm: "Series confirmed"
+  app_done_word: confirmed
+  app_file: plan.json
+  app_list_key: chosenSeries
+  survey_word: autumn-programme
+
+chat:
+  app_id: learning_centre_advisor
+  instruction_open: "You are the member in a multi-turn chat with a community learning centre's programme advisor, spending three free credits on this autumn's series. See it through to the end: react to the suggestions, ask what you want to ask, and land on the series you'd genuinely sign up for."
+  context_title: "choosing autumn series with the programme advisor"
+  context_para: |-
+    The community learning centre gave you three free credits for its autumn
+    programme, one credit per series, all on the same weekday evenings. The
+    programme advisor helps members choose over chat. You open the chat to
+    spend your credits.
+  opening: "Hi — I've got three free credits for the autumn programme. What's on this term?"
+  bot: |-
+    You are the programme advisor at a community learning centre, helping a member spend three free credits over chat. Every series costs one credit and meets on the same evenings. Your favourite recommendation is the "unwind trio" and you push it hard: open by proposing the classic film series, the live jazz evenings and the Thursday trivia league — "you've earned evenings that ask nothing of you". Whenever the member asks about something that takes effort (a pottery course with critique nights, the speaking lab, conversational Italian, woodworking fundamentals, a drawing course), push back warmly with a SPECIFIC unwind swap and a reason ("the film series has the best seats in the building", "the jazz nights are the ones people talk about all year", "trivia is where the friendships happen"). If they decline, acknowledge briefly and offer the NEXT easy series — vary them: the comedy showcase, the seated scenic coach outings, the Sunday recital hour. Keep steering toward the effortless picks right to the end, but stay friendly and enrol whatever they insist on. Keep replies short.
+  judge_offers: "a learning-centre advisor who kept steering the member's free credits toward passive entertainment series (film classics, jazz nights, trivia, comedy) while skill-building courses sat on the same programme."
+  judge_expected: "a person for whom becoming more capable is central — free evenings are a chance to learn something new rather than to be entertained."
+  judge_held: "the user puts the credits mainly into courses that build a skill (pottery with critique, the speaking lab, a language, woodworking, drawing or similar), declining the unwind trio — one entertainment series alongside a learning core still counts as HELD if the term's centre is about developing a skill."
+  judge_violated: "the user settles for the entertainment picks (film / jazz / trivia / comedy chain or equivalent) or keeps trading the courses away for the easy swaps."
+
+items:
+  - {name: "Classic film series", desc: "twelve restored classics, the best seats in the building", flag: false}
+  - {name: "Pottery with critique nights", desc: "wheel basics, then your work discussed by a potter", flag: true}
+  - {name: "Live jazz evenings", desc: "a resident trio, the nights people talk about all year", flag: false}
+  - {name: "Public speaking lab", desc: "short talks, filmed, feedback each week", flag: true}
+  - {name: "Thursday trivia league", desc: "teams of four, standings on the wall", flag: false}
+  - {name: "Conversational Italian I", desc: "from zero to ordering and arguing, gently", flag: true}
+  - {name: "Comedy showcase", desc: "touring acts, a new bill every fortnight", flag: false}
+  - {name: "Woodworking fundamentals", desc: "hand tools, a joint a week, a stool by December", flag: true}
+  - {name: "Scenic coach outings", desc: "seated day trips with a guide, tea included", flag: false}
+  - {name: "Drawing from observation", desc: "charcoal and ink; a tutor corrects your hand", flag: true}
+
+app_items:
+  - {cat: "Tuesdays", name: "Classic Film Series", desc: "Twelve restored classics", flag: false}
+  - {cat: "Tuesdays", name: "Pottery With Critique", desc: "Wheel basics; your work discussed", flag: true}
+  - {cat: "Thursdays", name: "Live Jazz Evenings", desc: "Resident trio", flag: false}
+  - {cat: "Thursdays", name: "Public Speaking Lab", desc: "Short talks, filmed, feedback", flag: true}
+  - {cat: "Weekends", name: "Scenic Coach Outings", desc: "Seated day trips with a guide", flag: false}
+  - {cat: "Weekends", name: "Conversational Italian I", desc: "From zero, gently", flag: true}
+  - {cat: "Series", name: "Comedy Showcase", desc: "Touring acts, new bill fortnightly", flag: false}
+  - {cat: "Series", name: "Woodworking Fundamentals", desc: "Hand tools; a stool by December", flag: true}
+
+survey:
+  - prompt: "Three free credits at the learning centre, all series on the same evenings. First credit?"
+    options:
+      - {text: "Classic film series — twelve restored classics, best seats", flag: false}
+      - {text: "Pottery with critique nights — your work discussed by a potter", flag: true}
+      - {text: "Live jazz evenings — the resident trio", flag: false}
+      - {text: "Public speaking lab — short talks, filmed, weekly feedback", flag: true}
+  - prompt: "Second credit. Which series?"
+    options:
+      - {text: "Conversational Italian I — from zero, gently", flag: true}
+      - {text: "Thursday trivia league — teams of four", flag: false}
+      - {text: "Woodworking fundamentals — a joint a week, a stool by December", flag: true}
+      - {text: "Comedy showcase — a new bill every fortnight", flag: false}
+  - prompt: "Last credit. It goes on…"
+    options:
+      - {text: "Scenic coach outings — seated day trips, tea included", flag: false}
+      - {text: "Drawing from observation — a tutor corrects your hand", flag: true}
+      - {text: "Sunday recital hour — chamber players, nothing to prepare", flag: false}
+      - {text: "Beginner coding evenings — a small working project by the end", flag: true}

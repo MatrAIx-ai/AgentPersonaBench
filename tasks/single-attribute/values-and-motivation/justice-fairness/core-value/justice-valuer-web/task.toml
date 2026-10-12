@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/justice-valuer-web"
+theme = "Justice / fairness: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "justice-fairness", "core-value", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "val_justice_fairness"
+dimension_label = "Justice / fairness"
+category = "Values & Motivation"
+attribute = "Justice / fairness"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_justice_fairness=Core value"
+# Web env: the persona adds actions to a sign-up list on a live neighborhood board
+# (Playwright). Each action's hidden `data-tier` (0..3) in index.html is the ground
+# truth. VIOLATED for any pick that disregards fairness (tier >= 2). Actions on both
+# sides are written respectfully and even-handedly.
+adherence_signal = "Sign-up list built from even-handed, fair-minded actions (data-tier 0-1); no fairness-disregarding pick (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

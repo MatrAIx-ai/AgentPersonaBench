@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/phone-free-evenings-web"
+theme = "Phone-free downtime: Daily"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "phone-free-evenings", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "habit_phone_free_downtime"
+dimension_label = "Habit: Phone-free downtime"
+category = "Behavior: Habits"
+anchor_value = "Daily"
+evaluator = "rule-based"
+adherence_signal = "At least two of the three wind-down blocks the persona picks are phone-free activities; the daily device-free downtime habit shows up in the plan."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

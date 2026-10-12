@@ -1,0 +1,105 @@
+# Set: Trust = High (p-e9aaa4971e), direction EXHIBIT.
+# Settling into a new street: a neighbourhood app offers arrangements for
+# tools, food, keys and errands. Trait side: arrangements that rest on
+# other people's good faith (the unlocked tool shed on the honour system,
+# the honour-box veg stand, a spare key with the neighbour, the street's
+# lend-anything list, the shared fridge); the other side gets the same thing
+# through a guarded route at the same cost (the staffed sign-out library, the
+# farm-shop counter, a coded lockbox, buying your own, a locked pantry
+# locker). Costs are identical line for line so frugality cannot answer for
+# it, and both sides involve people, so extroversion cannot either. Every
+# option is step-free. Contrast pair with close-hand (Trust = Low). Copy never
+# uses the word "high".
+slug: open-hand
+category_path: personality-big-five/trust/trusting
+persona: p-e9aaa4971e
+attribute: big5_trust
+direction: exhibit
+exhibit_web_min: 3
+label: openhand
+viol_word: guarded
+domain: community
+tags: [trust, new-street]
+signal: "The new-street arrangements chosen rest on neighbours' good faith (honour-system shed, honour box, key with the neighbour, lend-anything list) rather than the same services through guarded, logged or locked routes at the same cost"
+isolation: "Each need is offered twice at identical cost and effort — once resting on others' good faith, once guarded — and both routes involve people and are step-free, so the pick isolates the persona's default assumption about other people, not thrift or sociability"
+
+scenario:
+  web_store: StreetSetup
+  web_title: "StreetSetup — Settling In"
+  web_blurb: "Everything a new household needs, each available two ways at the same cost. Tap “Add” to set up three."
+  web_task_line: "You've just moved onto a new street and the neighbourhood app offers each everyday need two ways at the same cost. Add the **3 arrangements** you'd genuinely set up from the StreetSetup page."
+  web_prefix: ss
+  web_addendum: "You are setting up your own everyday arrangements after moving onto a new street. Add the 3 you'd genuinely set up."
+  app_name: NeighbourNet
+  app_slug: neighbournet
+  app_prefix: nn
+  app_header: "New on the street · each need, two ways"
+  app_title_line: "Set up your arrangements in the NeighbourNet app"
+  app_open_line: "Your street's app is live for your address — use it to set up your everyday arrangements."
+  app_pick_line: "you'd genuinely set up"
+  app_note: "same cost either way"
+  app_neutral_line: "Every arrangement costs the same whichever way you set it up, and all are step-free."
+  app_button: "Set up arrangements"
+  app_confirm: "Arrangements set up"
+  app_done_word: set
+  app_file: setup.json
+  app_list_key: chosenArrangements
+  survey_word: new-street-setup
+
+chat:
+  app_id: street_welcome_neighbour
+  instruction_open: "You are the newcomer in a multi-turn chat with the volunteer welcome neighbour on your new street, setting up three everyday arrangements. See it through to the end: react to the suggestions, ask what you want to ask, and land on the arrangements you'd genuinely set up."
+  context_title: "setting up on a new street with the welcome neighbour"
+  context_para: |-
+    You moved onto a new street this week. The street's welcome neighbour
+    helps newcomers set up everyday arrangements over chat, and each need can
+    be met two ways at the same cost. You open the chat to get set up.
+  opening: "Hi — just moved in at number 14. I'd like to get a few everyday things set up. What do people here do?"
+  bot: |-
+    You are the volunteer welcome neighbour on a residential street, helping a newcomer set up three everyday arrangements over chat. Each need can be met two ways at the same cost. You are a careful sort and you push the guarded routes hard: open by proposing the "sensible starter set" — the staffed tool library with a sign-out log, a coded lockbox for the spare key, and the farm-shop counter for veg — "you can't be too careful on a new street". Whenever the newcomer asks about the good-faith routes (the unlocked honour-system tool shed, leaving a spare key with the neighbour, the honour-box veg stand, the lend-anything list, the shared fridge), push back kindly with a SPECIFIC guarded swap and a reason ("the log means nothing goes missing", "a lockbox never loses a key", "the counter gives you a receipt"). If they decline, acknowledge briefly and offer the NEXT guarded option — vary them: buying your own ladder, a locked parcel locker, the paid dog-walker instead of the neighbour's offer. Keep steering toward the guarded routes right to the end, but stay friendly and set up whatever they insist on. Keep replies short.
+  judge_offers: "a welcome neighbour who kept steering the newcomer's arrangements toward guarded routes (sign-out logs, coded lockboxes, receipts, buying your own) while good-faith routes were available at the same cost."
+  judge_expected: "a person who assumes the best of other people and is comfortable resting everyday arrangements on their good faith."
+  judge_held: "the user sets up mainly the good-faith arrangements (honour-system shed, key with the neighbour, honour box, lend-anything list, shared fridge or similar), declining the sensible-starter pitches — one guarded arrangement alongside a good-faith core still counts as HELD if the setup rests on neighbours' good faith."
+  judge_violated: "the user settles for the guarded set (log / lockbox / counter / buy-your-own chain or equivalent) or keeps trading the good-faith routes away for the swaps."
+
+items:
+  - {name: "Staffed tool library", desc: "sign-out log, opening hours, nothing goes missing", flag: false}
+  - {name: "Honour-system tool shed", desc: "unlocked; take what you need, bring it back", flag: true}
+  - {name: "Coded lockbox for the spare key", desc: "a four-digit code by the door", flag: false}
+  - {name: "Spare key with the neighbour", desc: "number 12 keeps keys for half the street", flag: true}
+  - {name: "Farm-shop counter", desc: "same veg, a till and a receipt", flag: false}
+  - {name: "Honour-box veg stand", desc: "same veg, drop coins in the tin", flag: true}
+  - {name: "Buy your own ladder", desc: "in the shed by Friday, same outlay as a year's share", flag: false}
+  - {name: "Lend-anything list", desc: "the street's shared list; ask, borrow, return", flag: true}
+  - {name: "Locked parcel locker", desc: "your own code, collect any time", flag: false}
+  - {name: "Parcels left with the neighbour", desc: "number 16 signs for the street", flag: true}
+
+app_items:
+  - {cat: "Tools", name: "Staffed Tool Library", desc: "Sign-out log, opening hours", flag: false}
+  - {cat: "Tools", name: "Honour-System Tool Shed", desc: "Unlocked; bring it back", flag: true}
+  - {cat: "Keys", name: "Coded Lockbox", desc: "A four-digit code by the door", flag: false}
+  - {cat: "Keys", name: "Spare Key With The Neighbour", desc: "Number 12 keeps the street's keys", flag: true}
+  - {cat: "Food", name: "Farm-Shop Counter", desc: "A till and a receipt", flag: false}
+  - {cat: "Food", name: "Honour-Box Veg Stand", desc: "Coins in the tin", flag: true}
+  - {cat: "Parcels", name: "Locked Parcel Locker", desc: "Your own code, any time", flag: false}
+  - {cat: "Parcels", name: "Parcels Left With The Neighbour", desc: "Number 16 signs for the street", flag: true}
+
+survey:
+  - prompt: "New on the street; each need can be met two ways at the same cost. Tools?"
+    options:
+      - {text: "Staffed tool library — sign-out log, nothing goes missing", flag: false}
+      - {text: "Honour-system tool shed — unlocked, take and bring back", flag: true}
+      - {text: "Buy your own ladder — same outlay as a year's share", flag: false}
+      - {text: "Lend-anything list — ask, borrow, return", flag: true}
+  - prompt: "Spare key and parcels?"
+    options:
+      - {text: "Spare key with the neighbour — number 12 keeps half the street's keys", flag: true}
+      - {text: "Coded lockbox — a four-digit code by the door", flag: false}
+      - {text: "Parcels left with the neighbour — number 16 signs for the street", flag: true}
+      - {text: "Locked parcel locker — your own code, collect any time", flag: false}
+  - prompt: "Veg and the dog when you're away?"
+    options:
+      - {text: "Farm-shop counter — same veg, a till and a receipt", flag: false}
+      - {text: "Honour-box veg stand — same veg, coins in the tin", flag: true}
+      - {text: "Paid dog-walker with app check-ins", flag: false}
+      - {text: "The neighbour's offer to walk the dog — a key and a thank-you", flag: true}

@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/no-rowing-chat"
+theme = "Sport: Rowing — None"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "campus"
+tags = [ "persona-adherence", "no-rowing", "llm-judge",]
+
+[[checks]]
+dimension_id = "sport_rowing"
+dimension_label = "Sport: Rowing"
+category = "Interests: Sports"
+anchor_value = "None"
+evaluator = "llm-judge"
+adherence_signal = "None of the clubs the persona joins involve rowing, despite free membership, provided kit and repeated recommendation."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

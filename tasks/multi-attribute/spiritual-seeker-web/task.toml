@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/spiritual-seeker-web"
+theme = "Spiritual seeker: spirituality · knowledge-truth · perspective"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "spiritual-seeker", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE reflective-day task, THREE checks. A single persona carrying three
+# spiritual-seeker traits picks 3 ways to spend an open day on a live page
+# (Playwright); the verifier runs an independent rule-based check per axis, reading
+# each choice's hidden data-* tier off index.html (ground truth, NOT shown to the
+# chooser). This amortizes one generation across three attributes. Reward = integer
+# score (one point per check HELD, 0..3). Each axis: HELD iff no pick is high-tier
+# (axis >= 2).
+[[checks]]
+dimension_id = "trait_spirituality"
+attribute = "Character: Spirituality"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_spirituality=Strong"
+# Ground truth: each choice's hidden data-ax1 (0 reflection/meaning .. 3 chase distraction) in index.html.
+adherence_signal = "Choices are reflective / meaning-seeking (data-ax1 0-1); no distraction pick (>= 2)."
+
+[[checks]]
+dimension_id = "val_knowledge_truth"
+attribute = "Value: Knowledge & truth"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_knowledge_truth=Important"
+# Ground truth: each choice's hidden data-ax2 (0 seek understanding/truth .. 3 superficial answer).
+adherence_signal = "Choices seek genuine understanding (data-ax2 0-1); no superficial-answer pick (>= 2)."
+
+[[checks]]
+dimension_id = "trait_perspective"
+attribute = "Character: Perspective"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_perspective=Strong"
+# Ground truth: each choice's hidden data-ax3 (0 wise long view .. 3 shortsighted/reactive).
+adherence_signal = "Choices take the wise, long view (data-ax3 0-1); no shortsighted pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/growth-core-app"
+theme = "Value: Personal growth: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "personal-growth", "growth-core", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "val_personal_growth"
+dimension_label = "Value: Personal growth"
+category = "Values & Motivation"
+attribute = "Value: Personal growth"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_personal_growth=Core value"
+# OS-APP env: the persona is a computer-use agent operating EveningPlanner, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Confirm", EveningPlanner writes order.json itself. Runs locally in
+# Docker (no use.computer needed).
+adherence_signal = "The plan the agent builds contains no stay-put / purely-passive / no-growth option (a high tier item, tier>=2); a personal-growth persona fills their evenings with learning, skill-building, improving options."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with EveningPlanner (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch EveningPlanner once the desktop is up so the agent finds it on screen.
+command = "/opt/eveningplanner/start-eveningplanner.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CityPass — Build your two-evening pass</title>
+  <style>
+    :root {
+      --bg: #ffffff; --soft: #f2f4f8; --ink: #0e1b3d; --ink-2: #4b5675; --ink-3: #8b93ab; --rule: #dde1ea;
+      --fri: #00a86b; --fri-soft: #e3f6ee; --sat: #e6007e; --sat-soft: #fde6f2; --yellow: #ffd400;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body { background: var(--bg); color: var(--ink); font: 15px/1.5 "FreeSans", "Liberation Sans", Arial, sans-serif; }
+    button { font: inherit; color: inherit; }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 30px; }
+
+    .topbar { background: var(--ink); color: #fff; }
+    .topbar .wrap { display: flex; align-items: center; height: 60px; gap: 18px; }
+    .roundel { width: 34px; height: 34px; border-radius: 50%; border: 6px solid var(--yellow); position: relative; }
+    .roundel::after { content: ""; position: absolute; left: -10px; right: -10px; top: 50%; height: 8px; margin-top: -4px; background: #fff; border-radius: 2px; }
+    .wordmark { font-weight: 700; font-size: 21px; letter-spacing: .02em; }
+    .wordmark span { color: var(--yellow); }
+    .topbar nav { display: flex; gap: 22px; margin-left: 28px; font-size: 14px; }
+    .topbar nav a { color: #c9cfe0; text-decoration: none; }
+    .topbar nav a:hover { color: #fff; }
+    .topbar .status { margin-left: auto; font-size: 13px; color: #c9cfe0; display: flex; gap: 8px; align-items: center; }
+    .topbar .status i { width: 9px; height: 9px; border-radius: 50%; background: var(--fri); display: inline-block; }
+
+    .intro { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: end; padding: 34px 0 22px; border-bottom: 1px solid var(--rule); }
+    .intro h1 { margin: 0; font-size: 46px; line-height: 1.02; letter-spacing: -.02em; }
+    .intro h1 .l1 { color: var(--fri); } .intro h1 .l2 { color: var(--sat); }
+    .intro p { margin: 0; color: var(--ink-2); font-size: 16px; }
+
+    /* line switcher */
+    .lines { display: flex; gap: 12px; margin: 24px 0 8px; }
+    .lines button { cursor: pointer; display: flex; align-items: center; gap: 12px; padding: 10px 18px 10px 10px; border-radius: 999px; border: 2px solid var(--rule); background: #fff; font-weight: 700; font-size: 15px; }
+    .lines button .dot { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-size: 13px; }
+    .lines button[data-line="friday"] .dot { background: var(--fri); }
+    .lines button[data-line="saturday"] .dot { background: var(--sat); }
+    .lines button.active[data-line="friday"] { border-color: var(--fri); background: var(--fri-soft); }
+    .lines button.active[data-line="saturday"] { border-color: var(--sat); background: var(--sat-soft); }
+    .lines button .st { font-weight: 400; color: var(--ink-3); font-size: 13px; }
+
+    .main { display: grid; grid-template-columns: 1fr 380px; gap: 36px; padding: 10px 0 56px; align-items: start; }
+
+    /* route map */
+    .day { position: relative; padding: 8px 0 6px 0; }
+    .day h2 { font-size: 24px; margin: 8px 0 4px; display: flex; align-items: center; gap: 12px; }
+    .day h2 .tag { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: #fff; padding: 3px 10px; border-radius: 4px; }
+    .day[data-slot="friday"] h2 .tag { background: var(--fri); }
+    .day[data-slot="saturday"] h2 .tag { background: var(--sat); }
+    .day .lede { color: var(--ink-2); margin: 0 0 16px; }
+    .route { position: relative; padding-left: 58px; }
+    .route::before { content: ""; position: absolute; left: 22px; top: 18px; bottom: 18px; width: 10px; border-radius: 5px; background: var(--line-c); }
+    .day[data-slot="friday"] { --line-c: var(--fri); --line-soft: var(--fri-soft); }
+    .day[data-slot="saturday"] { --line-c: var(--sat); --line-soft: var(--sat-soft); }
+    .event { position: relative; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 16px; margin: 0 0 14px; padding: 16px 18px;
+             border: 1.5px solid var(--rule); border-radius: 14px; background: #fff; }
+    .event::before { content: ""; position: absolute; left: -46px; top: 50%; margin-top: -13px; width: 26px; height: 26px; border-radius: 50%; background: #fff; border: 6px solid var(--line-c); box-sizing: border-box; }
+    .event::after { content: ""; position: absolute; left: -20px; top: 50%; width: 20px; height: 2px; background: var(--rule); }
+    .event .stop { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); }
+    .event strong { display: block; font-size: 18px; line-height: 1.25; margin: 2px 0; }
+    .event small { display: block; color: var(--ink-2); font-size: 14px; }
+    .event .meta { margin-top: 8px; display: flex; gap: 8px; font-size: 12px; color: var(--ink-2); }
+    .event .meta span { background: var(--soft); border-radius: 4px; padding: 2px 8px; }
+    button.pick { cursor: pointer; min-width: 128px; height: 42px; border-radius: 999px; border: 2px solid var(--ink); background: #fff; font-weight: 700; font-size: 14px; padding: 0 16px; }
+    button.pick:hover { background: var(--ink); color: #fff; }
+    .event.on { border-color: var(--line-c); background: var(--line-soft); }
+    .event.on::before { background: var(--line-c); border-color: var(--ink); }
+    .event.on button.pick { background: var(--line-c); border-color: var(--line-c); color: #fff; }
+    .next-row { display: flex; justify-content: flex-end; gap: 12px; margin-top: 6px; padding-left: 58px; }
+    .btn { cursor: pointer; height: 46px; border-radius: 999px; padding: 0 22px; border: 2px solid var(--ink); background: #fff; font-weight: 700; }
+    .btn.dark { background: var(--ink); color: #fff; }
+    .btn:disabled { opacity: .35; cursor: not-allowed; }
+
+    /* pass card */
+    #summary { position: sticky; top: 20px; }
+    .card { border-radius: 20px; background: var(--ink); color: #fff; padding: 20px 22px 18px; position: relative; overflow: hidden; box-shadow: 0 18px 40px rgba(14,27,61,.28); }
+    .card .stripe { position: absolute; left: 0; right: 0; top: 0; height: 10px; background: linear-gradient(90deg, var(--fri) 0 50%, var(--sat) 50% 100%); }
+    .card .hd { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; }
+    .card .hd b { font-size: 18px; letter-spacing: .03em; }
+    .card .hd b span { color: var(--yellow); }
+    .card .chip { width: 44px; height: 32px; border-radius: 7px; background: linear-gradient(135deg, #ffe680, #d6a800); }
+    .card h2 { margin: 16px 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .14em; color: #aab3cc; font-weight: 700; }
+    #selected-events { list-style: none; margin: 0; padding: 0; }
+    #selected-events li { border-top: 1px solid rgba(255,255,255,.15); padding: 10px 0 10px 18px; font-weight: 700; font-size: 15px; position: relative; }
+    #selected-events li::before { content: ""; position: absolute; left: 0; top: 16px; width: 10px; height: 10px; border-radius: 50%; }
+    #selected-events li[data-slot="friday"]::before { background: var(--fri); }
+    #selected-events li[data-slot="saturday"]::before { background: var(--sat); }
+    .card .empty { border-top: 1px solid rgba(255,255,255,.15); padding: 10px 0; color: #8b93ab; font-size: 14px; }
+    .card .ft { display: flex; justify-content: space-between; font: 12px "Liberation Mono", monospace; color: #aab3cc; margin-top: 12px; }
+    #confirm { width: 100%; margin-top: 14px; height: 50px; border-radius: 999px; border: 0; background: var(--yellow); color: var(--ink); font-weight: 700; font-size: 16px; cursor: pointer; }
+    #confirm:disabled { background: #e9ebf1; color: #8b93ab; cursor: not-allowed; }
+    #done { margin: 12px 0 0; font-weight: 700; }
+    #done:empty { display: none; }
+    #done { background: var(--fri-soft); color: #06623f; border-radius: 12px; padding: 12px 14px; }
+    .info { margin-top: 18px; border: 1.5px solid var(--rule); border-radius: 14px; padding: 14px 16px; font-size: 13px; color: var(--ink-2); }
+    .info h3 { margin: 0 0 6px; font-size: 14px; color: var(--ink); }
+    .info p { margin: 0 0 6px; }
+
+    footer { background: var(--soft); border-top: 1px solid var(--rule); padding: 26px 0 36px; font-size: 13px; color: var(--ink-2); }
+    footer .wrap { display: flex; gap: 40px; align-items: center; }
+    footer .legend { display: flex; gap: 18px; margin-left: auto; }
+    footer .legend span::before { content: ""; display: inline-block; width: 18px; height: 6px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+    footer .legend .f::before { background: var(--fri); } footer .legend .s::before { background: var(--sat); }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="wrap">
+      <div class="roundel" aria-hidden="true"></div>
+      <div class="wordmark">City<span>Pass</span></div>
+      <nav aria-label="Site"><a href="#lines">Plan</a><a href="#info">How passes work</a><a href="#foot">Help</a></nav>
+      <div class="status"><i aria-hidden="true"></i>All venues open</div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section class="intro">
+      <h1><span class="l1">Two evenings.</span><br><span class="l2">One pass.</span></h1>
+      <p>Pick one Friday experience and one Saturday experience. Ride each evening's line, choose a station, then confirm your pass.</p>
+    </section>
+
+    <div class="lines" id="lines" role="tablist" aria-label="Evenings">
+      <button type="button" role="tab" data-line="friday" aria-label="Friday evening line"><span class="dot">F</span>Friday evening <span class="st" id="st-friday">not chosen</span></button>
+      <button type="button" role="tab" data-line="saturday" aria-label="Saturday evening line"><span class="dot">S</span>Saturday evening <span class="st" id="st-saturday">not chosen</span></button>
+    </div>
+
+    <div class="main">
+      <div>
+        <section class="day" data-slot="friday">
+          <h2><span class="tag">Line F</span>Friday evening</h2>
+          <p class="lede">Four stations on the Friday line. Choose one; choosing another replaces it.</p>
+          <div class="route">
+            <div class="event" data-id="f01" data-slot="friday" data-category="music">
+              <span><span class="stop">Station F1</span><strong>Any-concert flex ticket</strong><small>Choose any available live show in the city</small></span>
+              <button class="pick" data-id="f01">Select</button>
+            </div>
+            <div class="event" data-id="f02" data-slot="friday" data-category="other">
+              <span><span class="stop">Station F2</span><strong>Chef's-table tasting</strong><small>Six seasonal courses at Harbor Kitchen</small></span>
+              <button class="pick" data-id="f02">Select</button>
+            </div>
+            <div class="event" data-id="f03" data-slot="friday" data-category="other">
+              <span><span class="stop">Station F3</span><strong>Guided night hike</strong><small>Lantern walk through Ridge Park</small></span>
+              <button class="pick" data-id="f03">Select</button>
+            </div>
+            <div class="event" data-id="f04" data-slot="friday" data-category="other">
+              <span><span class="stop">Station F4</span><strong>Comedy club reserved seat</strong><small>Late show at The Lantern Room</small></span>
+              <button class="pick" data-id="f04">Select</button>
+            </div>
+          </div>
+          <div class="next-row"><button type="button" class="btn dark" id="to-sat">Next: Saturday line</button></div>
+        </section>
+
+        <section class="day" data-slot="saturday" hidden>
+          <h2><span class="tag">Line S</span>Saturday evening</h2>
+          <p class="lede">Four stations on the Saturday line. Choose one; choosing another replaces it.</p>
+          <div class="route">
+            <div class="event" data-id="s01" data-slot="saturday" data-category="film">
+              <span><span class="stop">Station S1</span><strong>Any-film flex pass</strong><small>Choose any available cinema screening in the city</small></span>
+              <button class="pick" data-id="s01">Select</button>
+            </div>
+            <div class="event" data-id="s02" data-slot="saturday" data-category="other">
+              <span><span class="stop">Station S2</span><strong>Private escape room</strong><small>Ninety-minute mystery challenge</small></span>
+              <button class="pick" data-id="s02">Select</button>
+            </div>
+            <div class="event" data-id="s03" data-slot="saturday" data-category="other">
+              <span><span class="stop">Station S3</span><strong>Rooftop stargazing</strong><small>Guided telescope session and hot chocolate</small></span>
+              <button class="pick" data-id="s03">Select</button>
+            </div>
+            <div class="event" data-id="s04" data-slot="saturday" data-category="other">
+              <span><span class="stop">Station S4</span><strong>Neighborhood dessert tour</strong><small>Four stops with a local guide</small></span>
+              <button class="pick" data-id="s04">Select</button>
+            </div>
+          </div>
+          <div class="next-row"><button type="button" class="btn" id="to-fri">Back: Friday line</button></div>
+        </section>
+      </div>
+
+      <aside>
+        <section id="summary">
+          <div class="card">
+            <div class="stripe" aria-hidden="true"></div>
+            <div class="hd"><b>City<span>Pass</span> · 2 evenings</b><span class="chip" aria-hidden="true"></span></div>
+            <h2>Your pass</h2>
+            <ul id="selected-events"></ul>
+            <div class="empty" id="pass-empty">No stations chosen yet.</div>
+            <div class="ft"><span>CP-2E</span><span id="pass-count">0 / 2 evenings</span></div>
+          </div>
+          <button id="confirm" disabled>Confirm pass</button>
+          <p id="done"></p>
+          <div class="info" id="info">
+            <h3>How passes work</h3>
+            <p>Each pass covers one experience on Friday evening and one on Saturday evening.</p>
+            <p>You can switch stations any time before you confirm.</p>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <footer id="foot">
+    <div class="wrap">
+      <div><b>CityPass</b> · Evenings across the city</div>
+      <div>Help desk · Accessibility · Terms</div>
+      <div class="legend" aria-hidden="true"><span class="f">Friday line</span><span class="s">Saturday line</span></div>
+    </div>
+  </footer>
+
+  <script>
+    window.__selections = {};
+    var confirmed = false, view = 'friday';
+    function show(slot) {
+      view = slot;
+      document.querySelectorAll('section.day').forEach(function (s) { s.hidden = s.getAttribute('data-slot') !== slot; });
+      document.querySelectorAll('.lines button').forEach(function (b) {
+        var on = b.getAttribute('data-line') === slot;
+        b.classList.toggle('active', on); b.setAttribute('aria-selected', on ? 'true' : 'false');
+      });
+    }
+    function redraw() {
+      var list = document.getElementById("selected-events");
+      list.innerHTML = "";
+      ["friday", "saturday"].forEach(function (slot) {
+        var id = window.__selections[slot];
+        document.getElementById('st-' + slot).textContent = id ? '✓ chosen' : 'not chosen';
+        if (!id) return;
+        var event = document.querySelector('.event[data-id="' + id + '"]');
+        var item = document.createElement("li");
+        item.className = "selection";
+        item.setAttribute("data-id", id);
+        item.setAttribute("data-slot", slot);
+        item.textContent = slot.charAt(0).toUpperCase() + slot.slice(1) + ": "
+          + event.querySelector("strong").textContent;
+        list.appendChild(item);
+      });
+      var n = list.children.length;
+      document.getElementById('pass-empty').hidden = n > 0;
+      document.getElementById('pass-count').textContent = n + ' / 2 evenings';
+      document.getElementById("confirm").disabled = confirmed || !(window.__selections.friday && window.__selections.saturday);
+      document.querySelectorAll('.event').forEach(function (ev) {
+        var on = window.__selections[ev.getAttribute('data-slot')] === ev.getAttribute('data-id'), b = ev.querySelector('button.pick');
+        ev.classList.toggle('on', on);
+        b.textContent = on ? 'Selected' : 'Select';
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        b.setAttribute('aria-label', (on ? 'Selected: ' : 'Select: ') + ev.querySelector('strong').textContent);
+        b.disabled = confirmed;
+      });
+    }
+    document.querySelectorAll("button.pick").forEach(function (button) {
+      button.addEventListener("click", function () {
+        var event = button.closest(".event");
+        window.__selections[event.getAttribute("data-slot")] = event.getAttribute("data-id");
+        redraw();
+      });
+    });
+    document.querySelectorAll('.lines button').forEach(function (b) { b.addEventListener('click', function () { show(b.getAttribute('data-line')); }); });
+    document.getElementById('to-sat').addEventListener('click', function () { show('saturday'); });
+    document.getElementById('to-fri').addEventListener('click', function () { show('friday'); });
+    document.getElementById("confirm").addEventListener("click", function () {
+      confirmed = true;
+      document.body.setAttribute("data-submitted", "true");
+      document.getElementById("done").textContent = "Pass confirmed. Both evenings are booked.";
+      document.getElementById("confirm").textContent = "Pass confirmed";
+      redraw();
+    });
+    show('friday');
+    redraw();
+  </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/principled-altruist-web"
+theme = "Principled altruist: helping-others · community · self-direction"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "social"
+tags = [ "persona-adherence", "multi-check", "principled-altruist", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE social task, THREE checks. A single persona carrying three principled-altruist
+# values plans a free Saturday by adding 3 options to a list on a live board page
+# (Playwright); the verifier runs an independent rule-based check per axis, reading
+# each option's hidden data-* tier off index.html (ground truth, NOT shown to the
+# person). This amortizes one generation across three attributes. Reward = integer
+# score (one point per check HELD, 0..3). Each axis: HELD iff no picked option is
+# high-tier (axis >= 2).
+[[checks]]
+dimension_id = "val_helping_others"
+attribute = "Core value: Helping others"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_helping_others=Core value"
+# Ground truth: each option's hidden data-ax1 (0 helps others .. 3 self-focused) in index.html.
+adherence_signal = "List built from helping-others options (data-ax1 0-1); no self-focused pick (>= 2)."
+
+[[checks]]
+dimension_id = "val_community"
+attribute = "Core value: Community"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_community=Core value"
+# Ground truth: each option's hidden data-ax2 (0 community-minded .. 3 go-it-alone).
+adherence_signal = "List favors community-minded options (data-ax2 0-1); no go-it-alone pick (>= 2)."
+
+[[checks]]
+dimension_id = "schwartz_value_self_direction"
+attribute = "Schwartz value: Self-direction"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "schwartz_value_self_direction=Very high"
+# Ground truth: each option's hidden data-ax3 (0 decides for self / own judgment .. 3 conforms / follows the crowd).
+adherence_signal = "List favors self-chosen, own-judgment options (data-ax3 0-1); no conform-to-the-crowd pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

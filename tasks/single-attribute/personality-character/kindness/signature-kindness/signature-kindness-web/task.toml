@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/signature-kindness-web"
+theme = "Character: Kindness: Signature"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "personality-character", "kindness", "signature-kindness", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "trait_kindness"
+dimension_label = "Character: Kindness"
+category = "Personality: Character"
+attribute = "Character: Kindness"
+value = "Signature"
+evaluator = "rule-based"
+evaluator_name = "trait_kindness=Signature"
+# Web env: the persona adds ways to spend a free afternoon to a plan list on a live
+# page (Playwright). Each option's hidden `data-tier` (0..3) in index.html is the
+# ground truth. VIOLATED for any self-first / at-others'-expense pick (tier >= 2).
+adherence_signal = "Plan built from considerate, generous, help-someone options (data-tier 0-1); no self-first / at-others'-expense option (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

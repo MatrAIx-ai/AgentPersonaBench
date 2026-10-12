@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harborlight Resort Planner</title>
+<style>
+  :root{
+    --bg:#f7f5f0; --card:#ffffff; --ink:#23262b; --soft:#6c6f75; --hair:#e6e1d6;
+    --gold:#c38a2c; --gold-soft:#f6ecd9; --slate:#3f5566; --slate-soft:#e9eef1;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:"Liberation Sans","Nimbus Sans","DejaVu Sans",Arial,sans-serif;font-size:15px;line-height:1.5}
+  button{font:inherit;color:inherit}
+
+  .top{height:68px;background:var(--card);border-bottom:1px solid var(--hair)}
+  .top .in{max-width:1180px;margin:0 auto;height:100%;display:flex;align-items:center;padding:0 32px;gap:26px}
+  .mark{display:flex;align-items:center;gap:12px}
+  .mark .wm{font-family:"URW Palladio L","P052","Palatino Linotype","DejaVu Serif",serif;font-size:23px;letter-spacing:.02em}
+  .mark .wm b{font-weight:400;color:var(--gold)}
+  .mark .sub{font-size:10px;letter-spacing:.34em;color:var(--soft);display:block;margin-top:-4px}
+  .top nav{display:flex;gap:22px;font-size:14px;color:var(--soft);margin-left:18px}
+  .top nav span.on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--gold);padding-bottom:22px;margin-bottom:-24px}
+  .booking{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--soft)}
+  .booking .chip{background:var(--slate-soft);color:var(--slate);border-radius:6px;padding:5px 10px;font-weight:600;letter-spacing:.04em;font-family:"Liberation Mono","DejaVu Sans Mono",monospace;font-size:12px}
+
+  .band{background:linear-gradient(100deg,#2f4252 0%,#3f5566 55%,#5a6f7d 100%);color:#fff;position:relative;overflow:hidden}
+  .band .in{max-width:1180px;margin:0 auto;padding:30px 32px 30px;position:relative;z-index:1}
+  .band h1{font-family:"URW Palladio L","P052","DejaVu Serif",serif;font-weight:400;font-size:34px;margin:0 0 6px;letter-spacing:.01em}
+  .band p{margin:0;color:#dfe7ec;max-width:640px}
+  .band svg.beam{position:absolute;right:0;top:0;height:100%;width:520px;opacity:.9}
+  .facts{display:flex;gap:26px;margin-top:16px;font-size:13px;color:#cfdbe2}
+  .facts b{color:#fff;font-weight:600;display:block;font-size:14px}
+
+  .layout{max-width:1180px;margin:0 auto;padding:28px 32px 60px;display:grid;grid-template-columns:260px 1fr;gap:34px}
+  .rail{align-self:start;position:sticky;top:18px}
+  .rail h3{font-size:11px;letter-spacing:.26em;color:var(--soft);margin:0 0 12px;font-weight:700}
+  .rail .ol{list-style:none;margin:0;padding:0;position:relative}
+  .rail .ol::before{content:"";position:absolute;left:15px;top:18px;bottom:18px;width:1px;background:var(--hair)}
+  .rail .li{position:relative;margin:0 0 6px}
+  .stepbtn{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:transparent;border:0;border-radius:10px;padding:8px 8px 8px 0;cursor:pointer}
+  .stepbtn:disabled{cursor:default}
+  .stepbtn .n{position:relative;z-index:1;width:31px;height:31px;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--bg);border:1px solid var(--hair);font-size:13px;font-weight:700;color:var(--soft)}
+  .stepbtn .t{font-size:14px;color:var(--soft)}
+  .stepbtn .t small{display:block;font-size:12px;color:#9a9ca1;max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .stepbtn.cur .n{background:var(--ink);border-color:var(--ink);color:#fff}
+  .stepbtn.cur .t{color:var(--ink);font-weight:600}
+  .stepbtn.ok .n{background:var(--gold-soft);border-color:var(--gold);color:var(--gold)}
+  .desk{margin-top:22px;background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:14px 16px;font-size:13px;color:var(--soft)}
+  .desk b{color:var(--ink)}
+
+  .panel{background:var(--card);border:1px solid var(--hair);border-radius:16px;padding:28px 30px 24px;min-height:460px;display:flex;flex-direction:column}
+  .question{display:none}
+  .question.show{display:block}
+  .kick{font-size:11px;letter-spacing:.26em;color:var(--gold);font-weight:700}
+  .question h2{font-family:"URW Palladio L","P052","DejaVu Serif",serif;font-weight:400;font-size:28px;margin:4px 0 4px}
+  .question .lead{margin:0 0 18px;color:var(--soft);font-size:14px}
+  .choices{display:flex;flex-direction:column;gap:10px}
+  .choice{display:flex;align-items:center;gap:16px;width:100%;text-align:left;background:var(--card);border:1px solid var(--hair);border-radius:12px;padding:15px 18px;cursor:pointer;font-size:15px;transition:border-color .12s,background .12s}
+  .choice:hover{border-color:#c9c1b0;background:#fcfbf8}
+  .choice .radio{width:20px;height:20px;border-radius:50%;border:1.5px solid #b9b3a6;flex:none;position:relative}
+  .choice .lt{width:26px;flex:none;font-family:"URW Palladio L","P052","DejaVu Serif",serif;color:var(--soft);font-size:17px}
+  .choice.selected{border-color:var(--gold);background:var(--gold-soft)}
+  .choice.selected .radio{border-color:var(--gold)}
+  .choice.selected .radio::after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--gold)}
+  .choice:disabled{cursor:default}
+
+  .review{display:none}
+  .review.show{display:block}
+  .sumrow{display:grid;grid-template-columns:170px 1fr auto;gap:16px;align-items:center;padding:14px 0;border-bottom:1px solid var(--hair)}
+  .sumrow .k{font-size:12px;letter-spacing:.16em;color:var(--soft);font-weight:700;text-transform:uppercase}
+  .sumrow .v{font-size:15px}
+  .sumrow .v.none{color:#b0563a}
+  .link{background:transparent;border:0;color:var(--slate);text-decoration:underline;cursor:pointer;font-size:14px}
+  .done{display:none;margin-top:18px;background:var(--slate-soft);border-radius:12px;padding:16px 18px;color:var(--slate)}
+  .done.show{display:flex;gap:14px;align-items:center}
+
+  .nav{margin-top:auto;padding-top:24px;display:flex;align-items:center;gap:12px}
+  #status{font-size:13px;color:var(--soft);margin-right:auto}
+  .btn{border-radius:10px;padding:11px 20px;font-weight:600;cursor:pointer;border:1px solid var(--hair);background:var(--card)}
+  .btn:hover{border-color:#c9c1b0}
+  .btn.pri{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .btn.pri:hover{background:#000}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  #submit{background:var(--gold);border-color:var(--gold);color:#fff}
+  .hide{display:none!important}
+
+  footer.site{border-top:1px solid var(--hair);background:var(--card)}
+  footer.site .in{max-width:1180px;margin:0 auto;padding:22px 32px;display:flex;gap:34px;font-size:13px;color:var(--soft)}
+  footer.site .in span:first-child{font-family:"URW Palladio L","P052","DejaVu Serif",serif;color:var(--ink);font-size:15px}
+</style>
+</head>
+<body>
+  <div class="top"><div class="in">
+    <div class="mark" aria-label="Harborlight">
+      <svg width="34" height="40" viewBox="0 0 34 40" aria-hidden="true">
+        <path d="M17 3 L22 12 L12 12 Z" fill="#c38a2c"/>
+        <path d="M13 13 L21 13 L24 36 L10 36 Z" fill="#23262b"/>
+        <rect x="11.6" y="20" width="10.8" height="3" fill="#f7f5f0"/>
+        <rect x="10.8" y="27" width="12.4" height="3" fill="#f7f5f0"/>
+        <path d="M6 37 H28" stroke="#3f5566" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span><span class="wm">Harbor<b>light</b></span><span class="sub">RESORT &amp; HARBOUR</span></span>
+    </div>
+    <nav aria-hidden="true"><span>Your stay</span><span class="on">Planner</span><span>Dining</span><span>Transfers</span></nav>
+    <div class="booking"><span>2 nights · 2 guests</span><span class="chip">HL-2291</span></div>
+  </div></div>
+
+  <header class="band"><div class="in">
+    <h1>Harborlight Resort Planner</h1>
+    <p>Arrange your stay. An afternoon rail excursion is included; exchanging it requires a visit to the booking desk.</p>
+    <div class="facts"><span><b>3 moments</b>to plan</span><span><b>One choice</b>in each</span><span><b>Confirm</b>when you're set</span></div>
+  </div>
+  <svg class="beam" viewBox="0 0 520 170" preserveAspectRatio="xMaxYMid slice" aria-hidden="true">
+    <defs><linearGradient id="bm" x1="1" x2="0"><stop offset="0" stop-color="#f6ecd9" stop-opacity=".45"/><stop offset="1" stop-color="#f6ecd9" stop-opacity="0"/></linearGradient></defs>
+    <path d="M470 60 L90 0 L90 150 Z" fill="url(#bm)"/>
+    <circle cx="470" cy="60" r="7" fill="#f6ecd9"/>
+    <path d="M462 66 h16 l6 104 h-28 z" fill="#2a3a47"/>
+  </svg>
+  </header>
+
+  <div class="layout">
+    <aside class="rail">
+      <h3>YOUR PLAN</h3>
+      <div id="steps" class="ol"></div>
+      <div class="desk"><b>Booking desk</b><br>Lobby level, beside the harbour doors. Open 07:30 – 22:00.</div>
+    </aside>
+
+    <main class="panel">
+      <section class="question" data-question="q1">
+        <div class="kick">MOMENT 1 OF 3</div>
+        <h2>1. Arrival afternoon</h2>
+        <p class="lead">Select one option.</p>
+        <div class="choices">
+          <button class="choice" data-id="q1a">Use the included rail excursion for a coastal hike and food festival — no desk visit</button>
+          <button class="choice" data-id="q1b">Spend ten minutes at the desk exchanging the excursion for one spa visit, then leave the afternoon open</button>
+          <button class="choice" data-id="q1c">Keep the prepaid three-stop local highlights shuttle reservation</button>
+          <button class="choice" data-id="q1d">Hosted activity followed by a timed tasting</button>
+        </div>
+      </section>
+      <section class="question" data-question="q2">
+        <div class="kick">MOMENT 2 OF 3</div>
+        <h2>2. Main day</h2>
+        <p class="lead">Select one option.</p>
+        <div class="choices">
+          <button class="choice" data-id="q2a">Morning craft class plus afternoon excursion</button>
+          <button class="choice" data-id="q2b">Four scheduled resort activities</button>
+          <button class="choice" data-id="q2c">Sunrise session, afternoon tour, and evening event</button>
+          <button class="choice" data-id="q2d">One spa appointment with the rest of the day open</button>
+        </div>
+      </section>
+      <section class="question" data-question="q3">
+        <div class="kick">MOMENT 3 OF 3</div>
+        <h2>3. Evening</h2>
+        <p class="lead">Select one option.</p>
+        <div class="choices">
+          <button class="choice" data-id="q3a">Dinner followed by a scheduled show</button>
+          <button class="choice" data-id="q3b">Quiet dinner with no reservation afterward</button>
+          <button class="choice" data-id="q3c">Hosted games followed by a social mixer</button>
+          <button class="choice" data-id="q3d">Show, tasting, and late lounge reservation</button>
+        </div>
+      </section>
+      <section class="review" id="review">
+        <div class="kick">REVIEW</div>
+        <h2 style="font-family:'URW Palladio L','P052','DejaVu Serif',serif;font-weight:400;font-size:28px;margin:4px 0 8px">Your plan at a glance</h2>
+        <div id="summary"></div>
+        <div class="done" id="done">
+          <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="14" fill="#3f5566"/><path d="M9 15.5l4 4 8-9" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><b>Choices confirmed.</b> Your plan is saved to booking HL-2291. The booking desk will have everything ready when you arrive.</div>
+        </div>
+      </section>
+      <div class="nav">
+        <span id="status" role="status">Choose one option in every section.</span>
+        <button class="btn" id="back">Back</button>
+        <button class="btn pri" id="next">Continue</button>
+        <button class="btn pri hide" id="submit">Confirm choices</button>
+      </div>
+    </main>
+  </div>
+
+  <footer class="site"><div class="in">
+    <span>Harborlight</span><span>Front desk: dial 0</span><span>Check-out 11:00</span><span>Harbour walk &amp; lobby open 24 h</span>
+  </div></footer>
+
+<script>
+(function(){
+  const questionIds = ["q1", "q2", "q3"];
+  const selected = {};
+  const events = [];
+  window.__artifact = {submitted: false, answers: [], events: []};
+  const sections = [...document.querySelectorAll('.question')];
+  const titles = sections.map(s => s.querySelector('h2').textContent.replace(/^\d+\.\s*/, ''));
+  const texts = {};
+  let cur = 0, visited = 0, submitted = false;
+  const status = document.getElementById('status');
+
+  sections.forEach(section => {
+    const qid = section.dataset.question;
+    section.querySelectorAll('.choice').forEach((button, i) => {
+      const txt = button.textContent;
+      texts[button.dataset.id] = txt;
+      button.innerHTML = '<span class="radio" aria-hidden="true"></span><span class="lt" aria-hidden="true">' + 'ABCD'[i] + '</span><span class="tx"></span>';
+      button.querySelector('.tx').textContent = txt;
+      button.setAttribute('aria-label', txt);
+      button.setAttribute('aria-pressed', 'false');
+      button.addEventListener('click', () => {
+        if (submitted) return;
+        section.querySelectorAll('.choice').forEach(other => { other.classList.remove('selected'); other.setAttribute('aria-pressed', 'false'); });
+        button.classList.add('selected'); button.setAttribute('aria-pressed', 'true');
+        selected[qid] = button.dataset.id;
+        events.push({event: 'select', questionId: qid, optionId: button.dataset.id});
+        render();
+      });
+    });
+  });
+
+  function go(i){ cur = i; visited = Math.max(visited, i); render(); window.scrollTo(0, 0); }
+  function render(){
+    const n = Object.keys(selected).length;
+    sections.forEach((s, i) => s.classList.toggle('show', i === cur));
+    const rev = cur === 3;
+    document.getElementById('review').classList.toggle('show', rev);
+    // rail
+    const ol = document.getElementById('steps'); ol.innerHTML = '';
+    titles.concat(['Review & confirm']).forEach((t, i) => {
+      const li = document.createElement('div'); li.className = 'li';
+      const b = document.createElement('button');
+      b.className = 'stepbtn' + (i === cur ? ' cur' : '') + (i < 3 && selected[questionIds[i]] && i !== cur ? ' ok' : '');
+      const pick = i < 3 && selected[questionIds[i]] ? texts[selected[questionIds[i]]] : (i < 3 ? 'Not chosen yet' : n + ' of 3 chosen');
+      b.innerHTML = '<span class="n">' + (i < 3 && selected[questionIds[i]] && i !== cur ? '✓' : (i + 1)) + '</span><span class="t"></span>';
+      b.querySelector('.t').innerHTML = '<span></span><small></small>';
+      b.querySelector('.t span').textContent = t;
+      b.querySelector('.t small').textContent = pick;
+      b.setAttribute('aria-label', 'Go to ' + t);
+      b.disabled = submitted || i > visited || i === cur;
+      b.addEventListener('click', () => go(i));
+      li.appendChild(b); ol.appendChild(li);
+    });
+    // summary
+    if (rev) {
+      const sm = document.getElementById('summary'); sm.innerHTML = '';
+      questionIds.forEach((q, i) => {
+        const row = document.createElement('div'); row.className = 'sumrow';
+        row.innerHTML = '<span class="k"></span><span class="v"></span>';
+        row.querySelector('.k').textContent = titles[i];
+        const v = row.querySelector('.v');
+        v.textContent = selected[q] ? texts[selected[q]] : 'Nothing chosen yet';
+        if (!selected[q]) v.classList.add('none');
+        if (!submitted) {
+          const c = document.createElement('button'); c.className = 'link'; c.textContent = 'Change';
+          c.setAttribute('aria-label', 'Change ' + titles[i]);
+          c.addEventListener('click', () => go(i));
+          row.appendChild(c);
+        }
+        sm.appendChild(row);
+      });
+    }
+    document.getElementById('back').classList.toggle('hide', cur === 0 || submitted);
+    document.getElementById('next').classList.toggle('hide', rev);
+    document.getElementById('submit').classList.toggle('hide', !rev || submitted);
+    const nx = document.getElementById('next');
+    nx.textContent = cur === 2 ? 'Review plan' : 'Continue to ' + titles[cur + 1];
+    if (submitted) status.textContent = 'Choices confirmed.';
+    else if (!rev) status.textContent = selected[questionIds[cur]] ? n + ' of 3 sections selected.' : 'Choose one option for ' + titles[cur] + '.';
+    else status.textContent = n === 3 ? 'All 3 sections selected.' : 'Choose one option in every section.';
+  }
+  document.getElementById('next').addEventListener('click', () => go(cur + 1));
+  document.getElementById('back').addEventListener('click', () => go(cur - 1));
+  document.getElementById('submit').addEventListener('click', function () {
+    if (!questionIds.every(id => selected[id])) { status.textContent = 'Choose one option in every section.'; return; }
+    const answers = questionIds.map(id => ({questionId: id, optionId: selected[id]}));
+    events.push({event: 'submit'});
+    window.__artifact = {submitted: true, answers: answers, events: events.slice()};
+    submitted = true;
+    document.querySelectorAll('.choice').forEach(button => button.disabled = true);
+    document.getElementById('done').classList.add('show');
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

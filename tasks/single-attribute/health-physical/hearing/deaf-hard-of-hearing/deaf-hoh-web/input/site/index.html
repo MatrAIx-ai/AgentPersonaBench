@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meridian Clinic Patient Portal</title>
+  <style>
+    :root { --canvas:#eef2f7; --card:#ffffff; --ink:#1e2240; --muted:#666b85; --line:#dfe3ee;
+            --iris:#4b3fb5; --iris-d:#382d93; --iris-l:#ecebfb; --peach:#f6b89a; --peach-l:#fdf0e9; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--canvas); color:var(--ink); font:15px/1.5 "FreeSans", "Liberation Sans", sans-serif; }
+    button { cursor:pointer; font:inherit; }
+    button:disabled { cursor:default; }
+    .serif { font-family:"Bitstream Charter", "Liberation Serif", serif; }
+    .app { display:grid; grid-template-columns:250px minmax(0,1fr); min-height:100vh; }
+    /* sidebar */
+    .side { background:var(--card); border-right:1px solid var(--line); padding:24px 18px; display:flex; flex-direction:column; gap:22px; }
+    .logo { display:flex; align-items:center; gap:10px; }
+    .logo b { font:700 20px "Bitstream Charter", serif; line-height:1.05; }
+    .logo small { display:block; font:12px "FreeSans", sans-serif; color:var(--muted); letter-spacing:.04em; }
+    .who { background:var(--iris-l); border-radius:14px; padding:14px; display:flex; gap:12px; align-items:center; }
+    .who .av { width:40px; height:40px; border-radius:50%; background:var(--iris); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; }
+    .who div { font-size:13px; color:var(--muted); }
+    .who b { display:block; color:var(--ink); font-size:14px; }
+    .menu { display:flex; flex-direction:column; gap:2px; }
+    .menu span { padding:10px 12px; border-radius:10px; font-size:14.5px; color:var(--muted); display:flex; gap:10px; align-items:center; }
+    .menu span i { width:8px; height:8px; border-radius:2px; background:var(--line); }
+    .menu span.on { background:var(--ink); color:#fff; }
+    .menu span.on i { background:var(--peach); }
+    .side .note { margin-top:auto; font-size:12.5px; color:var(--muted); border-top:1px solid var(--line); padding-top:14px; }
+    /* main */
+    .top { display:flex; align-items:center; justify-content:space-between; padding:18px 40px; border-bottom:1px solid var(--line); background:rgba(255,255,255,.6); }
+    .top .path { font-size:13px; color:var(--muted); }
+    .top .path b { color:var(--ink); }
+    .top .loc { font-size:13px; color:var(--muted); background:var(--card); border:1px solid var(--line); border-radius:999px; padding:6px 14px; }
+    .content { padding:26px 40px 50px; max-width:1060px; }
+    .stepper { display:flex; align-items:center; gap:0; margin:0 0 26px; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 18px; }
+    .stepper .s { display:flex; align-items:center; gap:10px; font-size:13.5px; color:var(--muted); white-space:nowrap; }
+    .stepper .s .c { width:28px; height:28px; border-radius:50%; border:2px solid var(--line); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; background:#fff; }
+    .stepper .s.have .c { background:var(--iris); border-color:var(--iris); color:#fff; }
+    .stepper .s.now { color:var(--ink); font-weight:700; }
+    .stepper .s.now .c { border-color:var(--iris); color:var(--iris); background:#fff; box-shadow:0 0 0 4px var(--iris-l); }
+    .stepper .bar { flex:1; height:2px; background:var(--line); margin:0 12px; min-width:20px; }
+    .crumb i { font-style:normal; }
+    .crumb { margin:0 0 4px; font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--iris); font-weight:700; }
+    h1 { font:400 34px/1.15 "Bitstream Charter", serif; margin:0 0 8px; letter-spacing:-.3px; }
+    .lead { margin:0 0 22px; color:var(--muted); max-width:680px; font-size:15.5px; }
+    /* intro */
+    .welcome { margin-top:14px; display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:20px; }
+    .panel { background:var(--card); border:1px solid var(--line); border-radius:18px; padding:28px 30px; }
+    .panel.hi { background:linear-gradient(135deg, #ffffff 55%, var(--peach-l)); }
+    .facts { display:flex; flex-direction:column; gap:14px; }
+    .fact { display:flex; gap:12px; font-size:14px; color:var(--muted); }
+    .fact .k { width:36px; height:36px; flex:0 0 auto; border-radius:10px; background:var(--iris-l); display:flex; align-items:center; justify-content:center; font:700 13px "Bitstream Charter", serif; color:var(--iris); }
+    .fact b { display:block; color:var(--ink); }
+    /* option rows */
+    .options { display:flex; flex-direction:column; gap:12px; }
+    .option { background:var(--card); border:1.5px solid var(--line); border-radius:16px; padding:18px 20px;
+              display:grid; grid-template-columns:30px minmax(0,1fr) 210px 140px; grid-template-areas:"dot name meta btn" "dot desc meta btn"; column-gap:16px; row-gap:2px; align-items:center; }
+    .option::before { content:""; grid-area:dot; align-self:start; margin-top:3px; width:22px; height:22px; border-radius:50%; border:2px solid #b9bdd0; background:#fff; }
+    .option.chosen { border-color:var(--iris); background:linear-gradient(90deg, var(--iris-l), #fff 60%); }
+    .option.chosen::before { border:7px solid var(--iris); }
+    .option h3 { grid-area:name; margin:0; font:700 17px "FreeSans", sans-serif; }
+    .option p { grid-area:desc; margin:0; color:var(--muted); font-size:14px; }
+    .option .meta { grid-area:meta; font-size:13px; color:var(--ink); background:var(--canvas); border-radius:10px; padding:8px 10px; }
+    .option button { grid-area:btn; }
+    .primary { background:var(--iris); color:#fff; border:0; border-radius:999px; padding:11px 20px; font-weight:700; }
+    .primary:hover:not(:disabled) { background:var(--iris-d); }
+    .primary:disabled { background:#d4d6e3; color:#8b8fa6; }
+    .secondary { background:#fff; color:var(--iris); border:1.5px solid var(--iris); border-radius:999px; padding:10px 18px; font-weight:700; }
+    .nav { display:flex; justify-content:space-between; align-items:center; margin-top:22px; }
+    .nav .hint { color:var(--muted); font-size:13.5px; }
+    /* review */
+    .summary { background:var(--card); border:1px solid var(--line); border-radius:18px; margin:0 0 20px; overflow:hidden; }
+    .row { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:18px 24px; border-bottom:1px solid var(--line); }
+    .row:last-child { border-bottom:0; }
+    .row .what { font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--iris); font-weight:700; }
+    .row strong { font:700 17px "FreeSans", sans-serif; display:block; }
+    .row .meta { font-size:13px; color:var(--muted); }
+    .appt { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:0 0 22px; }
+    .appt div { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px 14px; font-size:13px; color:var(--muted); }
+    .appt b { display:block; color:var(--ink); font-size:14px; }
+    .screen.done .panel { text-align:left; }
+    .tick { width:58px; height:58px; border-radius:50%; background:var(--iris); display:flex; align-items:center; justify-content:center; margin-bottom:14px; }
+    footer { padding:18px 40px 30px; color:var(--muted); font-size:12.5px; display:flex; gap:26px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="side">
+      <div class="logo">
+        <svg width="42" height="42" viewBox="0 0 42 42" aria-hidden="true"><circle cx="21" cy="21" r="20" fill="#1e2240"/><path d="M7 27 Q21 3 35 27" stroke="#f6b89a" stroke-width="3" fill="transparent" stroke-linecap="round"/><circle cx="21" cy="15" r="3.2" fill="#fff"/><path d="M9 31 h24" stroke="#8f86e6" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <b>Meridian<small>Clinic · Patient portal</small></b>
+      </div>
+      <div class="who"><span class="av" aria-hidden="true">P</span><div><b>Your account</b>Registered patient</div></div>
+      <nav class="menu" aria-label="Portal sections">
+        <span><i></i>Home</span><span class="on"><i></i>Appointments</span><span><i></i>Messages</span><span><i></i>Test results</span><span><i></i>Prescriptions</span><span><i></i>My details</span>
+      </nav>
+      <div class="note">Meridian Clinic, Harbour Road. Portal bookings are confirmed instantly.</div>
+    </aside>
+    <div>
+      <div class="top">
+        <div class="path">Appointments › <b>Book follow-up consultation</b></div>
+        <div class="loc">Meridian Clinic · Harbour Road</div>
+      </div>
+      <div class="content">
+        <div class="stepper" id="stepper" aria-hidden="true"></div>
+        <main id="main"></main>
+      </div>
+      <footer><span>© Meridian Clinic</span><span>Privacy</span><span>Terms of use</span><span>Help &amp; FAQs</span></footer>
+    </div>
+  </div>
+
+  <template id="copy">
+    <section data-screen="intro">
+      <p class="crumb">Follow-up due</p>
+      <h1>Book your follow-up consultation</h1>
+      <div class="welcome">
+        <div class="panel hi">
+          <p class="lead">Your follow-up with the clinic is due. Four short steps: how the consultation itself runs, how your results come back to you, how the nurse takes you through the preparation, and how the reminder reaches you. You can change anything before you confirm.</p>
+          <button class="primary" data-action="start">Book follow-up</button>
+        </div>
+        <div class="panel facts">
+          <div class="fact"><span class="k">1</span><div><b>Consultation format</b>How the follow-up itself runs</div></div>
+          <div class="fact"><span class="k">2</span><div><b>Your results</b>How they come back to you</div></div>
+          <div class="fact"><span class="k">3</span><div><b>Preparation</b>How the nurse takes you through it</div></div>
+          <div class="fact"><span class="k">4</span><div><b>Reminder</b>How it reaches you before the day</div></div>
+        </div>
+      </div>
+    </section>
+    <section data-screen="review">
+      <p class="crumb">Almost done</p>
+      <h1>Review your booking</h1>
+      <p class="lead">Look over the four settings before the clinic books them in. You can still change any of them.</p>
+      <div class="appt">
+        <div><b>Appointment</b>Follow-up consultation</div>
+        <div><b>Length</b>15 minutes, same clinician</div>
+        <div><b>Clinic</b>Meridian Clinic, Harbour Road</div>
+      </div>
+      <div class="summary"></div>
+      <button class="primary" data-action="confirm">Confirm booking</button>
+    </section>
+    <section data-screen="done">
+      <div class="panel">
+        <div class="tick" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M5 14 l5 5 l11 -12" stroke="#fff" stroke-width="3.5" fill="transparent" stroke-linecap="round"/></svg></div>
+        <h1>Booking confirmed</h1>
+        <p class="lead">Reference MC-40917. The clinic has your appointment and will follow the four settings you confirmed.</p>
+      </div>
+    </section>
+  </template>
+
+  <template id="catalog">
+    <section class="group" data-group="format">
+      <h2>Consultation format</h2>
+      <p>How would you like the follow-up itself to run? Every format is 15 minutes with the same clinician.</p>
+      <article class="option" data-id="f1" data-channel="voice">
+        <h3>Telephone consultation</h3>
+        <p>The clinician phones you at the booked time and talks you through your results and next steps.</p>
+        <span class="meta">Next available: tomorrow 09:10 · 15 min · Soonest</span>
+      </article>
+      <article class="option" data-id="f2" data-channel="visual">
+        <h3>Video consultation with live captions</h3>
+        <p>Secure video link; the clinician's words appear as text on your screen as they speak.</p>
+        <span class="meta">Next available: Thursday 14:30 · 15 min</span>
+      </article>
+      <article class="option" data-id="f3" data-channel="voice">
+        <h3>Video consultation</h3>
+        <p>Secure video link; you and the clinician talk it through face to face on screen.</p>
+        <span class="meta">Next available: tomorrow 11:40 · 15 min</span>
+      </article>
+      <article class="option" data-id="f4" data-channel="voice">
+        <h3>In-person visit</h3>
+        <p>You sit down with the clinician at Meridian Clinic, Harbour Road, and they talk you through everything aloud in the consulting room.</p>
+        <span class="meta">Next available: in 9 days · 15 min</span>
+      </article>
+    </section>
+    <section class="group" data-group="results">
+      <h2>How your results come back</h2>
+      <p>The nurse sends the follow-up results on once the clinic has them.</p>
+      <article class="option" data-id="r1" data-channel="voice">
+        <h3>Phone call from the nurse</h3>
+        <p>A nurse phones you and talks you through the result.</p>
+        <span class="meta">Within 2 working days · Fastest</span>
+      </article>
+      <article class="option" data-id="r2" data-channel="voice">
+        <h3>Video message from the nurse</h3>
+        <p>A short recorded video in the portal; the nurse speaks the result aloud.</p>
+        <span class="meta">Within 2 working days</span>
+      </article>
+      <article class="option" data-id="r3" data-channel="visual">
+        <h3>Video message with captions</h3>
+        <p>The same recorded video, with the nurse's words shown as text on screen while she speaks.</p>
+        <span class="meta">Within 4 working days</span>
+      </article>
+      <article class="option" data-id="r4" data-channel="voice">
+        <h3>Recorded voice summary</h3>
+        <p>A spoken summary from the nurse that you play back in the portal.</p>
+        <span class="meta">Within 2 working days</span>
+      </article>
+    </section>
+    <section class="group" data-group="prep">
+      <h2>Before your appointment</h2>
+      <p>There are a few things to do the day before. How would you like the nurse to take you through them?</p>
+      <article class="option" data-id="p1" data-channel="voice">
+        <h3>Narrated preparation video</h3>
+        <p>Two-minute video; the nurse talks you through what to do before the appointment.</p>
+        <span class="meta">Plays now · Most patients use this</span>
+      </article>
+      <article class="option" data-id="p2" data-channel="voice">
+        <h3>Nurse phones you the day before</h3>
+        <p>A five-minute call to run through the preparation; ask questions as you go.</p>
+        <span class="meta">Day before, between 9 and 5</span>
+      </article>
+      <article class="option" data-id="p3" data-channel="voice">
+        <h3>Clinic line reads the steps out</h3>
+        <p>Dial the clinic line the day before and the recording takes you through each step aloud, as often as you like.</p>
+        <span class="meta">Any time, day or night</span>
+      </article>
+      <article class="option" data-id="p4" data-channel="visual">
+        <h3>Preparation video with captions</h3>
+        <p>The same two-minute video with the nurse's words shown as text on screen.</p>
+        <span class="meta">Available from Thursday</span>
+      </article>
+    </section>
+    <section class="group" data-group="remind">
+      <h2>Your appointment reminder</h2>
+      <p>The portal sends one reminder before the day. How would you like it to reach you?</p>
+      <article class="option" data-id="m1" data-channel="visual">
+        <h3>Reminder card in the portal</h3>
+        <p>Your appointment card appears on the portal home screen with the time, the place and a map.</p>
+        <span class="meta">Evening before · Sign in to see it</span>
+      </article>
+      <article class="option" data-id="m2" data-channel="voice">
+        <h3>Automated reminder call</h3>
+        <p>An automated call the evening before reads out your time and place; press 1 to confirm the appointment.</p>
+        <span class="meta">Evening before, 6pm · Standard · Confirm on the spot</span>
+      </article>
+      <article class="option" data-id="m3" data-channel="voice">
+        <h3>Reminder call from reception</h3>
+        <p>Someone from reception rings you to go over the time and answer any last questions.</p>
+        <span class="meta">Evening before, between 5 and 7</span>
+      </article>
+      <article class="option" data-id="m4" data-channel="voice">
+        <h3>Voicemail reminder</h3>
+        <p>A short spoken reminder left on your voicemail for you to play back.</p>
+        <span class="meta">Evening before, 6pm</span>
+      </article>
+    </section>
+  </template>
+  <script>
+    (function () {
+      var LABELS = { select: "Choose", selected: "Chosen", next: "Continue", change: "Change", step: "Step" };
+      var main = document.getElementById("main");
+      var catalog = document.getElementById("catalog").content;
+      var copy = document.getElementById("copy").content;
+      var GROUPS = Array.prototype.map.call(catalog.querySelectorAll("section.group"), function (sec) {
+        var prompt = sec.querySelector(":scope > p");
+        return {
+          id: sec.dataset.group,
+          title: sec.querySelector(":scope > h2").textContent.trim(),
+          prompt: prompt ? prompt.textContent.trim() : "",
+          options: Array.prototype.map.call(sec.querySelectorAll("article.option"), function (art) {
+            var meta = art.querySelector(".meta");
+            return { id: art.dataset.id, name: art.querySelector("h3").textContent.trim(),
+                     meta: meta ? meta.textContent.trim() : "", node: art };
+          })
+        };
+      });
+      var SHORT = ["Format", "Results", "Preparation", "Reminder"];
+      var state = { screen: null, group: null, selections: {} };
+      var seq = 0;
+      window.__state = state;
+      window.__events = [];
+      window.__completed = false;
+
+      function log(event) { window.__events.push(Object.assign({ seq: ++seq }, event)); }
+      function el(tag, cls, text) {
+        var node = document.createElement(tag);
+        if (cls) node.className = cls;
+        if (text !== undefined) node.textContent = text;
+        return node;
+      }
+      function button(action, label, cls, disabled) {
+        var node = el("button", cls, label);
+        node.dataset.action = action;
+        node.disabled = !!disabled;
+        return node;
+      }
+      function groupOf(id) { return GROUPS.filter(function (g) { return g.id === id; })[0]; }
+      function nextUnselected() { return GROUPS.filter(function (g) { return !(g.id in state.selections); })[0]; }
+      function screen(name) {
+        var node = document.importNode(copy.querySelector('section[data-screen="' + name + '"]'), true);
+        node.className = "screen " + name;
+        return node;
+      }
+
+      function paintRail() {
+        var st = document.getElementById("stepper"); st.replaceChildren();
+        GROUPS.forEach(function (g, i) {
+          if (i) st.appendChild(el("span", "bar"));
+          var on = state.screen === "group" && state.group === g.id;
+          var s = el("span", "s" + (g.id in state.selections ? " have" : "") + (on ? " now" : ""));
+          s.appendChild(el("span", "c", g.id in state.selections && !on ? "✓" : String(i + 1)));
+          s.appendChild(el("span", null, SHORT[i]));
+          st.appendChild(s);
+        });
+        st.appendChild(el("span", "bar"));
+        var r = el("span", "s" + (state.screen === "review" ? " now" : "") + (state.screen === "done" ? " have" : ""));
+        r.appendChild(el("span", "c", state.screen === "done" ? "✓" : "5"));
+        r.appendChild(el("span", null, "Review"));
+        st.appendChild(r);
+      }
+
+      function renderIntro() {
+        state.screen = "intro"; state.group = null;
+        log({ type: "view", screen: "intro" });
+        var node = screen("intro");
+                node.querySelector('[data-action="start"]').addEventListener("click", function () {
+          var g = nextUnselected();
+          if (g) renderGroup(g.id); else renderReview();
+        });
+        main.replaceChildren(node);
+        paintRail();
+      }
+
+      function renderGroup(id) {
+        state.screen = "group"; state.group = id;
+        log({ type: "shown", group: id });
+        paintGroup();
+      }
+
+      function paintGroup() {
+        var g = groupOf(state.group), index = GROUPS.indexOf(g), chosen = state.selections[g.id];
+        var node = el("section", "step");
+        var crumb = el("p", "crumb");
+        crumb.appendChild(el("i", null, LABELS.step + " " + (index + 1) + " of " + GROUPS.length));
+        crumb.appendChild(document.createTextNode(" · " + (SHORT[index] || "")));
+        node.appendChild(crumb);
+        node.appendChild(el("h1", null, g.title));
+        if (g.prompt) node.appendChild(el("p", "lead", g.prompt));
+        var list = el("div", "options");
+        g.options.forEach(function (o, k) {
+          var card = document.importNode(o.node, true);
+          var isChosen = chosen === o.id;
+          if (isChosen) card.classList.add("chosen");
+          var label = isChosen ? LABELS.selected : LABELS.select;
+          var b = button("select-" + o.id, label, isChosen ? "secondary" : "primary", isChosen);
+          b.setAttribute("aria-label", label + ": " + o.name);
+          b.addEventListener("click", function () { select(g.id, o.id); });
+          card.appendChild(b);
+          list.appendChild(card);
+        });
+        node.appendChild(list);
+        var nav = el("div", "nav");
+        var nxt = GROUPS.filter(function (x) { return x !== g && !(x.id in state.selections); })[0];
+        nav.appendChild(el("span", "hint", g.id in state.selections ? "Choice saved. You can change it on the review page." : "Choose one option to continue."));
+        var cont = button("continue", LABELS.next, "primary", !(g.id in state.selections));
+        cont.setAttribute("aria-label", LABELS.next + (nxt ? " to step " + (GROUPS.indexOf(nxt) + 1) : " to review"));
+        cont.textContent = LABELS.next + (nxt ? " to step " + (GROUPS.indexOf(nxt) + 1) : " to review") + " →";
+        cont.addEventListener("click", advance);
+        nav.appendChild(cont);
+        node.appendChild(nav);
+        main.replaceChildren(node);
+        paintRail();
+      }
+
+      function select(gid, oid) {
+        if (state.screen !== "group" || state.group !== gid || state.selections[gid] === oid) return;
+        state.selections[gid] = oid;
+        log({ type: "select", group: gid, optionId: oid });
+        paintGroup();
+      }
+
+      function advance() {
+        if (state.screen !== "group" || !(state.group in state.selections)) return;
+        var g = nextUnselected();
+        if (g) renderGroup(g.id); else renderReview();
+        window.scrollTo(0, 0);
+      }
+
+      function renderReview() {
+        state.screen = "review"; state.group = null;
+        log({ type: "view", screen: "review" });
+        var node = screen("review"), summary = node.querySelector(".summary");
+        GROUPS.forEach(function (g) {
+          var o = g.options.filter(function (x) { return x.id === state.selections[g.id]; })[0];
+          var row = el("div", "row"), left = el("div");
+          left.appendChild(el("div", "what", g.title));
+          left.appendChild(el("strong", null, o ? o.name : ""));
+          if (o && o.meta) left.appendChild(el("div", "meta", o.meta));
+          var b = button("change-" + g.id, LABELS.change, "secondary");
+          b.setAttribute("aria-label", LABELS.change + ": " + g.title);
+          b.addEventListener("click", function () { renderGroup(g.id); window.scrollTo(0, 0); });
+          row.appendChild(left);
+          row.appendChild(b);
+          summary.appendChild(row);
+        });
+        node.querySelector('[data-action="confirm"]').addEventListener("click", complete);
+        main.replaceChildren(node);
+        paintRail();
+      }
+
+      function complete() {
+        if (state.screen !== "review" || window.__completed || nextUnselected()) return;
+        window.__completed = true;
+        state.screen = "done"; state.group = null;
+        log({ type: "complete", selections: Object.assign({}, state.selections) });
+        main.replaceChildren(screen("done"));
+        paintRail();
+        window.scrollTo(0, 0);
+      }
+
+      renderIntro();
+    })();
+  </script>
+</body>
+</html>

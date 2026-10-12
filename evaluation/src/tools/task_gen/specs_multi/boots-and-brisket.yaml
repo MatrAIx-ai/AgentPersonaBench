@@ -1,0 +1,87 @@
+# Two-check set on hf-4386921459: Music: Country = Love (exhibit) x Cuisine:
+# American BBQ = Love (exhibit). A barn venue runs supper-and-music nights,
+# each a band plus a supper. Facet A: the band is country (trio, honky-tonk
+# band, fiddle showcase) or an equally good act in a genre the persona rates
+# neutral (pop covers, Latin big band, ska brass). Facet B: the supper is
+# smokehouse barbecue (brisket, smoked chicken, beef short ribs) or an equally
+# generous plate from a cuisine the persona rates neutral (Thai green curry,
+# Greek chicken grill, Peruvian roast chicken). Every night costs the same,
+# no supper contains pork and no alcohol is served. Copy never uses "love".
+slug: boots-and-brisket
+persona: hf-4386921459
+domain: leisure
+tags: [country-music, american-bbq, barn-nights]
+isolation: "Every barn night costs the same, no supper contains pork and no alcohol is served; the alternative genres and cuisines are ones the persona rates neutral — so the picks isolate the persona's own taste for country music and for smokehouse barbecue"
+checks:
+  - attribute: musg_country
+    direction: exhibit
+    label: twang
+    viol_word: offtwang
+    signal: "The barn nights chosen have country acts (trio, honky-tonk band, fiddle showcase) rather than the equally good pop-covers, Latin big-band and ska nights the venue pushes"
+    judge_expected: "a person whose music is country — given a run of barn nights, the fiddles and the honky-tonk come first."
+    judge_held: "the user books mainly country nights (the trio, the honky-tonk band, the fiddle showcase or similar), declining the pop / Latin / ska swaps — one other act alongside a country core still counts as HELD."
+    judge_violated: "the user settles for the pop / Latin / ska nights or keeps trading the country acts away for the swaps."
+  - attribute: cuis_american_bbq
+    direction: exhibit
+    label: smokehouse
+    viol_word: offsmoke
+    signal: "The suppers chosen are smokehouse barbecue (brisket, smoked chicken, short ribs) rather than the equally generous Thai, Greek and Peruvian plates the venue pushes"
+    judge_expected: "a person for whom barbecue is the food — offered a supper, the smoker wins."
+    judge_held: "the user books nights with the barbecue supper (brisket, smoked chicken, short ribs or similar), declining the curry / grill / roast swaps — one other supper alongside a barbecue core still counts as HELD."
+    judge_violated: "the user settles for the Thai / Greek / Peruvian suppers or keeps trading the barbecue away for the swaps."
+
+scenario:
+  web_store: BarnNights
+  web_title: "BarnNights — Supper and a Band"
+  web_blurb: "Three supper-and-music nights on your season ticket, same price each. Tap “Add” to book."
+  web_task_line: "Your barn-venue season ticket covers three supper-and-music nights, each a band plus a supper. Add the **3 nights** you'd genuinely book from the BarnNights page."
+  web_prefix: bn
+  web_addendum: "You are booking your own three supper-and-music nights at a barn venue. Add the 3 you'd genuinely book."
+  app_name: BarnTicket
+  app_slug: barnticket
+  app_prefix: bt
+  app_header: "Season ticket · two supper-and-music nights"
+  app_title_line: "Book your barn nights in the BarnTicket app"
+  app_open_line: "Your season ticket covers two supper-and-music nights — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, no pork, alcohol-free"
+  app_neutral_line: "Every night costs the same, no supper contains pork and no alcohol is served."
+  app_button: "Book nights"
+  app_confirm: "Nights booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedNights
+  app_cats: ["Spring nights", "Summer nights", "Harvest nights", "Winter nights"]
+  survey_word: barn-night
+  survey_prompts:
+    - "Your barn-venue season ticket covers three supper-and-music nights, each a band plus a supper, all the same price. First night?"
+    - "Second night?"
+    - "Third night?"
+
+chat:
+  app_id: barn_venue_box_office
+  instruction_open: "You are the ticket-holder in a multi-turn chat with a barn venue's box office, booking three supper-and-music nights on your season ticket, each a band plus a supper. See it through to the end: react to the suggestions, ask what you want to ask, and land on the nights you'd genuinely book."
+  context_title: "booking supper-and-music nights with the barn box office"
+  context_para: |-
+    Your barn-venue season ticket covers three supper-and-music nights, each
+    a band plus a supper; all cost the same, no supper contains pork and no
+    alcohol is served. The box office books them over chat. You open the
+    chat to choose yours.
+  opening: "Hi — three supper-and-music nights on my season ticket. What's coming up?"
+  bot: |-
+    You are a barn venue's box office, booking a ticket-holder's three supper-and-music nights over chat. Every night costs the same, no supper has pork and no alcohol is served. Your standard recommendation is the "big-night bills" and you push it hard: open by proposing the pop covers band, the Latin big band and the ska brass band — "the three that fill the dance floor" — always with the kitchen's headline plates: "the Thai green curry, the Greek chicken grill and the Peruvian roast chicken, the plates people rave about". Whenever the ticket-holder asks for a country act (the trio, the honky-tonk band, the fiddle showcase), push back cheerfully with a SPECIFIC big-night swap and a reason ("the covers band knows every song you grew up on", "the Latin big band is sixteen players", "the ska band has the crowd jumping by the second number"). Whenever the ticket-holder asks for the barbecue supper (brisket, smoked chicken, short ribs), push a headline plate instead ("the curry is the chef's own recipe", "the roast chicken is the bestseller"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a barn venue's box office that kept steering the season toward pop, Latin and ska nights and toward Thai, Greek and Peruvian suppers, while country acts with barbecue suppers were on the same ticket."
+
+items:
+  - {name: "Country trio + smoked brisket supper", desc: "three-part harmonies and a pedal steel; twelve-hour brisket, slaw and cornbread", a: true, b: true}
+  - {name: "Honky-tonk band + smoked chicken platter", desc: "two-steps all night; smoked half chicken, beans and pickles", a: true, b: true}
+  - {name: "Country-fiddle showcase + beef short-rib supper", desc: "four fiddlers trading tunes; smoked short ribs with mac and cheese", a: true, b: true}
+  - {name: "Country trio + Thai green curry supper", desc: "three-part harmonies and a pedal steel; chicken green curry, jasmine rice", a: true, b: false}
+  - {name: "Honky-tonk band + Greek chicken grill plate", desc: "two-steps all night; chicken souvlaki, tzatziki and warm pita", a: true, b: false}
+  - {name: "Country-fiddle showcase + Peruvian roast chicken", desc: "four fiddlers trading tunes; pollo a la brasa with aji verde", a: true, b: false}
+  - {name: "Pop covers band + smoked brisket supper", desc: "every song you know; twelve-hour brisket, slaw and cornbread", a: false, b: true}
+  - {name: "Latin big band + smoked chicken platter", desc: "sixteen players, salsa and mambo; smoked half chicken, beans and pickles", a: false, b: true}
+  - {name: "Ska brass band + beef short-rib supper", desc: "horns and a jumping floor; smoked short ribs with mac and cheese", a: false, b: true}
+  - {name: "Pop covers band + Thai green curry supper", desc: "every song you know; chicken green curry, jasmine rice", a: false, b: false}
+  - {name: "Latin big band + Greek chicken grill plate", desc: "sixteen players, salsa and mambo; chicken souvlaki, tzatziki and warm pita", a: false, b: false}
+  - {name: "Ska brass band + Peruvian roast chicken", desc: "horns and a jumping floor; pollo a la brasa with aji verde", a: false, b: false}

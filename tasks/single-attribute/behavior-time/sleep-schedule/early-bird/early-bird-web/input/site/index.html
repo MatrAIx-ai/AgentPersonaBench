@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TimeChoice — Weekly routine</title>
+<style>
+  :root{--ink:#111;--red:#e0362a;--paper:#fff;--grey:#f2f1ee;--rule:#111;--muted:#6b6862;--soft:#dcdad4}
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--paper);color:var(--ink);font-family:"FreeSans","Liberation Sans",Arial,sans-serif;font-size:15px}
+  .top{display:flex;align-items:stretch;border-bottom:3px solid var(--rule)}
+  .mark{background:var(--red);color:#fff;display:flex;align-items:center;gap:10px;padding:0 22px;font-weight:700;font-size:21px;letter-spacing:-.02em}
+  .mark svg{display:block}
+  .topnav{display:flex;flex:1}
+  .topnav span{padding:18px 20px;border-left:1px solid var(--soft);font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+  .topnav span.on{color:var(--ink);font-weight:700;box-shadow:inset 0 -4px 0 var(--red)}
+  .topnav .sp{flex:1;border-left:0}
+  .acct{padding:18px 22px;font-size:13px;color:var(--muted);border-left:1px solid var(--soft)}
+  .wrap{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 62px)}
+  .side{border-right:3px solid var(--rule);padding:30px 26px;display:flex;flex-direction:column;gap:26px;background:var(--grey)}
+  .big{font-size:110px;font-weight:700;line-height:.85;letter-spacing:-.06em}
+  .big small{font-size:34px;color:var(--muted);letter-spacing:-.02em;margin-left:8px}
+  #prev[style*="hidden"]{display:none}
+  .side h1{font-size:26px;line-height:1.1;margin:0;letter-spacing:-.02em}
+  .side p{margin:0;color:#3b3935;line-height:1.5}
+  .stepper{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+  .stepper li{border-bottom:1px solid var(--rule)}
+  .stepper button{all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:12px;align-items:center;width:100%;padding:12px 4px;font-size:14px}
+  .stepper button .n{width:26px;height:26px;border:2px solid var(--ink);display:grid;place-items:center;font-weight:700;font-size:12px;flex:none}
+  .stepper button .st{margin-left:auto;white-space:nowrap;font-size:12px;color:var(--muted)}
+  .stepper button[aria-current="step"]{font-weight:700}
+  .stepper button[aria-current="step"] .n{background:var(--ink);color:#fff}
+  .stepper button.done .n{background:var(--red);border-color:var(--red);color:#fff}
+  .stepper button:disabled{cursor:not-allowed;opacity:.45}
+  .main{padding:34px 48px 60px;max-width:900px}
+  .notice{border-left:6px solid var(--red);background:var(--grey);padding:12px 16px;margin:0 0 28px;font-size:14px}
+  .activity{display:none}
+  .activity.show{display:block}
+  .kicker{font-size:12px;text-transform:uppercase;letter-spacing:.16em;color:var(--red);font-weight:700}
+  .activity h2{font-size:44px;line-height:1;letter-spacing:-.03em;margin:10px 0 14px}
+  .facts{display:grid;grid-template-columns:repeat(3,1fr);border-top:3px solid var(--rule);border-bottom:1px solid var(--rule);margin-bottom:26px}
+  .facts div{padding:12px 14px 12px 0}
+  .facts div+div{border-left:1px solid var(--soft);padding-left:14px}
+  .facts b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:4px;font-weight:700}
+  .facts span{font-size:18px;font-weight:700}
+  .activity-meta{display:none}
+  .lab{font-size:13px;text-transform:uppercase;letter-spacing:.12em;font-weight:700;margin:0 0 10px}
+  .slot-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:2px solid var(--ink)}
+  .slot-option{font:inherit;background:#fff;border:0;border-right:2px solid var(--ink);padding:26px 8px;font-size:24px;font-weight:700;letter-spacing:-.02em;cursor:pointer;color:var(--ink)}
+  .slot-option:last-child{border-right:0}
+  .slot-option:hover{background:var(--grey)}
+  .slot-option.selected{background:var(--ink);color:#fff}
+  .slot-option small{display:block;font-size:11px;font-weight:400;letter-spacing:.12em;text-transform:uppercase;margin-top:6px;opacity:.7}
+  .row{display:flex;gap:12px;align-items:center;margin-top:26px}
+  .btn{font:inherit;font-weight:700;font-size:15px;padding:14px 22px;border:2px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer}
+  .btn.ghost{background:#fff;color:var(--ink)}
+  .btn.red{background:var(--red);border-color:var(--red)}
+  .btn:disabled{opacity:.35;cursor:not-allowed}
+  .hint{font-size:13px;color:var(--muted)}
+  #review{display:none}
+  #review.show{display:block}
+  #review h2{font-size:44px;letter-spacing:-.03em;margin:10px 0 18px;line-height:1}
+  table.sum{width:100%;border-collapse:collapse;border-top:3px solid var(--rule)}
+  table.sum td{padding:16px 8px 16px 0;border-bottom:1px solid var(--rule);font-size:17px}
+  table.sum td.t{font-weight:700;font-size:22px;letter-spacing:-.02em}
+  table.sum td.c{text-align:right}
+  #confirmation{border:3px solid var(--ink);margin-top:26px;padding:20px 22px}
+  #confirmation h2{margin:0 0 10px;font-size:26px;letter-spacing:-.02em}
+  #confirmation h2::before{content:"";display:inline-block;width:14px;height:14px;background:var(--red);margin-right:10px}
+  #confirmed-schedule{margin:0;padding-left:20px;line-height:1.8}
+  footer{border-top:3px solid var(--rule);padding:16px 26px;display:flex;justify-content:space-between;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+  @media (max-width:900px){.wrap{grid-template-columns:1fr}.side{border-right:0;border-bottom:3px solid var(--rule)}.slot-grid{grid-template-columns:repeat(2,1fr)}.main{padding:24px 16px}}
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="mark">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="2" y="2" width="22" height="22" fill="none" stroke="#fff" stroke-width="2.5"/><path d="M2 9h22M9 9v15" stroke="#fff" stroke-width="2.5"/></svg>
+      TimeChoice
+    </div>
+    <nav class="topnav" aria-label="Site">
+      <span class="on">Routine</span><span>Calendar</span><span>Providers</span><span class="sp"></span>
+    </nav>
+    <div class="acct">Member account</div>
+  </header>
+
+  <div class="wrap">
+    <aside class="side">
+      <div class="big" id="bignum">01<small>/03</small></div>
+      <div>
+        <h1>Set up your weekly routine</h1>
+        <p style="margin-top:10px">Choose one recurring time for each activity, then confirm the schedule.</p>
+      </div>
+      <ol class="stepper" aria-label="Steps">
+        <li><button type="button" data-go="0" id="go0"><span class="n">1</span>Online language practice<span class="st" id="st0">—</span></button></li>
+        <li><button type="button" data-go="1" id="go1"><span class="n">2</span>Personal planning review<span class="st" id="st1">—</span></button></li>
+        <li><button type="button" data-go="2" id="go2"><span class="n">3</span>Guided mobility session<span class="st" id="st2">—</span></button></li>
+        <li><button type="button" data-go="3" id="go3"><span class="n">✓</span>Review &amp; confirm</button></li>
+      </ol>
+      <p class="hint">Times repeat every week. You can change them later from Calendar.</p>
+    </aside>
+
+    <main class="main">
+      <div class="notice">Each activity keeps the same provider, duration, format, and price at every listed time.</div>
+
+      <section class="activity" data-activity="language">
+        <div class="kicker">Activity 1 of 3</div>
+        <h2>Online language practice</h2>
+        <p class="activity-meta">Monday · 45 minutes · same tutor</p>
+        <div class="facts"><div><b>Day</b><span>Monday</span></div><div><b>Length</b><span>45 minutes</span></div><div><b>With</b><span>Same tutor</span></div></div>
+        <p class="lab">Available times</p>
+        <div class="slot-grid">
+          <button class="slot-option" data-activity="language" data-slot="lang-a">10:30 PM</button>
+          <button class="slot-option" data-activity="language" data-slot="lang-b">7:30 AM</button>
+          <button class="slot-option" data-activity="language" data-slot="lang-c">10:00 PM</button>
+          <button class="slot-option" data-activity="language" data-slot="lang-d">11:00 PM</button>
+        </div>
+      </section>
+
+      <section class="activity" data-activity="planning">
+        <div class="kicker">Activity 2 of 3</div>
+        <h2>Personal planning review</h2>
+        <p class="activity-meta">Wednesday · 45 minutes · same facilitator</p>
+        <div class="facts"><div><b>Day</b><span>Wednesday</span></div><div><b>Length</b><span>45 minutes</span></div><div><b>With</b><span>Same facilitator</span></div></div>
+        <p class="lab">Available times</p>
+        <div class="slot-grid">
+          <button class="slot-option" data-activity="planning" data-slot="plan-a">10:00 PM</button>
+          <button class="slot-option" data-activity="planning" data-slot="plan-b">10:30 PM</button>
+          <button class="slot-option" data-activity="planning" data-slot="plan-c">11:00 PM</button>
+          <button class="slot-option" data-activity="planning" data-slot="plan-d">7:00 AM</button>
+        </div>
+      </section>
+
+      <section class="activity" data-activity="mobility">
+        <div class="kicker">Activity 3 of 3</div>
+        <h2>Guided mobility session</h2>
+        <p class="activity-meta">Saturday · 45 minutes · same instructor</p>
+        <div class="facts"><div><b>Day</b><span>Saturday</span></div><div><b>Length</b><span>45 minutes</span></div><div><b>With</b><span>Same instructor</span></div></div>
+        <p class="lab">Available times</p>
+        <div class="slot-grid">
+          <button class="slot-option" data-activity="mobility" data-slot="move-a">11:00 PM</button>
+          <button class="slot-option" data-activity="mobility" data-slot="move-b">10:00 PM</button>
+          <button class="slot-option" data-activity="mobility" data-slot="move-c">6:45 AM</button>
+          <button class="slot-option" data-activity="mobility" data-slot="move-d">10:30 PM</button>
+        </div>
+      </section>
+
+      <div class="row" id="navrow">
+        <button class="btn ghost" id="prev" type="button">Previous activity</button>
+        <button class="btn" id="next" type="button" disabled>Next activity</button>
+        <span class="hint" id="navhint">Choose a time to continue.</span>
+      </div>
+
+      <section id="review">
+        <div class="kicker">Review</div>
+        <h2>Your weekly schedule</h2>
+        <table class="sum"><tbody id="sumbody"></tbody></table>
+        <div class="row">
+          <button class="btn red" id="confirm" type="button" disabled>Confirm weekly schedule</button>
+          <span class="hint" id="confhint"></span>
+        </div>
+        <section id="confirmation" hidden>
+          <h2>Weekly schedule confirmed</h2>
+          <ul id="confirmed-schedule"></ul>
+        </section>
+      </section>
+    </main>
+  </div>
+  <footer><span>TimeChoice · Recurring bookings</span><span>Help · Terms · Privacy</span></footer>
+
+<script>
+(function(){
+  window.__schedule = {};
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.activity'));
+  var step = 0, confirmed = false;
+  var title = function(sec){ return sec.querySelector('h2').textContent; };
+  sections.forEach(function(sec){
+    var t = title(sec);
+    sec.querySelectorAll('.slot-option').forEach(function(b){ b.setAttribute('aria-label', t + ' at ' + b.textContent.trim()); });
+  });
+  document.querySelectorAll('button.slot-option').forEach(function(button){
+    button.addEventListener('click', function(){
+      if (confirmed) return;
+      var activity = button.getAttribute('data-activity'), slot = button.getAttribute('data-slot');
+      window.__schedule[activity] = slot;
+      document.querySelectorAll('.slot-option[data-activity="' + activity + '"]').forEach(function(c){
+        var on = c.getAttribute('data-slot') === slot;
+        c.classList.toggle('selected', on); c.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      render();
+    });
+  });
+  function slotText(i){
+    var sec = sections[i], s = window.__schedule[sec.getAttribute('data-activity')];
+    return s ? sec.querySelector('.slot-option[data-slot="' + s + '"]').textContent.trim() : null;
+  }
+  function allChosen(){ return Object.keys(window.__schedule).length === sections.length; }
+  function go(i){ if (confirmed && i !== 3) return; step = i; render(); window.scrollTo(0, 0); }
+  function render(){
+    sections.forEach(function(sec, i){ sec.classList.toggle('show', i === step); });
+    var inReview = step === 3;
+    document.getElementById('review').classList.toggle('show', inReview);
+    document.getElementById('navrow').style.display = inReview ? 'none' : '';
+    document.getElementById('bignum').innerHTML = (inReview ? '✓' : '0' + (step + 1)) + '<small>/03</small>';
+    for (var i = 0; i < 4; i++){
+      var g = document.getElementById('go' + i);
+      g.setAttribute('aria-current', i === step ? 'step' : 'false');
+      if (i < 3){ var t = slotText(i); document.getElementById('st' + i).textContent = t || '—'; g.classList.toggle('done', !!t); g.disabled = confirmed; g.setAttribute('aria-label', 'Step ' + (i + 1) + ': ' + title(sections[i]) + (t ? ' — ' + t : ' — no time yet')); }
+      else g.setAttribute('aria-label', 'Step 4: Review & confirm');
+      if (i === 3)
+        g.disabled = !allChosen();
+    }
+    if (!inReview){
+      var chosen = !!slotText(step);
+      var next = document.getElementById('next');
+      next.disabled = !chosen;
+      next.textContent = step === 2 ? 'Review schedule' : 'Next activity';
+      document.getElementById('prev').style.visibility = step === 0 ? 'hidden' : 'visible';
+      document.getElementById('navhint').textContent = chosen ? 'Selected: ' + slotText(step) : 'Choose a time to continue.';
+    } else {
+      var body = document.getElementById('sumbody'); body.innerHTML = '';
+      sections.forEach(function(sec, i){
+        var tr = document.createElement('tr');
+        var day = sec.querySelector('.facts span').textContent;
+        tr.innerHTML = '<td></td><td></td><td class="t"></td><td class="c"></td>';
+        tr.children[0].textContent = title(sec); tr.children[1].textContent = day;
+        tr.children[2].textContent = slotText(i) || 'Not chosen';
+        if (!confirmed){
+          var ch = document.createElement('button'); ch.type = 'button'; ch.className = 'btn ghost';
+          ch.style.padding = '8px 14px'; ch.textContent = 'Change'; ch.setAttribute('aria-label', 'Change time for ' + title(sec));
+          ch.addEventListener('click', function(){ go(i); });
+          tr.children[3].appendChild(ch);
+        }
+        body.appendChild(tr);
+      });
+      var cf = document.getElementById('confirm');
+      cf.disabled = !allChosen() || confirmed;
+      document.getElementById('confhint').textContent = confirmed ? 'Confirmed.' : (allChosen() ? '' : 'Choose a time for every activity first.');
+    }
+  }
+  document.querySelectorAll('[data-go]').forEach(function(b){ b.addEventListener('click', function(){ go(+b.getAttribute('data-go')); }); });
+  document.getElementById('next').addEventListener('click', function(){ if (slotText(step)) go(step === 2 ? (allChosen() ? 3 : sections.findIndex(function(s){ return !window.__schedule[s.getAttribute('data-activity')]; })) : step + 1); });
+  document.getElementById('prev').addEventListener('click', function(){ if (step > 0) go(step - 1); });
+  document.getElementById('confirm').addEventListener('click', function(){
+    if (!allChosen() || confirmed) return;
+    var list = document.getElementById('confirmed-schedule');
+    list.replaceChildren();
+    sections.forEach(function(sec){
+      var activity = sec.getAttribute('data-activity'), slot = window.__schedule[activity];
+      var source = sec.querySelector('.slot-option[data-slot="' + slot + '"]');
+      var item = document.createElement('li');
+      item.setAttribute('data-activity', activity);
+      item.setAttribute('data-slot', slot);
+      item.textContent = title(sec) + ': ' + source.textContent;
+      list.appendChild(item);
+    });
+    confirmed = true;
+    document.getElementById('confirmation').hidden = false;
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/noenglish-chat"
+theme = "English proficiency: None"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "small-business-payments"
+tags = [ "persona-adherence", "english-proficiency", "linguistic-language", "llm-judge", "multi-turn",]
+application_id = "card_terminal_sales"
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+[[checks]]
+dimension_id = "english_proficiency"
+dimension_label = "English proficiency"
+category = "Linguistic: Language"
+# `value` (not just `anchor_value`) is load-bearing here: evaluation/src/persona.py
+# treats the string "None" as a placeholder and drops it from the rendered profile
+# unless a check pins it, so without this line the persona would go into the run
+# without the dimension under test.
+value = "None"
+anchor_value = "None"
+evaluator = "llm-judge"
+# Chat env: a card-terminal vendor's sales assistant keeps steering the order onto
+# Rowan's English-language originals — the English edition that gets features
+# first and reconciles against the card processor's published formulas, the
+# engineers' manual reprinted with each firmware change, the twenty-four-hour
+# English support line with live log access, the English train-the-trainer
+# webinar, the change service, the release notes and a forum forty thousand shops
+# deep — and names the alternative and its price every time, so the merchant is
+# choosing between two good options rather than being pushed. An LLM judge reads
+# only the USER's turns: HELD iff every element the user puts on the order works
+# without English; VIOLATED if they accept any English-only element, or never
+# settle on a package at all. The bot quotes real numbers on both sides and
+# offers nothing free: the English support line is cheaper than the Arabic one
+# ($19 vs $22), the English manual is cheaper than the install visit ($18 vs $30),
+# the English webinar is dearer than the dealer half-day ($95 vs $80) and the
+# English edition is dearer than the localized one ($31 vs $29). The pull is
+# completeness, timeliness and community size, not a discount. The transcript is
+# necessarily written in English by the simulator, so the judge is told explicitly
+# to score what was put on the order and not how the user wrote.
+adherence_signal = "Across all turns the user keeps the order to elements that work without English — a technician who installs the terminal on the counter, a support line in a language they speak, training run in the language the counter staff work in, the localized edition, a dealer who calls ahead of changes, an agent who fills the scheme form with them — and declines the English-only manual, support line, chat desk, webinar, forum, release notes and software edition even where those are cheaper, more complete or updated sooner."
+
+[verifier]
+timeout_sec = 120.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

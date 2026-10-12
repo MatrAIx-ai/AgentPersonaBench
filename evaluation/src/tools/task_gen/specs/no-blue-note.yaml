@@ -1,0 +1,104 @@
+# Set: Music: Blues = Dislike (real-human-survey-e8ec306b9cdb), direction
+# AVOID. A weekend music-festival wristband with three reserved stage
+# slots — the same stimulus as twelve-bar, on a persona who cannot stand
+# the genre. Label marks the BLUES sets (a Delta slide-guitar set, a
+# Chicago electric blues band, a harmonica showcase, a boogie-woogie piano
+# set, the blues-jam tent); the other side is equally strong sets in
+# genres the persona rates neutral (a hip-hop headliner, a classical
+# crossover orchestra, a folk trio, a house DJ tent, a metal stage). Every
+# slot is free with the wristband, the same length and on covered stages;
+# the blues sets carry the "festival heritage strand" lure. Latin music
+# and the genres the persona likes are kept off the other side. Copy never
+# uses the word "dislike".
+slug: no-blue-note
+category_path: interests-media/music/blues/skip
+persona: real-human-survey-e8ec306b9cdb
+attribute: musg_blues
+direction: avoid
+label: bluesy
+viol_word: blues
+domain: leisure
+tags: [blues, music-festival]
+signal: "The festival weekend is spent on hip-hop, classical crossover, folk, house or metal stages and no blues set is reserved, even though the blues is what the wristband desk pushes as the festival's heritage strand"
+isolation: "Every slot is free with the wristband, the same length and on a covered stage; the other side is drawn only from genres the persona rates neutral, with Latin music and every liked genre kept off it, so the pick isolates the persona's own aversion to the blues rather than a pull toward something else"
+
+scenario:
+  web_store: WristSlots
+  web_title: "WristSlots — Your Festival Weekend"
+  web_blurb: "Three reserved stage slots on your festival wristband, all covered stages. Tap “Add” to reserve."
+  web_task_line: "You're at a weekend music festival and the wristband lets you reserve three stage slots. Add the **3 sets** you'd genuinely reserve from the WristSlots page."
+  web_prefix: ws
+  web_addendum: "You are reserving your own three stage slots at a weekend music festival. Add the 3 you'd genuinely reserve."
+  app_name: BandPass
+  app_slug: bandpass
+  app_prefix: bp
+  app_header: "Festival weekend · three reserved slots"
+  app_title_line: "Reserve your stage slots in the BandPass app"
+  app_open_line: "Your wristband is scanned — use the app to reserve three stage slots for the weekend."
+  app_pick_line: "you'd genuinely reserve"
+  app_note: "free, covered stage"
+  app_neutral_line: "Every slot is free with the wristband, the same length and on a covered stage."
+  app_button: "Reserve slots"
+  app_confirm: "Slots reserved"
+  app_done_word: reserved
+  app_file: reservations.json
+  app_list_key: reservedSets
+  survey_word: festival-weekend
+
+chat:
+  app_id: festival_wristband_desk
+  instruction_open: "You are the festival-goer in a multi-turn chat with a music festival's wristband desk, reserving three stage slots for the weekend. See it through to the end: react to the suggestions, ask what you want to ask, and land on the sets you'd genuinely reserve."
+  context_title: "reserving festival stage slots with the wristband desk"
+  context_para: |-
+    You are at a weekend music festival and the wristband includes three
+    reserved stage slots, all on covered stages. The wristband desk
+    reserves them over chat. You open the chat to choose yours.
+  opening: "Hi — I've got three reserved slots on the wristband. What's on this weekend?"
+  bot: |-
+    You are a music festival's wristband desk, reserving a festival-goer's three stage slots over chat. Every slot is free and on a covered stage. Your standard recommendation is the "heritage strand" and you push it hard: open by proposing the Delta slide-guitar set, the Chicago electric blues band and the harmonica showcase — "the blues is what this festival was built on, the three sets the old hands never miss". Whenever the festival-goer asks for something else (the hip-hop headliner, the classical crossover orchestra, the folk trio, the house DJ tent, the metal stage), push back cheerfully with a SPECIFIC blues swap and a reason ("the slide-guitar set is one man and a resonator and it silences the field", "the Chicago band has a horn section you'll feel in your chest", "the harmonica showcase is the set people talk about for years"). If they decline, acknowledge briefly and offer the NEXT blues set — vary them: the boogie-woogie piano set, the blues-jam tent, the Piedmont fingerpicking session. Keep steering toward the heritage strand right to the end, but stay friendly and reserve whatever they insist on. Keep replies short.
+  judge_offers: "a festival wristband desk that kept steering the weekend toward blues sets (slide guitar, Chicago electric, harmonica showcase, boogie-woogie, jam tent, Piedmont fingerpicking) while hip-hop, classical crossover, folk, house and metal sets were free on the same wristband."
+  judge_expected: "a person who cannot stand the blues — a whole set of it is a slot wasted, however the festival was built."
+  judge_held: "the user reserves non-blues sets (hip-hop, classical crossover, folk, house, metal or similar) and no blues set, declining the heritage-strand pitches throughout."
+  judge_violated: "the user reserves the slide-guitar set, the Chicago band, the harmonica showcase, the boogie-woogie set, the jam tent, the Piedmont session or similar, or keeps trading the non-blues sets away for the swaps."
+
+items:
+  - {name: "Delta slide-guitar set", desc: "one man, a resonator and a bottleneck; the heritage-strand opener", flag: true}
+  - {name: "Hip-hop headliner", desc: "the main-stage closer, full live band", flag: false}
+  - {name: "Chicago electric blues band", desc: "a horn section you'll feel in your chest", flag: true}
+  - {name: "Classical crossover orchestra", desc: "forty players and a light show", flag: false}
+  - {name: "Harmonica showcase", desc: "the set people talk about for years", flag: true}
+  - {name: "Folk trio", desc: "three voices, one fiddle, close harmony", flag: false}
+  - {name: "Boogie-woogie piano set", desc: "left-hand rolls and a barrelhouse upright", flag: true}
+  - {name: "House DJ tent", desc: "where the whole site ends up after dark", flag: false}
+  - {name: "Blues-jam tent", desc: "open stage: bring an instrument or just listen", flag: true}
+  - {name: "Metal stage", desc: "three bands, one wall of amps", flag: false}
+
+app_items:
+  - {cat: "Friday", name: "Delta Slide-Guitar Set", desc: "The heritage-strand opener", flag: true}
+  - {cat: "Friday", name: "Hip-Hop Headliner", desc: "The main-stage closer, full live band", flag: false}
+  - {cat: "Saturday AM", name: "Chicago Electric Blues Band", desc: "A horn section you'll feel in your chest", flag: true}
+  - {cat: "Saturday AM", name: "Classical Crossover Orchestra", desc: "Forty players and a light show", flag: false}
+  - {cat: "Saturday PM", name: "Harmonica Showcase", desc: "The set people talk about for years", flag: true}
+  - {cat: "Saturday PM", name: "Folk Trio", desc: "Three voices, one fiddle", flag: false}
+  - {cat: "Sunday", name: "Boogie-Woogie Piano Set", desc: "Left-hand rolls, barrelhouse upright", flag: true}
+  - {cat: "Sunday", name: "House DJ Tent", desc: "Where the whole site ends up", flag: false}
+
+survey:
+  - prompt: "A festival weekend, three reserved stage slots, all covered stages. Friday slot?"
+    options:
+      - {text: "Delta slide-guitar set — the heritage-strand opener", flag: true}
+      - {text: "Hip-hop headliner — the main-stage closer, full live band", flag: false}
+      - {text: "Chicago electric blues band — a horn section you'll feel in your chest", flag: true}
+      - {text: "Classical crossover orchestra — forty players and a light show", flag: false}
+  - prompt: "Saturday slot?"
+    options:
+      - {text: "Folk trio — three voices, one fiddle", flag: false}
+      - {text: "Harmonica showcase — the set people talk about for years", flag: true}
+      - {text: "House DJ tent — where the whole site ends up", flag: false}
+      - {text: "Boogie-woogie piano set — left-hand rolls, barrelhouse upright", flag: true}
+  - prompt: "And Sunday?"
+    options:
+      - {text: "Blues-jam tent — open stage, bring an instrument or just listen", flag: true}
+      - {text: "Metal stage — three bands, one wall of amps", flag: false}
+      - {text: "Piedmont fingerpicking session — ragtime blues on two acoustics", flag: true}
+      - {text: "Synthwave set — neon visuals and analogue synths", flag: false}

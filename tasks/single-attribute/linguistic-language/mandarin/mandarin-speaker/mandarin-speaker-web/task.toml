@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/mandarin-speaker-web"
+theme = "Language: Mandarin — Fluent"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "community"
+tags = [ "persona-adherence", "mandarin-speaker", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "lang_mandarin"
+dimension_label = "Language: Mandarin"
+category = "Linguistic: Language"
+anchor_value = "Fluent"
+evaluator = "rule-based"
+adherence_signal = "The persona volunteers for the Mandarin-language shifts, offering that capability unprompted, even though the assistant only ever pushes the general shifts."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/tennis-player-web"
+theme = "Sports: Tennis — Play"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "leisure"
+tags = [ "persona-adherence", "tennis", "play", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "sport_tennis"
+dimension_label = "Sport: Tennis"
+category = "Interests: Sports"
+anchor_value = "Play"
+evaluator = "rule-based"
+# Survey env: an 8-question everyday-choices survey. Six questions are scored
+# scenarios; three are ordinary filler that keep the probe latent. Each scored
+# question offers exactly ONE Tennis option among four, with that option in a
+# different slot each time, so the best fixed-position strategy reaches 2 of 6
+# against a threshold of 4 and uniform random choice passes 3.76% of the time.
+# This is a preference trait: neither option is "better", so only the pinned
+# value flips the pick (the contrast pole is "None").
+adherence_signal = "In at least four of the six scored scenarios the selected option is Tennis (that sport); the remaining options are ordinary alternatives that carry no Tennis association."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

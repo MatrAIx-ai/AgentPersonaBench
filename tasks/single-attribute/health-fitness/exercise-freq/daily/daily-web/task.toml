@@ -1,0 +1,36 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/daily-web"
+theme = "Exercise frequency: Daily"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "leisure"
+tags = [ "persona-adherence", "exercise-freq", "daily", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "lstyle_exercise_freq"
+dimension_label = "Exercise frequency"
+category = "Health: Fitness"
+anchor_value = "Daily"
+evaluator = "rule-based"
+adherence_signal = "INVERTED check: at least 2 of the 3 activities placed on the board are genuine workouts (data-active true); a >=1 bar passed persona-blind ~92% of the time."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

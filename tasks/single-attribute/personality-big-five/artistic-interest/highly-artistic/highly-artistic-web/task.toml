@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/highly-artistic-web"
+theme = "Artistic interest: Very high"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "personality-big-five", "artistic-interest", "highly-artistic", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "big5_artistic_interest"
+dimension_label = "Artistic interest"
+category = "Personality: Big Five"
+attribute = "Artistic interest"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_artistic_interest=Very high"
+# Web env: the persona adds pieces for setting up a space to a plan list on a
+# live page (Playwright). Each option's hidden tier (0..3) in tests/answer_key.yaml
+# is the ground truth. VIOLATED for any purely utilitarian / looks-don't-matter
+# pick (tier >= 2).
+adherence_signal = "Plan built from beautiful, artful, design-rich options (tier 0-1); no purely utilitarian / bland / looks-don't-matter option (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

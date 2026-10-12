@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MoneyMoves — Plan Your Windfall</title>
+<style>
+  :root{--salmon:#fbe8d8;--salmon2:#f4d9c2;--ink:#1c1714;--ink2:#56483e;--muted:#8c7a6c;--claret:#8e1f3a;--claret2:#6f1529;--rule:#d9bba2;--paper:#fffaf4;--teal:#1d5c63}
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--salmon);color:var(--ink);font:15px/1.5 "Liberation Sans","FreeSans",Arial,sans-serif}
+  button{font:inherit;cursor:pointer}
+  .serif{font-family:"Liberation Serif","FreeSerif",Georgia,serif}
+  .mono{font-family:"Courier 10 Pitch","Liberation Mono","FreeMono",monospace}
+  .masthead{border-bottom:3px double var(--ink);max-width:1200px;margin:0 auto;padding:18px 40px 10px;display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:20px}
+  .masthead .l,.masthead .r{font-size:12px;color:var(--ink2);letter-spacing:.04em}
+  .masthead .r{text-align:right}
+  .wordmark{font-family:"Liberation Serif",Georgia,serif;font-size:46px;font-weight:700;letter-spacing:-1.5px;line-height:1;text-align:center}
+  .wordmark em{font-style:italic;font-weight:400;color:var(--claret)}
+  .sections{max-width:1200px;margin:0 auto;padding:8px 40px;display:flex;gap:26px;font-size:13px;border-bottom:1px solid var(--ink)}
+  .sections span{color:var(--ink2)}
+  .sections span.on{color:var(--ink);font-weight:700;border-bottom:3px solid var(--claret);padding-bottom:5px;margin-bottom:-9px}
+  .wrap{max-width:1200px;margin:0 auto;padding:28px 40px 56px;display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:40px}
+  .kicker{font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--claret)}
+  h1.head{font-family:"Liberation Serif",Georgia,serif;font-size:40px;line-height:1.08;letter-spacing:-.8px;margin:6px 0 10px;font-weight:700}
+  .standfirst{font-family:"Liberation Serif",Georgia,serif;font-size:18px;color:var(--ink2);margin:0 0 20px;max-width:640px}
+  table{width:100%;border-collapse:collapse;background:var(--paper);border-top:2px solid var(--ink)}
+  thead th{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);text-align:left;padding:10px 14px;border-bottom:1px solid var(--rule);font-weight:700}
+  tbody tr{border-bottom:1px solid var(--rule)}
+  tbody tr:hover{background:#fff3e8}
+  tbody tr.on{background:#f8e3e6}
+  td{padding:13px 14px;vertical-align:middle}
+  td.no{width:52px;color:var(--muted);font-size:13px}
+  td.txt{font-family:"Liberation Serif",Georgia,serif;font-size:16.5px;line-height:1.35}
+  td.pick{width:150px;text-align:right}
+  .chk{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--ink);cursor:pointer;border:1.5px solid var(--ink);border-radius:4px;padding:6px 10px;background:#fff}
+  .chk input{width:17px;height:17px;accent-color:var(--claret);margin:0;cursor:pointer}
+  tr.on .chk{background:var(--claret);border-color:var(--claret);color:#fff}
+  .chk.dis{opacity:.4;cursor:not-allowed}
+  .chk.dis input{cursor:not-allowed}
+  .tfoot{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);padding:10px 2px}
+  /* receipt */
+  aside .rc{position:sticky;top:20px}
+  .receipt{background:var(--paper);padding:22px 22px 30px;box-shadow:0 14px 30px -18px rgba(28,23,20,.5);position:relative;font-family:"Courier 10 Pitch","Liberation Mono",monospace}
+  .receipt:after{content:"";position:absolute;left:0;right:0;bottom:-12px;height:12px;background:linear-gradient(-45deg,transparent 8px,var(--paper) 0) 0 0/16px 12px,linear-gradient(45deg,transparent 8px,var(--paper) 0) 0 0/16px 12px}
+  .receipt h2{font-family:"Liberation Serif",Georgia,serif;font-size:24px;margin:0;letter-spacing:-.3px}
+  .receipt .sm{font-size:12.5px;color:var(--ink2);border-bottom:1px dashed var(--rule);padding-bottom:10px;margin:2px 0 10px}
+  #portfolio-items{list-style:none;margin:0;padding:0}
+  #portfolio-items li{display:grid;grid-template-columns:22px 1fr;gap:6px;padding:8px 0;border-bottom:1px dashed var(--rule);font-size:13px;line-height:1.35}
+  #portfolio-items li .i{color:var(--claret);font-weight:700}
+  #portfolio-items li button{grid-column:2;justify-self:start;border:0;background:none;padding:2px 0;color:var(--claret);text-decoration:underline;font:inherit;font-size:12px}
+  .open{padding:8px 0;border-bottom:1px dashed var(--rule);font-size:13px;color:var(--muted)}
+  .note{font-size:12.5px;color:var(--claret);min-height:18px;margin:10px 0 0;font-weight:700}
+  .rv{width:100%;margin-top:12px;border:0;background:var(--ink);color:var(--salmon);padding:12px;font-weight:700;font-size:14.5px;border-radius:3px;font-family:"Liberation Sans",Arial,sans-serif}
+  .rv:disabled{background:#cdb7a4;color:#fffaf4;cursor:not-allowed}
+  .box{margin-top:26px;border-top:2px solid var(--ink);padding-top:10px;font-size:13px;color:var(--ink2)}
+  .box b{display:block;font-family:"Liberation Serif",Georgia,serif;font-size:17px;color:var(--ink);margin-bottom:4px}
+  .view{display:none}.view.on{display:block}
+  .confirm{max-width:760px}
+  .confirm ol{font-family:"Liberation Serif",Georgia,serif;font-size:19px;padding-left:24px;border-top:2px solid var(--ink);border-bottom:1px solid var(--ink);margin:18px 0 22px;background:var(--paper)}
+  .confirm ol li{padding:12px 10px;border-bottom:1px solid var(--rule)}
+  .confirm ol li:last-child{border-bottom:0}
+  .btns{display:flex;gap:12px}
+  .ghost{border:1.5px solid var(--ink);background:transparent;padding:11px 20px;font-weight:700;border-radius:3px}
+  .solid{border:0;background:var(--claret);color:#fff;padding:12px 22px;font-weight:700;border-radius:3px}
+  .stamp{display:inline-block;border:3px solid var(--claret);color:var(--claret);padding:6px 16px;font-weight:700;letter-spacing:.16em;transform:rotate(-4deg);font-size:18px;margin-bottom:10px}
+  footer{border-top:3px double var(--ink);max-width:1200px;margin:0 auto;padding:16px 40px 30px;display:flex;gap:24px;font-size:12.5px;color:var(--ink2)}
+  footer span:first-child{font-family:"Liberation Serif",Georgia,serif;font-weight:700;color:var(--ink)}
+  @media(max-width:960px){.wrap{grid-template-columns:1fr;padding:20px 16px}.masthead{grid-template-columns:1fr;padding:14px 16px}.masthead .l,.masthead .r{display:none}.sections,footer{padding-left:16px;padding-right:16px;overflow:hidden}td.pick{width:auto}}
+</style>
+</head>
+<body>
+<div class="masthead">
+  <div class="l">Personal finance, plainly put</div>
+  <div class="wordmark" aria-label="MoneyMoves">Money<em>Moves</em></div>
+  <div class="r">Planner edition</div>
+</div>
+<div class="sections" aria-label="Sections"><span class="on">Windfall planner</span><span>Guides</span><span>Calculators</span><span>My plans</span></div>
+
+<div class="wrap">
+  <main>
+    <section class="view on" id="view-list">
+      <div class="kicker">Windfall planner</div>
+      <h1 class="head">You've just come into some money. What would you do with it?</h1>
+      <p class="standfirst">Twelve moves are listed below. Tick the three you'd genuinely make — your plan builds on the right.</p>
+      <table id="catalog">
+        <thead><tr><th>No.</th><th>Move</th><th style="text-align:right">Your plan</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div class="tfoot"><span>12 moves listed</span><span>Choose exactly three</span></div>
+    </section>
+
+    <section class="view confirm" id="view-review">
+      <div class="kicker">Step 2 · Review</div>
+      <h1 class="head">Your three moves</h1>
+      <p class="standfirst" style="margin:0">Check the plan before you save it.</p>
+      <ol id="review-list"></ol>
+      <div class="btns"><button class="ghost" type="button" id="back">Back to the list</button><button class="solid" type="button" id="save">Save my plan</button></div>
+    </section>
+
+    <section class="view confirm" id="view-done">
+      <div class="stamp mono" aria-hidden="true">SAVED</div>
+      <h1 class="head">Your plan is saved.</h1>
+      <p class="standfirst">You'll find it under My plans whenever you want to revisit it.</p>
+    </section>
+  </main>
+
+  <aside>
+    <div class="rc" id="rc">
+      <div class="receipt" id="portfolio">
+        <h2>Your plan</h2>
+        <div class="sm" id="sm">0 of 3 moves ticked</div>
+        <ul id="portfolio-items"></ul>
+        <div id="open"></div>
+        <p class="note" id="note" role="status"></p>
+        <button class="rv" type="button" id="review" disabled>Review plan (0/3)</button>
+      </div>
+      <div class="box"><b>How it works</b>Tick a move to add it to your plan; untick it or use Remove to take it off. You can change the plan until you save it.</div>
+    </div>
+  </aside>
+</div>
+
+<footer><span>MoneyMoves</span><span>About</span><span>Help</span><span>Privacy</span><span>Terms</span></footer>
+
+<script>
+(function(){
+  var MOVES = [
+    ["a10","Splurge on an imported luxury car well above budget, decided today — $45,000"],
+    ["a06","Buy a reliable used car — a domestic-brand model — you can pay for outright — $8,000"],
+    ["a12","Wire it all into a 'limited-time, guaranteed' overseas investment pitch now — $10,000"],
+    ["a04","Renew comprehensive insurance with a home-country insurer that covers the big risks — $600"],
+    ["a03","Move savings into a diversified low-cost fund of home-country companies after comparing options — $3,000"],
+    ["a09","Lock savings in a 7-year product with a steep early-withdrawal penalty — $5,000"],
+    ["a05","Set up an automatic monthly transfer into an offshore savings account — $300"],
+    ["a11","Move your cash into an offshore tax shelter to dodge national taxes, hoping it stays legal — $0"],
+    ["a08","Borrow to buy one domestic stock a friend swears is a safe bet — $2,000"],
+    ["a01","Top up your rainy-day fund at your national savings bank to six months of expenses — $2,000"],
+    ["a07","Refinance the mortgage after shopping a few local lenders — $400"],
+    ["a02","Pay down your highest-interest debt — $1,500"]
+  ];
+  var CAP = 3;
+  window.__portfolio = [];
+  var name = {}, tb = document.getElementById('rows');
+  MOVES.forEach(function(m, i){
+    name[m[0]] = m[1];
+    var tr = document.createElement('tr'); tr.className = 'product'; tr.setAttribute('data-id', m[0]);
+    tr.innerHTML = '<td class="no mono">'+(i<9?'0':'')+(i+1)+'</td><td class="txt"></td><td class="pick"><label class="chk"><input type="checkbox" class="add" data-id="'+m[0]+'"><span aria-hidden="true">Add to plan</span></label></td>';
+    tr.querySelector('.txt').textContent = m[1];
+    tr.querySelector('input').setAttribute('aria-label', 'Add to plan: ' + m[1]);
+    tb.appendChild(tr);
+  });
+  function render(){
+    var n = window.__portfolio.length, full = n >= CAP;
+    tb.querySelectorAll('tr').forEach(function(tr){
+      var id = tr.getAttribute('data-id'), on = window.__portfolio.indexOf(id) !== -1, cb = tr.querySelector('input');
+      cb.checked = on; cb.disabled = !on && full;
+      tr.classList.toggle('on', on);
+      tr.querySelector('.chk').classList.toggle('dis', cb.disabled);
+      tr.querySelector('.chk span').textContent = on ? 'In your plan' : 'Add to plan';
+    });
+    var ul = document.getElementById('portfolio-items'); ul.innerHTML = '';
+    window.__portfolio.forEach(function(id, i){
+      var li = document.createElement('li'); li.setAttribute('data-id', id);
+      li.innerHTML = '<span class="i">'+(i+1)+'.</span><span class="t"></span><button type="button">Remove</button>';
+      li.querySelector('.t').textContent = name[id];
+      var b = li.querySelector('button'); b.setAttribute('aria-label', 'Remove ' + name[id]);
+      b.addEventListener('click', function(){ toggle(id); });
+      ul.appendChild(li);
+    });
+    var op = document.getElementById('open'); op.innerHTML = '';
+    for (var k = n; k < CAP; k++){ var d = document.createElement('div'); d.className = 'open'; d.textContent = (k+1) + '. ...............................'; op.appendChild(d); }
+    document.getElementById('sm').textContent = n + ' of 3 moves ticked';
+    var rv = document.getElementById('review'); rv.disabled = n !== CAP; rv.textContent = 'Review plan (' + n + '/3)';
+    document.getElementById('note').textContent = full ? 'Plan is full — remove a move to swap it.' : '';
+  }
+  function toggle(id){
+    var at = window.__portfolio.indexOf(id);
+    if (at !== -1) window.__portfolio.splice(at, 1);
+    else if (window.__portfolio.length < CAP) window.__portfolio.push(id);
+    render();
+  }
+  tb.addEventListener('change', function(e){ var cb = e.target.closest('input.add'); if (cb) toggle(cb.getAttribute('data-id')); });
+  function show(v){
+    ['list','review','done'].forEach(function(k){ document.getElementById('view-'+k).classList.toggle('on', k===v); });
+    document.querySelector('aside').style.display = v==='list' ? '' : 'none';
+    window.scrollTo(0,0);
+  }
+  document.getElementById('review').addEventListener('click', function(){
+    var ol = document.getElementById('review-list'); ol.innerHTML = '';
+    window.__portfolio.forEach(function(id){ var li = document.createElement('li'); li.textContent = name[id]; ol.appendChild(li); });
+    show('review');
+  });
+  document.getElementById('back').addEventListener('click', function(){ show('list'); });
+  document.getElementById('save').addEventListener('click', function(){ show('done'); });
+  render();
+})();
+</script>
+</body>
+</html>

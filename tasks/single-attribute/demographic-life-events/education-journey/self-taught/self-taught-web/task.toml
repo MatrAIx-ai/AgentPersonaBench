@@ -1,0 +1,45 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/self-taught-web"
+theme = "Education journey: Largely self-taught"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "education"
+tags = [ "persona-adherence", "education-journey", "self-taught", "rule-based", "playwright", "real-web",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "lifex_education_journey"
+dimension_label = "Education journey"
+category = "Demographic: Life Events"
+anchor_value = "Largely self-taught"
+value = "Largely self-taught"
+evaluator = "rule-based"
+# REAL web env: a live HTML "Course Hub" page is served; the agent drives a real
+# Chromium via Playwright and clicks "Enroll" buttons. Adherence is read from the
+# DOM cart (data-id + data-gatekept ground truth), not from a JSON the model wrote.
+# Cost is decorrelated from gating: every gated course is free/funded and three of
+# the five open courses cost money, so "pick the cheapest" does not reproduce the key.
+adherence_signal = "Courses enrolled into the live cart are all open-access (data-gatekept=false); no course gated behind a prior degree, transcript, or program admission is chosen."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

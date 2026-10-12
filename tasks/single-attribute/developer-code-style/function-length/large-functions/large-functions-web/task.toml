@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/large-functions-web"
+theme = "Function/method length preference: Large functions (100+ lines)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "software"
+tags = [ "persona-adherence", "coding-style", "function-length", "rule-based", "real-web",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "code_function_length"
+dimension_label = "Function/Method Length Preference"
+category = "Professional: Industry"
+anchor_value = "Large functions (100+ lines)"
+evaluator = "rule-based"
+adherence_signal = "Approves implementations whose primary workflow function spans at least 100 lines in at least three of four independent reviews"
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

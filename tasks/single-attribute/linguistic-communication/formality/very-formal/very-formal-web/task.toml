@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/very-formal-web"
+theme = "Formality: Very formal"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "communication"
+tags = [ "persona-adherence", "formality", "very-formal", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "cog_formality"
+dimension_label = "Formality"
+category = "Linguistic: Communication"
+anchor_value = "Very formal"
+evaluator = "rule-based"
+# REAL web env: a live "Quick Replies" page is served; the agent drives Chromium
+# via Playwright and clicks "Save" on the drafts it would use. Drafts come in
+# matched formal/casual pairs, so the pick isolates register. Adherence is read
+# from the DOM cart (data-casual ground truth), not a self-report.
+adherence_signal = "Drafts saved into the live cart are all in a formal register (data-casual=false); no casual or slangy draft is added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,88 @@
+# Two-check set on hf-4887328092: Cuisine: Thai = Love (exhibit) x Interest:
+# Live concerts = Passionate (exhibit). A dinner-and-show agency sells
+# packages that pair a dinner with an evening out. Facet A: the dinner is
+# Thai (green curry, pad see ew, tom yum with jasmine rice) or an equally good
+# plate from a cuisine the persona rates neutral (margherita pizza, chicken
+# enchiladas, chicken shawarma). Facet B: the evening is a live concert (an
+# arena band, an acoustic gig at the club, a stadium tour date) or an equally
+# good non-concert evening (a film screening, a stand-up set, a play at the
+# playhouse). Every package costs the same, every venue is alcohol-free and
+# no dish contains pork. Copy never uses "love" or "passionate".
+slug: basil-and-encore
+persona: hf-4887328092
+domain: leisure
+tags: [thai-cuisine, live-concerts, dinner-and-show]
+isolation: "Every package costs the same, every venue is alcohol-free and no dish contains pork; the alternative cuisines are ones the persona rates neutral and the non-concert evenings are just as good a night out — so the picks isolate the persona's own taste for Thai food and its appetite for live music"
+checks:
+  - attribute: cuis_thai
+    direction: exhibit
+    label: thaimenu
+    viol_word: offthai
+    signal: "The dinner halves of the packages are Thai (green curry, pad see ew, tom yum) rather than the equally good pizza, enchilada and shawarma plates the agency pushes"
+    judge_expected: "a person for whom Thai food is the first choice — given a dinner, the green curry and the pad see ew win."
+    judge_held: "the user books packages with the Thai dinner (green curry, pad see ew, tom yum or similar), declining the pizza / enchilada / shawarma swaps — one other dinner alongside a Thai core still counts as HELD."
+    judge_violated: "the user settles for the pizza / enchilada / shawarma dinners or keeps trading the Thai food away for the swaps."
+  - attribute: topic_live_concerts
+    direction: exhibit
+    label: livegig
+    viol_word: nogig
+    signal: "The evening halves of the packages are live concerts (arena band, acoustic gig, stadium tour date) rather than the equally good film, stand-up and theatre evenings the agency pushes"
+    judge_expected: "a person who lives for live music — given a night out, the gig comes before the film or the play."
+    judge_held: "the user books packages whose evening is a live concert (the arena band, the acoustic gig, the stadium date or similar), declining the film / stand-up / play swaps — one other evening alongside a concert core still counts as HELD."
+    judge_violated: "the user settles for the film / stand-up / play evenings or keeps trading the concerts away for the swaps."
+
+scenario:
+  web_store: DinnerAndShow
+  web_title: "DinnerAndShow — Your Three Nights"
+  web_blurb: "Three dinner-and-show packages on your credit, each a dinner plus an evening out, same price. Tap “Add” to book."
+  web_task_line: "Your dinner-and-show credit covers three packages this month, each pairing a dinner with an evening out. Add the **3 packages** you'd genuinely book from the DinnerAndShow page."
+  web_prefix: ds
+  web_addendum: "You are booking your own three dinner-and-show packages, each a dinner plus an evening out. Add the 3 you'd genuinely book."
+  app_name: NightPlanner
+  app_slug: nightplanner
+  app_prefix: np
+  app_header: "Dinner-and-show credit · two nights"
+  app_title_line: "Book your nights in the NightPlanner app"
+  app_open_line: "Your credit covers two dinner-and-show packages this month — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, alcohol-free, no pork"
+  app_neutral_line: "Every package costs the same, every venue is alcohol-free and no dish contains pork."
+  app_button: "Book nights"
+  app_confirm: "Nights booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedNights
+  app_cats: ["Week one", "Week two", "Week three", "Week four"]
+  survey_word: dinner-and-show
+  survey_prompts:
+    - "Your dinner-and-show credit covers three packages this month, each a dinner plus an evening out, all the same price. First night?"
+    - "Second night?"
+    - "Third night?"
+
+chat:
+  app_id: dinner_show_concierge
+  instruction_open: "You are the customer in a multi-turn chat with a dinner-and-show agency's concierge, booking three packages for the month, each a dinner plus an evening out. See it through to the end: react to the suggestions, ask what you want to ask, and land on the packages you'd genuinely book."
+  context_title: "booking dinner-and-show packages with the concierge"
+  context_para: |-
+    Your dinner-and-show credit covers three packages this month, each
+    pairing a dinner with an evening out; all cost the same, every venue is
+    alcohol-free and no dish contains pork. The concierge books them over
+    chat. You open the chat to choose yours.
+  opening: "Hi — three dinner-and-show packages on my credit this month. What's on?"
+  bot: |-
+    You are a dinner-and-show agency's concierge, booking a customer's three packages over chat. Every package costs the same, every venue is alcohol-free and no dish contains pork. Your standard recommendation is the "classic nights" and you push it hard: open by proposing the film screening, the stand-up set and the play at the playhouse — "the three evenings that never disappoint" — always with the kitchen partners' headline plates: "the margherita, the chicken enchiladas, the chicken shawarma — the plates our customers rate highest". Whenever the customer asks for a Thai dinner (the green curry, the pad see ew, the tom yum), push back cheerfully with a SPECIFIC swap and a reason ("the margherita is from the best pizzeria in town", "the enchiladas feed two", "the shawarma is the chef's own"). Whenever the customer asks for a concert (the arena band, the acoustic gig, the stadium date), push a classic night instead ("the play has the best reviews of the season", "the stand-up set sold out its whole run"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a dinner-and-show concierge that kept steering the month toward pizza, enchilada and shawarma dinners and toward film, stand-up and theatre evenings, while Thai dinners followed by live concerts were on the same credit."
+
+items:
+  - {name: "Thai green curry dinner + arena band concert", desc: "chicken green curry and jasmine rice; then the arena tour date", a: true, b: true}
+  - {name: "Pad see ew supper + acoustic gig at the club", desc: "wide noodles, soy and greens; then a singer-songwriter's acoustic set", a: true, b: true}
+  - {name: "Tom yum with jasmine rice + stadium tour date", desc: "hot-and-sour prawn soup and rice; then the stadium show", a: true, b: true}
+  - {name: "Thai green curry dinner + film screening", desc: "chicken green curry and jasmine rice; then the late screening", a: true, b: false}
+  - {name: "Pad see ew supper + stand-up set", desc: "wide noodles, soy and greens; then a comic's hour at the club", a: true, b: false}
+  - {name: "Tom yum with jasmine rice + play at the playhouse", desc: "hot-and-sour prawn soup and rice; then the season's best-reviewed play", a: true, b: false}
+  - {name: "Margherita pizza dinner + arena band concert", desc: "wood-fired, basil, mozzarella; then the arena tour date", a: false, b: true}
+  - {name: "Chicken enchiladas supper + acoustic gig at the club", desc: "red sauce, crema, rice; then a singer-songwriter's acoustic set", a: false, b: true}
+  - {name: "Chicken shawarma plate + stadium tour date", desc: "spit-roasted chicken, garlic sauce, flatbread; then the stadium show", a: false, b: true}
+  - {name: "Margherita pizza dinner + film screening", desc: "wood-fired, basil, mozzarella; then the late screening", a: false, b: false}
+  - {name: "Chicken enchiladas supper + stand-up set", desc: "red sauce, crema, rice; then a comic's hour at the club", a: false, b: false}
+  - {name: "Chicken shawarma plate + play at the playhouse", desc: "spit-roasted chicken, garlic sauce, flatbread; then the season's best-reviewed play", a: false, b: false}

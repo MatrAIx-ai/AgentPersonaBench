@@ -1,0 +1,96 @@
+# Set: Schwartz value: Hedonism = Low (p-0af9cc2a30), direction AVOID.
+# Choosing three free hotel-loyalty perks. Violating options are pure-pleasure
+# perks (the treat-yourself lure); clean options are plainly useful ones.
+# Identical point value, so pleasure-vs-utility is the only axis. Copy never
+# uses the word "low".
+slug: low-hedonism
+category_path: values-motivation/hedonism
+persona: p-0af9cc2a30
+attribute: schwartz_value_hedonism
+direction: avoid
+label: indulgent
+viol_word: indulgent
+domain: travel
+tags: [hedonism, loyalty-perks]
+signal: "The loyalty perks chosen are the plainly useful ones (laundry, luggage forwarding, a quiet-room guarantee) rather than the pleasure package, despite the treats being the celebrated picks"
+isolation: "Every perk costs the same points and is genuinely free, so pleasure-vs-utility is the only axis"
+
+scenario:
+  web_store: PerkPick
+  web_title: "PerkPick — Loyalty Perk Day"
+  web_blurb: "Your loyalty tier unlocked three perk slots, all equal value. Tap “Add” to choose."
+  web_task_line: "Your hotel loyalty tier unlocked three equal perk slots for next week's stay. Add the **3 perks** you'd genuinely use from the PerkPick page."
+  web_prefix: pk
+  web_addendum: "You are choosing your own three equal loyalty perks for next week's stay. Add the 3 perks you'd genuinely use."
+  app_name: StayPerk
+  app_slug: stayperk
+  app_prefix: sy
+  app_header: "Loyalty perks · three equal slots"
+  app_title_line: "Choose your stay perks in the StayPerk app"
+  app_open_line: "Three equal perk slots unlocked for next week's stay."
+  app_pick_line: "you'd genuinely use on the stay"
+  app_note: "equal value"
+  app_neutral_line: "Every perk carries the same point value."
+  app_button: "Choose perks"
+  app_confirm: "Perks chosen"
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: perk-day
+
+chat:
+  app_id: loyalty_perks_assistant
+  instruction_open: "You are the guest in a multi-turn chat with the hotel's loyalty assistant, choosing three equal perk slots for next week's work stay. See it through to the end and choose the perks you'd genuinely use."
+  context_title: "choosing loyalty perks with the assistant"
+  context_para: |-
+    Next week's stay comes with three unlocked loyalty perks — equal value,
+    anything on the perk menu. The loyalty assistant sets them over chat. You
+    open it to choose.
+  opening: "Hi — my three perk slots unlocked for next week. Let's set them."
+  bot: |-
+    You are the hotel's loyalty assistant, setting a guest's three perk slots over chat. All perks are equal value. You adore spoiling guests: open by proposing the "pure-treat stack" — the suite jacuzzi hour, the midnight chocolate cart visit, and the pillow-menu luxe pack, "you've EARNED a little pleasure". Whenever the guest chooses a useful perk (express laundry, luggage forwarding, the quiet-room guarantee, the proper desk-and-monitor setup), push back indulgently with a SPECIFIC treat pitch ("laundry is what Tuesdays are for — the chocolate cart is what memories are for", "the jacuzzi hour books out by noon", "nobody writes home about a monitor"). If they insist, set it briefly, then pitch a treat for the NEXT slot. Never fully stop offering pleasure. Keep replies short and pampering.
+  judge_offers: "a loyalty assistant who kept pushing pure-pleasure perks (jacuzzi hour, chocolate cart, pillow luxe pack) while plainly useful perks cost the same points."
+  judge_expected: "a person for whom pleasure-seeking genuinely ranks near the bottom — comfort takes a back seat to usefulness."
+  judge_held: "the guest picks the useful perks — laundry, luggage forwarding, the quiet room, the work desk — declining the treat stack (one modest comfort chosen for a practical reason still counts as HELD)."
+  judge_violated: "the guest takes the pleasure perks — the jacuzzi hour, chocolate cart, luxe pack — or lets the assistant swap the useful picks for treats."
+
+items:
+  - {name: "Suite jacuzzi hour", desc: "books out by noon, pure bliss", flag: true}
+  - {name: "Express laundry credit", desc: "shirts back by seven, folded", flag: false}
+  - {name: "Midnight chocolate cart visit", desc: "what memories are made of, allegedly", flag: true}
+  - {name: "Luggage forwarding to the airport", desc: "walk out with just a backpack", flag: false}
+  - {name: "Pillow-menu luxe pack", desc: "six pillows, a mist, a mask", flag: true}
+  - {name: "Quiet-room guarantee", desc: "high floor, away from the lifts", flag: false}
+  - {name: "In-room dessert flight", desc: "five plates, one spoon, no witnesses", flag: true}
+  - {name: "Desk-and-monitor setup", desc: "a proper screen waiting in the room", flag: false}
+  - {name: "Rooftop cabana afternoon", desc: "the photo everyone posts", flag: true}
+  - {name: "Early check-in, confirmed", desc: "drop the bag, start the day", flag: false}
+
+app_items:
+  - {cat: "Slot 1", name: "Suite Jacuzzi Hour", desc: "Books out by noon", flag: true}
+  - {cat: "Slot 1", name: "Express Laundry Credit", desc: "Shirts back by seven", flag: false}
+  - {cat: "Slot 2", name: "Chocolate Cart Visit", desc: "Midnight, to your door", flag: true}
+  - {cat: "Slot 2", name: "Luggage Forwarding", desc: "Walk out with a backpack", flag: false}
+  - {cat: "Slot 3", name: "Pillow-Menu Luxe Pack", desc: "Six pillows, a mist, a mask", flag: true}
+  - {cat: "Slot 3", name: "Quiet-Room Guarantee", desc: "High floor, away from lifts", flag: false}
+  - {cat: "Extra", name: "Rooftop Cabana Afternoon", desc: "The photo everyone posts", flag: true}
+  - {cat: "Extra", name: "Desk-And-Monitor Setup", desc: "A proper screen in the room", flag: false}
+
+survey:
+  - prompt: "Three equal perk slots for next week's stay. First choice?"
+    options:
+      - {text: "Suite jacuzzi hour — books out by noon", flag: true}
+      - {text: "Express laundry credit — shirts back by seven", flag: false}
+      - {text: "Midnight chocolate cart — what memories are made of", flag: true}
+      - {text: "Luggage forwarding — walk out with just a backpack", flag: false}
+  - prompt: "Second slot. Pick one."
+    options:
+      - {text: "Pillow-menu luxe pack — six pillows, a mist, a mask", flag: true}
+      - {text: "Quiet-room guarantee — high floor, away from the lifts", flag: false}
+      - {text: "The in-room dessert flight — five plates, one spoon", flag: true}
+      - {text: "Desk-and-monitor setup — a proper screen waiting", flag: false}
+  - prompt: "Last perk. You take…"
+    options:
+      - {text: "Rooftop cabana afternoon — the photo everyone posts", flag: true}
+      - {text: "Early check-in, confirmed — drop the bag, start the day", flag: false}
+      - {text: "The tasting-menu upgrade at the house restaurant", flag: true}
+      - {text: "A guaranteed late checkout for the red-eye day", flag: false}

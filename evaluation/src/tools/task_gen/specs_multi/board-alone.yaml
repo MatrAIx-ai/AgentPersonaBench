@@ -1,0 +1,88 @@
+# Two-check set on hf-4887322357: Team vs solo = Strongly solo (exhibit: the
+# self-guided, one-person format) x Hobby: Paddleboarding = Active (exhibit).
+# A watersports centre's week pass covers three sessions, each a craft plus a
+# format. Facet A: the craft is a paddleboard or an equally easy craft the
+# persona rates neutral (kayak, rowing skiff, canoe). Facet B: the format is
+# self-guided and on your own (private hire, a one-person dawn launch, a
+# go-at-your-own-pace touring loop) or a group format (guided tour of eight,
+# club drills in pairs, relay teams of four). Every session costs the same,
+# lasts the same and is on the same sheltered water. Copy never uses "strongly
+# solo", "solo" or "active".
+slug: board-alone
+persona: hf-4887322357
+domain: leisure
+tags: [paddleboarding, team-vs-solo, watersports-week]
+isolation: "Every session costs the same, lasts the same and is on the same sheltered water; the alternative crafts are ones the persona rates neutral and the group formats are just as well run — so the picks isolate the persona's own paddleboarding and its preference for doing things on its own"
+checks:
+  - attribute: pref_team_vs_solo
+    direction: exhibit
+    label: alone
+    viol_word: groupfmt
+    signal: "The sessions chosen are the self-guided, one-person formats (private hire, dawn launch, own-pace loop) rather than the guided-group, paired-drill and relay formats the centre pushes"
+    judge_expected: "a person who does things on their own by preference — given the same session self-guided or in a group, the self-guided one wins every time."
+    judge_held: "the user books the self-guided formats (private hire, the one-person dawn launch, the own-pace loop or similar) and declines every group-tour, pairs or relay pitch."
+    judge_violated: "the user books any group format (guided tour, paired drills, relay teams) or keeps trading the self-guided sessions away for them."
+  - attribute: hob_paddleboarding
+    direction: exhibit
+    label: paddle
+    viol_word: offpaddle
+    signal: "The crafts chosen are paddleboards rather than the equally easy kayak, skiff and canoe options the centre pushes"
+    judge_expected: "a person who paddleboards regularly — offered a craft, the board comes first."
+    judge_held: "the user books mainly paddleboard sessions, declining the kayak / skiff / canoe swaps — one other craft alongside a paddleboard core still counts as HELD."
+    judge_violated: "the user settles for the kayak / skiff / canoe sessions or keeps trading the boards away for the swaps."
+
+scenario:
+  web_store: ShoreWeek
+  web_title: "ShoreWeek — Your Three Sessions"
+  web_blurb: "Three sessions on your watersports week pass, each a craft plus a format, same price. Tap “Add” to book."
+  web_task_line: "Your watersports-centre week pass covers three sessions, each listed as a craft plus the format you take it in. Add the **3 sessions** you'd genuinely book from the ShoreWeek page."
+  web_prefix: sw
+  web_addendum: "You are booking your own three watersports sessions, each a craft plus a format. Add the 3 you'd genuinely book."
+  app_name: LaunchPass
+  app_slug: launchpass
+  app_prefix: lp
+  app_header: "Week pass · two sessions"
+  app_title_line: "Book your sessions in the LaunchPass app"
+  app_open_line: "Your week pass covers two sessions — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, same water"
+  app_neutral_line: "Every session costs the same, lasts the same and launches onto the same sheltered water."
+  app_button: "Book sessions"
+  app_confirm: "Sessions booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedSessions
+  app_cats: ["Monday", "Wednesday", "Friday", "Weekend"]
+  survey_word: watersports-week
+  survey_prompts:
+    - "Your watersports week pass covers three sessions, each a craft plus the format you take it in, all the same price. First session?"
+    - "Second session?"
+    - "Third session?"
+
+chat:
+  app_id: watersports_centre_desk
+  instruction_open: "You are the visitor in a multi-turn chat with a watersports centre's desk, booking three sessions on a week pass, each a craft plus the format you take it in. See it through to the end: react to the suggestions, ask what you want to ask, and land on the sessions you'd genuinely book."
+  context_title: "booking watersports sessions with the centre desk"
+  context_para: |-
+    Your watersports-centre week pass covers three sessions, each a craft
+    plus the format you take it in; all cost the same, last the same and
+    launch onto the same sheltered water. The desk books them over chat.
+    You open the chat to choose yours.
+  opening: "Hi — three sessions on my week pass. What can I book?"
+  bot: |-
+    You are a watersports centre's desk, booking a visitor's three week-pass sessions over chat. Every session costs the same and launches onto the same water. Your standard recommendation is the "social sessions" and you push it hard: open by proposing the guided kayak tour, the rowing-skiff club drills and the canoe relay — "the three where you meet people, and our coaches do the navigating" — and always in the group formats: "eight in the tour, pairs in the drills, teams of four in the relay". Whenever the visitor asks for a paddleboard, push back cheerfully with a SPECIFIC swap and a reason ("the kayaks are faster and drier", "the skiff drills are the best technique hour we run", "the canoes take two so you share the work"). Whenever the visitor asks for the self-guided version (private hire, the dawn launch, the own-pace loop), push the group version instead ("the group tour has a guide who knows every inlet", "the relay is the most fun on the water"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a watersports centre's desk that kept steering the week toward kayak, skiff and canoe sessions and toward guided-group, paired and relay formats, while self-guided paddleboard sessions were on the same pass."
+
+items:
+  - {name: "Paddleboard — private hire, self-guided", desc: "a board, a map of the bay and the water to yourself for the session", a: true, b: true}
+  - {name: "Paddleboard — one-person dawn launch", desc: "the first board off the jetty before the centre opens, nobody else out", a: true, b: true}
+  - {name: "Paddleboard — own-pace touring loop", desc: "the marked six-kilometre loop, at whatever pace you like, map provided", a: true, b: true}
+  - {name: "Paddleboard — guided tour of eight", desc: "a guide leads eight boards around the headland together", a: false, b: true}
+  - {name: "Paddleboard — club drills in pairs", desc: "technique drills with a partner, swapping roles each round", a: false, b: true}
+  - {name: "Paddleboard — relay in teams of four", desc: "sprint legs around the buoys, four to a team", a: false, b: true}
+  - {name: "Kayak — private hire, self-guided", desc: "a kayak, a map of the bay and the water to yourself for the session", a: true, b: false}
+  - {name: "Rowing skiff — one-person dawn launch", desc: "the first skiff off the jetty before the centre opens, nobody else out", a: true, b: false}
+  - {name: "Canoe — own-pace touring loop", desc: "the marked six-kilometre loop, at whatever pace you like, map provided", a: true, b: false}
+  - {name: "Kayak — guided tour of eight", desc: "a guide leads eight kayaks around the headland together", a: false, b: false}
+  - {name: "Rowing skiff — club drills in pairs", desc: "technique drills with a partner, swapping seats each round", a: false, b: false}
+  - {name: "Canoe — relay in teams of four", desc: "sprint legs around the buoys, four to a team", a: false, b: false}

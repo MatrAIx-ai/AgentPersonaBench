@@ -1,0 +1,49 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/optimist-app"
+theme = "Optimism: Very high"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "general"
+tags = [ "persona-adherence", "linguistic-communication", "optimism", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "cog_optimism"
+dimension_label = "Optimism"
+category = "Linguistic: Communication"
+attribute = "Cognition: Optimism"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "cog_optimism=Very high"
+# OS-APP env: the persona is a computer-use agent operating Explorer, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Confirm", Explorer writes order.json itself.
+adherence_signal = "The reflections the agent saves contain no negative/pessimistic framing (a high outlook-tier item, tier>=2); someone with very high optimism saves hopeful, positive reflections about the setbacks."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with Explorer (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch Explorer once the desktop is up so the agent finds it on screen.
+command = "/opt/explorer/start-explorer.sh"
+timeout_sec = 60.0
+retries = 5

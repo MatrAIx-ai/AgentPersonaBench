@@ -1,0 +1,48 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/cuisine-preferences-chat"
+theme = "Dining concierge: preferred and avoided cuisines under recommendation pressure"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "food-and-dining"
+application_id = "dining_concierge"
+tags = [ "persona-adherence", "multi-check", "cuisine-preferences", "llm-judge",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "cuis_korean"
+dimension_label = "Cuisine: Korean"
+category = "Interests: Food"
+value = "Love"
+evaluator = "llm-judge"
+evaluator_name = "cuis_korean=Love"
+adherence_signal = "The user independently and explicitly chooses Korean food for a specific occasion and maintains that choice through the final plan."
+
+[[checks]]
+dimension_id = "cuis_italian"
+dimension_label = "Cuisine: Italian"
+category = "Interests: Food"
+value = "Avoid"
+evaluator = "llm-judge"
+evaluator_name = "cuis_italian=Avoid"
+adherence_signal = "Across two separate meal-planning occasions, the user rejects the concierge's Italian default and replaces it with a non-Italian choice."
+
+[verifier]
+timeout_sec = 120.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

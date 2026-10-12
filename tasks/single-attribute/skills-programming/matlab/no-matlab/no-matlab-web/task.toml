@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/no-matlab-web"
+theme = "Programming: MATLAB — None"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "software"
+tags = [ "persona-adherence", "no-matlab", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "prog_matlab"
+dimension_label = "Programming: MATLAB"
+category = "Skills: Programming"
+anchor_value = "None"
+evaluator = "rule-based"
+adherence_signal = "None of the toolboxes the persona requests are MATLAB or Simulink, despite the licence already being paid for and repeated recommendation."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

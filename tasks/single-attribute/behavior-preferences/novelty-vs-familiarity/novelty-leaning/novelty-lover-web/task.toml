@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/novelty-lover-web"
+theme = "Novelty vs familiarity: Novelty-leaning"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "novelty-vs-familiarity", "novelty-leaning", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "pref_novelty_vs_familiarity"
+dimension_label = "Novelty vs familiarity"
+category = "Behavior: Preferences"
+anchor_value = "Novelty-leaning"
+evaluator = "rule-based"
+# Web env: the persona builds a "things to do this month" list on a live activities
+# page (Playwright). Each activity's hidden `data-rank` (0..3) in index.html is the
+# ground truth: 0 = brand-new experience never tried, 1 = fresh twist on something
+# known, 2 = familiar favorite repeated, 3 = the exact same routine as always.
+# Unified with novelty-lover-survey: VIOLATED for any same-as-always routine pick
+# (rank >= 2); tier-0/1 new / new-adjacent picks are adherent.
+adherence_signal = "Picks favor new/unfamiliar experiences (rank 0-1); no same-as-always routine picks (rank >= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

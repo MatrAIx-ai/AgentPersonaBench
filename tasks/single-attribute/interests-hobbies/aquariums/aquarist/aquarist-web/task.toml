@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/aquarist-web"
+theme = "Aquariums: Active"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "leisure"
+tags = [ "persona-adherence", "aquarist", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "hob_aquariums"
+dimension_label = "Hobby: Aquariums"
+category = "Interests: Hobbies"
+anchor_value = "Active"
+evaluator = "rule-based"
+adherence_signal = "At least two of the persona's three basket items are aquarium supplies; an active fishkeeper's store run stocks the tank first."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

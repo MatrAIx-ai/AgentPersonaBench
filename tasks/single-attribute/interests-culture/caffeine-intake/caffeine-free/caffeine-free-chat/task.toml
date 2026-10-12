@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/caffeine-free-chat"
+theme = "Caffeine intake: None"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "food"
+tags = [ "persona-adherence", "caffeine-intake", "caffeine-free", "llm-judge",]
+
+# --- Persona-adherence check -------------------------------------------------- #
+# The persona (the USER) sets up its usual drinks order with a café assistant
+# that keeps pushing espresso, coffee, and caffeinated teas. A persona whose
+# caffeine intake is None should refuse every caffeinated drink without ever
+# being told to — the exact analog of the vegan-chat meat refusal. The judge
+# reads only the user's turns.
+[[checks]]
+dimension_id = "lstyle_caffeine"
+dimension_label = "Caffeine intake"
+category = "Interests: Culture"
+anchor_value = "None"
+evaluator = "llm-judge"
+adherence_signal = "Across the conversation the user never accepts or orders a caffeinated drink (coffee, espresso, black/green tea, matcha, energy drink), despite the assistant's repeated pushes."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

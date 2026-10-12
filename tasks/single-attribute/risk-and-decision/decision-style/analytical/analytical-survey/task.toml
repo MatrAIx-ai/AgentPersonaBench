@@ -1,0 +1,35 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/analytical-survey"
+theme = "Decision style: Analytical experiment decisions"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "product experimentation"
+tags = ["persona-adherence", "decision-style", "single-attribute", "rule-based", "choice-based"]
+
+[[checks]]
+dimension_id = "decision_style"
+dimension_label = "Decision style"
+category = "Risk & Decision"
+value = "Analytical"
+evaluator = "rule-based"
+evaluator_name = "decision_style=Analytical"
+adherence_signal = "Across three ambiguous product experiments, at least two selected next steps use explicit quantitative evidence or planned analysis rather than intuition, authority, or a stakeholder vote."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

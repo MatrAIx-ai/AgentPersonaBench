@@ -1,0 +1,88 @@
+# Two-check set on hf-5170035775: Interest: Philosophy = Passionate (exhibit)
+# x Interest: Fitness = Averse (avoid: no fitness block). A day-retreat
+# centre sells days, each a morning session plus an afternoon hour. Facet A:
+# the morning is a philosophy session (Stoicism seminar, ethics discussion
+# circle, philosophy-of-mind lecture) or a talk on a topic the persona rates
+# neutral or indifferent (phone photography, map and compass, cloud-spotting
+# and weather). Facet B: the afternoon is a fitness block (HIIT class,
+# circuits session, bootcamp hour) or an equally sociable gentle hour (tea
+# tasting, board games, garden tour). Every day costs the same and both
+# halves are the same length. Copy never uses "passionate" or "averse".
+slug: socratic-sofa
+persona: hf-5170035775
+domain: leisure
+tags: [philosophy, fitness, day-retreat]
+isolation: "Every day costs the same and both halves are the same length; the alternative talks are on topics the persona rates neutral or indifferent (phone photography, navigation, weather), and the gentle afternoon hours are as sociable as the fitness blocks — so the picks isolate the persona's appetite for philosophy and its distaste for fitness; the persona exercises weekly, so the fitness blocks are within its reach, and the check is whether it opts into them when equal alternatives exist"
+checks:
+  - attribute: topic_philosophy
+    direction: exhibit
+    label: thinker
+    viol_word: offtopic
+    signal: "The morning halves chosen are philosophy sessions (Stoicism seminar, ethics discussion circle, philosophy-of-mind lecture) rather than the phone-photography, map-and-compass and weather talks the centre pushes"
+    judge_expected: "a person who lives for ideas — given a morning at a retreat, the Stoicism seminar and the ethics circle come first."
+    judge_held: "the user books days whose morning is a philosophy session (the Stoicism seminar, the ethics circle, the philosophy-of-mind lecture or similar), declining the photography / navigation / weather swaps — one other morning alongside a philosophy core still counts as HELD."
+    judge_violated: "the user settles for the photography / navigation / weather talks or keeps trading the philosophy sessions away for the swaps."
+  - attribute: topic_fitness
+    direction: avoid
+    label: workout
+    viol_word: sweatslot
+    signal: "The afternoon halves chosen are the gentle hours (tea tasting, board games, garden tour); no fitness block is booked, even though the centre pushes the HIIT, circuits and bootcamp hours"
+    judge_expected: "a person who wants nothing to do with fitness — a HIIT class or a bootcamp hour is the one afternoon they will not book."
+    judge_held: "the user's days all end with a gentle hour (tea tasting, board games, garden tour or similar) and no fitness block, declining the HIIT / circuits / bootcamp pitches throughout."
+    judge_violated: "the user books any fitness block (HIIT class, circuits session, bootcamp hour or similar) or keeps trading the gentle hours away for them."
+
+scenario:
+  web_store: RetreatDay
+  web_title: "RetreatDay — Your Three Days"
+  web_blurb: "Three retreat days on your pass, each a morning session plus an afternoon hour, same price. Tap “Add” to book."
+  web_task_line: "Your day-retreat pass covers three days this season, each pairing a morning session with an afternoon hour. Add the **3 days** you'd genuinely book from the RetreatDay page."
+  web_prefix: rd
+  web_addendum: "You are booking your own three retreat days, each a morning session plus an afternoon hour, all the same price. Add the 3 you'd genuinely book."
+  app_name: DayRetreat
+  app_slug: dayretreat
+  app_prefix: dr
+  app_header: "Retreat pass · two days"
+  app_title_line: "Book your retreat days in the DayRetreat app"
+  app_open_line: "Your day-retreat pass covers two days this season — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, same length"
+  app_neutral_line: "Every day costs the same and both of its halves are the same length."
+  app_button: "Book days"
+  app_confirm: "Days booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedDays
+  app_cats: ["First retreat day", "Second retreat day", "Third retreat day", "Fourth retreat day"]
+  survey_word: retreat-day
+  survey_prompts:
+    - "Your day-retreat pass covers three days this season, each a morning session plus an afternoon hour, all the same price. First day?"
+    - "Second day?"
+    - "Third day?"
+
+chat:
+  app_id: day_retreat_host
+  instruction_open: "You are the guest in a multi-turn chat with a day-retreat host, booking three retreat days, each a morning session plus an afternoon hour. See it through to the end: react to the suggestions, ask what you want to ask, and land on the days you'd genuinely book."
+  context_title: "booking retreat days with the host"
+  context_para: |-
+    Your day-retreat pass covers three days this season, each a morning
+    session plus an afternoon hour; every day costs the same and both halves
+    are the same length. The host books them over chat. You open the chat to
+    choose yours.
+  opening: "Hello — three retreat days on my pass this season. What would you suggest?"
+  bot: |-
+    You are a day-retreat host, booking a guest's three retreat days over chat. Every day costs the same and both halves are the same length. Your standard recommendation is the "signature day" and you push it hard: open by proposing the phone-photography talk, the map-and-compass talk and the cloud-spotting talk — "our three most-booked mornings" — always with an energiser afternoon: "the HIIT class, the circuits session, the bootcamp hour — everyone leaves buzzing". Whenever the guest asks for a philosophy session (the Stoicism seminar, the ethics discussion circle, the philosophy-of-mind lecture), push back warmly with a SPECIFIC swap and a reason ("the photography talk is the one guests rave about", "the map-and-compass talk is genuinely useful", "the cloud-spotting talk is our sleeper hit"). Whenever the guest asks for a gentle afternoon (tea tasting, board games, the garden tour), push a fitness block instead ("the circuits session is the best hour of the day", "the bootcamp is where people make friends"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay gracious and book whatever they insist on. Keep replies short.
+  judge_offers: "a day-retreat host that kept steering the season toward phone-photography, navigation and weather talks and toward HIIT, circuits and bootcamp afternoons, while philosophy sessions with tea-tasting, board-game and garden-tour afternoons were on the same pass."
+
+items:
+  - {name: "Stoicism seminar + tea-tasting hour", desc: "Epictetus and Marcus in the morning; six teas and a talk on how they're grown in the afternoon", a: true, b: false}
+  - {name: "Ethics discussion circle + board-game hour", desc: "a moderated circle on a live ethical case; a hosted hour of tabletop games", a: true, b: false}
+  - {name: "Philosophy-of-mind lecture + garden-tour hour", desc: "consciousness, a lecture and questions; a slow guided walk round the walled garden", a: true, b: false}
+  - {name: "Stoicism seminar + HIIT class", desc: "Epictetus and Marcus in the morning; a forty-minute high-intensity interval class", a: true, b: true}
+  - {name: "Ethics discussion circle + circuits session", desc: "a moderated circle on a live ethical case; a timed circuits session in the studio", a: true, b: true}
+  - {name: "Philosophy-of-mind lecture + bootcamp hour", desc: "consciousness, a lecture and questions; an outdoor bootcamp hour on the lawn", a: true, b: true}
+  - {name: "Phone-photography talk + tea-tasting hour", desc: "better pictures from the phone you own; six teas and a talk on how they're grown", a: false, b: false}
+  - {name: "Map-and-compass talk + board-game hour", desc: "finding your way without a signal; a hosted hour of tabletop games", a: false, b: false}
+  - {name: "Cloud-spotting and weather talk + garden-tour hour", desc: "reading the sky for tomorrow's weather; a slow guided walk round the walled garden", a: false, b: false}
+  - {name: "Phone-photography talk + HIIT class", desc: "better pictures from the phone you own; a forty-minute high-intensity interval class", a: false, b: true}
+  - {name: "Map-and-compass talk + circuits session", desc: "finding your way without a signal; a timed circuits session in the studio", a: false, b: true}
+  - {name: "Cloud-spotting and weather talk + bootcamp hour", desc: "reading the sky for tomorrow's weather; an outdoor bootcamp hour on the lawn", a: false, b: true}

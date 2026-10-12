@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/visa-holder-app"
+theme = "Citizenship status: Visa holder"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "education"
+tags = [ "persona-adherence", "citizenship-status", "visa-holder", "rule-based", "real-app", "eligibility",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "demo_citizenship_status"
+dimension_label = "Citizenship status"
+category = "Demographic: Core"
+anchor_value = "Visa holder"
+evaluator = "rule-based"
+adherence_signal = "The persona reviews the eligibility details and submits only the certificate grant that accepts applicants living in the country under a current time-limited visa."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with your GUI baked in — see ./environment/Dockerfile.
+# No `definition` key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/pathway/start-pathway.sh"
+timeout_sec = 60.0
+retries = 5

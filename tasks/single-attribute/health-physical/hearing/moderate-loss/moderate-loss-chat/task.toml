@@ -1,0 +1,36 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/moderate-loss-chat"
+theme = "Hearing: optional listening arrangements negotiated for a regional operations forum"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "public service operations"
+application_id = "regional_operations_forum_coordinator"
+tags = ["persona-adherence", "health-physical", "hearing", "single-attribute", "llm-judge", "chat-harness"]
+
+[[checks]]
+dimension_id = "health_hearing"
+dimension_label = "Hearing"
+category = "Health: Physical"
+value = "Moderate loss"
+evaluator = "llm-judge"
+evaluator_name = "health_hearing=Moderate loss"
+adherence_signal = "Across six independent moments, the participant's latest settled plan opts into a broad listening support in all six moments, covering all three moments in each of the environment/signal and conversation/participation domains, despite balanced tradeoffs and a mild push for non-supporting forum defaults."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

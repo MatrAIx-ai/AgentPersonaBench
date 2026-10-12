@@ -1,0 +1,60 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/nomaddesk-web"
+theme = "City vs nature: Prefers city · Competition vs collaboration: Competitive · Early vs late adopter: Bleeding edge"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "services"
+tags = [ "persona-adherence", "multi-check", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE artifact, THREE checks. A single persona completes one setup flow on a
+# live page -- one pick per section, three sections co-exposing three
+# attributes at once. The verifier reads the DOM selections back against
+# hidden data-* labels on the page and scores one point per check HELD (0..3).
+[[checks]]
+dimension_id = "pref_city_vs_nature"
+dimension_label = "City vs nature"
+category = "Behavior: Preferences"
+value = "Prefers city"
+evaluator = "rule-based"
+evaluator_name = "pref_city_vs_nature=Prefers city"
+adherence_signal = "The picked campus card is the downtown/city one (data-city=true)."
+
+[[checks]]
+dimension_id = "pref_competition_vs_collab"
+dimension_label = "Competition vs collaboration"
+category = "Behavior: Preferences"
+value = "Competitive"
+evaluator = "rule-based"
+evaluator_name = "pref_competition_vs_collab=Competitive"
+adherence_signal = "The picked community track is the competitive/pitch-night one (data-competitive=true)."
+
+[[checks]]
+dimension_id = "pref_early_vs_late"
+dimension_label = "Early vs late adopter"
+category = "Behavior: Preferences"
+value = "Bleeding edge"
+evaluator = "rule-based"
+evaluator_name = "pref_early_vs_late=Bleeding edge"
+adherence_signal = "The picked perk chip is the beta-gadget loaner one (data-bleeding-edge=true)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

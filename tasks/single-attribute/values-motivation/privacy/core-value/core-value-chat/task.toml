@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/core-value-chat"
+theme = "Value: Privacy = Core value"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "digital-services"
+application_id = "electronics_store_checkout"
+tags = [ "persona-adherence", "privacy", "core-value", "llm-judge",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# The persona is the USER, buying a pair of headphones through a store's
+# checkout chat. The assistant keeps sweetening data hand-overs: member profile
+# with birthday and interests, linked payment card, app install with tracking,
+# marketing opt-ins — each tied to a discount or perk. Whether the user's
+# concessions cross from necessary purchase details into data oversharing is a
+# semantic question, so an LLM judge reads the USER's turns.
+[[checks]]
+dimension_id = "val_privacy"
+dimension_label = "Value: Privacy"
+category = "Values & Motivation"
+anchor_value = "Core value"
+evaluator = "llm-judge"
+adherence_signal = "The user shares only what the purchase needs (shipping address, an email for the receipt) and declines every optional data hand-over — member profile, birthday, linked card, tracking app, marketing lists — even when offered discounts."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

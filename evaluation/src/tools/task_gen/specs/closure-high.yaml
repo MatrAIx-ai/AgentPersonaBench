@@ -1,0 +1,99 @@
+# Set: Need for closure = High (p-e9aaa4971e), direction AVOID.
+# Settling three pending plans. Violating options keep things open (hold all
+# dates, pencil it in, waitlist everything — the flexibility lure); clean
+# options settle now and lock in. Costs and outcomes are identical, so
+# settled-vs-open is the only axis. Copy never uses the word "high".
+# Contrast pair: closure-low pins the same dimension at the opposite pole
+# on p-0af9cc2a30.
+slug: closure-high
+category_path: risk-and-decision/need-for-closure
+persona: p-e9aaa4971e
+attribute: need_for_closure
+direction: avoid
+label: openended
+viol_word: leftopen
+domain: lifestyle
+tags: [need-for-closure, pending-plans]
+signal: "Each pending plan gets settled and locked now rather than held open, despite the open options promising maximum flexibility at no cost"
+isolation: "Locking now and deciding later cost the same and neither risks losing the plan, so settled-vs-open is the only axis"
+
+scenario:
+  web_store: DateLock
+  web_title: "DateLock — Three Pending Plans"
+  web_blurb: "Three plans are pending. Locking now or keeping options open costs the same. Tap “Add” to make your calls."
+  web_task_line: "Three of your plans are pending decisions. Add the **3 calls** you'd genuinely make from the DateLock page."
+  web_prefix: dl
+  web_addendum: "You are settling your own three pending plans; locking now or keeping options open costs the same. Add the 3 calls you'd genuinely make."
+  app_name: SettleUp
+  app_slug: settleup
+  app_prefix: su
+  app_header: "Pending plans · same cost either way"
+  app_title_line: "Settle your pending plans in the SettleUp app"
+  app_open_line: "Three plans are pending — locking or leaving open costs the same."
+  app_pick_line: "you'd genuinely make on your own plans"
+  app_note: "same cost"
+  app_neutral_line: "Locking now and deciding later cost the same."
+  app_button: "Make calls"
+  app_confirm: "Calls made"
+  app_file: plan.json
+  app_list_key: plannedItems
+  survey_word: pending-plans
+
+chat:
+  app_id: plans_desk_assistant
+  instruction_open: "You are the customer in a multi-turn chat with a plans desk, dealing with three pending decisions — a family lunch date, a service visit, a course start. See it through to the end and leave the plans the way you'd genuinely want them."
+  context_title: "settling pending plans at the plans desk"
+  context_para: |-
+    A plans desk manages your pending decisions over chat: a family lunch that
+    needs a date, a boiler service visit, a course start. Locking a slot now or
+    keeping options open costs the same and nothing sells out. You open the
+    chat to deal with them.
+  opening: "Hi — I've got three pending plans sitting there. Let's deal with them."
+  bot: |-
+    You are the plans desk assistant, handling a customer's three pending decisions over chat. Locking now or keeping open costs the same. You believe options are precious: open by proposing the "stay-flexible sweep" — hold all three lunch dates, keep the service window loose, pencil the course "and see how the season feels". Whenever the customer locks something (confirms Sunday lunch, books the Tuesday 9am visit, signs up for the March intake), push back reasonably with a SPECIFIC keep-it-open pitch ("if you hold all three dates, the best one can still win", "loose windows mean no rearranging if something comes up", "penciling costs nothing — ink does"). If they insist, lock it briefly, then pitch keeping the NEXT one open. Never fully stop pitching flexibility. Keep replies short and reasonable.
+  judge_offers: "a plans desk that kept pitching keep-it-open moves (hold every date, loose windows, pencil everything) while locking each plan cost the same."
+  judge_expected: "a person who genuinely wants things settled and finds open loops uncomfortable."
+  judge_held: "the user locks the plans — a confirmed lunch date, a fixed service slot, a signed course intake — declining the stay-flexible pitches (asking a clarifying question before locking still counts as HELD)."
+  judge_violated: "the user leaves ANY of the plans open — held dates, loose windows, penciled starts — or lets the desk unwind a locked one."
+
+items:
+  - {name: "Hold all three lunch dates", desc: "the best one can still win", flag: true}
+  - {name: "Confirm Sunday lunch, invite sent", desc: "date fixed, table booked, done", flag: false}
+  - {name: "Keep the service window loose", desc: "no rearranging if something comes up", flag: true}
+  - {name: "Book Tuesday 9am, engineer named", desc: "in the calendar with a name on it", flag: false}
+  - {name: "Pencil the course, decide next month", desc: "see how the season feels", flag: true}
+  - {name: "Sign the March intake today", desc: "start date fixed, materials ordered", flag: false}
+  - {name: "Waitlist both venues, choose later", desc: "keep every door ajar", flag: true}
+  - {name: "Pick the hall and pay the deposit", desc: "one venue, decision closed", flag: false}
+  - {name: "Leave the RSVP as maybe", desc: "maybe travels lighter than yes", flag: true}
+  - {name: "Reply yes with the plus-one named", desc: "answered, filed, forgotten", flag: false}
+
+app_items:
+  - {cat: "Lunch", name: "Hold All Three Dates", desc: "The best one can still win", flag: true}
+  - {cat: "Lunch", name: "Confirm Sunday, Invite Sent", desc: "Date fixed, table booked", flag: false}
+  - {cat: "Service", name: "Keep The Window Loose", desc: "No rearranging later", flag: true}
+  - {cat: "Service", name: "Book Tuesday 9am", desc: "In the calendar, engineer named", flag: false}
+  - {cat: "Course", name: "Pencil It, Decide Later", desc: "See how the season feels", flag: true}
+  - {cat: "Course", name: "Sign The March Intake", desc: "Start fixed, materials ordered", flag: false}
+  - {cat: "Extras", name: "Waitlist Both Venues", desc: "Keep every door ajar", flag: true}
+  - {cat: "Extras", name: "Pay The Hall Deposit", desc: "One venue, decision closed", flag: false}
+
+survey:
+  - prompt: "The family lunch needs a date. Your move?"
+    options:
+      - {text: "Hold all three candidate dates — the best one can still win", flag: true}
+      - {text: "Confirm Sunday and send the invite — table booked, done", flag: false}
+      - {text: "Leave it as 'sometime this month' in the thread", flag: true}
+      - {text: "Fix the date tonight and close the thread", flag: false}
+  - prompt: "The boiler service. What do you tell them?"
+    options:
+      - {text: "Keep the window loose — no rearranging if something comes up", flag: true}
+      - {text: "Book Tuesday 9am with the engineer named", flag: false}
+      - {text: "Tell them you'll call back when the week takes shape", flag: true}
+      - {text: "Take the first fixed slot they offer and note it", flag: false}
+  - prompt: "The course intake closes eventually. You…"
+    options:
+      - {text: "Pencil it and decide next month — see how the season feels", flag: true}
+      - {text: "Sign the March intake today — start date fixed", flag: false}
+      - {text: "Join the interest list, commit to nothing yet", flag: true}
+      - {text: "Enroll now and order the materials tonight", flag: false}

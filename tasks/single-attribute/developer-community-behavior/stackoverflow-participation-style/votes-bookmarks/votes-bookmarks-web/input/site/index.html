@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DevExchange Review Queue</title>
+<style>
+:root{--ink:#111827;--ink2:#1f2937;--rail:#161b26;--canvas:#eceef2;--card:#fff;--line:#d9dde4;--muted:#6b7280;--yel:#facc15;--yel-d:#a16207;--blue:#1d4ed8}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--canvas);color:var(--ink);font:15px/1.5 "DejaVu Sans","Liberation Sans",Arial,sans-serif}
+.mono{font-family:"DejaVu Sans Mono","Liberation Mono",monospace}
+.app{display:grid;grid-template-columns:268px 1fr 300px;min-height:100vh}
+/* rail */
+.rail{background:var(--rail);color:#cbd2de;padding:20px 16px;display:flex;flex-direction:column;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:700;font-size:19px;letter-spacing:-.01em}
+.brand b{color:var(--yel)}
+.railh{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#7c879a;margin:4px 4px -8px}
+.q{display:block;width:100%;text-align:left;background:transparent;border:1px solid transparent;color:#cbd2de;border-radius:8px;padding:10px 10px 10px 12px;cursor:pointer;font:inherit;font-size:13px;line-height:1.35}
+.q:hover{background:#1f2633}
+.q.on{background:#232b3a;border-color:#39445a;color:#fff}
+.q .qn{display:flex;justify-content:space-between;font-size:11px;color:#8b95a7;margin-bottom:3px}
+.q .st{color:#8b95a7}.q .st.ok{color:var(--yel)}
+.q.rev{border:1px dashed #39445a}
+.railfoot{margin-top:auto;font-size:12px;color:#7c879a;border-top:1px solid #262e3d;padding-top:14px}
+/* center */
+.center{padding:0 34px 40px}
+.topbar{display:flex;align-items:center;gap:14px;height:64px;border-bottom:1px solid var(--line)}
+.search{flex:1;max-width:420px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px 12px;color:#9ca3af;font-size:14px}
+.rep{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+.av{width:32px;height:32px;border-radius:8px;background:var(--ink);color:var(--yel);display:grid;place-items:center;font-weight:700;font-size:13px}
+.crumb{margin:20px 0 6px;font-size:13px;color:var(--muted)}
+.notice{background:#fffbea;border:1px solid #f1dc8a;border-radius:10px;padding:12px 15px;margin:10px 0 18px;font-size:14px}
+.thread{display:none;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.thread.active{display:block}
+.th-head{padding:22px 26px 16px;border-bottom:1px solid var(--line)}
+.meta{display:flex;gap:6px;flex-wrap:wrap}
+.meta span{font-size:12px;background:#eef2ff;color:#3730a3;border-radius:6px;padding:2px 8px}
+.thread h2{font-size:24px;line-height:1.25;margin:10px 0 8px;letter-spacing:-.01em}
+.stats{display:flex;gap:18px;font-size:12px;color:var(--muted)}
+.th-body{display:grid;grid-template-columns:64px 1fr;gap:16px;padding:20px 26px}
+.score{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--muted);font-size:12px}
+.score .big{font-size:22px;font-weight:700;color:var(--ink)}
+.excerpt{margin:0;font-size:16px;line-height:1.6}
+.sumlab{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.pick{background:#f7f8fa;border-top:1px solid var(--line);padding:18px 26px 22px}
+.pick h3{margin:0 0 10px;font-size:14px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.action{cursor:pointer;text-align:left;background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:13px 14px;color:var(--ink);font:inherit;font-size:14px;font-weight:600;display:flex;align-items:center;gap:10px}
+.action::before{content:"";width:16px;height:16px;border-radius:50%;border:2px solid #9ca3af;flex:none}
+.action:hover{border-color:#9ca3af}
+.action.selected{border-color:var(--ink);background:#fffbea;box-shadow:inset 0 0 0 1px var(--ink)}
+.action.selected::before{border-color:var(--ink);background:radial-gradient(circle,var(--ink) 0 4px,transparent 5px)}
+.navrow{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.btn{cursor:pointer;border-radius:9px;padding:10px 18px;font:inherit;font-weight:700;font-size:14px;border:1.5px solid var(--ink)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.solid{background:var(--ink);color:var(--yel)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+/* review */
+#review{display:none;background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px 26px}
+#review.active{display:block}
+#review h2{margin:0 0 4px;font-size:22px}
+#review ol{list-style:none;padding:0;margin:16px 0}
+#review li{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;border-top:1px solid var(--line);padding:12px 0}
+#review li .n{width:28px;height:28px;border-radius:7px;background:var(--ink);color:var(--yel);display:grid;place-items:center;font-weight:700;font-size:13px}
+#review li small{display:block;color:var(--muted)}
+#finish{cursor:pointer;background:var(--yel);color:var(--ink);border:0;border-radius:9px;padding:12px 22px;font:inherit;font-weight:700;font-size:15px}
+#finish:disabled{opacity:.45;cursor:not-allowed}
+#done{display:none;background:#fff;border:1px solid var(--line);border-radius:14px;padding:60px 30px;text-align:center}
+#done h2{margin:0 0 6px;font-size:26px}
+/* right */
+.side{border-left:1px solid var(--line);background:#f6f7f9;padding:22px 20px;display:flex;flex-direction:column;gap:18px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.panel h4{margin:0 0 8px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.meter{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:8px 0}
+.meter i{height:7px;border-radius:4px;background:#e5e7eb}.meter i.f{background:var(--ink)}
+#summary{font-weight:700}
+.panel p{margin:0;font-size:13px;color:var(--muted)}
+.panel ul{margin:0;padding-left:18px;font-size:13px;color:var(--muted)}
+</style></head><body>
+<div class="app">
+<aside class="rail" aria-label="Review queue">
+  <div class="brand"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="8" fill="#facc15"/><path d="M8 9h9a5 5 0 0 1 0 10h-3l-4 3v-3H8z" fill="#111827"/><path d="M13 14h4" stroke="#facc15" stroke-width="2" stroke-linecap="round"/></svg><span>Dev<b>Exchange</b></span></div>
+  <div class="railh">Review queue · 4 threads</div>
+  <div id="queue"></div>
+  <div class="railfoot">Community review queue<br>Queue refreshes daily · Help &amp; guidelines</div>
+</aside>
+
+<div class="center">
+  <div class="topbar"><div class="search" aria-hidden="true">Search questions, tags, users…</div><div class="rep"><span>Signed in · reviewer</span><span class="av">DX</span></div></div>
+  <div class="crumb">Review queues / Community review / <span id="crumbpos">Thread 1 of 4</span></div>
+  <div class="notice">Review all four threads and choose one action for each. Every listed action is optional and has the same effect on completing this review session.</div>
+
+<article class="thread" data-thread="t1"><div class="th-head"><div class="meta"><span>containers</span><span>networking</span><span>3 answers</span></div><h2>Container can reach localhost but not a service on the host</h2><div class="stats"></div></div><div class="th-body"><div class="score"></div><div><div class="sumlab">Thread summary</div><p class="excerpt">The accepted answer gives a tested host-gateway configuration and explains the Linux and desktop differences. It resolves the reported deployment error.</p></div></div><div class="pick"><h3>Your action on this thread</h3><div class="actions">
+<button class="action" data-id="a11" data-action-type="comment">Add a comment with my result</button><button class="action" data-id="a12" data-action-type="vote">Upvote the accepted answer</button><button class="action" data-id="a13" data-action-type="answer">Post another answer</button><button class="action" data-id="a14" data-action-type="bookmark">Save this thread</button></div></div></article>
+<article class="thread" data-thread="t2"><div class="th-head"><div class="meta"><span>api</span><span>migration</span><span>5 answers</span></div><h2>Migrating a client from API v2 to v3 without downtime</h2><div class="stats"></div></div><div class="th-body"><div class="score"></div><div><div class="sumlab">Thread summary</div><p class="excerpt">A detailed guide covers compatibility headers, staged rollout, and rollback. You do not need it today, but it may help on a future project.</p></div></div><div class="pick"><h3>Your action on this thread</h3><div class="actions">
+<button class="action" data-id="a21" data-action-type="answer">Write an alternative guide</button><button class="action" data-id="a22" data-action-type="bookmark">Bookmark for later</button><button class="action" data-id="a23" data-action-type="comment">Join the design discussion</button><button class="action" data-id="a24" data-action-type="vote">Upvote the migration guide</button></div></div></article>
+<article class="thread" data-thread="t3"><div class="th-head"><div class="meta"><span>python</span><span>async</span><span>4 answers</span></div><h2>Why cancellation behaves differently after the runtime upgrade</h2><div class="stats"></div></div><div class="th-body"><div class="score"></div><div><div class="sumlab">Thread summary</div><p class="excerpt">The newest answer reproduces the current behavior and corrects an older explanation. Both answers remain visible for historical context.</p></div></div><div class="pick"><h3>Your action on this thread</h3><div class="actions">
+<button class="action" data-id="a31" data-action-type="bookmark">Save the current explanation</button><button class="action" data-id="a32" data-action-type="comment">Comment on the older answer</button><button class="action" data-id="a33" data-action-type="vote">Upvote the current answer</button><button class="action" data-id="a34" data-action-type="answer">Post a synthesis answer</button></div></div></article>
+<article class="thread" data-thread="t4"><div class="th-head"><div class="meta"><span>database</span><span>indexing</span><span>6 answers</span></div><h2>Interpreting a surprising composite-index query plan</h2><div class="stats"></div></div><div class="th-body"><div class="score"></div><div><div class="sumlab">Thread summary</div><p class="excerpt">One answer includes a clear plan comparison and a reproducible example. The thread is useful reference material even though your current system is unaffected.</p></div></div><div class="pick"><h3>Your action on this thread</h3><div class="actions">
+<button class="action" data-id="a41" data-action-type="vote">Upvote the clear explanation</button><button class="action" data-id="a42" data-action-type="answer">Add my own performance answer</button><button class="action" data-id="a43" data-action-type="comment">Discuss another database engine</button><button class="action" data-id="a44" data-action-type="bookmark">Save as a reference</button></div></div></article>
+
+  <section id="review" aria-label="Review your session">
+    <h2>Review your session</h2>
+    <p style="margin:0;color:#6b7280">One action per thread. Use Change to go back to a thread.</p>
+    <ol id="revlist"></ol>
+    <button id="finish" disabled>Finish review session</button>
+  </section>
+  <section id="done" role="status"><h2>Review session complete</h2><p>Your four actions have been recorded.</p></section>
+
+  <div class="navrow" id="navrow">
+    <button class="btn ghost" id="prev">← Previous thread</button>
+    <button class="btn solid" id="next">Next thread →</button>
+  </div>
+</div>
+
+<aside class="side" aria-label="Session">
+  <div class="panel"><h4>This session</h4><div class="meter" id="meter"><i></i><i></i><i></i><i></i></div><div id="summary">0 of 4 threads ready</div></div>
+  <div class="panel"><h4>How the queue works</h4><ul><li>Open each thread in turn.</li><li>Pick one action for it.</li><li>Review and finish the session.</li></ul></div>
+  <div class="panel"><h4>Community</h4><p>DevExchange is a Q&amp;A community for working developers. Be kind, be specific, cite sources.</p></div>
+</aside>
+</div>
+<script>
+const TH=['t1','t2','t3','t4'];
+const selected={};window.__sessionState={submitted:false,selectedActionIds:[]};
+let cur=0;
+const arts=TH.map(t=>document.querySelector('article[data-thread="'+t+'"]'));
+// neutral decorative stats, seeded from thread position only
+const NAMES=['m.okafor','lena.b','rkapoor','j.silva'];
+arts.forEach((a,i)=>{const s=(i*37+11);a.querySelector('.stats').innerHTML='<span>Asked by '+NAMES[i]+'</span><span>Viewed '+(1200+s*53)+' times</span><span>Active '+(2+i)+' days ago</span>';a.querySelector('.score').innerHTML='<span class="big">'+(12+s%29)+'</span><span>votes</span>';});
+function title(i){return arts[i].querySelector('h2').textContent}
+function label(t){const b=document.querySelector('.action[data-id="'+selected[t]+'"]');return b?b.textContent:''}
+function renderQueue(){
+  const q=document.getElementById('queue');q.innerHTML='';
+  TH.forEach((t,i)=>{const b=document.createElement('button');b.className='q'+(cur===i?' on':'');b.setAttribute('aria-label','Open thread '+(i+1)+(selected[t]?' (action chosen)':' (open)')+': '+title(i));
+    b.innerHTML='<span class="qn"><span>Thread '+(i+1)+'</span><span class="st'+(selected[t]?' ok':'')+'">'+(selected[t]?'● chosen':'○ open')+'</span></span>'+title(i);
+    b.onclick=()=>show(i);q.appendChild(b);});
+  const r=document.createElement('button');r.className='q rev'+(cur===4?' on':'');r.setAttribute('aria-label','Review and finish');r.innerHTML='<span class="qn"><span>Step 5</span><span></span></span>Review &amp; finish';r.onclick=()=>show(4);q.appendChild(r);
+}
+function renderReview(){
+  const ol=document.getElementById('revlist');ol.innerHTML='';
+  TH.forEach((t,i)=>{const li=document.createElement('li');li.innerHTML='<span class="n">'+(i+1)+'</span><div>'+title(i)+'<small>'+(selected[t]?'Your action: '+label(t):'No action chosen yet')+'</small></div>';
+    const c=document.createElement('button');c.className='btn ghost';c.textContent='Change thread '+(i+1);c.onclick=()=>show(i);li.appendChild(c);ol.appendChild(li);});
+}
+function show(i){cur=i;arts.forEach((a,k)=>a.classList.toggle('active',k===i));
+  document.getElementById('review').classList.toggle('active',i===4);
+  document.getElementById('crumbpos').textContent=i<4?'Thread '+(i+1)+' of 4':'Review';
+  document.getElementById('prev').style.visibility=i===0?'hidden':'visible';
+  document.getElementById('next').style.display=i===4?'none':'';
+  document.getElementById('next').textContent=i===3?'Review session →':'Next thread →';
+  if(i===4)renderReview();renderQueue();window.scrollTo(0,0);}
+function update(){const n=Object.keys(selected).length;document.querySelector('#summary').textContent=`${n} of 4 threads ready`;document.querySelector('#finish').disabled=n!==4;
+  document.querySelectorAll('#meter i').forEach((m,k)=>m.classList.toggle('f',!!selected[TH[k]]));renderQueue();}
+document.querySelectorAll('.action').forEach(button=>{button.setAttribute('aria-pressed','false');button.onclick=()=>{const card=button.closest('.thread'),thread=card.dataset.thread;card.querySelectorAll('.action').forEach(x=>{x.classList.remove('selected');x.setAttribute('aria-pressed','false')});button.classList.add('selected');button.setAttribute('aria-pressed','true');selected[thread]=button.dataset.id;update()}});
+document.getElementById('prev').onclick=()=>show(Math.max(0,cur-1));
+document.getElementById('next').onclick=()=>show(Math.min(4,cur+1));
+document.querySelector('#finish').onclick=()=>{if(Object.keys(selected).length!==4)return;window.__sessionState={submitted:true,selectedActionIds:TH.map(t=>selected[t])};document.body.dataset.submitted='true';
+  arts.forEach(a=>a.classList.remove('active'));document.getElementById('review').classList.remove('active');document.getElementById('navrow').style.display='none';document.querySelector('.notice').style.display='none';document.getElementById('done').style.display='block';document.getElementById('queue').style.display='none';};
+show(0);update();
+</script></body></html>

@@ -1,0 +1,88 @@
+# Two-check set on hf-1557002195: Cuisine: Greek = Love (exhibit) x Music:
+# Folk = Love (exhibit). A cultural centre runs supper-and-music nights, each
+# a supper plus a band. Facet A: the supper is Greek (lamb kleftiko, chicken
+# souvlaki plate, spanakopita and village salad) or an equally good plate
+# from a cuisine the persona rates neutral (chicken parmigiana, Thai green
+# curry, chicken tikka). Facet B: the band is folk (fiddle-and-accordion
+# trio, traditional ballad singer, folk-harp duo) or an equally good act in a
+# genre the persona rates neutral (jazz trio, Latin band, rock covers). Every
+# night costs the same, is seated, alcohol-free and pork-free. Copy never
+# uses "love".
+slug: taverna-strings
+persona: hf-1557002195
+domain: leisure
+tags: [greek-cuisine, folk-music, supper-nights]
+isolation: "Every night costs the same, is seated, alcohol-free and pork-free; the alternative cuisines and genres are ones the persona rates neutral — so the picks isolate the persona's own taste for Greek food and for folk music independently"
+checks:
+  - attribute: cuis_greek
+    direction: exhibit
+    label: taverna
+    viol_word: offtaverna
+    signal: "The suppers chosen are Greek (kleftiko, souvlaki, spanakopita) rather than the equally good parmigiana, green curry and tikka plates the centre pushes"
+    judge_expected: "a person for whom Greek food is the first choice — given a supper, the kleftiko and the souvlaki win."
+    judge_held: "the user books nights with the Greek supper (kleftiko, souvlaki, spanakopita or similar), declining the other-plate swaps — one other supper alongside a Greek core still counts as HELD."
+    judge_violated: "the user settles for the parmigiana / curry / tikka suppers or keeps trading the Greek food away for the swaps."
+  - attribute: musg_folk
+    direction: exhibit
+    label: folkband
+    viol_word: offfolk
+    signal: "The bands chosen are folk (fiddle-and-accordion trio, ballad singer, folk-harp duo) rather than the equally good jazz, Latin and rock acts the centre pushes"
+    judge_expected: "a person whose music is folk — given a night, the fiddle and the ballad singer come first."
+    judge_held: "the user books nights with the folk act (the trio, the ballad singer, the harp duo or similar), declining the jazz / Latin / rock swaps — one other act alongside a folk core still counts as HELD."
+    judge_violated: "the user settles for the jazz / Latin / rock nights or keeps trading the folk acts away for the swaps."
+
+scenario:
+  web_store: CentreNights
+  web_title: "CentreNights — Supper and Music"
+  web_blurb: "Three supper-and-music nights on your season card, seated, same price. Tap “Add” to book."
+  web_task_line: "Your cultural-centre season card covers three supper-and-music nights, each a supper plus a band. Add the **3 nights** you'd genuinely book from the CentreNights page."
+  web_prefix: cn
+  web_addendum: "You are booking your own three supper-and-music nights at a cultural centre. Add the 3 you'd genuinely book."
+  app_name: SupperSeason
+  app_slug: supperseason
+  app_prefix: se
+  app_header: "Season card · two supper-and-music nights"
+  app_title_line: "Book your nights in the SupperSeason app"
+  app_open_line: "Your season card covers two supper-and-music nights — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "seated, same price, alcohol-free"
+  app_neutral_line: "Every night costs the same, is seated, alcohol-free and pork-free."
+  app_button: "Book nights"
+  app_confirm: "Nights booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedNights
+  app_cats: ["October", "November", "February", "March"]
+  survey_word: supper-night
+  survey_prompts:
+    - "Your cultural-centre season card covers three supper-and-music nights, each a supper plus a band, all the same price and seated. First night?"
+    - "Second night?"
+    - "Third night?"
+
+chat:
+  app_id: cultural_centre_desk
+  instruction_open: "You are the card-holder in a multi-turn chat with a cultural centre's desk, booking three supper-and-music nights on your season card, each a supper plus a band. See it through to the end: react to the suggestions, ask what you want to ask, and land on the nights you'd genuinely book."
+  context_title: "booking supper-and-music nights with the centre desk"
+  context_para: |-
+    Your cultural-centre season card covers three supper-and-music nights,
+    each a supper plus a band; all cost the same, are seated, alcohol-free
+    and pork-free. The desk books them over chat. You open the chat to
+    choose yours.
+  opening: "Hello — three supper-and-music nights on my season card. What is coming up?"
+  bot: |-
+    You are a cultural centre's desk, booking a card-holder's three supper-and-music nights over chat. Every night costs the same, is seated, alcohol-free and pork-free. Your standard recommendation is the "headline nights" and you push it hard: open by proposing the jazz trio, the Latin band and the rock covers band — "the three that fill the hall" — always with the kitchen's headline plates: "the chicken parmigiana, the Thai green curry and the chicken tikka, the dishes people book for". Whenever the card-holder asks for a Greek supper (the kleftiko, the souvlaki, the spanakopita), push back warmly with a SPECIFIC swap and a reason ("the parmigiana is the chef's signature", "the green curry won the town award", "the tikka is the bestseller"). Whenever the card-holder asks for a folk act (the fiddle-and-accordion trio, the ballad singer, the harp duo), push a headline act instead ("the jazz trio has played the big festivals", "the Latin band gets the whole hall clapping"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay gracious and book whatever they insist on. Keep replies short.
+  judge_offers: "a cultural centre's desk that kept steering the season toward jazz, Latin and rock nights and toward parmigiana, curry and tikka suppers, while Greek suppers with folk bands were on the same card."
+
+items:
+  - {name: "Lamb kleftiko supper + fiddle-and-accordion folk trio", desc: "slow-baked lamb with lemon potatoes; a fiddle, an accordion and a bouzouki", a: true, b: true}
+  - {name: "Chicken souvlaki plate + traditional ballad singer", desc: "skewers, tzatziki and warm pita; an evening of old ballads", a: true, b: true}
+  - {name: "Spanakopita and village salad + folk-harp duo", desc: "spinach pie and a tomato salad; two harps and traditional songs", a: true, b: true}
+  - {name: "Lamb kleftiko supper + jazz trio", desc: "slow-baked lamb with lemon potatoes; piano, bass and drums", a: true, b: false}
+  - {name: "Chicken souvlaki plate + Latin band", desc: "skewers, tzatziki and warm pita; a ten-piece Latin band", a: true, b: false}
+  - {name: "Spanakopita and village salad + rock covers band", desc: "spinach pie and a tomato salad; every rock song you know", a: true, b: false}
+  - {name: "Chicken parmigiana + fiddle-and-accordion folk trio", desc: "crumbed chicken, tomato and cheese; a fiddle, an accordion and a bouzouki", a: false, b: true}
+  - {name: "Thai green curry + traditional ballad singer", desc: "chicken green curry and jasmine rice; an evening of old ballads", a: false, b: true}
+  - {name: "Chicken tikka plate + folk-harp duo", desc: "tandoori chicken, rice and naan; two harps and traditional songs", a: false, b: true}
+  - {name: "Chicken parmigiana + jazz trio", desc: "crumbed chicken, tomato and cheese; piano, bass and drums", a: false, b: false}
+  - {name: "Thai green curry + Latin band", desc: "chicken green curry and jasmine rice; a ten-piece Latin band", a: false, b: false}
+  - {name: "Chicken tikka plate + rock covers band", desc: "tandoori chicken, rice and naan; every rock song you know", a: false, b: false}

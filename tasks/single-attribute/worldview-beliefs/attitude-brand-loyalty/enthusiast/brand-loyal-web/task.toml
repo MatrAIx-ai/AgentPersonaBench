@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/brand-loyal-web"
+theme = "Attitude: Brand loyalty: Enthusiast"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "shopping"
+tags = [ "persona-adherence", "worldview-beliefs", "brand-loyalty", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "att_brand_loyalty"
+dimension_label = "Attitude: Brand loyalty"
+category = "Worldview: Beliefs"
+anchor_value = "Enthusiast"
+evaluator = "rule-based"
+# Web env: the persona restocks favorites by adding items to a cart on a live store
+# page (Playwright). Each product's hidden `data-switching` (0..3) in index.html is
+# the ground truth: 0/1 stay with the usual trusted brand, 2/3 switch away from it.
+# VIOLATED for any pick that abandons the trusted brand (switching >= 2).
+adherence_signal = "Cart built from the usual trusted brand and its same-brand line (data-switching 0-1); no pick abandons the trusted brand for a cheaper unknown or trendy new brand (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

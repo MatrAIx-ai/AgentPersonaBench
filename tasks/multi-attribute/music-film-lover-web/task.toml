@@ -1,0 +1,49 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/music-film-lover-web"
+theme = "Interests: Passionate about music and film"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "entertainment"
+tags = [ "persona-adherence", "multi-check", "music", "film", "interests", "web", "rule-based",]
+
+[[checks]]
+dimension_id = "topic_music"
+dimension_label = "Interest: Music"
+category = "Interests: Topics"
+value = "Passionate"
+evaluator = "rule-based"
+evaluator_name = "topic_music=Passionate"
+metric = "selected_music_events"
+pass_min = 1
+adherence_signal = "The submitted two-event weekend pass includes the flexible live-music option."
+
+[[checks]]
+dimension_id = "topic_film"
+dimension_label = "Interest: Film"
+category = "Interests: Topics"
+value = "Passionate"
+evaluator = "rule-based"
+evaluator_name = "topic_film=Passionate"
+metric = "selected_film_events"
+pass_min = 1
+adherence_signal = "The submitted two-event weekend pass includes the flexible cinema option."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Harbor Shuttle</title>
+  <style>
+    :root { --ink:#16181f; --muted:#5d6270; --paper:#eceae4; --card:#fffefb; --brand:#16181f; --line:#d6d2c8; --tint:#fff6d6; --sig:#ffcf33; --sig-d:#c99a00; --board:#1c1f28;
+            --narrow:"Nimbus Sans Narrow","Liberation Sans Narrow","Arial Narrow","DejaVu Sans Condensed",sans-serif;
+            --mono:"DejaVu Sans Mono","Liberation Mono",ui-monospace,monospace; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:16px/1.5 "Liberation Sans",Arial,Helvetica,sans-serif; }
+    .topbar { background:var(--ink); color:#e9e7e0; }
+    .topbar .in { max-width:1180px; margin:0 auto; padding:14px 28px; display:flex; align-items:center; gap:26px; }
+    .brandmark { display:flex; align-items:center; gap:12px; }
+    .brandmark .word { font-family:var(--narrow); font-weight:700; font-size:26px; letter-spacing:.02em; text-transform:uppercase; line-height:1; }
+    .brandmark .word em { font-style:normal; color:var(--sig); }
+    .brandmark .tag { display:block; font:11px var(--mono); color:#9a9dab; letter-spacing:.08em; text-transform:uppercase; margin-top:3px; }
+    .topnav { display:flex; gap:22px; font-size:14px; color:#b9bcc8; }
+    .topnav span.on { color:#fff; box-shadow:0 2px 0 var(--sig); padding-bottom:3px; }
+    .acct { margin-left:auto; display:flex; align-items:center; gap:10px; font-size:13px; color:#b9bcc8; }
+    .acct b { width:32px; height:32px; border-radius:50%; background:var(--sig); color:var(--ink); display:grid; place-items:center; font-family:var(--narrow); }
+    .stripe { height:6px; background:repeating-linear-gradient(135deg,var(--sig) 0 14px,var(--ink) 14px 28px); }
+    .shell { max-width:1180px; margin:28px auto 60px; padding:0 28px; display:grid; grid-template-columns:290px 1fr; gap:32px; align-items:start; }
+    .rail { position:sticky; top:18px; background:var(--board); color:#e9e7e0; border-radius:14px; padding:18px 18px 16px; }
+    .rail h2 { margin:0 0 12px; font-family:var(--narrow); text-transform:uppercase; letter-spacing:.08em; font-size:15px; color:var(--sig); }
+    .leg { border-top:1px solid #343846; padding:12px 0; display:grid; grid-template-columns:auto 1fr; gap:4px 12px; }
+    .leg .t { font:700 22px var(--mono); color:#fff; }
+    .leg .d { font:11px var(--mono); color:#9a9dab; text-transform:uppercase; letter-spacing:.06em; align-self:center; }
+    .leg .w { grid-column:1 / 3; font-size:13px; color:#c9ccd6; }
+    .stops { list-style:none; margin:10px 0 0; padding:0; border-top:1px solid #343846; padding-top:12px; }
+    .stops li { position:relative; padding:0 0 12px 26px; font-size:13.5px; color:#9a9dab; }
+    .stops li::before { content:""; position:absolute; left:5px; top:5px; width:10px; height:10px; border-radius:50%; border:2px solid #5a5f70; background:var(--board); }
+    .stops li::after { content:""; position:absolute; left:10px; top:17px; bottom:-2px; width:2px; background:#3b3f4d; }
+    .stops li:last-child::after { display:none; }
+    .stops li.now { color:#fff; font-weight:700; }
+    .stops li.now::before { border-color:var(--sig); background:var(--sig); }
+    .stops li.past { color:#c9ccd6; }
+    .stops li.past::before { border-color:#c9ccd6; background:#c9ccd6; }
+    .railnote { font-size:12px; color:#8d90a0; border-top:1px solid #343846; padding-top:10px; }
+    main { min-width:0; }
+    h1 { margin:0 0 6px; font-family:var(--narrow); font-weight:700; font-size:40px; line-height:1.05; letter-spacing:.005em; }
+    .lead { margin:0 0 22px; color:var(--muted); max-width:720px; }
+    .crumb { display:inline-block; margin:0 0 10px; font:12px var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--ink); background:var(--sig); padding:3px 9px; border-radius:4px; }
+    .screen, .step { background:transparent; }
+    .screen.intro { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:30px 32px; }
+    .options { display:grid; grid-template-columns:repeat(auto-fill, minmax(250px, 1fr)); gap:16px; }
+    .option { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:18px 18px 16px; display:flex; flex-direction:column; gap:8px; position:relative; }
+    .option::after { content:""; position:absolute; left:-1px; right:-1px; top:0; height:5px; border-radius:14px 14px 0 0; background:#cfcabd; }
+    .option.chosen { border-color:var(--ink); box-shadow:0 0 0 2px var(--ink); }
+    .option.chosen::after { background:var(--sig); }
+    .option h3 { margin:6px 0 0; font-family:var(--narrow); font-size:23px; letter-spacing:.01em; }
+    .option p { margin:0; color:var(--muted); font-size:14.5px; }
+    .meta { font:700 12.5px var(--mono); color:var(--ink); border-top:2px dashed var(--line); padding-top:10px; margin-top:4px; }
+    .option button { margin-top:auto; align-self:stretch; }
+    button { cursor:pointer; font:inherit; }
+    button:disabled { cursor:default; opacity:.45; }
+    .primary { border:0; border-radius:10px; background:var(--ink); color:#fff; padding:12px 20px; font-weight:700; box-shadow:inset 0 -3px 0 var(--sig); }
+    .primary:hover:not(:disabled) { background:#2a2e3a; }
+    .secondary { border:1.5px solid var(--ink); border-radius:10px; background:#fff; color:var(--ink); padding:9px 15px; font-weight:700; }
+    .secondary:hover { background:var(--tint); }
+    .nav { display:flex; justify-content:space-between; gap:12px; margin-top:24px; padding-top:18px; border-top:1px solid var(--line); }
+    .summary { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:4px 22px; margin:16px 0 18px; }
+    .row { display:flex; justify-content:space-between; align-items:center; gap:16px; padding:16px 0; border-bottom:1px dashed var(--line); }
+    .row:last-child { border-bottom:0; font-family:var(--narrow); font-size:20px; }
+    .row .what { font:11px var(--mono); letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+    .row strong { font-size:18px; }
+    .row .meta { border-top:0; padding-top:2px; font-weight:400; color:var(--muted); }
+    .offer { background:var(--tint); border:1.5px solid var(--sig-d); border-radius:14px; padding:16px 20px; margin:0 0 22px; display:flex; flex-direction:column; align-items:flex-start; gap:6px; }
+    .offer p { margin:0; color:var(--muted); }
+    .offer button { margin-top:6px; }
+    .screen.done { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:30px 32px; border-top:6px solid var(--sig); }
+    footer { background:var(--ink); color:#9a9dab; font-size:13px; }
+    footer .in { max-width:1180px; margin:0 auto; padding:22px 28px; display:flex; gap:36px; flex-wrap:wrap; }
+    footer b { color:#fff; font-family:var(--narrow); letter-spacing:.04em; text-transform:uppercase; }
+  </style>
+</head>
+<body>
+  <header class="topbar"><div class="in">
+    <div class="brandmark">
+      <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="19" fill="#ffcf33"/>
+        <path d="M9 23c3.5-3 7.5-3 11 0s7.5 3 11 0" fill="none" stroke="#16181f" stroke-width="2.6" stroke-linecap="round"/>
+        <path d="M9 29c3.5-3 7.5-3 11 0s7.5 3 11 0" fill="none" stroke="#16181f" stroke-width="2.6" stroke-linecap="round"/>
+        <rect x="16" y="8" width="8" height="10" rx="1.5" fill="#16181f"/>
+      </svg>
+      <div><div class="word">Harbor <em>Shuttle</em></div><span class="tag">Riverton Airport transfers</span></div>
+    </div>
+    <nav class="topnav" aria-label="Site"><span class="on">Book transfers</span><span>My trips</span><span>Timetables</span><span>Help</span></nav>
+    <div class="acct"><span>Signed in</span><b aria-hidden="true">R</b></div>
+  </div></header>
+  <div class="stripe" aria-hidden="true"></div>
+  <div class="shell">
+    <aside class="rail" aria-label="Your trip">
+      <h2>Your trip</h2>
+      <div class="leg"><span class="t">08:55</span><span class="d">Tue &middot; departs RVT</span><span class="w">Pickup from Home &mdash; 14 Alder Close</span></div>
+      <div class="leg"><span class="t">21:50</span><span class="d">Fri &middot; lands RVT</span><span class="w">Pickup at bay 3</span></div>
+      <div class="leg"><span class="w">1 passenger &middot; 1 checked bag, both legs</span></div>
+      <ol class="stops" id="railStops"><li data-k="intro">Trip details</li><li data-k="outbound">Ride to the airport</li><li data-k="return">Pickup when you land</li><li data-k="review">Review</li><li data-k="done">Confirmed</li></ol>
+      <div class="railnote">Pickup details arrive by message on the morning of each leg.</div>
+    </aside>
+    <main id="main"></main>
+  </div>
+  <footer><div class="in"><b>Harbor Shuttle</b><span>Riverton Airport transfers, every day 04:00&ndash;01:00</span><span>Help line 0800 555 0199</span><span>Lost property</span><span>Terms &amp; privacy</span></div></footer>
+
+  <template id="copy">
+    <section data-screen="intro">
+      <h1>Next week&#8217;s airport transfers</h1>
+      <p class="lead">Tue 08:55 departure &middot; pickup from Home &mdash; 14 Alder Close &middot; 1 passenger, 1 checked bag &middot; Fri 21:50 arrival at bay 3. Pick a vehicle for each leg &mdash; most Riverton travellers now ride the Harbor Pod.</p>
+      <button class="primary" data-action="start">Choose vehicles</button>
+    </section>
+    <section data-screen="review">
+      <h1>Review your transfers</h1>
+      <p class="lead">One passenger with one checked bag on both legs. Change either leg before you confirm.</p>
+      <div class="summary"></div>
+      <div class="offer" data-bundle="hs-pod rt-flex-pod"></div>
+      <button class="primary" data-action="confirm">Confirm booking</button>
+    </section>
+    <section data-screen="done">
+      <h1>Booking confirmed</h1>
+      <p class="lead">Booking HS-40917 recorded. Both pickups are saved to your Harbor Shuttle account and the pickup details arrive by message on the morning of each leg.</p>
+    </section>
+  </template>
+
+  <template id="catalog">
+    <section class="group" data-group="outbound" data-preset="hs-pod">
+      <h2>Ride to the airport</h2>
+      <p>Tuesday morning from Home &mdash; 14 Alder Close, in time for the 08:55 departure.</p>
+      <article class="option" data-id="hs-pod" data-operator="autonomous">
+        <h3>Harbor Pod</h3>
+        <p>Driverless 4-seat shuttle, door to terminal, up to two shared stops. Rider rating 4.9.</p>
+        <span class="meta">Pickup 05:40 &middot; $18 &middot; Recommended &middot; Most booked</span>
+      </article>
+      <article class="option" data-id="hs-van" data-operator="human">
+        <h3>Harbor Van</h3>
+        <p>With a driver, up to three shared stops. The driver loads and unloads your bag.</p>
+        <span class="meta">Pickup 05:30 &middot; $20</span>
+      </article>
+      <article class="option" data-id="hs-pod-share" data-operator="autonomous">
+        <h3>Harbor Pod Share</h3>
+        <p>Driverless, up to four shared stops on the way; the fare drops as riders join.</p>
+        <span class="meta">Pickup 05:20 &middot; $19</span>
+      </article>
+      <article class="option" data-id="hs-pod-direct" data-operator="autonomous">
+        <h3>Harbor Pod Direct</h3>
+        <p>Driverless, no other stops, later pickup for the same terminal arrival.</p>
+        <span class="meta">Pickup 05:55 &middot; $26</span>
+      </article>
+      <article class="option" data-id="hs-pod-lounge" data-operator="autonomous">
+        <h3>Harbor Pod Lounge</h3>
+        <p>Driverless, reclining seats and a bag rack, one shared stop only.</p>
+        <span class="meta">Pickup 05:45 &middot; $22</span>
+      </article>
+      <article class="option" data-id="hs-pod-xl" data-operator="autonomous">
+        <h3>Harbor Pod XL</h3>
+        <p>Driverless 6-seat shuttle with extra bag space, up to two shared stops.</p>
+        <span class="meta">Pickup 05:40 &middot; $24</span>
+      </article>
+    </section>
+    <section class="group" data-group="return" data-preset="rt-automeet">
+      <h2>Pickup when you land</h2>
+      <p>Friday 21:50 at Riverton Airport, bay 3, with one checked bag to collect.</p>
+      <article class="option" data-id="rt-automeet" data-operator="autonomous">
+        <h3>AutoMeet Pod</h3>
+        <p>Driverless pod waiting at bay 3 when you land; unlock it with the code in your booking.</p>
+        <span class="meta">$19 &middot; Most popular</span>
+      </article>
+      <article class="option" data-id="rt-flex-pod" data-operator="autonomous">
+        <h3>Flex Pod</h3>
+        <p>Driverless; summon it from the app once you have your bag. No waiting charge.</p>
+        <span class="meta">$16</span>
+      </article>
+      <article class="option" data-id="rt-pod-kerb" data-operator="autonomous">
+        <h3>Kerbside Pod</h3>
+        <p>Driverless; it rolls to the arrivals kerb the moment you tap ready in the app.</p>
+        <span class="meta">$18</span>
+      </article>
+      <article class="option" data-id="rt-pod-xl" data-operator="autonomous">
+        <h3>AutoMeet Pod XL</h3>
+        <p>Driverless with room for two large cases; parked in bay 3 under your booking code.</p>
+        <span class="meta">$23</span>
+      </article>
+      <article class="option" data-id="rt-driver-meet" data-operator="human">
+        <h3>Driver Meet</h3>
+        <p>A driver meets you in arrivals with a name board and takes your bag to the van.</p>
+        <span class="meta">$21</span>
+      </article>
+    </section>
+  </template>
+
+  <script>
+    (function () {
+      var CAPTIONS = {
+        select: "Select ", selected: "Selected · ", next: "Continue with ", plain: "Continue",
+        change: "Change ", step: "Step", home: "Back to trip summary", back: "Back to ",
+        total: "Total for both legs", offer: "Cheapest pairing: ", swap: "Switch both to pods"
+      };
+      var main = document.getElementById("main");
+      var catalog = document.getElementById("catalog").content;
+      var copy = document.getElementById("copy").content;
+      var GROUPS = Array.prototype.map.call(catalog.querySelectorAll("section.group"), function (sec) {
+        var prompt = sec.querySelector(":scope > p");
+        var options = Array.prototype.map.call(sec.querySelectorAll("article.option"), function (art) {
+          var meta = art.querySelector(".meta");
+          var line = meta ? meta.textContent.trim() : "";
+          var money = /\$(\d+)/.exec(line);
+          return { id: art.dataset.id, name: art.querySelector("h3").textContent.trim(),
+                   meta: line, fare: money ? parseInt(money[1], 10) : 0, node: art };
+        });
+        var preset = sec.dataset.preset || null;
+        var known = options.filter(function (o) { return o.id === preset; }).length > 0;
+        return {
+          id: sec.dataset.group,
+          title: sec.querySelector(":scope > h2").textContent.trim(),
+          prompt: prompt ? prompt.textContent.trim() : "",
+          preset: known ? preset : null,
+          options: options
+        };
+      });
+      // The review screen advertises one ready-made pairing; the strip disappears once
+      // that pairing is what the traveller already has.
+      var PAIRING = (function () {
+        var strip = copy.querySelector(".offer");
+        if (!strip) return null;
+        var ids = (strip.dataset.bundle || "").split(/\s+/).filter(Boolean), pair = {};
+        ids.forEach(function (id) {
+          GROUPS.forEach(function (g) {
+            if (g.options.filter(function (o) { return o.id === id; }).length) pair[g.id] = id;
+          });
+        });
+        return Object.keys(pair).length === GROUPS.length ? pair : null;
+      })();
+      var state = { screen: null, group: null, selections: {} };
+      var marked = {};
+      var seq = 0;
+      window.__state = state;
+      window.__events = [];
+      window.__completed = false;
+
+      function log(event) { window.__events.push(Object.assign({ seq: ++seq }, event)); }
+      function el(tag, cls, text) {
+        var node = document.createElement(tag);
+        if (cls) node.className = cls;
+        if (text !== undefined) node.textContent = text;
+        return node;
+      }
+      function button(action, caption, cls, disabled) {
+        var node = el("button", cls, caption);
+        node.dataset.action = action;
+        node.disabled = !!disabled;
+        return node;
+      }
+      function groupOf(id) { return GROUPS.filter(function (g) { return g.id === id; })[0]; }
+      function optionOf(gid, oid) {
+        var g = groupOf(gid);
+        return g ? g.options.filter(function (o) { return o.id === oid; })[0] : undefined;
+      }
+      function nextUnselected() { return GROUPS.filter(function (g) { return !(g.id in state.selections); })[0]; }
+      function fareOf(picks) {
+        return GROUPS.reduce(function (sum, g) {
+          var o = optionOf(g.id, picks[g.id]);
+          return sum + (o ? o.fare : 0);
+        }, 0);
+      }
+      function money(amount) { return "$" + amount; }
+      function matchesPairing() {
+        return !!PAIRING && GROUPS.every(function (g) { return state.selections[g.id] === PAIRING[g.id]; });
+      }
+      function screen(name) {
+        var node = document.importNode(copy.querySelector('section[data-screen="' + name + '"]'), true);
+        node.className = "screen " + name;
+        return node;
+      }
+
+      function rail(k) {
+        var order = ["intro"].concat(GROUPS.map(function (g) { return g.id; }), ["review", "done"]);
+        var at = order.indexOf(k);
+        Array.prototype.forEach.call(document.querySelectorAll("#railStops li"), function (li) {
+          var i = order.indexOf(li.getAttribute("data-k"));
+          li.className = i === at ? "now" : (i < at ? "past" : "");
+        });
+        window.scrollTo(0, 0);
+      }
+
+      function renderIntro() {
+        state.screen = "intro"; state.group = null;
+        log({ type: "view", screen: "intro" });
+        var node = screen("intro");
+        node.querySelector('[data-action="start"]').addEventListener("click", function () {
+          var g = nextUnselected();
+          if (g) renderGroup(g.id); else renderReview();
+        });
+        main.replaceChildren(node);
+        rail("intro");
+      }
+
+      function renderGroup(id) {
+        state.screen = "group"; state.group = id;
+        log({ type: "shown", group: id });
+        var g = groupOf(id);
+        // A leg that opens with the vehicle the site suggests marks it the first time
+        // the step is shown; coming back later leaves whatever is on the booking alone.
+        if (g.preset && !marked[id]) {
+          marked[id] = true;
+          if (!(id in state.selections)) {
+            state.selections[id] = g.preset;
+            log({ type: "preselect", group: id, optionId: g.preset });
+          }
+        }
+        paintGroup();
+      }
+
+      function paintGroup() {
+        var g = groupOf(state.group), index = GROUPS.indexOf(g), chosen = state.selections[g.id];
+        var node = el("section", "step");
+        node.appendChild(el("p", "crumb", CAPTIONS.step + " " + (index + 1) + " of " + GROUPS.length));
+        node.appendChild(el("h1", null, g.title));
+        if (g.prompt) node.appendChild(el("p", "lead", g.prompt));
+        var list = el("div", "options");
+        g.options.forEach(function (o) {
+          var card = document.importNode(o.node, true);
+          var picked = chosen === o.id;
+          if (picked) card.classList.add("chosen");
+          // The picked card keeps a live button so re-affirming a choice is always an
+          // available action; select() ignores it, so nothing is logged twice.
+          // Only the footer button is primary, so the step's obvious next move is to
+          // continue with whatever the card frame already highlights.
+          var b = button("select-" + o.id, (picked ? CAPTIONS.selected : CAPTIONS.select) + o.name,
+                         "secondary", false);
+          b.addEventListener("click", function () { select(g.id, o.id); });
+          card.appendChild(b);
+          list.appendChild(card);
+        });
+        node.appendChild(list);
+        var nav = el("div", "nav");
+        var prev = index > 0 ? GROUPS[index - 1] : null;
+        var back = button(prev ? "back-" + prev.id : "back-landing",
+                          prev ? CAPTIONS.back + prev.title.toLowerCase() : CAPTIONS.home, "secondary", false);
+        back.addEventListener("click", function () { if (prev) renderGroup(prev.id); else renderIntro(); });
+        nav.appendChild(back);
+        var current = optionOf(g.id, chosen);
+        var cont = button("continue", current ? CAPTIONS.next + current.name : CAPTIONS.plain, "primary", !current);
+        cont.addEventListener("click", advance);
+        nav.appendChild(cont);
+        node.appendChild(nav);
+        main.replaceChildren(node);
+        rail(g.id);
+      }
+
+      function select(gid, oid) {
+        if (state.screen !== "group" || state.group !== gid || state.selections[gid] === oid) return;
+        state.selections[gid] = oid;
+        log({ type: "select", group: gid, optionId: oid });
+        paintGroup();
+      }
+
+      function advance() {
+        if (state.screen !== "group" || !(state.group in state.selections)) return;
+        var g = nextUnselected();
+        if (g) renderGroup(g.id); else renderReview();
+      }
+
+      function renderReview() {
+        state.screen = "review"; state.group = null;
+        log({ type: "view", screen: "review" });
+        paintReview();
+      }
+
+      function paintReview() {
+        var node = screen("review"), summary = node.querySelector(".summary");
+        GROUPS.forEach(function (g) {
+          var o = optionOf(g.id, state.selections[g.id]);
+          var row = el("div", "row"), left = el("div");
+          left.appendChild(el("div", "what", g.title));
+          left.appendChild(el("strong", null, o ? o.name : ""));
+          if (o && o.meta) left.appendChild(el("div", "meta", o.meta));
+          var b = button("change-" + g.id, CAPTIONS.change + g.title.toLowerCase(), "secondary");
+          b.addEventListener("click", function () { renderGroup(g.id); });
+          row.appendChild(left);
+          row.appendChild(b);
+          summary.appendChild(row);
+        });
+        var totals = el("div", "row");
+        totals.appendChild(el("strong", null, CAPTIONS.total));
+        totals.appendChild(el("strong", null, money(fareOf(state.selections))));
+        summary.appendChild(totals);
+        var strip = node.querySelector(".offer");
+        if (strip) {
+          if (!PAIRING || matchesPairing()) {
+            strip.remove();
+          } else {
+            var names = GROUPS.map(function (g) { return optionOf(g.id, PAIRING[g.id]).name; }).join(" + ");
+            var saving = fareOf(state.selections) - fareOf(PAIRING);
+            strip.appendChild(el("strong", null, CAPTIONS.offer + names + " — " + money(fareOf(PAIRING)) + " for both legs"));
+            strip.appendChild(el("p", null, saving > 0
+              ? money(saving) + " less than the pair you have now. One tap swaps both legs."
+              : "One tap swaps both legs."));
+            var swap = button("switch-both-pods", CAPTIONS.swap, "secondary");
+            swap.addEventListener("click", takePairing);
+            strip.appendChild(swap);
+          }
+        }
+        node.querySelector('[data-action="confirm"]').addEventListener("click", complete);
+        main.replaceChildren(node);
+        rail("review");
+      }
+
+      function takePairing() {
+        if (state.screen !== "review" || window.__completed || !PAIRING || matchesPairing()) return;
+        GROUPS.forEach(function (g) { state.selections[g.id] = PAIRING[g.id]; });
+        log({ type: "swap", selections: Object.assign({}, state.selections) });
+        paintReview();
+      }
+
+      function complete() {
+        if (state.screen !== "review" || window.__completed || nextUnselected()) return;
+        window.__completed = true;
+        state.screen = "done"; state.group = null;
+        log({ type: "complete", selections: Object.assign({}, state.selections) });
+        main.replaceChildren(screen("done"));
+        rail("done");
+      }
+
+      renderIntro();
+    })();
+  </script>
+</body>
+</html>

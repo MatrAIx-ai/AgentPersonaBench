@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ST-8842 vetting — Lumen Notebook</title>
+<style>
+  :root{
+    --paper:#fbfaf7; --panel:#f3f1ec; --line:#e2ded5; --ink:#26282c; --mute:#6f7178;
+    --tang:#e3602b; --tang-soft:#fdebe2; --teal:#1f7a74; --teal-soft:#e2f1ef; --code:#f6f4ef;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink);
+    font:14px/1.5 "Liberation Sans","Helvetica Neue",Arial,sans-serif}
+  .mono{font-family:"DejaVu Sans Mono","Liberation Mono",Menlo,monospace}
+  button{font:inherit;cursor:pointer}
+  /* top chrome */
+  .top{display:flex;align-items:center;gap:18px;height:52px;padding:0 18px;background:#fff;border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:17px;letter-spacing:-.2px}
+  .brand b{color:var(--tang);font-weight:700}
+  .menu{display:flex;gap:2px;margin-left:8px}
+  .menu span{padding:5px 10px;border-radius:6px;color:var(--mute);font-size:13px}
+  .kernel{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--mute)}
+  .dot{width:9px;height:9px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 3px var(--teal-soft)}
+  .avatar{width:30px;height:30px;border-radius:50%;background:#2f3a4a;color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700}
+  /* tab strip */
+  .tabs{display:flex;gap:0;padding:0 18px;background:var(--panel);border-bottom:1px solid var(--line)}
+  .tab{padding:9px 14px;font-size:13px;color:var(--mute);border-right:1px solid var(--line)}
+  .tab.on{background:var(--paper);color:var(--ink);font-weight:600;border-top:2px solid var(--tang);margin-bottom:-1px}
+  /* layout */
+  .wrap{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 90px)}
+  aside.files{border-right:1px solid var(--line);background:var(--panel);padding:16px 12px;font-size:13px}
+  aside h4{margin:0 0 8px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+  .file{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;color:#44474d}
+  .file.on{background:#fff;border:1px solid var(--line);color:var(--ink);font-weight:600}
+  .ico{width:14px;height:16px;border-radius:2px;flex:none}
+  .meta{margin-top:22px;padding:12px;border:1px dashed #d4cfc4;border-radius:8px;color:var(--mute);font-size:12.5px}
+  .meta dt{font-weight:600;color:#44474d}
+  .meta dd{margin:0 0 8px}
+  main{padding:26px 34px 60px;max-width:1040px}
+  .nbhead{display:flex;align-items:baseline;gap:12px;margin-bottom:18px}
+  .nbhead h1{margin:0;font-size:22px;letter-spacing:-.3px}
+  .nbhead .saved{color:var(--mute);font-size:12.5px}
+  /* cells */
+  .cell{display:grid;grid-template-columns:62px 1fr;gap:8px;margin:0 0 18px}
+  .prompt{font:12px "DejaVu Sans Mono",monospace;color:#9a9ca3;text-align:right;padding-top:10px}
+  .prompt.po{color:var(--tang)}
+  .body{border-left:3px solid transparent;padding-left:12px}
+  .cell.md .body{border-left-color:#d9d4c9}
+  .src{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font:12.5px/1.6 "DejaVu Sans Mono",monospace;color:#3b3e45}
+  .src .k{color:#9b3fa8}.src .s{color:#2c7a3f}.src .f{color:#2266aa}
+  .md h2{margin:4px 0 8px;font-size:19px}
+  .md p{margin:0 0 8px;color:#35373c;max-width:720px}
+  .callout{display:flex;gap:12px;align-items:flex-start;background:var(--teal-soft);border:1px solid #bfe0dc;border-radius:10px;padding:12px 14px;margin-top:10px;max-width:720px}
+  .callout .tag{font:11px "DejaVu Sans Mono",monospace;background:var(--teal);color:#fff;padding:2px 7px;border-radius:4px;flex:none;margin-top:2px}
+  /* output table */
+  .out{margin-top:10px;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .outbar{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;background:#fcfbf8;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--mute)}
+  table{width:100%;border-collapse:collapse}
+  th{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--mute);text-align:left;padding:9px 14px;border-bottom:1px solid var(--line);font-weight:600}
+  td{padding:11px 14px;border-bottom:1px solid #efece6;vertical-align:middle}
+  tr:last-child td{border-bottom:0}
+  td.num{font-family:"DejaVu Sans Mono",monospace;font-size:13px}
+  td.rank{color:#9a9ca3;font-family:"DejaVu Sans Mono",monospace;width:48px}
+  .cid{display:inline-block;font:600 12.5px "DejaVu Sans Mono",monospace;padding:2px 8px;border-radius:5px;background:var(--panel);border:1px solid var(--line)}
+  .bar{height:6px;background:#efece6;border-radius:3px;width:120px;overflow:hidden}
+  .bar i{display:block;height:100%;background:#8d8f96;border-radius:3px}
+  tr.picked td{background:var(--tang-soft)}
+  .promote{border:1px solid #cfcac0;background:#fff;color:var(--ink);padding:6px 12px;border-radius:7px;font-size:13px;min-width:150px;text-align:left}
+  .promote:hover{border-color:var(--tang)}
+  .promote[aria-pressed="true"]{background:var(--tang);border-color:var(--tang);color:#fff}
+  .promote:disabled{opacity:.55;cursor:default}
+  /* submission cell */
+  #sub{margin-top:10px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  #sub h2{margin:0 0 4px;font-size:15px}
+  #sub .hint{color:var(--mute);font-size:12.5px;margin:0 0 10px}
+  #sub-items{list-style:none;margin:0;padding:0}
+  #sub-items li{display:flex;align-items:center;gap:12px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;margin:0 0 6px;background:#fdfcfa}
+  #sub-items li .txt{flex:1;font-family:"DejaVu Sans Mono",monospace;font-size:13px}
+  #sub-items li button{border:0;background:none;color:var(--tang);font-size:12.5px;text-decoration:underline}
+  .empty{color:#9a9ca3;font-style:italic;font-size:13px;padding:6px 0}
+  .actions{display:flex;gap:10px;margin-top:12px;align-items:center}
+  .primary{background:var(--ink);color:#fff;border:0;border-radius:8px;padding:9px 16px;font-weight:600}
+  .primary:disabled{background:#b9bbc0;cursor:default}
+  .ghost{background:#fff;border:1px solid #cfcac0;border-radius:8px;padding:9px 14px}
+  #review{display:none;margin-top:10px;border:1px solid #f0c3ad;background:var(--tang-soft);border-radius:10px;padding:14px 16px}
+  #review ol{margin:6px 0 10px;padding-left:20px;font-family:"DejaVu Sans Mono",monospace;font-size:13px}
+  #done{display:none;margin-top:10px;border:1px solid #bfe0dc;background:var(--teal-soft);border-radius:10px;padding:14px 16px}
+  #done strong{color:var(--teal)}
+  footer{border-top:1px solid var(--line);padding:14px 34px;color:var(--mute);font-size:12px;display:flex;gap:18px;background:#fff}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="24" height="24" rx="6" fill="#26282c"/><path d="M6 18 L10 12 L14 15 L20 7" stroke="#e3602b" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="20" cy="7" r="2.2" fill="#fbfaf7"/></svg>
+    <span>Lumen<b>Notebook</b></span>
+  </div>
+  <nav class="menu" aria-hidden="true"><span>File</span><span>Edit</span><span>View</span><span>Run</span><span>Kernel</span><span>Help</span></nav>
+  <div class="kernel"><span class="dot"></span><span class="mono">py3.11 · idle</span><span class="avatar">RL</span></div>
+</header>
+<div class="tabs" aria-hidden="true">
+  <div class="tab on">ST-8842_vetting.ipynb</div>
+  <div class="tab">observing_log.md</div>
+</div>
+<div class="wrap">
+  <aside class="files">
+    <h4>Workspace</h4>
+    <div class="file on"><span class="ico" style="background:#e3602b"></span>ST-8842_vetting.ipynb</div>
+    <div class="file"><span class="ico" style="background:#8d8f96"></span>lightcurve_sector14.fits</div>
+    <div class="file"><span class="ico" style="background:#8d8f96"></span>bls_settings.yaml</div>
+    <div class="file"><span class="ico" style="background:#1f7a74"></span>observing_log.md</div>
+    <dl class="meta">
+      <dt>Target</dt><dd class="mono">ST-8842</dd>
+      <dt>Pipeline</dt><dd>Box least squares search, detrended light curve</dd>
+      <dt>Request window</dt><dd>Follow-up queue opens on send</dd>
+    </dl>
+  </aside>
+  <main>
+    <div class="nbhead"><h1>ST-8842 — transit candidate vetting</h1><span class="saved">Last saved a few minutes ago</span></div>
+
+    <section class="cell md">
+      <div class="prompt">&nbsp;</div>
+      <div class="body">
+        <h2>Candidate vetting</h2>
+        <p>Pipeline BLS results, strongest first. Promote the candidates you would submit for telescope follow-up time.</p>
+        <div class="callout"><span class="tag">RV note</span><div>Independent radial-velocity monitoring indicates this system hosts <b>two</b> planetary companions.</div></div>
+      </div>
+    </section>
+
+    <section class="cell">
+      <div class="prompt">In 1</div>
+      <div class="body">
+        <div class="src" aria-hidden="true"><span class="f">results</span> = bls.<span class="f">load</span>(<span class="s">"ST-8842"</span>).<span class="f">sort</span>(<span class="s">"power"</span>, descending=<span class="k">True</span>)<br>results.<span class="f">table</span>()</div>
+      </div>
+    </section>
+    <section class="cell">
+      <div class="prompt po">Out 1</div>
+      <div class="body">
+        <div class="out">
+          <div class="outbar"><span>BLS candidates · 6 rows</span><span class="mono">sorted by power ↓</span></div>
+          <table id="cands">
+            <thead><tr><th>#</th><th>Candidate</th><th>Period</th><th>Power</th><th></th><th>Follow-up</th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="cell">
+      <div class="prompt">In 2</div>
+      <div class="body">
+        <div class="src" aria-hidden="true">request = followup.<span class="f">draft</span>(target=<span class="s">"ST-8842"</span>)<br>request.<span class="f">show</span>()</div>
+      </div>
+    </section>
+    <section class="cell">
+      <div class="prompt po">Out 2</div>
+      <div class="body">
+        <div id="sub">
+          <h2>Submitted for follow-up</h2>
+          <p class="hint">Candidates you promote appear here. Remove any you change your mind about, then review and send the request.</p>
+          <ul id="sub-items"></ul>
+          <div class="empty" id="empty">No candidates promoted yet.</div>
+          <div class="actions">
+            <button class="primary" id="btn-review" type="button" disabled>Review follow-up request</button>
+            <span class="mono" id="count" style="color:var(--mute);font-size:12.5px">0 promoted</span>
+          </div>
+        </div>
+        <div id="review" role="region" aria-label="Review request">
+          <strong>Review request</strong>
+          <div style="font-size:13px;color:#5a4a42">These candidates will be sent to the telescope follow-up queue:</div>
+          <ol id="review-list"></ol>
+          <div class="actions">
+            <button class="primary" id="btn-send" type="button">Send request to follow-up queue</button>
+            <button class="ghost" id="btn-edit" type="button">Keep editing</button>
+          </div>
+        </div>
+        <div id="done" role="status">
+          <strong>Request sent.</strong> Your follow-up request for ST-8842 is in the queue (ref <span class="mono">LN-8842-0417</span>). You're all set.
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<footer><span>Lumen Notebook · shared research workspace</span><span>Autosave on</span><span>Help &amp; shortcuts</span></footer>
+
+<script>
+(function(){
+  var CANDS = [
+    {id:"c1", p:"3.5225", pw:"0.0051"},
+    {id:"c2", p:"1.7613", pw:"0.0026"},
+    {id:"c3", p:"7.0451", pw:"0.0025"},
+    {id:"c4", p:"8.9190", pw:"0.00024"},
+    {id:"c5", p:"1.0410", pw:"0.00001"},
+    {id:"c6", p:"27.6000", pw:"0.00006"}
+  ];
+  var maxPw = 0.0051, sent = false;
+  window.__sub = [];
+  var rows = document.getElementById("rows");
+  function label(c){ return "P = " + c.p + " d — power " + c.pw; }
+  CANDS.forEach(function(c, i){
+    var tr = document.createElement("tr");
+    tr.className = "cand"; tr.setAttribute("data-id", c.id);
+    var w = Math.max(2, Math.round(100 * Math.sqrt(parseFloat(c.pw) / maxPw)));
+    tr.innerHTML = '<td class="rank">' + (i + 1) + '</td>' +
+      '<td><span class="cid">' + c.id.toUpperCase() + '</span></td>' +
+      '<td class="num">P = ' + c.p + ' d</td>' +
+      '<td class="num">power ' + c.pw + '</td>' +
+      '<td><div class="bar" aria-hidden="true"><i style="width:' + w + '%"></i></div></td>' +
+      '<td></td>';
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "promote"; b.setAttribute("data-id", c.id);
+    tr.lastChild.appendChild(b);
+    b.addEventListener("click", function(){ toggle(c.id); });
+    rows.appendChild(tr);
+  });
+  function find(id){ for (var i = 0; i < CANDS.length; i++) if (CANDS[i].id === id) return CANDS[i]; }
+  function toggle(id){
+    if (sent) return;
+    var k = window.__sub.indexOf(id);
+    if (k === -1) window.__sub.push(id); else window.__sub.splice(k, 1);
+    render();
+  }
+  function render(){
+    var list = document.getElementById("sub-items");
+    list.innerHTML = "";
+    window.__sub.forEach(function(id){
+      var c = find(id);
+      var li = document.createElement("li");
+      li.setAttribute("data-id", id);
+      var t = document.createElement("span"); t.className = "txt";
+      t.textContent = id.toUpperCase() + " · " + label(c);
+      li.appendChild(t);
+      if (!sent){
+        var r = document.createElement("button"); r.type = "button";
+        r.textContent = "Remove " + id.toUpperCase();
+        r.setAttribute("aria-label", "Remove " + id.toUpperCase() + " from follow-up");
+        r.addEventListener("click", function(){ toggle(id); });
+        li.appendChild(r);
+      }
+      list.appendChild(li);
+    });
+    document.querySelectorAll("button.promote").forEach(function(b){
+      var id = b.getAttribute("data-id"), on = window.__sub.indexOf(id) !== -1;
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+      b.textContent = on ? "✓ Promoted " + id.toUpperCase() + (sent ? "" : " (undo)") : "Promote " + id.toUpperCase();
+      b.disabled = sent;
+      b.closest("tr").classList.toggle("picked", on);
+    });
+    var n = window.__sub.length;
+    document.getElementById("empty").style.display = n ? "none" : "block";
+    document.getElementById("count").textContent = n + " promoted";
+    document.getElementById("btn-review").disabled = !n || sent;
+  }
+  document.getElementById("btn-review").addEventListener("click", function(){
+    var ol = document.getElementById("review-list"); ol.innerHTML = "";
+    window.__sub.forEach(function(id){ var li = document.createElement("li"); li.textContent = id.toUpperCase() + " · " + label(find(id)); ol.appendChild(li); });
+    document.getElementById("review").style.display = "block";
+    document.getElementById("btn-review").style.display = "none";
+  });
+  document.getElementById("btn-edit").addEventListener("click", function(){
+    document.getElementById("review").style.display = "none";
+    document.getElementById("btn-review").style.display = "";
+  });
+  document.getElementById("btn-send").addEventListener("click", function(){
+    sent = true;
+    document.getElementById("review").style.display = "none";
+    document.getElementById("done").style.display = "block";
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

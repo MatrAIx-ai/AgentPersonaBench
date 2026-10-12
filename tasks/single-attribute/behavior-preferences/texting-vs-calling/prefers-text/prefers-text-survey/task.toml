@@ -1,0 +1,35 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/prefers-text-survey"
+theme = "Texting vs calling: Prefers text"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "communications"
+tags = ["persona-adherence", "pref_text_vs_call", "prefers-text", "rule-based", "real-survey"]
+
+[[checks]]
+dimension_id = "pref_text_vs_call"
+dimension_label = "Texting vs calling"
+category = "Behavior: Preferences"
+anchor_value = "Prefers text"
+evaluator = "rule-based"
+adherence_signal = "The user consistently selects written messaging rather than voice or video communication when service quality is equal."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+

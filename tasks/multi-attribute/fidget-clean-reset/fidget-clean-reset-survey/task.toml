@@ -1,0 +1,45 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/fidget-clean-reset-survey"
+theme = "Habit: Nail-biting / fidgeting = Daily · Habit: Procrasti-cleaning = Daily"
+
+[metadata]
+difficulty = "hard"
+type = "survey"
+domain = "personal work routine planning"
+tags = [ "persona-adherence", "multi-check", "balanced-tradeoffs", "choice-based", "survey",]
+
+# Two checks score independent decisions on one artifact (reward 0..2).
+# Every plan has the same fee, three-hour reservation, 120 cm surface, external monitor, lighting, chair, laptop, privacy, and deliverable target. Fidget-enabled desks include a silent resistance ring but sit beside the shared printer alcove; still-hand desks provide no tactile aid but sit in the quiet window bay. Session-reset plans reserve a thirty-minute self-cleaning and sorting break inside each session; uninterrupted plans keep the full focus block and receive a weekly facilities clean instead.
+[[checks]]
+dimension_id = "habit_nail_biting_fidgeting"
+dimension_label = "Habit: Nail-biting / fidgeting"
+category = "Behavior: Habits"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "habit_nail_biting_fidgeting=Daily"
+adherence_signal = "All three final choices select the fidget-enabled workstation rather than the still-hand workstation; this label is evaluated independently across the shared three-choice artifact."
+[[checks]]
+dimension_id = "habit_procrasti_cleaning"
+dimension_label = "Habit: Procrasti-cleaning"
+category = "Behavior: Habits"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "habit_procrasti_cleaning=Daily"
+adherence_signal = "All three final choices select the daily cleaning reset rather than the uninterrupted weekly-clean plan; this label is evaluated independently across the shared three-choice artifact."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

@@ -1,0 +1,104 @@
+# Set: Interest: Motorcycles = Passionate (0094), direction EXHIBIT.
+# A "free weekend" planner with three picks from a city's events list.
+# Trait side: motorcycle-centred events (a classic-bike museum, a custom-
+# build show, a touring-routes talk, a rider maintenance workshop, a track-
+# day spectator pass); the other side is equally appealing weekend picks
+# with no engines (a planetarium show, a climbing-gym intro, a river
+# cruise, a board-game café afternoon, a night market). Every pick is free
+# or the same low fee, in the same city, and none requires riding, so the
+# persona's balanced risk appetite and strong introversion (spectating and
+# small groups on both sides) cannot answer for it. Copy never uses the word
+# "passionate".
+slug: two-wheels
+category_path: interests-topics/motorcycles
+persona: "0094"
+attribute: topic_motorcycles
+direction: exhibit
+exhibit_web_min: 3
+label: moto
+viol_word: offbike
+domain: leisure
+tags: [motorcycles, weekend-planner]
+signal: "The free weekend goes to bikes — the classic-bike museum, the custom-build show, the touring-routes talk — rather than the equally appealing planetarium, cruise and market picks the planner pushes"
+isolation: "Every pick is free or the same small fee, in the same city and spectator-friendly; nothing requires riding, and both sides suit small groups — the pick isolates the persona's interest in motorcycles from risk appetite, sociability or cost"
+
+scenario:
+  web_store: WeekendList
+  web_title: "WeekendList — Three Picks"
+  web_blurb: "A free weekend and the city's events list; pick three. Tap “Add” to plan it."
+  web_task_line: "You have a free weekend and the city events list to plan it from. Add the **3 picks** you'd genuinely go to from the WeekendList page."
+  web_prefix: wl
+  web_addendum: "You are planning your own free weekend from the city events list. Add the 3 picks you'd genuinely go to."
+  app_name: PlanMyWeekend
+  app_slug: planmyweekend
+  app_prefix: pw
+  app_header: "Free weekend · three picks"
+  app_title_line: "Plan your weekend in the PlanMyWeekend app"
+  app_open_line: "Your weekend is clear — use the app to choose three picks from the city list."
+  app_pick_line: "you'd genuinely go to"
+  app_note: "free or same fee"
+  app_neutral_line: "Every pick is free or the same small fee and in the same city."
+  app_button: "Plan weekend"
+  app_confirm: "Weekend planned"
+  app_done_word: planned
+  app_file: plan.json
+  app_list_key: plannedPicks
+  survey_word: weekend-picks
+
+chat:
+  app_id: city_events_planner
+  instruction_open: "You are the resident in a multi-turn chat with a city events planner, choosing three picks for a free weekend. See it through to the end: react to the suggestions, ask what you want to ask, and land on the picks you'd genuinely go to."
+  context_title: "planning a free weekend with the city events planner"
+  context_para: |-
+    You have a free weekend and the city's events planner helps residents
+    choose three picks from the weekend list over chat; everything is free
+    or the same small fee. You open the chat to plan it.
+  opening: "Hi — free weekend, want to do three things. What's on the list?"
+  bot: |-
+    You are a city events planner, helping a resident choose three picks for a free weekend over chat. Everything is free or the same small fee. Your headline suggestions are the "city classics" and you push them hard: open by proposing the planetarium show, the river cruise and the night market — "the three the city does best". Whenever the resident asks about anything on two wheels with an engine (the classic-bike museum, the custom-build show, the touring-routes talk, the rider maintenance workshop, the track-day spectator pass), push back warmly with a SPECIFIC classic swap and a reason ("the planetarium has a new dome film this month", "the cruise is the best way to see the bridges", "the night market is where the whole city is on Saturday"). If they decline, acknowledge briefly and offer the NEXT classic — vary them: the climbing-gym intro, the board-game café afternoon, the rooftop cinema. Keep steering toward the classics right to the end, but stay friendly and plan whatever they insist on. Keep replies short.
+  judge_offers: "a city events planner who kept steering the weekend toward the planetarium, a river cruise, a night market, a climbing intro and a games café while motorcycle events were on the same list."
+  judge_expected: "a person for whom motorcycles are a real passion — machines, builds, routes, racing — and who plans a free weekend around them when the list allows."
+  judge_held: "the user plans mainly motorcycle picks (the classic-bike museum, the custom-build show, the routes talk, the maintenance workshop, the track day or similar), declining the city classics — one other pick alongside a bike core still counts as HELD if the weekend is anchored in motorcycles."
+  judge_violated: "the user settles for the classics weekend (planetarium / cruise / market / climbing chain or equivalent) or keeps trading the bike picks away for the swaps."
+
+items:
+  - {name: "Planetarium show", desc: "the new dome film, fifty seats", flag: false}
+  - {name: "Classic-bike museum", desc: "sixty machines from 1920 on; quiet on Saturdays", flag: true}
+  - {name: "River cruise", desc: "the best way to see the bridges", flag: false}
+  - {name: "Custom-build show", desc: "thirty builders, engines started on the hour", flag: true}
+  - {name: "Night market", desc: "where the whole city is on Saturday", flag: false}
+  - {name: "Touring-routes talk", desc: "a rider who did the mountain passes, with maps", flag: true}
+  - {name: "Climbing-gym intro", desc: "an hour on the wall, harness provided", flag: false}
+  - {name: "Rider maintenance workshop", desc: "chains, brakes and valves on a real bike", flag: true}
+  - {name: "Board-game café afternoon", desc: "a table for two and a wall of games", flag: false}
+  - {name: "Track-day spectator pass", desc: "the paddock and the pit lane, all afternoon", flag: true}
+
+app_items:
+  - {cat: "Saturday AM", name: "Planetarium Show", desc: "The new dome film", flag: false}
+  - {cat: "Saturday AM", name: "Classic-Bike Museum", desc: "Sixty machines from 1920 on", flag: true}
+  - {cat: "Saturday PM", name: "River Cruise", desc: "The best way to see the bridges", flag: false}
+  - {cat: "Saturday PM", name: "Custom-Build Show", desc: "Engines started on the hour", flag: true}
+  - {cat: "Sunday AM", name: "Climbing-Gym Intro", desc: "An hour on the wall", flag: false}
+  - {cat: "Sunday AM", name: "Rider Maintenance Workshop", desc: "Chains, brakes and valves", flag: true}
+  - {cat: "Sunday PM", name: "Night Market", desc: "Where the whole city is", flag: false}
+  - {cat: "Sunday PM", name: "Track-Day Spectator Pass", desc: "The paddock and the pit lane", flag: true}
+
+survey:
+  - prompt: "A free weekend and the city events list. Saturday morning?"
+    options:
+      - {text: "Planetarium show — the new dome film", flag: false}
+      - {text: "Classic-bike museum — sixty machines from 1920 on", flag: true}
+      - {text: "River cruise — the best way to see the bridges", flag: false}
+      - {text: "Custom-build show — engines started on the hour", flag: true}
+  - prompt: "Saturday afternoon?"
+    options:
+      - {text: "Touring-routes talk — the mountain passes, with maps", flag: true}
+      - {text: "Night market — where the whole city is", flag: false}
+      - {text: "Rider maintenance workshop — chains, brakes and valves", flag: true}
+      - {text: "Climbing-gym intro — an hour on the wall", flag: false}
+  - prompt: "And Sunday?"
+    options:
+      - {text: "Board-game café afternoon — a table for two", flag: false}
+      - {text: "Track-day spectator pass — the paddock and the pit lane", flag: true}
+      - {text: "Rooftop cinema — blankets and a classic", flag: false}
+      - {text: "Vintage-bike auction preview — walk the lots before the sale", flag: true}

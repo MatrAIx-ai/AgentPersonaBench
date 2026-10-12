@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/statistics-expert-app"
+theme = "Statistics expertise: native experiment review desk"
+
+[metadata]
+difficulty = "hard"
+type = "app"
+os = "linux"
+domain = "product experimentation"
+tags = ["persona-adherence", "statistics", "single-attribute", "rule-based", "real-app", "cua"]
+
+[[checks]]
+dimension_id = "fam_statistics"
+dimension_label = "Familiarity: Statistics"
+category = "Expertise: Domains"
+value = "Expert"
+evaluator = "rule-based"
+evaluator_name = "fam_statistics=Expert"
+adherence_signal = "In a native review queue, the submitted action and rationale for every proposal avoid a material statistical error; the app-written decisions must agree with its authoritative interaction log."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 900.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/statdesk/start-statdesk.sh"
+timeout_sec = 60.0
+retries = 5

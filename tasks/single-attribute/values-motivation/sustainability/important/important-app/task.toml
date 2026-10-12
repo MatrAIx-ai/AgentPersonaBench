@@ -1,0 +1,47 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/important-app"
+theme = "Value: Sustainability = Important"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "household"
+tags = [ "persona-adherence", "sustainability", "important", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "val_sustainability"
+dimension_label = "Value: Sustainability"
+category = "Values & Motivation"
+anchor_value = "Important"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating HomeStock, a REAL
+# native desktop GUI app (Tkinter) on a local Linux CUA desktop, restocking
+# household supplies at flat pricing (cost plays no role). When it taps
+# "Place order", HomeStock writes order.json itself.
+adherence_signal = "The order contains only reusable/low-waste items; no single-use/throwaway variant is added, with prices flat so the choice isolates sustainability."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with HomeStock (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch HomeStock once the desktop is up so the agent finds it on screen.
+command = "/opt/homestock/start-homestock.sh"
+timeout_sec = 60.0
+retries = 5

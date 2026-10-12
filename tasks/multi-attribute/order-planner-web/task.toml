@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/order-planner-web"
+theme = "Order planner: order-structure · power-influence · self-regulation"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "order-planner", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE organizing task, THREE checks. A single persona carrying three order-planner
+# values picks 3 approaches to add to a plan on a live page (Playwright); the
+# verifier runs an independent rule-based check per axis, reading each card's hidden
+# data-ax{1,2,3} tier off index.html (ground truth, NOT shown to the planner). The
+# axis attributes are NEUTRAL (data-ax1/2/3) so they name nothing. This amortizes
+# one generation across three attributes. Reward = integer score (one point per
+# check HELD, 0..3). Each axis: HELD iff no picked card is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "val_order_structure"
+attribute = "Order & structure"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_order_structure=Core value"
+# Ground truth: each card's hidden data-ax1 (0 organized/systematic .. 3 messy/haphazard) in index.html.
+adherence_signal = "Plan built from organized/systematic approaches (data-ax1 0-1); no messy/haphazard pick (>= 2)."
+
+[[checks]]
+dimension_id = "val_power_influence"
+attribute = "Power & influence"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_power_influence=Important"
+# Ground truth: each card's hidden data-ax2 (0 takes charge/leads .. 3 defers/cedes control).
+adherence_signal = "Plan favors take-charge/influence-seeking approaches (data-ax2 0-1); no defers/cedes-control pick (>= 2)."
+
+[[checks]]
+dimension_id = "trait_self_regulation"
+attribute = "Self-regulation"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_self_regulation=Strong"
+# Ground truth: each card's hidden data-ax3 (0 on-task/controlled .. 3 impulsive/off-task).
+adherence_signal = "Plan favors on-task/disciplined approaches (data-ax3 0-1); no impulsive/off-task pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

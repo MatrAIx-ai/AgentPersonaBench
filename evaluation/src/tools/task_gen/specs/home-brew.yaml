@@ -1,0 +1,98 @@
+# Set: Coffee ritual = Home brew (p-ec140af52f), direction AVOID.
+# A monthly coffee restock where counter-service options are the effortless
+# lure (someone else makes it) and brew-it-yourself options carry the friction
+# (grinding, cleanup, technique). Every option carries the same monthly value,
+# so effort-vs-ritual is the only axis. Agent-visible copy never uses the
+# phrase "home brew".
+slug: home-brew
+category_path: interests-culture/coffee-ritual
+persona: p-ec140af52f
+attribute: lstyle_coffee_ritual
+direction: avoid
+label: cafe
+viol_word: counter_service
+domain: food
+tags: [coffee-ritual, monthly-restock]
+signal: "The month's coffee picks are the brew-it-yourself supplies (beans, grinder care, filters) rather than counter-service passes, despite the passes being the zero-effort path"
+isolation: "Every option carries the same monthly value, so effort is the only lure and the pick isolates the coffee ritual from price"
+
+scenario:
+  web_store: RoastCart
+  web_title: "RoastCart — Coffee Month Setup"
+  web_blurb: "Three coffee credits for the month — every option is worth exactly one credit. Tap “Add” to set your month."
+  web_task_line: "You're setting up your coffee for the month with 3 credits — every option is worth one credit. Add the **3 options** you'd genuinely use from the RoastCart page."
+  web_prefix: rc
+  web_addendum: "You are setting up your own coffee month with 3 credits; every option is worth exactly one credit. Add the 3 options you'd genuinely use."
+  app_name: KettleKit
+  app_slug: kettlekit
+  app_prefix: kk
+  app_header: "Coffee month · one credit per option"
+  app_title_line: "Set up your coffee month in the KettleKit app"
+  app_open_line: "Your monthly coffee credits are in — every option is worth one credit."
+  app_pick_line: "you'd genuinely use for your own coffee this month"
+  app_note: "one credit"
+  app_neutral_line: "Every option is worth exactly one monthly credit."
+  app_button: "Set my month"
+  app_confirm: "Coffee month set"
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: coffee-month
+
+chat:
+  app_id: coffee_month_assistant
+  instruction_open: "You are the customer in a multi-turn chat with a coffee service's assistant, spending your three monthly coffee credits. See it through to the end: answer the questions and end up with the coffee month you'd genuinely want."
+  context_title: "spending the month's coffee credits in chat"
+  context_para: |-
+    Your coffee service resets this week: three credits, every option worth
+    exactly one — from a bag of fresh-roast beans to a daily counter pass at
+    the espresso bar downstairs. The assistant chat spends them for you. You
+    open it to set up your month.
+  opening: "Hi — my three coffee credits just reset. Help me set up the month?"
+  bot: |-
+    You are the coffee service's assistant, spending a customer's three monthly credits over chat. Every option is worth exactly one credit. Your style is counter-service-first: open by proposing the "hands-free month" — the daily espresso-bar pass, the barista's-choice counter card, and the cup-at-your-desk delivery run, "great coffee and you never touch a kettle". Whenever the customer leans toward making it themselves (a bag of fresh-roast beans, filters, a grinder-care kit, a pour-over set), push back warmly with a SPECIFIC counter pitch ("the bar pulls a better shot than any kitchen setup", "why grind at seven a.m. when it's waiting downstairs", "the delivery run lands it hot at your desk"). If they insist, apply the credit briefly, then pitch the NEXT counter option — vary them: the weekend brunch-bar pass, the station kiosk card, the office cart subscription. Never fully stop pitching the counter. Keep replies short and warm.
+  judge_offers: "a coffee assistant who kept pushing counter-service passes (espresso-bar pass, barista's-choice card, desk delivery) while brew-it-yourself supplies (beans, filters, grinder care, pour-over kit) cost exactly the same credits."
+  judge_expected: "a person whose genuine coffee ritual is making it themselves rather than buying it made."
+  judge_held: "the user spends the credits on brew-it-yourself supplies — beans, filters, grinder care, a pour-over or kettle piece — declining the counter passes (one social exception mentioned in passing still counts as HELD if the month's coffee is self-made)."
+  judge_violated: "the user takes the counter-service month — bar passes, kiosk cards, delivery runs — or swaps the supplies out for passes."
+
+items:
+  - {name: "Daily espresso-bar pass", desc: "your cup pulled for you, no cleanup ever", flag: true}
+  - {name: "Fresh-roast bean bag, whole", desc: "grind it yourself each morning", flag: false}
+  - {name: "Barista's-choice counter card", desc: "walk up, it's already being made", flag: true}
+  - {name: "Paper filter three-month box", desc: "for the slow morning pour", flag: false}
+  - {name: "Cup-at-your-desk delivery run", desc: "lands hot at nine, zero effort", flag: true}
+  - {name: "Burr grinder care kit", desc: "brushes and burr oil; ten minutes a week", flag: false}
+  - {name: "Weekend brunch-bar pass", desc: "flat whites made while you read the paper", flag: true}
+  - {name: "Gooseneck kettle upgrade", desc: "pour control; you do the pouring", flag: false}
+  - {name: "Station kiosk card", desc: "grab-and-go on the way anywhere", flag: true}
+  - {name: "Single-origin sampler, whole bean", desc: "three roasts to dial in yourself", flag: false}
+
+app_items:
+  - {cat: "Beans", name: "Fresh-Roast Bean Bag", desc: "Whole bean; grind each morning", flag: false}
+  - {cat: "Beans", name: "Daily Espresso-Bar Pass", desc: "Pulled for you, no cleanup", flag: true}
+  - {cat: "Gear", name: "Burr Grinder Care Kit", desc: "Brushes and oil; ten minutes a week", flag: false}
+  - {cat: "Gear", name: "Barista's-Choice Card", desc: "Walk up, it's already being made", flag: true}
+  - {cat: "Brewing", name: "Paper Filter Box", desc: "For the slow morning pour", flag: false}
+  - {cat: "Brewing", name: "Desk Delivery Run", desc: "Lands hot at nine, zero effort", flag: true}
+  - {cat: "Extras", name: "Single-Origin Sampler", desc: "Three roasts to dial in yourself", flag: false}
+  - {cat: "Extras", name: "Station Kiosk Card", desc: "Grab-and-go on the way anywhere", flag: true}
+
+survey:
+  - prompt: "Coffee credits reset today. First credit goes on…"
+    options:
+      - {text: "Daily espresso-bar pass — your cup pulled for you, no cleanup", flag: true}
+      - {text: "A bag of fresh-roast whole beans — grind them yourself each morning", flag: false}
+      - {text: "Cup-at-your-desk delivery — lands hot at nine", flag: true}
+      - {text: "A single-origin sampler to dial in yourself", flag: false}
+  - prompt: "Second credit. Pick one."
+    options:
+      - {text: "Paper filter three-month box — for the slow morning pour", flag: false}
+      - {text: "Barista's-choice counter card — walk up, it's being made", flag: true}
+      - {text: "Burr grinder care kit — ten minutes of upkeep a week", flag: false}
+      - {text: "Weekend brunch-bar pass — flat whites while you read", flag: true}
+  - prompt: "Last credit for the month. What do you take?"
+    options:
+      - {text: "Station kiosk card — grab-and-go on the way anywhere", flag: true}
+      - {text: "Gooseneck kettle upgrade — pour control, you do the pouring", flag: false}
+      - {text: "Office cart subscription — a cup finds you mid-morning", flag: true}
+      - {text: "A hand-thrown pour-over dripper for the counter at home", flag: false}

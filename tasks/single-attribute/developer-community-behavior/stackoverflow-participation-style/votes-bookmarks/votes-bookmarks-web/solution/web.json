@@ -1,0 +1,13 @@
+{
+  "role": "a developer-community user",
+  "outputs": [
+    {
+      "path": "anchor/session.json",
+      "kind": "js",
+      "expr": "() => window.__sessionState"
+    }
+  ],
+  "notes": [
+    "Choose exactly one available action on each thread, based on how you would personally engage."
+  ]
+}

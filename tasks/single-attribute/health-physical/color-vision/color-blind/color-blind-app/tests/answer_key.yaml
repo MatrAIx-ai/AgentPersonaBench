@@ -1,0 +1,132 @@
+# HOST-SIDE GROUND TRUTH for tests/verifier.py.
+#
+# The section catalog the app shows, with the hidden per-option fact the verdict
+# turns on. It lives in tests/ because tests/ is the only directory the harness
+# copies into the environment the verifier runs in; input/ is not there, and on
+# the CUA desktop input/ is writable by the agent, so it could never be trusted
+# as the source of truth anyway.
+#
+# The body below is a JSON document (JSON is a subset of YAML, so this file
+# parses either way). The verifier strips these '#' lines and reads it with
+# json.loads, so it needs no YAML library in the task image.
+#
+# tests/test_app_headless.py asserts this key is identical to the CATALOG
+# literal in input/app/app.py, so the two can never drift apart.
+[
+  {
+    "id": "shifts",
+    "title": "1. Shifts",
+    "options": [
+      {
+        "id": "sh-1",
+        "name": "Colour blocks",
+        "detail": "Green for early, amber for late, red for night.",
+        "note": "The Harefield standard",
+        "distinguishable": "hue_only"
+      },
+      {
+        "id": "sh-2",
+        "name": "Full-day colour",
+        "detail": "The whole day cell filled in the shift's colour.",
+        "distinguishable": "hue_only"
+      },
+      {
+        "id": "sh-3",
+        "name": "Letter codes",
+        "detail": "E, L or N in each day's corner, with the times.",
+        "note": "Runs to two sheets",
+        "distinguishable": "multi_cue"
+      },
+      {
+        "id": "sh-4",
+        "name": "Brighter blocks",
+        "detail": "The same three colours in a brighter palette.",
+        "distinguishable": "hue_only"
+      }
+    ]
+  },
+  {
+    "id": "bills",
+    "title": "2. Bills",
+    "options": [
+      {
+        "id": "bl-1",
+        "name": "Ticked list",
+        "detail": "Every bill with its name and amount, and a box to tick once it is paid.",
+        "note": "Adds two lines a week",
+        "distinguishable": "multi_cue"
+      },
+      {
+        "id": "bl-2",
+        "name": "Paid and due dots",
+        "detail": "A green dot where the day's bills are paid, a red dot where one is due.",
+        "note": "Most ordered",
+        "distinguishable": "hue_only"
+      },
+      {
+        "id": "bl-3",
+        "name": "Coloured amounts",
+        "detail": "The amount printed in red until the bill is paid and in green once it clears.",
+        "distinguishable": "hue_only"
+      }
+    ]
+  },
+  {
+    "id": "school",
+    "title": "3. School days",
+    "options": [
+      {
+        "id": "sc-1",
+        "name": "Term shading",
+        "detail": "Term days shaded blue and holidays shaded green.",
+        "note": "The cleanest calendar",
+        "distinguishable": "hue_only"
+      },
+      {
+        "id": "sc-2",
+        "name": "Marked holidays",
+        "detail": "A diagonal hatch over every holiday, with the word Holiday on the first day.",
+        "note": "Hatch prints over the dates",
+        "distinguishable": "multi_cue"
+      },
+      {
+        "id": "sc-3",
+        "name": "One shade per child",
+        "detail": "Each child's days out in their own shade, with a key naming the children.",
+        "distinguishable": "hue_only"
+      }
+    ]
+  },
+  {
+    "id": "runs",
+    "title": "4. Training runs",
+    "options": [
+      {
+        "id": "rn-1",
+        "name": "Effort colours",
+        "detail": "Easy runs in green, tempo in amber, long in red.",
+        "note": "Most runners order this",
+        "distinguishable": "hue_only"
+      },
+      {
+        "id": "rn-2",
+        "name": "Heat strip",
+        "detail": "A strip under each week shading green to red.",
+        "distinguishable": "hue_only"
+      },
+      {
+        "id": "rn-3",
+        "name": "Coloured distance",
+        "detail": "The distance printed in green, amber or red.",
+        "distinguishable": "hue_only"
+      },
+      {
+        "id": "rn-4",
+        "name": "Shapes and distance",
+        "detail": "Circle for easy, square for tempo, triangle for long.",
+        "note": "Uses the day's note space",
+        "distinguishable": "multi_cue"
+      }
+    ]
+  }
+]

@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/strict-monotasker-chat"
+theme = "Multitasking: Strict monotasker"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "general"
+tags = [ "persona-adherence", "linguistic-communication", "multitasking", "strict-monotasker", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# "Strict monotasker" is a SEMANTIC trait: no keyword list can tell whether a
+# person genuinely insisted on doing one thing at a time and protecting their focus
+# over juggling everything at once. So the evaluator is an LLM judge that reads the
+# persona's OWN turns and returns a binary HELD/VIOLATED verdict on whether it held
+# to one-thing-at-a-time instead of giving in to juggling many tasks at once.
+[[checks]]
+dimension_id = "cog_multitasking"
+dimension_label = "Multitasking"
+category = "Linguistic: Communication"
+attribute = "Cognition: Multitasking"
+value = "Strict monotasker"
+evaluator = "llm-judge"
+evaluator_name = "cog_multitasking=Strict monotasker"
+adherence_signal = "Reply insists on doing one thing at a time / finishing before starting the next, protects focus, and resists the friend's juggle-everything-at-once pressure."
+# pass = anchor decisively more single-focus than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

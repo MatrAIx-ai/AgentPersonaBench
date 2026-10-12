@@ -1,0 +1,87 @@
+# Two-check set on hf-1557002195: Music: Soul = Love (exhibit) x Interest:
+# Dance = Averse (avoid). A music venue's season lists nights, each an act
+# plus a format. Facet A: the act is soul (a soul revue, a soul singer with
+# big band, a Motown-era tribute) or an equally good act in a genre the
+# persona rates neutral (jazz trio, rock covers band, country duo). Facet B:
+# the format is seated (listening show, cabaret tables, theatre seats) or a
+# dance-floor night (party night, standing dance floor, chairs cleared).
+# Every night costs the same, is alcohol-free and runs the same length. Copy
+# never uses "love" or "averse".
+slug: seated-soul
+persona: hf-1557002195
+domain: leisure
+tags: [soul-music, dance, venue-season]
+isolation: "Every night costs the same, is alcohol-free and runs the same length; the alternative genres are ones the persona rates neutral and the seated formats are just as good a view — so the picks isolate the persona's own taste for soul and its distaste for dancing"
+checks:
+  - attribute: musg_soul
+    direction: exhibit
+    label: soulset
+    viol_word: offsoul
+    signal: "The acts chosen are soul (the revue, the singer with big band, the Motown-era tribute) rather than the equally good jazz, rock and country acts the venue pushes"
+    judge_expected: "a person whose music is soul — given a season, the revue and the big-band singer come first."
+    judge_held: "the user books mainly soul nights (the revue, the singer with big band, the tribute or similar), declining the jazz / rock / country swaps — one other act alongside a soul core still counts as HELD."
+    judge_violated: "the user settles for the jazz / rock / country nights or keeps trading the soul acts away for the swaps."
+  - attribute: topic_dance
+    direction: avoid
+    label: dancefloor
+    viol_word: dancey
+    signal: "The formats chosen are the seated ones (listening show, cabaret tables, theatre seats); no dance-floor night is booked, even though the venue pushes the party nights as the best way to hear the bands"
+    judge_expected: "a person who does not dance and does not want to — a night built around a dance floor is the one they skip."
+    judge_held: "the user books only seated formats (listening show, cabaret tables, theatre seats or similar) and no dance-floor night, declining the party-night pitches throughout."
+    judge_violated: "the user books any dance-floor format (party night, standing dance floor, chairs cleared) or keeps trading the seated nights away for them."
+
+scenario:
+  web_store: VenueSeason
+  web_title: "VenueSeason — Your Three Nights"
+  web_blurb: "Three nights on your venue season ticket, each an act plus a format, same price. Tap “Add” to book."
+  web_task_line: "Your music-venue season ticket covers three nights, each listed as an act plus the format the night runs in. Add the **3 nights** you'd genuinely book from the VenueSeason page."
+  web_prefix: vs
+  web_addendum: "You are booking your own three nights on a music-venue season ticket, each an act plus a format. Add the 3 you'd genuinely book."
+  app_name: SeasonNights
+  app_slug: seasonnights
+  app_prefix: sn
+  app_header: "Season ticket · two nights"
+  app_title_line: "Book your nights in the SeasonNights app"
+  app_open_line: "Your season ticket covers two nights — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, alcohol-free"
+  app_neutral_line: "Every night costs the same, is alcohol-free and runs the same length."
+  app_button: "Book nights"
+  app_confirm: "Nights booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedNights
+  app_cats: ["Autumn", "Winter", "Spring", "Summer"]
+  survey_word: venue-night
+  survey_prompts:
+    - "Your music-venue season ticket covers three nights, each an act plus the format the night runs in, all the same price. First night?"
+    - "Second night?"
+    - "Third night?"
+
+chat:
+  app_id: music_venue_box_office
+  instruction_open: "You are the ticket-holder in a multi-turn chat with a music venue's box office, booking three nights on your season ticket, each an act plus the format the night runs in. See it through to the end: react to the suggestions, ask what you want to ask, and land on the nights you'd genuinely book."
+  context_title: "booking season nights with the venue box office"
+  context_para: |-
+    Your music-venue season ticket covers three nights, each an act plus
+    the format the night runs in; all cost the same, are alcohol-free and
+    run the same length. The box office books them over chat. You open the
+    chat to choose yours.
+  opening: "Hello — three nights on my season ticket. What is coming up?"
+  bot: |-
+    You are a music venue's box office, booking a ticket-holder's three season nights over chat. Every night costs the same, is alcohol-free and runs the same length. Your standard recommendation is the "party nights" and you push it hard: open by proposing the jazz trio, the rock covers band and the country duo — "the three acts that get the room going" — always in their dance-floor formats: "chairs cleared, standing floor, party night — you have not heard a band until you have danced to it". Whenever the ticket-holder asks for a soul act (the revue, the singer with big band, the Motown-era tribute), push back warmly with a SPECIFIC swap and a reason ("the jazz trio has played the big festivals", "the rock band knows every song you grew up on", "the country duo is the sweetest harmony we book"). Whenever the ticket-holder asks for a seated format (the listening show, cabaret tables, theatre seats), push the dance-floor format instead ("seated is for recitals, this is a party", "the standing floor has the best sound"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay gracious and book whatever they insist on. Keep replies short.
+  judge_offers: "a music venue's box office that kept steering the season toward jazz, rock and country acts and toward dance-floor formats, while seated soul nights were on the same season ticket."
+
+items:
+  - {name: "Soul revue — seated listening show", desc: "five singers and a horn section; a seated show, lights down, no talking", a: true, b: false}
+  - {name: "Soul singer with big band — cabaret tables, seated", desc: "a seventeen-piece band behind one voice; cabaret tables, seated all night", a: true, b: false}
+  - {name: "Motown-era tribute — theatre seats", desc: "the songs of one label, one decade; theatre seating, no floor", a: true, b: false}
+  - {name: "Soul revue — dance-floor party night", desc: "five singers and a horn section; chairs cleared, dance floor open", a: true, b: true}
+  - {name: "Soul singer with big band — standing dance floor", desc: "a seventeen-piece band behind one voice; standing floor, everyone dancing", a: true, b: true}
+  - {name: "Motown-era tribute — dance party, chairs cleared", desc: "the songs of one label, one decade; a dance party from the first number", a: true, b: true}
+  - {name: "Jazz trio — seated listening show", desc: "piano, bass and drums; a seated show, lights down, no talking", a: false, b: false}
+  - {name: "Rock covers band — cabaret tables, seated", desc: "every rock song you know; cabaret tables, seated all night", a: false, b: false}
+  - {name: "Country duo — theatre seats", desc: "two voices and a guitar; theatre seating, no floor", a: false, b: false}
+  - {name: "Jazz trio — dance-floor party night", desc: "piano, bass and drums; chairs cleared, dance floor open", a: false, b: true}
+  - {name: "Rock covers band — standing dance floor", desc: "every rock song you know; standing floor, everyone dancing", a: false, b: true}
+  - {name: "Country duo — dance party, chairs cleared", desc: "two voices and a guitar; a dance party from the first number", a: false, b: true}

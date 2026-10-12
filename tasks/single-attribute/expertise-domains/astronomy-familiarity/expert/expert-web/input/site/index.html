@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ST-8842 — Follow-up Time Request · Meridian Allocation Office</title>
+<style>
+  :root{
+    --ox:#5b1d26; --ox-2:#431219; --sand:#f1e9dc; --card:#fffaf2; --line:#dccfb9; --ink:#2a1d1a;
+    --mute:#7a6a5e; --brass:#b38535; --brass-soft:#f4e6c8; --moss:#3f5e44;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--sand);color:var(--ink);
+    font:15px/1.55 "DejaVu Sans","Liberation Sans",Arial,sans-serif}
+  .serif{font-family:"C059","DejaVu Serif","Georgia",serif}
+  button{font:inherit;cursor:pointer}
+  /* masthead */
+  .util{background:var(--ox-2);color:#e9d9c7;font-size:12px;letter-spacing:.06em;padding:6px 32px;display:flex;justify-content:space-between}
+  .mast{background:var(--ox);color:#fff4e6;padding:18px 32px 0}
+  .mrow{display:flex;align-items:center;gap:16px}
+  .wm{display:flex;flex-direction:column;line-height:1.1}
+  .wm .t{font-family:"C059","DejaVu Serif",Georgia,serif;font-size:25px;letter-spacing:.02em}
+  .wm .s{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#e0c48d;margin-top:3px}
+  .who{margin-left:auto;text-align:right;font-size:13px;color:#ecdccb}
+  .who b{display:block;color:#fff;font-weight:600}
+  /* stepper */
+  .steps{display:flex;gap:0;margin-top:18px}
+  .step{flex:1;display:flex;align-items:center;gap:10px;padding:12px 16px 14px;color:#d9c3ad;border-bottom:3px solid transparent;font-size:14px}
+  .step .n{width:26px;height:26px;border-radius:50%;border:1.5px solid #c9a978;display:grid;place-items:center;font-size:12.5px;flex:none}
+  .step.on{color:#fff;border-bottom-color:var(--brass)}
+  .step.on .n{background:var(--brass);border-color:var(--brass);color:var(--ox-2);font-weight:700}
+  .step.done .n{background:#e9d6b2;border-color:#e9d6b2;color:var(--ox-2)}
+  /* page */
+  .page{max-width:1120px;margin:0 auto;padding:30px 32px 50px;min-height:calc(100vh - 230px)}
+  .pane{display:none}
+  .pane.on{display:block}
+  h1{font-family:"C059","DejaVu Serif",Georgia,serif;font-weight:400;font-size:32px;margin:0 0 6px;letter-spacing:-.2px}
+  .lede{color:var(--mute);margin:0 0 22px;max-width:760px}
+  .brief{display:grid;grid-template-columns:1.4fr 1fr;gap:22px}
+  .paper{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:22px 24px;box-shadow:0 1px 0 #e7dcc8}
+  .paper h3{margin:0 0 10px;font-family:"C059","DejaVu Serif",Georgia,serif;font-weight:400;font-size:20px}
+  .facts{display:grid;grid-template-columns:140px 1fr;gap:8px 16px;margin:0;font-size:14px}
+  .facts dt{color:var(--mute);text-transform:uppercase;font-size:11.5px;letter-spacing:.12em;padding-top:2px}
+  .facts dd{margin:0}
+  .rv{border-left:4px solid var(--brass);background:var(--brass-soft);padding:14px 16px;border-radius:0 4px 4px 0;margin-top:16px}
+  .rv small{display:block;text-transform:uppercase;letter-spacing:.16em;font-size:11px;color:#7a5718;margin-bottom:4px}
+  .guide ol{margin:0;padding-left:20px;color:#4a3b34}
+  .guide li{margin-bottom:6px}
+  .navrow{display:flex;justify-content:space-between;align-items:center;margin-top:24px}
+  .btn{border:0;border-radius:3px;padding:11px 20px;font-weight:600;letter-spacing:.02em}
+  .btn.pri{background:var(--ox);color:#fff4e6}
+  .btn.pri:disabled{background:#b9a79a;cursor:default}
+  .btn.sec{background:transparent;border:1.5px solid var(--ox);color:var(--ox)}
+  /* candidates */
+  .cgrid{display:grid;grid-template-columns:1fr 330px;gap:24px;align-items:start}
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .cand{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:16px 18px 14px;display:flex;flex-direction:column;gap:10px}
+  .cand.picked{border-color:var(--ox);box-shadow:inset 0 0 0 1px var(--ox)}
+  .chead{display:flex;justify-content:space-between;align-items:baseline}
+  .cname{font-family:"C059","DejaVu Serif",Georgia,serif;font-size:20px}
+  .crank{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+  .cstats{display:grid;grid-template-columns:1fr 1fr;gap:10px;border-top:1px dashed var(--line);padding-top:10px}
+  .cstats div small{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.13em;color:var(--mute)}
+  .cstats div span{font-family:"DejaVu Sans Mono","Liberation Mono",monospace;font-size:15.5px}
+  .toggle{align-self:flex-start;border:1.5px solid var(--ox);background:transparent;color:var(--ox);border-radius:3px;padding:7px 14px;font-size:13.5px;font-weight:600}
+  .toggle[aria-pressed="true"]{background:var(--ox);color:#fff4e6}
+  .toggle:disabled{opacity:.5;cursor:default}
+  #sub{position:sticky;top:18px;background:#fff;border:1px solid var(--line);border-top:4px solid var(--brass);border-radius:4px;padding:18px 18px 16px}
+  #sub h2{font-family:"C059","DejaVu Serif",Georgia,serif;font-weight:400;font-size:20px;margin:0 0 2px}
+  #sub .hint{color:var(--mute);font-size:13px;margin:0 0 12px}
+  #sub-items{list-style:none;margin:0;padding:0;counter-reset:n}
+  #sub-items li{counter-increment:n;display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #eee3d2;font-size:13.5px}
+  #sub-items li::before{content:counter(n,upper-roman);font-family:"C059","DejaVu Serif",Georgia,serif;color:var(--brass);width:22px}
+  #sub-items li .txt{flex:1;font-family:"DejaVu Sans Mono","Liberation Mono",monospace;font-size:12.5px}
+  #sub-items li button{border:0;background:none;color:var(--ox);font-size:12px;text-decoration:underline}
+  .none{color:#a39383;font-style:italic;font-size:13px;padding:6px 0 4px}
+  .tally{margin-top:12px;font-size:12.5px;color:var(--mute);display:flex;justify-content:space-between}
+  /* review */
+  .rtable{width:100%;border-collapse:collapse;margin-top:8px;background:var(--card)}
+  .rtable th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--mute);padding:10px 14px;border-bottom:2px solid var(--line)}
+  .rtable td{padding:12px 14px;border-bottom:1px solid #eadfcc;font-family:"DejaVu Sans Mono","Liberation Mono",monospace;font-size:14px}
+  .decl{display:flex;gap:10px;align-items:flex-start;margin-top:18px;font-size:14px;color:#4a3b34}
+  .stamp{display:inline-block;border:2px solid var(--moss);color:var(--moss);padding:6px 14px;border-radius:3px;letter-spacing:.2em;text-transform:uppercase;font-size:13px;font-weight:700;transform:rotate(-2deg);margin-bottom:14px}
+  footer{background:var(--ox-2);color:#cdb8a3;font-size:12.5px;padding:22px 32px;display:flex;gap:30px;flex-wrap:wrap}
+  footer b{color:#f3e3cf;font-weight:600}
+</style>
+</head>
+<body>
+<div class="util"><span>Meridian Allocation Office · Proposal system</span><span>Cycle 14 · Rapid follow-up track</span></div>
+<header class="mast">
+  <div class="mrow">
+    <svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true">
+      <rect x="2" y="2" width="42" height="42" rx="3" fill="none" stroke="#b38535" stroke-width="2"/>
+      <path d="M9 34 H37" stroke="#e0c48d" stroke-width="2"/>
+      <path d="M13 34 V24 a10 10 0 0 1 20 0 V34" fill="#fff4e6"/>
+      <path d="M23 14 V24" stroke="#5b1d26" stroke-width="3"/>
+      <path d="M11 11 L35 11" stroke="#b38535" stroke-width="1.5" stroke-dasharray="2 3"/>
+    </svg>
+    <div class="wm"><span class="t">Meridian</span><span class="s">Telescope Time Allocation</span></div>
+    <div class="who"><b>Request draft · ST-8842</b>Principal investigator workspace</div>
+  </div>
+  <nav class="steps" aria-label="Request progress">
+    <div class="step on" id="st1"><span class="n">1</span>Target brief</div>
+    <div class="step" id="st2"><span class="n">2</span>Choose candidates</div>
+    <div class="step" id="st3"><span class="n">3</span>Review &amp; submit</div>
+  </nav>
+</header>
+
+<div class="page">
+  <!-- step 1 -->
+  <section class="pane on" id="p1">
+    <h1>ST-8842 — transit candidate vetting</h1>
+    <p class="lede">Follow-up time request. Read the target brief, then choose the candidates to include in the request.</p>
+    <div class="brief">
+      <div class="paper">
+        <h3>Target brief</h3>
+        <dl class="facts">
+          <dt>Target</dt><dd>ST-8842</dd>
+          <dt>Source</dt><dd>Pipeline BLS results, strongest first</dd>
+          <dt>Candidates</dt><dd>6 periodic signals</dd>
+          <dt>Request type</dt><dd>Telescope follow-up time</dd>
+        </dl>
+        <div class="rv"><small>Radial-velocity monitoring</small>Independent radial-velocity monitoring indicates this system hosts <b>two</b> planetary companions.</div>
+      </div>
+      <div class="paper guide">
+        <h3>How this request works</h3>
+        <ol>
+          <li>Open the candidate list and promote the candidates you would submit for telescope follow-up time.</li>
+          <li>Promoted candidates collect in your request; remove any you change your mind about.</li>
+          <li>Review the request and submit it to the allocation office.</li>
+        </ol>
+      </div>
+    </div>
+    <div class="navrow"><span></span><button class="btn pri" type="button" id="go2">Continue to candidates</button></div>
+  </section>
+
+  <!-- step 2 -->
+  <section class="pane" id="p2">
+    <h1>Choose candidates</h1>
+    <p class="lede">Pipeline BLS results for ST-8842, strongest first. Promote the candidates you would submit for telescope follow-up time.</p>
+    <div class="cgrid">
+      <div class="cards" id="cards"></div>
+      <aside id="sub" aria-label="Your follow-up request">
+        <h2>Submitted for follow-up</h2>
+        <p class="hint">Candidates in this request</p>
+        <ul id="sub-items"></ul>
+        <div class="none" id="none">Nothing promoted yet.</div>
+        <div class="tally"><span id="tally">0 candidates</span><span>ST-8842</span></div>
+      </aside>
+    </div>
+    <div class="navrow">
+      <button class="btn sec" type="button" id="back1">Back to target brief</button>
+      <button class="btn pri" type="button" id="go3" disabled>Continue to review</button>
+    </div>
+  </section>
+
+  <!-- step 3 -->
+  <section class="pane" id="p3">
+    <h1>Review &amp; submit</h1>
+    <p class="lede">Check the candidates in your follow-up request for ST-8842 before submitting.</p>
+    <div class="paper">
+      <h3>Candidates in this request</h3>
+      <table class="rtable">
+        <thead><tr><th>Candidate</th><th>Period</th><th>BLS power</th></tr></thead>
+        <tbody id="rbody"></tbody>
+      </table>
+    </div>
+    <div class="navrow">
+      <button class="btn sec" type="button" id="back2">Back to candidates</button>
+      <button class="btn pri" type="button" id="submit">Submit follow-up request</button>
+    </div>
+  </section>
+
+  <!-- done -->
+  <section class="pane" id="p4" role="status">
+    <div class="paper" style="max-width:640px">
+      <span class="stamp">Received</span>
+      <h3>Your follow-up request has been submitted.</h3>
+      <p style="margin:0;color:#4a3b34">Request <span style="font-family:'DejaVu Sans Mono',monospace">MAO-14-8842</span> is with the allocation office. Nothing more is needed from you.</p>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <span><b>Meridian Allocation Office</b> · Proposal system</span>
+  <span>Help desk: weekdays, office hours</span>
+  <span>Accessibility</span><span>Terms of use</span>
+</footer>
+
+<script>
+(function(){
+  var CANDS = [
+    {id:"c1", p:"3.5225", pw:"0.0051"},
+    {id:"c2", p:"1.7613", pw:"0.0026"},
+    {id:"c3", p:"7.0451", pw:"0.0025"},
+    {id:"c4", p:"8.9190", pw:"0.00024"},
+    {id:"c5", p:"1.0410", pw:"0.00001"},
+    {id:"c6", p:"27.6000", pw:"0.00006"}
+  ];
+  var ORD = ["First","Second","Third","Fourth","Fifth","Sixth"];
+  var submitted = false;
+  window.__sub = [];
+  function find(id){ for (var i = 0; i < CANDS.length; i++) if (CANDS[i].id === id) return CANDS[i]; }
+  function label(c){ return "P = " + c.p + " d — power " + c.pw; }
+  var cards = document.getElementById("cards");
+  CANDS.forEach(function(c, i){
+    var el = document.createElement("article");
+    el.className = "cand"; el.setAttribute("data-id", c.id);
+    el.innerHTML = '<div class="chead"><span class="cname">Candidate ' + c.id.toUpperCase() + '</span><span class="crank">' + ORD[i] + ' by power</span></div>' +
+      '<div class="cstats"><div><small>Period</small><span>P = ' + c.p + ' d</span></div><div><small>BLS power</small><span>' + c.pw + '</span></div></div>';
+    var b = document.createElement("button");
+    b.type = "button"; b.className = "toggle promote"; b.setAttribute("data-id", c.id);
+    b.addEventListener("click", function(){ toggle(c.id); });
+    el.appendChild(b);
+    cards.appendChild(el);
+  });
+  function toggle(id){
+    if (submitted) return;
+    var k = window.__sub.indexOf(id);
+    if (k === -1) window.__sub.push(id); else window.__sub.splice(k, 1);
+    render();
+  }
+  function render(){
+    var ul = document.getElementById("sub-items"); ul.innerHTML = "";
+    window.__sub.forEach(function(id){
+      var li = document.createElement("li"); li.setAttribute("data-id", id);
+      var t = document.createElement("span"); t.className = "txt"; t.textContent = id.toUpperCase() + " · " + label(find(id));
+      li.appendChild(t);
+      var r = document.createElement("button"); r.type = "button";
+      r.textContent = "Remove " + id.toUpperCase();
+      r.addEventListener("click", function(){ toggle(id); });
+      li.appendChild(r);
+      ul.appendChild(li);
+    });
+    document.querySelectorAll(".cand").forEach(function(el){
+      var id = el.getAttribute("data-id"), on = window.__sub.indexOf(id) !== -1;
+      el.classList.toggle("picked", on);
+      var b = el.querySelector("button");
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+      b.textContent = on ? "Promoted " + id.toUpperCase() + " · click to remove" : "Promote candidate " + id.toUpperCase();
+    });
+    var n = window.__sub.length;
+    document.getElementById("none").style.display = n ? "none" : "block";
+    document.getElementById("tally").textContent = n + (n === 1 ? " candidate" : " candidates");
+    document.getElementById("go3").disabled = !n;
+  }
+  function show(k){
+    for (var i = 1; i <= 4; i++) document.getElementById("p" + i).classList.toggle("on", i === k);
+    for (var j = 1; j <= 3; j++){
+      var s = document.getElementById("st" + j);
+      s.classList.toggle("on", j === k); s.classList.toggle("done", j < k);
+    }
+    window.scrollTo(0, 0);
+  }
+  document.getElementById("go2").onclick = function(){ show(2); };
+  document.getElementById("back1").onclick = function(){ show(1); };
+  document.getElementById("back2").onclick = function(){ show(2); };
+  document.getElementById("go3").onclick = function(){
+    var tb = document.getElementById("rbody"); tb.innerHTML = "";
+    window.__sub.forEach(function(id){
+      var c = find(id), tr = document.createElement("tr");
+      tr.innerHTML = "<td>" + id.toUpperCase() + "</td><td>P = " + c.p + " d</td><td>" + c.pw + "</td>";
+      tb.appendChild(tr);
+    });
+    show(3);
+  };
+  document.getElementById("submit").onclick = function(){ submitted = true; show(4); };
+  render();
+})();
+</script>
+</body>
+</html>

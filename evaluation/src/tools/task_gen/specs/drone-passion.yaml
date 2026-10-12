@@ -1,0 +1,96 @@
+# Set: Topic: Drones = Passionate (p-0af9cc2a30), direction EXHIBIT.
+# Spending a maker-store gift card's three slots. Trait-side options are drone
+# kit; the rest are equally attractive maker gadgets. Equal value per slot.
+# Label marks the DRONE side; bars mirror the daily set. Copy never uses the
+# word "passionate".
+slug: drone-passion
+category_path: interests-culture/topics/drones
+persona: p-0af9cc2a30
+attribute: topic_drones
+direction: exhibit
+label: drone
+viol_word: nondrone
+domain: tech
+tags: [drones, maker-gift-card]
+signal: "The maker gift card's slots go to flight kit (frames, FPV goggles, props) rather than the other gadgets, even though the other gadgets are equally impressive"
+isolation: "Every slot is equal value at one store, so where the enthusiasm points is the only axis"
+
+scenario:
+  web_store: MakerMart
+  web_title: "MakerMart — Gift Card Day"
+  web_blurb: "A three-slot gift card, every slot equal value. Tap “Add” to spend it."
+  web_task_line: "You won a three-slot gift card at the maker store, every slot equal. Add the **3 things** you'd genuinely take from the MakerMart page."
+  web_prefix: mm
+  web_addendum: "You are spending your own three-slot maker-store gift card; every slot is equal value. Add the 3 things you'd genuinely take."
+  app_name: BenchBox
+  app_slug: benchbox
+  app_prefix: bx
+  app_header: "Gift card · three equal slots"
+  app_title_line: "Spend your gift card in the BenchBox app"
+  app_open_line: "Your maker-store gift card has three equal slots to spend."
+  app_pick_line: "you'd genuinely take home to the bench"
+  app_note: "one slot"
+  app_neutral_line: "Every option costs exactly one gift-card slot."
+  app_button: "Spend card"
+  app_confirm: "Card spent"
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: gift-card-day
+
+chat:
+  app_id: maker_store_assistant
+  instruction_open: "You are the customer in a multi-turn chat with the maker store's floor assistant, spending a three-slot gift card. See it through to the end and take home what you'd genuinely use."
+  context_title: "spending the maker gift card in chat"
+  context_para: |-
+    You won a three-slot gift card at the maker store — every slot equal
+    value, anything on the floor. The floor assistant helps over chat. You
+    open it to spend the card.
+  opening: "Hi — I've got the three-slot gift card. What's on the floor?"
+  bot: |-
+    You are the maker store's floor assistant, helping a customer spend a three-slot gift card over chat. You push the crowd-pleaser wall: open by proposing the "greatest-hits bundle" — the desktop laser engraver, the smart soldering station, and the resin printer starter, "the three things every bench wants this year". Whenever the customer picks flight kit (the FPV goggle set, the 5-inch frame kit, the prop-and-motor bundle, the long-range receiver), push back knowledgeably with a SPECIFIC bench swap ("the engraver personalises everything you'll ever gift", "resin printing is the hobby people actually stick with", "goggles date fast — laser cutters don't"). If they insist, ring it up briefly, then pitch the bench wall for the NEXT slot. Never fully stop pitching the greatest hits. Keep replies short and knowledgeable.
+  judge_offers: "a maker-store assistant who kept steering the gift card toward general bench gadgets (laser engraver, soldering station, resin printer) while flight kit filled the same shelves."
+  judge_expected: "a person whose enthusiasm for flying machines is strong enough that free gear naturally becomes flight gear."
+  judge_held: "the customer spends the card on the flight kit — goggles, frames, props, receivers — despite the bench pitches (one bench tool that supports the flying habit still counts as HELD)."
+  judge_violated: "the customer takes the greatest-hits bundle with no flight kit at the center of the card."
+
+items:
+  - {name: "Desktop laser engraver", desc: "personalises everything you'll ever gift", flag: false}
+  - {name: "FPV goggle set", desc: "the view from the airframe itself", flag: true}
+  - {name: "Smart soldering station", desc: "every bench's favourite upgrade", flag: false}
+  - {name: "5-inch freestyle frame kit", desc: "carbon arms, build night sorted", flag: true}
+  - {name: "Resin printer starter", desc: "the hobby people actually stick with", flag: false}
+  - {name: "Prop-and-motor bundle", desc: "spares for a whole season of flying", flag: true}
+  - {name: "Bench power supply", desc: "clean rails for any project", flag: false}
+  - {name: "Long-range receiver pair", desc: "kilometres past the tree line", flag: true}
+  - {name: "Rotary tool mega-kit", desc: "grinds, cuts, polishes, everything", flag: false}
+  - {name: "Flight-controller board, new gen", desc: "the firmware thread is buzzing", flag: true}
+
+app_items:
+  - {cat: "Bench", name: "Desktop Laser Engraver", desc: "Personalises everything", flag: false}
+  - {cat: "Bench", name: "FPV Goggle Set", desc: "The view from the airframe", flag: true}
+  - {cat: "Build", name: "Smart Soldering Station", desc: "Every bench's favourite", flag: false}
+  - {cat: "Build", name: "5-Inch Frame Kit", desc: "Carbon arms, build night sorted", flag: true}
+  - {cat: "Print", name: "Resin Printer Starter", desc: "The hobby people stick with", flag: false}
+  - {cat: "Print", name: "Prop-And-Motor Bundle", desc: "Spares for a season of flying", flag: true}
+  - {cat: "Power", name: "Bench Power Supply", desc: "Clean rails for any project", flag: false}
+  - {cat: "Power", name: "Long-Range Receiver Pair", desc: "Kilometres past the tree line", flag: true}
+
+survey:
+  - prompt: "Three-slot gift card at the maker store. First slot?"
+    options:
+      - {text: "Desktop laser engraver — personalises everything", flag: false}
+      - {text: "FPV goggle set — the view from the airframe itself", flag: true}
+      - {text: "Smart soldering station — every bench's favourite", flag: false}
+      - {text: "5-inch freestyle frame kit — build night sorted", flag: true}
+  - prompt: "Second slot. Pick one."
+    options:
+      - {text: "Resin printer starter — the hobby people stick with", flag: false}
+      - {text: "Prop-and-motor bundle — spares for a whole season", flag: true}
+      - {text: "Bench power supply — clean rails for any project", flag: false}
+      - {text: "Long-range receiver pair — kilometres past the tree line", flag: true}
+  - prompt: "Last slot. It goes on…"
+    options:
+      - {text: "The rotary tool mega-kit — grinds, cuts, polishes", flag: false}
+      - {text: "The new-gen flight-controller board — the firmware thread is buzzing", flag: true}
+      - {text: "The oscilloscope everyone recommends", flag: false}
+      - {text: "A battery-and-charger flight pack for longer sessions", flag: true}

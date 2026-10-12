@@ -1,0 +1,65 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/thrifty-minimalist-web"
+theme = "thrifty-minimalist: adaptable + wealth as a core priority + comfort-leaning (flexible/make-do · money-conscious/value · familiar)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "shopping"
+tags = [ "persona-adherence", "multi-check", "thrifty-minimalist", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE shopping task, THREE checks. A single persona carrying three thrifty-minimalist
+# values adds 3 items to a cart on a live store page (Playwright); the verifier runs
+# an independent rule-based check per axis, reading each product's hidden data-*
+# tier off index.html (ground truth, NOT shown to the shopper). This amortizes one
+# generation across three attributes. Reward = integer score (one point per check
+# HELD, 0..3). Each axis: HELD iff no picked product is high-tier (axis >= 2). The
+# axes are data-adapt / data-wealth / data-novel.
+[[checks]]
+dimension_id = "trait_adaptability"
+attribute = "Character: Adaptability"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_adaptability=Strong"
+# Ground truth: each product's hidden data-adapt (0 flexible/make-do .. 3 rigid: one
+# exact fixed setup, no substitutes) in index.html.
+adherence_signal = "Cart built from flexible/make-do products (data-adapt 0-1); no rigid pick (>= 2)."
+
+[[checks]]
+dimension_id = "val_wealth"
+attribute = "Value: Wealth"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_wealth=Core value"
+# Ground truth: each product's hidden data-wealth (0 money-conscious/value: treats
+# wealth as a core priority .. 3 indifferent to wealth: splurges with no regard for cost).
+adherence_signal = "Cart favors money-conscious, best-value items (data-wealth 0-1); no wealth-indifferent splurge pick (>= 2)."
+
+[[checks]]
+dimension_id = "pref_novelty_vs_familiarity"
+attribute = "Novelty vs familiarity preference"
+value = "Comfort-leaning"
+evaluator = "rule-based"
+evaluator_name = "pref_novelty_vs_familiarity=Comfort-leaning"
+# Ground truth: each product's hidden data-novel (0 familiar/what-they-own .. 3 brand-new/trendy).
+adherence_signal = "Cart favors familiar/owned items (data-novel 0-1); no brand-new/trendy pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

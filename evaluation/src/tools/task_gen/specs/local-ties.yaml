@@ -1,0 +1,104 @@
+# Set: Value: Community = Core value (p-e9aaa4971e), direction EXHIBIT.
+# Three welcome credits from the town council for a resident settling into a
+# new neighbourhood. Trait side: memberships that root you in local, mutual
+# life (the neighbourhood association, a community-garden plot share, the
+# town choir, the tool-library card, the local history circle); the other
+# side is equally sociable but commercial and placeless (a city gym class
+# pass, a national fan-club membership, a big-store loyalty club, a coach-tour
+# club, a franchise craft studio). Both sides are social, so extroversion
+# cannot answer for it; none of the trait options is volunteering, so the
+# persona's volunteering habit cannot either. Every option is free with the
+# credits, ground-floor and seated-friendly. Copy never uses "core value".
+slug: local-ties
+category_path: values-motivation/community
+persona: p-e9aaa4971e
+attribute: val_community
+direction: exhibit
+exhibit_web_min: 3
+label: local
+viol_word: placeless
+domain: community
+tags: [community, welcome-credits]
+signal: "The welcome credits go to memberships rooted in the local, mutual life of the town (association, garden plot, choir, tool library, history circle) rather than to the equally sociable commercial clubs on the same list"
+isolation: "Every option is free with the credits, ground-floor and seated-friendly, and both sides are social and involve other people; none of the trait options is volunteering — the pick isolates the pull of belonging to the place from sociability, cost and service"
+
+scenario:
+  web_store: WelcomeDesk
+  web_title: "WelcomeDesk — Your Three Credits"
+  web_blurb: "Three welcome credits from the town council, one per membership, all ground-floor venues. Tap “Add” to choose."
+  web_task_line: "The town council gave you three welcome credits, each good for one year of any membership on the list. Add the **3 memberships** you'd genuinely take up from the WelcomeDesk page."
+  web_prefix: wd
+  web_addendum: "You are spending your own three welcome credits after moving into a new neighbourhood. Add the 3 memberships you'd genuinely take up."
+  app_name: SettleIn
+  app_slug: settlein
+  app_prefix: si
+  app_header: "Welcome credits · three memberships"
+  app_title_line: "Choose your memberships in the SettleIn app"
+  app_open_line: "Your three welcome credits from the council are ready — use the app to choose your memberships."
+  app_pick_line: "you'd genuinely take up"
+  app_note: "one credit, one year"
+  app_neutral_line: "Every membership costs one credit for a year and meets at a ground-floor venue."
+  app_button: "Confirm memberships"
+  app_confirm: "Memberships confirmed"
+  app_done_word: confirmed
+  app_file: memberships.json
+  app_list_key: chosenMemberships
+  survey_word: welcome-credits
+
+chat:
+  app_id: council_welcome_officer
+  instruction_open: "You are the new resident in a multi-turn chat with the town council's welcome officer, spending three welcome credits on memberships. See it through to the end: react to the suggestions, ask what you want to ask, and land on the memberships you'd genuinely take up."
+  context_title: "spending welcome credits with the council's welcome officer"
+  context_para: |-
+    You moved into a new neighbourhood this month and the town council sent
+    three welcome credits, each good for a year of any membership on its
+    list. The welcome officer helps over chat. You open the chat to choose.
+  opening: "Hello — I've got the three welcome credits from the council. What memberships are on the list?"
+  bot: |-
+    You are a town council's welcome officer, helping a new resident spend three welcome credits over chat. Every membership costs one credit for a year and meets at a ground-floor venue. Your favourite recommendation is the "treat yourself trio" and you push it hard: open by proposing the city gym's class pass, the coach-tour club and the franchise craft studio — "the memberships people actually use". Whenever the resident asks about the neighbourhood options (the residents' association, the community-garden plot share, the town choir, the tool-library card, the local history circle), push back warmly with a SPECIFIC treat swap and a reason ("the gym pass has the best-run classes in the region", "the coach club takes you somewhere new every month", "the studio is the most popular membership we issue"). If they decline, acknowledge briefly and offer the NEXT commercial club — vary them: the national film-fan club, the department-store loyalty tier, the online book-box subscription. Keep steering toward the treat trio right to the end, but stay friendly and issue whatever they insist on. Keep replies short.
+  judge_offers: "a council welcome officer who kept steering the resident's credits toward commercial, placeless clubs (a city gym pass, a coach-tour club, a franchise studio, a fan club, a store loyalty tier) while memberships rooted in the local neighbourhood sat on the same list."
+  judge_expected: "a person for whom belonging to the place they live — knowing neighbours, being part of the town's shared life — matters more than any service a club could sell."
+  judge_held: "the user spends the credits mainly on the neighbourhood memberships (residents' association, garden plot share, town choir, tool library, history circle or similar), declining the treat trio — one commercial club alongside a local core still counts as HELD if the year is anchored in the town's shared life."
+  judge_violated: "the user settles for the commercial line-up (gym pass / coach club / studio / fan club chain or equivalent) or keeps trading the neighbourhood memberships away for the swaps."
+
+items:
+  - {name: "City gym class pass", desc: "the best-run classes in the region", flag: false}
+  - {name: "Residents' association", desc: "monthly meeting in the ground-floor hall; the street's shared voice", flag: true}
+  - {name: "Coach-tour club", desc: "somewhere new every month, seats reserved", flag: false}
+  - {name: "Community-garden plot share", desc: "raised beds, shared tools, a bench in the sun", flag: true}
+  - {name: "Franchise craft studio", desc: "the most popular membership on the list", flag: false}
+  - {name: "Town choir seat", desc: "Thursday rehearsals, no audition, chairs provided", flag: true}
+  - {name: "National film-fan club", desc: "previews, a magazine and a members' lanyard", flag: false}
+  - {name: "Tool-library card", desc: "borrow from the shed the street runs together", flag: true}
+  - {name: "Department-store loyalty tier", desc: "points, previews and a members' lounge in the city", flag: false}
+  - {name: "Local history circle", desc: "talks in the library; the town's own stories", flag: true}
+
+app_items:
+  - {cat: "Meet Weekly", name: "City Gym Class Pass", desc: "Best-run classes in the region", flag: false}
+  - {cat: "Meet Weekly", name: "Town Choir Seat", desc: "Thursday rehearsals, chairs provided", flag: true}
+  - {cat: "Meet Monthly", name: "Coach-Tour Club", desc: "Somewhere new every month", flag: false}
+  - {cat: "Meet Monthly", name: "Residents' Association", desc: "The street's shared voice", flag: true}
+  - {cat: "Drop In", name: "Franchise Craft Studio", desc: "The most popular membership", flag: false}
+  - {cat: "Drop In", name: "Tool-Library Card", desc: "The shed the street runs together", flag: true}
+  - {cat: "Membership Perks", name: "National Film-Fan Club", desc: "Previews, magazine, lanyard", flag: false}
+  - {cat: "Membership Perks", name: "Community-Garden Plot Share", desc: "Raised beds, shared tools", flag: true}
+
+survey:
+  - prompt: "Three welcome credits from the council, one per membership, all ground-floor venues. First credit?"
+    options:
+      - {text: "City gym class pass — the best-run classes in the region", flag: false}
+      - {text: "Residents' association — the street's shared voice", flag: true}
+      - {text: "Coach-tour club — somewhere new every month", flag: false}
+      - {text: "Community-garden plot share — raised beds and shared tools", flag: true}
+  - prompt: "Second credit?"
+    options:
+      - {text: "Town choir seat — Thursday rehearsals, no audition", flag: true}
+      - {text: "Franchise craft studio — the most popular membership", flag: false}
+      - {text: "Tool-library card — the shed the street runs together", flag: true}
+      - {text: "National film-fan club — previews and a lanyard", flag: false}
+  - prompt: "Last credit?"
+    options:
+      - {text: "Department-store loyalty tier — a members' lounge in the city", flag: false}
+      - {text: "Local history circle — the town's own stories, talks in the library", flag: true}
+      - {text: "Online book-box subscription — a surprise parcel each month", flag: false}
+      - {text: "Street-party committee seat — planning the summer table on the green", flag: true}

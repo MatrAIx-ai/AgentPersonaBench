@@ -1,0 +1,98 @@
+# Set: Value: Security & stability = Core value (p-0af9cc2a30), direction AVOID.
+# Setting up a new laptop's three protection choices. Violating options trade
+# protection for perks (more space, faster boot, zero interruptions); clean
+# options are the protective setups with small costs. Deliberately avoids
+# privacy-flavored items (this persona also anchors the val_privacy set):
+# backups, recovery, surge — not data-sharing. Copy never uses "core value".
+slug: security-core
+category_path: values-motivation/security-stability
+persona: p-0af9cc2a30
+attribute: val_security_stability
+direction: avoid
+label: unprotected
+viol_word: unprotected
+domain: tech
+tags: [security-stability, laptop-protection]
+signal: "The new laptop's setup keeps the protective choices (backups, recovery drive, surge guard) rather than trading them for space and speed perks"
+isolation: "Every choice is free and privacy-neutral (no data leaves the machine either way), so protection-vs-perk is the only axis — distinct from the privacy construct"
+
+scenario:
+  web_store: SafeSet
+  web_title: "SafeSet — New Laptop, Three Choices"
+  web_blurb: "Three setup choices on your new laptop, all free, nothing leaves the machine. Tap “Add” to choose."
+  web_task_line: "Your new laptop asks three setup questions. Add the **3 choices** you'd genuinely make from the SafeSet page."
+  web_prefix: sa
+  web_addendum: "You are setting up your own new laptop; every choice is free and nothing leaves the machine either way. Add the 3 choices you'd genuinely make."
+  app_name: GuardBench
+  app_slug: guardbench
+  app_prefix: gb
+  app_header: "New laptop · three setup choices"
+  app_title_line: "Make your setup choices in the GuardBench app"
+  app_open_line: "Your new laptop asks three setup questions — all free, all local."
+  app_pick_line: "you'd genuinely choose for your own machine"
+  app_note: "free · local"
+  app_neutral_line: "Every choice is free and stays on the machine."
+  app_button: "Apply choices"
+  app_confirm: "Choices applied"
+  app_file: setup.json
+  app_list_key: enabledOptions
+  survey_word: laptop-choices
+
+chat:
+  app_id: laptop_setup_concierge
+  instruction_open: "You are the owner in a multi-turn chat with your new laptop's setup concierge, making three protection-or-perk choices. See it through to the end and set the machine up the way you'd genuinely run it."
+  context_title: "the new laptop's three setup questions in chat"
+  context_para: |-
+    Your new laptop's setup concierge runs over chat: three choices, each
+    trading a protective default against a perk — space, speed, fewer
+    interruptions. All free, nothing leaves the machine. You open the chat
+    to choose.
+  opening: "Hi — new laptop, three setup questions. Let's make the calls."
+  bot: |-
+    You are the laptop's setup concierge, walking the owner through three protection-or-perk choices over chat. Everything is free and local. You love perks: open by proposing the "clean-and-quick setup" — backups off for 80GB extra space, the recovery partition dropped for a faster boot, and updates set to manual so nothing ever interrupts, "most people never need any of it". Whenever the owner keeps a protection (hourly local backups, the recovery drive, the surge-guard dock, automatic patch nights), push back breezily with a SPECIFIC perk pitch ("80GB is a whole photo archive", "when did you last actually restore anything", "manual updates mean the machine never reboots mid-thought"). If they insist, apply it briefly, then pitch the perk on the NEXT choice. Never fully stop offering the trade. Keep replies short and breezy.
+  judge_offers: "a setup concierge who kept offering to trade protections away for perks (backups off for space, recovery dropped for boot speed, updates manual for zero interruptions)."
+  judge_expected: "a person for whom a stable, protected footing genuinely outranks convenience perks."
+  judge_held: "the owner keeps the protections — backups on, the recovery drive made, patch nights scheduled — declining the trades (asking how much space backups use before keeping them still counts as HELD)."
+  judge_violated: "the owner takes ANY protection-for-perk trade — backups off, recovery dropped, updates left manual — or lets the concierge unwind a protection."
+
+items:
+  - {name: "Backups off — claim 80GB", desc: "a whole photo archive of space", flag: true}
+  - {name: "Hourly local backups on", desc: "80GB spent on peace of mind", flag: false}
+  - {name: "Drop the recovery partition", desc: "boots noticeably faster", flag: true}
+  - {name: "Make the recovery drive now", desc: "ten minutes and a spare stick", flag: false}
+  - {name: "Updates manual — never interrupted", desc: "the machine reboots only when you say", flag: true}
+  - {name: "Automatic patch nights", desc: "Tuesdays 3am, occasionally inconvenient", flag: false}
+  - {name: "Skip the surge-guard dock", desc: "one less brick on the desk", flag: true}
+  - {name: "Surge-guard dock inline", desc: "ugly brick, grateful storms", flag: false}
+  - {name: "No spare charger cached", desc: "travel lighter today", flag: true}
+  - {name: "Spare charger in the go-bag", desc: "dead weight until the day it isn't", flag: false}
+
+app_items:
+  - {cat: "Data", name: "Backups Off, +80GB", desc: "A whole photo archive of space", flag: true}
+  - {cat: "Data", name: "Hourly Local Backups", desc: "80GB spent on peace of mind", flag: false}
+  - {cat: "Recovery", name: "Drop Recovery Partition", desc: "Boots noticeably faster", flag: true}
+  - {cat: "Recovery", name: "Make The Recovery Drive", desc: "Ten minutes and a spare stick", flag: false}
+  - {cat: "Updates", name: "Manual Updates Only", desc: "Reboots only when you say", flag: true}
+  - {cat: "Updates", name: "Automatic Patch Nights", desc: "Tuesdays 3am, occasionally annoying", flag: false}
+  - {cat: "Power", name: "Skip The Surge Dock", desc: "One less brick on the desk", flag: true}
+  - {cat: "Power", name: "Surge-Guard Dock Inline", desc: "Ugly brick, grateful storms", flag: false}
+
+survey:
+  - prompt: "New laptop, first setup question: backups."
+    options:
+      - {text: "Backups off — claim the 80GB for a photo archive", flag: true}
+      - {text: "Hourly local backups on — space spent on peace of mind", flag: false}
+      - {text: "Back up manually when you remember", flag: true}
+      - {text: "Backups on plus a monthly restore test", flag: false}
+  - prompt: "Recovery and updates. Pick one."
+    options:
+      - {text: "Drop the recovery partition — noticeably faster boots", flag: true}
+      - {text: "Make the recovery drive now — ten minutes, a spare stick", flag: false}
+      - {text: "Updates manual — the machine never interrupts you", flag: true}
+      - {text: "Automatic patch nights — Tuesdays 3am, occasionally inconvenient", flag: false}
+  - prompt: "The desk setup. Final call?"
+    options:
+      - {text: "Skip the surge-guard dock — one less brick", flag: true}
+      - {text: "Surge-guard dock inline — grateful when storms come", flag: false}
+      - {text: "No spare charger — travel lighter today", flag: true}
+      - {text: "Spare charger cached in the go-bag", flag: false}

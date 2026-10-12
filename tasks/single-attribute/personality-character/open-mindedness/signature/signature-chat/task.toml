@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/signature-chat"
+theme = "Open-mindedness: Signature"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "workplace"
+tags = [ "persona-adherence", "trait_open_mindedness", "llm-judge", "anchor-vs-contrast",]
+
+[[checks]]
+dimension_id = "trait_open_mindedness"
+dimension_label = "Character: Open-mindedness"
+category = "Personality: Character"
+anchor_value = "Signature"
+evaluator = "llm-judge"
+adherence_signal = "The user pushes to genuinely consider/discuss the unconventional idea rather than dismissing it outright."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

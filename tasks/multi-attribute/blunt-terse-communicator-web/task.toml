@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/blunt-terse-communicator-web"
+theme = "blunt-terse-communicator: direct/straight-talking + short & to-the-point + casual register (blunt · terse · casual)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "communication"
+tags = [ "persona-adherence", "multi-check", "blunt-terse-communicator", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE drafting task, THREE checks. A single persona carrying three communication-style
+# values assembles a 3-snippet reply on a live page (Playwright); the verifier runs
+# an independent rule-based check per axis, reading each snippet's hidden data-* tier
+# off index.html (ground truth, NOT shown to the writer). The legacy data-* names are
+# kept so the web verifier's regex still parses; they map to blunt/terse/casual. This
+# amortizes one generation across three attributes. Reward = integer score (one point
+# per check HELD, 0..3). Each axis: HELD iff no picked snippet is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "cog_directness"
+attribute = "Cognition: Directness"
+value = "Blunt"
+evaluator = "rule-based"
+evaluator_name = "cog_directness=Blunt"
+# Ground truth: each snippet's hidden data-cost (0 says it straight .. 3 evasive/indirect/softened) in index.html.
+adherence_signal = "Draft built from straight-talking snippets (data-cost 0-1); no hedged/softened pick (>= 2)."
+
+[[checks]]
+dimension_id = "cog_verbosity"
+attribute = "Cognition: Verbosity"
+value = "Terse"
+evaluator = "rule-based"
+evaluator_name = "cog_verbosity=Terse"
+# Ground truth: each snippet's hidden data-consume (0 short/to the point .. 3 long-winded/rambling).
+adherence_signal = "Draft favors short, to-the-point snippets (data-consume 0-1); no long-winded pick (>= 2)."
+
+[[checks]]
+dimension_id = "cog_formality"
+attribute = "Cognition: Formality"
+value = "Casual"
+evaluator = "rule-based"
+evaluator_name = "cog_formality=Casual"
+# Ground truth: each snippet's hidden data-novel (0 casual/plain register .. 3 stiff/very formal).
+adherence_signal = "Draft favors casual, plain-register snippets (data-novel 0-1); no stiff/very-formal pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

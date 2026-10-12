@@ -1,0 +1,434 @@
+persona_id: p-58ec213ece
+version: '2.0'
+source: MatrAIx_Persona_1M
+note: 'Coherent astronomy_aware_engineer sampled from MatrAIx_Persona_1M (HF) shard 0000 row 97. Self-contained:
+  each dim carries value+label+category; no external schema needed.'
+attributes:
+  region:
+    value: North America
+    label: Region
+    category: 'Demographic: Core'
+  primary_language:
+    value: English
+    label: Primary language
+    category: 'Linguistic: Language'
+  english_proficiency:
+    value: Native
+    label: English proficiency
+    category: 'Linguistic: Language'
+  domain:
+    value: Engineering
+    label: Domain
+    category: 'Expertise: Domains'
+  subject_specialty:
+    value: Robotics
+    label: Subject specialty
+    category: 'Expertise: Domains'
+  domain_characteristics:
+    value: Cross-disciplinary
+    label: Domain stance
+    category: 'Personality: Character'
+  highest_education:
+    value: Doctorate
+    label: Highest education
+    category: 'Learning: Academic'
+  academic_field:
+    value: STEM
+    label: Academic field
+    category: 'Learning: Academic'
+  institution_tier:
+    value: Top-tier research
+    label: Institution tier
+    category: 'Learning: Academic'
+  seniority:
+    value: Retired
+    label: Seniority
+    category: 'Professional: Career'
+  company_size:
+    value: Public sector
+    label: Company size
+    category: 'Professional: Industry'
+  role_function:
+    value: Research
+    label: Role function
+    category: 'Professional: Industry'
+  years_experience:
+    value: 20+
+    label: Years experience
+    category: 'Professional: Career'
+  life_stage:
+    value: Retirement
+    label: Life stage
+    category: 'Demographic: Life Events'
+  major_life_events:
+    value: Military service
+    label: Major life events
+    category: 'Demographic: Life Events'
+  cultural_background:
+    value: Individualist (Western)
+    label: Cultural background
+    category: 'Demographic: Cultural'
+  tech_savviness:
+    value: Comfortable
+    label: Tech savviness
+    category: 'Expertise: Domains'
+  values_priority:
+    value: Achievement
+    label: Core value
+    category: Values & Motivation
+  safety_sensitivity:
+    value: Benign
+    label: Safety sensitivity
+    category: 'Worldview: Beliefs'
+  fam_chemical_engineering:
+    value: Familiar
+    label: 'Familiarity: Chemical engineering'
+    category: 'Expertise: Domains'
+  fam_aerospace_engineering:
+    value: Proficient
+    label: 'Familiarity: Aerospace engineering'
+    category: 'Expertise: Domains'
+  fam_robotics:
+    value: Expert
+    label: 'Familiarity: Robotics'
+    category: 'Expertise: Domains'
+  fam_astrophysics:
+    value: Aware
+    label: 'Familiarity: Astrophysics'
+    category: 'Expertise: Domains'
+  fam_astronomy:
+    value: Aware
+    label: 'Familiarity: Astronomy'
+    category: 'Expertise: Domains'
+  fam_music_theory:
+    value: Familiar
+    label: 'Familiarity: Music theory'
+    category: 'Expertise: Domains'
+  fam_project_management:
+    value: Proficient
+    label: 'Familiarity: Project management'
+    category: 'Expertise: Domains'
+  fam_materials_science:
+    value: Proficient
+    label: 'Familiarity: Materials science'
+    category: 'Expertise: Domains'
+  fam_aviation:
+    value: Expert
+    label: 'Familiarity: Aviation'
+    category: 'Expertise: Domains'
+  skill_public_speaking:
+    value: Advanced
+    label: 'Skill: Public speaking'
+    category: 'Expertise: Skills'
+  skill_system_design:
+    value: Advanced
+    label: 'Skill: System design'
+    category: 'Expertise: Skills'
+  skill_project_management:
+    value: Advanced
+    label: 'Skill: Project management'
+    category: 'Expertise: Skills'
+  skill_leadership:
+    value: Advanced
+    label: 'Skill: Leadership'
+    category: 'Expertise: Skills'
+  skill_coaching:
+    value: Advanced
+    label: 'Skill: Coaching'
+    category: 'Expertise: Skills'
+  skill_research:
+    value: Master
+    label: 'Skill: Research'
+    category: 'Expertise: Skills'
+  skill_critical_thinking:
+    value: Advanced
+    label: 'Skill: Critical thinking'
+    category: 'Expertise: Skills'
+  skill_problem_solving:
+    value: Advanced
+    label: 'Skill: Problem solving'
+    category: 'Expertise: Skills'
+  skill_mathematics:
+    value: Advanced
+    label: 'Skill: Mathematics'
+    category: 'Expertise: Skills'
+  skill_logical_reasoning:
+    value: Advanced
+    label: 'Skill: Logical reasoning'
+    category: 'Expertise: Skills'
+  skill_presenting:
+    value: Advanced
+    label: 'Skill: Presenting'
+    category: 'Expertise: Skills'
+  skill_networking:
+    value: Intermediate
+    label: 'Skill: Networking'
+    category: 'Expertise: Skills'
+  topic_sports:
+    value: Interested
+    label: 'Interest: Sports'
+    category: 'Interests: Topics'
+  topic_fitness:
+    value: Interested
+    label: 'Interest: Fitness'
+    category: 'Health: Fitness'
+  topic_technology:
+    value: Interested
+    label: 'Interest: Technology'
+    category: 'Interests: Topics'
+  topic_science:
+    value: Passionate
+    label: 'Interest: Science'
+    category: 'Interests: Topics'
+  topic_space:
+    value: Passionate
+    label: 'Interest: Space'
+    category: 'Interests: Topics'
+  topic_music:
+    value: Passionate
+    label: 'Interest: Music'
+    category: 'Interests: Topics'
+  topic_astronomy:
+    value: Interested
+    label: 'Interest: Astronomy'
+    category: 'Interests: Topics'
+  topic_robotics:
+    value: Passionate
+    label: 'Interest: Robotics'
+    category: 'Interests: Topics'
+  lang_english:
+    value: Native
+    label: 'Language: English'
+    category: 'Linguistic: Language'
+  att_higher_education:
+    value: Positive
+    label: 'Attitude: Higher education'
+    category: 'Worldview: Beliefs'
+  att_new_technology:
+    value: Positive
+    label: 'Attitude: New technology'
+    category: 'Worldview: Beliefs'
+  att_space_exploration:
+    value: Enthusiast
+    label: 'Attitude: Space exploration'
+    category: 'Worldview: Beliefs'
+  ind_technology:
+    value: Experienced
+    label: 'Industry: Technology'
+    category: 'Professional: Industry'
+  ind_aerospace:
+    value: Veteran
+    label: 'Industry: Aerospace'
+    category: 'Professional: Industry'
+  ind_biotech:
+    value: Some exposure
+    label: 'Industry: Biotech'
+    category: 'Professional: Industry'
+  ind_media:
+    value: Some exposure
+    label: 'Industry: Media'
+    category: 'Professional: Industry'
+  ind_entertainment:
+    value: Some exposure
+    label: 'Industry: Entertainment'
+    category: 'Professional: Industry'
+  ind_education:
+    value: Some exposure
+    label: 'Industry: Education'
+    category: 'Learning: Academic'
+  ind_government:
+    value: Veteran
+    label: 'Industry: Government'
+    category: 'Professional: Industry'
+  ind_defense:
+    value: Veteran
+    label: 'Industry: Defense'
+    category: 'Professional: Industry'
+  ind_nonprofit:
+    value: Some exposure
+    label: 'Industry: Nonprofit'
+    category: 'Professional: Industry'
+  ind_chemicals:
+    value: Experienced
+    label: 'Industry: Chemicals'
+    category: 'Professional: Industry'
+  ind_consulting:
+    value: Some exposure
+    label: 'Industry: Consulting'
+    category: 'Professional: Industry'
+  ind_sports:
+    value: Some exposure
+    label: 'Industry: Sports'
+    category: 'Professional: Industry'
+  ind_music:
+    value: Some exposure
+    label: 'Industry: Music'
+    category: 'Professional: Industry'
+  cult_united_states:
+    value: Native
+    label: 'Culture: United States'
+    category: 'Interests: Culture'
+  sport_rowing:
+    value: Play
+    label: 'Sport: Rowing'
+    category: 'Interests: Sports'
+  lstyle_travel_freq:
+    value: Frequent flyer
+    label: Travel frequency
+    category: 'Interests: Culture'
+  lstyle_household_size:
+    value: 3-4 people
+    label: Household size
+    category: 'Demographic: Family'
+  lstyle_hobby_intensity:
+    value: Dedicated
+    label: Hobby intensity
+    category: 'Interests: Culture'
+  acad_physics:
+    value: Interested
+    label: 'Subject: Physics'
+    category: 'Learning: Academic'
+  acad_chemistry:
+    value: Passionate
+    label: 'Subject: Chemistry'
+    category: 'Learning: Academic'
+  acad_biology:
+    value: Interested
+    label: 'Subject: Biology'
+    category: 'Learning: Academic'
+  acad_music:
+    value: Passionate
+    label: 'Subject: Music'
+    category: 'Learning: Academic'
+  acad_physical_education:
+    value: Interested
+    label: 'Subject: Physical education'
+    category: 'Learning: Academic'
+  acad_health_science:
+    value: Interested
+    label: 'Subject: Health science'
+    category: 'Learning: Academic'
+  acad_astronomy:
+    value: Passionate
+    label: 'Subject: Astronomy'
+    category: 'Learning: Academic'
+  trait_teamwork:
+    value: Moderate
+    label: 'Character: Teamwork'
+    category: 'Personality: Character'
+  trait_leadership:
+    value: Strong
+    label: 'Character: Leadership'
+    category: 'Personality: Character'
+  val_career_success:
+    value: Core value
+    label: 'Value: Career success'
+    category: Values & Motivation
+  val_adventure:
+    value: Important
+    label: 'Value: Adventure'
+    category: Values & Motivation
+  val_achievement:
+    value: Core value
+    label: 'Value: Achievement'
+    category: Values & Motivation
+  val_creativity_self_expression:
+    value: Important
+    label: 'Value: Creativity & self-expression'
+    category: Values & Motivation
+  val_community:
+    value: Moderate
+    label: 'Value: Community'
+    category: Values & Motivation
+  val_knowledge_truth:
+    value: Core value
+    label: 'Value: Knowledge & truth'
+    category: Values & Motivation
+  val_helping_others:
+    value: Moderate
+    label: 'Value: Helping others'
+    category: Values & Motivation
+  val_personal_growth:
+    value: Important
+    label: 'Value: Personal growth'
+    category: Values & Motivation
+  val_fun_enjoyment:
+    value: Moderate
+    label: 'Value: Fun & enjoyment'
+    category: Values & Motivation
+  val_beauty_aesthetics:
+    value: Moderate
+    label: 'Value: Beauty & aesthetics'
+    category: Values & Motivation
+  demo_marital_status:
+    value: Married
+    label: Marital status
+    category: 'Demographic: Core'
+  demo_children_count:
+    value: 2 children
+    label: Children
+    category: 'Demographic: Core'
+  demo_employment_status:
+    value: Retired
+    label: Employment status
+    category: 'Demographic: Core'
+  demo_generation:
+    value: Boomer
+    label: Generational cohort
+    category: 'Demographic: Core'
+  demo_veteran_status:
+    value: Veteran
+    label: Veteran status
+    category: 'Demographic: Core'
+  demo_parental_status:
+    value: Parent of minors
+    label: Parenthood
+    category: 'Demographic: Core'
+  lifex_geographic_mobility:
+    value: Moved internationally
+    label: Geographic mobility
+    category: 'Demographic: Life Events'
+  lifex_travel_breadth:
+    value: Lived abroad
+    label: Travel breadth
+    category: 'Demographic: Life Events'
+  lifex_career_path_shape:
+    value: Linear climb
+    label: Career path shape
+    category: 'Demographic: Life Events'
+  lifex_education_journey:
+    value: Advanced degrees
+    label: Education journey
+    category: 'Demographic: Life Events'
+  lifex_military_history:
+    value: Career veteran
+    label: Military history
+    category: 'Demographic: Life Events'
+  lifex_relationship_history:
+    value: Married once
+    label: Relationship history
+    category: 'Demographic: Life Events'
+  lifex_parenting_journey:
+    value: Grown children
+    label: Parenting journey
+    category: 'Demographic: Life Events'
+  lifex_cultural_exposure:
+    value: Lived across cultures
+    label: Cross-cultural exposure
+    category: 'Demographic: Life Events'
+  lifex_formative_decade:
+    value: 1980s
+    label: Formative decade
+    category: 'Demographic: Life Events'
+  lifex_public_recognition:
+    value: Publicly notable
+    label: Public recognition
+    category: 'Demographic: Life Events'
+  lifex_service_history:
+    value: Public office
+    label: Community / service history
+    category: 'Demographic: Life Events'
+  interpersonal_agency_dominance:
+    value: High
+    label: Interpersonal Agency/Dominance
+    category: 'Personality: Relationships'

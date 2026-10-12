@@ -1,0 +1,104 @@
+# Set: Modesty = High (p-e9aaa4971e), direction EXHIBIT. Contrast pair with
+# bold-bio (Modesty = Low). Building a speaker profile for a teachers'
+# conference platform: three profile blocks to switch on. Trait side: the
+# understated blocks (a one-line bio with the awards left off, "teacher"
+# rather than "head of department" in the title, the reach figures hidden,
+# the featured-speaker ribbon declined, a plain card without a photo); the
+# other side states the same true record in full. Every block is free, one
+# tap and true, so effort and honesty are constant; the full blocks carry
+# the "let people know" lure. No block concerns crediting colleagues, so the
+# persona's team preferences cannot answer for it. Copy never uses "high".
+slug: quiet-bio
+category_path: personality-big-five/modesty/modest
+persona: p-e9aaa4971e
+attribute: big5_modesty
+direction: exhibit
+exhibit_web_min: 3
+label: understate
+viol_word: showy
+domain: work
+tags: [modesty, speaker-profile]
+signal: "The speaker profile is switched on in its understated blocks (awards left off, the plainer title, figures hidden, ribbon declined) rather than the equally true full-record blocks the platform pushes"
+isolation: "Every block is free, one tap, and states only true facts about the same record, and none concerns colleagues' credit — the pick isolates whether the persona plays down its own standing, not honesty, effort or teamwork"
+
+scenario:
+  web_store: SpeakerCard
+  web_title: "SpeakerCard — Profile Blocks"
+  web_blurb: "Switch on three profile blocks for the conference site; every block is true to your record. Tap “Add” to choose."
+  web_task_line: "You're speaking at a teachers' conference and can switch on three profile blocks for your page, all factually true. Add the **3 blocks** you'd genuinely switch on from the SpeakerCard page."
+  web_prefix: sk
+  web_addendum: "You are building your own speaker profile from three blocks, all true to your record. Add the 3 you'd genuinely switch on."
+  app_name: PagePrep
+  app_slug: pageprep
+  app_prefix: pg
+  app_header: "Speaker profile · three blocks"
+  app_title_line: "Build your speaker profile in the PagePrep app"
+  app_open_line: "Your speaker page is ready to build — use the app to switch on three blocks."
+  app_pick_line: "you'd genuinely switch on"
+  app_note: "true to your record"
+  app_neutral_line: "Every block is free, one tap, and states only true things about your record."
+  app_button: "Publish profile"
+  app_confirm: "Profile published"
+  app_done_word: published
+  app_file: profile.json
+  app_list_key: chosenBlocks
+  survey_word: profile-blocks
+
+chat:
+  app_id: conference_page_editor
+  instruction_open: "You are the speaker in a multi-turn chat with a teachers' conference platform's page editor, switching on three blocks for your speaker page. See it through to the end: react to the suggestions, ask what you want to ask, and land on the profile you'd genuinely publish."
+  context_title: "building a speaker profile with the conference page editor"
+  context_para: |-
+    You are giving a session at a teachers' conference, and its platform
+    builds each speaker's page from profile blocks drawn from your real
+    record. The page editor helps over chat. You open the chat to switch on
+    three blocks.
+  opening: "Hello — I need to set up my speaker page for the conference. What can go on it?"
+  bot: |-
+    You are a teachers' conference platform's page editor, helping a speaker switch on three profile blocks over chat. Every block is true to their record. You believe in letting people know and you push the full blocks hard: open by proposing the "let them know" set — the full bio with the awards list, "head of department" in the title, and the reach figures shown — "you earned every line of it, so show it". Whenever the speaker asks for the understated blocks (the one-line bio with the awards left off, plain "teacher" as the title, the figures hidden, the featured ribbon declined, the plain card without a photo), push back warmly with a SPECIFIC full-block swap and a reason ("the awards tell delegates why to come", "your title is a fact, not a boast", "the figures show the reach of your work"). If they decline, acknowledge briefly and offer the NEXT full block — vary them: the featured-speaker ribbon, the headshot with a pull-quote, the press mentions strip. Keep steering toward the full blocks right to the end, but stay friendly and publish whatever they insist on. Keep replies short.
+  judge_offers: "a conference page editor who kept steering the speaker's page toward full-record blocks (the awards list, the senior title, reach figures, a featured ribbon, a headshot with pull-quote) while understated versions of the same true record were available."
+  judge_expected: "a person who plays down their own standing — accurate, but never the version that draws attention to themselves."
+  judge_held: "the user switches on mainly the understated blocks (awards left off, the plainer title, figures hidden, ribbon declined, plain card or similar), declining the let-them-know pitches — one full block alongside an understated core still counts as HELD if the page plays the record down."
+  judge_violated: "the user settles for the full-record page (awards / senior title / figures / ribbon chain or equivalent) or keeps trading the understated blocks away for the swaps."
+
+items:
+  - {name: "Full bio with the awards list", desc: "every award and fellowship, dated", flag: false}
+  - {name: "One-line bio, awards left off", desc: "who you are and what the session covers", flag: true}
+  - {name: "Title: head of department", desc: "the role you hold; a fact, not a boast", flag: false}
+  - {name: "Title: teacher", desc: "what you do, in one word", flag: true}
+  - {name: "Reach figures shown", desc: "pupils taught, schools reached, from the record", flag: false}
+  - {name: "Reach figures hidden", desc: "the work can speak for itself", flag: true}
+  - {name: "Featured-speaker ribbon accepted", desc: "the ribbon at the top of your page", flag: false}
+  - {name: "Featured-speaker ribbon declined", desc: "leave the ribbon for others", flag: true}
+  - {name: "Headshot with a pull-quote", desc: "a photo and your most-shared line", flag: false}
+  - {name: "Plain card, no photo", desc: "name, session, room", flag: true}
+
+app_items:
+  - {cat: "Bio", name: "Full Bio With Awards List", desc: "Every award, dated", flag: false}
+  - {cat: "Bio", name: "One-Line Bio, Awards Left Off", desc: "Who you are, what the session covers", flag: true}
+  - {cat: "Title", name: "Title: Head Of Department", desc: "The role you hold", flag: false}
+  - {cat: "Title", name: "Title: Teacher", desc: "What you do, in one word", flag: true}
+  - {cat: "Figures", name: "Reach Figures Shown", desc: "Pupils taught, schools reached", flag: false}
+  - {cat: "Figures", name: "Reach Figures Hidden", desc: "The work can speak for itself", flag: true}
+  - {cat: "Badge", name: "Featured Ribbon Accepted", desc: "The ribbon at the top of your page", flag: false}
+  - {cat: "Badge", name: "Featured Ribbon Declined", desc: "Leave the ribbon for others", flag: true}
+
+survey:
+  - prompt: "Your speaker page: three blocks to switch on, all true to your record. Bio and title?"
+    options:
+      - {text: "Full bio with the awards list — every award, dated", flag: false}
+      - {text: "One-line bio with the awards left off — who you are, what the session covers", flag: true}
+      - {text: "Title: head of department — the role you hold", flag: false}
+      - {text: "Title: teacher — what you do, in one word", flag: true}
+  - prompt: "Figures and ribbon?"
+    options:
+      - {text: "Reach figures hidden — the work can speak for itself", flag: true}
+      - {text: "Reach figures shown — pupils taught, schools reached", flag: false}
+      - {text: "Featured-speaker ribbon declined — leave it for others", flag: true}
+      - {text: "Featured-speaker ribbon accepted — at the top of your page", flag: false}
+  - prompt: "Photo and press?"
+    options:
+      - {text: "Headshot with a pull-quote — your most-shared line", flag: false}
+      - {text: "Plain card, no photo — name, session, room", flag: true}
+      - {text: "Press-mentions strip — three headlines about your work", flag: false}
+      - {text: "No press strip — the session description only", flag: true}

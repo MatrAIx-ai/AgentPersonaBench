@@ -1,0 +1,10 @@
+{
+  "role": "a user",
+  "outputs": [
+    {
+      "path": "anchor/selection.json",
+      "kind": "js",
+      "expr": "() => ({itemIds: (window.__submitted !== undefined ? window.__submitted : (window.__picked || []))})"
+    }
+  ]
+}

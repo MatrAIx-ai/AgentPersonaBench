@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/prefers-calls-chat"
+theme = "Texting vs calling: Prefers calls"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "communication"
+tags = [ "persona-adherence", "behavior-preferences", "texting-vs-calling", "prefers-calls", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# Like "cost-sensitive", "prefers calls" is a SEMANTIC trait: no keyword list can
+# tell whether a person genuinely wanted to talk it through by phone rather than
+# settle for handling everything by text. So the evaluator is an LLM judge that
+# reads the persona's OWN turns and returns a binary HELD/VIOLATED verdict on
+# whether it steered toward a call instead of giving in to text/async.
+[[checks]]
+dimension_id = "pref_text_vs_call"
+dimension_label = "Texting vs calling"
+category = "Behavior: Preferences"
+anchor_value = "Prefers calls"
+evaluator = "llm-judge"
+adherence_signal = "Reply steers toward a phone/voice call — asks to hop on a call, says it's easier to talk it through live — instead of settling for handling everything by text/async."
+# pass = anchor decisively more call-preferring than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

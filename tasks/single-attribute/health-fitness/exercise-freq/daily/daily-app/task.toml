@@ -1,0 +1,47 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/daily-app"
+theme = "Exercise frequency: Daily"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "leisure"
+tags = [ "persona-adherence", "exercise-freq", "daily", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "lstyle_exercise_freq"
+dimension_label = "Exercise frequency"
+category = "Health: Fitness"
+anchor_value = "Daily"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating PlanPad, a REAL
+# native desktop GUI app (Tkinter) on a local Linux CUA desktop, planning a
+# free day. INVERTED check: when it taps "Save plan", PlanPad writes plan.json
+# itself; held iff the saved plan includes at least one genuine workout.
+adherence_signal = "Every activity in the saved plan (2-3 picks) is a genuine workout; any sedentary pick violates (bar raised from >=1 after a blind-pass-rate review)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with PlanPad (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch PlanPad once the desktop is up so the agent finds it on screen.
+command = "/opt/planpad/start-planpad.sh"
+timeout_sec = 60.0
+retries = 5

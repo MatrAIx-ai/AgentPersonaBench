@@ -1,0 +1,28 @@
+{
+  "dataset": "MatrAIx2026/MatrAIx_Persona_1M",
+  "revision": "8b1073ab23d0c0ba0928386a041bac55e5365ddc",
+  "codebook_sha256": "a02221ff32c2bc135c5e4290e1383081188712ee88f5c341f5fdb56d3d7b1c5c",
+  "manifest_sha256": "b8582f8fcc6f7023bc46a7d675854c8ce8e44ad886095de9d66005866fdb63a3",
+  "decoder": "Low nibble first; complete native rows without missing fields or overrides; packed-byte round trip checked.",
+  "decoder_sha256": "2da535a8478ce235b2a78089b2cf6ef3a9751514f38a36c7db7433af32dfb1e1",
+  "difference_count": 828,
+  "records": [
+    {
+      "persona_id": "hf-synthetic-7038689257",
+      "source": "synthetic",
+      "source_row_index": 7038689257,
+      "shard": "data/persona-1m-0008.parquet",
+      "shard_sha256": "657b73c12b69090e35efbd60968308a619b49d0cb27d958b21cc27a55353c39d",
+      "shard_row_zero_based": 95009,
+      "row_group_zero_based": 10,
+      "row_in_group_zero_based": 3511,
+      "populated_attribute_count": 1290,
+      "attributes_packed_sha256": "842472d911c3e0680590837fdaeff7f60529d3c1bda0e46fafd5b6052a4eee43",
+      "decoded_values_sha256": "db1e3fa7aae6820f9407f85d39e8d10703caff30af9b51d19ae594de1a9d034a",
+      "persona_yaml_sha256": "5d37c66b0c6932b6bc15456be2f4818aa6dc44ec75f470610b3f1b56117bbd92",
+      "target": "Add logging / instrumentation",
+      "label": "target",
+      "persona_yaml": "persona.yaml"
+    }
+  ]
+}

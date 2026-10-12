@@ -1,0 +1,14 @@
+{
+  "role": "a user",
+  "outputs": [
+    {
+      "path": "anchor/analysis.json",
+      "kind": "js",
+      "expr": "() => window.__analysisState"
+    }
+  ],
+  "notes": [
+    "Make the workflow choice you would genuinely make.",
+    "The hub offers these equally capable workspaces:"
+  ]
+}

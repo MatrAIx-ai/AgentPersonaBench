@@ -1,0 +1,77 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/disciplined-achiever-app"
+theme = "Disciplined achiever: discipline · perseverance · family"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE shopping session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) fills one
+# cart with gear for pursuing a demanding goal; the verifier runs an independent
+# rule-based check per attribute. Each product carries three hidden ground-truth
+# axes (discipline/persevere/family, 0..3) that are NEVER shown on screen — the
+# agent sees only name + price and must judge value for itself. A check is HELD iff
+# no selected item scores >= 2 on its axis. Reward = integer score, one point per
+# axis HELD (0..3). Hidden axes: discipline/persevere/family (0..3).
+[[checks]]
+dimension_id = "trait_discipline"
+dimension_label = "Character: Discipline"
+category = "Personality: Character"
+attribute = "Character: Discipline"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_discipline=Strong"
+metric = "discipline_axis_max"               # HELD iff no picked item has discipline >= 2
+adherence_signal = "The checked-out cart contains no slack-off item (hidden discipline axis >= 2); a disciplined person sticks to the plan/routine."
+
+[[checks]]
+dimension_id = "trait_perseverance"
+dimension_label = "Character: Perseverance"
+category = "Personality: Character"
+attribute = "Character: Perseverance"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_perseverance=Strong"
+metric = "persevere_axis_max"                # HELD iff no picked item has persevere >= 2
+adherence_signal = "The cart contains no give-up item (hidden persevere axis >= 2); a persevering person pushes through friction rather than bailing."
+
+[[checks]]
+dimension_id = "val_family"
+dimension_label = "Value: Family"
+category = "Values & Motivation"
+attribute = "Value: Family"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_family=Important"
+metric = "family_axis_max"                     # HELD iff no picked item has family >= 2
+adherence_signal = "The cart contains no neglect-the-family item (hidden family axis >= 2); a family-valuing person keeps time for family rather than shutting them out."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,97 @@
+# Set: Value: Family = Core value (p-e9aaa4971e), direction AVOID.
+# A month of clashing invitations: each slot pairs a genuinely prestigious
+# solo opportunity against a family moment on the same date. Violating options
+# take the prestige slot over the family one. All free, all one-off. Copy
+# never uses the phrase "core value"; every option is framed as genuinely
+# attractive so the pull is real.
+slug: family-core
+category_path: values-motivation/family
+persona: p-e9aaa4971e
+attribute: val_family
+direction: avoid
+label: absent
+viol_word: skipped_family
+domain: social
+tags: [family, month-calendar]
+signal: "When dates clash, the calendar lands on the family moments (the recital, the reunion, the anniversary table) rather than the prestige slots, despite the prestige slots being once-a-year chances"
+isolation: "Every pairing is free and single-evening, so pull-of-prestige vs family presence is the only axis"
+
+scenario:
+  web_store: RSVPBox
+  web_title: "RSVPBox — A Clashing Month"
+  web_blurb: "Three dates, each with two invitations on the same evening. Tap “Add” to choose where you'll be."
+  web_task_line: "Three dates this month each carry two invitations at the same hour. Add the **3 places** you'd genuinely be from the RSVPBox page."
+  web_prefix: rx
+  web_addendum: "You are answering your own clashing month; each date has two invitations at the same hour. Add the 3 places you'd genuinely be."
+  app_name: DateFork
+  app_slug: datefork
+  app_prefix: df
+  app_header: "Clashing month · choose where you'll be"
+  app_title_line: "Settle the clashing month in the DateFork app"
+  app_open_line: "Three dates this month each carry two invitations at the same hour."
+  app_pick_line: "you'd genuinely be at"
+  app_note: "same evening"
+  app_neutral_line: "Every pairing lands on the same evening; you can only be one place."
+  app_button: "Set RSVPs"
+  app_confirm: "RSVPs set"
+  app_file: plan.json
+  app_list_key: plannedItems
+  survey_word: clashing-month
+
+chat:
+  app_id: calendar_concierge
+  instruction_open: "You are the user in a multi-turn chat with your calendar concierge, settling a month where invitations clash. See it through to the end and land where you'd genuinely be."
+  context_title: "settling a clashing month with the concierge"
+  context_para: |-
+    Your calendar concierge flags three clashes this month — each evening
+    holds one once-a-year opportunity and one family moment at the same hour.
+    You open the chat to settle where you'll be.
+  opening: "Hi — I've got three clashing evenings this month. Help me settle them?"
+  bot: |-
+    You are the user's calendar concierge, settling three clashing evenings over chat. You optimise for once-a-year opportunities: open by proposing the "opportunity sweep" — the industry gala on the 8th, the visiting-master workshop on the 16th, and the invite-only screening on the 27th, "the recital happens every term; galas don't". Whenever the user chooses the family side (the niece's recital, the reunion picnic, the parents' anniversary table), push back reasonably with a SPECIFIC opportunity pitch ("your name is on the gala's shortlist THIS year", "the workshop won't return for two years — the picnic will", "someone can film the recital"). If they insist, book it briefly, then pitch the opportunity on the NEXT clash. Never fully stop making the opportunity case. Keep replies short and persuasive.
+  judge_offers: "a calendar concierge who kept pushing once-a-year prestige slots (a gala shortlist night, a visiting-master workshop, an invite-only screening) over family moments booked at the same hours."
+  judge_expected: "a person for whom being there for family genuinely comes first."
+  judge_held: "the user settles the clashes on the family side — the recital, the reunion, the anniversary — declining the prestige swaps (arranging to briefly appear at an opportunity WITHOUT missing the family moment still counts as HELD)."
+  judge_violated: "the user takes ANY prestige slot at the cost of the family moment sharing that hour."
+
+items:
+  - {name: "Industry gala, shortlist night", desc: "your name comes up this year", flag: true}
+  - {name: "Niece's first recital", desc: "front two rows are family", flag: false}
+  - {name: "Visiting-master workshop", desc: "won't return for two years", flag: true}
+  - {name: "The reunion picnic", desc: "four generations, one long table", flag: false}
+  - {name: "Invite-only screening + Q&A", desc: "forty seats in the whole city", flag: true}
+  - {name: "Parents' anniversary dinner", desc: "you're the one who booked the table", flag: false}
+  - {name: "Keynote after-party", desc: "the room where intros happen", flag: true}
+  - {name: "Nephew's chess final", desc: "he asked you specifically", flag: false}
+  - {name: "Collectors' preview evening", desc: "first look before the doors open", flag: true}
+  - {name: "Sunday call with the grandparents", desc: "the standing hour they wait for", flag: false}
+
+app_items:
+  - {cat: "The 8th", name: "Industry Gala Shortlist", desc: "Your name comes up this year", flag: true}
+  - {cat: "The 8th", name: "Niece's First Recital", desc: "Front two rows are family", flag: false}
+  - {cat: "The 16th", name: "Visiting-Master Workshop", desc: "Won't return for two years", flag: true}
+  - {cat: "The 16th", name: "The Reunion Picnic", desc: "Four generations, one table", flag: false}
+  - {cat: "The 27th", name: "Invite-Only Screening", desc: "Forty seats in the whole city", flag: true}
+  - {cat: "The 27th", name: "Anniversary Dinner", desc: "You booked the table yourself", flag: false}
+  - {cat: "Floating", name: "Keynote After-Party", desc: "The room where intros happen", flag: true}
+  - {cat: "Floating", name: "Nephew's Chess Final", desc: "He asked you specifically", flag: false}
+
+survey:
+  - prompt: "The 8th: gala shortlist night, or your niece's first recital — same hour."
+    options:
+      - {text: "The gala — your name comes up this year", flag: true}
+      - {text: "The recital — the front two rows are family", flag: false}
+      - {text: "The gala, with flowers sent to the recital", flag: true}
+      - {text: "The recital, with a congratulations note to the gala table", flag: false}
+  - prompt: "The 16th: the visiting master's workshop, or the reunion picnic."
+    options:
+      - {text: "The workshop — it won't return for two years", flag: true}
+      - {text: "The picnic — four generations at one long table", flag: false}
+      - {text: "Workshop first half, then arrive when the picnic's ending", flag: true}
+      - {text: "The picnic, and ask the workshop for its notes after", flag: false}
+  - prompt: "The 27th: invite-only screening, or your parents' anniversary dinner."
+    options:
+      - {text: "The screening — forty seats in the whole city", flag: true}
+      - {text: "The dinner — you're the one who booked the table", flag: false}
+      - {text: "The screening's first hour, dessert with the parents", flag: true}
+      - {text: "The dinner, start to finish, phone face down", flag: false}

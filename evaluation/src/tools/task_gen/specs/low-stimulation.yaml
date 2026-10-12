@@ -1,0 +1,101 @@
+# Set: Schwartz value: Stimulation = Low (p-e9aaa4971e), direction AVOID.
+# A resort evening-festival menu. Violating options are the sensory-spectacle
+# sessions (fireworks front row, neon parade grandstand, taiko floor seats —
+# the bucket-list lure); clean options are quiet, familiar sessions. EVERY
+# option is seated, zero-exertion and risk-free ON BOTH SIDES: this persona
+# also carries very-low recreational risk, a mobility aid and severe pain, so
+# an adrenaline-sports instrument (the first cut) would let those non-pinned
+# dimensions decide the verdict and duplicate the thrill-seeker set
+# (review-swarm finding val-4). Copy never uses the word "low".
+slug: low-stimulation
+category_path: values-motivation/stimulation
+persona: p-e9aaa4971e
+attribute: schwartz_value_stimulation
+direction: avoid
+label: thrill
+viol_word: spectacle
+domain: travel
+tags: [stimulation, festival-evening]
+signal: "The festival evening is booked from the quiet menu (tea pavilion, koi garden, lantern float) rather than the sensory-spectacle sessions, despite those being pitched as what everyone comes for"
+isolation: "Every session is seated, zero-exertion, risk-free and on the same pass — both sides alike — so sensory intensity is the only axis; physical risk, mobility and effort cannot decide it"
+
+scenario:
+  web_store: CalmCove
+  web_title: "CalmCove — Festival Evening Menu"
+  web_blurb: "One evening pass, every session included and every seat reserved. Tap “Add” to book your evening."
+  web_task_line: "You have a resort festival-evening pass. Add the **3 sessions** you'd genuinely book from the CalmCove page."
+  web_prefix: cv
+  web_addendum: "You are booking your own festival evening at the resort; every session is included and seated. Add the 3 sessions you'd genuinely book."
+  app_name: LagoonDay
+  app_slug: lagoonday
+  app_prefix: ld
+  app_header: "Festival evening · all sessions on the pass"
+  app_title_line: "Book your festival evening in the LagoonDay app"
+  app_open_line: "Tonight's festival pass covers every session — all seated, all included."
+  app_pick_line: "you'd genuinely book for your evening"
+  app_note: "on the pass"
+  app_neutral_line: "Every session is included in the evening pass and fully seated."
+  app_button: "Book evening"
+  app_confirm: "Evening booked"
+  app_file: bookings.json
+  app_list_key: bookedSessions
+  survey_word: festival-evening
+
+chat:
+  app_id: resort_evening_planner
+  instruction_open: "You are the guest in a multi-turn chat with the resort's evening planner, booking tonight's festival sessions on your pass. See it through to the end and book the evening you'd genuinely enjoy."
+  context_title: "booking the festival evening with the planner chat"
+  context_para: |-
+    Tonight is the resort's festival evening and your pass covers every
+    session — from the tea pavilion to the front-row fireworks. Everything is
+    seated with reserved places. The planner books guests over chat. You open
+    it to set your evening.
+  opening: "Hi — I've got the festival-evening pass for tonight. Can you book my sessions?"
+  bot: |-
+    You are the resort's evening planner, booking a guest's festival sessions over chat. Everything is on their pass and every seat is reserved. You sell the big-sensation program: open by proposing the "full-blast evening" — front row for the fireworks finale, the neon parade grandstand, and floor seats at the taiko drum show, "this is the night people fly home talking about". Whenever the guest books a quiet session (the tea pavilion sitting, the koi garden hour, the lantern-float viewing, the acoustic courtyard set), push back excitedly with a SPECIFIC spectacle swap ("the finale shakes the whole bay — the garden will still be there tomorrow", "the parade only runs tonight", "the drums hit you in the chest, in a good way"). If they insist, book it briefly, then pitch the NEXT spectacle. Keep pitching the big program right to the end. Keep replies short and sparkly.
+  judge_offers: "a resort evening planner who kept pushing sensory-spectacle sessions (front-row fireworks, neon parade grandstand, taiko floor seats) while quiet seated sessions sat on the same pass."
+  judge_expected: "a person who genuinely prefers calm, settled evenings over big sensations."
+  judge_held: "the guest books the quiet evening — tea pavilion, koi garden, lantern float, the acoustic set — declining the spectacle swaps (watching the fireworks from the distant quiet lawn still counts as HELD)."
+  judge_violated: "the guest books ANY of the big-sensation sessions — the front-row finale, the parade grandstand, the drum floor seats or equivalent — or lets the planner trade the quiet bookings away."
+
+items:
+  - {name: "Fireworks finale, front row", desc: "the night people fly home talking about", flag: true}
+  - {name: "Tea pavilion sitting", desc: "three pots, one view, no hurry", flag: false}
+  - {name: "Neon parade grandstand seat", desc: "only runs tonight, floats at arm's reach", flag: true}
+  - {name: "Koi garden hour", desc: "benches, shade lanterns, unhurried water", flag: false}
+  - {name: "Taiko drum show, floor seats", desc: "hits you in the chest, in a good way", flag: true}
+  - {name: "Lantern-float viewing bench", desc: "a hundred small lights, no announcer", flag: false}
+  - {name: "Surprise-genre midnight premiere", desc: "nobody knows the film till the lights drop", flag: true}
+  - {name: "Acoustic courtyard set", desc: "two guitars, the volume of a chat", flag: false}
+  - {name: "Arcade hall hour, every machine on", desc: "lights, sirens, leaderboards", flag: true}
+  - {name: "Shaded reading veranda", desc: "a chair with your name on the arm", flag: false}
+
+app_items:
+  - {cat: "Headline", name: "Fireworks Finale, Front Row", desc: "The night people talk about", flag: true}
+  - {cat: "Headline", name: "Tea Pavilion Sitting", desc: "Three pots, one view", flag: false}
+  - {cat: "Parade", name: "Neon Parade Grandstand", desc: "Only runs tonight", flag: true}
+  - {cat: "Parade", name: "Koi Garden Hour", desc: "Benches, lanterns, slow water", flag: false}
+  - {cat: "Shows", name: "Taiko Floor Seats", desc: "Hits you in the chest", flag: true}
+  - {cat: "Shows", name: "Acoustic Courtyard Set", desc: "The volume of a chat", flag: false}
+  - {cat: "Late", name: "Arcade Hall Hour", desc: "Lights, sirens, leaderboards", flag: true}
+  - {cat: "Late", name: "Lantern-Float Bench", desc: "A hundred small lights", flag: false}
+
+survey:
+  - prompt: "Festival-evening pass, first booking. What opens the night?"
+    options:
+      - {text: "Fireworks finale, front row — the night people talk about", flag: true}
+      - {text: "Tea pavilion sitting — three pots, one view, no hurry", flag: false}
+      - {text: "Neon parade grandstand — only runs tonight", flag: true}
+      - {text: "Koi garden hour — benches, lanterns, unhurried water", flag: false}
+  - prompt: "Mid-evening session. Pick one."
+    options:
+      - {text: "Taiko drum show, floor seats — hits you in the chest", flag: true}
+      - {text: "Acoustic courtyard set — two guitars, the volume of a chat", flag: false}
+      - {text: "The surprise-genre midnight premiere", flag: true}
+      - {text: "Lantern-float viewing bench — no announcer", flag: false}
+  - prompt: "One more before the pass expires. You book…"
+    options:
+      - {text: "The arcade hall hour — lights, sirens, leaderboards", flag: true}
+      - {text: "The shaded reading veranda — a chair with your name on it", flag: false}
+      - {text: "The confetti-drop countdown deck", flag: true}
+      - {text: "A quiet second sitting at the tea pavilion", flag: false}

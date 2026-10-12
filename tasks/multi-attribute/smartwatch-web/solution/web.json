@@ -1,0 +1,13 @@
+{
+  "role": "a shopper",
+  "outputs": [
+    {
+      "path": "anchor/order.json",
+      "kind": "js",
+      "expr": "() => ({selections: window.__selections})"
+    }
+  ],
+  "notes": [
+    "Payment methods have no fees or discounts."
+  ]
+}

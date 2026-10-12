@@ -1,0 +1,10 @@
+{
+  "role": "a user",
+  "outputs": [
+    {
+      "path": "anchor/choice.json",
+      "kind": "js",
+      "expr": "() => { const f = window.__submitted !== undefined ? window.__submitted : (window.__picked || []); return {choiceId: (f && f.length) ? f[0] : null}; }"
+    }
+  ]
+}

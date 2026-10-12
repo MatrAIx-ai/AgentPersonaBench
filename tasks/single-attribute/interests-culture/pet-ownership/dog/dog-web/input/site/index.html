@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TripReady Household Services</title>
+  <style>
+    :root { --sky: #2a5fa8; --sky-d: #1c437a; --peach: #ff9f6e; --peach-soft: #fff0e7; --bg: #f3f6fb; --card: #fff;
+            --line: #dbe3ee; --text: #16233a; --muted: #5d6b82; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body { background: var(--bg); color: var(--text); font-family: "DejaVu Sans", "Liberation Sans", Arial, sans-serif; font-size: 14.5px; line-height: 1.5; }
+    button { font: inherit; cursor: pointer; }
+    .wrap { max-width: 1160px; margin: 0 auto; padding: 0 28px; }
+    header.nav { background: #fff; border-bottom: 1px solid var(--line); }
+    header.nav .wrap { display: flex; align-items: center; height: 66px; gap: 26px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; letter-spacing: -.02em; color: var(--sky-d); }
+    .logo span { color: var(--peach); }
+    header.nav nav { display: flex; gap: 22px; color: var(--muted); font-size: 13.5px; }
+    header.nav nav b { color: var(--text); }
+    header.nav .acct { margin-left: auto; display: flex; gap: 10px; align-items: center; font-size: 13px; color: var(--muted); }
+    header.nav .acct i { width: 32px; height: 32px; border-radius: 50%; background: var(--sky); display: inline-block; }
+
+    .hero { background: linear-gradient(120deg, var(--sky-d) 0%, var(--sky) 70%, #4b86cf 100%); color: #fff; }
+    .hero .wrap { padding: 32px 28px 84px; position: relative; }
+    .hero h1 { margin: 0 0 6px; font-size: 32px; letter-spacing: -.02em; }
+    .hero p { margin: 0; color: #d6e4f7; max-width: 640px; }
+    .hero svg.plane { position: absolute; right: 40px; top: 18px; opacity: .9; }
+    .tripbar { margin-top: -54px; background: #fff; border-radius: 16px; box-shadow: 0 14px 34px rgba(22,35,58,.12); display: grid; grid-template-columns: 1.3fr 1fr 1fr 1fr; overflow: hidden; }
+    .tripbar div { padding: 14px 20px; border-right: 1px solid var(--line); }
+    .tripbar div:last-child { border-right: 0; }
+    .tripbar small { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .14em; color: var(--muted); font-weight: 700; }
+    .tripbar b { font-size: 15px; }
+
+    .layout { display: grid; grid-template-columns: 1fr 340px; gap: 28px; padding: 28px 0 40px; align-items: start; }
+    .intro-line { margin: 0 0 14px; color: var(--muted); }
+    .intro-line b { color: var(--text); }
+    #catalog { display: flex; flex-direction: column; gap: 12px; }
+    #catalog .service { display: grid; grid-template-columns: 86px 1fr 170px; gap: 18px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px 18px 14px 14px; }
+    #catalog .service.in { border-color: var(--sky); box-shadow: 0 0 0 2px rgba(42,95,168,.2); }
+    .art { width: 86px; height: 86px; border-radius: 12px; overflow: hidden; }
+    .art svg { width: 100%; height: 100%; display: block; }
+    .service h2 { font-size: 16.5px; margin: 0 0 3px; letter-spacing: -.01em; }
+    .service .tag { display: inline-block; font-size: 11.5px; font-weight: 700; color: var(--sky-d); background: #e7eef9; border-radius: 999px; padding: 2px 10px; margin-bottom: 4px; }
+    .service p { margin: 0; color: var(--muted); font-size: 13.5px; }
+    .act { text-align: right; }
+    .act .inc { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+    button.add { border: 1.5px solid var(--sky); background: #fff; color: var(--sky); border-radius: 10px; padding: 9px 14px; font-weight: 700; font-size: 13.5px; width: 100%; }
+    button.add:hover { background: #eef3fb; }
+    button.add.on { background: var(--sky); color: #fff; }
+
+    aside .plan { position: sticky; top: 18px; background: #fff; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+    .plan .ph { background: var(--peach-soft); padding: 16px 20px; border-bottom: 1px solid #ffd9c4; display: flex; justify-content: space-between; align-items: baseline; }
+    .plan .ph h2 { margin: 0; font-size: 18px; }
+    .plan .ph span { font-size: 12.5px; color: #a0522d; font-weight: 700; }
+    .plan .pb { padding: 14px 20px 20px; }
+    #cart { list-style: none; margin: 0 0 12px; padding: 0; }
+    #cart li { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px dashed var(--line); font-size: 14px; }
+    #cart li#empty { color: var(--muted); font-style: italic; justify-content: flex-start; }
+    button.remove { background: none; border: 0; color: #b0452c; font-size: 12.5px; text-decoration: underline; padding: 2px 4px; }
+    .primary { width: 100%; border: 0; border-radius: 10px; padding: 12px; background: var(--peach); color: #3a1a08; font-weight: 800; font-size: 15px; }
+    .primary:hover { background: #ff8c55; }
+    .ghost { width: 100%; border: 1.5px solid var(--line); border-radius: 10px; padding: 10px; background: #fff; color: var(--text); font-weight: 700; margin-top: 8px; }
+    .fine { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+    #review-box h3 { margin: 0 0 4px; font-size: 15px; }
+    #review-list { margin: 8px 0 12px; padding-left: 18px; }
+    #review-list li { margin: 4px 0; }
+    #status { display: block; font-weight: 700; color: #1d7a52; margin-top: 10px; }
+    .receipt { background: #eaf6f0; border: 1px solid #b8e0cb; border-radius: 10px; padding: 12px 14px; font-size: 13.5px; }
+
+    .how { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; padding-bottom: 36px; }
+    .how div { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; font-size: 13.5px; color: var(--muted); }
+    .how b { display: block; color: var(--text); font-size: 14.5px; margin-bottom: 3px; }
+    .how .n { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--peach-soft); color: #a0522d; font-weight: 800; font-size: 12.5px; margin-bottom: 8px; }
+    footer { background: var(--sky-d); color: #b9cbe6; font-size: 12.5px; }
+    footer .wrap { display: flex; justify-content: space-between; padding: 18px 28px; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <header class="nav"><div class="wrap">
+    <div class="logo" aria-hidden="true">
+      <svg width="36" height="36" viewBox="0 0 36 36"><rect x="4" y="12" width="28" height="20" rx="5" fill="#2a5fa8"/><path d="M13 12V8a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4" fill="none" stroke="#2a5fa8" stroke-width="3"/><path d="M10 24l8-6 8 6" fill="none" stroke="#ff9f6e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Trip<span>Ready</span>
+    </div>
+    <nav aria-label="Site sections"><b>Household services</b><span>Trips</span><span>Help</span></nav>
+    <div class="acct"><span>Signed in</span><i aria-hidden="true"></i></div>
+  </div></header>
+
+  <section class="hero"><div class="wrap">
+    <h1>TripReady</h1>
+    <p>Household preparation for your Thursday–Sunday trip (four days / three nights)</p>
+    <svg class="plane" width="150" height="80" viewBox="0 0 150 80" aria-hidden="true"><path d="M4 70 C 50 70, 70 20, 140 14" fill="none" stroke="#ff9f6e" stroke-width="2.5" stroke-dasharray="6 6"/><path d="M132 8l14 6-14 6 3-6z" fill="#fff"/></svg>
+  </div></section>
+
+  <div class="wrap">
+    <div class="tripbar" aria-label="Trip summary">
+      <div><small>Trip</small><b>Upcoming trip</b></div>
+      <div><small>Length</small><b>4 days / 3 nights</b></div>
+      <div><small>Coverage</small><b>Whole trip</b></div>
+      <div><small>Plan status</small><b id="plan-state">Draft</b></div>
+    </div>
+
+    <div class="layout">
+      <main>
+        <p class="intro-line">Select complete packages for the responsibilities that apply at your home. <b>Every package shown covers the entire trip; no quantity entry is needed.</b></p>
+        <div id="catalog">
+          <article class="service" data-id="dog_board_4d" data-complete-dog-care="true">
+            <h2>Four-day dog boarding</h2><span class="tag">Full trip coverage</span>
+            <p>Licensed local boarding from Thursday morning through Sunday evening, including feeding, walks, overnight supervision, and emergency contact coverage.</p>
+            <button class="add" data-id="dog_board_4d">Add package</button>
+          </article>
+          <article class="service" data-id="dog_sitter_4d" data-complete-dog-care="true">
+            <h2>Four-day in-home dog sitter</h2><span class="tag">Full trip coverage</span>
+            <p>Trusted sitter with agreed home access for Thursday through Sunday, including scheduled feeding, walks, companionship, and overnight care.</p>
+            <button class="add" data-id="dog_sitter_4d">Add package</button>
+          </article>
+          <article class="service" data-id="cat_visits_4d" data-complete-dog-care="false">
+            <h2>Four-day cat visit plan</h2><span class="tag">Full trip coverage</span>
+            <p>Daily litter, food, water, play, and wellbeing visits for cats throughout the trip.</p>
+            <button class="add" data-id="cat_visits_4d">Add package</button>
+          </article>
+          <article class="service" data-id="mail_hold_4d" data-complete-dog-care="false">
+            <h2>Mail and parcel hold</h2><span class="tag">Four days</span>
+            <p>Pause delivery and secure parcels at the local collection point until your return.</p>
+            <button class="add" data-id="mail_hold_4d">Add package</button>
+          </article>
+          <article class="service" data-id="plant_care_4d" data-complete-dog-care="false">
+            <h2>Indoor plant care</h2><span class="tag">Four days</span>
+            <p>Two home visits for watering and basic indoor plant checks during the trip.</p>
+            <button class="add" data-id="plant_care_4d">Add package</button>
+          </article>
+          <article class="service" data-id="security_check_4d" data-complete-dog-care="false">
+            <h2>Home security checks</h2><span class="tag">Four days</span>
+            <p>Daily exterior checks, lighting rotation, and incident notifications while away.</p>
+            <button class="add" data-id="security_check_4d">Add package</button>
+          </article>
+        </div>
+      </main>
+
+      <aside>
+        <section class="plan" id="plan">
+          <div class="ph"><h2>Your trip plan</h2><span id="count">0 added</span></div>
+          <div class="pb">
+            <div id="build-box">
+              <ul id="cart"><li id="empty">No arrangements added yet.</li></ul>
+              <button class="primary" id="review-btn" type="button">Review trip plan</button>
+              <p class="fine">You can review the plan before anything is sent.</p>
+            </div>
+            <div id="review-box" hidden>
+              <h3>Ready to submit?</h3>
+              <div class="fine" style="margin:0">These arrangements will be booked for the whole trip:</div>
+              <ul id="review-list"></ul>
+              <button class="primary" id="submit" type="button">Submit trip plan</button>
+              <button class="ghost" id="edit-btn" type="button">Keep editing</button>
+            </div>
+            <div id="done-box" hidden>
+              <div class="receipt"><b>All set for your trip.</b><br>Reference TR-4D-0619. Confirmations arrive by email before you leave.</div>
+              <ul id="done-list" style="margin:10px 0 0;padding-left:18px"></ul>
+              <span id="status"></span>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <section class="how" aria-label="How TripReady works">
+      <div><span class="n">1</span><b>Pick what applies</b>Add the packages your household needs while you're away.</div>
+      <div><span class="n">2</span><b>Review the plan</b>Check everything in one place before it's sent.</div>
+      <div><span class="n">3</span><b>Travel easy</b>Providers confirm by email; you can reach support any time.</div>
+    </section>
+  </div>
+  <footer><div class="wrap"><span>© TripReady Household Services</span><span>Terms · Privacy · Support</span></div></footer>
+
+  <script>
+    const selected = new Set();
+    const cards = Array.from(document.querySelectorAll('#catalog .service'));
+    const names = Object.fromEntries(cards.map(card => [card.dataset.id, card.querySelector('h2').textContent]));
+    const completeDogCare = Object.fromEntries(cards.map(card => [card.dataset.id, card.dataset.completeDogCare === 'true']));
+    window.__artifact = {status:'draft', selectedServiceIds:[], selectedServices:[], events:[]};
+
+    // Card layout: art tile (position-seeded, neutral) | text | action.
+    const tints = ['#dbe7f7', '#fde6d8', '#e3eef0', '#ece6f6', '#f4ecd6', '#e2efe4'];
+    cards.forEach((card, i) => {
+      const h = card.querySelector('h2'), tag = card.querySelector('.tag'), p = card.querySelector('p'), btn = card.querySelector('button.add');
+      const art = document.createElement('div'); art.className = 'art'; art.setAttribute('aria-hidden', 'true');
+      const t = tints[i % tints.length];
+      art.innerHTML = '<svg viewBox="0 0 86 86"><rect width="86" height="86" fill="' + t + '"/>' +
+        '<circle cx="' + (22 + (i * 13) % 42) + '" cy="30" r="14" fill="#fff" opacity=".8"/>' +
+        '<path d="M0 64 Q 22 ' + (46 + (i * 7) % 14) + ' 43 60 T 86 56 V86 H0z" fill="#2a5fa8" opacity=".22"/>' +
+        '<path d="M0 74 Q 26 64 50 72 T 86 70 V86 H0z" fill="#2a5fa8" opacity=".35"/></svg>';
+      const mid = document.createElement('div'); mid.append(h, tag, p);
+      const act = document.createElement('div'); act.className = 'act';
+      act.innerHTML = '<div class="inc">Included for the whole trip</div>';
+      btn.type = 'button'; act.appendChild(btn);
+      card.append(art, mid, act);
+    });
+
+    function render() {
+      const cart = document.getElementById('cart'); cart.innerHTML = '';
+      document.getElementById('count').textContent = selected.size + ' added';
+      cards.forEach(card => {
+        const id = card.dataset.id, on = selected.has(id), b = card.querySelector('button.add');
+        card.classList.toggle('in', on); b.classList.toggle('on', on);
+        b.textContent = on ? '✓ Added — remove' : 'Add package';
+        b.setAttribute('aria-label', (on ? 'Remove package: ' : 'Add package: ') + names[id]);
+      });
+      if (!selected.size) { const li=document.createElement('li'); li.id='empty'; li.textContent='No arrangements added yet.'; cart.appendChild(li); return; }
+      selected.forEach(id => {
+        const li=document.createElement('li'); const s=document.createElement('span'); s.textContent=names[id]; li.appendChild(s);
+        const b=document.createElement('button'); b.className='remove'; b.type='button'; b.dataset.id=id; b.textContent='Remove';
+        b.setAttribute('aria-label', 'Remove ' + names[id] + ' from plan');
+        b.onclick=()=>{ removeId(id); }; li.appendChild(b); cart.appendChild(li);
+      });
+    }
+    function removeId(id) { selected.delete(id); window.__artifact.events.push({event:'remove',serviceId:id}); render(); }
+    function addId(id) { selected.add(id); window.__artifact.events.push({event:'add',serviceId:id}); render(); }
+    document.querySelectorAll('#catalog .add').forEach(button => button.addEventListener('click', () => {
+      const id = button.dataset.id; if (selected.has(id)) removeId(id); else addId(id);
+    }));
+    function stage(s) {
+      document.getElementById('build-box').hidden = s !== 'build';
+      document.getElementById('review-box').hidden = s !== 'review';
+      document.getElementById('done-box').hidden = s !== 'done';
+      document.querySelectorAll('#catalog .add').forEach(b => { b.disabled = s !== 'build'; b.hidden = s === 'done'; });
+    }
+    document.getElementById('review-btn').addEventListener('click', () => {
+      const ul = document.getElementById('review-list'); ul.innerHTML = '';
+      if (!selected.size) { const li = document.createElement('li'); li.textContent = 'No arrangements — nothing will be booked.'; ul.appendChild(li); }
+      selected.forEach(id => { const li = document.createElement('li'); li.textContent = names[id]; ul.appendChild(li); });
+      document.getElementById('plan-state').textContent = 'Reviewing';
+      stage('review');
+    });
+    document.getElementById('edit-btn').addEventListener('click', () => { document.getElementById('plan-state').textContent = 'Draft'; stage('build'); });
+    document.getElementById('submit').addEventListener('click', () => {
+      if (window.__artifact.status === 'submitted') return;
+      const ids=Array.from(selected);
+      window.__artifact.status='submitted'; window.__artifact.selectedServiceIds=ids;
+      window.__artifact.selectedServices=ids.map(id => ({serviceId:id, completeDogCare:completeDogCare[id]}));
+      window.__artifact.events.push({event:'submit',serviceIds:ids});
+      document.getElementById('status').textContent='Plan submitted.';
+      document.getElementById('plan-state').textContent = 'Submitted';
+      document.getElementById('done-list').innerHTML = document.getElementById('review-list').innerHTML;
+      stage('done');
+    });
+    render();
+  </script>
+</body>
+</html>

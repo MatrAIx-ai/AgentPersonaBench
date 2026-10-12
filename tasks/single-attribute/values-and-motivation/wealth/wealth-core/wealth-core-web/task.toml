@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/wealth-core-web"
+theme = "Value: Wealth: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "wealth", "wealth-core", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "val_wealth"
+dimension_label = "Value: Wealth"
+category = "Values & Motivation"
+attribute = "Value: Wealth"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_wealth=Core value"
+# Web env: the persona shortlists career/money moves on a live page (Playwright).
+# Each option's hidden tier (0..3) in tests/answer_key.yaml is the ground truth.
+# VIOLATED for any move that gives up money for comfort/leisure (tier >= 2).
+adherence_signal = "Shortlist built from money-building, high-earning, financial-gain moves (tier 0-1); no give-up-money-for-comfort option (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

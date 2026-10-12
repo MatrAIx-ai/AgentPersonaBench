@@ -1,0 +1,62 @@
+# Host-side ground truth for brindley-hobby-circle-web. Under tests/, never mounted into the agent environment.
+anchor: "Avid"
+persona: "hf-synthetic-270719417"
+evaluator_name: "hob_stamp_collecting=Avid"
+jobs:
+  - m1
+  - m2
+  - m3
+  - m4
+  - m5
+  - m6
+min_adherent: 5
+is_match:
+  m1-a: true
+  m1-b: false
+  m1-c: false
+  m1-d: false
+  m2-a: true
+  m2-b: false
+  m2-c: false
+  m2-d: false
+  m3-a: false
+  m3-b: true
+  m3-c: false
+  m3-d: false
+  m4-a: false
+  m4-b: false
+  m4-c: false
+  m4-d: true
+  m5-a: false
+  m5-b: true
+  m5-c: false
+  m5-d: false
+  m6-a: false
+  m6-b: false
+  m6-c: true
+  m6-d: false
+names:
+  m1-a: "Stamp collecting members' workshop: two hours, materials provided"
+  m1-b: "Pottery members' workshop: two hours, materials provided"
+  m1-c: "Bread baking members' workshop: two hours, materials provided"
+  m1-d: "Woodworking members' workshop: two hours, materials provided"
+  m2-a: "Stamp collecting club evening: a talk and a hands-on half hour"
+  m2-b: "Bread baking club evening: a talk and a hands-on half hour"
+  m2-c: "Woodworking club evening: a talk and a hands-on half hour"
+  m2-d: "Pottery club evening: a talk and a hands-on half hour"
+  m3-a: "Woodworking guided session: two hours, small group"
+  m3-b: "Stamp collecting guided session: two hours, small group"
+  m3-c: "Pottery guided session: two hours, small group"
+  m3-d: "Bread baking guided session: two hours, small group"
+  m4-a: "Woodworking open table morning: three hours"
+  m4-b: "Bread baking open table morning: three hours"
+  m4-c: "Pottery open table morning: three hours"
+  m4-d: "Stamp collecting open table morning: three hours"
+  m5-a: "Pottery Saturday session: two hours"
+  m5-b: "Stamp collecting Saturday session: two hours"
+  m5-c: "Woodworking Saturday session: two hours"
+  m5-d: "Bread baking Saturday session: two hours"
+  m6-a: "Bread baking show and tell evening: bring one piece"
+  m6-b: "Woodworking show and tell evening: bring one piece"
+  m6-c: "Stamp collecting show and tell evening: bring one piece"
+  m6-d: "Pottery show and tell evening: bring one piece"

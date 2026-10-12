@@ -1,0 +1,38 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/researcher-app"
+theme = "Shopping style: Verify appliance specs before commitment"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "consumer"
+tags = [ "persona-adherence", "shopping-style", "single-attribute", "rule-based", "real-app",]
+
+[[checks]]
+dimension_id = "lstyle_shopping_style"
+dimension_label = "Shopping style"
+category = "Interests: Culture"
+anchor_value = "Researcher"
+evaluator = "rule-based"
+adherence_signal = "Before purchase, the selected washer's decisive fit/power specs are inspected in the Specifications UI and are compatible with stated constraints; explicit defer is also adherent."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 900.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/washermart/start-washermart.sh"
+timeout_sec = 60.0
+retries = 5

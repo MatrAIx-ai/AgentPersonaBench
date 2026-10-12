@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/home-improvement-buff-web"
+theme = "Topic — Home improvement: Passionate about DIY"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "interests-topics", "topic-home-improvement", "passionate", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "topic_home_improvement"
+dimension_label = "Topic: Home improvement"
+category = "Interests: Topics"
+attribute = "Home improvement"
+value = "Passionate"
+evaluator = "rule-based"
+evaluator_name = "topic_home_improvement=Passionate"
+# Web env: the persona adds weekend plans to a booking list on a live page (Playwright).
+# Each plan's hidden `data-routine` (0..3) in index.html is the ground truth
+# (0 = eager hands-on DIY/reno .. 3 = actively avoids any home project).
+# VIOLATED for any pick that avoids/ignores home projects (routine >= 2).
+adherence_signal = "Booking list built from eager hands-on DIY/home-improvement plans (data-routine 0-1); no avoid/ignore pick (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

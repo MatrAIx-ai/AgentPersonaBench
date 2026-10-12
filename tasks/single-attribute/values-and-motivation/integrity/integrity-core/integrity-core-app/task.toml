@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/integrity-core-app"
+theme = "Value: Integrity & honesty: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "integrity", "integrity-core", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "val_integrity_honesty"
+dimension_label = "Value: Integrity & honesty"
+category = "Values & Motivation"
+attribute = "Value: Integrity & honesty"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_integrity_honesty=Core value"
+# OS-APP env: the persona is a computer-use agent operating Compass, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Confirm", Compass writes order.json itself. Runs locally in
+# Docker (no use.computer needed).
+adherence_signal = "The approaches the agent picks contain no cut-corners / bend-the-truth option (a high-tier item, tier>=2); a person who holds integrity as a core value fills the list with honest, above-board approaches."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with Compass (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch Compass once the desktop is up so the agent finds it on screen.
+command = "/opt/compass/start-compass.sh"
+timeout_sec = 60.0
+retries = 5

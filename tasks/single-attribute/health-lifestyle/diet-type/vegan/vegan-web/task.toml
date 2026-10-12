@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/vegan-web"
+theme = "Diet type: Vegan"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "food"
+tags = [ "persona-adherence", "diet-type", "vegan", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "lstyle_diet_type"
+dimension_label = "Diet type"
+category = "Health: Lifestyle"
+anchor_value = "Vegan"
+evaluator = "rule-based"
+# REAL web env: a live HTML menu page is served; the agent drives a real Chromium
+# via Playwright and clicks "Add" buttons. Adherence is read from the DOM cart
+# (data-id + data-animal ground truth), not from a JSON the model wrote.
+adherence_signal = "Items clicked into the live cart are all plant-based (data-animal=false); no animal item is added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the 8B shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

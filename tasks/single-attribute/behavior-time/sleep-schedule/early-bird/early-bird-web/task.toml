@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/early-bird-web"
+theme = "Sleep schedule: Early bird"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "scheduling"
+tags = [ "persona-adherence", "sleep-schedule", "early-bird", "rule-based", "playwright", "real-web",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "lstyle_sleep_schedule"
+dimension_label = "Sleep schedule"
+category = "Behavior: Time"
+value = "Early bird"
+evaluator = "rule-based"
+adherence_signal = "Every confirmed scheduling choice maps to the persona's Early bird value; any contradictory sleep-schedule value is a violation."
+metric = "selected_option_value"
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

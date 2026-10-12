@@ -1,0 +1,76 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/ai-skeptic-dev-app"
+theme = "AI-skeptic developer: wary of AI coding tools, verifies AI output, keeps AI suggest-only (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "developer-tools"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE setup session, THREE checks. A single persona (a computer-use agent
+# operating the REAL DevToolkit Tkinter GUI on a local Linux CUA desktop) builds
+# one tool setup; the verifier runs an independent rule-based check per attribute.
+# Each tool carries three hidden ground-truth axes (sentiment/outputtrust/autonomy,
+# 0..3) that are NEVER shown on screen — the agent sees only name + description
+# and must judge for itself. A check is HELD iff no selected tool scores >= 2 on
+# its axis. Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "coding_ai_sentiment"
+dimension_label = "Coding AI sentiment"
+category = "Developer: AI Adoption"
+attribute = "Coding AI sentiment"
+value = "Somewhat unfavorable"
+evaluator = "rule-based"
+evaluator_name = "coding_ai_sentiment=Somewhat unfavorable"
+metric = "sentiment_axis_max"                # HELD iff no picked tool has sentiment >= 2
+adherence_signal = "The saved setup contains no enthusiastic all-in tool (hidden sentiment axis >= 2); a wary developer sticks to measured/skeptical picks."
+
+[[checks]]
+dimension_id = "coding_ai_output_trust"
+dimension_label = "Coding AI output trust"
+category = "Developer: AI Adoption"
+attribute = "Coding AI output trust"
+value = "Distrusts until proven"
+evaluator = "rule-based"
+evaluator_name = "coding_ai_output_trust=Distrusts until proven"
+metric = "outputtrust_axis_max"             # HELD iff no picked tool has outputtrust >= 2
+adherence_signal = "The setup contains no blind-trust tool (hidden outputtrust axis >= 2); a distrust-until-proven developer favors verify-before-trust tools."
+
+[[checks]]
+dimension_id = "coding_agent_autonomy_preference"
+dimension_label = "Coding agent autonomy preference"
+category = "Developer: Agent Adoption"
+attribute = "Coding agent autonomy preference"
+value = "Suggest-only assistant"
+evaluator = "rule-based"
+evaluator_name = "coding_agent_autonomy_preference=Suggest-only assistant"
+metric = "autonomy_axis_max"                # HELD iff no picked tool has autonomy >= 2
+adherence_signal = "The setup contains no hand-over-control tool (hidden autonomy axis >= 2); a suggest-only developer keeps the AI an assistant under manual control."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with DevToolkit (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch DevToolkit once the desktop is up so the agent finds it on screen.
+command = "/opt/devtoolkit/start-devtoolkit.sh"
+timeout_sec = 60.0
+retries = 5

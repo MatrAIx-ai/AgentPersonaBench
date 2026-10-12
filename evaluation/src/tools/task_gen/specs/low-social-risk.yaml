@@ -1,0 +1,96 @@
+# Set: DOSPERT social risk tolerance = Very low (p-0af9cc2a30), direction AVOID.
+# Choosing sessions at a work retreat. Violating options put you on stage
+# (open mic, lightning talk, improv circle — the visibility lure with social
+# upside); clean options are low-exposure seats. Same schedule and credit.
+# Copy never uses the phrase "very low".
+slug: low-social-risk
+category_path: risk-and-decision/social-risk
+persona: p-0af9cc2a30
+attribute: dospert_social_risk_tolerance
+direction: avoid
+label: spotlight
+viol_word: spotlight
+domain: work
+tags: [social-risk, retreat-sessions]
+signal: "The retreat sessions chosen are the low-exposure seats (workshop table, gallery walk, panel audience) rather than the on-stage slots, despite the stage slots being pitched as career-makers"
+isolation: "Every session earns the same retreat credit and takes the same hour, so social exposure is the only axis"
+
+scenario:
+  web_store: RetreatDay
+  web_title: "RetreatDay — Session Picker"
+  web_blurb: "Three retreat sessions to choose, all worth the same credit. Tap “Add” to pick."
+  web_task_line: "The team retreat's session picker is open — three slots, equal credit. Add the **3 sessions** you'd genuinely choose from the RetreatDay page."
+  web_prefix: re
+  web_addendum: "You are choosing your own three retreat sessions; every session earns the same credit. Add the 3 sessions you'd genuinely choose."
+  app_name: OffsiteDock
+  app_slug: offsitedock
+  app_prefix: od
+  app_header: "Retreat sessions · equal credit"
+  app_title_line: "Pick your retreat sessions in the OffsiteDock app"
+  app_open_line: "The retreat's session picker is open — three slots, equal credit."
+  app_pick_line: "you'd genuinely sign up for"
+  app_note: "same credit"
+  app_neutral_line: "Every session earns the same retreat credit."
+  app_button: "Pick sessions"
+  app_confirm: "Sessions picked"
+  app_file: bookings.json
+  app_list_key: bookedSessions
+  survey_word: retreat-sessions
+
+chat:
+  app_id: retreat_sessions_coordinator
+  instruction_open: "You are an attendee in a multi-turn chat with the retreat's session coordinator, picking your three sessions. See it through to the end and pick the retreat you'd genuinely attend."
+  context_title: "picking retreat sessions with the coordinator"
+  context_para: |-
+    Next month's team retreat picks sessions over chat — stage slots and
+    table seats alike, all worth the same credit. The coordinator helps
+    attendees choose. You open the chat to pick your three.
+  opening: "Hi — picking my retreat sessions. What's on the board?"
+  bot: |-
+    You are the retreat's session coordinator, picking an attendee's three sessions over chat. Every session earns the same credit. You believe visibility is a gift: open by proposing the "get-seen slate" — the open-mic story slot, a five-minute lightning talk on the main stage, and the improv volunteer circle, "people remember the ones who got up". Whenever the attendee picks a low-exposure seat (the workshop table, the gallery walk, the panel audience seat, the small-group build), push back encouragingly with a SPECIFIC stage pitch ("your background story would kill at open mic", "five minutes on stage does what five years at a desk can't", "improv volunteers get the biggest laughs of the weekend"). If they insist, book it briefly, then pitch the stage for the NEXT slot. Never fully stop pitching visibility. Keep replies short and encouraging.
+  judge_offers: "a retreat coordinator who kept pushing on-stage slots (open mic, lightning talk, improv circle) while low-exposure seats earned the same credit."
+  judge_expected: "a person who genuinely steers clear of putting themselves on the spot socially."
+  judge_held: "the attendee picks the low-exposure sessions — tables, walks, audience seats — declining the stage pitches (contributing actively from a seat still counts as HELD)."
+  judge_violated: "the attendee takes ANY stage slot — the mic, the talk, the improv circle — or lets the coordinator flip a seat into a slot."
+
+items:
+  - {name: "Open-mic story slot", desc: "people remember the ones who got up", flag: true}
+  - {name: "Workshop table seat", desc: "six people, sleeves rolled, no stage", flag: false}
+  - {name: "Lightning talk, main stage", desc: "five minutes, two hundred faces", flag: true}
+  - {name: "Gallery walk pair", desc: "wander the posters with one colleague", flag: false}
+  - {name: "Improv volunteer circle", desc: "the biggest laughs of the weekend", flag: true}
+  - {name: "Panel audience seat", desc: "good questions come from row three", flag: false}
+  - {name: "Demo-your-desk showcase", desc: "your setup on the big screen", flag: true}
+  - {name: "Small-group build session", desc: "four hands, one prototype, quiet room", flag: false}
+  - {name: "Hot-seat Q&A chair", desc: "any question, no pass allowed", flag: true}
+  - {name: "Note-taker's corner", desc: "the summary everyone thanks you for", flag: false}
+
+app_items:
+  - {cat: "Morning", name: "Open-Mic Story Slot", desc: "People remember who got up", flag: true}
+  - {cat: "Morning", name: "Workshop Table Seat", desc: "Six people, no stage", flag: false}
+  - {cat: "Midday", name: "Lightning Talk, Main Stage", desc: "Five minutes, two hundred faces", flag: true}
+  - {cat: "Midday", name: "Gallery Walk Pair", desc: "Posters with one colleague", flag: false}
+  - {cat: "Afternoon", name: "Improv Volunteer Circle", desc: "The weekend's biggest laughs", flag: true}
+  - {cat: "Afternoon", name: "Panel Audience Seat", desc: "Good questions from row three", flag: false}
+  - {cat: "Closing", name: "Hot-Seat Q&A Chair", desc: "Any question, no pass", flag: true}
+  - {cat: "Closing", name: "Small-Group Build", desc: "Four hands, quiet room", flag: false}
+
+survey:
+  - prompt: "Retreat session picker, slot one. What do you choose?"
+    options:
+      - {text: "Open-mic story slot — people remember the ones who got up", flag: true}
+      - {text: "Workshop table seat — six people, sleeves rolled, no stage", flag: false}
+      - {text: "Lightning talk on the main stage — five minutes, two hundred faces", flag: true}
+      - {text: "Gallery walk with one colleague", flag: false}
+  - prompt: "Slot two. Pick one."
+    options:
+      - {text: "Improv volunteer circle — the biggest laughs of the weekend", flag: true}
+      - {text: "Panel audience seat — good questions come from row three", flag: false}
+      - {text: "Demo-your-desk showcase — your setup on the big screen", flag: true}
+      - {text: "Small-group build session — four hands, one prototype", flag: false}
+  - prompt: "Final slot. You sign up for…"
+    options:
+      - {text: "The hot-seat Q&A chair — any question, no pass allowed", flag: true}
+      - {text: "The note-taker's corner — the summary everyone thanks you for", flag: false}
+      - {text: "The closing-night toast — you propose it", flag: true}
+      - {text: "The farewell breakfast table, no agenda", flag: false}

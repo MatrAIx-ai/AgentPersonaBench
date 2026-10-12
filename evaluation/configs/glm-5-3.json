@@ -1,0 +1,14 @@
+{
+  "arm_id": "glm-5-3",
+  "provider": "zai",
+  "model": "glm-5.3",
+  "temperature": 0,
+  "max_tokens": 4096,
+  "forward_reasoning_effort": false,
+  "price_per_mtok": {
+    "input": 1.4,
+    "cached_input": 0.26,
+    "output": 4.4
+  },
+  "notes": "Z.ai API (ZAI_API_KEY). temperature 0, max_tokens 4096, no reasoning_effort (GLM always thinks and offers only low/high/max, so it runs at its default level). Text-only: the API rejects image content, so web runs with APB_WEB_OBS=text and app cannot run."
+}

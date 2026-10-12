@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/avoids-jargon-web"
+theme = "Use of jargon: Avoids jargon"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "communication"
+tags = [ "persona-adherence", "jargon-use", "avoids-jargon", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "cog_use_of_jargon"
+dimension_label = "Use of jargon"
+category = "Linguistic: Communication"
+anchor_value = "Avoids jargon"
+evaluator = "rule-based"
+# REAL web env: a live "Quick Replies" page; the agent drives Chromium via
+# Playwright and clicks "Save" on the drafts it would use. Drafts come in matched
+# plain/jargon pairs, so the pick isolates vocabulary. Adherence is read from the
+# DOM cart (data-jargon ground truth).
+adherence_signal = "Drafts saved into the live cart all use plain language (data-jargon=false); no jargon-laden draft is added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

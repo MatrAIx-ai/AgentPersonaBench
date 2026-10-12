@@ -1,0 +1,57 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/morningkit-app"
+theme = "Morning kit: daily walk · tracks hydration"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "wellness"
+tags = [ "persona-adherence", "multi-check", "morningkit", "rule-based", "os-app", "computer-use",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE artifact, TWO checks. A single persona completes one health-app morning-kit
+# setup (an every-morning activity block + one always-on tracker widget); the one
+# setup co-exposes both habits, so one generation is scored against two
+# independent checks. Reward = integer score (one point per check HELD, 0..2).
+[[checks]]
+dimension_id = "habit_morning_walk"
+dimension_label = "Morning walk"
+category = "Behavior: Habits"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "morning_walk=Daily"
+adherence_signal = "The activity block the persona locks in for every morning is the walk, not an indoor alternative."
+
+[[checks]]
+dimension_id = "habit_hydration_tracking"
+dimension_label = "Hydration tracking"
+category = "Behavior: Habits"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "hydration_tracking=Daily"
+adherence_signal = "The tracker widget the persona enables for daily use is the water tracker, not another widget."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with the KitStart Tkinter GUI baked in — see
+# ./environment/Dockerfile. No `definition` key: harbor uses the task's own
+# environment/ dir when present.
+build_timeout_sec = 1200.0
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/morningkit/start-app.sh"
+timeout_sec = 60.0
+retries = 5

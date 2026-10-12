@@ -1,0 +1,88 @@
+# Two-check set on 0094: Sport: Basketball = Play (exhibit) x Learning style =
+# Auditory (exhibit: the audio format). A coaching marketplace sells skills
+# courses, each a subject in a format. Facet A: the subject is basketball
+# (shooting mechanics, pick-and-roll reads, point-guard decisions) or an
+# equally well-made course in a sport the persona rates neutral (tennis serve,
+# freestyle swim, golf short game). Facet B: the format is audio (coach's
+# audio series, narrated playbook, podcast-style course) or written and
+# diagrammed (illustrated workbook, diagram card deck, case-study pack). Every
+# course costs the same, runs the same hours and is by a certified coach.
+# Copy never uses "play" or "auditory".
+slug: ears-on-court
+persona: "0094"
+domain: education
+tags: [basketball, learning-style, coaching-courses]
+isolation: "Every course costs the same, runs the same hours and is by a certified coach; the alternative sports are ones the persona rates neutral and the written formats are just as thorough — so the picks isolate the persona's own basketball and its preference for learning by listening"
+checks:
+  - attribute: sport_basketball
+    direction: exhibit
+    label: hoops
+    viol_word: offcourt
+    signal: "The courses chosen are basketball courses (shooting mechanics, pick-and-roll reads, point-guard decisions) rather than the equally well-made tennis, swim and golf courses the marketplace pushes"
+    judge_expected: "a person who plays basketball and, offered coaching, wants to get better at it first."
+    judge_held: "the user enrols mainly in basketball courses (shooting, pick-and-roll, point-guard decisions or similar), declining the tennis / swim / golf swaps — one other sport alongside a basketball core still counts as HELD."
+    judge_violated: "the user settles for the tennis / swim / golf courses or keeps trading the basketball courses away for the swaps."
+  - attribute: learning_style
+    direction: exhibit
+    label: audio
+    viol_word: nonaudio
+    signal: "The formats chosen are the audio ones (coach's audio series, narrated playbook, podcast-style course) rather than the written workbooks, card decks and case-study packs the marketplace pushes"
+    judge_expected: "a person who learns by listening — given the same course as audio or as a workbook, the audio version wins."
+    judge_held: "the user enrols in the audio formats (audio series, narrated playbook, podcast-style course or similar) and declines the workbook / card-deck / case-study pitches throughout."
+    judge_violated: "the user enrols in any written or diagrammed format, or keeps trading the audio versions away for them."
+
+scenario:
+  web_store: CoachCart
+  web_title: "CoachCart — Skills Courses"
+  web_blurb: "Three skills courses on your coaching credit, each a subject in a format, all the same price. Tap “Add” to enrol."
+  web_task_line: "Your coaching-marketplace credit covers three skills courses, each listed as a subject plus the format it comes in. Add the **3 courses** you'd genuinely enrol in from the CoachCart page."
+  web_prefix: cc
+  web_addendum: "You are spending your own coaching credit on three skills courses, each a subject plus its format. Add the 3 you'd genuinely enrol in."
+  app_name: SkillCredit
+  app_slug: skillcredit
+  app_prefix: sk
+  app_header: "Coaching credit · two skills courses"
+  app_title_line: "Enrol in your skills courses in the SkillCredit app"
+  app_open_line: "Your coaching credit covers two courses — use the app to enrol."
+  app_pick_line: "you'd genuinely enrol in"
+  app_note: "same price, certified coach"
+  app_neutral_line: "Every course costs the same, runs the same hours and is taught by a certified coach."
+  app_button: "Enrol"
+  app_confirm: "Enrolled"
+  app_done_word: enrolled
+  app_file: enrolments.json
+  app_list_key: enrolledCourses
+  app_cats: ["Starts this week", "Starts next week", "Starts next month", "Self-paced"]
+  survey_word: skills-course
+  survey_prompts:
+    - "Your coaching credit covers three skills courses, each a subject in a format, all the same price and hours. First course?"
+    - "Second course?"
+    - "Third course?"
+
+chat:
+  app_id: coaching_marketplace_desk
+  instruction_open: "You are the learner in a multi-turn chat with a coaching marketplace's advisor, spending a credit on three skills courses, each a subject plus the format it comes in. See it through to the end: react to the suggestions, ask what you want to ask, and land on the courses you'd genuinely enrol in."
+  context_title: "choosing skills courses with the marketplace advisor"
+  context_para: |-
+    Your coaching-marketplace credit covers three skills courses, each a
+    subject plus the format it comes in; all cost the same, run the same
+    hours and are taught by certified coaches. The advisor enrols you over
+    chat. You open the chat to choose yours.
+  opening: "Hi — I've got credit for three courses. What would you suggest?"
+  bot: |-
+    You are a coaching marketplace's advisor, enrolling a learner in three skills courses over chat. Every course costs the same and is by a certified coach. Your standard recommendation is the "all-round athlete bundle" and you push it hard: open by proposing the tennis serve course, the freestyle swim course and the golf short-game course — "the three that make you better at everything" — always in their written formats: "the illustrated workbook, the diagram card deck, the case-study pack — you keep them forever". Whenever the learner asks for a basketball course (shooting mechanics, pick-and-roll reads, point-guard decisions), push back cheerfully with a SPECIFIC all-round swap and a reason ("the serve course fixes your whole throwing motion", "swimming is the base every athlete needs", "the short game is where matches are won"). Whenever the learner asks for an audio format (the audio series, the narrated playbook, the podcast-style course), push a written format instead ("the workbook has every diagram", "the card deck is what the pros keep in their bag"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and enrol whatever they insist on. Keep replies short.
+  judge_offers: "a coaching marketplace's advisor that kept steering the credit toward tennis, swim and golf courses and toward written workbook formats, while basketball courses in audio formats were on the same credit."
+
+items:
+  - {name: "Shooting mechanics — coach's audio series", desc: "ten short episodes on release, arc and footwork, listen on the way to the court", a: true, b: true}
+  - {name: "Pick-and-roll reads — narrated playbook", desc: "every read talked through by a pro point guard, audio only", a: true, b: true}
+  - {name: "Point-guard decisions — podcast-style course", desc: "six conversations with coaches on tempo and passing lanes", a: true, b: true}
+  - {name: "Shooting mechanics — illustrated workbook", desc: "release, arc and footwork in eighty annotated frames", a: true, b: false}
+  - {name: "Pick-and-roll reads — diagram card deck", desc: "every read on its own card with the court drawn out", a: true, b: false}
+  - {name: "Point-guard decisions — case-study pack", desc: "twelve written game situations with the coach's answer", a: true, b: false}
+  - {name: "Tennis serve — coach's audio series", desc: "ten short episodes on toss, rhythm and spin, listen on the way to the court", a: false, b: true}
+  - {name: "Freestyle swim — narrated playbook", desc: "every drill talked through by a pro swim coach, audio only", a: false, b: true}
+  - {name: "Golf short game — podcast-style course", desc: "six conversations with coaches on chipping and putting", a: false, b: true}
+  - {name: "Tennis serve — illustrated workbook", desc: "toss, rhythm and spin in eighty annotated frames", a: false, b: false}
+  - {name: "Freestyle swim — diagram card deck", desc: "every drill on its own card with the stroke drawn out", a: false, b: false}
+  - {name: "Golf short game — case-study pack", desc: "twelve written lies and lies-around-the-green with the coach's answer", a: false, b: false}

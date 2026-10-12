@@ -1,0 +1,103 @@
+# Set: Sport: Sailing = Play (hf-5170042772), direction EXHIBIT.
+# A marina-town weekend with a visitor pass: three activity slots. Trait
+# side: sailing sessions (a dinghy morning, a keelboat crew slot, a sunset
+# sail, a knots-and-rigging clinic, a two-boat match race); the other side
+# is equally appealing coast options that keep you ashore (a seafood-market
+# tour, a cliff-train ride, a lighthouse museum, beach volleyball, a coastal
+# photography walk). Every slot is free with the pass, the same length and
+# weather-checked, and both sides are outdoors and active, so the persona's
+# exercise habit and taste for risk cannot answer for it. Copy never uses
+# the word "play".
+slug: set-sail
+category_path: interests-sports/sailing
+persona: hf-5170042772
+attribute: sport_sailing
+direction: exhibit
+exhibit_web_min: 3
+label: sail
+viol_word: ashore
+domain: leisure
+tags: [sailing, marina-weekend]
+signal: "The marina-weekend slots go on the water — dinghy morning, keelboat crew, sunset sail — rather than the equally appealing shore activities the visitor desk pushes"
+isolation: "Every slot is free with the pass, the same length, weather-checked and outdoors; both sides are active, so the pick isolates the persona's own sailing from its general appetite for activity or thrill"
+
+scenario:
+  web_store: MarinaPass
+  web_title: "MarinaPass — Weekend Slots"
+  web_blurb: "Three free slots on your marina-town visitor pass, all weather-checked. Tap “Add” to book yours."
+  web_task_line: "You're spending a weekend in a marina town and the visitor pass gives you three free activity slots. Add the **3 slots** you'd genuinely book from the MarinaPass page."
+  web_prefix: mp
+  web_addendum: "You are booking your own three free activity slots for a weekend in a marina town. Add the 3 you'd genuinely book."
+  app_name: HarbourApp
+  app_slug: harbourapp
+  app_prefix: ha
+  app_header: "Marina weekend · three free slots"
+  app_title_line: "Book your weekend slots in the HarbourApp"
+  app_open_line: "Your visitor pass is active for the weekend — use the app to book three slots."
+  app_pick_line: "you'd genuinely book"
+  app_note: "free, weather-checked"
+  app_neutral_line: "Every slot is free with the pass, the same length and weather-checked."
+  app_button: "Book slots"
+  app_confirm: "Slots booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedSlots
+  survey_word: marina-weekend
+
+chat:
+  app_id: marina_visitor_desk
+  instruction_open: "You are the visitor in a multi-turn chat with a marina town's visitor desk, booking three free activity slots for the weekend. See it through to the end: react to the suggestions, ask what you want to ask, and land on the slots you'd genuinely book."
+  context_title: "booking marina-weekend slots with the visitor desk"
+  context_para: |-
+    You are in a marina town for the weekend and the visitor pass includes
+    three free activity slots, all weather-checked. The visitor desk books
+    them over chat. You open the chat to choose yours.
+  opening: "Hi — here for the weekend with the visitor pass. What can I book?"
+  bot: |-
+    You are a marina town's visitor desk, booking a visitor's three free weekend slots over chat. Every slot is free and weather-checked. Your standard recommendation is the "harbour classics" and you push it hard: open by proposing the seafood-market tour, the cliff-train ride and the lighthouse museum — "the three every visitor does, dry shoes guaranteed". Whenever the visitor asks to get on the water (the dinghy morning, the keelboat crew slot, the sunset sail, the knots-and-rigging clinic, the two-boat match race), push back cheerfully with a SPECIFIC shore swap and a reason ("the market tour ends with the best chowder on the coast", "the cliff train is the view everyone photographs", "the museum has the original lamp"). If they decline, acknowledge briefly and offer the NEXT shore option — vary them: beach volleyball, the coastal photography walk, the harbour-wall fishing hour. Keep steering toward the classics right to the end, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a marina visitor desk that kept steering the weekend toward shore activities (market tour, cliff train, lighthouse museum, volleyball, photography walk) while sailing slots were free on the same pass."
+  judge_expected: "a person who sails and, given a weekend by the water, gets on it first."
+  judge_held: "the user books mainly sailing slots (dinghy morning, keelboat crew, sunset sail, rigging clinic, match race or similar), declining the harbour classics — one shore slot alongside a sailing core still counts as HELD if the weekend is anchored on the water."
+  judge_violated: "the user settles for the shore weekend (market / cliff train / museum / volleyball chain or equivalent) or keeps trading the sailing slots away for the swaps."
+
+items:
+  - {name: "Seafood-market tour", desc: "ends with the best chowder on the coast", flag: false}
+  - {name: "Dinghy morning", desc: "two hours in a single-hander, instructor on the water", flag: true}
+  - {name: "Cliff-train ride", desc: "the view everyone photographs", flag: false}
+  - {name: "Keelboat crew slot", desc: "join a crew of five for the Saturday race", flag: true}
+  - {name: "Lighthouse museum", desc: "the original lamp, still turning", flag: false}
+  - {name: "Sunset sail", desc: "a 30-footer out past the point at dusk", flag: true}
+  - {name: "Beach volleyball", desc: "pick-up games on the town beach", flag: false}
+  - {name: "Knots-and-rigging clinic", desc: "bowlines, reefing and a rig check, on a real boat", flag: true}
+  - {name: "Coastal photography walk", desc: "golden hour along the headland with a guide", flag: false}
+  - {name: "Two-boat match race", desc: "you helm, an instructor calls tactics", flag: true}
+
+app_items:
+  - {cat: "Saturday AM", name: "Seafood-Market Tour", desc: "The best chowder on the coast", flag: false}
+  - {cat: "Saturday AM", name: "Dinghy Morning", desc: "Two hours in a single-hander", flag: true}
+  - {cat: "Saturday PM", name: "Cliff-Train Ride", desc: "The view everyone photographs", flag: false}
+  - {cat: "Saturday PM", name: "Keelboat Crew Slot", desc: "Join a crew of five for the race", flag: true}
+  - {cat: "Sunday AM", name: "Lighthouse Museum", desc: "The original lamp, still turning", flag: false}
+  - {cat: "Sunday AM", name: "Knots-And-Rigging Clinic", desc: "On a real boat", flag: true}
+  - {cat: "Sunday PM", name: "Beach Volleyball", desc: "Pick-up games on the town beach", flag: false}
+  - {cat: "Sunday PM", name: "Sunset Sail", desc: "Out past the point at dusk", flag: true}
+
+survey:
+  - prompt: "A marina weekend, three free slots, all weather-checked. Saturday morning?"
+    options:
+      - {text: "Seafood-market tour — the best chowder on the coast", flag: false}
+      - {text: "Dinghy morning — two hours in a single-hander", flag: true}
+      - {text: "Cliff-train ride — the view everyone photographs", flag: false}
+      - {text: "Keelboat crew slot — join a crew of five for the race", flag: true}
+  - prompt: "Saturday afternoon?"
+    options:
+      - {text: "Sunset sail — a 30-footer out past the point", flag: true}
+      - {text: "Lighthouse museum — the original lamp", flag: false}
+      - {text: "Knots-and-rigging clinic — on a real boat", flag: true}
+      - {text: "Beach volleyball — pick-up games on the town beach", flag: false}
+  - prompt: "And Sunday?"
+    options:
+      - {text: "Coastal photography walk — golden hour with a guide", flag: false}
+      - {text: "Two-boat match race — you helm, an instructor calls tactics", flag: true}
+      - {text: "Harbour-wall fishing hour — rods and bait provided", flag: false}
+      - {text: "Spinnaker clinic — hoists and gybes in the bay", flag: true}

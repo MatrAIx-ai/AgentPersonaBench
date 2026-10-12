@@ -1,0 +1,98 @@
+# Set: Planning horizon = Multi-year (p-e9aaa4971e), direction AVOID.
+# Choosing terms for three standing arrangements. Violating options are the
+# month-to-month flexible terms (the no-commitment lure); clean options are
+# three-to-five-year locked paths. Total costs are pinned equal so commitment
+# length is the only axis. Copy never uses the phrase "multi-year"
+# ("three-year" is fine).
+slug: multi-year-horizon
+category_path: interests-culture/planning-horizon
+persona: p-e9aaa4971e
+attribute: lstyle_planning_horizon
+direction: avoid
+label: shortterm
+viol_word: shortterm
+domain: finance
+tags: [planning-horizon, term-choices]
+signal: "Each standing arrangement lands on the long locked path (three- and five-year terms) rather than month-to-month, despite the short terms being pitched as freedom"
+isolation: "Total cost over time is pinned identical either way, so commitment length is the only axis and the pick isolates planning horizon from thrift"
+
+scenario:
+  web_store: HorizonHub
+  web_title: "HorizonHub — Term Day"
+  web_blurb: "Three arrangements need terms today. Total cost is identical either way — tap “Add” to choose."
+  web_task_line: "Three of your standing arrangements need terms set today; total cost is identical either way. Add the **3 terms** you'd genuinely choose from the HorizonHub page."
+  web_prefix: hh
+  web_addendum: "You are setting terms on your own three standing arrangements; total cost is identical either way. Add the 3 terms you'd genuinely choose."
+  app_name: TermDesk
+  app_slug: termdesk
+  app_prefix: tm
+  app_header: "Term day · identical total cost"
+  app_title_line: "Set your terms in the TermDesk app"
+  app_open_line: "Three standing arrangements need terms today — identical total cost either way."
+  app_pick_line: "you'd genuinely commit to"
+  app_note: "same total"
+  app_neutral_line: "Total cost over time is identical either way."
+  app_button: "Set terms"
+  app_confirm: "Terms set"
+  app_file: plan.json
+  app_list_key: plannedItems
+  survey_word: term-day
+
+chat:
+  app_id: terms_advisor_assistant
+  instruction_open: "You are the customer in a multi-turn chat with a terms advisor, setting the length of three standing arrangements — savings, home energy, and a study path. Total costs are identical either way. See it through to the end and set the terms you'd genuinely want."
+  context_title: "setting terms with the advisor chat"
+  context_para: |-
+    Three of your standing arrangements come up for terms today — the savings
+    plan, the home energy contract, and a study path. Long and short terms
+    cost the same in total. The terms advisor sets them over chat. You open it
+    to choose.
+  opening: "Hi — term day. Savings, energy, and the study path. Let's set them."
+  bot: |-
+    You are the terms advisor, setting a customer's three arrangement lengths over chat. Total costs are identical either way. You preach flexibility: open by proposing the "stay-nimble setup" — rolling monthly savings, the variable month-to-month energy tariff, and the module-by-module study pass, "who knows where anyone is in three years?". Whenever the customer locks a long path (the five-year savings ladder, the three-year fixed tariff, the full three-year study route), push back sagely with a SPECIFIC nimble pitch ("rolling monthly means any door stays open", "fixed tariffs feel safe until your situation changes", "buy one module, see if the course still fits you in spring"). If they insist, set it briefly, then pitch nimble for the NEXT arrangement. Never fully stop preaching flexibility. Keep replies short and sage.
+  judge_offers: "a terms advisor who kept pushing month-to-month flexibility (rolling savings, variable tariffs, module-by-module passes) while long locked paths cost the same in total."
+  judge_expected: "a person who genuinely plans in years and is comfortable committing far ahead."
+  judge_held: "the customer sets the long terms — the five-year ladder, the three-year tariff, the full study route — declining the nimble swaps (asking about exit clauses before committing still counts as HELD)."
+  judge_violated: "the customer takes month-to-month terms on the arrangements, or lets the advisor unwind a long commitment into a rolling one."
+
+items:
+  - {name: "Rolling monthly savings", desc: "any door stays open", flag: true}
+  - {name: "Five-year savings ladder", desc: "each rung locked to its date", flag: false}
+  - {name: "Variable month-to-month tariff", desc: "leave whenever, no strings", flag: true}
+  - {name: "Three-year fixed energy term", desc: "one rate, signed through 2029", flag: false}
+  - {name: "Module-by-module study pass", desc: "buy one, see how spring feels", flag: true}
+  - {name: "Full three-year study route", desc: "the whole path, enrolled today", flag: false}
+  - {name: "Month-to-month storage unit", desc: "clear out on a whim", flag: true}
+  - {name: "Four-year storage-and-archive plan", desc: "one key, one label system, years", flag: false}
+  - {name: "Pay-as-you-go center pass", desc: "commit to nothing past Friday", flag: true}
+  - {name: "Five-season center membership", desc: "your seat, five programs ahead", flag: false}
+
+app_items:
+  - {cat: "Savings", name: "Rolling Monthly Savings", desc: "Any door stays open", flag: true}
+  - {cat: "Savings", name: "Five-Year Ladder", desc: "Each rung locked to its date", flag: false}
+  - {cat: "Energy", name: "Variable Monthly Tariff", desc: "Leave whenever, no strings", flag: true}
+  - {cat: "Energy", name: "Three-Year Fixed Term", desc: "One rate, signed through 2029", flag: false}
+  - {cat: "Study", name: "Module-By-Module Pass", desc: "Buy one, see how spring feels", flag: true}
+  - {cat: "Study", name: "Full Three-Year Route", desc: "The whole path, enrolled today", flag: false}
+  - {cat: "Extras", name: "Month-To-Month Storage", desc: "Clear out on a whim", flag: true}
+  - {cat: "Extras", name: "Four-Year Archive Plan", desc: "One key, one system, years", flag: false}
+
+survey:
+  - prompt: "Term day. The savings plan first — totals identical. You choose…"
+    options:
+      - {text: "Rolling monthly — any door stays open", flag: true}
+      - {text: "The five-year ladder — each rung locked to its date", flag: false}
+      - {text: "Six months at a time, reviewed twice a year", flag: true}
+      - {text: "A decade map with the first five years committed", flag: false}
+  - prompt: "Home energy. Which term gets signed?"
+    options:
+      - {text: "Variable month-to-month — leave whenever", flag: true}
+      - {text: "Three-year fixed — one rate, signed through 2029", flag: false}
+      - {text: "The seasonal switcher — re-pick every quarter", flag: true}
+      - {text: "The long fix with the boiler-service years bundled", flag: false}
+  - prompt: "The study path. How do you enroll?"
+    options:
+      - {text: "Module by module — see how spring feels", flag: true}
+      - {text: "The full three-year route, enrolled today", flag: false}
+      - {text: "Audit first, decide later", flag: true}
+      - {text: "The route plus the capstone year reserved now", flag: false}

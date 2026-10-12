@@ -1,0 +1,89 @@
+# Two-check set on hf-5170035775: Cooking frequency = Never (avoid: no supper
+# that has to be cooked) x Film: Comedy = Love (exhibit). A Friday film-and-
+# supper subscription sells bundles, each a film to stream plus a supper.
+# Facet A: the supper is ready to eat when it arrives (hot supper delivered
+# plated, restaurant delivery, deli platter) or a kit the subscriber has to
+# cook (cook-along meal kit, DIY pizza kit, chop-and-cook pasta kit). Facet B:
+# the film is a comedy (buddy road-trip comedy, workplace comedy, spoof
+# comedy) or a film from a genre the persona rates neutral (space-station
+# sci-fi, frontier western, bank-heist crime film). Every bundle costs the
+# same and arrives at the same time. The comedies are films, not stand-up
+# sets. Copy never uses "never" or "love".
+slug: laughs-delivered
+persona: hf-5170035775
+domain: leisure
+tags: [cooking-frequency, comedy-films, film-and-supper]
+isolation: "Every bundle costs the same and arrives at the same time; the non-comedy films are genres the persona rates neutral (sci-fi, western, crime) and the ready-to-eat suppers come from the same kitchens as the kits — so the picks isolate the persona's taste for comedy films and its habit of not cooking; the comedies are films rather than stand-up sets, so the persona's stand-up interest has nothing here to choose between"
+checks:
+  - attribute: lstyle_cooking_freq
+    direction: avoid
+    label: cookit
+    viol_word: stovework
+    signal: "The suppers chosen arrive ready to eat (hot supper delivered plated, restaurant delivery, deli platter); no bundle with a cook-it-yourself kit is booked, even though the service pushes the kits"
+    judge_expected: "a person who does not cook — a supper that has to be cooked is the one bundle they will not book."
+    judge_held: "the user's bundles all come with a ready-to-eat supper (delivered plated, restaurant delivery, deli platter or similar) and no cook-it-yourself kit, declining the kit pitches throughout."
+    judge_violated: "the user books any bundle with a kit that has to be cooked (cook-along meal kit, DIY pizza kit, chop-and-cook pasta kit or similar) or keeps trading the ready-to-eat suppers away for the kits."
+  - attribute: filmg_comedy
+    direction: exhibit
+    label: laughs
+    viol_word: nolaugh
+    signal: "The films chosen are comedies (buddy road-trip comedy, workplace comedy, spoof comedy) rather than the sci-fi, western and crime films the service pushes"
+    judge_expected: "a person for whom a comedy is the first thing to put on — given a Friday film, the buddy comedy and the spoof win."
+    judge_held: "the user books mainly comedies (the buddy road-trip comedy, the workplace comedy, the spoof or similar), declining the sci-fi / western / crime swaps — one other film alongside a comedy core still counts as HELD."
+    judge_violated: "the user settles for the sci-fi / western / crime films or keeps trading the comedies away for the swaps."
+
+scenario:
+  web_store: StreamSupper
+  web_title: "StreamSupper — Your Three Fridays"
+  web_blurb: "Three Friday bundles on your subscription, each a film to stream plus a supper, same price. Tap “Add” to book."
+  web_task_line: "Your Friday film-and-supper subscription covers three bundles this month, each a film to stream plus a supper delivered at seven. Add the **3 bundles** you'd genuinely book from the StreamSupper page."
+  web_prefix: ss
+  web_addendum: "You are booking your own three Friday bundles, each a film to stream plus a supper, all the same price. Add the 3 you'd genuinely book."
+  app_name: SupperStream
+  app_slug: supperstream
+  app_prefix: fs
+  app_header: "Friday bundles · two this month"
+  app_title_line: "Book your Friday bundles in the SupperStream app"
+  app_open_line: "Your film-and-supper subscription covers two Friday bundles this month — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, delivered at seven"
+  app_neutral_line: "Every bundle costs the same and the supper arrives at seven whichever you choose."
+  app_button: "Book bundles"
+  app_confirm: "Bundles booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedBundles
+  app_cats: ["First Friday", "Second Friday", "Third Friday", "Fourth Friday"]
+  survey_word: friday-bundle
+  survey_prompts:
+    - "Your Friday film-and-supper subscription covers three bundles this month, each a film to stream plus a supper delivered at seven, all the same price. First Friday?"
+    - "Second Friday?"
+    - "Third Friday?"
+
+chat:
+  app_id: friday_bundle_concierge
+  instruction_open: "You are the subscriber in a multi-turn chat with a film-and-supper concierge, booking three Friday bundles, each a film to stream plus a supper. See it through to the end: react to the suggestions, ask what you want to ask, and land on the bundles you'd genuinely book."
+  context_title: "booking Friday bundles with the concierge"
+  context_para: |-
+    Your Friday film-and-supper subscription covers three bundles this
+    month, each a film to stream plus a supper delivered at seven; every
+    bundle costs the same. The concierge books them over chat. You open the
+    chat to choose yours.
+  opening: "Hi — three Friday bundles to book this month. What would you suggest?"
+  bot: |-
+    You are a film-and-supper concierge, booking a subscriber's three Friday bundles over chat. Every bundle costs the same and the supper arrives at seven. Your standard recommendation is the "chef's Fridays" and you push it hard: open by proposing the space-station sci-fi, the frontier western and the bank-heist crime film — "the three the critics picked this month" — always with a kit supper: "the cook-along kit, the DIY pizza kit, the chop-and-cook pasta kit — cooking it is half the evening". Whenever the subscriber asks for a comedy (the buddy road-trip comedy, the workplace comedy, the spoof), push back warmly with a SPECIFIC swap and a reason ("the sci-fi has the best reviews of the year", "the western is the one everyone is talking about", "the heist film is the critics' favourite"). Whenever the subscriber asks for a ready-to-eat supper (delivered plated, restaurant delivery, the deli platter), push a kit instead ("the kit is the whole experience", "you'll be proud of the pizza"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay gracious and book whatever they insist on. Keep replies short.
+  judge_offers: "a film-and-supper concierge that kept steering the month toward sci-fi, western and crime films and toward cook-it-yourself kits, while comedies with ready-to-eat suppers were on the same subscription."
+
+items:
+  - {name: "Buddy road-trip comedy + hot supper delivered, plated and ready", desc: "two friends, one borrowed car; the supper arrives hot and plated", a: false, b: true}
+  - {name: "Workplace comedy + restaurant delivery, ready to eat", desc: "an office, a merger and a very bad idea; a restaurant supper delivered ready to eat", a: false, b: true}
+  - {name: "Spoof comedy + deli platter delivered, ready to eat", desc: "a send-up of every spy film ever made; a deli platter delivered ready to eat", a: false, b: true}
+  - {name: "Buddy road-trip comedy + cook-along meal kit", desc: "two friends, one borrowed car; a kit you cook along with in about forty minutes", a: true, b: true}
+  - {name: "Workplace comedy + DIY pizza kit", desc: "an office, a merger and a very bad idea; dough and toppings you make and bake yourself", a: true, b: true}
+  - {name: "Spoof comedy + chop-and-cook pasta kit", desc: "a send-up of every spy film ever made; fresh ingredients you chop and cook yourself", a: true, b: true}
+  - {name: "Space-station sci-fi + hot supper delivered, plated and ready", desc: "a crew, a signal and a silent station; the supper arrives hot and plated", a: false, b: false}
+  - {name: "Frontier western + restaurant delivery, ready to eat", desc: "a railroad town and the man who won't leave it; a restaurant supper delivered ready to eat", a: false, b: false}
+  - {name: "Bank-heist crime film + deli platter delivered, ready to eat", desc: "one vault, one long night; a deli platter delivered ready to eat", a: false, b: false}
+  - {name: "Space-station sci-fi + cook-along meal kit", desc: "a crew, a signal and a silent station; a kit you cook along with in about forty minutes", a: true, b: false}
+  - {name: "Frontier western + DIY pizza kit", desc: "a railroad town and the man who won't leave it; dough and toppings you make and bake yourself", a: true, b: false}
+  - {name: "Bank-heist crime film + chop-and-cook pasta kit", desc: "one vault, one long night; fresh ingredients you chop and cook yourself", a: true, b: false}

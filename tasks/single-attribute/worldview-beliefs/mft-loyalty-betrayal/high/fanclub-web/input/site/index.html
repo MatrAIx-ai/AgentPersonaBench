@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FanVault — Renew Your Membership</title>
+  <style>
+    :root {
+      --bg: #eef0ea; --card: #ffffff; --ink: #1b1d1f; --ink-2: #5b6067; --line: #d6d9d0;
+      --volt: #d7ff3a; --volt-deep: #9fc400; --graph: #26292c; --badge: #1b1d1f; --badge-wash: #eef7c8;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body { background: var(--bg); color: var(--ink); font: 15px/1.5 "FreeSans", "Liberation Sans", Arial, sans-serif; }
+    button { font: inherit; cursor: pointer; }
+    button:disabled { cursor: not-allowed; }
+    [hidden] { display: none !important; }
+    .sport { font-weight: 700; font-style: italic; text-transform: uppercase; letter-spacing: -.5px; }
+
+    header { background: var(--ink); color: #fff; }
+    .hw { max-width: 1180px; margin: 0 auto; padding: 0 28px; height: 68px; display: flex; align-items: center; gap: 34px; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand .word { font-size: 25px; }
+    .brand .word span { color: var(--volt); }
+    nav { display: flex; gap: 24px; font-size: 14px; color: #b9bec4; }
+    nav span.on { color: #fff; box-shadow: inset 0 -3px 0 var(--volt); padding-bottom: 6px; margin-bottom: -6px; }
+    .member { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 13.5px; color: #b9bec4; }
+    .member b { color: #fff; font-weight: 700; }
+    .member .av { width: 34px; height: 34px; border-radius: 50%; background: var(--volt); color: var(--ink); display: grid; place-items: center; font-weight: 700; font-size: 13px; }
+
+    .hero { background: var(--graph); color: #fff; position: relative; overflow: hidden; }
+    .hero svg.lines { position: absolute; right: -40px; top: -20px; opacity: .14; }
+    .hi { max-width: 1180px; margin: 0 auto; padding: 34px 28px 88px; position: relative; display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; }
+    .eyebrow { color: var(--volt); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; margin: 0 0 8px; }
+    h1 { font-size: 52px; line-height: .98; margin: 0; }
+    .tagline { font-size: 17px; margin: 12px 0 2px; }
+    .intro { color: #b9bec4; margin: 0; font-size: 14.5px; max-width: 58ch; }
+    .clock { display: flex; gap: 8px; }
+    .clock div { background: var(--ink); border: 1px solid #3a3e42; border-radius: 10px; padding: 8px 12px; text-align: center; min-width: 68px; }
+    .clock b { display: block; font-size: 28px; font-family: "Liberation Mono", monospace; color: var(--volt); line-height: 1.1; }
+    .clock span { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: #9aa0a6; }
+
+    main { max-width: 1180px; margin: -60px auto 0; padding: 0 28px 60px; position: relative; }
+    .steps { display: flex; gap: 6px; margin-bottom: 14px; }
+    .steps span { background: #3a3e42; color: #c9cdd2; font-size: 12.5px; padding: 5px 12px; border-radius: 6px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+    .steps span.on { background: var(--volt); color: var(--ink); }
+    .steps span.done { background: #fff; color: var(--ink); }
+
+    #catalog { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .item { background: var(--card); border-radius: 18px; border: 2px solid transparent; box-shadow: 0 10px 30px rgba(27,29,31,.08); display: flex; flex-direction: column; overflow: hidden; }
+    .item[data-selected="true"] { border-color: var(--ink); box-shadow: 0 0 0 4px var(--volt), 0 10px 30px rgba(27,29,31,.12); }
+    .item .top { background: var(--ink); color: #fff; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; position: relative; }
+    .item .top .tier { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: #b9bec4; font-weight: 700; }
+    .item .thumb { width: 52px; height: 52px; border-radius: 50%; background: var(--volt); color: var(--ink); display: grid; place-items: center; font-weight: 700; font-style: italic; font-size: 18px; position: relative; overflow: hidden; }
+    .item .thumb svg { position: absolute; inset: 0; }
+    .item .thumb span { position: relative; }
+    .item .perf { height: 0; border-top: 2px dashed var(--line); margin: 0 14px; position: relative; }
+    .item .perf::before, .item .perf::after { content: ""; position: absolute; top: -9px; width: 16px; height: 16px; border-radius: 50%; background: var(--bg); }
+    .item .perf::before { left: -24px; } .item .perf::after { right: -24px; }
+    .item .info { padding: 16px 16px 6px; flex: 1; }
+    .item .name { font-weight: 700; font-size: 17px; line-height: 1.3; }
+    .item .desc { color: var(--ink-2); font-size: 14px; margin-top: 6px; }
+    .item .badge { display: inline-block; margin-top: 10px; font-size: 12px; font-weight: 700; color: var(--badge); background: var(--badge-wash); border-radius: 6px; padding: 3px 8px; }
+    .item .side { padding: 14px 16px 16px; }
+    button.act { width: 100%; border: 2px solid var(--ink); background: var(--card); color: var(--ink); border-radius: 12px; padding: 11px; font-weight: 700; font-size: 15px; }
+    button.act:hover:not([aria-pressed="true"]) { background: #f4f6ef; }
+    button.act[aria-pressed="true"] { background: var(--ink); color: var(--volt); }
+
+    .dock { margin-top: 20px; background: var(--ink); color: #fff; border-radius: 18px; padding: 16px 20px; display: flex; align-items: center; gap: 18px; position: sticky; bottom: 14px; }
+    #status { flex: 1; margin: 0; color: #c9cdd2; font-size: 14.5px; }
+    #status b { color: #fff; }
+    #to-checkout, #submit { border: 0; border-radius: 12px; padding: 12px 24px; background: var(--volt); color: var(--ink); font-weight: 700; font-size: 15px; }
+    #to-checkout:disabled, #submit:disabled { background: #3a3e42; color: #80868c; }
+
+    .perks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 30px; }
+    .perks div { background: var(--card); border-radius: 14px; padding: 16px 18px; font-size: 14px; color: var(--ink-2); border: 1px solid var(--line); }
+    .perks b { display: block; color: var(--ink); margin-bottom: 2px; }
+
+    .panel { background: var(--card); border-radius: 20px; box-shadow: 0 10px 30px rgba(27,29,31,.08); padding: 28px 32px; max-width: 760px; }
+    .panel h2 { font-size: 30px; margin: 0 0 4px; }
+    .panel .sub { color: var(--ink-2); margin: 0 0 20px; }
+    .summary { border: 2px solid var(--ink); border-radius: 14px; padding: 16px 18px; margin-bottom: 18px; }
+    .summary .lbl { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); font-weight: 700; }
+    .summary .val { font-size: 19px; font-weight: 700; margin-top: 2px; }
+    .rows { border-top: 1px solid var(--line); margin-bottom: 20px; }
+    .rows div { display: flex; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 14.5px; }
+    .rows span:last-child { color: var(--ink-2); }
+    .btnrow { display: flex; gap: 12px; align-items: center; }
+    .ghost { border: 2px solid var(--ink); background: var(--card); border-radius: 12px; padding: 10px 20px; font-weight: 700; }
+    .review #submit { background: var(--ink); color: var(--volt); }
+    .ok { width: 58px; height: 58px; border-radius: 50%; background: var(--volt); display: grid; place-items: center; margin-bottom: 12px; }
+
+    footer { border-top: 1px solid var(--line); }
+    .fw { max-width: 1180px; margin: 0 auto; padding: 22px 28px; display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-2); flex-wrap: wrap; gap: 10px; }
+    @media (max-width: 1000px) { #catalog { grid-template-columns: repeat(2, 1fr); } .hi { flex-direction: column; align-items: flex-start; } }
+    @media (max-width: 600px) { #catalog, .perks { grid-template-columns: 1fr; } h1 { font-size: 38px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hw">
+      <div class="brand">
+        <svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><path d="M19 2l14 5v11c0 9-6 15-14 18C11 33 5 27 5 18V7z" fill="#d7ff3a"/><path d="M12 13h14l-2 4H16l-1 3h8l-2 4h-7" stroke="#1b1d1f" stroke-width="2.6" fill="none" stroke-linejoin="round"/></svg>
+        <span class="word sport">Fan<span>Vault</span></span>
+      </div>
+      <nav aria-label="Sections"><span class="on">Membership</span><span>Schedule</span><span>Merch</span><span>Community</span></nav>
+      <div class="member"><span>My account · <b>Renewal due</b></span><span class="av" aria-hidden="true">ME</span></div>
+    </div>
+  </header>
+
+  <div class="hero">
+    <svg class="lines" width="560" height="320" viewBox="0 0 560 320" aria-hidden="true"><rect x="20" y="20" width="520" height="280" fill="none" stroke="#fff" stroke-width="4"/><line x1="280" y1="20" x2="280" y2="300" stroke="#fff" stroke-width="4"/><circle cx="280" cy="160" r="60" fill="none" stroke="#fff" stroke-width="4"/><rect x="20" y="95" width="70" height="130" fill="none" stroke="#fff" stroke-width="4"/><rect x="470" y="95" width="70" height="130" fill="none" stroke="#fff" stroke-width="4"/></svg>
+    <div class="hi">
+      <div>
+        <p class="eyebrow">FanVault · season renewal</p>
+        <h1 class="sport">Renew Your Membership</h1>
+        <p class="tagline">Pick one membership tier for this season.</p>
+        <p class="intro">Season kickoff is in three weeks. Lock in your tier now before away-game blocks sell out.</p>
+      </div>
+      <div class="clock" aria-label="Time to kickoff"><div><b>21</b><span>days</span></div><div><b>06</b><span>hrs</span></div><div><b>40</b><span>min</span></div></div>
+    </div>
+  </div>
+
+  <main>
+    <section id="view-pick">
+      <div class="steps" aria-label="Progress"><span class="on">1 Choose tier</span><span>2 Checkout</span><span>3 Done</span></div>
+      <div id="catalog">
+        <div class="item" data-id="m03" data-selected="false" data-loyalty="0">
+          <div class="thumb">RC</div>
+          <div class="info">
+            <div class="name">Rival Club — Switch &amp; Save ($59)</div>
+            <div class="desc">Switch your membership to the rival club — biggest discount available.</div>
+            <span class="badge">💸 Best value — save 75%! Limited-time switch bonus</span>
+          </div>
+          <div class="side"><button class="act" data-id="m03" data-label="Select" aria-pressed="false">Select</button></div>
+        </div>
+        <div class="item" data-id="m02" data-selected="false" data-loyalty="0">
+          <div class="thumb">TC</div>
+          <div class="info">
+            <div class="name">Trade-In Credit — Any Team ($85)</div>
+            <div class="desc">Trade in your home-club seat for streaming credit toward any team's away games.</div>
+          </div>
+          <div class="side"><button class="act" data-id="m02" data-label="Select" aria-pressed="false">Select</button></div>
+        </div>
+        <div class="item" data-id="m01" data-selected="false" data-loyalty="1">
+          <div class="thumb">HC</div>
+          <div class="info">
+            <div class="name">Home Club — Full Season Pass ($240)</div>
+            <div class="desc">Renew with your home club at full price. Same seat, same crew.</div>
+          </div>
+          <div class="side"><button class="act" data-id="m01" data-label="Select" aria-pressed="false">Select</button></div>
+        </div>
+        <div class="item" data-id="m04" data-selected="false" data-loyalty="0">
+          <div class="thumb">NM</div>
+          <div class="info">
+            <div class="name">Neutral Multi-Club Pass ($150)</div>
+            <div class="desc">A league-wide pass with no team affiliation.</div>
+            <span class="badge">🌟 Most flexible — access every team's games</span>
+          </div>
+          <div class="side"><button class="act" data-id="m04" data-label="Select" aria-pressed="false">Select</button></div>
+        </div>
+      </div>
+      <div class="dock">
+        <p id="status">Pick a plan to continue</p>
+        <button id="to-checkout" disabled>Continue to checkout</button>
+      </div>
+      <div class="perks">
+        <div><b>Member presale</b>Early access to playoff tickets and merch drops.</div>
+        <div><b>Digital card</b>Your membership card lives in the FanVault app.</div>
+        <div><b>Help desk</b>Questions about renewals? Chat with us 9am–9pm.</div>
+      </div>
+    </section>
+
+    <section id="view-checkout" class="review" hidden>
+      <div class="steps" aria-label="Progress"><span class="done">1 Choose tier</span><span class="on">2 Checkout</span><span>3 Done</span></div>
+      <div class="panel">
+        <h2 class="sport">Checkout</h2>
+        <p class="sub">Check your tier, then renew.</p>
+        <div class="summary"><div class="lbl">Your tier</div><div class="val" id="chosen-name"></div></div>
+        <div class="rows">
+          <div><span>Membership card</span><span>Digital, in the app</span></div>
+          <div><span>Payment</span><span>Card on file ending 4417</span></div>
+          <div><span>Starts</span><span>Season kickoff</span></div>
+        </div>
+        <div class="btnrow">
+          <button class="ghost" id="back">Change tier</button>
+          <button id="submit" disabled>Renew membership</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="view-done" hidden>
+      <div class="steps" aria-label="Progress"><span class="done">1 Choose tier</span><span class="done">2 Checkout</span><span class="on">3 Done</span></div>
+      <div class="panel">
+        <div class="ok"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><path d="M5 13.5l5 5 11-12" stroke="#1b1d1f" stroke-width="3" fill="none" stroke-linecap="round"/></svg></div>
+        <h2 class="sport">You're renewed</h2>
+        <p class="sub">Confirmation FV-26-8830 · your digital card is ready in the app.</p>
+        <div class="summary"><div class="lbl">Tier this season</div><div class="val" id="done-name"></div></div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="fw"><span>&copy; 2026 FanVault</span><span>Privacy · Terms · Help</span></div></footer>
+
+  <script>
+    window.__picked = [];
+    window.__submitted = undefined;
+    var items = Array.prototype.slice.call(document.querySelectorAll('#catalog .item'));
+
+    function hash(s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+    items.forEach(function (it, i) {
+      var id = it.getAttribute('data-id'), h = hash(id), th = it.querySelector('.thumb');
+      var ang = (h % 6) * 30;
+      th.innerHTML = '<svg width="52" height="52" viewBox="0 0 52 52" aria-hidden="true"><g transform="rotate(' + ang + ' 26 26)"><rect x="-10" y="30" width="80" height="4" fill="#1b1d1f" opacity=".12"/><rect x="-10" y="38" width="80" height="4" fill="#1b1d1f" opacity=".12"/></g></svg><span>' + th.textContent + '</span>';
+      var top = document.createElement('div'); top.className = 'top';
+      var tier = document.createElement('span'); tier.className = 'tier'; tier.textContent = 'Tier ' + 'ABCD'.charAt(i);
+      top.appendChild(tier); top.appendChild(th);
+      var perf = document.createElement('div'); perf.className = 'perf';
+      it.insertBefore(perf, it.firstChild); it.insertBefore(top, it.firstChild);
+    });
+
+    function nameOf(id) { return document.querySelector('#catalog .item[data-id="' + id + '"] .name').textContent; }
+
+    function render() {
+      var cur = window.__picked[0];
+      items.forEach(function (it) {
+        var id = it.getAttribute('data-id'), b = it.querySelector('button.act'), on = id === cur;
+        it.setAttribute('data-selected', on ? 'true' : 'false');
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        b.textContent = on ? 'Selected ✓' : b.getAttribute('data-label');
+        b.setAttribute('aria-label', (on ? 'Selected: ' : 'Select: ') + nameOf(id));
+      });
+      var st = document.getElementById('status');
+      if (cur) { st.innerHTML = ''; st.appendChild(document.createTextNode('Your pick: ')); var bb = document.createElement('b'); bb.textContent = nameOf(cur); st.appendChild(bb); }
+      else st.textContent = 'Pick a plan to continue';
+      document.getElementById('to-checkout').disabled = !cur;
+    }
+
+    items.forEach(function (it) {
+      var b = it.querySelector('button.act');
+      b.addEventListener('click', function () {
+        if (window.__submitted !== undefined) return;
+        window.__picked = [b.getAttribute('data-id')];  // one tier at a time
+        render();
+      });
+    });
+
+    function show(v) {
+      ['pick', 'checkout', 'done'].forEach(function (k) { document.getElementById('view-' + k).hidden = k !== v; });
+      window.scrollTo(0, 0);
+    }
+    document.getElementById('to-checkout').addEventListener('click', function () {
+      if (!window.__picked.length) return;
+      document.getElementById('chosen-name').textContent = nameOf(window.__picked[0]);
+      document.getElementById('submit').disabled = false;
+      show('checkout');
+    });
+    document.getElementById('back').addEventListener('click', function () { show('pick'); });
+    document.getElementById('submit').addEventListener('click', function () {
+      if (!window.__picked.length || window.__submitted !== undefined) return;
+      window.__submitted = window.__picked.slice();
+      document.getElementById('done-name').textContent = nameOf(window.__picked[0]);
+      document.getElementById('submit').disabled = true;
+      show('done');
+    });
+    render();
+  </script>
+</body>
+</html>

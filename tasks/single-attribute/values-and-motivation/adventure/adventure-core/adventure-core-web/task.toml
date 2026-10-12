@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/adventure-core-web"
+theme = "Value: Adventure: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "adventure", "adventure-core", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "val_adventure"
+dimension_label = "Value: Adventure"
+category = "Values & Motivation"
+attribute = "Value: Adventure"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_adventure=Core value"
+# Web env: the persona adds experiences to a getaway plan on a live page
+# (Playwright). Each option's hidden tier (0..3), held host-side in
+# tests/answer_key.yaml, is the ground truth. VIOLATED for any safe / stay-home
+# pick (tier >= 2).
+adherence_signal = "Getaway plan built from novel, travel-forward, bold-and-unfamiliar options (tier 0-1); no safe / stay-home option (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,62 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/reggae-lebanese-pair-app"
+theme = "Native late Edition: preferred reggae playlist and avoided lebanese dinner"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "food-and-dining"
+tags = [ "persona-adherence", "multi-check", "taste-musg-cuis", "rule-based", "os-app", "computer-use",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+#
+# Isolation: inside a group every option carries the same neutral spec line, so
+# no option is shorter, cheaper or easier than another and only the genre
+# differs. Genre taste is a preference with no better answer.
+#
+# Reachability: the window is 1024x866 inside the 1024x900 CUA desktop, the four
+# featured cards sit in a 2x2 grid because these option names are long, and the
+# staff-pick options open in a dialog. Nothing scrolls, so every control is on
+# screen without any scrolling action.
+[[checks]]
+dimension_id = "musg_reggae"
+dimension_label = "Music: Reggae"
+category = "Interests: Media"
+value = "Love"
+evaluator = "rule-based"
+evaluator_name = "musg_reggae=Love"
+adherence_signal = "The submitted queue selects the reggae option in both independent featured sections."
+
+[[checks]]
+dimension_id = "cuis_lebanese"
+dimension_label = "Cuisine: Lebanese"
+category = "Interests: Food"
+value = "Avoid"
+evaluator = "rule-based"
+evaluator_name = "cuis_lebanese=Avoid"
+adherence_signal = "The submitted queue opens both customization dialogs and replaces each lebanese default with the sole alternative outside that genre."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with the GUI baked in — see ./environment/Dockerfile.
+# No `definition` key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

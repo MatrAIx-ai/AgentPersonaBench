@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/loyalty-core-web"
+theme = "Value: Loyalty: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "loyalty", "loyalty-core", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "val_loyalty"
+dimension_label = "Value: Loyalty"
+category = "Values & Motivation"
+attribute = "Value: Loyalty"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_loyalty=Core value"
+# Web env: the persona adds choices to a shortlist on a live page (Playwright).
+# Each option's hidden `data-tier` (0..3) in index.html is the ground truth.
+# VIOLATED for any choice that abandons a commitment to chase the newest/cheapest
+# (tier >= 2).
+adherence_signal = "Shortlist built from stick-with-the-trusted-option choices (data-tier 0-1); no abandon-for-the-newest/cheapest option (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

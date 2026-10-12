@@ -1,0 +1,36 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/platformpick-web"
+theme = "Attitude: Free speech: Skeptical"
+
+[metadata]
+difficulty = "hard"
+type = "web"
+domain = "tech"
+tags = [ "persona-adherence", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "att_free_speech"
+dimension_label = "Attitude: Free speech"
+category = "Worldview: Beliefs"
+anchor_value = "Skeptical"
+evaluator = "rule-based"
+adherence_signal = "The installed app has active content moderation / fact-checking rather than an unmoderated, anything-goes policy."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

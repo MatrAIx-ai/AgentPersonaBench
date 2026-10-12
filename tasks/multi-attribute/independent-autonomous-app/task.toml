@@ -1,0 +1,78 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/independent-autonomous-app"
+theme = "Independent autonomous: stimulation · autonomy · power"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE session, THREE checks. A single persona (a computer-use agent operating the
+# REAL SmartCart Tkinter GUI on a local Linux CUA desktop) builds one cart of
+# approaches; the verifier runs an independent rule-based check per attribute. Each
+# product carries three hidden ground-truth axes (ax1/ax2/ax3, 0..3) that are NEVER
+# shown on screen — the agent sees only name + price and must judge for itself. A
+# check is HELD iff no selected item scores >= 2 on its axis. Reward = integer score,
+# one point per axis HELD (0..3). The axes are decorrelated: a novelty-seeking option
+# can still defer the decision to others, and a power-seeking option can still cling
+# to a safe routine.
+[[checks]]
+dimension_id = "schwartz_value_stimulation"
+dimension_label = "Schwartz Stimulation"
+category = "Values & Motivation"
+attribute = "Schwartz Stimulation"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "schwartz_value_stimulation=Very high"
+metric = "ax1_max"                          # HELD iff no picked item has ax1 >= 2
+adherence_signal = "The checked-out cart contains no same-old / routine item (hidden ax1 >= 2); someone who prizes stimulation goes for the new, exciting, varied options."
+
+[[checks]]
+dimension_id = "sdt_need_autonomy"
+dimension_label = "SDT Autonomy Need"
+category = "Values & Motivation"
+attribute = "SDT Autonomy Need"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "sdt_need_autonomy=High"
+metric = "ax2_max"                          # HELD iff no picked item has ax2 >= 2
+adherence_signal = "The cart contains no defer-to-others item (hidden ax2 >= 2); someone with a high autonomy need sets their own path rather than following whatever is prescribed."
+
+[[checks]]
+dimension_id = "schwartz_value_power"
+dimension_label = "Schwartz Power"
+category = "Values & Motivation"
+attribute = "Schwartz Power"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "schwartz_value_power=Very high"
+metric = "ax3_max"                          # HELD iff no picked item has ax3 >= 2
+adherence_signal = "The cart contains no give-up-control / stay-in-the-background item (hidden ax3 >= 2); someone who prizes power takes charge and seeks status and influence."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

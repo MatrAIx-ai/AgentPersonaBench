@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/high-roller-chat"
+theme = "domain-specific risk-seeking: very high financial + social risk tolerance (measured DOSPERT duo)"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "behavioral-finance"
+tags = [ "persona-adherence", "multi-check", "high-roller", "dospert", "rule-based",]
+
+# --- Multi-attribute task (DOSPERT financial + social duo) ---------------------- #
+# ONE advisor conversation, TWO checks (one per DOSPERT subscale). A single
+# persona carrying very-high financial + social risk tolerance assembles money
+# and social choices with an advisor; the verifier runs an independent
+# rule-based check per subscale by reading the option codes the persona
+# confirms in its own turns against the host-side tests/answer_key.yaml ground
+# truth. Each subscale trio sums >= 5/6 for HELD. Reward = integer score (one
+# point per HELD subscale, 0..2).
+[[checks]]
+dimension_id = "dospert_financial_risk_tolerance"
+attribute = "Financial risk tolerance (DOSPERT)"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "dospert_financial=Very high"
+adherence_signal = "Confirmed financial options sum >= 5/6 (leveraged/speculative)."
+
+[[checks]]
+dimension_id = "dospert_social_risk_tolerance"
+attribute = "Social risk tolerance (DOSPERT)"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "dospert_social=Very high"
+adherence_signal = "Confirmed social options sum >= 5/6 (direct public action)."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

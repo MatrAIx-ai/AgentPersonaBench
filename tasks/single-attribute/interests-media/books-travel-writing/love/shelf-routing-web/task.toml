@@ -1,0 +1,35 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/shelf-routing-web"
+theme = "Three books, two readers"
+
+[metadata]
+# Workflow rating; see README.md for the tested arm and calibration limits.
+difficulty = "medium"
+type = "web"
+domain = "recommendation-systems"
+tags = ["persona-adherence", "shared-draft", "recipient-scope", "final-state", "rule-based"]
+
+[[checks]]
+dimension_id = "bookg_travel_writing"
+attribute = "Books: Travel writing"
+value = "Love"
+evaluator = "rule-based"
+adherence_signal = "The confirmed assignments for the persona’s own entries match their stated preference. Other people’s requests are diagnostic only."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 2400.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 2
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

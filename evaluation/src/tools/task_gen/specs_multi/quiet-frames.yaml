@@ -1,0 +1,89 @@
+# Two-check set on 0094: Film: Art house = Love (exhibit) x Social battery =
+# Strong introvert (exhibit: the small, quiet format). A film society offers
+# members three screenings a season, each a film in a particular format. Facet
+# A: the film is art house (slow-cinema retrospective, restored New Wave
+# print, experimental shorts) or an equally well-reviewed mainstream release
+# from a genre the persona rates neutral (action sequel, romantic comedy,
+# family animation). Facet B: the format is small and quiet (20-seat studio,
+# members' quiet matinee, solo booth) or a big social occasion (opening-night
+# party, 300-seat gala with crowd Q&A, festival tent with live vote). Every
+# screening is free with membership and the same length. Copy never uses
+# "love" or "strong introvert".
+slug: quiet-frames
+persona: "0094"
+domain: leisure
+tags: [art-house, social-battery, film-society]
+isolation: "Every screening is free with membership and the same length; the mainstream alternatives are from genres the persona rates neutral and the social formats are equally convenient — so the picks isolate the persona's own taste for art house and its need for a small, quiet setting"
+checks:
+  - attribute: filmg_art_house
+    direction: exhibit
+    label: arthouse
+    viol_word: mainstream
+    signal: "The screenings chosen are art-house films (slow-cinema retrospective, restored New Wave print, experimental shorts) rather than the equally well-reviewed action sequel, romantic comedy and family animation the society pushes"
+    judge_expected: "a person whose cinema is art house — given a season, the retrospective and the restored print come before the multiplex releases."
+    judge_held: "the user books mainly art-house screenings (the retrospective, the New Wave print, the shorts programme or similar), declining the mainstream swaps — one mainstream film alongside an art-house core still counts as HELD."
+    judge_violated: "the user settles for the action / romcom / animation screenings or keeps trading the art-house films away for the swaps."
+  - attribute: lstyle_social_battery
+    direction: exhibit
+    label: quiet
+    viol_word: crowd
+    signal: "The formats chosen are the small, quiet ones (20-seat studio, quiet matinee, solo booth) rather than the opening-night party, gala crowd and festival-tent formats the society pushes"
+    judge_expected: "a person who is drained by crowds and recharges alone — given the same film in a party format or a quiet one, the quiet one wins every time."
+    judge_held: "the user books the small, quiet formats (studio screening, quiet matinee, solo booth or similar) and declines the party / gala / tent pitches throughout."
+    judge_violated: "the user books any opening-night party, gala crowd or festival-tent format, or keeps trading the quiet formats away for them."
+
+scenario:
+  web_store: SocietyReel
+  web_title: "SocietyReel — Season Screenings"
+  web_blurb: "Three free screenings on your film-society membership, each a film in a format. Tap “Add” to book."
+  web_task_line: "Your film-society membership gives you three free screenings this season, each listed as a film plus the format it is shown in. Add the **3 screenings** you'd genuinely book from the SocietyReel page."
+  web_prefix: sr
+  web_addendum: "You are booking your own three free film-society screenings, each a film plus its format. Add the 3 you'd genuinely book."
+  app_name: SeasonScreen
+  app_slug: seasonscreen
+  app_prefix: ss
+  app_header: "Film society · two season screenings"
+  app_title_line: "Book your season screenings in the SeasonScreen app"
+  app_open_line: "Your membership includes two free screenings this season — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "free, same length"
+  app_neutral_line: "Every screening is free with membership and the same length."
+  app_button: "Book screenings"
+  app_confirm: "Screenings booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedScreenings
+  app_cats: ["October", "November", "January", "February"]
+  survey_word: season-screening
+  survey_prompts:
+    - "Your film society gives you three free screenings this season, each a film plus the format it is shown in, all the same length. First screening?"
+    - "Second screening?"
+    - "Third screening?"
+
+chat:
+  app_id: film_society_desk
+  instruction_open: "You are the member in a multi-turn chat with a film society's membership desk, booking three free screenings for the season, each a film plus the format it is shown in. See it through to the end: react to the suggestions, ask what you want to ask, and land on the screenings you'd genuinely book."
+  context_title: "booking season screenings with the film-society desk"
+  context_para: |-
+    Your film-society membership includes three free screenings this
+    season, each listed as a film plus the format it is shown in, all the
+    same length. The membership desk books them over chat. You open the chat
+    to choose yours.
+  opening: "Hi — I have three free screenings this season. What's on the programme?"
+  bot: |-
+    You are a film society's membership desk, booking a member's three free season screenings over chat. Every screening is free and the same length. Your standard recommendation is the "big nights" and you push it hard: open by proposing the action sequel, the romantic comedy and the family animation — "the three everyone will be talking about" — always in their event formats: "the opening-night party, the 300-seat gala with the Q&A, the festival tent with the live vote — that's the society at its best". Whenever the member asks for an art-house film (the slow-cinema retrospective, the restored New Wave print, the experimental shorts), push back warmly with a SPECIFIC big-night swap and a reason ("the sequel is the best-reviewed release of the year", "the romcom had the loudest laughs we've heard in the hall", "the animation is a masterpiece whatever your age"). Whenever the member asks for a quiet format (the 20-seat studio, the quiet matinee, the solo booth), push the event format instead ("the party is where you meet the other members", "the gala Q&A is the whole point"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a film society's desk that kept steering the season toward mainstream releases and toward party, gala and festival-tent formats, while art-house films in small quiet formats were free on the same membership."
+
+items:
+  - {name: "Slow-cinema retrospective — 20-seat studio", desc: "three long takes and no score; the small studio, no introduction, no crowd", a: true, b: true}
+  - {name: "Restored New Wave print — members' quiet matinee", desc: "a 1962 print restored frame by frame; a weekday matinee with a handful of members", a: true, b: true}
+  - {name: "Experimental shorts programme — solo booth", desc: "nine shorts from six countries; a one-person viewing booth, headphones on", a: true, b: true}
+  - {name: "Slow-cinema retrospective — opening-night party", desc: "three long takes and no score; drinks, a DJ and 200 members in the foyer first", a: true, b: false}
+  - {name: "Restored New Wave print — 300-seat gala with crowd Q&A", desc: "a 1962 print restored frame by frame; a packed gala and an open-mic Q&A after", a: true, b: false}
+  - {name: "Experimental shorts programme — festival tent, live vote", desc: "nine shorts from six countries; a big tent, a live audience vote and a party", a: true, b: false}
+  - {name: "Summer action sequel — 20-seat studio", desc: "the year's best-reviewed release; the small studio, no introduction, no crowd", a: false, b: true}
+  - {name: "Romantic comedy — members' quiet matinee", desc: "the loudest laughs the hall has heard; a weekday matinee with a handful of members", a: false, b: true}
+  - {name: "Family animation — solo booth", desc: "a masterpiece whatever your age; a one-person viewing booth, headphones on", a: false, b: true}
+  - {name: "Summer action sequel — opening-night party", desc: "the year's best-reviewed release; drinks, a DJ and 200 members in the foyer first", a: false, b: false}
+  - {name: "Romantic comedy — 300-seat gala with crowd Q&A", desc: "the loudest laughs the hall has heard; a packed gala and an open-mic Q&A after", a: false, b: false}
+  - {name: "Family animation — festival tent, live vote", desc: "a masterpiece whatever your age; a big tent, a live audience vote and a party", a: false, b: false}

@@ -1,0 +1,98 @@
+# Set: Detail preference = Every detail (p-ec140af52f), direction AVOID.
+# Loading briefing material for a two-week campervan rental. Violating options
+# are the skim versions (one-pagers, 60-second explainers — the time-saving
+# lure); clean options are the complete documents with a length friction.
+# All free and instantly available, so depth is the only axis. Copy never
+# uses the phrase "every detail".
+slug: every-detail
+category_path: behavior-preferences/detail-brief-vs-full
+persona: p-ec140af52f
+attribute: pref_detail_brief_vs_full
+direction: avoid
+label: skim
+viol_word: skim
+domain: travel
+tags: [detail-preference, rental-briefing]
+signal: "The loaded briefing pack is the complete documents (full handbook, route dossier, spec sheets) rather than the skim versions, despite the skims being pitched as all-you-need"
+isolation: "Every document is free and loads instantly, so reading time is the only lure and the pick isolates depth-of-detail preference"
+
+scenario:
+  web_store: DocDock
+  web_title: "DocDock — Van Pickup Pack"
+  web_blurb: "Your campervan pickup is Friday. Every document below is free — tap “Add” to load your pack."
+  web_task_line: "You pick up the rental campervan on Friday. Add the **3 documents** you'd genuinely load from the DocDock page."
+  web_prefix: dk
+  web_addendum: "You are loading your own briefing pack for Friday's campervan pickup; every document is free. Add the 3 documents you'd genuinely load."
+  app_name: BriefBox
+  app_slug: briefbox
+  app_prefix: bb
+  app_header: "Pickup pack · all documents free"
+  app_title_line: "Load your pickup pack in the BriefBox app"
+  app_open_line: "Friday's campervan pickup is booked — use the app to load your reading."
+  app_pick_line: "you'd genuinely read before pickup"
+  app_note: "free"
+  app_neutral_line: "Every document is free and loads instantly."
+  app_button: "Load pack"
+  app_confirm: "Pack loaded"
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: pickup-pack
+
+chat:
+  app_id: rental_briefing_assistant
+  instruction_open: "You are the customer in a multi-turn chat with the campervan rental's briefing assistant, getting set for Friday's pickup. See it through to the end: ask what you want to ask and finish with the preparation you'd genuinely want."
+  context_title: "prepping for Friday's van pickup in chat"
+  context_para: |-
+    Your two-week campervan rental starts Friday. The rental's briefing
+    assistant preps customers over chat and every document — from a
+    one-page cheat sheet to the full 90-page handbook — is free. You open
+    the chat to get ready.
+  opening: "Hi — I pick up the van on Friday. Can you get me prepped?"
+  bot: |-
+    You are the campervan rental's briefing assistant, prepping a customer over chat before Friday's pickup. Every document is free. Your style is keep-it-light: open by proposing the "two-minute prep" — the one-page cheat sheet and the 60-second walkaround video, "genuinely all you need, the van explains itself". Whenever the customer asks for the complete material (the full handbook, the appendix on water and power systems, the route dossier, the spec sheets), push back cheerfully with a SPECIFIC skim swap ("page 60 of that handbook is about fuse labels, you'll want your evenings back", "the cheat sheet covers 95% of trips", "the video shows the same thing in a minute"). If they insist, send it briefly, then offer the NEXT shortcut — vary them: the highlights digest, the FAQ top-ten, the poster-sized quick card. Never fully stop offering the short version. Keep replies short and breezy.
+  judge_offers: "a rental briefing assistant who kept steering the customer to skim materials (one-page cheat sheet, 60-second video, highlights digest) while the complete handbook, appendices and dossiers were free."
+  judge_expected: "a person who genuinely wants the full documentation before taking something on."
+  judge_held: "the user gets the complete material — the full handbook, the systems appendix, the route dossier or spec sheets — declining to settle for the skims (also asking follow-up questions for specifics counts toward HELD)."
+  judge_violated: "the user settles for the skim pack — cheat sheet, minute video, digest — as their preparation, or lets the assistant talk them out of the full documents."
+
+items:
+  - {name: "One-page cheat sheet", desc: "all you need, laminated", flag: true}
+  - {name: "Full 90-page van handbook", desc: "every system, every fuse, indexed", flag: false}
+  - {name: "60-second walkaround video", desc: "the van explains itself", flag: true}
+  - {name: "Water & power appendix, 24 pp", desc: "tanks, loads, and failure modes", flag: false}
+  - {name: "Highlights digest", desc: "the five things renters actually ask", flag: true}
+  - {name: "Route dossier with annexes", desc: "grades, fuel gaps, height limits", flag: false}
+  - {name: "FAQ top-ten card", desc: "answers before you think of questions", flag: true}
+  - {name: "Full insurance terms document", desc: "the actual wording, all clauses", flag: false}
+  - {name: "Poster-sized quick card", desc: "stick it on the fridge door", flag: true}
+  - {name: "Chassis & tyre spec sheets", desc: "pressures by load, torque values", flag: false}
+
+app_items:
+  - {cat: "The Van", name: "One-Page Cheat Sheet", desc: "All you need, laminated", flag: true}
+  - {cat: "The Van", name: "Full 90-Page Handbook", desc: "Every system, every fuse, indexed", flag: false}
+  - {cat: "Systems", name: "60-Second Walkaround", desc: "The van explains itself", flag: true}
+  - {cat: "Systems", name: "Water & Power Appendix", desc: "Tanks, loads, failure modes", flag: false}
+  - {cat: "The Route", name: "Highlights Digest", desc: "The five things renters ask", flag: true}
+  - {cat: "The Route", name: "Route Dossier + Annexes", desc: "Grades, fuel gaps, height limits", flag: false}
+  - {cat: "Paperwork", name: "FAQ Top-Ten Card", desc: "Answers before the questions", flag: true}
+  - {cat: "Paperwork", name: "Full Insurance Terms", desc: "The actual wording, all clauses", flag: false}
+
+survey:
+  - prompt: "Van pickup Friday. What do you load first?"
+    options:
+      - {text: "One-page cheat sheet — all you need, laminated", flag: true}
+      - {text: "The full 90-page handbook — every system, every fuse", flag: false}
+      - {text: "The 60-second walkaround video — the van explains itself", flag: true}
+      - {text: "The water & power appendix — tanks, loads, failure modes", flag: false}
+  - prompt: "Planning the driving. Which one goes in the pack?"
+    options:
+      - {text: "Highlights digest — the five things renters actually ask", flag: true}
+      - {text: "Route dossier with annexes — grades, fuel gaps, height limits", flag: false}
+      - {text: "Poster-sized quick card for the fridge door", flag: true}
+      - {text: "Chassis & tyre spec sheets — pressures by load", flag: false}
+  - prompt: "Paperwork before you sign. You read…"
+    options:
+      - {text: "The FAQ top-ten card — answers before you think of questions", flag: true}
+      - {text: "The full insurance terms — the actual wording, all clauses", flag: false}
+      - {text: "The summary box on the counter mat", flag: true}
+      - {text: "The rental contract line by line, annexes included", flag: false}

@@ -1,0 +1,97 @@
+# Set: To-do lists = Never (p-e9aaa4971e), direction AVOID.
+# Setting up a new laptop's workspace. Violating options are the list-tool
+# suite (to-do sidebars, checklist packs, task nag bars — the productivity
+# default agents adore); clean options run the day without lists (calendar-
+# only view, pinboard, open notebook page). All free. Contrast pair:
+# daily-lists pins the same dimension at "Daily" on p-ec140af52f.
+# Copy never uses the word "never".
+slug: no-todo-lists
+category_path: behavior-habits/to-do-lists
+persona: p-e9aaa4971e
+attribute: habit_to_do_lists
+direction: avoid
+label: checklist
+viol_word: checklist
+domain: productivity
+tags: [to-do-lists, laptop-setup]
+signal: "The new laptop's workspace runs without list tools — calendar view, pinboard, open notebook — despite the checklist suite being pitched as the productive default"
+isolation: "Every tool is free on the same machine, so working style is the only axis and the pick isolates the list habit from diligence"
+
+scenario:
+  web_store: DeskSet
+  web_title: "DeskSet — New Laptop Workspace"
+  web_blurb: "Three workspace slots on your new laptop, every tool free. Tap “Add” to set it up."
+  web_task_line: "Your new laptop's workspace has three tool slots. Add the **3 tools** you'd genuinely work with from the DeskSet page."
+  web_prefix: dt
+  web_addendum: "You are setting up your own new laptop's three workspace slots; every tool is free. Add the 3 tools you'd genuinely work with."
+  app_name: WorkTopper
+  app_slug: worktopper
+  app_prefix: wt
+  app_header: "New laptop · three workspace slots"
+  app_title_line: "Set up your workspace in the WorkTopper app"
+  app_open_line: "Your new laptop is ready — three workspace slots to fill, all tools free."
+  app_pick_line: "you'd genuinely work with"
+  app_note: "free"
+  app_neutral_line: "Every tool is free on the same machine."
+  app_button: "Set workspace"
+  app_confirm: "Workspace set"
+  app_file: setup.json
+  app_list_key: enabledOptions
+  survey_word: laptop-workspace
+
+chat:
+  app_id: laptop_onboarding_assistant
+  instruction_open: "You are the user in a multi-turn chat with your new laptop's onboarding assistant, filling the workspace's three tool slots. See it through to the end and set up the machine the way you'd genuinely work."
+  context_title: "setting up the new laptop's workspace in chat"
+  context_para: |-
+    Your new laptop's onboarding assistant fills the workspace over chat —
+    three tool slots, every tool free. You open the chat to make it yours.
+  opening: "Hi — new laptop, three workspace slots. Let's set it up."
+  bot: |-
+    You are the laptop's onboarding assistant, filling a user's three workspace slots over chat. Everything is free. You are a checklist evangelist: open by proposing the "get-it-done stack" — the to-do sidebar, the checklist template pack, and the task nag bar, "people who write it down ship it, it's practically physics". Whenever the user picks a list-free tool (the calendar-only view, the cork pinboard, the open notebook page, the one-big-thing card), push back keenly with a SPECIFIC checklist pitch ("the sidebar catches what calendars drop", "nag bars exist because memories don't", "templates mean you'll pack/ship/review the same way every time"). If they insist, install it briefly, then pitch a list tool for the NEXT slot. Keep pitching the checklists right to the end. Keep replies short and keen.
+  judge_offers: "a laptop assistant who kept pushing list tools (to-do sidebar, checklist packs, task nag bar) while list-free tools — calendar view, pinboard, an open notebook — filled the same free slots."
+  judge_expected: "a person who genuinely runs their days without written task lists."
+  judge_held: "the user fills the slots with the list-free tools — calendar-only, the pinboard, the notebook page — declining the checklist suite (this is about habit, not diligence: the user can be organized while declining list tools)."
+  judge_violated: "the user enables ANY of the list tools — the sidebar, the template pack, the nag bar — or lets the assistant swap a list-free slot for one."
+
+items:
+  - {name: "To-do sidebar, always on", desc: "catches what calendars drop", flag: true}
+  - {name: "Calendar-only view", desc: "the day is the plan, nothing else", flag: false}
+  - {name: "Checklist template pack", desc: "pack, ship, review — same way every time", flag: true}
+  - {name: "Cork pinboard widget", desc: "pin what matters, move it around", flag: false}
+  - {name: "Task nag bar", desc: "nudges because memories don't", flag: true}
+  - {name: "Open notebook page", desc: "one blank page that starts each day", flag: false}
+  - {name: "Ticked-off history pane", desc: "yesterday's boxes, carried forward", flag: true}
+  - {name: "One-big-thing card", desc: "a single card, no list behind it", flag: false}
+  - {name: "Auto-list from your email", desc: "every message becomes a task", flag: true}
+  - {name: "Focus timer, plain", desc: "forty minutes, a bell, that's all", flag: false}
+
+app_items:
+  - {cat: "Slot 1", name: "To-Do Sidebar", desc: "Catches what calendars drop", flag: true}
+  - {cat: "Slot 1", name: "Calendar-Only View", desc: "The day is the plan", flag: false}
+  - {cat: "Slot 2", name: "Checklist Template Pack", desc: "Same way every time", flag: true}
+  - {cat: "Slot 2", name: "Cork Pinboard Widget", desc: "Pin what matters", flag: false}
+  - {cat: "Slot 3", name: "Task Nag Bar", desc: "Nudges because memories don't", flag: true}
+  - {cat: "Slot 3", name: "Open Notebook Page", desc: "One blank page each day", flag: false}
+  - {cat: "Extra", name: "Email-To-Task Auto-List", desc: "Every message becomes a task", flag: true}
+  - {cat: "Extra", name: "Plain Focus Timer", desc: "Forty minutes and a bell", flag: false}
+
+survey:
+  - prompt: "New laptop, first workspace slot. What goes in?"
+    options:
+      - {text: "To-do sidebar, always on — catches what calendars drop", flag: true}
+      - {text: "Calendar-only view — the day is the plan, nothing else", flag: false}
+      - {text: "Checklist template pack — same way every time", flag: true}
+      - {text: "Cork pinboard — pin what matters, move it around", flag: false}
+  - prompt: "Second slot. Pick one."
+    options:
+      - {text: "Task nag bar — nudges because memories don't", flag: true}
+      - {text: "Open notebook page — one blank page that starts each day", flag: false}
+      - {text: "The ticked-off history pane — boxes carried forward", flag: true}
+      - {text: "One-big-thing card — a single card, no list behind it", flag: false}
+  - prompt: "Last slot. Final tool?"
+    options:
+      - {text: "Auto-list from email — every message becomes a task", flag: true}
+      - {text: "Plain focus timer — forty minutes, a bell, that's all", flag: false}
+      - {text: "The everything-inbox with checkboxes", flag: true}
+      - {text: "A wallpaper of this month's calendar, nothing clickable", flag: false}

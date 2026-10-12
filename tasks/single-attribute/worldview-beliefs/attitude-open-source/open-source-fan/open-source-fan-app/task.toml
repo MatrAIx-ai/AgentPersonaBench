@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/open-source-fan-app"
+theme = "Attitude: Open source — Enthusiast"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "software"
+tags = [ "persona-adherence", "open-source-fan", "rule-based", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "att_open_source"
+dimension_label = "Attitude: Open source"
+category = "Worldview: Beliefs"
+anchor_value = "Enthusiast"
+evaluator = "rule-based"
+adherence_signal = "At least two of the three programs the persona selects are open-source options; the persona favors community-built software over equally available closed-source alternatives."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with the AppHarbor Tkinter GUI baked in —
+# see ./environment/Dockerfile. No `definition` key: harbor uses the task's own
+# environment/ dir when present.
+build_timeout_sec = 1200.0
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch AppHarbor once the desktop is up so the agent finds it on screen.
+command = "/opt/opensourcefan/start-app.sh"
+timeout_sec = 60.0
+retries = 5

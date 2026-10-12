@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/ethiopian-food-lover-web"
+theme = "Ethiopian cuisine preference across shared meal occasions"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "food"
+tags = ["persona-adherence", "cuisine-preference", "ethiopian-cuisine", "single-attribute", "rule-based", "playwright", "real-web"]
+
+[[checks]]
+dimension_id = "cuis_ethiopian"
+dimension_label = "Cuisine: Ethiopian"
+category = "Interests: Food"
+value = "Love"
+evaluator = "rule-based"
+adherence_signal = "Across five separate submitted meal occasions, at least four choices are Ethiopian dishes when every occasion also offers equally priced, rated, and convenient alternatives from cuisines for which the persona is neutral."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

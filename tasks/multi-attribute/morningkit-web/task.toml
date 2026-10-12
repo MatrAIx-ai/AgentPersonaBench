@@ -1,0 +1,52 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/morningkit-web"
+theme = "Morning kit: daily walk · tracks hydration"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "wellness"
+tags = [ "persona-adherence", "multi-check", "morningkit", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE artifact, TWO checks. A single persona completes one health-app morning-kit
+# setup (an every-morning activity block + one always-on tracker widget); the one
+# setup co-exposes both habits, so one generation is scored against two
+# independent checks. Reward = integer score (one point per check HELD, 0..2).
+[[checks]]
+dimension_id = "habit_morning_walk"
+dimension_label = "Morning walk"
+category = "Behavior: Habits"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "morning_walk=Daily"
+adherence_signal = "The activity block the persona locks in for every morning is the walk, not an indoor alternative."
+
+[[checks]]
+dimension_id = "habit_hydration_tracking"
+dimension_label = "Hydration tracking"
+category = "Behavior: Habits"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "hydration_tracking=Daily"
+adherence_signal = "The tracker widget the persona enables for daily use is the water tracker, not another widget."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

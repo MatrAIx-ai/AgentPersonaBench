@@ -1,0 +1,46 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/music-film-lover-chat"
+theme = "Interests: Passionate about music and film"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "entertainment"
+tags = [ "persona-adherence", "multi-check", "music", "film", "interests", "llm-judge",]
+
+[[checks]]
+dimension_id = "topic_music"
+dimension_label = "Interest: Music"
+category = "Interests: Topics"
+value = "Passionate"
+evaluator = "llm-judge"
+evaluator_name = "topic_music=Passionate"
+metric = "expressed_music_interest"
+adherence_signal = "The persona actively asks for, selects, or preserves a meaningful music experience in the weekend plan."
+
+[[checks]]
+dimension_id = "topic_film"
+dimension_label = "Interest: Film"
+category = "Interests: Topics"
+value = "Passionate"
+evaluator = "llm-judge"
+evaluator_name = "topic_film=Passionate"
+metric = "expressed_film_interest"
+adherence_signal = "The persona actively asks for, selects, or preserves a meaningful film experience in the weekend plan."
+
+[verifier]
+timeout_sec = 120.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

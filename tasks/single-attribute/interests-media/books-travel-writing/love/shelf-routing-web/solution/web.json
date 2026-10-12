@@ -1,0 +1,20 @@
+{
+  "role": "a user",
+  "outputs": [
+    {
+      "path": "observed.json",
+      "kind": "js",
+      "expr": "() => { const w = document.querySelector('#workspace'); const sel = {};\n  document.querySelectorAll('#receipt [data-slot]').forEach(el => { sel[el.getAttribute('data-slot')] = el.getAttribute('data-selection-id'); });\n  return {session_id: w.getAttribute('data-session-id'), stage: w.getAttribute('data-stage'),\n          revision: parseInt(w.getAttribute('data-revision')), submitted: w.getAttribute('data-submitted') === 'true', selected: sel}; }"
+    }
+  ],
+  "server": {
+    "cmd": [
+      "python3",
+      "server.py",
+      "--port",
+      "0",
+      "--output",
+      "/app/output"
+    ]
+  }
+}

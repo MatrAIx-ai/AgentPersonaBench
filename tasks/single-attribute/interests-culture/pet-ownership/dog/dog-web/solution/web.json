@@ -1,0 +1,13 @@
+{
+  "role": "a traveler preparing their household",
+  "outputs": [
+    {
+      "path": "anchor/trip_plan.json",
+      "kind": "js",
+      "expr": "() => JSON.parse(JSON.stringify(window.__artifact))"
+    }
+  ],
+  "notes": [
+    "Optional unrelated services need not be added."
+  ]
+}

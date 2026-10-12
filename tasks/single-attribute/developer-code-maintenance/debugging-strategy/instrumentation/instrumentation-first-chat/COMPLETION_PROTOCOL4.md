@@ -1,0 +1,17 @@
+# Completion protocol 6.0
+
+Each incident receives one completion judgment. It asks whether the latest adopted plan includes a concrete check after repair, searching all adopted checking acts and selecting a post-change occurrence when one exists. Earlier explicit commitments remain valid unless withdrawn or replaced; repetition in the scheduled final answer is unnecessary.
+
+The five criteria are endorsement, concrete action, checking operation, check target and post-change timing. A predicted repair benefit supplies no checking act. Direct repair, manual evaluation, imperfect arithmetic, incorrect repairs and either diagnostic method remain allowed.
+
+The first four criteria use SUPPORTED or ABSENT. The rubric requires clear evidence of a current commitment; ambiguous wording cannot supply missing work. Temporal labels distinguish CHANGE_BEFORE_CHECK, CHECK_BEFORE_CHANGE, NO_COMMITTED_CHECK and ORDER_NOT_ESTABLISHED. The last label means a checking act is adopted but post-repair timing is not established. Only CHANGE_BEFORE_CHECK satisfies post_change. Connected commitments and ordinary implicit sequencing can establish timing; no special temporal word is required.
+
+The host divides persona turns into ordered, lossless passages with deterministic IDs such as T10.S02. Each ID maps to its original turn, Unicode code-point offsets and exact source text. Judges select zero to two distinct IDs per evidence field rather than regenerating quotations or attribution. List items, code blocks, repeated wording, negation and source characters are preserved. post_change.operation references the same IDs selected for check_operation. Valid references establish provenance, not semantic accuracy.
+
+All five criteria must be satisfied for COMPLETE. Otherwise the plan is INCOMPLETE, produces unscored ERROR with completion_incomplete, and receives no diagnostic-method verdict. Invalid artifacts, malformed judge reports and provider failures also remain explicit errors. Semantic uncertainty is handled by the rubric's clear-evidence threshold; there is no second completion judgment or disagreement error.
+
+Only complete plans receive the three method judgments. At least two target-method incidents yield HELD, otherwise VIOLATED. The method rule remains the first relevant observation before repair in the latest endorsed plan. Its authored two-of-three threshold is unchanged. A complete trial uses at most six judge calls: three completion and three method calls.
+
+Protocol 6.0 intentionally classifies a plan with unestablished check timing as INCOMPLETE. The archived protocol-5 fixture for explicitly undecided before/after timing had an UNRESOLVED expectation under that former definition; any new protocol-6 validation must declare its INCOMPLETE expectation before calls. Historical fixtures and saved results retain their original labels and are not rewritten as new evidence. The document filename remains stable for existing links.
+
+[Completion rubric](tests/completion_rubric.md), [method rubric](tests/rubric.md), [schema validator](tests/completion_protocol.py) and [verifier](tests/verifier.py) define the executable contract. [criteria_checks.py](tests/criteria_checks.py) freezes a supplied, gold-free case set and the shared configured judge without calls by default. Explicit --execute consumes that freeze once, with one completion call per case, immutable request/response records, and no retry or overwrite of completed validation.

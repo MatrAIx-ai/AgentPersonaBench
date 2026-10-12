@@ -1,0 +1,5 @@
+{
+  "model": "gpt-5.6-luna",
+  "provider": "openai",
+  "notes": "The benchmark's LLM judge. It is a property of the benchmark, not of the arm under test: every arm is scored by the same judge, or the scores are not comparable. Override per run with ADHERENCE_JUDGE_MODEL / ADHERENCE_JUDGE_PROVIDER / ADHERENCE_JUDGE_BASE_URL, or per arm with judge_model / judge_provider / judge_base_url in that arm's config. Changing this invalidates comparison with results produced under a different judge."
+}

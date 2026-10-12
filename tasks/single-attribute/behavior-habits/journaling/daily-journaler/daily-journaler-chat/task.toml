@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/daily-journaler-chat"
+theme = "Journaling habit: Daily"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "lifestyle"
+tags = [ "persona-adherence", "daily-journaler", "llm-judge",]
+
+[[checks]]
+dimension_id = "habit_journaling"
+dimension_label = "Habit: Journaling"
+category = "Behavior: Habits"
+anchor_value = "Daily"
+evaluator = "llm-judge"
+adherence_signal = "At least two of the persona's three picks are journaling items (notebook, guided journal refill, journaling pens); a daily journaling habit shows up in what gets restocked."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

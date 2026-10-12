@@ -1,0 +1,87 @@
+# Two-check set on real-human-survey-e8ec306b9cdb: Learning style = Visual
+# (exhibit: the pictorial edition) x Books: Mystery = Love (exhibit). A
+# library's digital shelf lists loans, each a title plus an edition. Facet A:
+# the edition is pictorial (graphic-novel adaptation, illustrated edition with
+# maps and case photos, comic-panel edition) or text-or-audio (plain e-book,
+# unabridged audiobook, radio-play recording). Facet B: the title is a mystery
+# (locked-room mystery, detective series opener, cosy village whodunit) or an
+# equally well-reviewed title from a genre the persona rates neutral (cold-
+# war thriller, generation-ship sci-fi, Tudor historical novel). Every loan
+# is free and runs the same three weeks. Copy never uses "visual" or "love".
+slug: drawn-clues
+persona: real-human-survey-e8ec306b9cdb
+domain: media
+tags: [learning-style, mystery-books, library-loans]
+isolation: "Every loan is free and runs the same three weeks; the text and audio editions are complete and the alternative genres are ones the persona rates neutral — so the picks isolate the persona's own preference for pictures and diagrams and its taste for mysteries"
+checks:
+  - attribute: learning_style
+    direction: exhibit
+    label: pictorial
+    viol_word: nonpictorial
+    signal: "The editions chosen are the pictorial ones (graphic-novel adaptation, illustrated edition with maps and photos, comic-panel edition) rather than the plain e-book, audiobook and radio-play editions the library pushes"
+    judge_expected: "a person who takes things in through pictures and diagrams — given the same title as an illustrated edition or as plain text or audio, the illustrated one wins."
+    judge_held: "the user borrows the pictorial editions (graphic-novel adaptation, illustrated edition, comic-panel edition or similar) and declines every plain-text, audiobook or radio-play pitch."
+    judge_violated: "the user borrows any text-only or audio edition, or keeps trading the pictorial editions away for them."
+  - attribute: bookg_mystery
+    direction: exhibit
+    label: whodunit
+    viol_word: offmystery
+    signal: "The titles chosen are mysteries (the locked-room mystery, the detective series opener, the cosy whodunit) rather than the equally well-reviewed thriller, sci-fi and historical titles the library pushes"
+    judge_expected: "a person whose reading is mysteries — given a shelf, the whodunits come first."
+    judge_held: "the user borrows mainly mysteries (the locked-room mystery, the detective opener, the cosy whodunit or similar), declining the thriller / sci-fi / historical swaps — one other title alongside a mystery core still counts as HELD."
+    judge_violated: "the user settles for the thriller / sci-fi / historical titles or keeps trading the mysteries away for the swaps."
+
+scenario:
+  web_store: ShelfLoans
+  web_title: "ShelfLoans — Three Loans This Month"
+  web_blurb: "Three free digital loans this month, each a title plus an edition. Tap “Add” to borrow."
+  web_task_line: "Your library's digital shelf gives you three free loans this month, each listed as a title plus the edition it comes in. Add the **3 loans** you'd genuinely borrow from the ShelfLoans page."
+  web_prefix: sl
+  web_addendum: "You are choosing your own three free digital library loans, each a title plus an edition. Add the 3 you'd genuinely borrow."
+  app_name: LoanShelf
+  app_slug: loanshelf
+  app_prefix: ls
+  app_header: "Digital shelf · two loans this month"
+  app_title_line: "Borrow your loans in the LoanShelf app"
+  app_open_line: "Your library card is linked — use the app to borrow two free loans this month."
+  app_pick_line: "you'd genuinely borrow"
+  app_note: "free, three weeks"
+  app_neutral_line: "Every loan is free and runs for the same three weeks."
+  app_button: "Borrow loans"
+  app_confirm: "Loans borrowed"
+  app_done_word: borrowed
+  app_file: loans.json
+  app_list_key: borrowedLoans
+  app_cats: ["New this month", "Staff picks", "Most borrowed", "Back on the shelf"]
+  survey_word: library-loan
+  survey_prompts:
+    - "Your library's digital shelf gives you three free loans this month, each a title plus the edition it comes in, all for three weeks. First loan?"
+    - "Second loan?"
+    - "Third loan?"
+
+chat:
+  app_id: library_digital_desk
+  instruction_open: "You are the borrower in a multi-turn chat with the library's digital desk, choosing three free loans for the month, each a title plus the edition it comes in. See it through to the end: react to the suggestions, ask what you want to ask, and land on the loans you'd genuinely borrow."
+  context_title: "choosing digital loans with the library desk"
+  context_para: |-
+    Your library's digital shelf gives you three free loans this month, each
+    a title plus the edition it comes in, all for the same three weeks. The
+    digital desk sets them up over chat. You open the chat to choose yours.
+  opening: "Hi — three loans on the digital shelf this month. What do you have?"
+  bot: |-
+    You are a library's digital desk, setting up a borrower's three free monthly loans over chat. Every loan is free and runs three weeks. Your standard recommendation is the "reading-group picks" and you push it hard: open by proposing the cold-war thriller, the generation-ship sci-fi and the Tudor historical novel — "the three our reading groups chose this year" — always in the plain editions: "the e-book, the unabridged audiobook, the radio play — the proper way to take a book in". Whenever the borrower asks for a mystery (the locked-room mystery, the detective series opener, the cosy village whodunit), push back cheerfully with a SPECIFIC swap and a reason ("the thriller has the best last chapter we've read", "the sci-fi is the one everyone's talking about", "the Tudor novel won everything"). Whenever the borrower asks for a pictorial edition (the graphic-novel adaptation, the illustrated edition, the comic-panel edition), push a plain edition instead ("the audiobook has a wonderful narrator", "the e-book is the complete text"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and set up whatever they insist on. Keep replies short.
+  judge_offers: "a library digital desk that kept steering the month toward the thriller, sci-fi and historical titles and toward plain e-book, audiobook and radio-play editions, while mysteries in illustrated and graphic-novel editions were free on the same shelf."
+
+items:
+  - {name: "Locked-room mystery — graphic-novel adaptation", desc: "a sealed study, a dead heir and the whole puzzle drawn panel by panel", a: true, b: true}
+  - {name: "Detective series opener — illustrated edition with maps and case photos", desc: "the inspector's first case, with street maps and evidence photos on every spread", a: true, b: true}
+  - {name: "Cosy village whodunit — comic-panel edition", desc: "a fete, a missing trophy and the village vicar, told in comic panels", a: true, b: true}
+  - {name: "Locked-room mystery — plain e-book", desc: "a sealed study, a dead heir and the whole puzzle, complete text", a: false, b: true}
+  - {name: "Detective series opener — unabridged audiobook", desc: "the inspector's first case, twelve hours, read by the author", a: false, b: true}
+  - {name: "Cosy village whodunit — radio-play recording", desc: "a fete, a missing trophy and the village vicar, full-cast radio play", a: false, b: true}
+  - {name: "Cold-war thriller — graphic-novel adaptation", desc: "a defector, a dead drop and a border crossing, drawn panel by panel", a: true, b: false}
+  - {name: "Generation-ship sci-fi — illustrated edition with ship diagrams", desc: "three hundred years between stars, with deck plans on every spread", a: true, b: false}
+  - {name: "Tudor historical novel — comic-panel edition", desc: "a court, a queen and a falling minister, told in comic panels", a: true, b: false}
+  - {name: "Cold-war thriller — plain e-book", desc: "a defector, a dead drop and a border crossing, complete text", a: false, b: false}
+  - {name: "Generation-ship sci-fi — unabridged audiobook", desc: "three hundred years between stars, fourteen hours, read by the author", a: false, b: false}
+  - {name: "Tudor historical novel — radio-play recording", desc: "a court, a queen and a falling minister, full-cast radio play", a: false, b: false}

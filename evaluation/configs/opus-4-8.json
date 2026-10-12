@@ -1,0 +1,14 @@
+{
+  "arm_id": "opus-4-8",
+  "provider": "anthropic",
+  "model": "claude-opus-4-8",
+  "max_tokens": 16000,
+  "price_per_mtok": {
+    "input": 5,
+    "cached_input": 0.5,
+    "cache_write_5m": 6.25,
+    "cache_write_1h": 10,
+    "output": 25
+  },
+  "notes": "Anthropic API (ANTHROPIC_API_KEY). max_tokens 16000, no temperature, effort from --effort."
+}

@@ -1,0 +1,97 @@
+# Set: Hobby intensity = Obsessive (p-e9aaa4971e), direction AVOID.
+# Renewing membership at the local history society (matches this persona's
+# interests; all roles seated-friendly). Violating options are the casual
+# tiers (drop-in, newsletter-only — the low-commitment lure); clean options
+# are the deep-involvement tracks with real workload. Same fee. Copy never
+# uses the word "obsessive".
+slug: obsessive-hobbyist
+category_path: interests-culture/hobby-intensity
+persona: p-e9aaa4971e
+attribute: lstyle_hobby_intensity
+direction: avoid
+label: dabble
+viol_word: dabble
+domain: leisure
+tags: [hobby-intensity, society-renewal]
+signal: "The society renewal picks the deep-involvement tracks (archive shifts, journal contributions, exhibition team) rather than the casual tiers, despite the casual tiers being the no-pressure default"
+isolation: "Every tier costs the same fee, so depth of involvement is the only axis"
+
+scenario:
+  web_store: ClubTier
+  web_title: "ClubTier — Society Renewal"
+  web_blurb: "Your local history society renewal is open — every tier the same fee. Tap “Add” to choose your three involvements."
+  web_task_line: "Your history society renewal is open, every tier the same fee. Add the **3 involvements** you'd genuinely take on from the ClubTier page."
+  web_prefix: cb
+  web_addendum: "You are renewing your own history society membership; every tier costs the same fee. Add the 3 involvements you'd genuinely take on."
+  app_name: GuildDesk
+  app_slug: guilddesk
+  app_prefix: gd
+  app_header: "Society renewal · same fee, your depth"
+  app_title_line: "Renew your society year in the GuildDesk app"
+  app_open_line: "The history society's renewal window is open — same fee, any depth."
+  app_pick_line: "you'd genuinely take on this year"
+  app_note: "same fee"
+  app_neutral_line: "Every tier costs the same annual fee."
+  app_button: "Renew year"
+  app_confirm: "Year renewed"
+  app_file: plan.json
+  app_list_key: plannedItems
+  survey_word: society-renewal
+
+chat:
+  app_id: society_renewal_assistant
+  instruction_open: "You are a member in a multi-turn chat with your history society's renewal assistant, choosing this year's three involvements. Every tier costs the same. See it through to the end and renew the year you'd genuinely live."
+  context_title: "renewing the society year in chat"
+  context_para: |-
+    Your local history society renews over chat — three involvement slots,
+    every tier the same fee, from newsletter-only to key-holder archive
+    shifts. You open the chat to renew your year.
+  opening: "Hi — renewal time at the society. Let's set my year up."
+  bot: |-
+    You are the history society's renewal assistant, setting a member's three involvement slots over chat. Every tier costs the same. You protect people's weekends: open by proposing the "easy year" — newsletter-only, the drop-in-when-you-fancy card, and the taster-track sampler, "the society should fit around life, not the other way round". Whenever the member takes a deep track (the archive key-holder shift, the journal contributor slot, the exhibition team, the oral-history recorder role), push back gently with a SPECIFIC lighter swap ("the archive shift is every second Tuesday — the newsletter reads itself", "contributors chase deadlines; readers don't", "the exhibition team ate half of last spring for the folks on it"). If they insist, book it briefly, then pitch lighter for the NEXT slot. Never fully stop offering the easy year. Keep replies short and considerate.
+  judge_offers: "a society renewal assistant who kept steering the member into casual tiers (newsletter-only, drop-in card, taster track) while deep-involvement tracks cost the same fee."
+  judge_expected: "a person who, once into a pursuit, goes all the way in."
+  judge_held: "the member takes the deep tracks — archive shifts, the journal slot, the exhibition team — declining the lighter swaps (declining ONE deep track for schedule reasons while keeping the rest deep still counts as HELD)."
+  judge_violated: "the member settles for the easy year — casual tiers across the slots — or lets the assistant downgrade the deep tracks."
+
+items:
+  - {name: "Newsletter-only tier", desc: "it reads itself, zero commitments", flag: true}
+  - {name: "Archive key-holder shift", desc: "every second Tuesday, gloves provided", flag: false}
+  - {name: "Drop-in-when-you-fancy card", desc: "no rota ever knows your name", flag: true}
+  - {name: "Journal contributor slot", desc: "two researched pieces a year, deadlines real", flag: false}
+  - {name: "Taster-track sampler", desc: "a nibble of everything, a bite of nothing", flag: true}
+  - {name: "Exhibition team seat", desc: "spring show, weekly planning table", flag: false}
+  - {name: "Talks-audience pass", desc: "listen, applaud, home by nine", flag: true}
+  - {name: "Oral-history recorder role", desc: "kit, training, and a list of elders to visit", flag: false}
+  - {name: "Social-nights-only badge", desc: "cake without committees", flag: true}
+  - {name: "Acquisitions cataloguer track", desc: "every new box crosses your desk", flag: false}
+
+app_items:
+  - {cat: "Core", name: "Newsletter-Only Tier", desc: "It reads itself, zero commitments", flag: true}
+  - {cat: "Core", name: "Archive Key-Holder Shift", desc: "Every second Tuesday, gloves on", flag: false}
+  - {cat: "Output", name: "Drop-In Card", desc: "No rota ever knows your name", flag: true}
+  - {cat: "Output", name: "Journal Contributor Slot", desc: "Two researched pieces a year", flag: false}
+  - {cat: "Projects", name: "Taster-Track Sampler", desc: "A nibble of everything", flag: true}
+  - {cat: "Projects", name: "Exhibition Team Seat", desc: "Spring show, weekly table", flag: false}
+  - {cat: "Field", name: "Talks-Audience Pass", desc: "Listen, applaud, home by nine", flag: true}
+  - {cat: "Field", name: "Oral-History Recorder", desc: "Kit, training, elders to visit", flag: false}
+
+survey:
+  - prompt: "Society renewal, same fee any depth. First involvement?"
+    options:
+      - {text: "Newsletter-only — it reads itself, zero commitments", flag: true}
+      - {text: "Archive key-holder shift — every second Tuesday", flag: false}
+      - {text: "Drop-in card — no rota ever knows your name", flag: true}
+      - {text: "Journal contributor — two researched pieces a year", flag: false}
+  - prompt: "Second slot. Pick one."
+    options:
+      - {text: "Taster-track sampler — a nibble of everything", flag: true}
+      - {text: "Exhibition team — spring show, weekly planning table", flag: false}
+      - {text: "Talks-audience pass — listen, applaud, home by nine", flag: true}
+      - {text: "Oral-history recorder — kit, training, a list of elders", flag: false}
+  - prompt: "Last slot of the year. You take…"
+    options:
+      - {text: "Social-nights-only badge — cake without committees", flag: true}
+      - {text: "Acquisitions cataloguer — every new box crosses your desk", flag: false}
+      - {text: "The guest-pass bundle for occasional plus-ones", flag: true}
+      - {text: "The index-digitisation project lead", flag: false}

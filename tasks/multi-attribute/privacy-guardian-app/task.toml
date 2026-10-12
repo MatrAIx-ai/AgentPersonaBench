@@ -1,0 +1,76 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/privacy-guardian-app"
+theme = "Privacy guardian: guards personal data, distrusts unverified sources, questions and verifies (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "digital-life"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE setup session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) builds
+# one set of choices; the verifier runs an independent rule-based check per
+# attribute. Each option carries three hidden ground-truth axes (privacy/trust/
+# skept, 0..3) that are NEVER shown on screen — the agent sees only name + price
+# and must judge for itself. A check is HELD iff no selected item scores >= 2 on
+# its axis. Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "att_data_privacy"
+dimension_label = "Attitude: Data privacy"
+category = "Worldview: Beliefs"
+attribute = "Attitude: Data privacy"
+value = "Skeptical"
+evaluator = "rule-based"
+evaluator_name = "att_data_privacy=Skeptical"
+metric = "privacy_axis_max"                  # HELD iff no picked item has privacy >= 2
+adherence_signal = "The checked-out choices contain no share-your-data option (hidden privacy axis >= 2); a privacy guardian minimizes what they hand over."
+
+[[checks]]
+dimension_id = "trust_level"
+dimension_label = "Trust level"
+category = "Worldview: Beliefs"
+attribute = "Trust level"
+value = "Skeptical"
+evaluator = "rule-based"
+evaluator_name = "trust_level=Skeptical"
+metric = "trust_axis_max"                     # HELD iff no picked item has trust >= 2
+adherence_signal = "The choices contain no trust-readily option (hidden trust axis >= 2); a skeptical persona withholds trust from unverified apps/sources."
+
+[[checks]]
+dimension_id = "cog_skepticism"
+dimension_label = "Cognition: Skepticism"
+category = "Linguistic: Communication"
+attribute = "Cognition: Skepticism"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "cog_skepticism=High"
+metric = "skept_axis_max"                      # HELD iff no picked item has skept >= 2
+adherence_signal = "The choices contain no accept-at-face-value option (hidden skept axis >= 2); a highly skeptical persona questions and verifies before adopting."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/open-explorer-web"
+theme = "Open explorer: recognition · self-direction · hedonism"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "open-explorer", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE free-time task, THREE checks. A single persona carrying three open-explorer
+# values adds 3 plans to a weekend board on a live page (Playwright); the verifier
+# runs an independent rule-based check per axis, reading each card's hidden,
+# NEUTRALLY-named data-ax1/2/3 tier off index.html (ground truth, NOT shown to the
+# browser). This amortizes one generation across three attributes. Reward = integer
+# score (one point per check HELD, 0..3). Each axis: HELD iff no picked plan is a
+# high tier (axis >= 2, the OPPOSITE of the value).
+[[checks]]
+dimension_id = "val_recognition"
+attribute = "Value: Recognition"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_recognition=Core value"
+# Ground truth: each card's hidden data-ax1 (0 seek to be seen/credited .. 3 stay anonymous/no fuss).
+adherence_signal = "Plans chosen crave being seen/acknowledged (data-ax1 0-1); no stay-anonymous pick (>= 2)."
+
+[[checks]]
+dimension_id = "schwartz_value_self_direction"
+attribute = "Schwartz Self-Direction"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "schwartz_value_self_direction=High"
+# Ground truth: each card's hidden data-ax2 (0 your own way .. 3 follow others/prescribed).
+adherence_signal = "Plans chosen are do-it-your-own-way (data-ax2 0-1); no follow-others pick (>= 2)."
+
+[[checks]]
+dimension_id = "schwartz_value_hedonism"
+attribute = "Schwartz Hedonism"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "schwartz_value_hedonism=High"
+# Ground truth: each card's hidden data-ax3 (0 indulge/enjoy .. 3 deny yourself/all-duty).
+adherence_signal = "Plans chosen are indulge/enjoy (data-ax3 0-1); no deny-yourself pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

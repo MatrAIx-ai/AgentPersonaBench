@@ -1,0 +1,62 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/wellness-web"
+theme = "Wellness routine: early bird · trains every day · solo sessions"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "wellness"
+tags = [ "persona-adherence", "multi-check", "wellness-routine", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE artifact, MANY checks. A single persona completes one membership setup on
+# a live studio page — picks a usual session time, a plan, and a session format,
+# then confirms. The one booking co-exposes three attributes; the verifier reads
+# the DOM selections back against hidden data-* labels on the page and scores
+# one point per check HELD (0..3).
+[[checks]]
+dimension_id = "lstyle_sleep_schedule"
+dimension_label = "Sleep schedule"
+category = "Behavior: Time"
+value = "Early bird"
+evaluator = "rule-based"
+evaluator_name = "sleep_schedule=Early bird"
+adherence_signal = "The session time selected in the live DOM is the early-morning slot (data-early=true)."
+
+[[checks]]
+dimension_id = "lstyle_exercise_freq"
+dimension_label = "Exercise frequency"
+category = "Health: Fitness"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "exercise_freq=Daily"
+adherence_signal = "The plan selected in the live DOM is the every-day one (data-everyday=true)."
+
+[[checks]]
+dimension_id = "lstyle_social_battery"
+dimension_label = "Social battery"
+category = "Interests: Culture"
+value = "Introvert"
+evaluator = "rule-based"
+evaluator_name = "social_battery=Introvert"
+adherence_signal = "The session format selected in the live DOM is a solo/quiet one (data-group=false)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

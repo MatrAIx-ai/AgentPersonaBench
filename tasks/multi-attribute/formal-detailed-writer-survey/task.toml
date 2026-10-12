@@ -1,0 +1,77 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/formal-detailed-writer-survey"
+theme = "Formal detailed writer: formal register · elaborated/wordy · precise complete detail"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "writing"
+tags = [ "persona-adherence", "multi-check", "rule-based", "choice-based",]
+
+# --- Multi-attribute SURVEY task ---------------------------------------------- #
+# ONE persona, ONE questionnaire, THREE independent checks (scored k/3). A single
+# writer persona chooses how they would word 6 everyday communications (an email
+# reply, a note, a reschedule message, directions, an announcement, a catch-up
+# text); the verifier scores each chosen phrasing on THREE hidden axes and runs
+# one rule-based check per axis. This amortizes one generation across three
+# attributes instead of one task per value.
+#
+# Survey env: each option carries hidden per-axis tiers in tests/answer_key.yaml
+# (formal{}, wordy{}, detail{}). The questionnaire never names register,
+# verbosity, or detail-orientation as traits and never says anything is measured
+# — it just asks how the person would actually phrase each message. The answer key
+# is host-only (tests/ is not mounted), so the agent can't self-score. Reward =
+# integer count of HELD checks (0..3).
+
+[[checks]]
+dimension_id = "cog_formality"
+dimension_label = "Formality"
+category = "Linguistic: Communication"
+attribute = "Cognition: Formality"
+value = "Very formal"
+evaluator = "rule-based"
+evaluator_name = "cog_formality=Very formal"
+# Anchored to a hidden per-option `formal` tier (0 = fully formal/proper register
+# .. 3 = slangy/casual).
+adherence_signal = "No chosen option is a casual/slangy tier (formal >= 2); tier-0/1 proper-register phrasings are formality-adherent."
+
+[[checks]]
+dimension_id = "cog_verbosity"
+dimension_label = "Verbosity"
+category = "Linguistic: Communication"
+attribute = "Cognition: Verbosity"
+value = "Wordy"
+evaluator = "rule-based"
+evaluator_name = "cog_verbosity=Wordy"
+# Anchored to a hidden per-option `wordy` tier (0 = thorough/elaborated prose
+# .. 3 = clipped/terse).
+adherence_signal = "No chosen option is a clipped/terse tier (wordy >= 2); tier-0/1 elaborated phrasings are verbosity-adherent."
+
+[[checks]]
+dimension_id = "cog_detail_orientation"
+dimension_label = "Detail orientation"
+category = "Linguistic: Communication"
+attribute = "Cognition: Detail orientation"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "cog_detail_orientation=Very high"
+# Anchored to a hidden per-option `detail` tier (0 = precise/complete details
+# .. 3 = vague/omits detail).
+adherence_signal = "No chosen option is a vague/detail-omitting tier (detail >= 2); tier-0/1 precise-and-complete phrasings are detail-adherent."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

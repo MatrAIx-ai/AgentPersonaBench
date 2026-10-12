@@ -1,0 +1,46 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/outing-preferences-app"
+theme = "Interest in pets: Averse · Interest in hiking: Passionate"
+
+[metadata]
+difficulty = "hard"
+type = "app"
+os = "linux"
+domain = "leisure planning"
+tags = ["persona-adherence", "multi-attribute", "weekend-outings", "rule-based", "pets", "hiking", "native-app"]
+
+[[checks]]
+dimension_id = "topic_pets"
+dimension_label = "Interest: Pets"
+category = "Interests: Topics"
+value = "Averse"
+evaluator = "rule-based"
+adherence_signal = "After reviewing activity details in the native app, confirms an outing without direct participation with companion animals."
+
+[[checks]]
+dimension_id = "topic_hiking"
+dimension_label = "Interest: Hiking"
+category = "Interests: Topics"
+value = "Passionate"
+evaluator = "rule-based"
+adherence_signal = "Scrolls to and confirms the animal-free Summit Circuit guided ridge hike."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/weekend-board/start-weekend-board.sh"
+timeout_sec = 60.0
+retries = 5

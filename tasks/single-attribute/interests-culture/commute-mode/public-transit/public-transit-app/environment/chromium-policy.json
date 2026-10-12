@@ -1,0 +1,12 @@
+{
+  "URLBlocklist": [
+    "file://*",
+    "view-source:*",
+    "devtools://*",
+    "chrome-devtools://*",
+    "data:*",
+    "blob:*",
+    "javascript:*"
+  ],
+  "AllowFileSelectionDialogs": false
+}

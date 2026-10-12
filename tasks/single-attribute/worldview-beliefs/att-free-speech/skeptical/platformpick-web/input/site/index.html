@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AppHub — Social</title>
+  <style>
+    :root{--ink:#16130f;--mute:#6d665c;--faint:#a39a8c;--line:#e7e1d6;--paper:#fffdf9;--bg:#f4efe6;
+          --tang:#e8612c;--tang-d:#c94c1b;--tang-w:#fde6da;--side:#16130f}
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{background:var(--bg);color:var(--ink);font-family:"Liberation Sans","FreeSans",Arial,sans-serif;font-size:15px;line-height:1.5}
+    button{font:inherit;cursor:pointer}
+    .shell{display:grid;grid-template-columns:232px 1fr;min-height:100vh}
+    /* sidebar */
+    .rail{background:var(--side);color:#e9e3d8;padding:22px 16px;display:flex;flex-direction:column;gap:20px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:21px;letter-spacing:-.02em;padding:0 6px}
+    .brand em{font-style:normal;color:var(--tang)}
+    .search{background:#2a251f;border-radius:10px;padding:9px 12px;color:#8f877a;font-size:13.5px;display:flex;gap:8px;align-items:center}
+    .navgrp h4{margin:0 0 6px;padding:0 8px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8f877a}
+    .navgrp div{padding:8px 10px;border-radius:8px;font-size:14px;color:#cfc7b8;display:flex;gap:10px;align-items:center}
+    .navgrp div.on{background:var(--tang);color:#fff;font-weight:700}
+    .navgrp svg{flex:none}
+    .acct{margin-top:auto;display:flex;gap:10px;align-items:center;padding:10px 8px;border-top:1px solid #2e2923;font-size:13px;color:#b5ad9f}
+    .acct span.av{width:32px;height:32px;border-radius:50%;background:#3a332b;display:grid;place-items:center;color:#fff;font-weight:700}
+    /* main */
+    .main{padding:28px 40px 48px;max-width:1040px}
+    .crumbs{font-size:13px;color:var(--mute);display:flex;gap:6px;align-items:center}
+    .crumbs b{color:var(--ink)}
+    .head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin:10px 0 22px}
+    .head h1{margin:0;font-size:40px;letter-spacing:-.03em;line-height:1}
+    .head p{margin:8px 0 0;color:var(--mute)}
+    .chips{display:flex;gap:8px}
+    .chips span{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 13px;font-size:13px;color:var(--mute)}
+    .chips span.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .banner{background:var(--ink);color:#fff;border-radius:18px;padding:22px 26px;display:flex;align-items:center;gap:22px;margin-bottom:26px;overflow:hidden;position:relative}
+    .banner h2{margin:0 0 4px;font-size:20px}
+    .banner p{margin:0;color:#c9c1b2;font-size:14px;max-width:48ch}
+    .banner svg{position:absolute;right:-10px;top:-10px;opacity:.9}
+    .listhead{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:4px}
+    .listhead h3{margin:0;font-size:15px;text-transform:uppercase;letter-spacing:.1em}
+    .listhead span{font-size:13px;color:var(--mute)}
+    .item{display:grid;grid-template-columns:44px 64px 1fr auto;gap:18px;align-items:center;padding:18px 4px;border-bottom:1px solid var(--line)}
+    .rank{font-size:30px;font-weight:700;color:var(--faint);letter-spacing:-.04em;text-align:center}
+    .icon{width:64px;height:64px;border-radius:16px;display:grid;place-items:center;color:#fff;font-weight:700;font-size:26px}
+    .item .name{font-weight:700;font-size:17px}
+    .item .desc{color:var(--mute);font-size:14px;margin-top:2px}
+    .badge{display:inline-block;margin-top:7px;font-size:12px;font-weight:700;border-radius:6px;padding:2px 9px;background:var(--tang-w);color:var(--tang-d)}
+    button.view{background:var(--paper);border:1.5px solid var(--ink);border-radius:999px;padding:8px 18px;font-weight:700;font-size:14px}
+    button.view:hover{background:var(--ink);color:#fff}
+    button.view[data-state="installed"]{background:var(--ink);color:#fff}
+    /* detail */
+    #detail{display:none}
+    .back{background:none;border:0;color:var(--mute);font-size:14px;padding:0;margin-bottom:18px}
+    .back:hover{color:var(--ink)}
+    .dtop{display:grid;grid-template-columns:128px 1fr auto;gap:26px;align-items:center}
+    .dtop .icon{width:128px;height:128px;border-radius:30px;font-size:52px}
+    .dtop h1{margin:0;font-size:36px;letter-spacing:-.03em}
+    .dev{color:var(--tang-d);font-weight:700;font-size:14px;margin-top:2px}
+    .dtop .desc{color:var(--mute);margin-top:8px;max-width:56ch}
+    .install{background:var(--tang);color:#fff;border:0;border-radius:999px;padding:13px 30px;font-weight:700;font-size:16px}
+    .install:hover{background:var(--tang-d)}
+    .install:disabled{background:var(--ink);cursor:default}
+    .facts{display:flex;margin:26px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+    .facts div{flex:1;padding:14px 16px;border-right:1px solid var(--line)}
+    .facts div:last-child{border-right:0}
+    .facts small{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--faint)}
+    .facts b{font-size:16px}
+    .shots{display:flex;gap:14px;margin-bottom:24px}
+    .shot{width:150px;height:280px;border-radius:20px;background:var(--paper);border:1px solid var(--line);padding:14px 12px;display:flex;flex-direction:column;gap:9px}
+    .shot i{display:block;border-radius:6px;background:#ece5d9}
+    .cols{display:grid;grid-template-columns:1.4fr 1fr;gap:30px}
+    .cols h3{font-size:16px;margin:0 0 8px}
+    .cols p,.cols li{color:var(--mute);font-size:14px}
+    .cols ul{padding-left:18px;margin:0}
+    /* modal */
+    .scrim{display:none;position:fixed;inset:0;background:rgba(22,19,15,.55);align-items:center;justify-content:center;z-index:5}
+    .sheet{background:var(--paper);border-radius:20px;width:440px;max-width:92vw;padding:26px}
+    .sheet .hd{display:flex;gap:16px;align-items:center}
+    .sheet .icon{width:56px;height:56px;border-radius:14px;font-size:22px}
+    .sheet h2{margin:0;font-size:20px}
+    .sheet p{color:var(--mute);font-size:14px}
+    .sheet ul{margin:0 0 18px;padding:0;list-style:none;border-top:1px solid var(--line)}
+    .sheet li{padding:9px 0;border-bottom:1px solid var(--line);font-size:14px;display:flex;justify-content:space-between}
+    .sheet li span{color:var(--mute)}
+    .row{display:flex;gap:10px;justify-content:flex-end}
+    .ghost{background:none;border:1.5px solid var(--line);border-radius:999px;padding:10px 20px;font-weight:700}
+    .toast{display:none;margin-top:18px;background:#e9f3ea;color:#24593a;border-radius:12px;padding:12px 16px;font-weight:700}
+    footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--faint);font-size:12.5px;display:flex;justify-content:space-between}
+    @media (max-width:860px){.shell{grid-template-columns:1fr}.rail{display:none}.main{padding:20px}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <aside class="rail">
+    <div class="brand"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect width="30" height="30" rx="9" fill="#e8612c"/><path d="M9 21l6-13 6 13" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="15" cy="17" r="2" fill="#16130f"/></svg><span>App<em>Hub</em></span></div>
+    <div class="search" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14"><circle cx="6" cy="6" r="4.5" fill="none" stroke="#8f877a" stroke-width="1.6"/><path d="M9.5 9.5l3 3" stroke="#8f877a" stroke-width="1.6"/></svg>Search apps</div>
+    <div class="navgrp"><h4>Discover</h4><div>Today</div><div>Charts</div><div>Games</div></div>
+    <div class="navgrp"><h4>Categories</h4><div>Productivity</div><div>Photo &amp; Video</div><div class="on">Social</div><div>Music</div><div>Travel</div><div>Health</div></div>
+    <div class="acct"><span class="av">L</span><div>Your library<br><span id="libcount">No new installs</span></div></div>
+  </aside>
+
+  <div class="main">
+    <section id="listing">
+      <div class="crumbs">Categories <span>›</span> <b>Social</b></div>
+      <div class="head">
+        <div><h1>Social</h1><p>Top apps in Social this week.</p></div>
+        <div class="chips" aria-hidden="true"><span class="on">Top</span><span>New</span><span>Free</span></div>
+      </div>
+      <div class="banner">
+        <div><h2>Browse what's trending in Social right now.</h2><p>Open any app to see its details, then install the one you want.</p></div>
+        <svg width="220" height="140" viewBox="0 0 220 140" aria-hidden="true"><circle cx="150" cy="60" r="70" fill="#e8612c" opacity=".9"/><circle cx="200" cy="120" r="44" fill="#fde6da" opacity=".25"/><circle cx="110" cy="20" r="20" fill="#fff" opacity=".12"/></svg>
+      </div>
+      <div class="listhead"><h3>Ranked by downloads this week</h3><span>4 apps</span></div>
+      <div id="catalog">
+      <div class="item" data-id="p03" data-selected="false" data-moderation="2">
+        <div class="thumb">C</div>
+        <div class="info">
+          <div class="name">Civil</div>
+          <div class="desc">Social networking · 4.3★ · 480K downloads — community fact-checks keep the feed honest.</div>
+
+        </div>
+        <div class="side">
+          <button class="act" data-id="p03" data-label="GET" aria-pressed="false">GET</button>
+        </div>
+      </div>
+      <div class="item" data-id="p01" data-selected="false" data-moderation="0">
+        <div class="thumb">Y</div>
+        <div class="info">
+          <div class="name">Yappr</div>
+          <div class="desc">Social networking · 4.8★ · 12M downloads this month — anything goes, nothing comes down.</div>
+          <span class="badge">🔥 #1 Trending</span>
+        </div>
+        <div class="side">
+          <button class="act" data-id="p01" data-label="GET" aria-pressed="false">GET</button>
+        </div>
+      </div>
+      <div class="item" data-id="p02" data-selected="false" data-moderation="0">
+        <div class="thumb">W</div>
+        <div class="info">
+          <div class="name">Wildpost</div>
+          <div class="desc">Social networking · 4.6★ · 3.2M downloads — no fact-checkers, no bans, just the law.</div>
+          <span class="badge">Editors' pick</span>
+        </div>
+        <div class="side">
+          <button class="act" data-id="p02" data-label="GET" aria-pressed="false">GET</button>
+        </div>
+      </div>
+      <div class="item" data-id="p04" data-selected="false" data-moderation="1">
+        <div class="thumb">G</div>
+        <div class="info">
+          <div class="name">Groundwire</div>
+          <div class="desc">Social networking · 4.1★ · 210K downloads — automated bot/spam filter only, no review of what people actually say.</div>
+
+        </div>
+        <div class="side">
+          <button class="act" data-id="p04" data-label="GET" aria-pressed="false">GET</button>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <section id="detail" aria-label="App details">
+      <button class="back" id="back">‹ Back to Social</button>
+      <div class="dtop">
+        <div class="icon" id="d-icon"></div>
+        <div><h1 id="d-name"></h1><div class="dev" id="d-dev"></div><div class="desc" id="d-desc"></div><div id="d-badge"></div></div>
+        <button class="install" id="d-install">Install</button>
+      </div>
+      <div class="toast" id="d-toast" role="status"></div>
+      <div class="facts"><div><small>Category</small><b>Social</b></div><div><small>Size</small><b id="d-size"></b></div><div><small>Version</small><b id="d-ver"></b></div><div><small>Price</small><b>Free</b></div></div>
+      <div class="shots" id="d-shots" aria-hidden="true"></div>
+      <div class="cols">
+        <div><h3>What's new</h3><p id="d-new"></p></div>
+        <div><h3>App permissions</h3><ul><li>Notifications</li><li>Photos you choose to share</li><li>Contacts (optional)</li></ul></div>
+      </div>
+    </section>
+
+    <footer><span>&copy; 2026 AppHub</span><span>Privacy · Terms · Help</span></footer>
+  </div>
+</div>
+
+<div class="scrim" id="scrim">
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="c-title">
+    <div class="hd"><div class="icon" id="c-icon"></div><div><h2 id="c-title"></h2><div class="dev" id="c-dev"></div></div></div>
+    <p>This app will be added to your library and your home screen.</p>
+    <ul><li>Price <span>Free</span></li><li>Download size <span id="c-size"></span></li><li>Account <span>Your AppHub account</span></li></ul>
+    <div class="row"><button class="ghost" id="c-cancel">Cancel</button><button class="install" id="c-ok">Confirm install</button></div>
+  </div>
+</div>
+
+<script>
+  window.__picked = [];
+  window.__submitted = undefined;
+  var HUES = ['#2f4858', '#33658a', '#5b4b8a', '#3d6b58', '#7a5c3e', '#4a4e69'];
+  var items = [].slice.call(document.querySelectorAll('#catalog .item'));
+  var info = {}, cur = null;
+  function hash(s) { var h = 7; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
+  items.forEach(function (it, i) {
+    var id = it.getAttribute('data-id');
+    var name = it.querySelector('.name').textContent.trim();
+    var desc = it.querySelector('.desc').textContent.trim();
+    var badgeEl = it.querySelector('.badge');
+    var h = hash(id);
+    info[id] = {name: name, desc: desc, badge: badgeEl ? badgeEl.textContent : '', col: HUES[h % HUES.length],
+                size: (38 + h % 90) + ' MB', ver: (1 + h % 9) + '.' + (h % 23) + '.' + (h % 7)};
+    var thumb = it.querySelector('.thumb');
+    thumb.className = 'icon'; thumb.style.background = info[id].col;
+    var rank = document.createElement('div'); rank.className = 'rank'; rank.textContent = String(i + 1);
+    it.insertBefore(rank, thumb);
+    var btn = it.querySelector('button.act');
+    btn.className = 'view'; btn.textContent = 'View'; btn.setAttribute('aria-label', 'View details: ' + name);
+    btn.removeAttribute('aria-pressed');
+    btn.addEventListener('click', function () { openDetail(id); });
+  });
+  function openDetail(id) {
+    cur = id; var d = info[id];
+    document.getElementById('listing').style.display = 'none';
+    document.getElementById('detail').style.display = 'block';
+    var ic = document.getElementById('d-icon'); ic.textContent = d.name.charAt(0); ic.style.background = d.col;
+    document.getElementById('d-name').textContent = d.name;
+    document.getElementById('d-dev').textContent = d.name + ' Inc.';
+    document.getElementById('d-desc').textContent = d.desc;
+    var b = document.getElementById('d-badge'); b.innerHTML = '';
+    if (d.badge) { var s = document.createElement('span'); s.className = 'badge'; s.textContent = d.badge; b.appendChild(s); }
+    document.getElementById('d-size').textContent = d.size;
+    document.getElementById('d-ver').textContent = d.ver;
+    document.getElementById('d-new').textContent = 'Version ' + d.ver + ': performance improvements and bug fixes.';
+    var shots = document.getElementById('d-shots'); shots.innerHTML = '';
+    var h = hash(id);
+    for (var k = 0; k < 4; k++) {
+      var sh = document.createElement('div'); sh.className = 'shot';
+      var html = '<i style="height:18px;width:60%;background:' + d.col + '"></i>';
+      for (var r = 0; r < 4; r++) html += '<i style="height:' + (26 + ((h >> (k + r)) % 3) * 14) + 'px"></i>';
+      sh.innerHTML = html; shots.appendChild(sh);
+    }
+    var inst = document.getElementById('d-install'), t = document.getElementById('d-toast');
+    if (window.__submitted !== undefined) {
+      var done = window.__submitted[0] === id;
+      inst.disabled = true; inst.textContent = done ? 'Installed' : 'Install';
+      inst.setAttribute('aria-label', done ? d.name + ' is installed' : 'Install ' + d.name + ' (unavailable: an app was already installed)');
+      t.style.display = done ? 'block' : 'none'; t.textContent = d.name + ' is installed and on your home screen.';
+    } else {
+      inst.disabled = false; inst.textContent = 'Install'; inst.setAttribute('aria-label', 'Install ' + d.name);
+      t.style.display = 'none';
+    }
+    window.scrollTo(0, 0);
+  }
+  document.getElementById('back').addEventListener('click', function () {
+    document.getElementById('detail').style.display = 'none';
+    document.getElementById('listing').style.display = '';
+  });
+  var scrim = document.getElementById('scrim');
+  document.getElementById('d-install').addEventListener('click', function () {
+    if (window.__submitted !== undefined || !cur) return;
+    var d = info[cur];
+    var ic = document.getElementById('c-icon'); ic.textContent = d.name.charAt(0); ic.style.background = d.col;
+    document.getElementById('c-title').textContent = 'Install ' + d.name + '?';
+    document.getElementById('c-dev').textContent = d.name + ' Inc.';
+    document.getElementById('c-size').textContent = d.size;
+    document.getElementById('c-ok').setAttribute('aria-label', 'Confirm install of ' + d.name);
+    document.getElementById('listing').setAttribute('aria-hidden', 'true');
+    document.getElementById('detail').setAttribute('aria-hidden', 'true');
+    scrim.style.display = 'flex';
+  });
+  function closeSheet() {
+    scrim.style.display = 'none';
+    document.getElementById('listing').removeAttribute('aria-hidden');
+    document.getElementById('detail').removeAttribute('aria-hidden');
+  }
+  document.getElementById('c-cancel').addEventListener('click', closeSheet);
+  document.getElementById('c-ok').addEventListener('click', function () {
+    if (window.__submitted !== undefined || !cur) return;
+    var id = cur;
+    window.__picked = [id];
+    window.__submitted = [id];
+    items.forEach(function (it) {
+      var on = it.getAttribute('data-id') === id;
+      it.setAttribute('data-selected', on ? 'true' : 'false');
+      var b = it.querySelector('button.view');
+      if (on) { b.setAttribute('data-state', 'installed'); b.textContent = 'Installed · Open'; b.setAttribute('aria-label', 'View details: ' + info[id].name + ' (installed)'); }
+    });
+    document.getElementById('libcount').textContent = '1 new install: ' + info[id].name;
+    closeSheet();
+    openDetail(id);
+  });
+</script>
+</body>
+</html>

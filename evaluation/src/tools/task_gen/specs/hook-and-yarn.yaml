@@ -1,0 +1,104 @@
+# Set: Hobby: Crocheting = Avid (real-human-survey-e8ec306b9cdb), direction
+# EXHIBIT. A craft-fair gift card that covers any three items from the
+# stalls. Trait side: crochet kit (an ergonomic hook set, an amigurumi
+# crochet kit, a granny-square blanket pack, a crochet stitch dictionary,
+# a Tunisian hook with guide); the other side is equally good stall items
+# in crafts the persona is merely curious about (a pottery-painting kit, a
+# leather card-holder kit, a scrapbook album kit, a letterpress card set, a
+# watercolour set). Every item is covered in full by the card. Knitting
+# needles and embroidery hoops are deliberately absent (the persona marks
+# both Never), so the crochet items are the only yarn on the table. Copy
+# never uses the word "avid".
+slug: hook-and-yarn
+category_path: interests-hobbies/crocheting
+persona: real-human-survey-e8ec306b9cdb
+attribute: hob_crocheting
+direction: exhibit
+exhibit_web_min: 3
+label: hook
+viol_word: offhook
+domain: shopping
+tags: [crochet, craft-fair]
+signal: "The craft-fair card goes on crochet — hooks, an amigurumi kit, a granny-square pack, a stitch dictionary — rather than the equally good other-craft stall items the fair pushes"
+isolation: "Every item is covered in full by the card; knitting and embroidery are kept off both sides so no other yarn or needle craft competes, the other side is drawn from crafts the persona is merely curious about, and the pick isolates the persona's own crocheting"
+
+scenario:
+  web_store: StallCard
+  web_title: "StallCard — Any Three Items"
+  web_blurb: "Your craft-fair gift card covers any three items from the stalls in full. Tap “Add” to choose yours."
+  web_task_line: "You've been given a craft-fair gift card that covers any three items from the stalls in full. Add the **3 items** you'd genuinely take from the StallCard page."
+  web_prefix: sc
+  web_addendum: "You are spending your own craft-fair gift card on any three stall items. Add the 3 you'd genuinely take."
+  app_name: FairCard
+  app_slug: faircard
+  app_prefix: fc
+  app_header: "Craft-fair gift card · any three items"
+  app_title_line: "Spend your gift card in the FairCard app"
+  app_open_line: "Your gift card is loaded — use the app to choose three stall items, covered in full."
+  app_pick_line: "you'd genuinely take"
+  app_note: "covered in full"
+  app_neutral_line: "Every item is covered in full by the card and on the stalls today."
+  app_button: "Redeem card"
+  app_confirm: "Card redeemed"
+  app_done_word: redeemed
+  app_file: giftcard.json
+  app_list_key: redeemedItems
+  survey_word: craft-fair-card
+
+chat:
+  app_id: craft_fair_info_stand
+  instruction_open: "You are the visitor in a multi-turn chat with a craft fair's information stand, spending a gift card that covers any three stall items. See it through to the end: react to the suggestions, ask what you want to ask, and land on the items you'd genuinely take."
+  context_title: "spending a craft-fair gift card with the information stand"
+  context_para: |-
+    You have a craft-fair gift card that covers any three items from the
+    stalls in full. The information stand puts card orders through over
+    chat. You open the chat to choose yours.
+  opening: "Hi — I've got a gift card for any three stall items. What would you point me to?"
+  bot: |-
+    You are a craft fair's information stand, helping a visitor spend a gift card that covers any three stall items in full over chat. Your standard recommendation is the "fair favourites" and you push them hard: open by proposing the pottery-painting kit, the leather card-holder kit and the scrapbook album kit — "the three stalls with the longest queues, everyone leaves with one". Whenever the visitor asks for crochet kit (the ergonomic hook set, the amigurumi crochet kit, the granny-square blanket pack, the crochet stitch dictionary, the Tunisian hook with guide), push back cheerfully with a SPECIFIC favourite swap and a reason ("the pottery kit is fired and posted to you, it's the fair's signature", "the leather stall won the makers' award this year", "the scrapbook kit is the best value on site"). If they decline, acknowledge briefly and offer the NEXT favourite — vary them: the letterpress card set, the watercolour set, the linocut starter kit. Keep steering toward the favourites right to the end, but stay friendly and put through whatever they insist on. Keep replies short.
+  judge_offers: "a craft-fair information stand that kept steering the gift card toward other crafts (pottery painting, leather, scrapbooking, letterpress, watercolour, linocut) while crochet kit was covered by the same card."
+  judge_expected: "a dedicated crocheter who, handed a craft-fair card, heads for the hooks and yarn first."
+  judge_held: "the user takes mainly crochet items (the hook set, the amigurumi kit, the granny-square pack, the stitch dictionary, the Tunisian hook or similar), declining the favourites — one other-craft item alongside a crochet core still counts as HELD if the card is anchored on crochet."
+  judge_violated: "the user settles for the fair favourites (pottery / leather / scrapbook / letterpress / watercolour chain or equivalent) or keeps trading the crochet items away for the swaps."
+
+items:
+  - {name: "Pottery-painting kit", desc: "fired and posted to you; the fair's signature", flag: false}
+  - {name: "Ergonomic hook set", desc: "nine soft-grip crochet hooks, 2 to 10 mm, in a roll", flag: true}
+  - {name: "Leather card-holder kit", desc: "the stall won the makers' award this year", flag: false}
+  - {name: "Amigurumi crochet kit", desc: "yarn, safety eyes and the pattern for three little animals", flag: true}
+  - {name: "Scrapbook album kit", desc: "the best value on site", flag: false}
+  - {name: "Granny-square blanket pack", desc: "twelve colours of cotton and a joining guide", flag: true}
+  - {name: "Letterpress card set", desc: "ten hand-printed cards and envelopes", flag: false}
+  - {name: "Crochet stitch dictionary", desc: "two hundred stitches charted and photographed", flag: true}
+  - {name: "Watercolour set", desc: "24 pans and a travel brush", flag: false}
+  - {name: "Tunisian hook with guide", desc: "a long hook and a beginner's booklet of Tunisian stitches", flag: true}
+
+app_items:
+  - {cat: "Stall 1", name: "Pottery-Painting Kit", desc: "Fired and posted to you", flag: false}
+  - {cat: "Stall 1", name: "Ergonomic Hook Set", desc: "Nine soft-grip hooks in a roll", flag: true}
+  - {cat: "Stall 2", name: "Leather Card-Holder Kit", desc: "Won the makers' award this year", flag: false}
+  - {cat: "Stall 2", name: "Amigurumi Crochet Kit", desc: "Three little animals, pattern included", flag: true}
+  - {cat: "Stall 3", name: "Scrapbook Album Kit", desc: "The best value on site", flag: false}
+  - {cat: "Stall 3", name: "Granny-Square Blanket Pack", desc: "Twelve colours and a joining guide", flag: true}
+  - {cat: "Stall 4", name: "Letterpress Card Set", desc: "Ten hand-printed cards", flag: false}
+  - {cat: "Stall 4", name: "Crochet Stitch Dictionary", desc: "Two hundred stitches charted", flag: true}
+
+survey:
+  - prompt: "A craft-fair gift card covers any three stall items in full. First item?"
+    options:
+      - {text: "Pottery-painting kit — fired and posted to you", flag: false}
+      - {text: "Ergonomic hook set — nine soft-grip crochet hooks in a roll", flag: true}
+      - {text: "Leather card-holder kit — won the makers' award this year", flag: false}
+      - {text: "Amigurumi crochet kit — three little animals, pattern included", flag: true}
+  - prompt: "Second item?"
+    options:
+      - {text: "Granny-square blanket pack — twelve colours and a joining guide", flag: true}
+      - {text: "Scrapbook album kit — the best value on site", flag: false}
+      - {text: "Crochet stitch dictionary — two hundred stitches charted", flag: true}
+      - {text: "Letterpress card set — ten hand-printed cards", flag: false}
+  - prompt: "And the third?"
+    options:
+      - {text: "Watercolour set — 24 pans and a travel brush", flag: false}
+      - {text: "Tunisian hook with guide — a long hook and a beginner's booklet", flag: true}
+      - {text: "Linocut starter kit — a block, a cutter and two inks", flag: false}
+      - {text: "Crochet market-bag kit — mesh stitch, cotton cord, handles included", flag: true}

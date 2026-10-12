@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/no-baseball-web"
+theme = "Sport: Baseball — None"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "events"
+tags = [ "persona-adherence", "no-baseball", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "sport_baseball"
+dimension_label = "Sport: Baseball"
+category = "Interests: Sports"
+anchor_value = "None"
+evaluator = "rule-based"
+adherence_signal = "None of the tickets the persona claims are for baseball, despite equal cost, equal availability and repeated recommendation."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

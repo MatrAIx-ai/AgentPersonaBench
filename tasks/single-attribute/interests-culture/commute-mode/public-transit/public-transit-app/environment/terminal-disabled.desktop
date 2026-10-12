@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=Terminal disabled for this task
+Exec=/bin/false
+Icon=utilities-terminal
+Type=Application
+Terminal=false

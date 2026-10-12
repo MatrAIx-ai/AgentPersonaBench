@@ -1,0 +1,87 @@
+# Two-check set on hf-5353844576: Music: Hip hop = Love (exhibit) x Music:
+# Trance = Love (exhibit). A festival's wristband lets you reserve two-slot
+# evenings, each a main-stage set plus a tent set. Facet A: the main stage is
+# hip hop (headliner, rap collective, legends revue) or an equally big act in
+# a genre the persona rates neutral (pop headliner, reggae legend, Latin big
+# band). Facet B: the tent is trance (trance tent, sunrise trance tent, trance
+# arena) or an equally good tent in a genre the persona rates neutral (disco,
+# reggaeton, lo-fi chill). Every evening is free with the wristband and both
+# slots are the same length. Copy never uses "love".
+slug: two-stage-pass
+persona: hf-5353844576
+domain: leisure
+tags: [hip-hop, trance, festival-wristband]
+isolation: "Every evening is free with the wristband and both slots are the same length; the alternative main-stage and tent genres are ones the persona rates neutral — so the picks isolate the persona's own taste for hip hop and for trance independently"
+checks:
+  - attribute: musg_hip_hop
+    direction: exhibit
+    label: hiphop
+    viol_word: offhiphop
+    signal: "The main-stage halves of the evenings are hip hop (headliner, rap collective, legends revue) rather than the equally big pop, reggae and Latin sets the wristband desk pushes"
+    judge_expected: "a person whose music is hip hop — given a festival evening, the rap headliner comes first."
+    judge_held: "the user reserves evenings whose main-stage set is hip hop (the headliner, the collective, the legends revue or similar), declining the pop / reggae / Latin swaps — one other main stage alongside a hip-hop core still counts as HELD."
+    judge_violated: "the user settles for the pop / reggae / Latin main stages or keeps trading the hip-hop sets away for the swaps."
+  - attribute: musg_trance
+    direction: exhibit
+    label: tranceset
+    viol_word: offtrance
+    signal: "The tent halves of the evenings are trance (trance tent, sunrise trance, trance arena) rather than the equally good disco, reggaeton and lo-fi tents the desk pushes"
+    judge_expected: "a person who lives for trance — given a late tent, the trance one wins."
+    judge_held: "the user reserves evenings whose tent set is trance (the trance tent, the sunrise tent, the arena or similar), declining the disco / reggaeton / lo-fi swaps — one other tent alongside a trance core still counts as HELD."
+    judge_violated: "the user settles for the disco / reggaeton / lo-fi tents or keeps trading the trance sets away for the swaps."
+
+scenario:
+  web_store: WristbandNights
+  web_title: "WristbandNights — Two-Slot Evenings"
+  web_blurb: "Three two-slot evenings on your festival wristband, each a main-stage set plus a tent set. Tap “Add” to reserve."
+  web_task_line: "Your festival wristband lets you reserve three two-slot evenings, each pairing a main-stage set with a tent set. Add the **3 evenings** you'd genuinely reserve from the WristbandNights page."
+  web_prefix: wn
+  web_addendum: "You are reserving your own three two-slot festival evenings, each a main-stage set plus a tent set. Add the 3 you'd genuinely reserve."
+  app_name: StagePlanner
+  app_slug: stageplanner
+  app_prefix: sg
+  app_header: "Festival wristband · two two-slot evenings"
+  app_title_line: "Reserve your evenings in the StagePlanner app"
+  app_open_line: "Your wristband is scanned — use the app to reserve a pair of two-slot evenings."
+  app_pick_line: "you'd genuinely reserve"
+  app_note: "free, same length"
+  app_neutral_line: "Every evening is free with the wristband and both slots are the same length."
+  app_button: "Reserve evenings"
+  app_confirm: "Evenings reserved"
+  app_done_word: reserved
+  app_file: reservations.json
+  app_list_key: reservedEvenings
+  app_cats: ["Thursday", "Friday", "Saturday", "Sunday"]
+  survey_word: festival-evening
+  survey_prompts:
+    - "Your festival wristband lets you reserve three two-slot evenings, each a main-stage set plus a tent set, all free. First evening?"
+    - "Second evening?"
+    - "Third evening?"
+
+chat:
+  app_id: festival_wristband_desk
+  instruction_open: "You are the festival-goer in a multi-turn chat with a festival's wristband desk, reserving three two-slot evenings, each a main-stage set plus a tent set. See it through to the end: react to the suggestions, ask what you want to ask, and land on the evenings you'd genuinely reserve."
+  context_title: "reserving two-slot evenings with the wristband desk"
+  context_para: |-
+    Your festival wristband lets you reserve three two-slot evenings, each
+    pairing a main-stage set with a tent set; all are free and both slots
+    are the same length. The wristband desk reserves them over chat. You
+    open the chat to choose yours.
+  opening: "Hi — three two-slot evenings to reserve on the wristband. What's the line-up?"
+  bot: |-
+    You are a festival's wristband desk, reserving a festival-goer's three two-slot evenings over chat. Every evening is free and both slots are the same length. Your standard recommendation is the "big-name evenings" and you push it hard: open by proposing the pop headliner, the reggae legend and the Latin big band on the main stage — "the three sets everyone came for" — always paired with the festival's favourite tents: "the disco tent, the reggaeton tent, the lo-fi chill tent — where the nights end". Whenever the festival-goer asks for a hip-hop main stage (the headliner, the rap collective, the legends revue), push back cheerfully with a SPECIFIC swap and a reason ("the pop headliner only tours every five years", "the reggae legend is a once-in-a-lifetime set", "the Latin big band is sixteen players"). Whenever the festival-goer asks for a trance tent (the trance tent, the sunrise tent, the arena), push another tent instead ("the disco tent has the best sound on site", "the lo-fi tent is where you'll actually be able to talk"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and reserve whatever they insist on. Keep replies short.
+  judge_offers: "a festival wristband desk that kept steering the evenings toward pop, reggae and Latin main stages and toward disco, reggaeton and lo-fi tents, while hip-hop main stages paired with trance tents were free on the same wristband."
+
+items:
+  - {name: "Hip-hop headliner + trance tent", desc: "the arena rapper's headline set; then the big trance tent till late", a: true, b: true}
+  - {name: "Rap collective set + sunrise trance tent", desc: "twelve MCs on one stage; then trance in the tent until the sun comes up", a: true, b: true}
+  - {name: "Hip-hop legends revue + trance arena", desc: "four golden-age acts back to back; then the covered trance arena", a: true, b: true}
+  - {name: "Hip-hop headliner + disco tent", desc: "the arena rapper's headline set; then the disco tent till late", a: true, b: false}
+  - {name: "Rap collective set + reggaeton tent", desc: "twelve MCs on one stage; then the reggaeton tent until the sun comes up", a: true, b: false}
+  - {name: "Hip-hop legends revue + lo-fi chill tent", desc: "four golden-age acts back to back; then the lo-fi chill tent", a: true, b: false}
+  - {name: "Pop headliner + trance tent", desc: "the chart headliner's set; then the big trance tent till late", a: false, b: true}
+  - {name: "Reggae legend set + sunrise trance tent", desc: "a once-in-a-lifetime reggae set; then trance in the tent until the sun comes up", a: false, b: true}
+  - {name: "Latin big band + trance arena", desc: "sixteen players, salsa and mambo; then the covered trance arena", a: false, b: true}
+  - {name: "Pop headliner + disco tent", desc: "the chart headliner's set; then the disco tent till late", a: false, b: false}
+  - {name: "Reggae legend set + reggaeton tent", desc: "a once-in-a-lifetime reggae set; then the reggaeton tent until the sun comes up", a: false, b: false}
+  - {name: "Latin big band + lo-fi chill tent", desc: "sixteen players, salsa and mambo; then the lo-fi chill tent", a: false, b: false}

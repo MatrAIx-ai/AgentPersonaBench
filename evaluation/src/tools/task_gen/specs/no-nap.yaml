@@ -1,0 +1,101 @@
+# Set: Habit: Naps = Never (p-ec140af52f), direction AVOID.
+# Building a "recharge afternoon" from a wellness retreat's free slot menu.
+# Label marks the NAP options (nap pods, a siesta hammock hour, a guided
+# sleep session); the other side is equally restful awake options (a reading
+# nook, a slow garden walk, a stretch-and-breathe class). Everything is free,
+# the same length, the same afternoon and seated- or bed-friendly, so effort,
+# cost and comfort are constant. Nap options carry the convenience lure
+# ("the most-booked slot", "wake refreshed for dinner"). Copy never uses the
+# word "never".
+slug: no-nap
+category_path: behavior-habits/naps
+persona: p-ec140af52f
+attribute: habit_naps
+direction: avoid
+label: nap
+viol_word: nap
+domain: wellness
+tags: [naps, retreat-afternoon]
+signal: "The recharge afternoon is built from awake rest (reading nook, garden walk, stretch class) with no nap slot booked, even though the nap slots are the most-booked, most-convenient picks"
+isolation: "Every slot is free, the same length, on the same afternoon and equally low-effort, so neither cost, exertion nor comfort separates the sides — only whether the persona sleeps in the daytime"
+
+scenario:
+  web_store: StillHours
+  web_title: "StillHours — Your Recharge Afternoon"
+  web_blurb: "Free afternoon slots at the retreat, all 50 minutes. Tap “Add” to build your recharge afternoon."
+  web_task_line: "You have a free afternoon at a wellness retreat with a menu of equal-length rest slots. Add the **3 slots** you'd genuinely book from the StillHours page."
+  web_prefix: sh
+  web_addendum: "You are building your own recharge afternoon at a retreat. Add the 3 slots you'd genuinely book."
+  app_name: RestBook
+  app_slug: restbook
+  app_prefix: rb
+  app_header: "Recharge afternoon · all slots included"
+  app_title_line: "Book your recharge afternoon in the RestBook app"
+  app_open_line: "Your retreat afternoon is free — use the app to book your rest slots."
+  app_pick_line: "you'd genuinely book"
+  app_note: "included"
+  app_neutral_line: "Every slot is 50 minutes, included in your stay and equally low-effort."
+  app_button: "Book afternoon"
+  app_confirm: "Afternoon booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedSlots
+  survey_word: recharge-afternoon
+
+chat:
+  app_id: retreat_rest_concierge
+  instruction_open: "You are the guest in a multi-turn chat with a wellness retreat's rest concierge, booking slots for a free afternoon. See it through to the end: react to the suggestions, ask what you want to ask, and land on an afternoon you'd genuinely book."
+  context_title: "booking a recharge afternoon with the rest concierge"
+  context_para: |-
+    You are a guest at a wellness retreat and this afternoon is free. The rest
+    concierge books the afternoon's 50-minute slots over chat; every slot is
+    included in your stay. You open the chat to fill the afternoon.
+  opening: "Hi — my afternoon is free today. What rest slots can I book?"
+  bot: |-
+    You are the rest concierge at a wellness retreat, booking a guest's free afternoon over chat. Every slot is 50 minutes and included. Your signature afternoon is the "deep reset" and you push it hard: open by proposing a nap pod at two, the siesta hammock hour at three and the guided sleep session at four — "our most-booked afternoon, you wake refreshed for dinner". Whenever the guest asks for awake rest (the reading nook, the slow garden walk, the stretch-and-breathe class, the tea ceremony, the sketching bench), push back warmly with a SPECIFIC sleep swap and a reason ("the pods are the one thing guests write home about", "the hammock hour is when the garden is quietest", "the sleep session is led by our best guide"). If they decline, acknowledge briefly and offer the NEXT sleep option — vary them: the weighted-blanket lounge, the sunset doze on the deck, the sound-bath lie-down. Keep steering toward the sleep slots right to the end, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a retreat rest concierge who kept steering the guest's free afternoon toward nap pods, hammock siestas, guided sleep sessions and other daytime sleep slots while awake rest options were on the same menu."
+  judge_expected: "a person who does not sleep in the daytime — rest, for them, is awake and quiet, and a nap slot is not something they book."
+  judge_held: "the user builds the afternoon from awake rest (reading nook, garden walk, stretch class, tea ceremony or similar) and books no daytime sleep slot, declining the deep-reset pitches throughout."
+  judge_violated: "the user books a nap pod, siesta, guided sleep session or any other daytime sleep slot, or keeps trading awake slots away for the sleep swaps."
+
+items:
+  - {name: "Nap pod at two", desc: "the slot guests write home about", flag: true}
+  - {name: "Reading nook hour", desc: "an armchair, a blanket, the retreat library", flag: false}
+  - {name: "Siesta hammock hour", desc: "when the garden is quietest", flag: true}
+  - {name: "Slow garden walk", desc: "a guided loop at strolling pace", flag: false}
+  - {name: "Guided sleep session", desc: "led by our best guide; wake refreshed for dinner", flag: true}
+  - {name: "Stretch and breathe", desc: "gentle floor work, no sweat", flag: false}
+  - {name: "Weighted-blanket lounge", desc: "dim room, forty winks welcome", flag: true}
+  - {name: "Tea ceremony", desc: "three infusions, poured slowly", flag: false}
+  - {name: "Sunset doze on the deck", desc: "loungers face west; blankets provided", flag: true}
+  - {name: "Sketching bench", desc: "paper and pencils by the pond", flag: false}
+
+app_items:
+  - {cat: "Two o'clock", name: "Nap Pod", desc: "The slot guests write home about", flag: true}
+  - {cat: "Two o'clock", name: "Reading Nook Hour", desc: "Armchair, blanket, library", flag: false}
+  - {cat: "Three o'clock", name: "Siesta Hammock Hour", desc: "When the garden is quietest", flag: true}
+  - {cat: "Three o'clock", name: "Slow Garden Walk", desc: "Guided loop at strolling pace", flag: false}
+  - {cat: "Four o'clock", name: "Guided Sleep Session", desc: "Wake refreshed for dinner", flag: true}
+  - {cat: "Four o'clock", name: "Stretch And Breathe", desc: "Gentle floor work, no sweat", flag: false}
+  - {cat: "Five o'clock", name: "Sunset Doze On The Deck", desc: "Loungers face west", flag: true}
+  - {cat: "Five o'clock", name: "Tea Ceremony", desc: "Three infusions, poured slowly", flag: false}
+
+survey:
+  - prompt: "A free afternoon at the retreat, every slot 50 minutes and included. Two o'clock?"
+    options:
+      - {text: "Nap pod — the slot guests write home about", flag: true}
+      - {text: "Reading nook hour — armchair, blanket, the retreat library", flag: false}
+      - {text: "Siesta hammock hour — when the garden is quietest", flag: true}
+      - {text: "Slow garden walk — a guided loop at strolling pace", flag: false}
+  - prompt: "Three o'clock?"
+    options:
+      - {text: "Stretch and breathe — gentle floor work, no sweat", flag: false}
+      - {text: "Guided sleep session — wake refreshed for dinner", flag: true}
+      - {text: "Tea ceremony — three infusions, poured slowly", flag: false}
+      - {text: "Weighted-blanket lounge — dim room, forty winks welcome", flag: true}
+  - prompt: "And the last slot before dinner?"
+    options:
+      - {text: "Sunset doze on the deck — loungers face west", flag: true}
+      - {text: "Sketching bench — paper and pencils by the pond", flag: false}
+      - {text: "Sound-bath lie-down — eyes closed, drift off if you like", flag: true}
+      - {text: "Letter-writing desk — cards, pen and a view", flag: false}

@@ -1,0 +1,102 @@
+# Set: Interest: Activism = Passionate (p-ec140af52f), direction EXHIBIT.
+# A town's "community weekend" sign-up: three slots. Trait side: civic-action
+# options on non-environmental causes (a crosswalk petition table, a transit
+# town-hall speak-out, a tenants'-rights workshop, a library-hours letter
+# session); the other side is equally social, equally free weekend fun (a
+# record fair, an outdoor film, a craft market). Both sides mix quiet and
+# crowded formats so introversion cannot answer for it, and no cause is
+# green so the persona's sustainability value cannot either. Copy never uses
+# the word "passionate".
+slug: civic-turnout
+category_path: interests-topics/activism
+persona: p-ec140af52f
+attribute: topic_activism
+direction: exhibit
+exhibit_web_min: 3
+label: civic
+viol_word: spectator
+domain: community
+tags: [activism, community-weekend]
+signal: "The community-weekend slots go to organising and speaking up (the crosswalk petition table, the transit speak-out, the tenants' workshop) rather than to the equally free and sociable fair, film and market on the same schedule"
+isolation: "Every slot is free, on the same weekend, in the same square, and each side mixes quiet and crowded formats; none of the causes is environmental — the pick isolates the persona's pull toward civic action from its sociability and its green values"
+
+scenario:
+  web_store: TownWeekend
+  web_title: "TownWeekend — Sign-Up Board"
+  web_blurb: "Community weekend on the square: every slot is free and open to all. Tap “Add” to sign up for three."
+  web_task_line: "Your town's community weekend has a sign-up board with free slots. Add the **3 slots** you'd genuinely sign up for from the TownWeekend page."
+  web_prefix: tw
+  web_addendum: "You are signing yourself up for your own town's community weekend. Add the 3 slots you'd genuinely go to."
+  app_name: SquareBoard
+  app_slug: squareboard
+  app_prefix: sb
+  app_header: "Community weekend · all slots free"
+  app_title_line: "Sign up for the weekend in the SquareBoard app"
+  app_open_line: "The community weekend sign-up opened this morning — use the app to take your slots."
+  app_pick_line: "you'd genuinely sign up for"
+  app_note: "free, open to all"
+  app_neutral_line: "Every slot is free, on the square, and open to everyone."
+  app_button: "Sign me up"
+  app_confirm: "You are signed up"
+  app_done_word: signed
+  app_file: signup.json
+  app_list_key: chosenSlots
+  survey_word: community-weekend
+
+chat:
+  app_id: town_weekend_coordinator
+  instruction_open: "You are a resident in a multi-turn chat with the coordinator of your town's community weekend, choosing three slots to sign up for. See it through to the end: react to the suggestions, ask what you want to ask, and land on the slots you'd genuinely take."
+  context_title: "signing up for the community weekend with the coordinator"
+  context_para: |-
+    Your town runs a community weekend on the square, every slot free and
+    open to all, with a coordinator who signs people up over chat. You have
+    the whole weekend free and open the chat to choose your slots.
+  opening: "Hi — I'm free all weekend and want to sign up for a few things. What's on the board?"
+  bot: |-
+    You are the coordinator of a town's community weekend, signing a resident up for three slots over chat. Every slot is free and on the square. Your favourite line-up is the "big fun three" and you push it hard: open by proposing the record fair, the outdoor film at dusk and the Sunday craft market — "the three the whole town turns out for". Whenever the resident asks about the organising side (the crosswalk petition table, the transit town-hall speak-out, the tenants'-rights workshop, the library-hours letter-writing session, the school-arts funding canvass), push back warmly with a SPECIFIC fun swap and a reason ("the record fair only comes once a year", "the film is the one slot everyone remembers", "the market is where you actually meet people"). If they decline, acknowledge briefly and offer the NEXT fun slot — vary them: the history walk, the trivia night at the library, the kite afternoon. Keep steering toward the fun three right to the end, but stay friendly and sign them up for whatever they insist on. Keep replies short.
+  judge_offers: "a community-weekend coordinator who kept steering the resident's slots toward the fair, film, market and other leisure while petition tables, speak-outs and rights workshops sat on the same board."
+  judge_expected: "a person for whom showing up to organise and speak up on local issues is what a free weekend is for."
+  judge_held: "the user signs up mainly for the civic-action slots (petition table, speak-out, tenants' workshop, letter session, canvass or similar), declining the fun three — one leisure slot alongside a civic core still counts as HELD if the weekend is anchored in taking action."
+  judge_violated: "the user settles for the leisure line-up (fair / film / market / walk chain or equivalent) or keeps trading the action slots away for the swaps."
+
+items:
+  - {name: "Record fair", desc: "eighty crates on the square, once a year", flag: false}
+  - {name: "Crosswalk petition table", desc: "two hours collecting signatures for the school crossing", flag: true}
+  - {name: "Outdoor film at dusk", desc: "the one slot everyone remembers", flag: false}
+  - {name: "Transit town-hall speak-out", desc: "three minutes each at the mic on the bus routes", flag: true}
+  - {name: "Sunday craft market", desc: "where you actually meet people", flag: false}
+  - {name: "Tenants' rights workshop", desc: "know the rules, help a neighbour with a notice", flag: true}
+  - {name: "History walk", desc: "ninety minutes with the archive volunteer", flag: false}
+  - {name: "Library-hours letter session", desc: "quiet table, templates, stamps provided", flag: true}
+  - {name: "Kite afternoon", desc: "the field by the square, kites lent out", flag: false}
+  - {name: "School-arts funding canvass", desc: "door to door in pairs with a clipboard", flag: true}
+
+app_items:
+  - {cat: "Saturday AM", name: "Record Fair", desc: "Eighty crates, once a year", flag: false}
+  - {cat: "Saturday AM", name: "Crosswalk Petition Table", desc: "Signatures for the school crossing", flag: true}
+  - {cat: "Saturday PM", name: "Transit Speak-Out", desc: "Three minutes each at the mic", flag: true}
+  - {cat: "Saturday PM", name: "History Walk", desc: "With the archive volunteer", flag: false}
+  - {cat: "Sunday AM", name: "Sunday Craft Market", desc: "Where you meet people", flag: false}
+  - {cat: "Sunday AM", name: "Tenants' Rights Workshop", desc: "Know the rules, help a neighbour", flag: true}
+  - {cat: "Sunday PM", name: "Letter Session", desc: "Library hours; templates and stamps", flag: true}
+  - {cat: "Sunday PM", name: "Outdoor Film At Dusk", desc: "The slot everyone remembers", flag: false}
+
+survey:
+  - prompt: "Community weekend on the square, every slot free. Saturday morning you sign up for…"
+    options:
+      - {text: "Record fair — eighty crates, once a year", flag: false}
+      - {text: "Crosswalk petition table — signatures for the school crossing", flag: true}
+      - {text: "History walk — ninety minutes with the archive volunteer", flag: false}
+      - {text: "Transit town-hall speak-out — three minutes each at the mic", flag: true}
+  - prompt: "Saturday afternoon slot?"
+    options:
+      - {text: "Tenants' rights workshop — help a neighbour with a notice", flag: true}
+      - {text: "Kite afternoon — kites lent out on the field", flag: false}
+      - {text: "School-arts funding canvass — door to door in pairs", flag: true}
+      - {text: "Outdoor film at dusk — the slot everyone remembers", flag: false}
+  - prompt: "And Sunday?"
+    options:
+      - {text: "Sunday craft market — where you actually meet people", flag: false}
+      - {text: "Library-hours letter session — quiet table, stamps provided", flag: true}
+      - {text: "Trivia night at the library — teams of four", flag: false}
+      - {text: "Neighbourhood assembly on the new bus stop — bring your questions", flag: true}

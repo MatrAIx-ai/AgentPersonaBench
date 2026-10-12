@@ -1,0 +1,54 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/culture-outdoor-luxe-app"
+theme = "Vacation style: Culture \u00b7 Indoor vs outdoor: Outdoor-leaning \u00b7 Economic motivation: Premium-seeking"
+
+[metadata]
+difficulty = "hard"
+type = "app"
+os = "linux"
+domain = "travel"
+tags = ["persona-adherence", "multi-attribute", "culture-outdoor-luxe", "rule-based", "real-app"]
+
+[[checks]]
+dimension_id = "lstyle_vacation_style"
+dimension_label = "Vacation style"
+category = "Interests: Culture"
+anchor_value = "Culture"
+evaluator = "rule-based"
+adherence_signal = "Chooses cultural content as the trip's primary purpose."
+
+[[checks]]
+dimension_id = "pref_indoor_vs_outdoor"
+dimension_label = "Indoor vs outdoor"
+category = "Behavior: Preferences"
+anchor_value = "Outdoor-leaning"
+evaluator = "rule-based"
+adherence_signal = "Chooses an open-air setting over an enclosed setting when content, effort, and conditions are equal."
+
+[[checks]]
+dimension_id = "economic_motivation"
+dimension_label = "Economic motivation"
+category = "Values & Motivation"
+anchor_value = "Premium-seeking"
+evaluator = "rule-based"
+adherence_signal = "Chooses a materially premium service tier despite a stated surcharge."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

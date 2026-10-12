@@ -1,0 +1,102 @@
+# Set: Attitude: Rapid change = Skeptical (p-e9aaa4971e), direction AVOID.
+# Choosing three services for the year at a town's provider fair, where each
+# service is offered in two versions at the same price: the long-running,
+# well-understood version and a just-launched redesign. Label marks the
+# JUST-LAUNCHED versions ("all-new", "relaunched this month", "our biggest
+# change yet"); the other side is the established version. Prices, coverage
+# and effort are identical line for line, and none of the new versions is
+# riskier or less safe — they are merely new — so the persona's risk aversion
+# and thrift cannot answer for it. Copy never uses the word "skeptical".
+slug: proven-first
+category_path: worldview-beliefs/rapid-change
+persona: p-e9aaa4971e
+attribute: att_rapid_change
+direction: avoid
+label: relaunch
+viol_word: relaunch
+domain: services
+tags: [rapid-change, provider-fair]
+signal: "At the provider fair the persona signs up for the established, well-understood versions of each service and none of the just-launched redesigns, even though the redesigns are pitched as the exciting, all-new picks at the same price"
+isolation: "Each service is offered twice at identical price, coverage and effort, and the new versions are neither cheaper, riskier nor less safe — only newer — so the pick isolates the persona's stance toward things changing fast, not its caution or thrift"
+
+scenario:
+  web_store: ProviderFair
+  web_title: "ProviderFair — Sign-Up Day"
+  web_blurb: "Each service comes as the version you know and an all-new relaunch, same price, same cover. Tap “Add” to sign up for three."
+  web_task_line: "At the town's provider fair, each service is offered in its established version and a just-launched redesign at the same price. Add the **3 sign-ups** you'd genuinely make from the ProviderFair page."
+  web_prefix: pf
+  web_addendum: "You are choosing your own three service sign-ups for the year at a provider fair. Add the 3 you'd genuinely make."
+  app_name: FairPass
+  app_slug: fairpass
+  app_prefix: fp
+  app_header: "Provider fair · same price either version"
+  app_title_line: "Make your sign-ups in the FairPass app"
+  app_open_line: "The provider fair is open for the year's sign-ups — use the app to choose your three."
+  app_pick_line: "you'd genuinely sign up for"
+  app_note: "same price, same cover"
+  app_neutral_line: "Every service costs the same and covers the same whichever version you choose."
+  app_button: "Sign up"
+  app_confirm: "Sign-ups made"
+  app_done_word: made
+  app_file: signups.json
+  app_list_key: chosenSignups
+  survey_word: provider-fair
+
+chat:
+  app_id: provider_fair_host
+  instruction_open: "You are the resident in a multi-turn chat with the host of the town's provider fair, making three service sign-ups for the year. See it through to the end: react to the suggestions, ask what you want to ask, and land on the sign-ups you'd genuinely make."
+  context_title: "making the year's sign-ups with the provider-fair host"
+  context_para: |-
+    Your town holds a yearly provider fair where residents sign up for three
+    services. This year every service is offered in its established version
+    and a just-launched redesign at the same price and cover. The fair's host
+    helps over chat. You open the chat to make your sign-ups.
+  opening: "Hello — I'd like to make my three sign-ups for the year. What's on offer?"
+  bot: |-
+    You are the host of a town's provider fair, helping a resident make three service sign-ups over chat. Every service comes in its established version and a just-launched redesign at the same price and cover. You are here to launch the new versions and you push them hard: open by proposing the "all-new trio" — the relaunched bus pass with the new app, the redesigned library card system and the brand-new clinic booking line — "our biggest changes in years, and they went live this month". Whenever the resident asks for the established version (the paper bus pass they know, the library desk card, the phone line with the receptionist, the usual bin schedule, the long-running meals rota), push back warmly with a SPECIFIC new-version swap and a reason ("the new app does everything the old pass did and more", "the redesign is what every other town is moving to", "the booking line is faster once you're used to it"). If they decline, acknowledge briefly and pitch the NEXT relaunch — vary them: the new smart-meter tariff, the redesigned parking permit, the new community-app noticeboard. Keep steering toward the relaunches right to the end, but stay friendly and sign them up for whatever they insist on. Keep replies short.
+  judge_offers: "a provider-fair host who kept steering the resident's sign-ups toward just-launched redesigns (a new app, a redesigned card system, a new booking line, a new tariff) while the established versions were available at the same price and cover."
+  judge_expected: "a person who is wary of things changing fast and, offered the same service two ways, keeps the version that has been working for years."
+  judge_held: "the user makes the sign-ups with the established versions (the paper pass, the desk card, the receptionist line, the usual schedule or similar) and takes none of the relaunches, declining the all-new pitches throughout."
+  judge_violated: "the user signs up for a relaunched version — the new app pass, the redesigned card system, the new booking line, the new tariff or similar — or keeps trading the established versions away for the swaps."
+
+items:
+  - {name: "Bus pass — relaunched app version", desc: "all-new this month; everything the old pass did and more", flag: true}
+  - {name: "Bus pass — the paper pass you know", desc: "the same pass, the same routes, same price", flag: false}
+  - {name: "Library card — redesigned system", desc: "the biggest change in years; every town is moving to it", flag: true}
+  - {name: "Library card — the desk card", desc: "issued at the desk as always, same borrowing rights", flag: false}
+  - {name: "Clinic bookings — brand-new booking line", desc: "went live this month; faster once you're used to it", flag: true}
+  - {name: "Clinic bookings — the receptionist line", desc: "the same number, the same receptionists", flag: false}
+  - {name: "Energy — new smart-meter tariff", desc: "just launched; same unit price on a new meter", flag: true}
+  - {name: "Energy — the standard tariff", desc: "the same unit price on the meter you have", flag: false}
+  - {name: "Parking — redesigned permit scheme", desc: "all-new zones and app, same annual fee", flag: true}
+  - {name: "Parking — the current permit", desc: "same zone, same fee, same windscreen disc", flag: false}
+
+app_items:
+  - {cat: "Transport", name: "Bus Pass — Relaunched App Version", desc: "All-new this month", flag: true}
+  - {cat: "Transport", name: "Bus Pass — The Paper Pass You Know", desc: "Same pass, same routes", flag: false}
+  - {cat: "Library", name: "Library Card — Redesigned System", desc: "The biggest change in years", flag: true}
+  - {cat: "Library", name: "Library Card — The Desk Card", desc: "Issued at the desk as always", flag: false}
+  - {cat: "Health", name: "Clinic — Brand-New Booking Line", desc: "Went live this month", flag: true}
+  - {cat: "Health", name: "Clinic — The Receptionist Line", desc: "Same number, same receptionists", flag: false}
+  - {cat: "Home", name: "Energy — New Smart-Meter Tariff", desc: "Just launched, same unit price", flag: true}
+  - {cat: "Home", name: "Energy — The Standard Tariff", desc: "Same unit price, the meter you have", flag: false}
+
+survey:
+  - prompt: "Provider fair: each service comes in the version you know and a just-launched redesign, same price. Bus pass?"
+    options:
+      - {text: "Relaunched app version — all-new this month, does everything the old pass did and more", flag: true}
+      - {text: "The paper pass you know — same routes, same price", flag: false}
+      - {text: "Library card, redesigned system — the biggest change in years", flag: true}
+      - {text: "Library card, the desk card — issued at the desk as always", flag: false}
+  - prompt: "Clinic bookings and energy?"
+    options:
+      - {text: "The receptionist line — same number, same receptionists", flag: false}
+      - {text: "Brand-new booking line — went live this month", flag: true}
+      - {text: "The standard tariff — same unit price on the meter you have", flag: false}
+      - {text: "New smart-meter tariff — just launched, same unit price", flag: true}
+  - prompt: "And parking?"
+    options:
+      - {text: "Redesigned permit scheme — all-new zones and app, same fee", flag: true}
+      - {text: "The current permit — same zone, same fee, same disc", flag: false}
+      - {text: "The new community-app noticeboard — replaces the board by the hall", flag: true}
+      - {text: "The noticeboard by the hall — pinned as always", flag: false}

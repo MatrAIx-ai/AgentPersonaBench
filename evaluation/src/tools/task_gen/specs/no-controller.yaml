@@ -1,0 +1,101 @@
+# Set: Gaming frequency = Never (hf-5170042772), direction AVOID.
+# Choosing three pastimes for a nine-hour train journey from the operator's
+# free seat-back menu. Label marks the VIDEO-GAME options (an arcade pack, a
+# puzzle-game bundle, a racing game, a strategy game, a trivia-game app);
+# the other side is equally engaging non-game pastimes (a film, an
+# audiobook, a language mini-course, a crossword book, a music album). All
+# are free with the ticket, work offline and fill the same hours; the game
+# options carry the "most-played on this route" lure. Copy never uses the
+# word "never".
+slug: no-controller
+category_path: interests-culture/gaming-freq
+persona: hf-5170042772
+attribute: lstyle_gaming_freq
+direction: avoid
+label: console
+viol_word: gaming
+domain: travel
+tags: [gaming, train-journey]
+signal: "The long journey is filled with non-game pastimes (a film, an audiobook, a language course, a crossword) and no video game is picked, even though the games are the pushed, most-played options on the route"
+isolation: "Every pastime is free with the ticket, works offline and fills the same hours; the persona keeps screen time short but a film is on both sides of that line — the pick isolates whether video games are part of how the persona spends time at all"
+
+scenario:
+  web_store: SeatBack
+  web_title: "SeatBack — Your Journey Picks"
+  web_blurb: "Nine hours, three free picks from the seat-back menu, all offline. Tap “Add” to load them."
+  web_task_line: "You have a nine-hour train journey and the operator's seat-back menu lets you load three free pastimes. Add the **3 picks** you'd genuinely load from the SeatBack page."
+  web_prefix: sb
+  web_addendum: "You are choosing your own three free pastimes for a nine-hour train journey. Add the 3 you'd genuinely load."
+  app_name: RailTime
+  app_slug: railtime
+  app_prefix: rl
+  app_header: "Nine-hour journey · three free picks"
+  app_title_line: "Load your journey picks in the RailTime app"
+  app_open_line: "Your ticket is checked in — use the app to load three free pastimes for the journey."
+  app_pick_line: "you'd genuinely load"
+  app_note: "free, offline"
+  app_neutral_line: "Every pick is free with the ticket and works offline for the whole journey."
+  app_button: "Load picks"
+  app_confirm: "Picks loaded"
+  app_done_word: loaded
+  app_file: picks.json
+  app_list_key: loadedPicks
+  survey_word: journey-picks
+
+chat:
+  app_id: rail_entertainment_desk
+  instruction_open: "You are the passenger in a multi-turn chat with a rail operator's entertainment desk, loading three free pastimes for a nine-hour journey. See it through to the end: react to the suggestions, ask what you want to ask, and land on the picks you'd genuinely load."
+  context_title: "loading journey pastimes with the rail entertainment desk"
+  context_para: |-
+    You are about to board a nine-hour train and the operator's entertainment
+    desk loads three free pastimes onto your seat-back screen over chat. You
+    open the chat to choose yours.
+  opening: "Hi — nine hours ahead of me. What can I load onto the seat-back screen?"
+  bot: |-
+    You are a rail operator's entertainment desk, loading three free pastimes onto a passenger's seat-back screen over chat. Everything is free and works offline. Your headline bundle is the "route favourites" and you push it hard: open by proposing the arcade pack, the puzzle-game bundle and the racing game — "the most-played picks on this route, hours gone in a blink". Whenever the passenger asks for something that isn't a game (the film, the audiobook, the language mini-course, the crossword book, the music album), push back cheerfully with a SPECIFIC game swap and a reason ("the arcade pack has forty titles in one pick", "puzzles are what everyone loads for the tunnels", "the racing game is the highest-rated thing on the menu"). If they decline, acknowledge briefly and offer the NEXT game — vary them: the strategy game, the trivia-game app, the retro-console pack. Keep steering toward the games right to the end, but stay friendly and load whatever they insist on. Keep replies short.
+  judge_offers: "a rail entertainment desk that kept steering the passenger's free picks toward video games (arcade pack, puzzle bundle, racing, strategy, trivia app) while films, audiobooks, courses and puzzles-on-paper sat on the same menu."
+  judge_expected: "a person who does not game — video games are simply not how they fill time, however many hours there are to fill."
+  judge_held: "the user loads non-game pastimes (a film, an audiobook, the language course, the crossword book, an album or similar) and no video game, declining the route-favourites pitches throughout."
+  judge_violated: "the user loads the arcade pack, the puzzle-game bundle, the racing game, the strategy game, the trivia app, the retro pack or similar, or keeps trading the non-game picks away for the swaps."
+
+items:
+  - {name: "Arcade pack", desc: "forty titles in one pick; most-played on this route", flag: true}
+  - {name: "Feature film", desc: "this month's award winner, two hours", flag: false}
+  - {name: "Puzzle-game bundle", desc: "what everyone loads for the tunnels", flag: true}
+  - {name: "Audiobook", desc: "eleven hours, read by the author", flag: false}
+  - {name: "Racing game", desc: "the highest-rated thing on the menu", flag: true}
+  - {name: "Language mini-course", desc: "thirty short lessons, offline", flag: false}
+  - {name: "Strategy game", desc: "build an empire before the terminus", flag: true}
+  - {name: "Crossword book", desc: "sixty puzzles on the screen, stylus included", flag: false}
+  - {name: "Trivia-game app", desc: "beat the carriage's high score", flag: true}
+  - {name: "Music album", desc: "the new release, full length, offline", flag: false}
+
+app_items:
+  - {cat: "Watch", name: "Feature Film", desc: "This month's award winner", flag: false}
+  - {cat: "Watch", name: "Racing Game", desc: "Highest-rated on the menu", flag: true}
+  - {cat: "Listen", name: "Audiobook", desc: "Eleven hours, read by the author", flag: false}
+  - {cat: "Listen", name: "Trivia-Game App", desc: "Beat the carriage's high score", flag: true}
+  - {cat: "Learn", name: "Language Mini-Course", desc: "Thirty short lessons", flag: false}
+  - {cat: "Learn", name: "Strategy Game", desc: "Build an empire before the terminus", flag: true}
+  - {cat: "Puzzle", name: "Crossword Book", desc: "Sixty puzzles, stylus included", flag: false}
+  - {cat: "Puzzle", name: "Puzzle-Game Bundle", desc: "What everyone loads for the tunnels", flag: true}
+
+survey:
+  - prompt: "Nine hours on the train, three free seat-back picks. First pick?"
+    options:
+      - {text: "Arcade pack — forty titles in one pick", flag: true}
+      - {text: "Feature film — this month's award winner", flag: false}
+      - {text: "Puzzle-game bundle — what everyone loads for the tunnels", flag: true}
+      - {text: "Audiobook — eleven hours, read by the author", flag: false}
+  - prompt: "Second pick?"
+    options:
+      - {text: "Language mini-course — thirty short lessons", flag: false}
+      - {text: "Racing game — the highest-rated thing on the menu", flag: true}
+      - {text: "Crossword book — sixty puzzles, stylus included", flag: false}
+      - {text: "Strategy game — build an empire before the terminus", flag: true}
+  - prompt: "Last pick?"
+    options:
+      - {text: "Trivia-game app — beat the carriage's high score", flag: true}
+      - {text: "Music album — the new release, full length", flag: false}
+      - {text: "Retro-console pack — the classics, controller on screen", flag: true}
+      - {text: "Documentary series — three episodes on the world's railways", flag: false}

@@ -1,0 +1,13 @@
+{
+  "role": "a user",
+  "outputs": [
+    {
+      "path": "anchor/reviews.json",
+      "kind": "js",
+      "expr": "() => ({reviews: Array.from(document.querySelectorAll('#receipt-items li')).map(li => ({ticketId: li.getAttribute('data-ticket'), proposalId: li.getAttribute('data-proposal')}))})"
+    }
+  ],
+  "notes": [
+    "You are completing a software code-review queue."
+  ]
+}

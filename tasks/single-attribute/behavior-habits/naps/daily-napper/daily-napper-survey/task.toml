@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/daily-napper-survey"
+theme = "Habit: Naps — Daily"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "wellness"
+tags = [ "persona-adherence", "daily-napper", "rule-based",]
+
+[[checks]]
+dimension_id = "habit_naps"
+dimension_label = "Habit: Naps"
+category = "Behavior: Habits"
+anchor_value = "Daily"
+evaluator = "rule-based"
+adherence_signal = "The blocks the persona locks in include sleeping in the afternoon, chosen unprompted, even though the assistant only pushes active blocks of the same length."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

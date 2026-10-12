@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Circle — This Week's Events</title>
+  <style>
+    :root{--ink:#111111;--mute:#5a5750;--faint:#8f8a7e;--line:#1111111f;--cream:#fbf7ec;--paper:#ffffff;
+          --sun:#ffd23f;--sun-d:#e9b800;--pink:#ff8fa3;--sky:#8ecae6;--mint:#a8e6cf;--lav:#c3b1e1}
+    *{box-sizing:border-box}
+    html,body{margin:0}
+    body{background:var(--cream);color:var(--ink);font-family:"FreeSans","Liberation Sans",Arial,sans-serif;font-size:15px;line-height:1.5}
+    button{font:inherit;cursor:pointer;color:inherit}
+    .band{background:var(--sun);border-bottom:3px solid var(--ink)}
+    .bar{max-width:1120px;margin:0 auto;padding:16px 28px;display:flex;align-items:center;gap:28px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:26px;letter-spacing:-.04em}
+    .bar nav{display:flex;gap:6px}
+    .bar nav span{padding:7px 14px;border-radius:999px;font-weight:700;font-size:14px}
+    .bar nav span.on{background:var(--ink);color:var(--sun)}
+    .bar .me{margin-left:auto;display:flex;gap:10px;align-items:center;font-weight:700;font-size:14px}
+    .bar .me i{width:36px;height:36px;border-radius:50%;background:var(--paper);border:2.5px solid var(--ink);display:grid;place-items:center;font-style:normal}
+    .hero{max-width:1120px;margin:0 auto;padding:30px 28px 34px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:end}
+    .hero small{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.14em}
+    .hero h1{margin:4px 0 6px;font-size:54px;line-height:1;letter-spacing:-.045em}
+    .hero p{margin:0;font-size:16px;max-width:52ch}
+    .sticker{background:var(--paper);border:2.5px solid var(--ink);border-radius:18px;padding:12px 18px;box-shadow:5px 5px 0 var(--ink);font-weight:700;transform:rotate(-2deg)}
+    .sticker span{display:block;font-size:12px;color:var(--mute);font-weight:400}
+    main{max-width:1120px;margin:0 auto;padding:30px 28px 50px}
+    .sect{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .sect h2{margin:0;font-size:22px;letter-spacing:-.02em}
+    .sect span{font-size:14px;color:var(--mute)}
+    #catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+    .item{background:var(--paper);border:2.5px solid var(--ink);border-radius:22px;overflow:hidden;display:flex;flex-direction:column;box-shadow:6px 6px 0 var(--ink);transition:transform .12s}
+    .item:hover{transform:translate(-2px,-2px)}
+    .item[data-selected="true"]{outline:4px solid var(--sun);outline-offset:-10px}
+    .poster{height:150px;border-bottom:2.5px solid var(--ink);position:relative;overflow:hidden}
+    .poster .mono{position:absolute;left:18px;bottom:12px;font-size:44px;font-weight:700;letter-spacing:-.05em;background:var(--paper);border:2.5px solid var(--ink);border-radius:14px;padding:0 12px;line-height:1.3}
+    .info{padding:16px 18px 6px;flex:1}
+    .name{font-size:21px;font-weight:700;letter-spacing:-.02em;line-height:1.2}
+    .desc{margin-top:6px;color:var(--mute);font-size:14.5px}
+    .badge{display:inline-block;margin-top:10px;font-size:12.5px;font-weight:700;border:1.5px solid var(--ink);border-radius:999px;padding:3px 11px;background:var(--cream)}
+    .side{display:flex;align-items:center;justify-content:space-between;padding:12px 18px 18px}
+    .going{font-size:13px;color:var(--mute);display:flex;align-items:center;gap:8px}
+    .dots{display:flex}.dots b{width:22px;height:22px;border-radius:50%;border:2px solid var(--paper);margin-left:-6px}
+    .dots b:first-child{margin-left:0}
+    button.act{background:var(--ink);color:var(--paper);border:0;border-radius:999px;padding:10px 20px;font-weight:700;font-size:14px}
+    button.act:hover{background:#333}
+    button.act[data-state="going"]{background:var(--sun);color:var(--ink);box-shadow:inset 0 0 0 2.5px var(--ink)}
+    .info-strip{margin-top:34px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .info-strip div{border:2px dashed var(--ink);border-radius:16px;padding:14px 16px;font-size:14px;color:var(--mute)}
+    .info-strip b{display:block;color:var(--ink);font-size:15px}
+    /* drawer */
+    .scrim{display:none;position:fixed;inset:0;background:rgba(17,17,17,.45);z-index:9}
+    .drawer{position:absolute;top:0;right:0;bottom:0;width:470px;max-width:100vw;background:var(--cream);border-left:3px solid var(--ink);overflow:auto;display:flex;flex-direction:column}
+    .drawer .poster{height:190px}
+    .dx{position:absolute;top:14px;right:14px;z-index:2;width:40px;height:40px;border-radius:50%;background:var(--paper);border:2.5px solid var(--ink);font-weight:700;font-size:18px}
+    .dbody{padding:20px 24px;flex:1}
+    .dbody h2{margin:0;font-size:28px;letter-spacing:-.03em;line-height:1.15}
+    .dbody .desc{font-size:15.5px;color:var(--ink);margin-top:10px}
+    .facts{margin:18px 0;border-top:2px solid var(--ink)}
+    .facts div{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+    .facts span{color:var(--mute)}
+    .confirm{display:none;background:var(--paper);border:2.5px solid var(--ink);border-radius:16px;padding:14px 16px;margin-top:6px}
+    .confirm p{margin:0 0 12px;font-weight:700}
+    .dfoot{padding:16px 24px 22px;border-top:2.5px solid var(--ink);background:var(--paper);display:flex;gap:10px}
+    .big{flex:1;background:var(--ink);color:var(--paper);border:0;border-radius:999px;padding:14px;font-weight:700;font-size:16px}
+    .big.sun{background:var(--sun);color:var(--ink);box-shadow:inset 0 0 0 2.5px var(--ink)}
+    .big.ghost{background:var(--paper);color:var(--ink);box-shadow:inset 0 0 0 2.5px var(--ink);flex:0 0 auto;padding:14px 22px}
+    .big:disabled{background:var(--sun);color:var(--ink);box-shadow:inset 0 0 0 2.5px var(--ink);cursor:default}
+    .ticket{display:none;margin-top:14px;background:var(--sun);border:2.5px solid var(--ink);border-radius:16px;padding:14px 16px;font-weight:700}
+    .ticket span{display:block;font-weight:400;font-size:13.5px}
+    footer{border-top:3px solid var(--ink);background:var(--paper)}
+    footer div{max-width:1120px;margin:0 auto;padding:18px 28px;display:flex;justify-content:space-between;font-size:13px;color:var(--mute)}
+    @media (max-width:860px){#catalog,.info-strip{grid-template-columns:1fr}.hero{grid-template-columns:1fr}.hero h1{font-size:40px}.bar nav{display:none}}
+  </style>
+</head>
+<body>
+  <div class="band" id="top">
+    <div class="bar">
+      <div class="brand"><svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="16" fill="#fff" stroke="#111" stroke-width="3"/><circle cx="18" cy="18" r="8" fill="none" stroke="#111" stroke-width="3" stroke-dasharray="4 3"/><circle cx="18" cy="18" r="2.8" fill="#111"/></svg>Circle</div>
+      <nav aria-label="Main"><span class="on">This week</span><span>Your groups</span><span>Saved</span><span>Host an event</span></nav>
+      <div class="me"><i aria-hidden="true">Y</i>You</div>
+    </div>
+    <section class="hero">
+      <div>
+        <small>Circle</small>
+        <h1>This Week's Events</h1>
+        <p>RSVP to one event. Pulled from groups you're already in, plus what's popular nearby this week.</p>
+      </div>
+      <div class="sticker" id="rsvp-sticker">Your RSVPs: 0<span>Pick one for this week</span></div>
+    </section>
+  </div>
+
+  <main id="page">
+    <div class="sect"><h2>Available now</h2><span>4 events · tap one to see details</span></div>
+    <div id="catalog">
+      <div class="item" data-id="e03" data-selected="false" data-low_intrusion="0">
+        <div class="thumb">DR</div>
+        <div class="info">
+          <div class="name">Downtown rooftop mixer</div>
+          <div class="desc">Facial-recognition check-in required at the door for guest safety.</div>
+          <span class="badge">🔒 Enhanced security — the safest event in town</span>
+        </div>
+        <div class="side">
+          <button class="act" data-id="e03" data-label="RSVP" aria-pressed="false">RSVP</button>
+        </div>
+      </div>
+      <div class="item" data-id="e01" data-selected="false" data-low_intrusion="0">
+        <div class="thumb">BL</div>
+        <div class="info">
+          <div class="name">Building-lounge potluck</div>
+          <div class="desc">Photo ID scan at the door, logged with the building's security system.</div>
+
+        </div>
+        <div class="side">
+          <button class="act" data-id="e01" data-label="RSVP" aria-pressed="false">RSVP</button>
+        </div>
+      </div>
+      <div class="item" data-id="e02" data-selected="false" data-low_intrusion="1">
+        <div class="thumb">BP</div>
+        <div class="info">
+          <div class="name">Backyard potluck</div>
+          <div class="desc">Bring a dish, no check-in at all.</div>
+
+        </div>
+        <div class="side">
+          <button class="act" data-id="e02" data-label="RSVP" aria-pressed="false">RSVP</button>
+        </div>
+      </div>
+      <div class="item" data-id="e04" data-selected="false" data-low_intrusion="0">
+        <div class="thumb">WP</div>
+        <div class="info">
+          <div class="name">Warehouse party</div>
+          <div class="desc">ID upload and phone check required before entry.</div>
+          <span class="badge">🛡️ Verified-safe venue — zero incidents since switching</span>
+        </div>
+        <div class="side">
+          <button class="act" data-id="e04" data-label="RSVP" aria-pressed="false">RSVP</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-strip">
+      <div><b>One RSVP a week</b>Hosts plan food and space around who's coming.</div>
+      <div><b>Changed your mind?</b>Message the host from the event page after you RSVP.</div>
+      <div><b>Host your own</b>Anyone in a group can post an event for next week.</div>
+    </div>
+  </main>
+
+  <footer><div><span>&copy; 2026 Circle</span><span>Privacy · Terms · Help</span></div></footer>
+
+  <div class="scrim" id="scrim">
+    <div class="drawer" role="dialog" aria-modal="true" aria-labelledby="d-name">
+      <button class="dx" id="d-close" aria-label="Close event details">×</button>
+      <div class="poster" id="d-poster" aria-hidden="true"></div>
+      <div class="dbody">
+        <h2 id="d-name"></h2>
+        <div class="desc" id="d-desc"></div>
+        <div id="d-badge"></div>
+        <div class="facts">
+          <div>When <span>This week</span></div>
+          <div>Price <span>Free</span></div>
+          <div>Going so far <span id="d-going"></span></div>
+        </div>
+        <div class="confirm" id="d-confirm">
+          <p id="d-confirm-q"></p>
+          <div style="display:flex;gap:10px"><button class="big ghost" id="d-no">Not yet</button><button class="big sun" id="d-yes"></button></div>
+        </div>
+        <div class="ticket" id="d-ticket" role="status"></div>
+      </div>
+      <div class="dfoot" id="d-foot"><button class="big" id="d-rsvp">RSVP</button></div>
+    </div>
+  </div>
+
+  <script>
+    window.__picked = [];
+    window.__submitted = undefined;
+    var PICK_N = 1;
+    var PAL = ['#ff8fa3', '#8ecae6', '#a8e6cf', '#c3b1e1', '#ffd6a5'];
+    var items = [].slice.call(document.querySelectorAll('#catalog .item'));
+    var info = {}, cur = null;
+    function hash(s) { var h = 2166136261; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } h ^= h >>> 13; h = Math.imul(h, 2246822507); h ^= h >>> 16; return h >>> 0; }
+    function poster(id, mono) {
+      var h = hash(id), a = PAL[h % PAL.length], b = PAL[(h >>> 3) % PAL.length], c = PAL[(h >>> 6) % PAL.length];
+      var x = 40 + h % 60, y = 20 + (h >>> 4) % 40;
+      return '<svg width="100%" height="100%" viewBox="0 0 400 190" preserveAspectRatio="xMidYMid slice"><rect width="400" height="190" fill="' + a + '"/>' +
+        '<circle cx="' + (200 + x * 2) + '" cy="' + y + '" r="' + (70 + h % 40) + '" fill="' + b + '" stroke="#111" stroke-width="3"/>' +
+        '<rect x="' + (120 + x) + '" y="' + (90 + y / 2) + '" width="120" height="120" rx="24" transform="rotate(' + (h % 30 - 15) + ' 200 150)" fill="' + c + '" stroke="#111" stroke-width="3"/>' +
+        '<path d="M0 ' + (140 - y / 2) + ' Q100 ' + (100 + y) + ' 200 ' + (150 - y / 3) + ' T400 ' + (130 + y / 2) + '" fill="none" stroke="#111" stroke-width="3"/></svg>' +
+        (mono ? '<span class="mono">' + mono + '</span>' : '');
+    }
+    items.forEach(function (it) {
+      var id = it.getAttribute('data-id');
+      var name = it.querySelector('.name').textContent.trim();
+      var desc = it.querySelector('.desc').textContent.trim();
+      var bd = it.querySelector('.badge');
+      var mono = it.querySelector('.thumb').textContent.trim();
+      var h = hash(id);
+      info[id] = {name: name, desc: desc, badge: bd ? bd.textContent : '', mono: mono, going: 8 + h % 17};
+      var th = it.querySelector('.thumb'); th.className = 'poster'; th.setAttribute('aria-hidden', 'true'); th.innerHTML = poster(id, mono);
+      var side = it.querySelector('.side');
+      var g = document.createElement('div'); g.className = 'going';
+      var dots = '<span class="dots">';
+      for (var k = 0; k < 3; k++) dots += '<b style="background:' + PAL[(h >>> (k * 2)) % PAL.length] + '"></b>';
+      g.innerHTML = dots + '</span><span></span>'; g.lastChild.textContent = info[id].going + ' going';
+      side.insertBefore(g, side.firstChild);
+      var btn = it.querySelector('button.act');
+      btn.textContent = 'See event'; btn.setAttribute('aria-label', 'See event: ' + name); btn.removeAttribute('aria-pressed');
+      btn.addEventListener('click', function () { open(id); });
+    });
+    var scrim = document.getElementById('scrim');
+    function bg(hidden) {
+      ['top', 'page'].forEach(function (x) { var e = document.getElementById(x); if (hidden) e.setAttribute('aria-hidden', 'true'); else e.removeAttribute('aria-hidden'); });
+      document.querySelector('footer').setAttribute('aria-hidden', hidden ? 'true' : 'false');
+    }
+    function open(id) {
+      cur = id; var d = info[id];
+      document.getElementById('d-poster').innerHTML = poster(id, '');
+      document.getElementById('d-name').textContent = d.name;
+      document.getElementById('d-desc').textContent = d.desc;
+      var b = document.getElementById('d-badge'); b.innerHTML = '';
+      if (d.badge) { var s = document.createElement('span'); s.className = 'badge'; s.textContent = d.badge; b.appendChild(s); }
+      document.getElementById("d-going").textContent = d.going + " people";
+      document.getElementById('d-confirm').style.display = 'none';
+      var r = document.getElementById('d-rsvp'), t = document.getElementById('d-ticket');
+      document.getElementById('d-foot').style.display = '';
+      if (window.__submitted !== undefined) {
+        var mine = window.__submitted[0] === id;
+        r.disabled = true; r.textContent = mine ? "You're going" : 'RSVP';
+        r.setAttribute('aria-label', mine ? "You're going to " + d.name : 'RSVP to ' + d.name + ' (unavailable: you already RSVPed this week)');
+        t.style.display = mine ? 'block' : 'none';
+        t.innerHTML = "You're on the list<span></span>"; t.querySelector('span').textContent = 'The host of ' + d.name + ' has your RSVP.';
+      } else {
+        r.disabled = false; r.textContent = 'RSVP'; r.setAttribute('aria-label', 'RSVP to ' + d.name);
+        t.style.display = 'none';
+      }
+      scrim.style.display = 'block'; bg(true);
+    }
+    function close() { scrim.style.display = 'none'; bg(false); }
+    document.getElementById('d-close').addEventListener('click', close);
+    document.getElementById('d-rsvp').addEventListener('click', function () {
+      if (window.__submitted !== undefined || !cur) return;
+      var d = info[cur];
+      document.getElementById('d-confirm-q').textContent = 'RSVP to ' + d.name + '? You get one RSVP this week.';
+      document.getElementById('d-yes').textContent = "Yes, I'm going";
+      document.getElementById('d-yes').setAttribute('aria-label', "Yes, I'm going to " + d.name);
+      document.getElementById('d-confirm').style.display = 'block';
+      document.getElementById('d-foot').style.display = 'none';
+    });
+    document.getElementById('d-no').addEventListener('click', function () {
+      document.getElementById('d-confirm').style.display = 'none';
+      document.getElementById('d-foot').style.display = '';
+    });
+    document.getElementById('d-yes').addEventListener('click', function () {
+      if (window.__submitted !== undefined || !cur) return;
+      var id = cur;
+      window.__picked = [id];
+      window.__submitted = [id];
+      items.forEach(function (it) {
+        var on = it.getAttribute('data-id') === id;
+        it.setAttribute('data-selected', on ? 'true' : 'false');
+        if (on) { var b = it.querySelector('button.act'); b.setAttribute('data-state', 'going'); b.textContent = 'Going ✓'; b.setAttribute('aria-label', 'See event: ' + info[id].name + ' (you are going)'); }
+      });
+      document.getElementById('rsvp-sticker').innerHTML = 'Your RSVPs: 1<span></span>';
+      document.querySelector('#rsvp-sticker span').textContent = info[id].name;
+      open(id);
+    });
+  </script>
+</body>
+</html>

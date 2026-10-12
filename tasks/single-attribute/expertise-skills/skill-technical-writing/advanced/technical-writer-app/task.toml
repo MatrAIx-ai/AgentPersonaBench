@@ -1,0 +1,51 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/technical-writer-app"
+theme = "Skill: Technical writing: Advanced"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "software"
+tags = [ "technical-writing", "advanced", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "skill_technical_writing"
+dimension_label = "Skill: Technical writing"
+category = "Expertise: Skills"
+anchor_value = "Advanced"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating SmartCart, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Checkout", SmartCart writes order.json itself. Each documentation
+# approach carries a hidden quality tier (0 = advanced .. 3 = none) that is NEVER
+# drawn on screen; the agent judges each approach from its visible name/description.
+# Unified with technical-writer-survey and technical-writer-web: VIOLATED for any
+# minimal/careless-or-worse pick (tier >= 2).
+adherence_signal = "The plan the agent checks out contains no weak documentation approach (a careless/minimal or no-docs choice, tier>=2); an advanced technical writer picks audience-scoped guides, runnable tested examples, and clear structured references — no sloppy / no-doc approaches."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

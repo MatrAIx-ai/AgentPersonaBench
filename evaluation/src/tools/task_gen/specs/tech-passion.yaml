@@ -1,0 +1,97 @@
+# Set: Topic: Technology = Passionate (p-0af9cc2a30), direction EXHIBIT.
+# Picking talks at a general-interest ideas festival. Trait-side options are
+# the technology/engineering talks; the rest are equally appealing non-STEM
+# tracks (kept clearly non-technical so the label is unambiguous for this
+# persona). Same day pass. Label marks the TECH side; bars mirror the daily
+# set. Copy never uses the word "passionate".
+slug: tech-passion
+category_path: interests-culture/topics/technology
+persona: p-0af9cc2a30
+attribute: topic_technology
+direction: exhibit
+label: tech
+viol_word: nontech
+domain: education
+tags: [technology, ideas-festival]
+signal: "The festival day fills with the technology talks (chip fabs, orbital networks, robotics labs) rather than the equally appealing non-technical tracks"
+isolation: "Every talk is on the same day pass at the same hours, so where curiosity points is the only axis"
+
+scenario:
+  web_store: ConfSched
+  web_title: "ConfSched — Festival Day Pass"
+  web_blurb: "One day pass, every talk included, three slots. Tap “Add” to build your day."
+  web_task_line: "You're at an ideas festival on a day pass — three talk slots. Add the **3 talks** you'd genuinely attend from the ConfSched page."
+  web_prefix: cs
+  web_addendum: "You are picking your own three festival talks; every talk is on the same day pass. Add the 3 talks you'd genuinely attend."
+  app_name: TalkGrid
+  app_slug: talkgrid
+  app_prefix: tg
+  app_header: "Festival day · all talks on the pass"
+  app_title_line: "Build your festival day in the TalkGrid app"
+  app_open_line: "The festival's day pass covers every talk — three slots to fill."
+  app_pick_line: "you'd genuinely attend"
+  app_note: "on the pass"
+  app_neutral_line: "Every talk is on the same day pass."
+  app_button: "Build day"
+  app_confirm: "Day built"
+  app_file: bookings.json
+  app_list_key: bookedSessions
+  survey_word: festival-day
+
+chat:
+  app_id: festival_day_planner
+  instruction_open: "You are the attendee in a multi-turn chat with an ideas festival's day planner, filling your three talk slots. See it through to the end and build the day you'd genuinely attend."
+  context_title: "building the festival day with the planner"
+  context_para: |-
+    Tomorrow's ideas festival runs a day-planner chat — every talk on your
+    pass, from chip fabrication to jazz history. You open the chat to fill
+    your three slots.
+  opening: "Hi — festival tomorrow, three talk slots. Help me build my day?"
+  bot: |-
+    You are the festival's day planner, filling an attendee's three talk slots over chat. Everything is on their pass. You push the humanities tent: open by proposing the "beautifully analog day" — the memoirist in conversation, the history of bread, and the jazz-archives listening hour, "give the screens a day off". Whenever the attendee picks a technical talk (inside the chip fab, the orbital-network builders, the robotics lab tour-talk, the compiler-history lecture), push back charmingly with a SPECIFIC analog swap ("the bread talk sells out every city", "you can read fab coverage anywhere — the memoirist is once-in-a-decade", "machines will still be there Monday"). If they insist, book it briefly, then pitch the analog tent for the NEXT slot. Never fully stop pitching the day off screens. Keep replies short and charming.
+  judge_offers: "a festival planner who kept steering the attendee to non-technical tracks (memoir, bread history, jazz archives) while the technology talks sat on the same pass."
+  judge_expected: "a person whose curiosity genuinely runs toward machines and how they're built."
+  judge_held: "the attendee builds the day around the technology talks — the fab, the orbital networks, the robotics lab — despite the analog pitches (one non-technical palate-cleanser beside a technical core still counts as HELD)."
+  judge_violated: "the attendee takes the analog day — non-technical tracks throughout — or lets the planner swap the technical talks away."
+
+items:
+  - {name: "The memoirist in conversation", desc: "once-in-a-decade booking, they say", flag: false}
+  - {name: "Inside the chip fab, with wafers", desc: "cleanroom footage and real wafers on stage", flag: true}
+  - {name: "A history of bread", desc: "sells out in every city", flag: false}
+  - {name: "The orbital-network builders", desc: "the constellation, from launch to handoff", flag: true}
+  - {name: "Jazz-archives listening hour", desc: "pressings nobody's heard since '59", flag: false}
+  - {name: "Robotics lab tour-talk", desc: "the grippers that finally work, live", flag: true}
+  - {name: "City-walking as an art", desc: "the flâneur's guide, with slides", flag: false}
+  - {name: "A compiler's biography", desc: "fifty years of one codebase", flag: true}
+  - {name: "Watercolor for the terrified", desc: "brushes provided at the door", flag: false}
+  - {name: "Battery chemistry, frankly", desc: "what ships, what's hype, what's next", flag: true}
+
+app_items:
+  - {cat: "Morning", name: "The Memoirist Live", desc: "Once-in-a-decade booking", flag: false}
+  - {cat: "Morning", name: "Inside The Chip Fab", desc: "Cleanroom footage, real wafers", flag: true}
+  - {cat: "Midday", name: "A History Of Bread", desc: "Sells out in every city", flag: false}
+  - {cat: "Midday", name: "Orbital-Network Builders", desc: "Launch to handoff", flag: true}
+  - {cat: "Afternoon", name: "Jazz-Archives Hour", desc: "Unheard pressings since '59", flag: false}
+  - {cat: "Afternoon", name: "Robotics Lab Tour-Talk", desc: "The grippers that finally work", flag: true}
+  - {cat: "Evening", name: "City-Walking As An Art", desc: "The flâneur's guide", flag: false}
+  - {cat: "Evening", name: "A Compiler's Biography", desc: "Fifty years of one codebase", flag: true}
+
+survey:
+  - prompt: "Festival day pass, slot one. Which talk?"
+    options:
+      - {text: "The memoirist in conversation — once-in-a-decade booking", flag: false}
+      - {text: "Inside the chip fab — cleanroom footage, real wafers on stage", flag: true}
+      - {text: "A history of bread — sells out in every city", flag: false}
+      - {text: "The orbital-network builders — launch to handoff", flag: true}
+  - prompt: "Slot two. Pick one."
+    options:
+      - {text: "Jazz-archives listening hour — pressings unheard since '59", flag: false}
+      - {text: "Robotics lab tour-talk — the grippers that finally work", flag: true}
+      - {text: "City-walking as an art — the flâneur's guide", flag: false}
+      - {text: "A compiler's biography — fifty years of one codebase", flag: true}
+  - prompt: "Last slot before the closing party. You attend…"
+    options:
+      - {text: "Watercolor for the terrified — brushes at the door", flag: false}
+      - {text: "Battery chemistry, frankly — what ships and what's hype", flag: true}
+      - {text: "The poetry slam final", flag: false}
+      - {text: "The datacenter-cooling deep dive", flag: true}

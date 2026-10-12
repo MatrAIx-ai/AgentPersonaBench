@@ -1,0 +1,12 @@
+{
+  "arm_id": "qwen-3-8-flash",
+  "provider": "dashscope",
+  "model": "qwen3.8-flash",
+  "temperature": 0,
+  "max_tokens": 4096,
+  "price_per_mtok": {
+    "input": 0.14,
+    "output": 0.42
+  },
+  "notes": "Alibaba Cloud Model Studio / DashScope (DASHSCOPE_API_KEY; set DASHSCOPE_API_BASE for a non-default region). temperature 0, max_tokens 4096, effort from --effort."
+}

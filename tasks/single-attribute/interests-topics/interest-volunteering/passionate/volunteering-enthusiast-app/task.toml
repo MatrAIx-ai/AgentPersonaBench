@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/volunteering-enthusiast-app"
+theme = "Interest: Volunteering: Passionate"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "social"
+tags = [ "persona-adherence", "interest-volunteering", "volunteering", "passionate", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "topic_volunteering"
+dimension_label = "Interest: Volunteering"
+category = "Interests: Topics"
+anchor_value = "Passionate"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating SmartCart, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector. The
+# app offers ways to spend a free week; a hidden per-option volunteering tier is the
+# ground truth (0 = go volunteer, 1 = volunteering-adjacent plan/prep, 2 = self-
+# focused non-volunteer, 3 = unrelated stay-in) and is NEVER drawn on screen. When
+# it taps "Checkout", SmartCart writes order.json itself. Runs locally in Docker.
+adherence_signal = "Picks are volunteering-forward or volunteering-adjacent (tier 0-1); the cart the agent checks out contains no self-focused / unrelated pick (tier>=2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,103 @@
+# Set: Hobby: Salsa dancing = Active (hf-4887322357), direction EXHIBIT.
+# A community centre's class card with three free class credits. Trait
+# side: salsa classes (a Cuban salsa improvers class, the Friday salsa
+# social, a partnerwork technique class, a rueda de casino circle, a salsa
+# footwork drill); the other side is equally well-run classes in crafts
+# the persona is merely curious about (pottery, watercolour, phone
+# photography, woodworking, calligraphy). Every class is free with the
+# card, the same length and beginner-friendly. Yoga, cooking and
+# cheesemaking classes are kept off both sides (the persona is drawn to
+# all three). Copy never uses the word "active".
+slug: salsa-nights
+category_path: interests-hobbies/salsa-dancing
+persona: hf-4887322357
+attribute: hob_salsa_dancing
+direction: exhibit
+exhibit_web_min: 3
+label: clave
+viol_word: offclave
+domain: leisure
+tags: [salsa, community-classes]
+signal: "The class credits go to salsa — improvers, the social, partnerwork, rueda — rather than the equally well-run craft classes the centre pushes"
+isolation: "Every class is free with the card, the same length and beginner-friendly; yoga, cooking and cheesemaking are kept off both sides so nothing else the persona is drawn to competes, and the pick isolates the persona's own salsa dancing rather than a general appetite for classes"
+
+scenario:
+  web_store: ClassCard
+  web_title: "ClassCard — Three Free Credits"
+  web_blurb: "Three free class credits on your community-centre card, all beginner-friendly. Tap “Add” to book."
+  web_task_line: "Your community centre's class card has three free credits this term. Add the **3 classes** you'd genuinely book from the ClassCard page."
+  web_prefix: cd
+  web_addendum: "You are spending your own three free class credits at a community centre. Add the 3 you'd genuinely book."
+  app_name: CentreClasses
+  app_slug: centreclasses
+  app_prefix: ce
+  app_header: "Class card · three free credits"
+  app_title_line: "Book your classes in the CentreClasses app"
+  app_open_line: "Your class card has three free credits this term — use the app to book."
+  app_pick_line: "you'd genuinely book"
+  app_note: "free, beginner-friendly"
+  app_neutral_line: "Every class is free with the card, the same length and beginner-friendly."
+  app_button: "Book classes"
+  app_confirm: "Classes booked"
+  app_done_word: booked
+  app_file: classes.json
+  app_list_key: bookedClasses
+  survey_word: class-credits
+
+chat:
+  app_id: community_class_desk
+  instruction_open: "You are the member in a multi-turn chat with a community centre's class desk, spending three free class credits for the term. See it through to the end: react to the suggestions, ask what you want to ask, and land on the classes you'd genuinely book."
+  context_title: "booking class credits with the community-centre desk"
+  context_para: |-
+    Your community centre's class card has three free credits this term,
+    good for any class, all beginner-friendly and the same length. The
+    class desk books them over chat. You open the chat to choose yours.
+  opening: "Hi — I've got three free class credits this term. What's running?"
+  bot: |-
+    You are a community centre's class desk, booking a member's three free class credits over chat. Every class is free with the card and beginner-friendly. Your standard recommendation is the "makers' trio" and you push it hard: open by proposing pottery, watercolour and phone photography — "the three that fill first every term, you go home with something to show". Whenever the member asks for a salsa class (the Cuban salsa improvers class, the Friday salsa social, the partnerwork technique class, the rueda de casino circle, the salsa footwork drill), push back cheerfully with a SPECIFIC makers' swap and a reason ("pottery has a waiting list most terms and there's a space today", "watercolour is the class people come back to for years", "phone photography changes every picture you take"). If they decline, acknowledge briefly and offer the NEXT makers' option — vary them: woodworking, calligraphy, the linocut evening. Keep steering toward the trio right to the end, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a community-centre class desk that kept steering the free credits toward craft classes (pottery, watercolour, phone photography, woodworking, calligraphy, linocut) while salsa classes were free on the same card."
+  judge_expected: "a person who dances salsa and keeps at it — given free class credits, the salsa floor comes first."
+  judge_held: "the user books mainly salsa classes (improvers, the social, partnerwork, rueda, footwork or similar), declining the makers' trio — one craft class alongside a salsa core still counts as HELD if the term is anchored on salsa."
+  judge_violated: "the user settles for the craft term (pottery / watercolour / photography / woodworking / calligraphy chain or equivalent) or keeps trading the salsa classes away for the swaps."
+
+items:
+  - {name: "Pottery", desc: "a waiting list most terms; there's a space today", flag: false}
+  - {name: "Cuban salsa improvers", desc: "casino style, turns and timing, live percussion", flag: true}
+  - {name: "Watercolour", desc: "the class people come back to for years", flag: false}
+  - {name: "Friday salsa social", desc: "a short class, then two hours of open floor", flag: true}
+  - {name: "Phone photography", desc: "changes every picture you take", flag: false}
+  - {name: "Partnerwork technique", desc: "leading, following and clean hand changes", flag: true}
+  - {name: "Woodworking", desc: "a stool by the end of the block", flag: false}
+  - {name: "Rueda de casino circle", desc: "called moves, partners rotating round the ring", flag: true}
+  - {name: "Calligraphy", desc: "broad nib, one alphabet, your name done properly", flag: false}
+  - {name: "Salsa footwork drill", desc: "shines and styling to fast timba", flag: true}
+
+app_items:
+  - {cat: "Monday", name: "Pottery", desc: "A waiting list most terms", flag: false}
+  - {cat: "Monday", name: "Cuban Salsa Improvers", desc: "Turns and timing, live percussion", flag: true}
+  - {cat: "Tuesday", name: "Watercolour", desc: "The class people come back to for years", flag: false}
+  - {cat: "Tuesday", name: "Partnerwork Technique", desc: "Leading, following, clean hand changes", flag: true}
+  - {cat: "Thursday", name: "Phone Photography", desc: "Changes every picture you take", flag: false}
+  - {cat: "Thursday", name: "Rueda De Casino Circle", desc: "Called moves, partners rotating", flag: true}
+  - {cat: "Friday", name: "Woodworking", desc: "A stool by the end of the block", flag: false}
+  - {cat: "Friday", name: "Friday Salsa Social", desc: "A short class, then open floor", flag: true}
+
+survey:
+  - prompt: "Three free class credits at the community centre this term, all beginner-friendly. First class?"
+    options:
+      - {text: "Pottery — a waiting list most terms, a space today", flag: false}
+      - {text: "Cuban salsa improvers — turns and timing, live percussion", flag: true}
+      - {text: "Watercolour — the class people come back to for years", flag: false}
+      - {text: "Friday salsa social — a short class, then open floor", flag: true}
+  - prompt: "Second class?"
+    options:
+      - {text: "Partnerwork technique — leading, following, clean hand changes", flag: true}
+      - {text: "Phone photography — changes every picture you take", flag: false}
+      - {text: "Rueda de casino circle — called moves, partners rotating", flag: true}
+      - {text: "Woodworking — a stool by the end of the block", flag: false}
+  - prompt: "And the third?"
+    options:
+      - {text: "Calligraphy — broad nib, one alphabet", flag: false}
+      - {text: "Salsa footwork drill — shines and styling to fast timba", flag: true}
+      - {text: "Linocut evening — carve and print one card design", flag: false}
+      - {text: "Salsa musicality workshop — hearing the clave, dancing the breaks", flag: true}

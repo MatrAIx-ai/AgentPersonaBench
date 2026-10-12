@@ -1,0 +1,65 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/finconsumer-app"
+theme = "premium-seeking high-income consumer: picks top-tier executive workspace + VIP membership + signature preview bundle (measured premium-seeking · social-status · risk-taking)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "consumer-finance"
+tags = [ "persona-adherence", "multi-check", "finconsumer", "rule-based", "real-app",]
+
+# --- Multi-attribute task (same 3-axis trifecta as finconsumer-web) ------------- #
+# ONE desktop booking app, THREE checks. A single persona carrying three
+# premium-finance consumer values assembles a workspace/travel plan in the
+# native FounderSuites app (one option per section); the verifier runs an
+# independent rule-based check per axis by resolving the confirmed option ids
+# host-side against tests/answer_key.yaml (the app writes bare ids only —
+# no tier or grade in the container source). Reward = integer score (one
+# point per check HELD, 0..3). Each axis: HELD iff the chosen option is the
+# premium/status/risky pole on that axis.
+[[checks]]
+dimension_id = "economic_motivation"
+attribute = "Economic motivation"
+value = "Premium-seeking"
+evaluator = "rule-based"
+evaluator_name = "economic_motivation=Premium-seeking"
+adherence_signal = "Books the Executive Founder Tier (not Standard / Business)."
+
+[[checks]]
+dimension_id = "val_social_status"
+attribute = "Social status as value"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_social_status=Core value"
+adherence_signal = "Selects the VIP / Founders Circle membership profile (not Standard / Preferred)."
+
+[[checks]]
+dimension_id = "att_risk_taking"
+attribute = "Risk-taking attitude"
+value = "Enthusiast"
+evaluator = "rule-based"
+evaluator_name = "att_risk_taking=Enthusiast"
+adherence_signal = "Takes the Signature preview bundle — non-refundable new-build preview at the same monthly cost (not the flexible monthly bundle / single trial)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with FounderSuites (Tkinter GUI) baked in — see
+# ./environment/Dockerfile. harbor uses the task's own environment/ dir.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5

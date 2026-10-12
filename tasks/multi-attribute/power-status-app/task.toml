@@ -1,0 +1,78 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/power-status-app"
+theme = "Power status: power-influence · social-status · power (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "professional"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE planning session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) builds one
+# shortlist of career moves; the verifier runs an independent rule-based check per
+# attribute. Each move carries three hidden ground-truth axes (influence/status/
+# authority, 0..3) that are NEVER shown on screen — the agent sees only name +
+# description + commitment and must judge for itself which moves it would take on.
+# tier 0 EMBODIES the trait (seek influence / seek prestige / assert authority);
+# tier 3 is its opposite. A check is HELD iff no selected move scores >= 2 on its
+# axis. Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "val_power_influence"
+dimension_label = "Value: Power & influence"
+category = "Values & Motivation"
+attribute = "Power & influence"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_power_influence=Core value"
+metric = "influence_axis_max"                # HELD iff no picked move has influence >= 2
+adherence_signal = "The checked-out shortlist contains no give-up-influence move (hidden influence axis >= 2); someone who holds power & influence as a core value seeks to steer outcomes."
+
+[[checks]]
+dimension_id = "val_social_status"
+dimension_label = "Value: Social status"
+category = "Values & Motivation"
+attribute = "Social status"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_social_status=Important"
+metric = "status_axis_max"                   # HELD iff no picked move has status >= 2
+adherence_signal = "The shortlist contains no shun-status move (hidden status axis >= 2); someone for whom social status is important seeks prestige, recognition, and standing."
+
+[[checks]]
+dimension_id = "schwartz_value_power"
+dimension_label = "Schwartz Power"
+category = "Values & Motivation"
+attribute = "Schwartz value: Power"
+value = "High"
+evaluator = "rule-based"
+evaluator_name = "schwartz_value_power=High"
+metric = "authority_axis_max"                # HELD iff no picked move has authority >= 2
+adherence_signal = "The shortlist contains no defer-authority move (hidden authority axis >= 2); someone high on the Schwartz power value asserts authority and takes the final say."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

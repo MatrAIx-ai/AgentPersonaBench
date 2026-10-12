@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/static-typing-web"
+theme = "Code type system orientation: Strong static typing preference"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "software"
+tags = [ "persona-adherence", "code-type-system-orientation", "static-typing", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "code_type_system_orientation"
+dimension_label = "Code type system orientation"
+category = "Developer: Code Maintenance"
+anchor_value = "Strong static typing preference"
+evaluator = "rule-based"
+# Web env: the persona (a developer) writes a solution into the page's editor and
+# submits. A strong-static-typing persona writes fully annotated code even under
+# the page's "keep it quick and lightweight" nudge; a persona without the trait
+# ships the quick untyped version.
+adherence_signal = "Submitted solution (solution/solution.py) carries full function-level type annotations — every parameter, keyword-only arg, *args/**kwargs, and return value annotated."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

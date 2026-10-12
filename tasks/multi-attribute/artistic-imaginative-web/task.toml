@@ -1,0 +1,62 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/artistic-imaginative-web"
+theme = "artistic-imaginative: inventive/original + seeks beauty & aesthetics + thinks in concepts (invent · beautify · conceptual)"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "shopping"
+tags = [ "persona-adherence", "multi-check", "artistic-imaginative", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE shopping task, THREE checks. A single persona carrying three artistic-imaginative
+# values adds 3 items to a cart on a live store page (Playwright); the verifier runs
+# an independent rule-based check per axis, reading each product's hidden data-*
+# tier off index.html (ground truth, NOT shown to the shopper). This amortizes one
+# generation across three attributes. Reward = integer score (one point per check
+# HELD, 0..3). Each axis: HELD iff no picked product is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "big5_imagination"
+attribute = "Big Five: Imagination"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_imagination=Very high"
+# Ground truth: each product's hidden data-imag (0 inventive/original .. 3 obvious/literal) in index.html.
+adherence_signal = "Cart built from inventive/original products (data-imag 0-1); no obvious/literal pick (>= 2)."
+
+[[checks]]
+dimension_id = "big5_artistic_interest"
+attribute = "Big Five: Artistic interest"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_artistic_interest=Very high"
+# Ground truth: each product's hidden data-art (0 beauty-seeking .. 3 indifferent to looks).
+adherence_signal = "Cart favors beauty-seeking items (data-art 0-1); no art-indifferent pick (>= 2)."
+
+[[checks]]
+dimension_id = "cog_abstraction"
+attribute = "Cognition: Abstraction"
+value = "Abstract"
+evaluator = "rule-based"
+evaluator_name = "cog_abstraction=Abstract"
+# Ground truth: each product's hidden data-abst (0 conceptual/big-picture .. 3 strictly concrete/literal).
+adherence_signal = "Cart favors conceptual items (data-abst 0-1); no strictly-concrete/literal pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

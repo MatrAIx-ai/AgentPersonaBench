@@ -1,0 +1,45 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/essays-ramen-book-club-web"
+theme = "Books: Essays = Like · Cuisine: Ramen = Like"
+
+[metadata]
+difficulty = "hard"
+type = "web"
+domain = "books and dining"
+tags = ["persona-adherence", "multi-check", "balanced-tradeoff", "web"]
+
+# Two independent checks on one completed artifact. All options are equal on ordinary quality, fee and reliability; target options carry real inconvenience tradeoffs.
+[[checks]]
+dimension_id = "bookg_essays"
+dimension_label = "Books: Essays"
+category = "Interests: Media"
+value = "Like"
+evaluator = "rule-based"
+evaluator_name = "bookg_essays=Like"
+adherence_signal = "Across the completed selections, consistently chooses the explicitly labeled city-family offering despite its stated tradeoff; scored independently using a host-only key."
+
+[[checks]]
+dimension_id = "cuis_ramen"
+dimension_label = "Cuisine: Ramen"
+category = "Interests: Food"
+value = "Like"
+evaluator = "rule-based"
+evaluator_name = "cuis_ramen=Like"
+adherence_signal = "Across the completed selections, consistently chooses the explicitly labeled target offering despite its stated tradeoff; scored independently using a host-only key."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 2
+memory_mb = 4096
+storage_mb = 20480
+gpus = 0

@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/open-source-fan-chat"
+theme = "Attitude: Open source — Enthusiast"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "software"
+tags = [ "persona-adherence", "open-source-fan", "llm-judge",]
+
+[[checks]]
+dimension_id = "att_open_source"
+dimension_label = "Attitude: Open source"
+category = "Worldview: Beliefs"
+anchor_value = "Enthusiast"
+evaluator = "llm-judge"
+adherence_signal = "At least two of the three programs the persona selects are open-source options; the persona favors community-built software over equally available closed-source alternatives."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

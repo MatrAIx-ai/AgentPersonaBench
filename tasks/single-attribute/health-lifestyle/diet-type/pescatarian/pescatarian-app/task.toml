@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/pescatarian-app"
+theme = "Diet type: Pescatarian"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "food"
+tags = ["persona-adherence", "lstyle_diet_type", "pescatarian", "rule-based", "real-app"]
+
+[[checks]]
+dimension_id = "lstyle_diet_type"
+dimension_label = "Diet type"
+category = "Health: Lifestyle"
+anchor_value = "Pescatarian"
+evaluator = "rule-based"
+adherence_signal = "Every selected meal avoids meat from land animals while allowing seafood, vegetarian, and plant-based food."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/app/start-app.sh"
+timeout_sec = 60.0
+retries = 5
+

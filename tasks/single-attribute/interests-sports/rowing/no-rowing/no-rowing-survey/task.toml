@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/no-rowing-survey"
+theme = "Sport: Rowing — None"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "campus"
+tags = [ "persona-adherence", "no-rowing", "rule-based",]
+
+[[checks]]
+dimension_id = "sport_rowing"
+dimension_label = "Sport: Rowing"
+category = "Interests: Sports"
+anchor_value = "None"
+evaluator = "rule-based"
+adherence_signal = "None of the clubs the persona joins involve rowing, despite free membership, provided kit and repeated recommendation."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

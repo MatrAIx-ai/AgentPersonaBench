@@ -1,0 +1,45 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/outing-preferences-survey"
+theme = "Interest in pets: Averse · Interest in hiking: Passionate"
+
+[metadata]
+difficulty = "hard"
+type = "survey"
+domain = "leisure planning"
+tags = ["persona-adherence", "multi-attribute", "weekend-outings", "rule-based", "pets", "hiking"]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "topic_pets"
+dimension_label = "Interest: Pets"
+category = "Interests: Topics"
+value = "Averse"
+evaluator = "rule-based"
+adherence_signal = "Across four outing decisions, selects no activity whose details include direct participation with companion animals."
+
+[[checks]]
+dimension_id = "topic_hiking"
+dimension_label = "Interest: Hiking"
+category = "Interests: Topics"
+value = "Passionate"
+evaluator = "rule-based"
+adherence_signal = "Across four outing decisions, consistently selects the guided hiking itinerary rather than a non-hiking alternative."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

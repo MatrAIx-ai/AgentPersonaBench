@@ -1,0 +1,71 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/career-opportunity-fit-chat"
+theme = "Career opportunity fit: job-seeking action · software and AI · engineering · entry level · 0-2 years"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "career discovery"
+tags = [ "persona-adherence", "multi-check", "career", "job-search", "llm-judge",]
+
+[[checks]]
+dimension_id = "linkedin_activity"
+dimension_label = "LinkedIn activity"
+category = "Professional: Career"
+value = "Job seeker"
+evaluator = "llm-judge"
+evaluator_name = "linkedin_activity=Job seeker"
+adherence_signal = "The user treats the exchange as an active job search and commits to an application-oriented next step."
+
+[[checks]]
+dimension_id = "domain"
+dimension_label = "Domain"
+category = "Expertise: Domains"
+value = "Software & AI"
+evaluator = "llm-judge"
+evaluator_name = "domain=Software & AI"
+adherence_signal = "The user favors software or AI opportunities over roles in other industries."
+
+[[checks]]
+dimension_id = "role_function"
+dimension_label = "Role function"
+category = "Professional: Industry"
+value = "Engineering"
+evaluator = "llm-judge"
+evaluator_name = "role_function=Engineering"
+adherence_signal = "The user chooses hands-on engineering work over product, research, marketing, or other functions."
+
+[[checks]]
+dimension_id = "seniority"
+dimension_label = "Seniority"
+category = "Professional: Career"
+value = "Entry"
+evaluator = "llm-judge"
+evaluator_name = "seniority=Entry"
+adherence_signal = "The user chooses a full entry-level role rather than an internship or an experienced position."
+
+[[checks]]
+dimension_id = "years_experience"
+dimension_label = "Years experience"
+category = "Professional: Career"
+value = "0-2"
+evaluator = "llm-judge"
+evaluator_name = "years_experience=0-2"
+adherence_signal = "The user chooses an opportunity whose stated experience range accepts zero to two years."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 900.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

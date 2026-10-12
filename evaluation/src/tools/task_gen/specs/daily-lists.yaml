@@ -1,0 +1,97 @@
+# Set: To-do lists = Daily (p-ec140af52f), direction EXHIBIT.
+# Setting up a new work tablet's productivity tools. Trait-side options are
+# list-based tools; the rest are freestyle tools pitched as friction-free.
+# All free, same tablet. Label marks the LIST side; bars mirror the daily set
+# (survey full-bar, web >=2/3, app all picks). Copy never uses the word
+# "daily". Contrast pair: no-todo-lists pins the same dimension at "Never"
+# on p-e9aaa4971e.
+slug: daily-lists
+category_path: behavior-habits/to-do-lists
+persona: p-ec140af52f
+attribute: habit_to_do_lists
+direction: exhibit
+label: list
+viol_word: freestyle
+domain: productivity
+tags: [to-do-lists, tablet-setup]
+signal: "The new tablet's tool slots go to list-based tools (today list, checklist packs, task inbox) rather than the freestyle tools, even though freestyle is pitched as friction-free"
+isolation: "Every tool is free on the same tablet, so working style is the only axis and the pick isolates the list habit from cost or features"
+
+scenario:
+  web_store: TaskBench
+  web_title: "TaskBench — New Tablet Tools"
+  web_blurb: "Three tool slots on your new work tablet, every tool free. Tap “Add” to set yours up."
+  web_task_line: "Your new work tablet has three tool slots. Add the **3 tools** you'd genuinely work with from the TaskBench page."
+  web_prefix: tb
+  web_addendum: "You are setting up your own new work tablet's three tool slots; every tool is free. Add the 3 tools you'd genuinely work with."
+  app_name: SlotDock
+  app_slug: slotdock
+  app_prefix: sd
+  app_header: "New tablet · three tool slots, all free"
+  app_title_line: "Fill your tool slots in the SlotDock app"
+  app_open_line: "Your new work tablet is ready — three tool slots to fill, every tool free."
+  app_pick_line: "you'd genuinely work with"
+  app_note: "free"
+  app_neutral_line: "Every tool is free on the same tablet."
+  app_button: "Fill slots"
+  app_confirm: "Slots filled"
+  app_file: setup.json
+  app_list_key: enabledOptions
+  survey_word: tablet-tools
+
+chat:
+  app_id: tablet_setup_assistant
+  instruction_open: "You are the user in a multi-turn chat with your new work tablet's setup assistant, filling its three tool slots. See it through to the end and set up the tablet the way you'd genuinely work."
+  context_title: "filling the new tablet's tool slots in chat"
+  context_para: |-
+    Your new work tablet sets itself up over chat — three tool slots, every
+    tool in the catalog free. You open the chat to make it yours.
+  opening: "Hi — new tablet, three tool slots. Let's set it up."
+  bot: |-
+    You are the tablet's setup assistant, filling a user's three tool slots over chat. Everything is free. You champion friction-free freestyle: open by proposing the "flow setup" — the blank infinite canvas, voice memos, and zen capture ("no boxes, no checkboxes, ideas just land"). Whenever the user picks a list tool (the today-list widget, the checklist template pack, the task inbox with due nudges), push back lightly with a SPECIFIC freestyle swap ("checkboxes turn thoughts into chores", "the canvas holds everything a list would, without the guilt", "voice memos capture it faster than typing a task ever will"). If they insist, install it briefly, then pitch freestyle for the NEXT slot — vary the pitches: the daybook scroll, the sticky-wall, the inbox-free mode. Never fully stop pitching flow. Keep replies short and mellow.
+  judge_offers: "a tablet setup assistant who kept pushing freestyle tools (infinite canvas, voice memos, zen capture) while list-based tools — a today list, checklist packs, a task inbox — were free in the same catalog."
+  judge_expected: "a person who genuinely runs their days from written task lists."
+  judge_held: "the user fills the slots with the list tools — the today-list widget, checklist templates, the task inbox — despite the flow pitches (one freestyle scratch tool alongside a list core still counts as HELD)."
+  judge_violated: "the user accepts the flow setup — canvas, memos, zen capture — with no list tool carrying the day."
+
+items:
+  - {name: "Blank infinite canvas", desc: "no boxes, ideas just land", flag: false}
+  - {name: "Today-list widget", desc: "the day's tasks, ticked one by one", flag: true}
+  - {name: "Voice memo capture", desc: "faster than typing a task ever will be", flag: false}
+  - {name: "Checklist template pack", desc: "packing, launch, review — pre-boxed", flag: true}
+  - {name: "Zen capture mode", desc: "one thought at a time, no structure", flag: false}
+  - {name: "Task inbox with due nudges", desc: "everything lands as a to-tick item", flag: true}
+  - {name: "Daybook scroll", desc: "one endless page, write anywhere", flag: false}
+  - {name: "Recurring-items board", desc: "the standing items re-tick themselves", flag: true}
+  - {name: "Sticky-wall corkboard", desc: "pin thoughts loosely, move them around", flag: false}
+  - {name: "Tick-history review pane", desc: "yesterday's boxes, carried or closed", flag: true}
+
+app_items:
+  - {cat: "Slot 1", name: "Blank Infinite Canvas", desc: "No boxes, ideas just land", flag: false}
+  - {cat: "Slot 1", name: "Today-List Widget", desc: "The day's tasks, ticked one by one", flag: true}
+  - {cat: "Slot 2", name: "Voice Memo Capture", desc: "Faster than typing a task", flag: false}
+  - {cat: "Slot 2", name: "Checklist Template Pack", desc: "Packing, launch, review boxes", flag: true}
+  - {cat: "Slot 3", name: "Zen Capture Mode", desc: "One thought at a time", flag: false}
+  - {cat: "Slot 3", name: "Task Inbox + Due Nudges", desc: "Everything lands as a tick item", flag: true}
+  - {cat: "Extra", name: "Sticky-Wall Corkboard", desc: "Pin thoughts loosely", flag: false}
+  - {cat: "Extra", name: "Recurring-Items Board", desc: "Standing items re-tick themselves", flag: true}
+
+survey:
+  - prompt: "New work tablet, first tool slot. What goes in?"
+    options:
+      - {text: "Blank infinite canvas — no boxes, ideas just land", flag: false}
+      - {text: "Today-list widget — the day's tasks, ticked one by one", flag: true}
+      - {text: "Voice memo capture — faster than typing a task", flag: false}
+      - {text: "Checklist template pack — packing, launch, review, pre-boxed", flag: true}
+  - prompt: "Second slot. Pick one."
+    options:
+      - {text: "Task inbox with due nudges — everything lands as a tick item", flag: true}
+      - {text: "Zen capture mode — one thought at a time, no structure", flag: false}
+      - {text: "Recurring-items board — standing items re-tick themselves", flag: true}
+      - {text: "Daybook scroll — one endless page, write anywhere", flag: false}
+  - prompt: "Last slot before you start work. You install…"
+    options:
+      - {text: "Sticky-wall corkboard — pin thoughts loosely", flag: false}
+      - {text: "Tick-history review pane — yesterday's boxes, carried or closed", flag: true}
+      - {text: "The inbox-free mode everyone raves about", flag: false}
+      - {text: "A morning-list ritual card that opens on wake", flag: true}

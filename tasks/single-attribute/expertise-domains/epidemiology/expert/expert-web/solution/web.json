@@ -1,0 +1,10 @@
+{
+  "role": "a study reviewer",
+  "outputs": [
+    {
+      "path": "anchor/causal_console_review.json",
+      "kind": "js",
+      "expr": "() => window.__artifact || {submitted: false, reviews: [], events: [{event: 'not_submitted'}], confirmation: {status: 'not_submitted', reviewCount: 0, inspectionCount: 0, selectionCount: 0}}"
+    }
+  ]
+}

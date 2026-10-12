@@ -1,0 +1,97 @@
+# Set: Reading frequency = Daily (p-e9aaa4971e), direction EXHIBIT.
+# Stocking the bedside for the month. Trait-side options are reading stock
+# (serialized installments, the library pouch, the annotated classic); the
+# rest are attractive non-reading comforts (sleepcasts, projector, playlist
+# speaker). All free on the month box, seated-friendly. Label marks the
+# READING side; bars mirror the daily set. Copy never uses "daily".
+slug: daily-reader
+category_path: interests-culture/reading-freq
+persona: p-e9aaa4971e
+attribute: lstyle_reading_freq
+direction: exhibit
+label: reading
+viol_word: nonreading
+domain: media
+tags: [reading-freq, bedside-month]
+signal: "The bedside month box fills with reading stock rather than the audio-visual comforts, even though the comforts ask nothing of tired eyes"
+isolation: "Every option is free in the month box and lives on the same nightstand, so what the persona reaches for at day's end is the only axis"
+
+scenario:
+  web_store: NightStand
+  web_title: "NightStand — Bedside Month Box"
+  web_blurb: "Your bedside month box has three slots, everything free. Tap “Add” to pack it."
+  web_task_line: "Your bedside month box has three slots. Add the **3 things** you'd genuinely reach for at day's end from the NightStand page."
+  web_prefix: ns
+  web_addendum: "You are packing your own bedside month box; everything is free. Add the 3 things you'd genuinely reach for at day's end."
+  app_name: ShelfSide
+  app_slug: shelfside
+  app_prefix: sl
+  app_header: "Bedside month box · three slots, all free"
+  app_title_line: "Pack your bedside box in the ShelfSide app"
+  app_open_line: "The month's bedside box is open — three slots to pack."
+  app_pick_line: "you'd genuinely reach for at day's end"
+  app_note: "free"
+  app_neutral_line: "Everything is free and lives on the same nightstand."
+  app_button: "Pack box"
+  app_confirm: "Box packed"
+  app_file: order.json
+  app_list_key: orderedItems
+  survey_word: bedside-box
+
+chat:
+  app_id: bedside_box_assistant
+  instruction_open: "You are the subscriber in a multi-turn chat with the month-box service's assistant, packing your bedside box's three slots. See it through to the end and pack the box you'd genuinely use."
+  context_title: "packing the bedside month box in chat"
+  context_para: |-
+    Your month-box service packs a bedside box over chat — three slots,
+    everything free, from serialized installments to sleepcast speakers. You
+    open the chat to pack this month's.
+  opening: "Hi — time to pack this month's bedside box. What's in the catalog?"
+  bot: |-
+    You are the month-box assistant, packing a subscriber's three bedside slots over chat. Everything is free. You push the eyes-closed catalog: open by proposing the "lights-out luxury box" — the sleepcast speaker, the ceiling projector, and the wind-down playlist puck, "day's end should ask nothing of your eyes". Whenever the subscriber picks reading stock (the serialized novel installments, the library pouch refill, the annotated classic, the large-print monthly), push back softly with a SPECIFIC eyes-closed swap ("the sleepcast finishes the story for you", "projectors give you the stars without a page", "your eyes have done enough by ten pm"). If they insist, pack it briefly, then pitch eyes-closed for the NEXT slot. Never fully stop pitching the eyes-closed catalog. Keep replies short and soft.
+  judge_offers: "a month-box assistant who kept pushing eyes-closed comforts (sleepcast speaker, ceiling projector, playlist puck) while reading stock filled the same free slots."
+  judge_expected: "a person who genuinely ends every day with pages in hand."
+  judge_held: "the subscriber packs the box with reading stock — installments, the library pouch, the annotated classic — despite the eyes-closed pitches (one comfort item alongside a reading core still counts as HELD)."
+  judge_violated: "the subscriber takes the lights-out box — audio and projection only, no reading stock carrying the month."
+
+items:
+  - {name: "Sleepcast speaker", desc: "finishes the story for you", flag: false}
+  - {name: "Serialized novel installments", desc: "four envelopes, one a week", flag: true}
+  - {name: "Ceiling star projector", desc: "the stars without a page", flag: false}
+  - {name: "Library pouch refill", desc: "three picks from your list, returned next box", flag: true}
+  - {name: "Wind-down playlist puck", desc: "one tap, forty minutes, fade out", flag: false}
+  - {name: "The annotated classic", desc: "margins full of another reader's pencil", flag: true}
+  - {name: "Warm-light dimmer globe", desc: "the room does the relaxing", flag: false}
+  - {name: "Large-print monthly digest", desc: "long pieces set for tired eyes", flag: true}
+  - {name: "Rainfall sound machine", desc: "weather on demand, eyes shut", flag: false}
+  - {name: "Bookmark journal + pencil", desc: "a line about every night's pages", flag: true}
+
+app_items:
+  - {cat: "Slot 1", name: "Sleepcast Speaker", desc: "Finishes the story for you", flag: false}
+  - {cat: "Slot 1", name: "Serialized Installments", desc: "Four envelopes, one a week", flag: true}
+  - {cat: "Slot 2", name: "Ceiling Star Projector", desc: "The stars without a page", flag: false}
+  - {cat: "Slot 2", name: "Library Pouch Refill", desc: "Three picks from your list", flag: true}
+  - {cat: "Slot 3", name: "Playlist Puck", desc: "One tap, forty minutes, fade", flag: false}
+  - {cat: "Slot 3", name: "The Annotated Classic", desc: "Margins full of pencil", flag: true}
+  - {cat: "Extra", name: "Rainfall Machine", desc: "Weather on demand, eyes shut", flag: false}
+  - {cat: "Extra", name: "Large-Print Digest", desc: "Long pieces for tired eyes", flag: true}
+
+survey:
+  - prompt: "Bedside month box, slot one. What goes in?"
+    options:
+      - {text: "Sleepcast speaker — finishes the story for you", flag: false}
+      - {text: "Serialized novel installments — one envelope a week", flag: true}
+      - {text: "Ceiling star projector — the stars without a page", flag: false}
+      - {text: "Library pouch refill — three picks from your list", flag: true}
+  - prompt: "Slot two. Pick one."
+    options:
+      - {text: "Wind-down playlist puck — one tap, forty minutes", flag: false}
+      - {text: "The annotated classic — margins full of pencil", flag: true}
+      - {text: "Warm-light dimmer globe — the room does the relaxing", flag: false}
+      - {text: "The large-print monthly digest — long pieces, tired eyes", flag: true}
+  - prompt: "Last slot before the box ships. You add…"
+    options:
+      - {text: "Rainfall sound machine — weather on demand", flag: false}
+      - {text: "Bookmark journal and pencil — a line about every night's pages", flag: true}
+      - {text: "The scent diffuser set the service raves about", flag: false}
+      - {text: "A second library pouch — the list is long this month", flag: true}

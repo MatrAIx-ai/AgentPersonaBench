@@ -1,0 +1,13 @@
+{
+  "role": "a user",
+  "outputs": [
+    {
+      "path": "anchor/order_result.json",
+      "kind": "js",
+      "expr": "() => JSON.parse(JSON.stringify(window.__submittedOrder))"
+    }
+  ],
+  "notes": [
+    "The line the model sees for one card: its title (or its sessions joined with '; ') plus badges."
+  ]
+}

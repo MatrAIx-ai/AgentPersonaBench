@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/very-low-complexity-survey"
+theme = "Code complexity tolerance: Very low"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "software"
+tags = [ "persona-adherence", "code-complexity-tolerance", "simplicity", "rule-based", "dev-survey",]
+
+# --- Single-attribute task ---------------------------------------------------- #
+# A developer persona with very low complexity tolerance completes a nested-data
+# work-sample; the verifier runs one deterministic rule-based check reading
+# cyclomatic complexity + nesting depth off the submitted code. Reward = 1.0/0.0.
+[[checks]]
+dimension_id = "code_complexity_tolerance"
+dimension_label = "Code complexity tolerance"
+category = "Developer: Code Maintenance"
+anchor_value = "Very low"
+evaluator = "rule-based"
+evaluator_name = "code_complexity_tolerance=Very low"
+adherence_signal = "Submitted solution keeps every function at cyclomatic complexity <=3 and nesting depth <=2 — flat guard clauses and helpers, never deep nesting."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

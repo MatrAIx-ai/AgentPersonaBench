@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Money &amp; Nerve — Your Picks</title>
+<style>
+  :root {
+    --ink: #221a2b; --plum: #2e2139; --plum-2: #3d2d4b; --paper: #f6f1e9; --card: #fffdf8;
+    --line: #e4dccf; --muted: #6f6576; --coral: #ef6b4f; --coral-soft: #fde6df; --mint: #3fae94;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background: var(--paper); color: var(--ink); font: 15px/1.5 "Nimbus Sans", "Liberation Sans", Arial, sans-serif; }
+  a { color: inherit; }
+  .topbar { background: var(--plum); color: #f3ecf6; }
+  .topbar .in { max-width: 1120px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; gap: 18px; }
+  .brand { display: flex; align-items: center; gap: 10px; font: 700 22px/1 "P052", "Palatino Linotype", Palatino, Georgia, serif; letter-spacing: .2px; }
+  .brand svg { flex: none; }
+  .brand em { font-style: italic; color: var(--coral); font-weight: 400; }
+  .topbar nav { margin-left: auto; display: flex; gap: 22px; font-size: 14px; }
+  .topbar nav a { text-decoration: none; opacity: .82; }
+  .topbar nav a:hover { opacity: 1; }
+  .acct { width: 32px; height: 32px; border-radius: 50%; background: var(--plum-2); display: grid; place-items: center; font-size: 12px; font-weight: 700; }
+  .hero { background: linear-gradient(180deg, var(--plum) 0 62%, var(--paper) 62% 100%); }
+  .hero .in { max-width: 1120px; margin: 0 auto; padding: 22px 24px 0; }
+  .hero h1 { margin: 0; color: #fff; font: 700 38px/1.1 "P052", "Palatino Linotype", Palatino, Georgia, serif; }
+  .hero p.lead { margin: 8px 0 20px; color: #d8cde0; max-width: 620px; }
+  .steps { display: flex; background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: 0 10px 30px rgba(34,26,43,.10); overflow: hidden; }
+  .steps .st { flex: 1; display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-right: 1px solid var(--line); color: var(--muted); }
+  .steps .st:last-child { border-right: 0; }
+  .steps .num { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--line); display: grid; place-items: center; font-weight: 700; font-size: 13px; }
+  .steps .st.on { color: var(--ink); }
+  .steps .st.on .num { border-color: var(--coral); background: var(--coral); color: #fff; }
+  .steps .st.done .num { border-color: var(--mint); color: var(--mint); }
+  .steps small { display: block; font-size: 12px; color: var(--muted); }
+  main { max-width: 1120px; margin: 0 auto; padding: 28px 24px 40px; display: grid; grid-template-columns: 1fr 300px; gap: 28px; }
+  .panel h2 { margin: 0 0 4px; font: 700 24px/1.2 "P052", "Palatino Linotype", Palatino, Georgia, serif; }
+  .panel .sub { margin: 0 0 18px; color: var(--muted); }
+  .q { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px 16px; margin: 0 0 16px; }
+  .q legend { padding: 0; float: left; width: 100%; margin-bottom: 12px; }
+  .q .qn { display: inline-block; font: 700 11px/1 "DejaVu Sans Mono", monospace; letter-spacing: 1px; color: var(--coral); margin-bottom: 6px; }
+  .q .qt { display: block; font-size: 17px; }
+  .q .qt strong { font-family: "P052", "Palatino Linotype", Palatino, Georgia, serif; font-size: 19px; }
+  .opts { clear: both; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .opt { position: relative; display: flex; gap: 10px; align-items: flex-start; border: 1.5px solid var(--line); border-radius: 10px; padding: 12px 12px; cursor: pointer; background: #fff; min-height: 64px; }
+  .opt:hover { border-color: #cbbfd4; }
+  .opt input { margin: 3px 0 0; accent-color: var(--coral); width: 16px; height: 16px; flex: none; }
+  .opt.sel { border-color: var(--coral); background: var(--coral-soft); }
+  .actions { display: flex; align-items: center; gap: 14px; margin-top: 8px; }
+  .btn { font: 700 15px/1 "Nimbus Sans", "Liberation Sans", Arial, sans-serif; border: 0; border-radius: 999px; padding: 13px 24px; cursor: pointer; }
+  .btn.primary { background: var(--coral); color: #fff; }
+  .btn.ghost { background: transparent; border: 1.5px solid #cbbfd4; color: var(--ink); }
+  .notice { color: #b3402a; font-size: 14px; min-height: 20px; }
+  .review { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+  .review .grp { padding: 10px 20px; background: #efe8f2; font: 700 12px/1.4 "DejaVu Sans Mono", monospace; letter-spacing: 1px; color: var(--plum-2); }
+  .review .row { display: grid; grid-template-columns: 1fr 1fr auto; gap: 14px; align-items: center; padding: 12px 20px; border-top: 1px solid var(--line); }
+  .review .row .k { color: var(--muted); font-size: 14px; }
+  .review .row .v { font-weight: 700; }
+  .linkbtn { background: none; border: 0; color: var(--plum-2); text-decoration: underline; cursor: pointer; font: inherit; font-size: 13px; }
+  .saved { margin-top: 18px; border-radius: 14px; padding: 16px 20px; background: #e5f4ef; border: 1px solid #b9e0d4; }
+  .saved strong { color: #1f7a64; }
+  aside .box { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px 18px; margin-bottom: 16px; }
+  aside h3 { margin: 0 0 10px; font: 700 16px/1.2 "P052", "Palatino Linotype", Palatino, Georgia, serif; }
+  .tally { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin: 6px 0 10px; }
+  .tally span { height: 8px; border-radius: 4px; background: var(--line); }
+  .tally span.f { background: var(--plum-2); }
+  aside ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
+  aside p { margin: 0; color: var(--muted); font-size: 14px; }
+  footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+  footer .in { max-width: 1120px; margin: 0 auto; padding: 18px 24px 28px; display: flex; gap: 22px; flex-wrap: wrap; }
+  footer .in span:first-child { font-weight: 700; color: var(--ink); }
+  [hidden] { display: none !important; }
+  @media (max-width: 860px) { main { grid-template-columns: 1fr; } .opts { grid-template-columns: 1fr; } .topbar nav { display: none; } }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="in">
+    <div class="brand">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="14" fill="#ef6b4f"/><path d="M8 20 L12 10 L15 17 L18 10 L22 20" fill="none" stroke="#2e2139" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/></svg>
+      <span>Money <em>&amp;</em> Nerve</span>
+    </div>
+    <nav aria-label="Site">
+      <a href="#picks">My picks</a>
+      <a href="#how">How it works</a>
+      <a href="#help">Help</a>
+    </nav>
+    <div class="acct" aria-hidden="true">ME</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="in">
+    <h1>Money &amp; Nerve</h1>
+    <p class="lead">Make six picks — three money moves, three social moves. Choose one option in each section, then save.</p>
+    <div class="steps" aria-label="Progress">
+      <div class="st" id="st-1"><span class="num">1</span><div>Money moves<small>3 sections</small></div></div>
+      <div class="st" id="st-2"><span class="num">2</span><div>Social moves<small>3 sections</small></div></div>
+      <div class="st" id="st-3"><span class="num">3</span><div>Review &amp; save<small>Your plan</small></div></div>
+    </div>
+  </div>
+</section>
+
+<main id="picks">
+  <div class="panel">
+    <form id="config-form" novalidate>
+      <!-- Step 1 -->
+      <section id="step-1" class="stepbody">
+        <h2>Money moves</h2>
+        <p class="sub">Pick one option in each of the three sections below.</p>
+
+        <fieldset class="q" data-id="sq_f1" data-q="f1">
+          <legend><span class="qn">SECTION 1 OF 6</span><span class="qt"><strong>Windfall $20k</strong> — most people keep it safe; you?</span></legend>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="f1" value="f1b"><span>Blue-chip dividend portfolio</span></label>
+            <label class="opt"><input type="radio" name="f1" value="f1a"><span>Certificate of deposit, guaranteed return</span></label>
+            <label class="opt"><input type="radio" name="f1" value="f1c"><span>Leveraged crypto for maximum upside</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="q" data-id="sq_f2" data-q="f2">
+          <legend><span class="qn">SECTION 2 OF 6</span><span class="qt"><strong>Startup round</strong> — could double or halve?</span></legend>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="f2" value="f2b"><span>Meaningful slice of savings</span></label>
+            <label class="opt"><input type="radio" name="f2" value="f2c"><span>Aggressive large part of liquid savings</span></label>
+            <label class="opt"><input type="radio" name="f2" value="f2a"><span>Sidelines, wait for traction</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="q" data-id="sq_f3" data-q="f3">
+          <legend><span class="qn">SECTION 3 OF 6</span><span class="qt"><strong>Portfolio strategy</strong> — plus a cash option?</span></legend>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="f3" value="f3a"><span>Conservative bonds and cash</span></label>
+            <label class="opt"><input type="radio" name="f3" value="f3b"><span>Balanced moderate mix</span></label>
+            <label class="opt"><input type="radio" name="f3" value="f3c"><span>Max-growth concentrated high-volatility</span></label>
+          </div>
+        </fieldset>
+
+        <div class="actions">
+          <button type="button" class="btn primary" id="next-1">Continue to social moves</button>
+          <span class="notice" id="notice-1" role="status"></span>
+        </div>
+      </section>
+
+      <!-- Step 2 -->
+      <section id="step-2" class="stepbody" hidden>
+        <h2>Social moves</h2>
+        <p class="sub">Pick one option in each of the three sections below.</p>
+
+        <fieldset class="q" data-id="sq_s1" data-q="s1">
+          <legend><span class="qn">SECTION 4 OF 6</span><span class="qt"><strong>Failing plan in a meeting</strong> — most keep a low profile?</span></legend>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="s1" value="s1a"><span>Stay silent, go along</span></label>
+            <label class="opt"><input type="radio" name="s1" value="s1c"><span>Speak up publicly against it</span></label>
+            <label class="opt"><input type="radio" name="s1" value="s1b"><span>Private message afterward</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="q" data-id="sq_s2" data-q="s2">
+          <legend><span class="qn">SECTION 5 OF 6</span><span class="qt"><strong>Friend treats a server unfairly</strong> — intervene?</span></legend>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="s2" value="s2b"><span>Quiet word later</span></label>
+            <label class="opt"><input type="radio" name="s2" value="s2a"><span>Let it go</span></label>
+            <label class="opt"><input type="radio" name="s2" value="s2c"><span>Confront directly on the spot</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="q" data-id="sq_s3" data-q="s3">
+          <legend><span class="qn">SECTION 6 OF 6</span><span class="qt"><strong>Impromptu toast to 200 strangers</strong> — take the mic?</span></legend>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="s3" value="s3a"><span>Decline politely</span></label>
+            <label class="opt"><input type="radio" name="s3" value="s3c"><span>Grab the mic and improvise</span></label>
+            <label class="opt"><input type="radio" name="s3" value="s3b"><span>Short prepared remarks</span></label>
+          </div>
+        </fieldset>
+
+        <div class="actions">
+          <button type="button" class="btn ghost" id="back-2">Back to money moves</button>
+          <button type="button" class="btn primary" id="next-2">Review my picks</button>
+          <span class="notice" id="notice-2" role="status"></span>
+        </div>
+      </section>
+
+      <!-- Step 3 -->
+      <section id="step-3" class="stepbody" hidden>
+        <h2>Review &amp; save</h2>
+        <p class="sub">Check your six picks. Use Change to go back to a section.</p>
+        <div class="review" id="review"></div>
+        <div class="actions" style="margin-top:18px">
+          <button type="button" class="btn ghost" id="back-3">Back to social moves</button>
+          <button type="submit" class="btn primary save" id="save">Save picks</button>
+        </div>
+        <div class="saved" id="summary" hidden></div>
+      </section>
+    </form>
+  </div>
+
+  <aside>
+    <div class="box">
+      <h3>Your plan</h3>
+      <div class="tally" id="tally" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <p id="tally-text">0 of 6 sections answered</p>
+    </div>
+    <div class="box" id="how">
+      <h3>How it works</h3>
+      <ul>
+        <li>One pick per section, six sections in all.</li>
+        <li>You can change a pick any time before saving.</li>
+        <li>Saving replaces any plan you saved before.</li>
+      </ul>
+    </div>
+    <div class="box" id="help">
+      <h3>Need a hand?</h3>
+      <p>Your progress stays on this page until you save. Questions about your account? Visit the help centre from the footer.</p>
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <div class="in">
+    <span>Money &amp; Nerve</span>
+    <span>About</span><span>Help centre</span><span>Privacy</span><span>Terms</span>
+    <span>© 2026 Money &amp; Nerve</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var MONEY = ['f1', 'f2', 'f3'], SOCIAL = ['s1', 's2', 's3'], ALL = MONEY.concat(SOCIAL);
+  var step = 1;
+  function val(q) { var r = document.querySelector('input[name="' + q + '"]:checked'); return r ? r.value : null; }
+  function textOf(q) { var r = document.querySelector('input[name="' + q + '"]:checked'); return r ? r.parentNode.textContent.trim() : ''; }
+  function titleOf(q) { return document.querySelector('fieldset[data-q="' + q + '"] .qt strong').textContent; }
+  function refresh() {
+    document.querySelectorAll('.opt').forEach(function (l) { l.classList.toggle('sel', l.querySelector('input').checked); });
+    var n = 0, spans = document.querySelectorAll('#tally span');
+    ALL.forEach(function (q, i) { var on = !!val(q); if (on) n++; spans[i].classList.toggle('f', on); });
+    document.getElementById('tally-text').textContent = n + ' of 6 sections answered';
+  }
+  function show(s) {
+    step = s;
+    [1, 2, 3].forEach(function (i) {
+      document.getElementById('step-' + i).hidden = i !== s;
+      var st = document.getElementById('st-' + i);
+      st.classList.toggle('on', i === s); st.classList.toggle('done', i < s);
+    });
+    if (s === 3) buildReview();
+    window.scrollTo(0, 0);
+  }
+  function missing(qs) { return qs.filter(function (q) { return !val(q); }); }
+  function buildReview() {
+    var h = '';
+    [['MONEY MOVES', MONEY], ['SOCIAL MOVES', SOCIAL]].forEach(function (g) {
+      h += '<div class="grp">' + g[0] + '</div>';
+      g[1].forEach(function (q) {
+        h += '<div class="row"><span class="k">' + titleOf(q) + '</span><span class="v">' + textOf(q) +
+             '</span><button type="button" class="linkbtn" data-go="' + q + '" aria-label="Change ' + titleOf(q) + '">Change</button></div>';
+      });
+    });
+    var box = document.getElementById('review'); box.innerHTML = h;
+    box.querySelectorAll('[data-go]').forEach(function (b) {
+      b.addEventListener('click', function () { show(MONEY.indexOf(b.getAttribute('data-go')) >= 0 ? 1 : 2); });
+    });
+  }
+  document.querySelectorAll('input[type=radio]').forEach(function (r) { r.addEventListener('change', function () {
+    refresh(); document.getElementById('summary').hidden = true;
+    document.getElementById('notice-1').textContent = ''; document.getElementById('notice-2').textContent = '';
+  }); });
+  document.getElementById('next-1').addEventListener('click', function () {
+    var m = missing(MONEY);
+    if (m.length) { document.getElementById('notice-1').textContent = 'Pick one option in each section first (' + m.length + ' left).'; return; }
+    show(2);
+  });
+  document.getElementById('back-2').addEventListener('click', function () { show(1); });
+  document.getElementById('next-2').addEventListener('click', function () {
+    var m = missing(SOCIAL);
+    if (m.length) { document.getElementById('notice-2').textContent = 'Pick one option in each section first (' + m.length + ' left).'; return; }
+    show(3);
+  });
+  document.getElementById('back-3').addEventListener('click', function () { show(2); });
+  document.getElementById('config-form').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    if (missing(ALL).length) { show(missing(MONEY).length ? 1 : 2); return; }
+    var picks = {
+      sq_f1: val('f1'), sq_f2: val('f2'), sq_f3: val('f3'),
+      sq_s1: val('s1'), sq_s2: val('s2'), sq_s3: val('s3')
+    };
+    window.__config = picks;
+    var out = document.getElementById('summary');
+    out.innerHTML = '<strong>Picks saved.</strong> Your six picks are stored as your current plan. You can change them and save again at any time.';
+    out.hidden = false;
+  });
+  refresh(); show(1);
+})();
+</script>
+</body>
+</html>

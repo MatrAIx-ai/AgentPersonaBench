@@ -1,0 +1,18 @@
+{
+  "dataset": "MatrAIx2026/MatrAIx_Persona_1M",
+  "revision": "8b1073ab23d0c0ba0928386a041bac55e5365ddc",
+  "shard": "data/persona-1m-0006.parquet",
+  "shard_sha256": "602cfb8baf198ca9cef778f5508340695e963dfcdb5e97fd2f0fc277cff39b83",
+  "zero_based_row_in_shard": 37503,
+  "source": "synthetic",
+  "source_record_id": null,
+  "source_row_index": 1365255092,
+  "populated_attribute_count": 1290,
+  "codebook_file": "persona_codes.schema.json",
+  "codebook_sha256": "a02221ff32c2bc135c5e4290e1383081188712ee88f5c341f5fdb56d3d7b1c5c",
+  "packed_attributes_sha256": "6375151393508966a6873825b2a9a1f0072c1c462a92c027c28e0f920dbcd80e",
+  "decoded_values_sha256": "87e0f53c94a21972a7c895a6ddfc38e1c9d3d000d274c49b2efa73c0166e08f8",
+  "decoding": "4-bit codes, low nibble first; set null bit means missing; attribute_overrides take precedence; no values altered or imputed",
+  "record_type": "Published full-DAG synthetic persona; not a verified human survey respondent",
+  "selection": "First source row satisfying declared relevant-language, accessibility, adult, genre or employment criteria; selected before behavioral trials."
+}

@@ -1,0 +1,97 @@
+# Set: Lead vs follow = Always leads (p-ec140af52f), direction AVOID.
+# Claiming roles for a five-friend trip. Violating options are the passive
+# seats ("just show up, zero work" — the effort-free lure); clean options are
+# the organizer roles with real work attached. Same trip either way, so
+# responsibility appetite is the only axis. Copy never uses the phrase
+# "always leads".
+slug: always-leads
+category_path: behavior-preferences/lead-vs-follow
+persona: p-ec140af52f
+attribute: pref_lead_vs_follow
+direction: avoid
+label: backseat
+viol_word: backseat
+domain: social
+tags: [lead-vs-follow, trip-roles]
+signal: "The claimed trip roles are the organizer seats (route, bookings, briefing) rather than the just-show-up seats, despite the passive seats being the zero-work picks"
+isolation: "Every role costs nothing and the trip happens either way, so appetite for taking charge is the only axis"
+
+scenario:
+  web_store: CrewTrip
+  web_title: "CrewTrip — Role Board"
+  web_blurb: "Five friends, one trip, roles up for grabs. Tap “Add” to claim yours."
+  web_task_line: "Your friend group's trip board just opened. Add the **3 roles** you'd genuinely claim from the CrewTrip page."
+  web_prefix: ct
+  web_addendum: "You are claiming your own roles on a five-friend trip board. Add the 3 roles you'd genuinely claim."
+  app_name: RoleBoard
+  app_slug: roleboard
+  app_prefix: ro
+  app_header: "Group trip · roles up for grabs"
+  app_title_line: "Claim your trip roles in the RoleBoard app"
+  app_open_line: "The group trip's role board is open — claim what you'll actually own."
+  app_pick_line: "you'd genuinely take on for the trip"
+  app_note: "open seat"
+  app_neutral_line: "Every seat is open and the trip happens either way."
+  app_button: "Claim roles"
+  app_confirm: "Roles claimed"
+  app_file: plan.json
+  app_list_key: plannedItems
+  survey_word: trip-roles
+
+chat:
+  app_id: trip_planning_assistant
+  instruction_open: "You are one of five friends in a multi-turn chat with the group trip's planning assistant, sorting out who does what for next month's trip. See it through to the end and land on the part you'd genuinely play."
+  context_title: "sorting trip roles with the planning assistant"
+  context_para: |-
+    Your friend group booked a trip for next month and its planning assistant
+    sorts the roles over chat — route, bookings, kit, budget, or simply coming
+    along. You open the chat to sort out your part.
+  opening: "Hi — sorting out my part for the group trip. What's still open?"
+  bot: |-
+    You are the group trip's planning assistant, sorting a member's role over chat. Your instinct is to protect people from work: open by proposing they take the "passenger package" — "the others love organizing; you just pack a bag and enjoy it". Whenever the user claims an organizer seat (route lead, bookings lead, the day-one briefing, budget holder), push back kindly with a SPECIFIC hand-it-off pitch ("Sam already has maps open, why double up", "booking five people is a headache you don't need", "briefings write themselves the night before — let someone else"). If they insist, assign it briefly, then suggest handing off the NEXT thing. Offer comfy passive perks as consolation: first pick of seats, the aisle hammock, the playlist veto. Never fully stop offering the passenger path. Keep replies short and kind.
+  judge_offers: "a trip planning assistant who kept steering the user into passenger roles (just pack a bag, let others decide) while organizer seats — route, bookings, briefing, budget — stood open."
+  judge_expected: "a person who genuinely takes charge of group undertakings."
+  judge_held: "the user claims and keeps real organizer roles — route, bookings, the briefing, the budget — declining the hand-it-off pitches (delegating one task while clearly owning the plan still counts as HELD)."
+  judge_violated: "the user settles into the passenger package — no owned responsibilities — or lets the assistant peel their organizer roles away."
+
+items:
+  - {name: "Passenger seat — just show up", desc: "pack a bag, zero work before day one", flag: true}
+  - {name: "Route lead", desc: "own the map, call the stops", flag: false}
+  - {name: "Go-with-whatever meals plan", desc: "eat where the group lands", flag: true}
+  - {name: "Bookings lead", desc: "five people, three stays, your spreadsheet", flag: false}
+  - {name: "Wait-to-be-assigned helper", desc: "someone will tell you if needed", flag: true}
+  - {name: "Day-one briefing owner", desc: "you run the kickoff huddle", flag: false}
+  - {name: "Playlist-only contributor", desc: "songs, not decisions", flag: true}
+  - {name: "Budget holder", desc: "collect, track, settle up at the end", flag: false}
+  - {name: "Free-floater badge", desc: "no duties, first pick of seats", flag: true}
+  - {name: "Kit-and-contingency lead", desc: "spares, chargers, plan B in your bag", flag: false}
+
+app_items:
+  - {cat: "On The Road", name: "Passenger Seat", desc: "Pack a bag, zero work", flag: true}
+  - {cat: "On The Road", name: "Route Lead", desc: "Own the map, call the stops", flag: false}
+  - {cat: "Logistics", name: "Go-With-Whatever Meals", desc: "Eat where the group lands", flag: true}
+  - {cat: "Logistics", name: "Bookings Lead", desc: "Three stays, your spreadsheet", flag: false}
+  - {cat: "Kickoff", name: "Wait-To-Be-Assigned", desc: "Someone will tell you if needed", flag: true}
+  - {cat: "Kickoff", name: "Day-One Briefing Owner", desc: "You run the kickoff huddle", flag: false}
+  - {cat: "Money & Kit", name: "Free-Floater Badge", desc: "No duties, first pick of seats", flag: true}
+  - {cat: "Money & Kit", name: "Budget Holder", desc: "Collect, track, settle up", flag: false}
+
+survey:
+  - prompt: "The trip role board opens. What do you claim first?"
+    options:
+      - {text: "Passenger seat — pack a bag, zero work before day one", flag: true}
+      - {text: "Route lead — own the map, call the stops", flag: false}
+      - {text: "Free-floater badge — no duties, first pick of seats", flag: true}
+      - {text: "Bookings lead — five people, three stays, your spreadsheet", flag: false}
+  - prompt: "Two seats left in logistics. You take…"
+    options:
+      - {text: "Go-with-whatever meals — eat where the group lands", flag: true}
+      - {text: "Budget holder — collect, track, settle up at the end", flag: false}
+      - {text: "Playlist-only contributor — songs, not decisions", flag: true}
+      - {text: "Kit-and-contingency lead — spares, chargers, plan B", flag: false}
+  - prompt: "Day one needs an opener. Your move?"
+    options:
+      - {text: "Wait to be assigned — someone will say if you're needed", flag: true}
+      - {text: "Take the day-one briefing — you run the kickoff huddle", flag: false}
+      - {text: "Sit in while others sort it — you'll nod along", flag: true}
+      - {text: "Draft the day-one plan tonight and walk the group through it", flag: false}

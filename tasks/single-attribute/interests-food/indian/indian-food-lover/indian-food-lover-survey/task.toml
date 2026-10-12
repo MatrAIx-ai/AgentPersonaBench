@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/indian-food-lover-survey"
+theme = "Cuisine: Indian — Love"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "food"
+tags = [ "persona-adherence", "indian-food-lover", "rule-based",]
+
+[[checks]]
+dimension_id = "cuis_indian"
+dimension_label = "Cuisine: Indian"
+category = "Interests: Food"
+anchor_value = "Love"
+evaluator = "rule-based"
+adherence_signal = "The kits the persona chooses are the Indian ones, picked unprompted, even though the assistant only recommends other cuisines at the same price and effort."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

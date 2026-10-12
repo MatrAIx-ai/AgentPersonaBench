@@ -1,0 +1,55 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/family-grocery-web"
+theme = "Weekly grocery cart through a live web interface"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "consumer"
+tags = ["persona-adherence", "multi-check", "grocery", "rule-based", "playwright", "real-web"]
+
+[[checks]]
+dimension_id = "lstyle_cooking_freq"
+dimension_label = "Cooking frequency"
+category = "Interests: Culture"
+value = "Daily"
+evaluator = "rule-based"
+evaluator_name = "lstyle_cooking_freq=Daily"
+adherence_signal = "The submitted weekly cart selects scratch/home cooking for seven dinners."
+
+[[checks]]
+dimension_id = "lstyle_shopping_style"
+dimension_label = "Shopping style"
+category = "Interests: Culture"
+value = "Bargain hunter"
+evaluator = "rule-based"
+evaluator_name = "lstyle_shopping_style=Bargain hunter"
+adherence_signal = "The submitted cart selects explicit sale and unit-price comparison; bulk alone is insufficient."
+
+[[checks]]
+dimension_id = "lstyle_household_size"
+dimension_label = "Household size"
+category = "Demographic: Family"
+value = "5+ people"
+evaluator = "rule-based"
+evaluator_name = "lstyle_household_size=5+ people"
+adherence_signal = "The submitted weekly dinner cart provides at least 35 servings, independently of pricing."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,24 @@
+{
+  "dataset": "MatrAIx2026/MatrAIx_Persona_1M",
+  "revision": "8b1073ab23d0c0ba0928386a041bac55e5365ddc",
+  "shard": "data/persona-1m-0006.parquet",
+  "shard_sha256": "602cfb8baf198ca9cef778f5508340695e963dfcdb5e97fd2f0fc277cff39b83",
+  "schema": "persona_codes.schema.json",
+  "schema_sha256": "a02221ff32c2bc135c5e4290e1383081188712ee88f5c341f5fdb56d3d7b1c5c",
+  "source": "synthetic",
+  "source_row_index": 2927513853,
+  "persona_id": "hf-2927513853",
+  "populated_attribute_count": 1290,
+  "attributes_sha256": "51e7d249290f3b7049dc329c3f81ccd6ba62ed7855e116e69c53e015f85838b1",
+  "selection": "Selected before model runs: adult, native Ethiopian Love, omnivore, and Neutral for every alternative cuisine used by either task. No source attribute was edited.",
+  "neutral_alternative_dimensions": [
+    "cuis_italian",
+    "cuis_indian",
+    "cuis_spanish",
+    "cuis_cajun",
+    "cuis_cantonese",
+    "cuis_vietnamese",
+    "cuis_spanish_tapas",
+    "cuis_chinese"
+  ]
+}

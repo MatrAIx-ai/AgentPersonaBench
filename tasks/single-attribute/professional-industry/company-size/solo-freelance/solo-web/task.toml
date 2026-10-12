@@ -1,0 +1,44 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/solo-web"
+theme = "Company size: Solo / freelance"
+
+[metadata]
+difficulty = "easy"
+type = "web"
+domain = "work-tooling"
+tags = [ "persona-adherence", "company-size", "solo-freelance", "rule-based", "live-dom",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+[[checks]]
+dimension_id = "company_size"
+dimension_label = "Company size"
+category = "Professional: Industry"
+anchor_value = "Solo / freelance"
+evaluator = "rule-based"
+# Web env: the Stackline plan page pairs each need (project tracking, invoicing,
+# support, sign-in, file storage) with an organization-shaped option
+# (data-flag=true — seat minimums, procurement contracts, admin/SSO provisioning,
+# helpdesk routing, a shared master agreement) and a self-serve single-seat
+# option (data-flag=false). Prices are visible and deliberately decorrelated from
+# the keyed side: no line is free, both sides of every pair are quoted in the same
+# unit, and the keyed line is cheaper on 2 of the 5 pairs (project tracking,
+# sign-in), dearer on 2 (invoicing, support) and within 10% on 1 (files). The
+# agent clicks Add in a real browser; the cart is read back from the live DOM.
+adherence_signal = "The 4 lines actually added to the DOM cart contain zero data-flag=true (seat-minimum / procurement / admin-provisioned / helpdesk-routed) options, whether the self-serve line in that pair happens to be the cheaper or the dearer of the two."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

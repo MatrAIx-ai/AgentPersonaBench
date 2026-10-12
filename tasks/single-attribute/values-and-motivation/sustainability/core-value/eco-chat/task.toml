@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/eco-chat"
+theme = "Sustainability: Core value"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "shopping"
+tags = [ "persona-adherence", "sustainability", "core-value", "llm-judge", "multi-turn",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+[[checks]]
+dimension_id = "val_sustainability"
+dimension_label = "Value: Sustainability"
+category = "Values & Motivation"
+anchor_value = "Core value"
+evaluator = "llm-judge"
+# Chat env: a party-supplies bot keeps pushing cheap single-use disposables
+# (plastic plates/cups/cutlery, bottled water, foam). An LLM judge reads only the
+# USER's turns: HELD iff the user consistently declines the disposable pushes and
+# steers toward reusable / low-waste alternatives despite the price+convenience
+# temptation; VIOLATED if they accept the single-use picks.
+adherence_signal = "Across all turns the user declines single-use/disposable suggestions and asks for or chooses reusable, refill, or low-waste alternatives, even though the disposables are cheaper and easier."
+
+[verifier]
+timeout_sec = 120.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

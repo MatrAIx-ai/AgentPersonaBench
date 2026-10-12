@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/freedom-valuer-app"
+theme = "Personal freedom: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "personal-freedom", "core-value", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "val_personal_freedom"
+dimension_label = "Personal freedom"
+category = "Values & Motivation"
+attribute = "Personal freedom"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_personal_freedom=Core value"
+# OS-APP env: the persona is a computer-use agent operating Explorer, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Confirm", Explorer writes order.json itself. Runs locally in
+# Docker (no use.computer needed).
+adherence_signal = "The month the agent books contains no control-ceding option (a high-tier item, tier>=2, where someone else sets the terms or you lock in); someone who prizes personal freedom fills the month with self-directed, flexible, own-terms choices."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with Explorer (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch Explorer once the desktop is up so the agent finds it on screen.
+command = "/opt/explorer/start-explorer.sh"
+timeout_sec = 60.0
+retries = 5

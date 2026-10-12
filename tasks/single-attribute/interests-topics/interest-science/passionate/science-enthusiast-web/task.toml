@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/science-enthusiast-web"
+theme = "Interest: Science: Passionate"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "science", "passionate", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "topic_science"
+dimension_label = "Interest: Science"
+category = "Interests: Topics"
+anchor_value = "Passionate"
+evaluator = "rule-based"
+# Web env: the persona picks 3 "ways to spend a free week" on a live page
+# (Playwright). Each card's hidden `data-rank` (0..3) in index.html is the ground
+# truth: 0 = do science, 1 = science-adjacent, 2 = unrelated, 3 = anti-intellectual
+# stay-in. Unified with science-enthusiast-survey: VIOLATED for any unrelated /
+# anti-intellectual pick (rank >= 2); science and science-adjacent picks are adherent.
+adherence_signal = "Picks are science-forward or science-adjacent (rank 0-1); no unrelated / anti-intellectual picks (rank >= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

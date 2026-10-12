@@ -1,0 +1,7 @@
+# Verifier-only task ground truth. Every opaque slot maps to a member of the
+# lstyle_sleep_schedule value set; a response holds only when no choice
+# contradicts the persona's Early bird value.
+option_values:
+  language: {lang-a: Night owl, lang-b: Early bird, lang-c: Night owl, lang-d: Night owl}
+  planning: {plan-a: Night owl, plan-b: Night owl, plan-c: Night owl, plan-d: Early bird}
+  mobility: {move-a: Night owl, move-b: Night owl, move-c: Early bird, move-d: Night owl}

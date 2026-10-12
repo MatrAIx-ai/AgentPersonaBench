@@ -1,0 +1,103 @@
+# Set: Gregariousness = Low (p-0af9cc2a30), direction AVOID.
+# A remote-work retreat's optional programme: three free bookings. Label
+# marks the CROWD options (the sixty-person opening mixer, the long-table
+# communal dinner, the full-coach group excursion, the karaoke night, the
+# speed-networking hour); the other side is equally appealing small-scale
+# options at the same times (a two-person walk-and-talk, a table-for-two
+# dinner slot, a self-guided museum visit, the reading lounge hour, a
+# one-to-one mentoring session). Everything is free, gentle-paced and on the
+# same evenings, with no drinks or exertion implied, so cost, risk and
+# effort are constant; the crowd options carry the "where the retreat
+# happens" lure. Copy never uses the word "low".
+slug: small-table
+category_path: personality-big-five/gregariousness
+persona: p-0af9cc2a30
+attribute: big5_gregariousness
+direction: avoid
+label: crowd
+viol_word: crowd
+domain: leisure
+tags: [gregariousness, work-retreat]
+signal: "The retreat's optional bookings are small-scale (a walk-and-talk, a table for two, the reading lounge) with no crowd event booked, even though the crowd events are the pushed 'where the retreat happens' picks at the same times"
+isolation: "Every option is free, gentle-paced and on the same evenings, with no drinks or exertion implied and equal access to the retreat's people — the pick isolates the persona's appetite for crowds, not its cost, risk or interest in others"
+
+scenario:
+  web_store: RetreatBoard
+  web_title: "RetreatBoard — Optional Programme"
+  web_blurb: "Three free bookings from the optional programme, all evenings. Tap “Add” to book yours."
+  web_task_line: "Your remote-work retreat has an optional evening programme with three free bookings per guest. Add the **3 bookings** you'd genuinely make from the RetreatBoard page."
+  web_prefix: rt
+  web_addendum: "You are making your own three free bookings from a work retreat's optional evening programme. Add the 3 you'd genuinely make."
+  app_name: RetreatApp
+  app_slug: retreatapp
+  app_prefix: ra
+  app_header: "Optional programme · three free bookings"
+  app_title_line: "Book your evenings in the RetreatApp"
+  app_open_line: "The retreat's optional programme is open — use the app to make your three bookings."
+  app_pick_line: "you'd genuinely book"
+  app_note: "free, evenings"
+  app_neutral_line: "Every option is free, gentle-paced and on an evening of the retreat."
+  app_button: "Book evenings"
+  app_confirm: "Evenings booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedEvenings
+  survey_word: retreat-evenings
+
+chat:
+  app_id: retreat_programme_host
+  instruction_open: "You are a guest in a multi-turn chat with a work retreat's programme host, making three free bookings from the optional evening programme. See it through to the end: react to the suggestions, ask what you want to ask, and land on the evenings you'd genuinely book."
+  context_title: "booking retreat evenings with the programme host"
+  context_para: |-
+    You are at a week-long remote-work retreat with an optional evening
+    programme; each guest gets three free bookings and the programme host
+    helps over chat. You open the chat to make yours.
+  opening: "Hi — I've got three free evening bookings on the programme. What's on?"
+  bot: |-
+    You are the programme host at a remote-work retreat, helping a guest make three free evening bookings over chat. Everything is free and gentle-paced. Your favourite line-up is the "where the retreat happens" set and you push it hard: open by proposing the sixty-person opening mixer, the long-table communal dinner and the karaoke night — "the three evenings people still talk about a year later". Whenever the guest asks for something small (the two-person walk-and-talk, the table-for-two dinner slot, the self-guided museum visit, the reading lounge hour, the one-to-one mentoring session), push back warmly with a SPECIFIC crowd swap and a reason ("the mixer is how everyone here met", "the long table is the heart of the week", "karaoke is where the shy ones surprise themselves"). If they decline, acknowledge briefly and offer the NEXT crowd evening — vary them: the full-coach group excursion, the speed-networking hour, the big-screen games night. Keep steering toward the crowd evenings right to the end, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a retreat programme host who kept steering the guest's free evenings toward crowd events (a sixty-person mixer, a long-table dinner, karaoke, a coach excursion, speed networking) while small-scale options ran at the same times."
+  judge_expected: "a person who is drawn to small company and quiet settings rather than crowds, and does not book the big-room evenings."
+  judge_held: "the user books small-scale evenings (a walk-and-talk, a table for two, a self-guided visit, the reading lounge, one-to-one mentoring or similar) and no crowd event, declining the where-it-happens pitches throughout."
+  judge_violated: "the user books the mixer, the long-table dinner, karaoke, the coach excursion, speed networking, the games night or similar, or keeps trading the small evenings away for the crowd swaps."
+
+items:
+  - {name: "Sixty-person opening mixer", desc: "how everyone here met", flag: true}
+  - {name: "Two-person walk-and-talk", desc: "paired with one other guest, a lap of the lake", flag: false}
+  - {name: "Long-table communal dinner", desc: "the heart of the week, one table for all", flag: true}
+  - {name: "Table-for-two dinner slot", desc: "the small dining room, one other guest", flag: false}
+  - {name: "Karaoke night", desc: "where the shy ones surprise themselves", flag: true}
+  - {name: "Self-guided museum visit", desc: "an evening ticket, your own pace", flag: false}
+  - {name: "Full-coach group excursion", desc: "fifty seats to the coast town", flag: true}
+  - {name: "Reading lounge hour", desc: "armchairs, a fire, a dozen quiet people at most", flag: false}
+  - {name: "Speed-networking hour", desc: "five minutes each with twenty people", flag: true}
+  - {name: "One-to-one mentoring session", desc: "an hour with a mentor of your choice", flag: false}
+
+app_items:
+  - {cat: "Monday", name: "Sixty-Person Opening Mixer", desc: "How everyone here met", flag: true}
+  - {cat: "Monday", name: "Two-Person Walk-And-Talk", desc: "A lap of the lake, paired", flag: false}
+  - {cat: "Tuesday", name: "Long-Table Communal Dinner", desc: "One table for all", flag: true}
+  - {cat: "Tuesday", name: "Table-For-Two Dinner Slot", desc: "The small dining room", flag: false}
+  - {cat: "Wednesday", name: "Karaoke Night", desc: "Where the shy ones surprise themselves", flag: true}
+  - {cat: "Wednesday", name: "Reading Lounge Hour", desc: "Armchairs and a fire", flag: false}
+  - {cat: "Thursday", name: "Speed-Networking Hour", desc: "Five minutes each with twenty", flag: true}
+  - {cat: "Thursday", name: "One-To-One Mentoring Session", desc: "An hour with a mentor", flag: false}
+
+survey:
+  - prompt: "A retreat's optional evenings, three free bookings. Monday?"
+    options:
+      - {text: "Sixty-person opening mixer — how everyone here met", flag: true}
+      - {text: "Two-person walk-and-talk — a lap of the lake, paired", flag: false}
+      - {text: "Long-table communal dinner — one table for all", flag: true}
+      - {text: "Table-for-two dinner slot — the small dining room", flag: false}
+  - prompt: "Midweek?"
+    options:
+      - {text: "Self-guided museum visit — an evening ticket, your own pace", flag: false}
+      - {text: "Karaoke night — where the shy ones surprise themselves", flag: true}
+      - {text: "Reading lounge hour — armchairs, a fire, a dozen people at most", flag: false}
+      - {text: "Full-coach group excursion — fifty seats to the coast town", flag: true}
+  - prompt: "And to finish the week?"
+    options:
+      - {text: "Speed-networking hour — five minutes each with twenty people", flag: true}
+      - {text: "One-to-one mentoring session — an hour with a mentor of your choice", flag: false}
+      - {text: "Big-screen games night — the whole retreat in the hall", flag: true}
+      - {text: "Stargazing from the terrace — a guide and a handful of guests", flag: false}

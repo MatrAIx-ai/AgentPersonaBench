@@ -1,0 +1,60 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/nextchapterhomes-web"
+theme = "Brief vs full detail: Detail-leaning · Parenting journey: Empty nester · Fitness level: Sedentary"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE artifact, THREE checks. A single persona completes one setup flow on a
+# live page -- one pick per section, three sections co-exposing three
+# attributes at once. The verifier reads the DOM selections back against
+# hidden data-* labels on the page and scores one point per check HELD (0..3).
+[[checks]]
+dimension_id = "pref_detail_brief_vs_full"
+dimension_label = "Brief vs full detail"
+category = "Behavior: Preferences"
+value = "Detail-leaning"
+evaluator = "rule-based"
+evaluator_name = "pref_detail_brief_vs_full=Detail-leaning"
+adherence_signal = "The picked listing-view pill is the full-detail spec-sheet one (data-full-detail=true)."
+
+[[checks]]
+dimension_id = "lifex_parenting_journey"
+dimension_label = "Parenting journey"
+category = "Demographic: Life Events"
+value = "Empty nester"
+evaluator = "rule-based"
+evaluator_name = "lifex_parenting_journey=Empty nester"
+adherence_signal = "The picked home-size card is the empty-nester/downsizing-for-two one (data-empty-nest=true)."
+
+[[checks]]
+dimension_id = "health_fitness_level"
+dimension_label = "Fitness level"
+category = "Health: Physical"
+value = "Sedentary"
+evaluator = "rule-based"
+evaluator_name = "health_fitness_level=Sedentary"
+adherence_signal = "The picked property-features option is the low-maintenance/no-stairs one (data-low-maintenance=true)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

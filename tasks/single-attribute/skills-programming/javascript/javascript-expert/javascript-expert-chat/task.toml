@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/javascript-expert-chat"
+theme = "Programming: JavaScript — Expert"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "software"
+tags = [ "persona-adherence", "javascript-expert", "llm-judge",]
+
+[[checks]]
+dimension_id = "prog_javascript"
+dimension_label = "Programming: JavaScript"
+category = "Skills: Programming"
+anchor_value = "Expert"
+evaluator = "llm-judge"
+adherence_signal = "The issues the persona claims are the JavaScript ones, chosen unprompted, even though the assistant only pushes backend work of the same size and priority."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

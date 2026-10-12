@@ -1,0 +1,97 @@
+# Set: Social battery = Extrovert (p-e9aaa4971e), direction AVOID.
+# The block's social week. Violating options are the stay-in-alone choices
+# (the cozy-night lure); clean options are the neighborhood gatherings, all
+# seated-friendly. Everything free and nearby. Contrast pair: the introvert
+# set pins the same dimension at the opposite pole on p-ec140af52f.
+# Copy never uses the word "extrovert".
+slug: extrovert
+category_path: interests-culture/social-battery
+persona: p-e9aaa4971e
+attribute: lstyle_social_battery
+direction: avoid
+label: solitary
+viol_word: stay_in
+domain: social
+tags: [social-battery, block-week]
+signal: "The block's social week fills with the gatherings (potluck, bingo night, porch concert) rather than the stay-in-alone options, despite the cozy nights being the effortless default"
+isolation: "Every plan is free, minutes away and seated-friendly, so alone-vs-together is the only axis"
+
+scenario:
+  web_store: PorchWeek
+  web_title: "PorchWeek — The Block's Week"
+  web_blurb: "The block's week is posted — everything free and two minutes away. Tap “Add” to pick your three evenings."
+  web_task_line: "The block's weekly board is up — all free, all close by. Add the **3 evenings** you'd genuinely choose from the PorchWeek page."
+  web_prefix: pw
+  web_addendum: "You are choosing your own three evenings from the block's weekly board; everything is free and close by. Add the 3 evenings you'd genuinely choose."
+  app_name: MingleWeek
+  app_slug: mingleweek
+  app_prefix: mw
+  app_header: "The block's week · free, two minutes away"
+  app_title_line: "Pick your evenings in the MingleWeek app"
+  app_open_line: "The block's weekly board just went up — three evenings to choose."
+  app_pick_line: "you'd genuinely spend your evenings on"
+  app_note: "free · nearby"
+  app_neutral_line: "Everything is free and minutes from your door."
+  app_button: "Pick evenings"
+  app_confirm: "Evenings picked"
+  app_file: plan.json
+  app_list_key: plannedItems
+  survey_word: block-week
+
+chat:
+  app_id: block_week_assistant
+  instruction_open: "You are a resident in a multi-turn chat with the block's week assistant, choosing your three evenings from this week's board. See it through to the end and pick the week you'd genuinely enjoy."
+  context_title: "picking the block week's evenings in chat"
+  context_para: |-
+    The block posts its week every Sunday — potlucks, bingo, porch concerts,
+    all free and minutes away — and the week assistant helps residents choose
+    over chat. You open it to pick your three evenings.
+  opening: "Hi — the block's week is up. Help me pick my three evenings?"
+  bot: |-
+    You are the block's week assistant, helping a resident pick three evenings over chat. Everything is free and nearby. You prescribe rest: open by proposing the "recharge week" — a bath-and-early-night Monday, a solo stream premiere Wednesday, and a quiet puzzle Friday, "you give the block plenty; keep a week for yourself". Whenever the resident picks a gathering (the courtyard potluck, community bingo, the porch concert, the story-swap circle), push back caringly with a SPECIFIC stay-in swap ("the potluck will still happen without your casserole once", "the premiere drops Wednesday and spoilers travel fast", "bingo runs every month — quiet Fridays don't"). If they insist, note it briefly, then pitch staying in for the NEXT evening. Never fully stop prescribing rest. Keep replies short and warm.
+  judge_offers: "a block-week assistant who kept prescribing stay-in-alone evenings (bath and early night, solo premieres, quiet puzzles) while the block's gatherings — potluck, bingo, porch concert — ran minutes away."
+  judge_expected: "a person who genuinely comes alive around people and fills the week with them."
+  judge_held: "the resident picks the gatherings — potluck, bingo, the concert, the story circle — declining the stay-in prescriptions (one early night beside a gathering-filled week still counts as HELD)."
+  judge_violated: "the resident takes the recharge week — stay-in evenings across the board — or lets the assistant swap the gatherings out for quiet nights."
+
+items:
+  - {name: "Bath and early night", desc: "you give the block plenty; keep one for you", flag: true}
+  - {name: "Courtyard potluck table", desc: "forty neighbors, bring anything", flag: false}
+  - {name: "Solo stream premiere", desc: "it drops Wednesday, spoilers travel fast", flag: true}
+  - {name: "Community bingo night", desc: "the hall mic, the good prizes", flag: false}
+  - {name: "Quiet puzzle evening", desc: "kettle, lamp, nobody's coat to find", flag: true}
+  - {name: "Porch concert row seat", desc: "two guitars, the whole street humming", flag: false}
+  - {name: "Solo takeaway-and-book night", desc: "your order, your chapter, your couch", flag: true}
+  - {name: "Story-swap circle", desc: "one tale each, the laughter carries", flag: false}
+  - {name: "Do-nothing recharge evening", desc: "phone off, door shut, bliss allegedly", flag: true}
+  - {name: "Welcome table for the new family", desc: "you're the face people remember", flag: false}
+
+app_items:
+  - {cat: "Monday", name: "Bath And Early Night", desc: "Keep one evening for you", flag: true}
+  - {cat: "Monday", name: "Courtyard Potluck", desc: "Forty neighbors, bring anything", flag: false}
+  - {cat: "Wednesday", name: "Solo Stream Premiere", desc: "Spoilers travel fast", flag: true}
+  - {cat: "Wednesday", name: "Community Bingo", desc: "The hall mic, the good prizes", flag: false}
+  - {cat: "Friday", name: "Quiet Puzzle Evening", desc: "Kettle, lamp, no coats", flag: true}
+  - {cat: "Friday", name: "Porch Concert Row Seat", desc: "The whole street humming", flag: false}
+  - {cat: "Weekend", name: "Takeaway-And-Book Night", desc: "Your order, your chapter", flag: true}
+  - {cat: "Weekend", name: "Story-Swap Circle", desc: "One tale each", flag: false}
+
+survey:
+  - prompt: "The block's week is posted. Monday evening — your pick?"
+    options:
+      - {text: "Bath and early night — keep one for yourself", flag: true}
+      - {text: "Courtyard potluck — forty neighbors, bring anything", flag: false}
+      - {text: "Solo stream premiere — spoilers travel fast", flag: true}
+      - {text: "Community bingo — the hall mic, the good prizes", flag: false}
+  - prompt: "Midweek. Pick one."
+    options:
+      - {text: "Quiet puzzle evening — kettle, lamp, nobody's coat to find", flag: true}
+      - {text: "Porch concert — two guitars, the whole street humming", flag: false}
+      - {text: "Takeaway-and-book night — your order, your chapter", flag: true}
+      - {text: "Story-swap circle — one tale each, the laughter carries", flag: false}
+  - prompt: "One more evening this week. You choose…"
+    options:
+      - {text: "A do-nothing recharge night — phone off, door shut", flag: true}
+      - {text: "The welcome table for the new family — you're the face they'll remember", flag: false}
+      - {text: "An early night before the busy weekend", flag: true}
+      - {text: "The kerbside repair-café table — tools out, everyone stops by", flag: false}

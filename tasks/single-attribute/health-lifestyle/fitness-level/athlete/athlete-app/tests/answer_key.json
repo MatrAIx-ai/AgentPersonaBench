@@ -1,0 +1,23 @@
+{
+  "_about": "Host-only ground truth. The acting model can read input/ and the app image, so neither app copy contains these labels. The verifier scores submitted IDs against this file and reconciles its IDs and names with both label-free catalogs.",
+  "label": {
+    "md01": true,
+    "md02": false,
+    "md03": true,
+    "md04": false,
+    "md05": true,
+    "md06": false,
+    "md07": true,
+    "md08": false
+  },
+  "name": {
+    "md01": "Threshold Cycling",
+    "md02": "Scenic Social Walk",
+    "md03": "Barbell Power Technique",
+    "md04": "First-Time Stretching Basics",
+    "md05": "Change-of-Direction Drills",
+    "md06": "Beginner Rhythm Sampler",
+    "md07": "Bike-to-Run Brick",
+    "md08": "Float and Easy Laps"
+  }
+}

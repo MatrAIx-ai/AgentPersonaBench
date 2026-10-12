@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/space-enthusiast-web"
+theme = "Topic space: Passionate about space"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "interests-topics", "topic-space", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "topic_space"
+dimension_label = "Topic: Space"
+category = "Interests: Topics"
+attribute = "topic_space"
+value = "Passionate"
+evaluator = "rule-based"
+evaluator_name = "topic_space=Passionate"
+# Web env: the persona adds experiences to a booking list on a live page (Playwright).
+# Each experience's hidden `data-avoid` (0..3) in index.html is the ground truth.
+# VIOLATED for any off-space pick (avoid >= 2).
+adherence_signal = "Booking list built from space/astronomy experiences (data-avoid 0-1); no off-space pick (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

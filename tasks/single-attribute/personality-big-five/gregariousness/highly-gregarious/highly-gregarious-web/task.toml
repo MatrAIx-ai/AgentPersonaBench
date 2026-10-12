@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/highly-gregarious-web"
+theme = "Gregariousness: Very high"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "personality-big-five", "gregariousness", "highly-gregarious", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "big5_gregariousness"
+dimension_label = "Gregariousness"
+category = "Personality: Big Five"
+attribute = "Gregariousness"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_gregariousness=Very high"
+# Web env: the persona adds ways to spend the weekend to a plan list on a live page
+# (Playwright). Each option's hidden `tier` (0..3) in tests/answer_key.yaml is the
+# ground truth. VIOLATED for any solitary / keep-to-yourself pick (tier >= 2).
+adherence_signal = "Weekend plan built from being-with-people / group options (tier 0-1); no solitary / keep-to-yourself option (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

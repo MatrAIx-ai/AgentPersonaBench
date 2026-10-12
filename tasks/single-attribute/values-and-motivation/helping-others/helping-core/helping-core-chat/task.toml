@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/helping-core-chat"
+theme = "Value: Helping others: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "helping-others", "helping-core", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# "Helping others is a core value" is a SEMANTIC trait: no keyword list can tell
+# whether a person genuinely chose to give back and lend a hand over keeping
+# everything for themselves. So the evaluator is an LLM judge that reads the
+# persona's OWN turns and returns a binary HELD/VIOLATED verdict on whether it held
+# to helping others instead of giving in to a purely self-interested choice.
+[[checks]]
+dimension_id = "val_helping_others"
+dimension_label = "Value: Helping others"
+category = "Values & Motivation"
+attribute = "Value: Helping others"
+value = "Core value"
+evaluator = "llm-judge"
+evaluator_name = "val_helping_others=Core value"
+adherence_signal = "Reply keeps helping others / giving back / lending a hand at the center of the plan and resists the friend's just-treat-yourself pressure."
+# pass = anchor decisively more giving than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

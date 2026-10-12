@@ -1,0 +1,12 @@
+{
+  "arm_id": "deepseek-v4-flash",
+  "provider": "deepseek",
+  "model": "deepseek-flash",
+  "max_tokens": 16000,
+  "price_per_mtok": {
+    "input": 0.22,
+    "cached_input": 0.007,
+    "output": 0.66
+  },
+  "notes": "DeepSeek API (DEEPSEEK_API_KEY). Text-only: the API rejects image content, so web runs with APB_WEB_OBS=text and app cannot run. max_tokens 16000."
+}

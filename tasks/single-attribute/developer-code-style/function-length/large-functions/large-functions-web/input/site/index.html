@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CodeHarbor · Review queue</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #0e1217;
+    --panel: #151b23;
+    --panel-2: #1b2330;
+    --line: #283241;
+    --text: #dbe3ee;
+    --muted: #8795a8;
+    --teal: #2ec4b6;
+    --teal-d: #1a9d91;
+    --amber: #f0b429;
+    --green: #3ecf8e;
+    --mono: "Liberation Mono", "DejaVu Sans Mono", monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { font-family: "Liberation Sans", Arial, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
+
+  .top { height: 52px; border-bottom: 1px solid var(--line); background: #0a0d11; display: flex; align-items: center; padding: 0 20px; gap: 26px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; letter-spacing: .2px; }
+  .brand em { font-style: normal; color: var(--teal); }
+  .top nav { display: flex; gap: 20px; font-size: 13px; color: var(--muted); }
+  .top nav .on { color: var(--text); }
+  .top .repo { margin-left: auto; font-family: var(--mono); font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 5px 10px; }
+  .top .av { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, #2ec4b6, #3b82f6); }
+
+  .app { display: grid; grid-template-columns: 290px 1fr; min-height: calc(100vh - 52px); }
+  .side { border-right: 1px solid var(--line); background: var(--panel); padding: 18px 14px; }
+  .side h2 { font-size: 11px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--muted); margin: 0 6px 10px; display: flex; justify-content: space-between; }
+  .qbtn { width: 100%; text-align: left; font: inherit; color: var(--text); background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 10px 12px; cursor: pointer; display: grid; grid-template-columns: 14px 1fr; gap: 10px; margin-bottom: 4px; }
+  .qbtn:hover { background: var(--panel-2); }
+  .qbtn.current { background: var(--panel-2); border-color: var(--line); }
+  .qbtn .dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--amber); margin-top: 4px; }
+  .qbtn.decided .dot { background: var(--green); border-color: var(--green); }
+  .qbtn .k { font-family: var(--mono); font-size: 11px; color: var(--muted); display: block; }
+  .qbtn .n { font-size: 13px; }
+  .side .batch { margin-top: 18px; border-top: 1px solid var(--line); padding-top: 16px; }
+  .meter { height: 6px; background: var(--panel-2); border-radius: 3px; overflow: hidden; margin: 8px 6px 12px; }
+  .meter i { display: block; height: 100%; background: var(--teal); width: 0; transition: width .2s; }
+  .side .pr { font-size: 12px; color: var(--muted); margin: 0 6px; }
+
+  main { padding: 26px 34px 60px; max-width: 1100px; }
+  .crumb { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .view { display: none; }
+  .view.on { display: block; }
+
+  .overview h1 { font-size: 26px; margin: 6px 0 6px; }
+  .overview p.lead { color: var(--muted); margin: 0 0 20px; max-width: 720px; }
+  .policy { border: 1px solid var(--line); border-left: 3px solid var(--teal); background: var(--panel); border-radius: 8px; padding: 14px 16px; margin-bottom: 22px; color: #c3cedb; }
+  table.q { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+  table.q th { text-align: left; font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); padding: 10px 14px; border-bottom: 1px solid var(--line); background: #121820; font-weight: 400; }
+  table.q td { padding: 13px 14px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+  table.q tr:last-child td { border-bottom: 0; }
+  .pill { font-size: 11px; border-radius: 999px; padding: 2px 9px; border: 1px solid var(--amber); color: var(--amber); white-space: nowrap; }
+  .pill.ok { border-color: var(--green); color: var(--green); }
+  .mono { font-family: var(--mono); }
+
+  .btn { font: inherit; font-size: 13px; font-weight: 700; border-radius: 7px; padding: 8px 14px; cursor: pointer; border: 1px solid var(--line); background: var(--panel-2); color: var(--text); }
+  .btn:hover { border-color: #3a4658; }
+  .btn.pri { background: var(--teal); border-color: var(--teal); color: #06201d; }
+  .btn.pri:hover { background: #45d3c6; }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  .ticket .th { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; margin: 6px 0 16px; }
+  .ticket h2 { font-size: 24px; margin: 0 0 6px; }
+  .ticket .th p { margin: 0; color: var(--muted); max-width: 760px; }
+  .checks { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin: 0 0 18px; }
+  .checks span { display: inline-flex; gap: 6px; align-items: center; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 5px 10px; }
+  .checks b { color: var(--green); font-weight: 400; }
+  .proposals { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .ticket .proposal { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px; }
+  .ticket .proposal.selected { border-color: var(--teal); box-shadow: 0 0 0 1px var(--teal) inset; background: #122126; }
+  .proposal h3 { margin: 0; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+  .proposal h3::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: #56657a; display: inline-block; }
+  .proposal.selected h3::before { background: var(--teal); }
+  .proposal p { margin: 0; color: #b6c2d1; }
+  .proposal .facts { font-family: var(--mono); font-size: 12px; color: #9fb0c4; background: #0f141b; border: 1px solid var(--line); border-radius: 6px; padding: 9px 11px; }
+  .proposal .foot { margin-top: auto; padding-top: 6px; display: flex; justify-content: flex-end; }
+  .choose[aria-pressed="true"] { background: var(--teal); border-color: var(--teal); color: #06201d; }
+  .tnav { display: flex; justify-content: space-between; margin-top: 20px; }
+
+  .batchview h1 { font-size: 26px; margin: 6px 0 6px; }
+  .sum { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); margin: 16px 0 20px; }
+  .sum td { padding: 12px 14px; border-bottom: 1px solid var(--line); }
+  .sum td:first-child { font-family: var(--mono); color: var(--muted); width: 90px; }
+  #receipt { display: none; background: #0f2419; border: 1px solid #2c6e4d; border-radius: 10px; padding: 18px 20px; margin-top: 20px; }
+  #receipt strong { color: var(--green); font-size: 16px; }
+  #receipt-items { margin: 10px 0 0; padding-left: 18px; font-family: var(--mono); font-size: 13px; }
+  .foot-bar { border-top: 1px solid var(--line); margin-top: 40px; padding-top: 14px; font-size: 12px; color: var(--muted); display: flex; gap: 20px; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15c3 3 15 3 18 0" fill="none" stroke="#2ec4b6" stroke-width="2" stroke-linecap="round"/><path d="M12 3v12M8 7h8" stroke="#dbe3ee" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="3.5" r="1.8" fill="none" stroke="#dbe3ee" stroke-width="1.6"/></svg>
+    <span>Code<em>Harbor</em></span>
+  </div>
+  <nav aria-label="Product"><span>Pull requests</span><span class="on">Review queue</span><span>Insights</span><span>Settings</span></nav>
+  <span class="repo">platform/core-services</span>
+  <span class="av" aria-hidden="true"></span>
+</header>
+
+<div class="app">
+  <aside class="side" aria-label="Review queue">
+    <h2><span>Assigned to you</span><span id="side-count">4</span></h2>
+    <button class="qbtn" type="button" data-go="t1" aria-label="Open ticket T-241 Shipment event consolidation"><span class="dot"></span><span><span class="k">T-241</span><span class="n">Shipment event consolidation</span></span></button>
+    <button class="qbtn" type="button" data-go="t2" aria-label="Open ticket T-318 Feature-flag retirement report"><span class="dot"></span><span><span class="k">T-318</span><span class="n">Feature-flag retirement report</span></span></button>
+    <button class="qbtn" type="button" data-go="t3" aria-label="Open ticket T-405 Partner payout reconciliation"><span class="dot"></span><span><span class="k">T-405</span><span class="n">Partner payout reconciliation</span></span></button>
+    <button class="qbtn" type="button" data-go="t4" aria-label="Open ticket T-477 Account migration planner"><span class="dot"></span><span><span class="k">T-477</span><span class="n">Account migration planner</span></span></button>
+    <div class="batch">
+      <h2><span>Review batch</span></h2>
+      <div class="meter" aria-hidden="true"><i id="meter"></i></div>
+      <div class="pr" id="progress">0 of 4 tickets decided</div>
+      <div style="margin:12px 6px 0"><button class="btn pri" id="to-batch" type="button" style="width:100%" disabled>Review batch &amp; submit</button></div>
+    </div>
+  </aside>
+
+  <main>
+    <!-- OVERVIEW -->
+    <section class="view on overview" id="view-overview">
+      <div class="crumb">platform/core-services › review queue</div>
+      <h1>Review queue</h1>
+      <p class="lead">Four maintenance tickets are ready for your implementation decision. Open each ticket, compare the proposals and approve one per ticket, then submit the batch.</p>
+      <div class="policy"><strong>Review note:</strong> Every proposal below passes the same acceptance tests, preserves the public API, changes one existing Python module, and has equivalent measured runtime. Select the implementation you would approve.</div>
+      <table class="q">
+        <tr><th>Ticket</th><th>Title</th><th>Proposals</th><th>Status</th><th></th></tr>
+        <tr><td class="mono">T-241</td><td>Shipment event consolidation</td><td>4</td><td><span class="pill" data-st="t1">Awaiting decision</span></td><td><button class="btn" type="button" data-go="t1" aria-label="Open T-241">Open</button></td></tr>
+        <tr><td class="mono">T-318</td><td>Feature-flag retirement report</td><td>4</td><td><span class="pill" data-st="t2">Awaiting decision</span></td><td><button class="btn" type="button" data-go="t2" aria-label="Open T-318">Open</button></td></tr>
+        <tr><td class="mono">T-405</td><td>Partner payout reconciliation</td><td>4</td><td><span class="pill" data-st="t3">Awaiting decision</span></td><td><button class="btn" type="button" data-go="t3" aria-label="Open T-405">Open</button></td></tr>
+        <tr><td class="mono">T-477</td><td>Account migration planner</td><td>4</td><td><span class="pill" data-st="t4">Awaiting decision</span></td><td><button class="btn" type="button" data-go="t4" aria-label="Open T-477">Open</button></td></tr>
+      </table>
+    </section>
+
+    <!-- TICKETS -->
+    <section class="view ticket" data-ticket="t1" id="view-t1">
+      <div class="crumb">review queue › T-241</div>
+      <div class="th"><div><h2>T-241 · Shipment event consolidation</h2><p>Validate carrier events, normalize timestamps, merge duplicates, calculate transit stages, flag delays, and render one customer timeline.</p></div></div>
+      <div class="checks"><span><b>&#10003;</b> Acceptance tests</span><span><b>&#10003;</b> Public API unchanged</span><span><b>&#10003;</b> Runtime equivalent</span></div>
+      <div class="proposals">
+        <article class="proposal" data-ticket="t1" data-proposal="t1p1" data-primary-lines="23"><h3>Patch Kestrel</h3><p>A coordinator delegates parsing, merging, stage calculation, delay checks, and rendering to eight focused helpers; reviewers follow the shared workflow state across those calls.</p><p class="facts">Primary: consolidate_events — 23 lines<br>Helpers: 8 functions — 7–21 lines · 8 call jumps</p><div class="foot"><button class="btn choose" type="button" data-ticket="t1" data-proposal="t1p1">Approve Patch Kestrel</button></div></article>
+        <article class="proposal" data-ticket="t1" data-proposal="t1p2" data-primary-lines="119"><h3>Patch Lantern</h3><p>The entire ordered workflow stays inside the existing entry point, with intermediate state local and readable from validation through timeline output without cross-function navigation.</p><p class="facts">Primary: consolidate_events — 119 lines<br>Helpers: none added · 0 call jumps</p><div class="foot"><button class="btn choose" type="button" data-ticket="t1" data-proposal="t1p2">Approve Patch Lantern</button></div></article>
+        <article class="proposal" data-ticket="t1" data-proposal="t1p3" data-primary-lines="34"><h3>Patch Meridian</h3><p>Three collaborating classes divide ingestion, transit analysis, and presentation.</p><p class="facts">Longest method: 34 lines<br>Methods: 11 total</p><div class="foot"><button class="btn choose" type="button" data-ticket="t1" data-proposal="t1p3">Approve Patch Meridian</button></div></article>
+        <article class="proposal" data-ticket="t1" data-proposal="t1p4" data-primary-lines="29"><h3>Patch Nimbus</h3><p>A generic stage runner executes registered normalization, analysis, and rendering callables.</p><p class="facts">Primary: run_pipeline — 29 lines<br>Stages: 9 callables</p><div class="foot"><button class="btn choose" type="button" data-ticket="t1" data-proposal="t1p4">Approve Patch Nimbus</button></div></article>
+      </div>
+      <div class="tnav"><button class="btn" type="button" data-go="overview" aria-label="Back to queue from T-241">Back to queue</button><button class="btn nextbtn" type="button" data-go="t2" aria-label="Next ticket: T-318">Next ticket: T-318</button></div>
+    </section>
+
+    <section class="view ticket" data-ticket="t2" id="view-t2">
+      <div class="crumb">review queue › T-318</div>
+      <div class="th"><div><h2>T-318 · Feature-flag retirement report</h2><p>Load snapshots, resolve environments, classify stale flags, calculate ownership, rank removal risk, and format the final report.</p></div></div>
+      <div class="checks"><span><b>&#10003;</b> Acceptance tests</span><span><b>&#10003;</b> Public API unchanged</span><span><b>&#10003;</b> Runtime equivalent</span></div>
+      <div class="proposals">
+        <article class="proposal" data-ticket="t2" data-proposal="t2p1" data-primary-lines="31"><h3>Patch Orchard</h3><p>A table-driven engine applies registered loading, classification, ranking, and formatting stages.</p><p class="facts">Primary: execute_report — 31 lines<br>Stages: 10 callables</p><div class="foot"><button class="btn choose" type="button" data-ticket="t2" data-proposal="t2p1">Approve Patch Orchard</button></div></article>
+        <article class="proposal" data-ticket="t2" data-proposal="t2p2" data-primary-lines="27"><h3>Patch Pebble</h3><p>A compact coordinator calls nine single-purpose functions for each transformation; reviewers trace the report state through each call.</p><p class="facts">Primary: build_flag_report — 27 lines<br>Helpers: 9 functions — 8–24 lines · 9 call jumps</p><div class="foot"><button class="btn choose" type="button" data-ticket="t2" data-proposal="t2p2">Approve Patch Pebble</button></div></article>
+        <article class="proposal" data-ticket="t2" data-proposal="t2p3" data-primary-lines="38"><h3>Patch Quill</h3><p>Loader, classifier, risk model, and renderer objects divide the processing state.</p><p class="facts">Longest method: 38 lines<br>Methods: 13 total</p><div class="foot"><button class="btn choose" type="button" data-ticket="t2" data-proposal="t2p3">Approve Patch Quill</button></div></article>
+        <article class="proposal" data-ticket="t2" data-proposal="t2p4" data-primary-lines="128"><h3>Patch Rivet</h3><p>The existing report function carries the complete sequence and its branching logic from snapshot loading to final formatting in one top-to-bottom flow.</p><p class="facts">Primary: build_flag_report — 128 lines<br>Helpers: none added · 0 call jumps</p><div class="foot"><button class="btn choose" type="button" data-ticket="t2" data-proposal="t2p4">Approve Patch Rivet</button></div></article>
+      </div>
+      <div class="tnav"><button class="btn" type="button" data-go="t1" aria-label="Previous ticket: T-241">Previous ticket: T-241</button><button class="btn nextbtn" type="button" data-go="t3" aria-label="Next ticket: T-405">Next ticket: T-405</button></div>
+    </section>
+
+    <section class="view ticket" data-ticket="t3" id="view-t3">
+      <div class="crumb">review queue › T-405</div>
+      <div class="th"><div><h2>T-405 · Partner payout reconciliation</h2><p>Normalize ledgers, pair transfers, apply fee schedules, classify exceptions, aggregate currencies, and produce the payout summary.</p></div></div>
+      <div class="checks"><span><b>&#10003;</b> Acceptance tests</span><span><b>&#10003;</b> Public API unchanged</span><span><b>&#10003;</b> Runtime equivalent</span></div>
+      <div class="proposals">
+        <article class="proposal" data-ticket="t3" data-proposal="t3p1" data-primary-lines="116"><h3>Patch Summit</h3><p>One reconciliation function performs the full top-to-bottom sequence, retaining match indexes, exception lists, totals, and report sections as local state.</p><p class="facts">Primary: reconcile_payouts — 116 lines<br>Helpers: none added · 0 call jumps</p><div class="foot"><button class="btn choose" type="button" data-ticket="t3" data-proposal="t3p1">Approve Patch Summit</button></div></article>
+        <article class="proposal" data-ticket="t3" data-proposal="t3p2" data-primary-lines="22"><h3>Patch Tundra</h3><p>A coordinator composes ten focused parsing, matching, pricing, and output helpers; shared reconciliation state is passed along the call chain.</p><p class="facts">Primary: reconcile_payouts — 22 lines<br>Helpers: 10 functions — 6–23 lines · 10 call jumps</p><div class="foot"><button class="btn choose" type="button" data-ticket="t3" data-proposal="t3p2">Approve Patch Tundra</button></div></article>
+        <article class="proposal" data-ticket="t3" data-proposal="t3p3" data-primary-lines="35"><h3>Patch Umber</h3><p>Four strategy objects separate ledger formats, transfer matching, fee policy, and summary output.</p><p class="facts">Longest method: 35 lines<br>Methods: 12 total</p><div class="foot"><button class="btn choose" type="button" data-ticket="t3" data-proposal="t3p3">Approve Patch Umber</button></div></article>
+        <article class="proposal" data-ticket="t3" data-proposal="t3p4" data-primary-lines="30"><h3>Patch Vector</h3><p>A declarative ruleset feeds a generic reconciliation interpreter and formatter.</p><p class="facts">Primary: evaluate_rules — 30 lines<br>Rules: 14 data entries</p><div class="foot"><button class="btn choose" type="button" data-ticket="t3" data-proposal="t3p4">Approve Patch Vector</button></div></article>
+      </div>
+      <div class="tnav"><button class="btn" type="button" data-go="t2" aria-label="Previous ticket: T-318">Previous ticket: T-318</button><button class="btn nextbtn" type="button" data-go="t4" aria-label="Next ticket: T-477">Next ticket: T-477</button></div>
+    </section>
+
+    <section class="view ticket" data-ticket="t4" id="view-t4">
+      <div class="crumb">review queue › T-477</div>
+      <div class="th"><div><h2>T-477 · Account migration planner</h2><p>Validate exports, map plans, reconcile permissions, calculate storage moves, surface conflicts, and render an execution plan.</p></div></div>
+      <div class="checks"><span><b>&#10003;</b> Acceptance tests</span><span><b>&#10003;</b> Public API unchanged</span><span><b>&#10003;</b> Runtime equivalent</span></div>
+      <div class="proposals">
+        <article class="proposal" data-ticket="t4" data-proposal="t4p1" data-primary-lines="25"><h3>Patch Willow</h3><p>An entry function delegates each migration phase to nine named helpers; reviewers navigate those helpers to follow the shared plan state.</p><p class="facts">Primary: plan_migration — 25 lines<br>Helpers: 9 functions — 8–26 lines · 9 call jumps</p><div class="foot"><button class="btn choose" type="button" data-ticket="t4" data-proposal="t4p1">Approve Patch Willow</button></div></article>
+        <article class="proposal" data-ticket="t4" data-proposal="t4p2" data-primary-lines="33"><h3>Patch Xenon</h3><p>Reader, mapper, conflict analyzer, and plan writer objects divide the workflow.</p><p class="facts">Longest method: 33 lines<br>Methods: 14 total</p><div class="foot"><button class="btn choose" type="button" data-ticket="t4" data-proposal="t4p2">Approve Patch Xenon</button></div></article>
+        <article class="proposal" data-ticket="t4" data-proposal="t4p3" data-primary-lines="124"><h3>Patch Yarrow</h3><p>The existing planner contains validation through final plan emission as one continuous top-to-bottom function with local working collections.</p><p class="facts">Primary: plan_migration — 124 lines<br>Helpers: none added · 0 call jumps</p><div class="foot"><button class="btn choose" type="button" data-ticket="t4" data-proposal="t4p3">Approve Patch Yarrow</button></div></article>
+        <article class="proposal" data-ticket="t4" data-proposal="t4p4" data-primary-lines="28"><h3>Patch Zephyr</h3><p>A generic executor consumes data-defined phases, mappings, checks, and output templates.</p><p class="facts">Primary: run_plan — 28 lines<br>Stages: 11 callables</p><div class="foot"><button class="btn choose" type="button" data-ticket="t4" data-proposal="t4p4">Approve Patch Zephyr</button></div></article>
+      </div>
+      <div class="tnav"><button class="btn" type="button" data-go="t3" aria-label="Previous ticket: T-405">Previous ticket: T-405</button><button class="btn nextbtn" type="button" data-go="batch" aria-label="Go to review batch">Go to review batch</button></div>
+    </section>
+
+    <!-- BATCH -->
+    <section class="view batchview" id="view-batch">
+      <div class="crumb">review queue › batch</div>
+      <h1>Review batch</h1>
+      <p style="color:#8795a8;margin:0">Your decisions for the four tickets. Submitting records one approved implementation per ticket.</p>
+      <table class="sum" id="sum"></table>
+      <div style="display:flex;gap:10px"><button class="btn" type="button" data-go="overview" aria-label="Back to queue from batch">Back to queue</button><button class="btn pri" id="submit" type="button" disabled>Submit review batch</button></div>
+      <div id="receipt"><strong>Review batch submitted.</strong><ul id="receipt-items"></ul></div>
+    </section>
+
+    <div class="foot-bar"><span>CodeHarbor</span><span>Review guidelines</span><span>Keyboard shortcuts</span><span>Status: operational</span></div>
+  </main>
+</div>
+
+<script>
+  const choices = {};
+  const TICKETS = ['t1', 't2', 't3', 't4'];
+  const KEYS = { t1: 'T-241', t2: 'T-318', t3: 'T-405', t4: 'T-477' };
+  let submitted = false;
+  const name = p => document.querySelector(`.proposal[data-proposal="${p}"] h3`).textContent;
+
+  function go(target) {
+    document.querySelectorAll('main .view').forEach(v => v.classList.remove('on'));
+    document.getElementById('view-' + target).classList.add('on');
+    document.querySelectorAll('.qbtn').forEach(b => b.classList.toggle('current', b.dataset.go === target));
+    if (target === 'batch') renderBatch();
+    window.scrollTo(0, 0);
+  }
+  document.querySelectorAll('[data-go]').forEach(b => b.addEventListener('click', () => go(b.dataset.go)));
+
+  function refresh() {
+    const n = Object.keys(choices).length;
+    document.getElementById('progress').textContent = submitted ? 'Submitted' : `${n} of 4 tickets decided`;
+    document.getElementById('meter').style.width = (n / 4 * 100) + '%';
+    document.getElementById('to-batch').disabled = n !== 4 || submitted;
+    document.getElementById('side-count').textContent = String(4 - n);
+    TICKETS.forEach(t => {
+      const done = !!choices[t];
+      document.querySelector(`.qbtn[data-go="${t}"]`).classList.toggle('decided', done);
+      const pill = document.querySelector(`.pill[data-st="${t}"]`);
+      pill.textContent = done ? 'Decided: ' + name(choices[t]) : 'Awaiting decision';
+      pill.classList.toggle('ok', done);
+    });
+    document.querySelectorAll('button.choose').forEach(b => {
+      const on = choices[b.dataset.ticket] === b.dataset.proposal;
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      b.textContent = (on ? 'Approved: ' : 'Approve ') + name(b.dataset.proposal);
+      b.closest('.proposal').classList.toggle('selected', on);
+      b.disabled = submitted;
+    });
+  }
+
+  document.querySelectorAll('button.choose').forEach(button => {
+    button.addEventListener('click', () => {
+      if (submitted) return;
+      choices[button.dataset.ticket] = button.dataset.proposal;
+      refresh();
+    });
+  });
+  document.getElementById('to-batch').addEventListener('click', () => go('batch'));
+
+  function renderBatch() {
+    const t = document.getElementById('sum');
+    t.innerHTML = '';
+    TICKETS.forEach(k => {
+      const tr = document.createElement('tr');
+      const a = document.createElement('td'); a.textContent = KEYS[k];
+      const b = document.createElement('td'); b.textContent = document.querySelector(`#view-${k} h2`).textContent.split(' · ')[1];
+      const c = document.createElement('td'); c.textContent = choices[k] ? 'Approved: ' + name(choices[k]) : 'No decision yet';
+      tr.append(a, b, c); t.appendChild(tr);
+    });
+    document.getElementById('submit').disabled = submitted || Object.keys(choices).length !== 4;
+  }
+
+  document.getElementById('submit').addEventListener('click', () => {
+    if (Object.keys(choices).length !== 4 || submitted) return;
+    const list = document.getElementById('receipt-items');
+    list.innerHTML = '';
+    Object.entries(choices).sort().forEach(([ticket, proposal]) => {
+      const li = document.createElement('li');
+      li.dataset.ticket = ticket;
+      li.dataset.proposal = proposal;
+      li.textContent = `${KEYS[ticket]}: ${name(proposal)}`;
+      list.appendChild(li);
+    });
+    submitted = true;
+    document.getElementById('receipt').style.display = 'block';
+    document.getElementById('submit').disabled = true;
+    document.getElementById('to-batch').disabled = true;
+    refresh();
+  });
+  refresh();
+</script>
+</body>
+</html>

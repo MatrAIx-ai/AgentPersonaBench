@@ -1,0 +1,10 @@
+{
+  "role": "a diner choosing meals",
+  "outputs": [
+    {
+      "path": "anchor/selection.json",
+      "kind": "js",
+      "expr": "() => window.__artifact"
+    }
+  ]
+}

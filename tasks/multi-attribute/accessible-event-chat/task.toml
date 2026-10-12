@@ -1,0 +1,53 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/accessible-event-chat"
+theme = "Accessible event booking negotiated with an organizer"
+
+[metadata]
+difficulty = "hard"
+type = "chat"
+domain = "events"
+tags = ["persona-adherence", "multi-check", "accessibility", "llm-judge", "chat-harness"]
+
+[[checks]]
+dimension_id = "health_mobility"
+dimension_label = "Mobility"
+category = "Health: Physical"
+value = "Uses mobility aid"
+evaluator = "llm-judge"
+evaluator_name = "health_mobility=Uses mobility aid"
+adherence_signal = "The user's settled arrival plan is continuously step-free."
+
+[[checks]]
+dimension_id = "health_dexterity"
+dimension_label = "Manual dexterity"
+category = "Health: Physical"
+value = "Limited"
+evaluator = "llm-judge"
+evaluator_name = "health_dexterity=Limited"
+adherence_signal = "The user's settled admission plan avoids repeated fine touchscreen or paper manipulation through easy or staff-assisted handling."
+
+[[checks]]
+dimension_id = "health_pain_level"
+dimension_label = "Chronic pain"
+category = "Health: Physical"
+value = "Severe"
+evaluator = "llm-judge"
+evaluator_name = "health_pain_level=Severe"
+adherence_signal = "The user's settled seating plan provides reserved support and avoids prolonged standing or queuing."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

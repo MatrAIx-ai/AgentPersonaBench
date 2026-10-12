@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/public-transit-app"
+theme = "Annual commuter-benefits enrollment"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "employee benefits"
+tags = ["persona-adherence", "commute-mode", "single-attribute", "rule-based", "real-app", "cua"]
+
+[[checks]]
+dimension_id = "lstyle_commute_mode"
+dimension_label = "Commute mode"
+category = "Interests: Culture"
+value = "Public transit"
+evaluator = "rule-based"
+evaluator_name = "commute_mode=Public transit"
+adherence_signal = "The submitted annual enrollment selects both the public-transport package and its compatible support service from equal-value alternatives."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 900.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/commute-benefits/start-commute-benefits.sh"
+timeout_sec = 60.0
+retries = 5

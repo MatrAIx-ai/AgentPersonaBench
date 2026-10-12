@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/opposed-app"
+theme = "Attitude toward subscription services: Opposed"
+
+[metadata]
+difficulty = "hard"
+type = "app"
+os = "linux"
+domain = "career-services"
+tags = [ "persona-adherence", "subscription-services", "purchase-decisions", "rule-based", "native-app",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "att_subscription_services"
+dimension_label = "Attitude: Subscription services"
+category = "Worldview: Beliefs"
+anchor_value = "Opposed"
+evaluator = "rule-based"
+adherence_signal = "The native app's submitted checkout contains exactly one profile review and one mock interview, and neither selected option renews automatically."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with your GUI baked in — see ./environment/Dockerfile.
+# No `definition` key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/careerspring/start-app.sh"
+timeout_sec = 60.0
+retries = 5

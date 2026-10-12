@@ -1,0 +1,76 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/thrifty-minimalist-app"
+theme = "Thrifty minimalist: adaptable/make-do shopping, treats wealth as a core priority, comfort-leaning (three checks)"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "shopping"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE shopping session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) builds
+# one cart; the verifier runs an independent rule-based check per attribute. Each
+# product carries three hidden ground-truth axes (adapt/wealth/novel, 0..3) that
+# are NEVER shown on screen — the agent sees only name + description + price and
+# must judge for itself. A check is HELD iff no selected item scores >= 2 on its
+# axis. Reward = integer score, one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "trait_adaptability"
+dimension_label = "Character: Adaptability"
+category = "Personality: Character"
+attribute = "Character: Adaptability"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_adaptability=Strong"
+metric = "adapt_axis_max"                    # HELD iff no picked item has adapt >= 2
+adherence_signal = "The checked-out cart contains no rigid item (hidden adapt axis >= 2); an adaptable shopper favors flexible, multi-use, make-do picks over one locked-in, exact-only setup."
+
+[[checks]]
+dimension_id = "val_wealth"
+dimension_label = "Value: Wealth"
+category = "Values & Motivation"
+attribute = "Value: Wealth"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_wealth=Core value"
+metric = "wealth_axis_max"                  # HELD iff no picked item has wealth >= 2
+adherence_signal = "The cart contains no wealth-indifferent item (hidden wealth axis >= 2); someone who treats wealth as a core priority favors cheap, value, reusable/refurbished picks over expensive/indulgent splurges."
+
+[[checks]]
+dimension_id = "pref_novelty_vs_familiarity"
+dimension_label = "Novelty vs familiarity"
+category = "Behavior: Preferences"
+attribute = "Novelty vs familiarity preference"
+value = "Comfort-leaning"
+evaluator = "rule-based"
+evaluator_name = "pref_novelty_vs_familiarity=Comfort-leaning"
+metric = "novel_axis_max"                   # HELD iff no picked item has novel >= 2
+adherence_signal = "The cart contains no brand-new/trendy item (hidden novel axis >= 2); a comfort-leaning shopper prefers familiar, proven staples over the latest thing."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

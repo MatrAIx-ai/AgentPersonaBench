@@ -1,0 +1,88 @@
+# Two-check set on hf-2050687254: Cuisine: Southern soul food = Love
+# (exhibit) x Music: Indie = Love (exhibit). A supper club runs nights that
+# pair a menu with a band. Facet A: the menu is Southern soul food (smothered
+# chicken and cornbread, catfish and cheese grits, chicken and waffles) or an
+# equally good plate from a cuisine the persona rates neutral (chicken
+# parmigiana, chicken souvlaki plate, chicken tikka masala). Facet B: the
+# band is indie (an indie four-piece, an indie singer-songwriter, a jangle-
+# pop indie trio) or an equally good act in a genre the persona rates
+# neutral (jazz quartet, country duo, pop covers band). Every night costs the
+# same, is alcohol-free and serves no beef or pork. Copy never uses "love".
+slug: cornbread-and-indie
+persona: hf-2050687254
+domain: leisure
+tags: [soul-food, indie-music, supper-club]
+isolation: "Every night costs the same, is alcohol-free and serves no beef or pork; the alternative cuisines and genres are ones the persona rates neutral — so the picks isolate the persona's own taste for soul food and for indie music independently"
+checks:
+  - attribute: cuis_southern_soul_food
+    direction: exhibit
+    label: soulfood
+    viol_word: offsoulfood
+    signal: "The menus chosen are Southern soul food (smothered chicken, catfish and grits, chicken and waffles) rather than the equally good parmigiana, souvlaki and tikka plates the club pushes"
+    judge_expected: "a person for whom Southern soul food is the first choice — given a supper, the catfish and the cornbread win."
+    judge_held: "the user books nights with the soul-food menu (smothered chicken, catfish and grits, chicken and waffles or similar), declining the parmigiana / souvlaki / tikka swaps — one other menu alongside a soul-food core still counts as HELD."
+    judge_violated: "the user settles for the parmigiana / souvlaki / tikka menus or keeps trading the soul food away for the swaps."
+  - attribute: musg_indie
+    direction: exhibit
+    label: indieband
+    viol_word: offindie
+    signal: "The bands chosen are indie (the four-piece, the singer-songwriter, the jangle-pop trio) rather than the equally good jazz, country and pop acts the club pushes"
+    judge_expected: "a person whose music is indie — given a night, the four-piece and the singer-songwriter come first."
+    judge_held: "the user books nights with the indie act (the four-piece, the singer-songwriter, the jangle-pop trio or similar), declining the jazz / country / pop swaps — one other act alongside an indie core still counts as HELD."
+    judge_violated: "the user settles for the jazz / country / pop nights or keeps trading the indie acts away for the swaps."
+
+scenario:
+  web_store: SupperNights
+  web_title: "SupperNights — Menu and Band"
+  web_blurb: "Three supper-club nights on your membership, each a menu plus a band, same price. Tap “Add” to book."
+  web_task_line: "Your supper-club membership covers three nights this month, each pairing a menu with a band. Add the **3 nights** you'd genuinely book from the SupperNights page."
+  web_prefix: sn
+  web_addendum: "You are booking your own three supper-club nights, each a menu plus a band. Add the 3 you'd genuinely book."
+  app_name: ClubSupper
+  app_slug: clubsupper
+  app_prefix: cs
+  app_header: "Membership · two supper-club nights"
+  app_title_line: "Book your supper-club nights in the ClubSupper app"
+  app_open_line: "Your membership covers two nights this month — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, alcohol-free, no beef or pork"
+  app_neutral_line: "Every night costs the same, is alcohol-free and serves no beef or pork."
+  app_button: "Book nights"
+  app_confirm: "Nights booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedNights
+  app_cats: ["Week one", "Week two", "Week three", "Week four"]
+  survey_word: supper-club
+  survey_prompts:
+    - "Your supper-club membership covers three nights this month, each a menu plus a band, all the same price. First night?"
+    - "Second night?"
+    - "Third night?"
+
+chat:
+  app_id: supper_club_host
+  instruction_open: "You are the member in a multi-turn chat with a supper club's host, booking three nights for the month, each a menu plus a band. See it through to the end: react to the suggestions, ask what you want to ask, and land on the nights you'd genuinely book."
+  context_title: "booking supper-club nights with the host"
+  context_para: |-
+    Your supper-club membership covers three nights this month, each
+    pairing a menu with a band; all cost the same, are alcohol-free and
+    serve no beef or pork. The host books them over chat. You open the chat
+    to choose yours.
+  opening: "Hi — three supper-club nights on my membership this month. What's on?"
+  bot: |-
+    You are a supper club's host, booking a member's three nights over chat. Every night costs the same, is alcohol-free and serves no beef or pork. Your standard recommendation is the "house favourites" and you push it hard: open by proposing the jazz quartet, the country duo and the pop covers band — "the three acts our regulars ask for" — always with the kitchen's headline menus: "the chicken parmigiana, the souvlaki plate, the tikka masala — the plates that made the club's name". Whenever the member asks for a soul-food menu (the smothered chicken, the catfish and grits, the chicken and waffles), push back cheerfully with a SPECIFIC swap and a reason ("the parmigiana is the chef's signature", "the souvlaki is the lightest thing on the menu", "the tikka is the bestseller"). Whenever the member asks for an indie act (the four-piece, the singer-songwriter, the jangle-pop trio), push a house favourite instead ("the jazz quartet has played the big festivals", "the country duo is the sweetest harmony we book"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a supper club's host that kept steering the month toward jazz, country and pop acts and toward parmigiana, souvlaki and tikka menus, while soul-food menus with indie bands were on the same membership."
+
+items:
+  - {name: "Smothered chicken and cornbread + indie four-piece", desc: "chicken in onion gravy with skillet cornbread; a four-piece from the local scene", a: true, b: true}
+  - {name: "Catfish and cheese grits + indie singer-songwriter", desc: "cornmeal-fried catfish over cheese grits; one voice and a jangling guitar", a: true, b: true}
+  - {name: "Chicken and waffles + jangle-pop indie trio", desc: "fried chicken on buttermilk waffles; a trio of chiming guitars", a: true, b: true}
+  - {name: "Smothered chicken and cornbread + jazz quartet", desc: "chicken in onion gravy with skillet cornbread; piano, bass, drums and horn", a: true, b: false}
+  - {name: "Catfish and cheese grits + country duo", desc: "cornmeal-fried catfish over cheese grits; two voices and a guitar", a: true, b: false}
+  - {name: "Chicken and waffles + pop covers band", desc: "fried chicken on buttermilk waffles; every song you know", a: true, b: false}
+  - {name: "Chicken parmigiana + indie four-piece", desc: "crumbed chicken, tomato and cheese; a four-piece from the local scene", a: false, b: true}
+  - {name: "Chicken souvlaki plate + indie singer-songwriter", desc: "skewers, tzatziki and warm pita; one voice and a jangling guitar", a: false, b: true}
+  - {name: "Chicken tikka masala + jangle-pop indie trio", desc: "tikka in a spiced tomato cream with naan; a trio of chiming guitars", a: false, b: true}
+  - {name: "Chicken parmigiana + jazz quartet", desc: "crumbed chicken, tomato and cheese; piano, bass, drums and horn", a: false, b: false}
+  - {name: "Chicken souvlaki plate + country duo", desc: "skewers, tzatziki and warm pita; two voices and a guitar", a: false, b: false}
+  - {name: "Chicken tikka masala + pop covers band", desc: "tikka in a spiced tomato cream with naan; every song you know", a: false, b: false}

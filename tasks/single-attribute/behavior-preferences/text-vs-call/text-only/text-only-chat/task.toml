@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/text-only-chat"
+theme = "Text vs call: Text only"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "communication"
+tags = [ "persona-adherence", "text-only", "llm-judge",]
+
+[[checks]]
+dimension_id = "pref_text_vs_call"
+dimension_label = "Texting vs calling"
+category = "Behavior: Preferences"
+anchor_value = "Text only"
+evaluator = "llm-judge"
+adherence_signal = "Every handling option the persona selects is a written channel; no phone, voice, or video call is chosen even though calls are equally fast."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

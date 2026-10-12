@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Backcountry Trading Post</title>
+  <style>
+    :root { --char:#23201c; --char2:#35302a; --kraft:#efe3cc; --kraft2:#e5d5b8; --paper:#fbf6ec;
+            --rust:#b4471f; --rust-d:#8f3514; --slate:#3c566d; --muted:#6f6556; --line:#d8c7a8; }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--kraft); color:var(--char);
+           font:15px/1.55 "Bitstream Charter", Georgia, serif; }
+    button { font:inherit; }
+    .mono { font-family:"Courier 10 Pitch","Liberation Mono",monospace; }
+    .caps { font-family:"Liberation Sans",Arial,sans-serif; text-transform:uppercase; letter-spacing:.14em; font-weight:700; }
+
+    /* top strip + header */
+    .strip { background:var(--char); color:#d9ccb3; font-size:12px; text-align:center; padding:7px 16px; }
+    .strip b { color:#fff; font-weight:700; }
+    header.mast { background:var(--char2); color:var(--kraft); border-bottom:4px solid var(--rust); }
+    .mast-in { max-width:1160px; margin:0 auto; padding:14px 28px; display:flex; align-items:center; gap:26px; }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .brand svg { flex:none; }
+    .wordmark { line-height:1; }
+    .wordmark .w1 { font-family:"Liberation Sans",Arial,sans-serif; font-weight:700; font-size:21px; letter-spacing:.2em; text-transform:uppercase; color:#fff; }
+    .wordmark .w2 { font-family:"Courier 10 Pitch",monospace; font-size:12.5px; letter-spacing:.24em; color:#e8a07f; text-transform:uppercase; margin-top:5px; }
+    nav.main { display:flex; gap:22px; margin-left:18px; }
+    nav.main span { font-family:"Liberation Sans",Arial,sans-serif; font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; color:#cdbfa4; padding:6px 0; border-bottom:2px solid transparent; }
+    nav.main span.on { color:#fff; border-color:#e8a07f; }
+    .pack-btn { margin-left:auto; display:flex; align-items:center; gap:10px; cursor:pointer; background:var(--rust); color:#fff;
+                border:0; border-radius:3px; padding:9px 16px; font-family:"Liberation Sans",Arial,sans-serif; font-weight:700;
+                font-size:12.5px; letter-spacing:.12em; text-transform:uppercase; }
+    .pack-btn .n { background:#fff; color:var(--rust-d); border-radius:2px; padding:1px 7px; font-family:"Courier 10 Pitch",monospace; font-size:13px; }
+
+    /* hero */
+    .hero { position:relative; overflow:hidden; background:var(--paper); border-bottom:1px solid var(--line); }
+    .hero svg.topo { position:absolute; inset:0; width:100%; height:100%; opacity:.55; }
+    .hero-in { position:relative; max-width:1160px; margin:0 auto; padding:38px 28px 34px; display:grid; grid-template-columns:1.4fr 1fr; gap:40px; align-items:center; }
+    .stamp { display:inline-block; border:2px solid var(--rust); color:var(--rust); padding:4px 10px; transform:rotate(-2deg);
+             font-family:"Courier 10 Pitch",monospace; font-size:12.5px; letter-spacing:.18em; text-transform:uppercase; }
+    .hero h1 { font-family:"Liberation Sans",Arial,sans-serif; font-size:40px; line-height:1.02; letter-spacing:-.01em; margin:16px 0 12px; text-transform:uppercase; }
+    .hero h1 em { font-family:"Bitstream Charter",Georgia,serif; text-transform:none; font-weight:400; color:var(--rust); letter-spacing:0; }
+    .hero p.lede { font-size:17px; color:var(--char2); max-width:46ch; margin:0 0 6px; }
+    .hero p.small { color:var(--muted); font-size:13.5px; margin:0; }
+    .steps { list-style:none; margin:0; padding:0; background:#fff; border:1px solid var(--line); border-radius:4px; box-shadow:6px 6px 0 var(--kraft2); }
+    .steps li { display:flex; gap:14px; padding:14px 18px; border-bottom:1px dashed var(--line); align-items:center; }
+    .steps li:last-child { border-bottom:0; }
+    .steps .k { width:34px; height:34px; border-radius:50%; border:2px solid var(--char); display:flex; align-items:center; justify-content:center;
+                font-family:"Courier 10 Pitch",monospace; font-weight:700; flex:none; }
+    .steps li.cur .k { background:var(--char); color:#fff; }
+    .steps li.done .k { background:var(--rust); border-color:var(--rust); color:#fff; }
+    .steps .t { font-weight:700; }
+    .steps .s { color:var(--muted); font-size:13px; }
+
+    /* layout */
+    .wrap { max-width:1160px; margin:0 auto; padding:28px 28px 60px; display:grid; grid-template-columns:1fr 330px; gap:28px; align-items:start; }
+    .sec-h { display:flex; align-items:baseline; justify-content:space-between; margin:0 0 16px; border-bottom:2px solid var(--char); padding-bottom:8px; }
+    .sec-h h2 { margin:0; font-family:"Liberation Sans",Arial,sans-serif; font-size:15px; letter-spacing:.16em; text-transform:uppercase; }
+    .sec-h .mono { color:var(--muted); font-size:13px; }
+
+    .grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:18px; }
+    .item { background:var(--paper); border:1px solid var(--line); border-radius:4px; display:flex; flex-direction:column; position:relative;
+            transition:transform .12s ease, box-shadow .12s ease; }
+    .item:hover { box-shadow:5px 5px 0 var(--kraft2); transform:translate(-1px,-1px); }
+    .item[data-selected="true"] { border-color:var(--rust); box-shadow:5px 5px 0 #e3b9a4; }
+    .item .art { height:128px; border-bottom:1px solid var(--line); position:relative; overflow:hidden; }
+    .item .art svg { display:block; width:100%; height:100%; }
+    .item .tag { position:absolute; top:12px; left:12px; background:var(--paper); border:1px solid var(--char); padding:3px 9px 3px 16px;
+                 font-family:"Courier 10 Pitch",monospace; font-size:12px; letter-spacing:.1em; }
+    .item .tag::before { content:""; position:absolute; left:5px; top:50%; width:5px; height:5px; margin-top:-2.5px; border-radius:50%; border:1px solid var(--char); }
+    .item .body { padding:14px 16px 16px; display:flex; flex-direction:column; gap:6px; flex:1; }
+    .item .name { font-family:"Liberation Sans",Arial,sans-serif; font-weight:700; font-size:16.5px; letter-spacing:-.005em; }
+    .item .desc { color:var(--muted); font-size:14px; }
+    .item .badge { align-self:flex-start; font-family:"Courier 10 Pitch",monospace; font-size:12.5px; color:var(--char2); background:var(--kraft);
+                   border:1px dashed #bda883; padding:3px 8px; border-radius:2px; }
+    .item .row { margin-top:auto; padding-top:10px; display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .item .stock { font-family:"Courier 10 Pitch",monospace; font-size:12.5px; color:var(--muted); }
+    button.act { cursor:pointer; background:var(--char); color:#fff; border:2px solid var(--char); border-radius:3px; padding:8px 14px;
+                 font-family:"Liberation Sans",Arial,sans-serif; font-weight:700; font-size:12px; letter-spacing:.12em; text-transform:uppercase; }
+    button.act:hover { background:var(--char2); }
+    button.act[aria-pressed="true"] { background:#fff; color:var(--rust-d); border-color:var(--rust); }
+    button.act:disabled { opacity:.45; cursor:not-allowed; }
+
+    /* pack panel */
+    aside.pack { position:sticky; top:16px; background:#fff; border:2px solid var(--char); border-radius:4px; }
+    .pack-h { background:var(--char); color:#fff; padding:12px 16px; display:flex; align-items:center; justify-content:space-between; }
+    .pack-h .caps { font-size:12.5px; }
+    .slots { display:flex; gap:6px; }
+    .slots i { width:18px; height:8px; border:1px solid #fff; display:block; }
+    .slots i.f { background:#e8a07f; border-color:#e8a07f; }
+    #pack-list { list-style:none; margin:0; padding:6px 16px; min-height:60px; }
+    #pack-list li { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px dashed var(--line); }
+    #pack-list li .no { font-family:"Courier 10 Pitch",monospace; color:var(--rust); font-weight:700; }
+    #pack-list li .nm { flex:1; font-size:14px; font-weight:700; font-family:"Liberation Sans",Arial,sans-serif; }
+    #pack-list li button { cursor:pointer; background:none; border:1px solid var(--line); border-radius:3px; font-size:12px; padding:3px 8px; color:var(--muted); }
+    #pack-list .empty { color:var(--muted); font-style:italic; font-size:14px; border:0; }
+    .notice { margin:0 16px 10px; font-size:13px; color:var(--rust-d); background:#fbe9df; border-left:3px solid var(--rust); padding:7px 10px; display:none; }
+    .notice.show { display:block; }
+    .pack-f { padding:12px 16px 16px; border-top:1px solid var(--line); }
+    #status { margin:0 0 10px; font-size:13.5px; color:var(--muted); }
+    .big { width:100%; cursor:pointer; border:0; border-radius:3px; padding:12px 14px; background:var(--rust); color:#fff;
+           font-family:"Liberation Sans",Arial,sans-serif; font-weight:700; font-size:13px; letter-spacing:.14em; text-transform:uppercase; }
+    .big:disabled { background:#cdbfa4; cursor:not-allowed; }
+    .big.ghost { background:#fff; color:var(--char); border:2px solid var(--char); }
+    .store { margin-top:18px; background:var(--paper); border:1px solid var(--line); border-radius:4px; padding:14px 16px; font-size:13.5px; color:var(--char2); }
+    .store h3 { margin:0 0 6px; font-family:"Liberation Sans",Arial,sans-serif; font-size:12px; letter-spacing:.14em; text-transform:uppercase; }
+    .store p { margin:2px 0; }
+
+    /* checkout view */
+    #checkout, #done { display:none; }
+    body.view-checkout #shop, body.view-done #shop { display:none; }
+    body.view-checkout #checkout { display:block; }
+    body.view-done #done { display:block; }
+    .panel { max-width:760px; margin:30px auto 60px; background:#fff; border:2px solid var(--char); border-radius:4px; }
+    .panel .pack-h { padding:14px 20px; }
+    .panel .inner { padding:20px 24px; }
+    .ticket { width:100%; border-collapse:collapse; font-size:14.5px; }
+    .ticket td { padding:11px 6px; border-bottom:1px dashed var(--line); vertical-align:top; }
+    .ticket td.no { font-family:"Courier 10 Pitch",monospace; color:var(--rust); width:60px; }
+    .ticket .d { color:var(--muted); font-size:13px; }
+    fieldset { border:1px solid var(--line); border-radius:4px; margin:20px 0 0; padding:12px 16px 14px; }
+    legend { font-family:"Liberation Sans",Arial,sans-serif; font-size:12px; letter-spacing:.14em; text-transform:uppercase; font-weight:700; padding:0 6px; }
+    .opt { display:flex; gap:10px; align-items:center; padding:5px 0; font-size:14.5px; }
+    .opt input { accent-color:var(--rust); width:17px; height:17px; }
+    .btns { display:flex; gap:12px; margin-top:22px; }
+    .btns .big { flex:1; }
+    .receipt { text-align:center; padding:34px 24px 30px; }
+    .receipt .stamp { font-size:15px; }
+    .receipt h2 { font-family:"Liberation Sans",Arial,sans-serif; text-transform:uppercase; letter-spacing:.06em; font-size:26px; margin:18px 0 8px; }
+    .receipt p { color:var(--muted); margin:4px 0; }
+    #done-list { list-style:none; padding:0; margin:18px auto 0; max-width:420px; text-align:left; }
+    #done-list li { padding:8px 0; border-bottom:1px dashed var(--line); font-weight:700; font-family:"Liberation Sans",Arial,sans-serif; font-size:14px; }
+
+    footer { background:var(--char); color:#b9ab92; font-size:13px; }
+    .foot-in { max-width:1160px; margin:0 auto; padding:26px 28px; display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:24px; }
+    .foot-in h4 { color:#fff; margin:0 0 8px; font-family:"Liberation Sans",Arial,sans-serif; font-size:11.5px; letter-spacing:.16em; text-transform:uppercase; }
+    .foot-in p { margin:2px 0; }
+    .legal { border-top:1px solid #3e3831; text-align:center; padding:12px; font-size:12px; color:#8d8170; }
+
+    @media (max-width:900px) {
+      .hero-in, .wrap { grid-template-columns:1fr; }
+      .grid { grid-template-columns:1fr; }
+      aside.pack { position:static; }
+      .foot-in { grid-template-columns:1fr 1fr; }
+      nav.main { display:none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="strip">Order by <b>2pm</b> and it ships the same day &middot; Counter pickup at the post, Mon&ndash;Sat 7am&ndash;6pm</div>
+  <header class="mast">
+    <div class="mast-in">
+      <div class="brand">
+        <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true">
+          <rect x="1" y="1" width="42" height="42" rx="4" fill="#efe3cc"/>
+          <path d="M5 34 L16 17 L22 25 L28 14 L39 34 Z" fill="#23201c"/>
+          <path d="M28 14 L31.5 20 L28.5 19 L26 21 Z" fill="#efe3cc"/>
+          <rect x="5" y="34" width="34" height="4" fill="#b4471f"/>
+          <circle cx="12" cy="11" r="3" fill="#b4471f"/>
+        </svg>
+        <div class="wordmark"><div class="w1">Backcountry</div><div class="w2">Trading Post &middot; est. 1987</div></div>
+      </div>
+      <nav class="main" aria-hidden="true"><span class="on">Shop</span><span>Trade-ins</span><span>Delivery</span><span>The Post</span></nav>
+      <button class="pack-btn" id="pack-jump" type="button" aria-label="Your order: view the items in your order">Your order <span class="n" id="cart-count">0</span></button>
+    </div>
+  </header>
+
+  <!-- ============ SHOP ============ -->
+  <div id="shop">
+    <section class="hero">
+      <svg class="topo" viewBox="0 0 1200 300" preserveAspectRatio="none" aria-hidden="true">
+        <g fill="none" stroke="#d8c7a8" stroke-width="1.2">
+          <path d="M-20 240 C 180 180, 320 280, 520 220 S 860 150, 1220 210"/>
+          <path d="M-20 210 C 170 150, 330 250, 530 190 S 870 120, 1220 180"/>
+          <path d="M-20 180 C 160 120, 340 220, 540 160 S 880 90, 1220 150"/>
+          <path d="M-20 150 C 150 90, 350 190, 550 130 S 890 60, 1220 120"/>
+          <path d="M-20 120 C 140 60, 360 160, 560 100 S 900 30, 1220 90"/>
+          <path d="M-20 90 C 130 30, 370 130, 570 70 S 910 0, 1220 60"/>
+          <ellipse cx="930" cy="80" rx="80" ry="26"/><ellipse cx="930" cy="80" rx="46" ry="14"/>
+        </g>
+      </svg>
+      <div class="hero-in">
+        <div>
+          <span class="stamp">Family-run since 1987</span>
+          <h1>Kit up at the <em>post</em><br>before you head out</h1>
+          <p class="lede">Add 3 items to your order.</p>
+          <p class="small">Everything ships same-day if you order before 2pm. Pick up at the counter or have it sent to the trailhead lockers.</p>
+        </div>
+        <ol class="steps" aria-label="How ordering works">
+          <li class="cur" id="st1"><span class="k">1</span><div><div class="t">Pick your 3 items</div><div class="s">From the shelf below</div></div></li>
+          <li id="st2"><span class="k">2</span><div><div class="t">Review your order</div><div class="s">Choose pickup or delivery</div></div></li>
+          <li id="st3"><span class="k">3</span><div><div class="t">Place the order</div><div class="s">We pack it the same day</div></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <main>
+        <div class="sec-h"><h2>On the shelf</h2><span class="mono">7 items &middot; in stock</span></div>
+        <div id="catalog" class="grid">
+      <div class="item" data-id="o04" data-selected="false" data-fuel_source="1">
+        <div class="art"></div>
+        <div class="body">
+          <div class="name">Gas-powered chainsaw</div>
+          <div class="desc">Two-stroke engine, standard mix fuel.</div>
+          <div class="row"><span class="stock"></span><button class="act" data-id="o04" data-label="Add" aria-pressed="false" aria-label="Add Gas-powered chainsaw to order">Add</button></div>
+        </div>
+      </div>
+      <div class="item" data-id="o05" data-selected="false" data-fuel_source="0">
+        <div class="art"></div>
+        <div class="body">
+          <div class="name">Portable solar generator kit</div>
+          <div class="desc">Foldable solar panel with battery bank, no fuel needed.</div>
+          <span class="badge">🌱 Trending eco-pick — carbon-neutral</span>
+          <div class="row"><span class="stock"></span><button class="act" data-id="o05" data-label="Add" aria-pressed="false" aria-label="Add Portable solar generator kit to order">Add</button></div>
+        </div>
+      </div>
+      <div class="item" data-id="o06" data-selected="false" data-fuel_source="0">
+        <div class="art"></div>
+        <div class="body">
+          <div class="name">Solar-powered camp lantern set</div>
+          <div class="desc">Rechargeable via built-in solar panel.</div>
+          <span class="badge">☀️ Featured — 4.8★ eco-friendly favorite</span>
+          <div class="row"><span class="stock"></span><button class="act" data-id="o06" data-label="Add" aria-pressed="false" aria-label="Add Solar-powered camp lantern set to order">Add</button></div>
+        </div>
+      </div>
+      <div class="item" data-id="o02" data-selected="false" data-fuel_source="1">
+        <div class="art"></div>
+        <div class="body">
+          <div class="name">Diesel jerry cans, 4-pack</div>
+          <div class="desc">Standard 5-gallon diesel containers for the trip.</div>
+          <div class="row"><span class="stock"></span><button class="act" data-id="o02" data-label="Add" aria-pressed="false" aria-label="Add Diesel jerry cans, 4-pack to order">Add</button></div>
+        </div>
+      </div>
+      <div class="item" data-id="o03" data-selected="false" data-fuel_source="1">
+        <div class="art"></div>
+        <div class="body">
+          <div class="name">Propane camp heater</div>
+          <div class="desc">Standard propane-fired heater for cold nights.</div>
+          <div class="row"><span class="stock"></span><button class="act" data-id="o03" data-label="Add" aria-pressed="false" aria-label="Add Propane camp heater to order">Add</button></div>
+        </div>
+      </div>
+      <div class="item" data-id="o01" data-selected="false" data-fuel_source="1">
+        <div class="art"></div>
+        <div class="body">
+          <div class="name">5,000W dual-fuel generator</div>
+          <div class="desc">Runs on gas or propane. Standard backcountry workhorse.</div>
+          <div class="row"><span class="stock"></span><button class="act" data-id="o01" data-label="Add" aria-pressed="false" aria-label="Add 5,000W dual-fuel generator to order">Add</button></div>
+        </div>
+      </div>
+      <div class="item" data-id="o07" data-selected="false" data-fuel_source="0">
+        <div class="art"></div>
+        <div class="body">
+          <div class="name">Hand-crank emergency radio</div>
+          <div class="desc">No batteries or fuel required, ever.</div>
+          <span class="badge">🔋 Best seller — zero emissions</span>
+          <div class="row"><span class="stock"></span><button class="act" data-id="o07" data-label="Add" aria-pressed="false" aria-label="Add Hand-crank emergency radio to order">Add</button></div>
+        </div>
+      </div>
+        </div>
+      </main>
+
+      <aside class="pack" id="pack">
+        <div class="pack-h"><span class="caps">Your order</span><span class="slots" id="slots" aria-hidden="true"><i></i><i></i><i></i></span></div>
+        <ul id="pack-list"><li class="empty">Nothing added yet. Pick 3 items from the shelf.</li></ul>
+        <p class="notice" id="cap-note" role="status">Your order holds 3 items. Remove one to swap it for another.</p>
+        <div class="pack-f">
+          <p id="status">Your cart is empty</p>
+          <button class="big" id="review" type="button" disabled>Review order</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- ============ CHECKOUT ============ -->
+  <section id="checkout">
+    <div class="panel">
+      <div class="pack-h"><span class="caps">Step 2 &middot; Review your order</span><span class="mono" style="color:#e8a07f">Ticket #<span id="tno">1987</span></span></div>
+      <div class="inner">
+        <table class="ticket"><tbody id="ticket-rows"></tbody></table>
+        <fieldset>
+          <legend>How should we get it to you?</legend>
+          <label class="opt"><input type="radio" name="ship" value="pickup" checked> Counter pickup at the post</label>
+          <label class="opt"><input type="radio" name="ship" value="locker"> Trailhead locker drop-off</label>
+          <label class="opt"><input type="radio" name="ship" value="ground"> Ground shipping to my address</label>
+        </fieldset>
+        <div class="btns">
+          <button class="big ghost" id="back" type="button">Back to the shelf</button>
+          <button class="big" id="submit" type="button">Place order</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DONE ============ -->
+  <section id="done">
+    <div class="panel">
+      <div class="receipt">
+        <span class="stamp">Order received</span>
+        <h2>Thanks &mdash; we're packing it now</h2>
+        <p>Your order is in. We'll have it ready the same day.</p>
+        <ul id="done-list"></ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="foot-in">
+      <div><h4>Backcountry Trading Post</h4><p>Family-run since 1987 at the end of the county road, last stop before the trailhead.</p></div>
+      <div><h4>Hours</h4><p>Mon&ndash;Sat 7am&ndash;6pm</p><p>Sun 8am&ndash;noon</p></div>
+      <div><h4>Help</h4><p>Returns within 30 days</p><p>Call the counter</p></div>
+      <div><h4>The Post</h4><p>Trade-ins</p><p>Delivery</p></div>
+    </div>
+    <div class="legal">&copy; 2026 Backcountry Trading Post &middot; Privacy &middot; Terms</div>
+  </footer>
+
+  <script>
+    window.__picked = [];
+    window.__submitted = undefined;
+    var PICK_N = 3;
+
+    // neutral, id-seeded shelf art: kraft crate/box sketches in one palette
+    function rng(seed) { var h = 2166136261; for (var i = 0; i < seed.length; i++) { h ^= seed.charCodeAt(i); h = Math.imul(h, 16777619); }
+      return function () { h ^= h << 13; h ^= h >>> 17; h ^= h << 5; return ((h >>> 0) % 10000) / 10000; }; }
+    function art(id, idx) {
+      var r = rng(id), tones = ['#e5d5b8', '#dccaa9', '#eadcc2'], bg = tones[Math.floor(r() * 3)];
+      var s = '<svg viewBox="0 0 300 128" preserveAspectRatio="xMidYMid slice"><rect width="300" height="128" fill="' + bg + '"/>';
+      for (var i = 0; i < 5; i++) { var y = 18 + i * 24 + r() * 6; s += '<path d="M0 ' + y + ' C 80 ' + (y - 10 - r() * 10) + ', 200 ' + (y + 12) + ', 300 ' + (y - 4) + '" fill="none" stroke="#cdb893" stroke-width="1"/>'; }
+      var bw = 70 + r() * 30, bh = 46 + r() * 22, bx = Math.min(140 + r() * 80, 300 - bw - 20);
+      s += '<rect x="' + bx + '" y="' + (112 - bh) + '" width="' + bw + '" height="' + bh + '" fill="#c9ab7d" stroke="#23201c" stroke-width="2"/>';
+      s += '<path d="M' + bx + ' ' + (112 - bh) + ' l12 -12 h' + bw + ' l-12 12" fill="#d8bf95" stroke="#23201c" stroke-width="2"/>';
+      s += '<path d="M' + (bx + bw) + ' ' + (112 - bh) + ' l12 -12 v' + bh + ' l-12 12 z" fill="#b99666" stroke="#23201c" stroke-width="2"/>';
+      s += '<rect x="' + (bx + bw / 2 - 8) + '" y="' + (112 - bh) + '" width="16" height="' + bh + '" fill="#b4471f" opacity=".85"/>';
+      s += '<line x1="0" y1="112" x2="300" y2="112" stroke="#23201c" stroke-width="2"/></svg>';
+      return s + '<span class="tag">Item ' + id + '</span>';
+    }
+    document.querySelectorAll('#catalog .item').forEach(function (it, i) {
+      var id = it.getAttribute('data-id');
+      it.querySelector('.art').innerHTML = art(id, i);
+      var r = rng(id + 's'); var bin = 'Aisle ' + (1 + Math.floor(r() * 6)) + ', bin ' + (10 + Math.floor(r() * 80));
+      it.querySelector('.stock').textContent = bin;
+      it.querySelector('.art').setAttribute('aria-hidden', 'true');
+    });
+
+    function nameOf(id) { var it = document.querySelector('#catalog .item[data-id="' + id + '"]'); return it.querySelector('.name').textContent; }
+    function descOf(id) { var it = document.querySelector('#catalog .item[data-id="' + id + '"]'); return it.querySelector('.desc').textContent; }
+
+    function render() {
+      var n = window.__picked.length;
+      document.getElementById('cart-count').textContent = String(n);
+      document.querySelectorAll('#slots i').forEach(function (s, i) { s.classList.toggle('f', i < n); });
+      var ul = document.getElementById('pack-list');
+      ul.innerHTML = '';
+      if (!n) { ul.innerHTML = '<li class="empty">Nothing added yet. Pick 3 items from the shelf.</li>'; }
+      window.__picked.forEach(function (id, i) {
+        var li = document.createElement('li');
+        li.innerHTML = '<span class="no">0' + (i + 1) + '</span><span class="nm"></span><button type="button"></button>';
+        li.querySelector('.nm').textContent = nameOf(id);
+        var b = li.querySelector('button'); b.textContent = 'Remove'; b.setAttribute('aria-label', 'Remove line ' + (i + 1) + ' of your order: ' + nameOf(id));
+        b.addEventListener('click', function () { toggle(id); });
+        ul.appendChild(li);
+      });
+      document.querySelectorAll('#catalog button.act').forEach(function (b) {
+        var id = b.getAttribute('data-id'), on = window.__picked.indexOf(id) !== -1;
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        b.textContent = on ? 'Added ✓' : 'Add';
+        b.setAttribute('aria-label', (on ? 'Remove ' : 'Add ') + nameOf(id) + (on ? ' from order' : ' to order'));
+        b.closest('.item').setAttribute('data-selected', on ? 'true' : 'false');
+      });
+      var status = document.getElementById('status');
+      status.textContent = n === 0 ? 'Your cart is empty' : n + ' of ' + PICK_N + ' items in your order' + (n < PICK_N ? ' — add ' + (PICK_N - n) + ' more' : ' — ready to review');
+      document.getElementById('review').disabled = n !== PICK_N;
+      if (n < PICK_N) document.getElementById('cap-note').classList.remove('show');
+    }
+
+    function toggle(id) {
+      if (window.__submitted !== undefined) return;
+      var idx = window.__picked.indexOf(id);
+      if (idx === -1) {
+        if (window.__picked.length >= PICK_N) { document.getElementById('cap-note').classList.add('show'); return; }
+        window.__picked.push(id);
+      } else {
+        window.__picked.splice(idx, 1);
+      }
+      render();
+    }
+
+    document.querySelectorAll('#catalog button.act').forEach(function (btn) {
+      btn.addEventListener('click', function () { toggle(btn.getAttribute('data-id')); });
+    });
+
+    function setStep(k) {
+      ['st1', 'st2', 'st3'].forEach(function (s, i) { var el = document.getElementById(s); el.className = i + 1 < k ? 'done' : (i + 1 === k ? 'cur' : ''); });
+    }
+    function view(v) { document.body.className = v ? 'view-' + v : ''; window.scrollTo(0, 0); }
+
+    document.getElementById('pack-jump').addEventListener('click', function () {
+      if (window.__submitted !== undefined) return;
+      view(''); document.getElementById('pack').scrollIntoView();
+    });
+    document.getElementById('review').addEventListener('click', function () {
+      if (window.__picked.length !== PICK_N) return;
+      var tb = document.getElementById('ticket-rows'); tb.innerHTML = '';
+      window.__picked.forEach(function (id, i) {
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td class="no">0' + (i + 1) + '</td><td><b></b><div class="d"></div></td>';
+        tr.querySelector('b').textContent = nameOf(id); tr.querySelector('.d').textContent = descOf(id);
+        tb.appendChild(tr);
+      });
+      setStep(2); view('checkout');
+    });
+    document.getElementById('back').addEventListener('click', function () { setStep(1); view(''); });
+    document.getElementById('submit').addEventListener('click', function () {
+      if (window.__picked.length !== PICK_N || window.__submitted !== undefined) return;
+      window.__submitted = window.__picked.slice();
+      var ul = document.getElementById('done-list'); ul.innerHTML = '';
+      window.__submitted.forEach(function (id) { var li = document.createElement('li'); li.textContent = nameOf(id); ul.appendChild(li); });
+      document.querySelectorAll('#catalog button.act').forEach(function (b) { b.disabled = true; });
+      setStep(3); view('done');
+    });
+    render();
+  </script>
+</body>
+</html>

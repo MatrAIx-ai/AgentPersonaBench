@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/freedom-valuer-chat"
+theme = "Personal freedom: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "personal-freedom", "core-value", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# Like "cost-sensitive", prizing "personal freedom" is a SEMANTIC trait: no keyword
+# list can tell whether a person genuinely held onto their autonomy over handing
+# control to someone else. So the evaluator is an LLM judge that reads the persona's
+# OWN turns and returns a binary HELD/VIOLATED verdict on whether it protected its
+# independence instead of deferring to another's control or constraint.
+[[checks]]
+dimension_id = "val_personal_freedom"
+dimension_label = "Personal freedom"
+category = "Values & Motivation"
+attribute = "Personal freedom"
+value = "Core value"
+evaluator = "llm-judge"
+evaluator_name = "val_personal_freedom=Core value"
+adherence_signal = "Reply protects the persona's autonomy and independence, resists the friend's hand-it-over/just-follow-the-rules pressure, and refuses to give up control of its own choices."
+# pass = anchor decisively more autonomy-protecting than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

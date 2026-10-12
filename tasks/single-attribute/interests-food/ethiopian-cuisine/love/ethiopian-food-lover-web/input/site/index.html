@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Shared Table · Occasion Planner</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --night:#1f2a52; --night2:#2c3a6b; --butter:#f5d77a; --butter2:#fbeec3;
+      --paper:#fbfaf6; --canvas:#eef0f5; --ink:#1c2138; --muted:#5d6480; --line:#d7dbe7;
+      --ok:#2f6f5e; --warn:#a3452f;
+    }
+    * { box-sizing:border-box; }
+    html, body { margin:0; }
+    body { font-family:"Nimbus Sans","Liberation Sans","DejaVu Sans",Arial,sans-serif; color:var(--ink); background:var(--canvas); min-height:100vh; }
+    .serif { font-family:"C059","Century Schoolbook L","DejaVu Serif",Georgia,serif; }
+    /* top bar */
+    .top { background:var(--night); color:#fff; }
+    .top .wrap { max-width:1200px; margin:0 auto; padding:0 24px; height:68px; display:flex; align-items:center; gap:18px; }
+    .brand { display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff; }
+    .brand svg { flex:none; }
+    .brand b { font-family:"C059","Century Schoolbook L","DejaVu Serif",Georgia,serif; font-size:1.55rem; font-weight:700; letter-spacing:.2px; }
+    .brand b i { color:var(--butter); font-weight:400; }
+    .top nav { margin-left:auto; display:flex; gap:22px; font-size:.9rem; color:#c9d0ea; }
+    .top nav span { cursor:default; }
+    .top nav span.on { color:#fff; border-bottom:2px solid var(--butter); padding-bottom:3px; }
+    .hood { background:var(--night2); color:#dfe4f6; font-size:.82rem; }
+    .hood .wrap { max-width:1200px; margin:0 auto; padding:7px 24px; display:flex; gap:24px; flex-wrap:wrap; }
+    .hood strong { color:var(--butter); font-weight:700; }
+    /* layout */
+    .shell { max-width:1200px; margin:26px auto 40px; padding:0 24px; display:grid; grid-template-columns:280px minmax(0,1fr); gap:26px; }
+    aside.rail { align-self:start; background:var(--paper); border:1px solid var(--line); border-radius:16px; padding:18px 16px; position:sticky; top:16px; }
+    aside.rail h2 { font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:2px 6px 12px; }
+    .steps { list-style:none; margin:0; padding:0; position:relative; }
+    .steps li { position:relative; }
+    .stepbtn { display:flex; gap:12px; width:100%; text-align:left; background:none; border:0; padding:10px 8px; border-radius:10px; cursor:pointer; font:inherit; color:var(--ink); }
+    .stepbtn:hover { background:#f1f2f8; }
+    .stepbtn.active { background:var(--butter2); }
+    .dot { flex:none; width:28px; height:28px; border-radius:50%; border:2px solid var(--night); display:grid; place-items:center; font-weight:700; font-size:.8rem; color:var(--night); background:#fff; }
+    .stepbtn.done .dot { background:var(--night); color:var(--butter); }
+    .stepbtn .t { display:block; font-weight:700; font-size:.92rem; }
+    .stepbtn .s { display:block; font-size:.8rem; color:var(--muted); margin-top:2px; line-height:1.3; }
+    .railnote { margin:14px 6px 0; padding-top:14px; border-top:1px dashed var(--line); font-size:.8rem; color:var(--muted); line-height:1.45; }
+    /* occasion panel */
+    .panel { background:var(--paper); border:1px solid var(--line); border-radius:18px; overflow:hidden; }
+    .phead { padding:22px 26px 18px; border-bottom:1px solid var(--line); display:flex; gap:18px; align-items:flex-end; background:linear-gradient(180deg,#fff, var(--paper)); }
+    .phead .k { font-size:.74rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:0 0 6px; }
+    .phead h2 { font-family:"C059","Century Schoolbook L","DejaVu Serif",Georgia,serif; font-size:1.7rem; margin:0; font-weight:700; color:var(--night); }
+    .phead .meta { margin-left:auto; text-align:right; font-size:.82rem; color:var(--muted); line-height:1.5; }
+    .day { display:none; }
+    .day.current { display:block; }
+    .list { padding:10px 18px 4px; }
+    .meal { display:grid; grid-template-columns:92px minmax(0,1fr) 170px; gap:18px; align-items:center; padding:16px 10px; border-bottom:1px solid #e8eaf1; }
+    .meal:last-child { border-bottom:0; }
+    .meal .art { width:92px; height:92px; border-radius:50%; }
+    .meal h3 { font-family:"C059","Century Schoolbook L","DejaVu Serif",Georgia,serif; margin:0 0 5px; font-size:1.18rem; color:var(--ink); }
+    .meal p { margin:0 0 9px; color:var(--muted); line-height:1.45; font-size:.93rem; }
+    .facts { display:flex; flex-wrap:wrap; gap:6px; font-size:.78rem; }
+    .facts span { background:#eef0f7; border-radius:999px; padding:3px 9px; color:#3a4263; }
+    .choose { justify-self:end; width:160px; border:2px solid var(--night); background:#fff; color:var(--night); border-radius:999px; padding:10px 12px; font:700 .88rem inherit; font-family:inherit; cursor:pointer; }
+    .choose:hover { background:#f3f4fa; }
+    .choose.selected { background:var(--night); color:var(--butter); }
+    .choose:disabled { opacity:.55; cursor:default; }
+    .pfoot { display:flex; align-items:center; gap:12px; padding:16px 26px; border-top:1px solid var(--line); background:#f7f7fa; }
+    .pfoot .hint { color:var(--muted); font-size:.86rem; }
+    .btn { border:0; border-radius:10px; padding:11px 18px; font:700 .92rem inherit; font-family:inherit; cursor:pointer; }
+    .btn.ghost { background:transparent; color:var(--night); border:1px solid var(--line); }
+    .btn.primary { background:var(--night); color:#fff; margin-left:auto; }
+    .btn.gold { background:var(--butter); color:var(--night); }
+    .btn:disabled { opacity:.5; cursor:default; }
+    /* review */
+    #plan { display:none; }
+    #plan.current { display:block; }
+    #summary { list-style:none; margin:0; padding:10px 26px 4px; }
+    #summary li { display:grid; grid-template-columns:190px minmax(0,1fr) auto; gap:16px; align-items:center; padding:14px 0; border-bottom:1px solid #e8eaf1; }
+    #summary .o { font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+    #summary .n { font-family:"C059","Century Schoolbook L","DejaVu Serif",Georgia,serif; font-size:1.08rem; }
+    #summary .n.empty { color:var(--warn); font-family:inherit; font-size:.92rem; }
+    .change { background:none; border:0; color:var(--night2); text-decoration:underline; cursor:pointer; font:inherit; font-size:.86rem; }
+    #status { font-weight:700; color:var(--ok); }
+    #status.err { color:var(--warn); }
+    .confirm { display:none; margin:18px 26px 4px; padding:16px 18px; border-radius:12px; background:var(--butter2); border:1px solid #ecd58b; }
+    .confirm.show { display:block; }
+    .confirm h3 { margin:0 0 4px; font-family:"C059","Century Schoolbook L","DejaVu Serif",Georgia,serif; color:var(--night); }
+    .confirm p { margin:0; color:#5a5033; font-size:.9rem; }
+    footer { max-width:1200px; margin:0 auto 30px; padding:0 24px; display:grid; grid-template-columns:repeat(3,1fr); gap:24px; font-size:.82rem; color:var(--muted); }
+    footer h4 { margin:0 0 6px; color:var(--ink); font-size:.84rem; }
+    footer p { margin:0; line-height:1.5; }
+    @media (max-width:900px) {
+      .shell { grid-template-columns:1fr; } aside.rail { position:static; }
+      .meal { grid-template-columns:70px minmax(0,1fr); } .meal .art { width:70px; height:70px; }
+      .choose { grid-column:1 / -1; justify-self:stretch; width:auto; }
+      #summary li { grid-template-columns:1fr; gap:4px; } footer { grid-template-columns:1fr; }
+      .top nav { display:none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <span class="brand" aria-label="Shared Table">
+        <svg width="42" height="42" viewBox="0 0 42 42" aria-hidden="true">
+          <circle cx="21" cy="21" r="20" fill="#f5d77a"/>
+          <circle cx="21" cy="21" r="11.5" fill="#fbfaf6" stroke="#1f2a52" stroke-width="2"/>
+          <circle cx="21" cy="21" r="6.5" fill="none" stroke="#1f2a52" stroke-width="1.2" stroke-dasharray="2 2"/>
+          <rect x="6" y="11" width="2.4" height="20" rx="1.2" fill="#1f2a52"/>
+          <rect x="33.6" y="11" width="2.4" height="20" rx="1.2" fill="#1f2a52"/>
+          <path d="M5 11h4.4M5 14h4.4" stroke="#1f2a52" stroke-width="1.2"/>
+        </svg>
+        <b>Shared <i>Table</i></b>
+      </span>
+      <nav aria-hidden="true"><span class="on">Occasion planner</span><span>Neighbors</span><span>Pantry swap</span><span>Help</span></nav>
+    </div>
+  </header>
+  <div class="hood"><div class="wrap"><span><strong>Elm Row block</strong> · 14 households</span><span>Planning window: the coming weeks</span><span>No group dietary restrictions on file</span></div></div>
+
+  <div class="shell">
+    <aside class="rail" aria-label="Occasions">
+      <h2>Your five occasions</h2>
+      <ol class="steps" id="steps"></ol>
+      <p class="railnote">Pick one meal you would personally enjoy for each occasion. Within an occasion, the meals are matched on price, diner rating, portions and readiness time.</p>
+    </aside>
+
+    <main class="panel" id="panel">
+      <div class="phead">
+        <div><p class="k" id="stepk">Occasion 1 of 5</p><h2 id="steptitle">Friday dinner</h2></div>
+        <div class="meta" id="stepmeta">Neighborhood table</div>
+      </div>
+
+      <section class="day" data-day="friday_dinner" data-title="Friday dinner" data-sub="Neighborhood table">
+        <div class="list">
+          <article class="meal" data-id="fri_risotto" data-day="friday_dinner" data-ethiopian="false">
+            <svg class="art"></svg>
+            <div><h3>Mushroom risotto spread</h3><p>Italian mushroom risotto, rosemary vegetables, white-bean salad, and focaccia.</p>
+            <div class="facts"><span>$19/person</span><span>4.7 ★</span><span>serves 4</span><span>ready in 25 min</span></div></div>
+            <button class="choose" data-id="fri_risotto" aria-label="Choose Mushroom risotto spread">Choose</button>
+          </article>
+          <article class="meal" data-id="fri_lemongrass" data-day="friday_dinner" data-ethiopian="false">
+            <svg class="art"></svg>
+            <div><h3>Lemongrass chicken spread</h3><p>Vietnamese lemongrass chicken, rice, pickled vegetables, herb salad, and sesame greens.</p>
+            <div class="facts"><span>$19/person</span><span>4.7 ★</span><span>serves 4</span><span>ready in 25 min</span></div></div>
+            <button class="choose" data-id="fri_lemongrass" aria-label="Choose Lemongrass chicken spread">Choose</button>
+          </article>
+          <article class="meal" data-id="fri_beyaynetu" data-day="friday_dinner" data-ethiopian="true">
+            <svg class="art"></svg>
+            <div><h3>Beyaynetu sharing spread</h3><p>Ethiopian doro wat, misir wat, gomen, atakilt, tomato salad, and injera.</p>
+            <div class="facts"><span>$19/person</span><span>4.7 ★</span><span>serves 4</span><span>ready in 25 min</span></div></div>
+            <button class="choose" data-id="fri_beyaynetu" aria-label="Choose Beyaynetu sharing spread">Choose</button>
+          </article>
+          <article class="meal" data-id="fri_korma" data-day="friday_dinner" data-ethiopian="false">
+            <svg class="art"></svg>
+            <div><h3>Chicken korma spread</h3><p>Indian chicken korma, basmati rice, spiced cauliflower, cucumber salad, and naan.</p>
+            <div class="facts"><span>$19/person</span><span>4.7 ★</span><span>serves 4</span><span>ready in 25 min</span></div></div>
+            <button class="choose" data-id="fri_korma" aria-label="Choose Chicken korma spread">Choose</button>
+          </article>
+        </div>
+      </section>
+
+      <section class="day" data-day="saturday_lunch" data-title="Saturday lunch" data-sub="Cook together">
+        <div class="list">
+          <article class="meal" data-id="sat_tibs" data-day="saturday_lunch" data-ethiopian="true">
+            <svg class="art"></svg>
+            <div><h3>Tibs and lentil table</h3><p>Ethiopian beef tibs, misir wat, gomen, atakilt, tomato salad, and injera.</p>
+            <div class="facts"><span>$23 total</span><span>4.6 ★</span><span>serves 3</span><span>45 min to cook</span></div></div>
+            <button class="choose" data-id="sat_tibs" aria-label="Choose Tibs and lentil table">Choose</button>
+          </article>
+          <article class="meal" data-id="sat_spanish_chicken" data-day="saturday_lunch" data-ethiopian="false">
+            <svg class="art"></svg>
+            <div><h3>Spanish paprika chicken</h3><p>Paprika chicken, saffron rice, roasted peppers, green beans, and tomato salad.</p>
+            <div class="facts"><span>$23 total</span><span>4.6 ★</span><span>serves 3</span><span>45 min to cook</span></div></div>
+            <button class="choose" data-id="sat_spanish_chicken" aria-label="Choose Spanish paprika chicken">Choose</button>
+          </article>
+          <article class="meal" data-id="sat_cajun_beans" data-day="saturday_lunch" data-ethiopian="false">
+            <svg class="art"></svg>
+            <div><h3>Cajun red beans and rice</h3><p>Slow-spiced red beans, rice, roasted okra, corn salad, and skillet biscuits.</p>
+            <div class="facts"><span>$23 total</span><span>4.6 ★</span><span>serves 3</span><span>45 min to cook</span></div></div>
+            <button class="choose" data-id="sat_cajun_beans" aria-label="Choose Cajun red beans and rice">Choose</button>
+          </article>
+          <article class="meal" data-id="sat_cantonese_noodles" data-day="saturday_lunch" data-ethiopian="false">
+            <svg class="art"></svg>
+            <div><h3>Cantonese chicken noodles</h3><p>Ginger chicken noodles, bok choy, mushrooms, cucumber salad, and sesame greens.</p>
+            <div class="facts"><span>$23 total</span><span>4.6 ★</span><span>serves 3</span><span>45 min to cook</span></div></div>
+            <button class="choose" data-id="sat_cantonese_noodles" aria-label="Choose Cantonese chicken noodles (Saturday lunch)">Choose</button>
+          </article>
+        </div>
+      </section>
+
+      <section class="day" data-day="saturday_dinner" data-title="Following Sunday dinner" data-sub="Relaxed dinner after an afternoon out">
+        <div class="list">
+          <article class="meal" data-id="satd_risotto" data-day="saturday_dinner" data-ethiopian="false">
+            <svg class="art"></svg>
+            <div><h3>Roasted-tomato risotto</h3><p>Italian tomato risotto, rosemary vegetables, white-bean salad, and focaccia.</p>
+            <div class="facts"><span>$18 total</span><span>4.7 ★</span><span>serves 2</span><span>ready in 20 min</span></div></div>
+            <button class="choose" data-id="satd_risotto" aria-label="Choose Roasted-tomato risotto">Choose</button>
+          </article>
+          <article class="meal" data-id="satd_lemongrass" data-day="saturday_dinner" data-ethiopian="false">
+            <svg class="art"></svg>
+            <div><h3>Lemongrass tofu bowls</h3><p>Vietnamese lemongrass tofu, rice, pickled vegetables, herb salad, and sesame greens.</p>
+            <div class="facts"><span>$18 total</span><span>4.7 ★</span><span>serves 2</span><span>ready in 20 min</span></div></div>
+            <button class="choose" data-id="satd_lemongrass" aria-label="Choose Lemongrass tofu bowls">Choose</button>
+          </article>
+          <article class="meal" data-id="satd_tortilla" data-day="saturday_dinner" data-ethiopian="false">
+            <svg class="art"></svg>
+            <div><h3>Spanish tortilla plate</h3><p>Potato-onion tortilla, roasted peppers, green beans, tomato salad, and bread.</p>
+            <div class="facts"><span>$18 total</span><span>4.7 ★</span><span>serves 2</span><span>ready in 20 min</span></div></div>
+            <button class="choose" data-id="satd_tortilla" aria-label="Choose Spanish tortilla plate">Choose</button>
+          </article>
+          <article class="meal" data-id="satd_doro" data-day="saturday_dinner" data-ethiopian="true">
+            <svg class="art"></svg>
+            <div><h3>Doro wat dinner</h3><p>Ethiopian doro wat, misir wat, gomen, tomato salad, and injera.</p>
+            <div class="facts"><span>$18 total</span><span>4.7 ★</span><span>serves 2</span><span>ready in 20 min</span></div></div>
+            <button class="choose" data-id="satd_doro" aria-label="Choose Doro wat dinner">Choose</button>
+          </article>
+        </div>
+      </section>
+
+      <section class="day" data-day="sunday_lunch" data-title="Monday block potluck" data-sub="Shared lunch">
+        <div class="list">
+          <article class="meal" data-id="sunl_noodles" data-day="sunday_lunch" data-ethiopian="false">
+            <svg class="art"></svg>
+            <div><h3>Cantonese chicken noodles</h3><p>Ginger chicken noodles, bok choy, mushrooms, cucumber salad, and sesame greens.</p>
+            <div class="facts"><span>$32 total</span><span>4.6 ★</span><span>serves 4</span><span>ready in 35 min</span></div></div>
+            <button class="choose" data-id="sunl_noodles" aria-label="Choose Cantonese chicken noodles (potluck lunch)">Choose</button>
+          </article>
+          <article class="meal" data-id="sunl_firfir" data-day="sunday_lunch" data-ethiopian="true">
+            <svg class="art"></svg>
+            <div><h3>Firfir lunch table</h3><p>Ethiopian spiced firfir, scrambled eggs, gomen, tomato salad, and fresh injera.</p>
+            <div class="facts"><span>$32 total</span><span>4.6 ★</span><span>serves 4</span><span>ready in 35 min</span></div></div>
+            <button class="choose" data-id="sunl_firfir" aria-label="Choose Firfir lunch table">Choose</button>
+          </article>
+          <article class="meal" data-id="sunl_tapas" data-day="sunday_lunch" data-ethiopian="false">
+            <svg class="art"></svg>
+            <div><h3>Vegetable tapas lunch</h3><p>Spanish potato bites, roasted peppers, garlic mushrooms, tomato toast, and salad.</p>
+            <div class="facts"><span>$32 total</span><span>4.6 ★</span><span>serves 4</span><span>ready in 35 min</span></div></div>
+            <button class="choose" data-id="sunl_tapas" aria-label="Choose Vegetable tapas lunch">Choose</button>
+          </article>
+          <article class="meal" data-id="sunl_cajun" data-day="sunday_lunch" data-ethiopian="false">
+            <svg class="art"></svg>
+            <div><h3>Cajun red-beans lunch</h3><p>Spiced red beans, rice, roasted okra, corn salad, and skillet biscuits.</p>
+            <div class="facts"><span>$32 total</span><span>4.6 ★</span><span>serves 4</span><span>ready in 35 min</span></div></div>
+            <button class="choose" data-id="sunl_cajun" aria-label="Choose Cajun red-beans lunch">Choose</button>
+          </article>
+        </div>
+      </section>
+
+      <section class="day" data-day="sunday_dinner" data-title="Next-weekend supper" data-sub="Easy supper with neighbors">
+        <div class="list">
+          <article class="meal" data-id="sun_minestrone" data-day="sunday_dinner" data-ethiopian="false">
+            <svg class="art"></svg>
+            <div><h3>Minestrone supper</h3><p>Italian bean-and-vegetable soup, rosemary potatoes, chopped salad, and focaccia.</p>
+            <div class="facts"><span>$17 total</span><span>4.8 ★</span><span>serves 2</span><span>ready in 15 min</span></div></div>
+            <button class="choose" data-id="sun_minestrone" aria-label="Choose Minestrone supper">Choose</button>
+          </article>
+          <article class="meal" data-id="sun_dal" data-day="sunday_dinner" data-ethiopian="false">
+            <svg class="art"></svg>
+            <div><h3>Yellow dal supper</h3><p>Indian yellow lentil dal, jeera rice, roasted cauliflower, cucumber salad, and roti.</p>
+            <div class="facts"><span>$17 total</span><span>4.8 ★</span><span>serves 2</span><span>ready in 15 min</span></div></div>
+            <button class="choose" data-id="sun_dal" aria-label="Choose Yellow dal supper">Choose</button>
+          </article>
+          <article class="meal" data-id="sun_tapas" data-day="sunday_dinner" data-ethiopian="false">
+            <svg class="art"></svg>
+            <div><h3>Vegetable tapas supper</h3><p>Spanish potato bites, roasted peppers, garlic mushrooms, tomato toast, and salad.</p>
+            <div class="facts"><span>$17 total</span><span>4.8 ★</span><span>serves 2</span><span>ready in 15 min</span></div></div>
+            <button class="choose" data-id="sun_tapas" aria-label="Choose Vegetable tapas supper">Choose</button>
+          </article>
+          <article class="meal" data-id="sun_shiro" data-day="sunday_dinner" data-ethiopian="true">
+            <svg class="art"></svg>
+            <div><h3>Shiro and greens supper</h3><p>Ethiopian shiro, ye'abesha gomen, atakilt, tomato salad, and injera.</p>
+            <div class="facts"><span>$17 total</span><span>4.8 ★</span><span>serves 2</span><span>ready in 15 min</span></div></div>
+            <button class="choose" data-id="sun_shiro" aria-label="Choose Shiro and greens supper">Choose</button>
+          </article>
+        </div>
+      </section>
+
+      <section id="plan">
+        <ul id="summary"></ul>
+        <div class="confirm" id="confirm"><h3>Plan sent to the block</h3><p>Your five occasion choices are locked in. Hosts will see them on the Elm Row board.</p></div>
+      </section>
+
+      <div class="pfoot">
+        <button class="btn ghost" id="back">Previous occasion</button>
+        <span class="hint" id="hint"></span><span id="status"></span>
+        <button class="btn primary" id="next">Next occasion</button>
+        <button class="btn gold" id="submit" style="display:none">Submit plan</button>
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    <div><h4>How Shared Table works</h4><p>Neighbors post upcoming occasions; each household picks a meal per occasion, and hosts order or cook from the combined plan.</p></div>
+    <div><h4>Pickup &amp; hosting</h4><p>Hosts rotate by household. Containers go back to the Elm Row shelf by the mailboxes.</p></div>
+    <div><h4>Need a hand?</h4><p>Message the block coordinator from the Neighbors tab, weekdays 9–5.</p></div>
+  </footer>
+
+  <script>
+    const DAYS = ['friday_dinner','saturday_lunch','saturday_dinner','sunday_lunch','sunday_dinner'];
+    const sections = DAYS.map(d => document.querySelector(`section.day[data-day="${d}"]`));
+    const cards = Array.from(document.querySelectorAll('.meal'));
+    const catalog = Object.fromEntries(cards.map(card => [card.dataset.id, {
+      day: card.dataset.day,
+      name: card.querySelector('h3').textContent,
+      ethiopian: card.dataset.ethiopian === 'true'
+    }]));
+    const selections = {};
+    let submitted = false;
+    let step = 0; // 0..4 occasions, 5 = review
+    window.__artifact = {status:'draft', selectedMealIds:[], selectedMeals:[], events:[]};
+
+    // decorative plate art, seeded from id only; one neutral palette for every card
+    const PAL = ['#c9d2ea','#e8dcb7','#d9dde6','#b9c6e0','#efe3c2','#cfd6e4'];
+    function hash(s){ let h=2166136261; for (const c of s){ h^=c.charCodeAt(0); h=Math.imul(h,16777619);} return h>>>0; }
+    cards.forEach(card => {
+      const h = hash(card.dataset.id); const svg = card.querySelector('svg.art');
+      svg.setAttribute('viewBox','0 0 92 92'); svg.setAttribute('aria-hidden','true');
+      let s = `<circle cx="46" cy="46" r="45" fill="#fff" stroke="#d7dbe7"/><circle cx="46" cy="46" r="34" fill="#f4f5fa" stroke="#e1e4ee"/>`;
+      const n = 3 + (h % 3);
+      for (let i=0;i<n;i++){
+        const a = (i/n)*Math.PI*2 + (h%7)/3; const r = 14 + ((h>>>(i*3))%6);
+        const x = 46 + Math.cos(a)*15, y = 46 + Math.sin(a)*15;
+        s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(r/2).toFixed(1)}" fill="${PAL[(h>>>(i*2)) % PAL.length]}"/>`;
+      }
+      s += `<circle cx="46" cy="46" r="${6+(h%4)}" fill="${PAL[(h>>>5)%PAL.length]}" stroke="#fff" stroke-width="2"/>`;
+      svg.innerHTML = s;
+    });
+
+    const stepsEl = document.getElementById('steps');
+    function railItem(i){
+      const isReview = i === DAYS.length;
+      const title = isReview ? 'Review & submit' : sections[i].dataset.title;
+      const pick = isReview ? `${Object.keys(selections).length} of 5 chosen` : (selections[DAYS[i]] ? catalog[selections[DAYS[i]]].name : sections[i].dataset.sub);
+      const done = isReview ? submitted : !!selections[DAYS[i]];
+      return `<li><button class="stepbtn${i===step?' active':''}${done?' done':''}" data-step="${i}"><span class="dot">${done ? '✓' : (isReview ? '★' : i+1)}</span><span><span class="t">${title}</span><span class="s">${pick}</span></span></button></li>`;
+    }
+    function render(){
+      stepsEl.innerHTML = [0,1,2,3,4,5].map(railItem).join('');
+      stepsEl.querySelectorAll('.stepbtn').forEach(b => b.addEventListener('click', () => { step = +b.dataset.step; render(); }));
+      sections.forEach((s,i) => s.classList.toggle('current', i === step));
+      document.getElementById('plan').classList.toggle('current', step === DAYS.length);
+      cards.forEach(card => {
+        const b = card.querySelector('.choose'); const on = selections[card.dataset.day] === card.dataset.id;
+        b.classList.toggle('selected', on); b.setAttribute('aria-pressed', on ? 'true' : 'false');
+        b.textContent = on ? 'Chosen ✓' : 'Choose'; b.disabled = submitted;
+      });
+      const k = document.getElementById('stepk'), t = document.getElementById('steptitle'), m = document.getElementById('stepmeta');
+      const next = document.getElementById('next'), back = document.getElementById('back'), sub = document.getElementById('submit');
+      if (step < DAYS.length) {
+        k.textContent = `Occasion ${step+1} of 5`; t.textContent = sections[step].dataset.title; m.textContent = sections[step].dataset.sub;
+        next.style.display = ''; sub.style.display = 'none';
+        next.textContent = step === DAYS.length-1 ? 'Review plan' : 'Next occasion';
+        document.getElementById('hint').textContent = selections[DAYS[step]] ? '' : 'Choose one meal for this occasion.';
+      } else {
+        k.textContent = 'Final step'; t.textContent = 'Review your plan'; m.textContent = `${Object.keys(selections).length} of 5 occasions chosen`;
+        next.style.display = 'none'; sub.style.display = ''; sub.disabled = submitted;
+        document.getElementById('hint').textContent = '';
+        document.getElementById('summary').innerHTML = DAYS.map((d,i) => {
+          const id = selections[d];
+          return `<li><span class="o">${sections[i].dataset.title}</span><span class="n${id?'':' empty'}">${id ? catalog[id].name : 'Not chosen yet'}</span>${submitted ? '' : `<button class="change" data-step="${i}" aria-label="Change ${sections[i].dataset.title}">Change</button>`}</li>`;
+        }).join('');
+        document.querySelectorAll('#summary .change').forEach(b => b.addEventListener('click', () => { step = +b.dataset.step; render(); }));
+      }
+      back.style.visibility = step === 0 || submitted ? 'hidden' : 'visible';
+    }
+    document.querySelectorAll('.choose').forEach(button => button.addEventListener('click', () => {
+      if (submitted) return;
+      const id = button.dataset.id;
+      selections[catalog[id].day] = id;
+      window.__artifact.events.push({event:'select', day:catalog[id].day, mealId:id});
+      document.getElementById('status').textContent = '';
+      render();
+    }));
+    document.getElementById('next').addEventListener('click', () => { if (step < DAYS.length) { step += 1; render(); window.scrollTo(0,0); } });
+    document.getElementById('back').addEventListener('click', () => { if (step > 0) { step -= 1; render(); window.scrollTo(0,0); } });
+    document.getElementById('submit').addEventListener('click', () => {
+      if (submitted) return;
+      const st = document.getElementById('status');
+      if (!DAYS.every(day => selections[day])) {
+        st.textContent = 'Choose one meal for every occasion.'; st.className = 'err';
+        window.__artifact.events.push({event:'incomplete-submit'});
+        return;
+      }
+      const ids = DAYS.map(day => selections[day]);
+      submitted = true;
+      window.__artifact.status = 'submitted';
+      window.__artifact.selectedMealIds = ids;
+      window.__artifact.selectedMeals = ids.map(id => ({day:catalog[id].day, mealId:id, ethiopian:catalog[id].ethiopian}));
+      window.__artifact.events.push({event:'submit', mealIds:ids});
+      st.textContent = 'Plan submitted.'; st.className = '';
+      document.getElementById('confirm').classList.add('show');
+      render();
+    });
+    render();
+  </script>
+</body>
+</html>

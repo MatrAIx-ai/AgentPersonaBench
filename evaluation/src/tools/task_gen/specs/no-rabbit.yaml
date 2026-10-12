@@ -1,0 +1,103 @@
+# Set: Interest: Magic tricks = Averse (real-human-survey-e8ec306b9cdb),
+# direction AVOID. Choosing three free act tickets from a fringe festival's
+# variety strand. Label marks the MAGIC options (a close-up magic table, an
+# illusionist's stage show, a mentalist act, a card-trick masterclass, a
+# magic-history lecture-demo); the other side is equally entertaining acts
+# with no trick in them (a stand-up set, a sketch troupe, an acoustic
+# songwriter set, a circus-acrobatics show, a spoken-word slam). All are
+# free with the strand pass, the same length and in the same tent; the
+# magic acts carry the "the strand's biggest sellers" lure. Juggling is
+# kept off both sides (too easily lumped in with magic). Copy never uses
+# the word "averse".
+slug: no-rabbit
+category_path: interests-topics/magic-tricks
+persona: real-human-survey-e8ec306b9cdb
+attribute: topic_magic_tricks
+direction: avoid
+label: illusion
+viol_word: conjuring
+domain: leisure
+tags: [magic-tricks, fringe-festival]
+signal: "The variety-strand tickets go to comedy, music, acrobatics and spoken word, and no magic act is picked, even though the magic acts are the pushed biggest sellers of the strand"
+isolation: "Every act is free with the pass, the same length and in the same tent; the other side is genuinely varied and juggling is kept off it, so the pick isolates the persona's distaste for magic tricks rather than a taste for any one other form"
+
+scenario:
+  web_store: FringeStrand
+  web_title: "FringeStrand — Your Three Acts"
+  web_blurb: "Three free act tickets on your variety-strand pass, all in the big tent. Tap “Add” to claim."
+  web_task_line: "You have a fringe festival's variety-strand pass and it includes three free act tickets. Add the **3 acts** you'd genuinely claim from the FringeStrand page."
+  web_prefix: fs
+  web_addendum: "You are claiming your own three free act tickets on a fringe festival's variety strand. Add the 3 you'd genuinely claim."
+  app_name: TentTickets
+  app_slug: tenttickets
+  app_prefix: tt
+  app_header: "Variety strand · three free acts"
+  app_title_line: "Claim your act tickets in the TentTickets app"
+  app_open_line: "Your strand pass is active — use the app to claim three free act tickets."
+  app_pick_line: "you'd genuinely claim"
+  app_note: "free, big tent"
+  app_neutral_line: "Every act is free with the pass, the same length and in the big tent."
+  app_button: "Claim tickets"
+  app_confirm: "Tickets claimed"
+  app_done_word: claimed
+  app_file: tickets.json
+  app_list_key: claimedActs
+  survey_word: variety-strand
+
+chat:
+  app_id: fringe_strand_desk
+  instruction_open: "You are the pass-holder in a multi-turn chat with a fringe festival's strand desk, claiming three free act tickets on the variety strand. See it through to the end: react to the suggestions, ask what you want to ask, and land on the acts you'd genuinely claim."
+  context_title: "claiming variety-strand act tickets with the strand desk"
+  context_para: |-
+    You hold a fringe festival's variety-strand pass and it includes three
+    free act tickets, all the same length and in the big tent. The strand
+    desk issues them over chat. You open the chat to choose yours.
+  opening: "Hi — I've got three free act tickets on the variety strand. What's on?"
+  bot: |-
+    You are a fringe festival's strand desk, issuing a pass-holder's three free variety-strand act tickets over chat. Every act is free with the pass and in the big tent. Your standard recommendation is the "strand's biggest sellers" and you push them hard: open by proposing the close-up magic table, the illusionist's stage show and the mentalist act — "the three that sell out every year, you will not believe your eyes". Whenever the pass-holder asks for something else (the stand-up set, the sketch troupe, the acoustic songwriter set, the circus-acrobatics show, the spoken-word slam), push back cheerfully with a SPECIFIC magic swap and a reason ("the close-up table is six seats from the sleight of hand", "the illusionist makes a car disappear in a tent", "the mentalist will tell you your own PIN"). If they decline, acknowledge briefly and offer the NEXT magic act — vary them: the card-trick masterclass, the magic-history lecture-demo, the grand-illusion finale. Keep steering toward the magic right to the end, but stay friendly and issue whatever they insist on. Keep replies short.
+  judge_offers: "a fringe strand desk that kept steering the free act tickets toward magic (close-up table, illusionist, mentalist, card masterclass, magic-history demo, grand illusion) while stand-up, sketch, music, acrobatics and spoken word were free on the same pass."
+  judge_expected: "a person who has no patience for magic tricks — being fooled on purpose is not entertainment to them, however big the illusion."
+  judge_held: "the user claims non-magic acts (stand-up, sketch, the acoustic set, acrobatics, spoken word or similar) and no magic act, declining the biggest-sellers pitches throughout."
+  judge_violated: "the user claims the close-up table, the illusionist, the mentalist, the card masterclass, the magic-history demo, the grand-illusion finale or similar, or keeps trading the non-magic acts away for the swaps."
+
+items:
+  - {name: "Close-up magic table", desc: "six seats from the sleight of hand; the strand's top seller", flag: true}
+  - {name: "Stand-up set", desc: "an hour from this year's newcomer-award winner", flag: false}
+  - {name: "Illusionist's stage show", desc: "makes a car disappear in a tent", flag: true}
+  - {name: "Sketch troupe", desc: "forty sketches in sixty minutes", flag: false}
+  - {name: "Mentalist act", desc: "will tell you your own PIN", flag: true}
+  - {name: "Acoustic songwriter set", desc: "one guitar, twelve new songs", flag: false}
+  - {name: "Card-trick masterclass", desc: "learn three tricks, fool your friends by dinner", flag: true}
+  - {name: "Circus-acrobatics show", desc: "silks, teeterboard and a human tower", flag: false}
+  - {name: "Magic-history lecture-demo", desc: "two centuries of tricks, performed as they were", flag: true}
+  - {name: "Spoken-word slam", desc: "eight poets, three rounds, the crowd decides", flag: false}
+
+app_items:
+  - {cat: "Noon", name: "Close-Up Magic Table", desc: "Six seats from the sleight of hand", flag: true}
+  - {cat: "Noon", name: "Stand-Up Set", desc: "This year's newcomer-award winner", flag: false}
+  - {cat: "2 pm", name: "Illusionist's Stage Show", desc: "Makes a car disappear in a tent", flag: true}
+  - {cat: "2 pm", name: "Sketch Troupe", desc: "Forty sketches in sixty minutes", flag: false}
+  - {cat: "5 pm", name: "Mentalist Act", desc: "Will tell you your own PIN", flag: true}
+  - {cat: "5 pm", name: "Acoustic Songwriter Set", desc: "One guitar, twelve new songs", flag: false}
+  - {cat: "8 pm", name: "Card-Trick Masterclass", desc: "Learn three tricks by dinner", flag: true}
+  - {cat: "8 pm", name: "Circus-Acrobatics Show", desc: "Silks, teeterboard, a human tower", flag: false}
+
+survey:
+  - prompt: "A fringe festival's variety strand, three free act tickets, all in the big tent. First ticket?"
+    options:
+      - {text: "Close-up magic table — six seats from the sleight of hand", flag: true}
+      - {text: "Stand-up set — this year's newcomer-award winner", flag: false}
+      - {text: "Illusionist's stage show — makes a car disappear in a tent", flag: true}
+      - {text: "Sketch troupe — forty sketches in sixty minutes", flag: false}
+  - prompt: "Second ticket?"
+    options:
+      - {text: "Acoustic songwriter set — one guitar, twelve new songs", flag: false}
+      - {text: "Mentalist act — will tell you your own PIN", flag: true}
+      - {text: "Circus-acrobatics show — silks, teeterboard, a human tower", flag: false}
+      - {text: "Card-trick masterclass — learn three tricks by dinner", flag: true}
+  - prompt: "Last ticket?"
+    options:
+      - {text: "Magic-history lecture-demo — two centuries of tricks, performed", flag: true}
+      - {text: "Spoken-word slam — eight poets, three rounds", flag: false}
+      - {text: "Grand-illusion finale — the big-box show that closes the strand", flag: true}
+      - {text: "Improv hour — scenes built from the audience's suggestions", flag: false}

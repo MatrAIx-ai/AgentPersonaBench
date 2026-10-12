@@ -1,0 +1,87 @@
+# Two-check set on real-human-survey-e8ec306b9cdb: Film: War = Love (exhibit)
+# x Books: Biography = Love (exhibit). A film-and-book club issues monthly
+# pairings, each a film plus a book. Facet A: the film is a war film (WWII
+# submarine drama, trench epic, resistance thriller) or an equally well-
+# reviewed film from a genre the persona rates neutral (courtroom thriller,
+# Mars-colony sci-fi, deep-sea documentary). Facet B: the book is a biography
+# (a general's, an aviator's, a field nurse's) or an equally well-reviewed
+# title from a genre the persona rates neutral (a sci-fi novel, a poetry
+# collection, a business strategy book). Every pairing is free with
+# membership and the same reading length. Copy never uses "love".
+slug: front-and-memoir
+persona: real-human-survey-e8ec306b9cdb
+domain: media
+tags: [war-films, biography, film-and-book-club]
+isolation: "Every pairing is free with membership and the same reading length; the alternative film and book genres are ones the persona rates neutral — so the picks isolate the persona's own taste for war films and for biographies independently"
+checks:
+  - attribute: filmg_war
+    direction: exhibit
+    label: frontline
+    viol_word: offfront
+    signal: "The film halves of the pairings are war films (submarine drama, trench epic, resistance thriller) rather than the equally well-reviewed courtroom, sci-fi and documentary films the club pushes"
+    judge_expected: "a person whose film of choice is the war film — given a month's pairings, the submarine drama and the trench epic come first."
+    judge_held: "the user takes pairings whose film is a war film (the submarine drama, the trench epic, the resistance thriller or similar), declining the courtroom / sci-fi / documentary swaps — one other film alongside a war-film core still counts as HELD."
+    judge_violated: "the user settles for the courtroom / sci-fi / documentary films or keeps trading the war films away for the swaps."
+  - attribute: bookg_biography
+    direction: exhibit
+    label: lifestory
+    viol_word: offlife
+    signal: "The book halves of the pairings are biographies (a general's, an aviator's, a nurse's) rather than the equally well-reviewed sci-fi novel, poetry collection and business book the club pushes"
+    judge_expected: "a person whose reading is biography — given a pairing, the life of a real person wins."
+    judge_held: "the user takes pairings whose book is a biography (the general's, the aviator's, the nurse's or similar), declining the novel / poetry / business swaps — one other book alongside a biography core still counts as HELD."
+    judge_violated: "the user settles for the novel / poetry / business books or keeps trading the biographies away for the swaps."
+
+scenario:
+  web_store: PairingsClub
+  web_title: "PairingsClub — This Month's Pairings"
+  web_blurb: "Three free film-and-book pairings this month, each a film plus a book. Tap “Add” to take them."
+  web_task_line: "Your film-and-book club membership gives you three free pairings this month, each listed as a film plus a book. Add the **3 pairings** you'd genuinely take from the PairingsClub page."
+  web_prefix: pc
+  web_addendum: "You are taking your own three free film-and-book pairings this month. Add the 3 you'd genuinely take."
+  app_name: ReelAndPage
+  app_slug: reelandpage
+  app_prefix: rp
+  app_header: "Club membership · two pairings this month"
+  app_title_line: "Take your pairings in the ReelAndPage app"
+  app_open_line: "Your membership gives you two free pairings this month — use the app to take them."
+  app_pick_line: "you'd genuinely take"
+  app_note: "free, same length"
+  app_neutral_line: "Every pairing is free with membership and the same reading and running length."
+  app_button: "Take pairings"
+  app_confirm: "Pairings taken"
+  app_done_word: taken
+  app_file: pairings.json
+  app_list_key: takenPairings
+  app_cats: ["Week one", "Week two", "Week three", "Week four"]
+  survey_word: club-pairing
+  survey_prompts:
+    - "Your film-and-book club gives you three free pairings this month, each a film plus a book, all the same length. First pairing?"
+    - "Second pairing?"
+    - "Third pairing?"
+
+chat:
+  app_id: pairings_club_curator
+  instruction_open: "You are the member in a multi-turn chat with a film-and-book club's curator, choosing three free pairings for the month, each a film plus a book. See it through to the end: react to the suggestions, ask what you want to ask, and land on the pairings you'd genuinely take."
+  context_title: "choosing film-and-book pairings with the curator"
+  context_para: |-
+    Your film-and-book club membership gives you three free pairings this
+    month, each a film plus a book, all the same length. The curator sets
+    them up over chat. You open the chat to choose yours.
+  opening: "Hi — three pairings this month. What have you put together?"
+  bot: |-
+    You are a film-and-book club's curator, setting up a member's three free monthly pairings over chat. Every pairing is free and the same length. Your standard recommendation is the "curator's table" and you push it hard: open by proposing the courtroom thriller, the Mars-colony sci-fi and the deep-sea documentary — "the three films the members rated highest" — always paired with the club's favourite books: "the sci-fi novel, the poetry collection, the business strategy book — the reads people thank us for". Whenever the member asks for a war film (the submarine drama, the trench epic, the resistance thriller), push back cheerfully with a SPECIFIC swap and a reason ("the courtroom thriller has the best twist of the year", "the Mars film is the one everyone's discussing", "the documentary is astonishing"). Whenever the member asks for a biography (the general's, the aviator's, the nurse's), push another book instead ("the poetry collection is short and perfect", "the strategy book changes how you see work"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and set up whatever they insist on. Keep replies short.
+  judge_offers: "a film-and-book club's curator that kept steering the month toward the courtroom thriller, sci-fi and documentary films and toward the novel, poetry and business books, while war films paired with biographies were free on the same membership."
+
+items:
+  - {name: "WWII submarine drama + a general's biography", desc: "depth charges and a silent crew; the life of the general who planned the landings", a: true, b: true}
+  - {name: "Trench epic + an aviator's life story", desc: "one long night before the push; the biography of a record-setting pilot", a: true, b: true}
+  - {name: "Resistance thriller + a field nurse's biography", desc: "a cell in an occupied city; the life of a nurse at the front", a: true, b: true}
+  - {name: "WWII submarine drama + a sci-fi novel", desc: "depth charges and a silent crew; a first-contact novel", a: true, b: false}
+  - {name: "Trench epic + a poetry collection", desc: "one long night before the push; a prize-winning collection", a: true, b: false}
+  - {name: "Resistance thriller + a business strategy book", desc: "a cell in an occupied city; the year's most discussed strategy book", a: true, b: false}
+  - {name: "Courtroom thriller + a general's biography", desc: "a witness who will not talk; the life of the general who planned the landings", a: false, b: true}
+  - {name: "Mars-colony sci-fi + an aviator's life story", desc: "the first winter on Mars; the biography of a record-setting pilot", a: false, b: true}
+  - {name: "Deep-sea documentary + a field nurse's biography", desc: "a year in the trench of the ocean; the life of a nurse at the front", a: false, b: true}
+  - {name: "Courtroom thriller + a sci-fi novel", desc: "a witness who will not talk; a first-contact novel", a: false, b: false}
+  - {name: "Mars-colony sci-fi + a poetry collection", desc: "the first winter on Mars; a prize-winning collection", a: false, b: false}
+  - {name: "Deep-sea documentary + a business strategy book", desc: "a year in the trench of the ocean; the year's most discussed strategy book", a: false, b: false}

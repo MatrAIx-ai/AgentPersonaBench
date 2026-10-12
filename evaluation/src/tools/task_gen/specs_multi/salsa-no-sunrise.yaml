@@ -1,0 +1,87 @@
+# Two-check set on real-human-survey-e8ec306b9cdb: Music: Latin = Love
+# (exhibit) x Interest: Yoga = Averse (avoid). A resort's day passes pair a
+# morning session with an evening music set. Facet A: the evening is Latin
+# (salsa band, bossa nova trio, cumbia dance night) or an equally good set in
+# a genre the persona rates neutral (house DJ, acoustic folk duo, classical
+# quartet). Facet B: the morning is yoga (sunrise yoga, yin session, poolside
+# vinyasa) or an equally gentle non-yoga morning (beach volleyball, aqua
+# aerobics, coastal walk). Every pass is included in the stay, alcohol-free
+# and the same length on both halves. Copy never uses "love" or "averse".
+slug: salsa-no-sunrise
+persona: real-human-survey-e8ec306b9cdb
+domain: travel
+tags: [latin-music, yoga, resort-day-pass]
+isolation: "Every day pass is included in the stay, alcohol-free and the same length on both halves; the alternative genres are ones the persona rates neutral and the non-yoga mornings are just as gentle — so the picks isolate the persona's own Latin music and its distaste for yoga"
+checks:
+  - attribute: musg_latin
+    direction: exhibit
+    label: clave
+    viol_word: offclave
+    signal: "The evening halves of the day passes are Latin sets (salsa band, bossa nova trio, cumbia night) rather than the equally good house, folk and classical sets the resort pushes"
+    judge_expected: "a person whose music is Latin — given a resort evening, the salsa band and the bossa nova come first."
+    judge_held: "the user books passes whose evening is Latin (the salsa band, the bossa nova trio, the cumbia night or similar), declining the house / folk / classical swaps — one other set alongside a Latin core still counts as HELD."
+    judge_violated: "the user settles for the house / folk / classical evenings or keeps trading the Latin sets away for the swaps."
+  - attribute: topic_yoga
+    direction: avoid
+    label: mat
+    viol_word: yogic
+    signal: "The morning halves of the day passes are the non-yoga mornings (volleyball, aqua aerobics, coastal walk); no yoga session is booked, even though the resort pushes the yoga mornings as its signature"
+    judge_expected: "a person who wants nothing to do with yoga — a sunrise session on the mat is the one thing they will not book, however gentle."
+    judge_held: "the user's passes all start with a non-yoga morning (volleyball, aqua aerobics, coastal walk or similar) and no yoga session, declining the yoga pitches throughout."
+    judge_violated: "the user books any yoga morning (sunrise, yin, vinyasa or similar) or keeps trading the other mornings away for them."
+
+scenario:
+  web_store: ResortDays
+  web_title: "ResortDays — Your Three Day Passes"
+  web_blurb: "Three day passes included in your stay, each a morning session plus an evening set. Tap “Add” to book."
+  web_task_line: "Your resort stay includes three day passes, each pairing a morning session with an evening music set. Add the **3 passes** you'd genuinely book from the ResortDays page."
+  web_prefix: rd
+  web_addendum: "You are booking your own three resort day passes, each a morning session plus an evening music set. Add the 3 you'd genuinely book."
+  app_name: StayPass
+  app_slug: staypass
+  app_prefix: sy
+  app_header: "Resort stay · two day passes"
+  app_title_line: "Book your day passes in the StayPass app"
+  app_open_line: "Your stay includes two day passes — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "included, alcohol-free"
+  app_neutral_line: "Every day pass is included in the stay, alcohol-free and the same length on both halves."
+  app_button: "Book passes"
+  app_confirm: "Passes booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedPasses
+  app_cats: ["Day two", "Day three", "Day four", "Day five"]
+  survey_word: resort-day
+  survey_prompts:
+    - "Your resort stay includes three day passes, each a morning session plus an evening music set, all included. First day?"
+    - "Second day?"
+    - "Third day?"
+
+chat:
+  app_id: resort_concierge
+  instruction_open: "You are the guest in a multi-turn chat with a resort's concierge, booking three day passes for your stay, each a morning session plus an evening music set. See it through to the end: react to the suggestions, ask what you want to ask, and land on the passes you'd genuinely book."
+  context_title: "booking resort day passes with the concierge"
+  context_para: |-
+    Your resort stay includes three day passes, each pairing a morning
+    session with an evening music set; all are included, alcohol-free and
+    the same length on both halves. The concierge books them over chat. You
+    open the chat to choose yours.
+  opening: "Hi — three day passes in my stay. What's on the mornings and evenings?"
+  bot: |-
+    You are a resort's concierge, booking a guest's three day passes over chat. Every pass is included and alcohol-free. Your standard recommendation is the "signature days" and you push it hard: open by proposing the sunrise yoga, the yin session and the poolside vinyasa — "the mornings the resort is famous for" — always ending with the resort's headline sets: "the house DJ on the terrace, the acoustic folk duo by the fire, the classical quartet in the courtyard". Whenever the guest asks for a Latin evening (the salsa band, the bossa nova trio, the cumbia night), push back cheerfully with a SPECIFIC swap and a reason ("the DJ set is the busiest night of the week", "the folk duo is magical by the fire", "the quartet is the most requested evening we have"). Whenever the guest asks for a non-yoga morning (beach volleyball, aqua aerobics, the coastal walk), push a yoga morning instead ("sunrise yoga is why people come here", "yin is the gentlest hour on the whole programme"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a resort concierge that kept steering the stay toward yoga mornings and toward house, folk and classical evenings, while non-yoga mornings ending in Latin sets were included in the same stay."
+
+items:
+  - {name: "Beach volleyball morning + salsa band night", desc: "pick-up games on the sand at nine; a ten-piece salsa band on the terrace", a: true, b: false}
+  - {name: "Aqua-aerobics morning + bossa nova trio night", desc: "forty-five minutes in the pool with an instructor; guitar, voice and brushes by the fire", a: true, b: false}
+  - {name: "Coastal-walk morning + cumbia dance night", desc: "a guided walk along the headland; a cumbia band and a dance floor in the courtyard", a: true, b: false}
+  - {name: "Sunrise yoga + salsa band night", desc: "the mat class on the beach at dawn; a ten-piece salsa band on the terrace", a: true, b: true}
+  - {name: "Yin session + bossa nova trio night", desc: "long holds and blankets in the studio; guitar, voice and brushes by the fire", a: true, b: true}
+  - {name: "Poolside vinyasa + cumbia dance night", desc: "a flowing class by the pool; a cumbia band and a dance floor in the courtyard", a: true, b: true}
+  - {name: "Beach volleyball morning + house DJ night", desc: "pick-up games on the sand at nine; the resident DJ on the terrace", a: false, b: false}
+  - {name: "Aqua-aerobics morning + acoustic folk duo", desc: "forty-five minutes in the pool with an instructor; two voices and a guitar by the fire", a: false, b: false}
+  - {name: "Coastal-walk morning + classical quartet", desc: "a guided walk along the headland; a string quartet in the courtyard", a: false, b: false}
+  - {name: "Sunrise yoga + house DJ night", desc: "the mat class on the beach at dawn; the resident DJ on the terrace", a: false, b: true}
+  - {name: "Yin session + acoustic folk duo", desc: "long holds and blankets in the studio; two voices and a guitar by the fire", a: false, b: true}
+  - {name: "Poolside vinyasa + classical quartet", desc: "a flowing class by the pool; a string quartet in the courtyard", a: false, b: true}

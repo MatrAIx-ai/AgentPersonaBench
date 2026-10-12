@@ -1,0 +1,53 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/high-roller-survey"
+theme = "domain-specific risk-seeking: very high financial + social risk tolerance (measured DOSPERT duo)"
+
+[metadata]
+difficulty = "medium"
+type = "survey"
+domain = "behavioral-finance"
+tags = [ "persona-adherence", "multi-check", "high-roller", "dospert", "rule-based",]
+
+# --- Multi-attribute task (DOSPERT financial + social duo) ---------------------- #
+# ONE risk-preference battery, TWO checks (one per DOSPERT subscale). A single
+# persona carrying very-high financial + social risk tolerance answers three
+# questions per subscale; each subscale is HELD iff it sums >= 5/6. Reward =
+# integer score (one point per HELD subscale, 0..2). Full 2/2 always totals
+# >= 10; uniform-random full pass = (4/27)^2 = 2.2%; an all-middle-tier chooser
+# maxes at 3+3 and scores 0/2. Recreational DOSPERT is deliberately NOT pinned
+# (merged thrill-adventurer holds recreational Very high); financial + social
+# are free in main.
+[[checks]]
+dimension_id = "dospert_financial_risk_tolerance"
+attribute = "Financial risk tolerance (DOSPERT)"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "dospert_financial=Very high"
+adherence_signal = "Financial trio sums >= 5/6 (prefers leveraged/speculative positions)."
+pass_min = 5
+
+[[checks]]
+dimension_id = "dospert_social_risk_tolerance"
+attribute = "Social risk tolerance (DOSPERT)"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "dospert_social=Very high"
+adherence_signal = "Social trio sums >= 5/6 (prefers direct public action over safe silence)."
+pass_min = 5
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

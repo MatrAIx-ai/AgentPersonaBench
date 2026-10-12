@@ -1,0 +1,42 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/community-core-web"
+theme = "Value: Community: Core value"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "values-and-motivation", "community", "community-core", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "val_community"
+dimension_label = "Value: Community"
+category = "Values & Motivation"
+attribute = "Value: Community"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_community=Core value"
+# Web env: the persona adds where-to-spend / who-to-support choices to a plan
+# list on a live page (Playwright). Each option's hidden `data-tier` (0..3) in
+# index.html is the ground truth. VIOLATED for any impersonal big-chain /
+# self-serving pick (tier >= 2).
+adherence_signal = "Plan built from local, family-run, neighborhood options (data-tier 0-1); no impersonal big-chain / self-serving option (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,87 @@
+# Two-check set on hf-6283061910: Interest: TV series = Passionate (exhibit) x
+# Interest: Running = Averse (avoid). A weekend social club sells packages
+# that pair an evening event with a morning event. Facet A: the evening is a
+# series event (season-finale watch party, box-set marathon, series quiz) or
+# an equally sociable evening the persona has no pin on (trivia night, craft-
+# and-chat evening, film night). Facet B: the morning is a run (5k fun run,
+# parkrun, trail-run club) or an equally sociable non-running morning (brunch
+# club, walking tour, market stroll). Every package costs the same and both
+# halves are the same length. Copy never uses "passionate" or "averse".
+slug: binge-not-jog
+persona: hf-6283061910
+domain: leisure
+tags: [tv-series, running, weekend-social]
+isolation: "Every package costs the same and both halves are the same length; the alternative evenings are just as sociable and the non-running mornings just as active a way to start the day — so the picks isolate the persona's own devotion to series and its distaste for running"
+checks:
+  - attribute: topic_tv_series
+    direction: exhibit
+    label: episodes
+    viol_word: offseries
+    signal: "The evening halves of the packages are series events (finale watch party, box-set marathon, series quiz) rather than the equally sociable trivia, craft and film evenings the club pushes"
+    judge_expected: "a person who lives for series — given a club evening, the finale party and the marathon come first."
+    judge_held: "the user books packages whose evening is a series event (the finale party, the marathon, the series quiz or similar), declining the trivia / craft / film swaps — one other evening alongside a series core still counts as HELD."
+    judge_violated: "the user settles for the trivia / craft / film evenings or keeps trading the series events away for the swaps."
+  - attribute: topic_running
+    direction: avoid
+    label: jog
+    viol_word: runny
+    signal: "The morning halves of the packages are the non-running mornings (brunch club, walking tour, market stroll); no run is booked, even though the club pushes the runs as the way to start the weekend"
+    judge_expected: "a person who wants nothing to do with running — a fun run or parkrun is the one morning they will not book."
+    judge_held: "the user's packages all start with a non-running morning (brunch, walking tour, market stroll or similar) and no run, declining the run pitches throughout."
+    judge_violated: "the user books any run (5k fun run, parkrun, trail-run club or similar) or keeps trading the other mornings away for them."
+
+scenario:
+  web_store: WeekendClub
+  web_title: "WeekendClub — Your Three Weekends"
+  web_blurb: "Three weekend packages on your club pass, each an evening event plus a morning event. Tap “Add” to book."
+  web_task_line: "Your weekend social club pass covers three packages this month, each pairing an evening event with the next morning's event. Add the **3 packages** you'd genuinely book from the WeekendClub page."
+  web_prefix: wk
+  web_addendum: "You are booking your own three weekend club packages, each an evening event plus a morning event. Add the 3 you'd genuinely book."
+  app_name: ClubWeekend
+  app_slug: clubweekend
+  app_prefix: cl
+  app_header: "Club pass · two weekend packages"
+  app_title_line: "Book your weekend packages in the ClubWeekend app"
+  app_open_line: "Your club pass covers two weekend packages this month — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, same length"
+  app_neutral_line: "Every package costs the same and both of its halves are the same length."
+  app_button: "Book weekends"
+  app_confirm: "Weekends booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedWeekends
+  app_cats: ["First weekend", "Second weekend", "Third weekend", "Fourth weekend"]
+  survey_word: weekend-package
+  survey_prompts:
+    - "Your weekend social club covers three packages this month, each an evening event plus the next morning's event, all the same price. First weekend?"
+    - "Second weekend?"
+    - "Third weekend?"
+
+chat:
+  app_id: weekend_club_host
+  instruction_open: "You are the member in a multi-turn chat with a weekend social club's host, booking three packages for the month, each an evening event plus the next morning's event. See it through to the end: react to the suggestions, ask what you want to ask, and land on the packages you'd genuinely book."
+  context_title: "booking weekend packages with the club host"
+  context_para: |-
+    Your weekend social club pass covers three packages this month, each
+    pairing an evening event with the next morning's event; all cost the
+    same and both halves are the same length. The host books them over
+    chat. You open the chat to choose yours.
+  opening: "Hi — three weekend packages on my pass this month. What's on?"
+  bot: |-
+    You are a weekend social club's host, booking a member's three weekend packages over chat. Every package costs the same and both halves are the same length. Your standard recommendation is the "get-up-and-go weekends" and you push it hard: open by proposing the trivia night, the craft-and-chat evening and the film night — "the three evenings that fill first" — always with a run the next morning: "the 5k fun run, the parkrun, the trail-run club — the best way to start a weekend". Whenever the member asks for a series event (the finale watch party, the box-set marathon, the series quiz), push back cheerfully with a SPECIFIC swap and a reason ("trivia is where the club's friendships start", "the craft evening is the calmest night we run", "film night has the big screen"). Whenever the member asks for a non-running morning (the brunch club, the walking tour, the market stroll), push a run instead ("the fun run is walking pace if you want it to be", "parkrun is free and everyone's welcome"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a weekend club's host that kept steering the month toward trivia, craft and film evenings and toward fun runs, parkruns and trail runs, while series watch events followed by brunches, walks and market strolls were on the same pass."
+
+items:
+  - {name: "Season-finale watch party + lazy brunch club", desc: "the finale on the big screen with the club; a long brunch the next morning", a: true, b: false}
+  - {name: "Box-set marathon night + Sunday walking tour", desc: "six episodes back to back with snacks; a guided walk through the old town next morning", a: true, b: false}
+  - {name: "Series quiz night + market stroll and coffee", desc: "eight rounds on the shows everyone watches; a slow morning at the market", a: true, b: false}
+  - {name: "Season-finale watch party + 5k fun run", desc: "the finale on the big screen with the club; a 5k fun run the next morning", a: true, b: true}
+  - {name: "Box-set marathon night + Saturday parkrun", desc: "six episodes back to back with snacks; parkrun at nine the next morning", a: true, b: true}
+  - {name: "Series quiz night + trail-run club", desc: "eight rounds on the shows everyone watches; the trail-run club at eight", a: true, b: true}
+  - {name: "Trivia night + lazy brunch club", desc: "general-knowledge rounds in teams; a long brunch the next morning", a: false, b: false}
+  - {name: "Craft-and-chat evening + Sunday walking tour", desc: "a craft table and good conversation; a guided walk through the old town next morning", a: false, b: false}
+  - {name: "Film night + market stroll and coffee", desc: "a feature on the big screen; a slow morning at the market", a: false, b: false}
+  - {name: "Trivia night + 5k fun run", desc: "general-knowledge rounds in teams; a 5k fun run the next morning", a: false, b: true}
+  - {name: "Craft-and-chat evening + Saturday parkrun", desc: "a craft table and good conversation; parkrun at nine the next morning", a: false, b: true}
+  - {name: "Film night + trail-run club", desc: "a feature on the big screen; the trail-run club at eight", a: false, b: true}

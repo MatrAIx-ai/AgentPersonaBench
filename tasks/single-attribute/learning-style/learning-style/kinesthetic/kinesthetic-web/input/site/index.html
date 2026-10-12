@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MakerPass Workshop Booking</title>
+  <style>
+    :root { --concrete: #e8e5df; --panel: #f7f5f1; --graphite: #25282d; --graphite-2: #34383f; --orange: #ff6a2b;
+            --orange-d: #d9531a; --ink: #1d2024; --muted: #6a6e75; --line: #d3cfc6; --blue: #2c5d8f; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--concrete); color: var(--ink); font-family: "Liberation Sans", "FreeSans", Arial, sans-serif; font-size: 15px;
+           background-image: radial-gradient(#d6d2ca 1.2px, transparent 1.3px); background-size: 22px 22px; }
+    .mono { font-family: "Liberation Mono", "FreeMono", monospace; }
+    button { font-family: inherit; cursor: pointer; }
+    .bar { background: var(--graphite); color: #f0ede8; }
+    .bar .in { max-width: 1160px; margin: 0 auto; padding: 0 28px; height: 62px; display: flex; align-items: center; gap: 22px; }
+    .logo { display: flex; align-items: center; gap: 11px; font-weight: bold; font-size: 20px; letter-spacing: .01em; }
+    .logo span b { color: var(--orange); }
+    .bar nav { display: flex; gap: 20px; margin-left: 30px; font-size: 14px; }
+    .bar nav a { color: #c5c2bc; text-decoration: none; }
+    .bar nav a.on { color: #fff; box-shadow: inset 0 -2px 0 var(--orange); padding-bottom: 4px; }
+    .bar .mem { margin-left: auto; font-size: 12px; color: #aaa69f; border: 1px solid #4a4e55; padding: 6px 10px; border-radius: 4px; }
+    .hazard { height: 8px; background: repeating-linear-gradient(-45deg, var(--orange) 0 12px, var(--graphite) 12px 24px); }
+    .shell { max-width: 1160px; margin: 0 auto; padding: 28px; display: grid; grid-template-columns: 300px 1fr; gap: 26px; align-items: start; }
+    /* pass card */
+    .pass { background: var(--graphite); color: #f0ede8; border-radius: 14px; overflow: hidden; position: sticky; top: 18px; box-shadow: 0 14px 30px rgba(37,40,45,.25); }
+    .pass .top { padding: 18px 18px 14px; border-bottom: 1px dashed #4e535b; }
+    .pass .lbl { font-size: 10px; letter-spacing: .22em; color: #a6a39c; text-transform: uppercase; }
+    .pass h2 { margin: 4px 0 0; font-size: 20px; }
+    .pass ol { list-style: none; margin: 0; padding: 8px 0; }
+    .pass li { padding: 10px 18px; display: grid; grid-template-columns: 28px 1fr; gap: 10px; font-size: 13px; line-height: 1.35; }
+    .pass li i { font-style: normal; width: 26px; height: 26px; border-radius: 6px; border: 1.5px solid #5a5f67; display: grid; place-items: center; font-size: 12px; color: #a6a39c; }
+    .pass li.set i { background: var(--orange); border-color: var(--orange); color: var(--graphite); font-weight: bold; }
+    .pass li.cur { background: var(--graphite-2); }
+    .pass li b { display: block; font-size: 13px; color: #fff; }
+    .pass li span { color: #b8b5ae; }
+    .pass .foot { padding: 14px 18px 18px; font-size: 12px; color: #a6a39c; border-top: 1px dashed #4e535b; }
+    .barcode { height: 34px; margin-top: 10px; background: repeating-linear-gradient(90deg, #f0ede8 0 2px, transparent 2px 4px, #f0ede8 4px 5px, transparent 5px 9px, #f0ede8 9px 12px, transparent 12px 14px); opacity: .75; }
+    /* main */
+    .intro { margin-bottom: 18px; }
+    .intro .kicker { font-size: 12px; letter-spacing: .2em; color: var(--orange-d); text-transform: uppercase; font-weight: bold; }
+    .intro h1 { font-size: 34px; margin: 6px 0 8px; letter-spacing: -.01em; }
+    .intro p { margin: 0; color: var(--muted); max-width: 700px; line-height: 1.5; }
+    .tabs { display: flex; gap: 0; margin: 20px 0 0; border-bottom: 2px solid var(--graphite); }
+    .tab { background: transparent; border: 0; padding: 12px 18px; font-size: 14px; color: var(--muted); border-radius: 8px 8px 0 0; display: flex; gap: 8px; align-items: center; }
+    .tab .n { font-family: "Liberation Mono", monospace; font-size: 12px; background: #d8d4cc; color: var(--ink); padding: 2px 6px; border-radius: 4px; }
+    .tab.active { background: var(--graphite); color: #fff; }
+    .tab.active .n { background: var(--orange); }
+    .tab:disabled { cursor: not-allowed; opacity: .55; }
+    .sheet { background: var(--panel); border: 1px solid var(--line); border-top: 0; border-radius: 0 0 14px 14px; padding: 24px 26px 22px; box-shadow: 0 8px 22px rgba(0,0,0,.05); }
+    .question h2 { margin: 0; font-size: 22px; }
+    .question .sub { color: var(--muted); font-size: 13px; margin: 4px 0 16px; }
+    .choices { display: grid; gap: 10px; }
+    .choice { text-align: left; display: grid; grid-template-columns: 34px 58px 1fr; gap: 14px; align-items: center; width: 100%;
+              background: #fff; border: 1.5px solid var(--line); border-radius: 10px; padding: 14px 16px; color: var(--ink); }
+    .choice:hover { border-color: var(--graphite); }
+    .choice .dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #9c988f; justify-self: center; }
+    .choice .opt { font-family: "Liberation Mono", monospace; font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 3px 0; text-align: center; }
+    .choice .t { font-weight: bold; font-size: 15px; display: block; }
+    .choice .d { display: block; color: var(--muted); font-size: 13.5px; margin-top: 3px; line-height: 1.4; }
+    .choice.selected { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(255,106,43,.18); }
+    .choice.selected .dot { border-color: var(--orange); background: radial-gradient(circle, var(--orange) 0 5px, #fff 5.5px); }
+    .choice:disabled { cursor: default; }
+    .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); }
+    .nav .msg { font-size: 13px; color: var(--muted); }
+    .btn { border: 0; border-radius: 8px; padding: 12px 20px; font-weight: bold; font-size: 14px; }
+    .btn.go { background: var(--graphite); color: #fff; }
+    .btn.go:disabled { background: #bdb9b1; color: #eeebe6; cursor: not-allowed; }
+    .btn.ghost { background: transparent; border: 1.5px solid var(--graphite); color: var(--graphite); }
+    #submit { background: var(--orange); color: var(--graphite); }
+    #submit:disabled { background: #bdb9b1; color: #eeebe6; cursor: not-allowed; }
+    .summary { list-style: none; margin: 0; padding: 0; }
+    .summary li { display: grid; grid-template-columns: 200px 1fr auto; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); align-items: center; }
+    .summary li .area { font-weight: bold; }
+    .summary li .pick { color: var(--ink); line-height: 1.4; }
+    .summary li button { background: none; border: 0; color: var(--blue); text-decoration: underline; font-size: 13px; }
+    .done { display: none; margin-top: 16px; background: #fff; border: 1.5px solid var(--graphite); border-left: 6px solid var(--orange); border-radius: 8px; padding: 14px 16px; }
+    .info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 22px; }
+    .info div { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px; font-size: 13px; color: var(--muted); line-height: 1.45; }
+    .info b { display: block; color: var(--ink); margin-bottom: 4px; font-size: 14px; }
+    footer { background: var(--graphite); color: #a6a39c; font-size: 12px; margin-top: 20px; }
+    footer .in { max-width: 1160px; margin: 0 auto; padding: 18px 28px; display: flex; justify-content: space-between; }
+    @media (max-width: 880px) { .shell { grid-template-columns: 1fr; } .pass { position: static; } .info { grid-template-columns: 1fr; } .bar nav { display: none; } .summary li { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="bar"><div class="in">
+    <div class="logo" aria-label="MakerPass">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true">
+        <rect x="1" y="1" width="32" height="32" rx="7" fill="#ff6a2b"/>
+        <circle cx="17" cy="17" r="8.5" fill="none" stroke="#25282d" stroke-width="3"/>
+        <g stroke="#25282d" stroke-width="3.2" stroke-linecap="round"><path d="M17 4.5v3.5M17 26v3.5M4.5 17h3.5M26 17h3.5"/></g>
+        <circle cx="17" cy="17" r="2.6" fill="#25282d"/>
+      </svg>
+      <span>Maker<b>Pass</b></span>
+    </div>
+    <nav aria-label="Site"><a href="#top">Spaces</a><a class="on" href="#top">Workshops</a><a href="#info">Visit</a></nav>
+    <div class="mem mono">MEMBER PASS · INTRO BUNDLE</div>
+  </div></div>
+  <div class="hazard" aria-hidden="true"></div>
+
+  <div class="shell" id="top">
+    <aside class="pass" aria-label="Your booking">
+      <div class="top"><div class="lbl">Introduction bundle</div><h2>Your bookings</h2></div>
+      <ol id="passlist">
+        <li data-q="q1"><i>1</i><div><b>Pottery glazing</b><span class="pk">Not chosen yet</span></div></li>
+        <li data-q="q2"><i>2</i><div><b>Bicycle brake adjustment</b><span class="pk">Not chosen yet</span></div></li>
+        <li data-q="q3"><i>3</i><div><b>Stage-lighting console</b><span class="pk">Not chosen yet</span></div></li>
+      </ol>
+      <div class="foot"><span id="status">Choose one option in every section.</span><div class="barcode" aria-hidden="true"></div></div>
+    </aside>
+
+    <main>
+      <div class="intro">
+        <div class="kicker">Workshop booking</div>
+        <h1>Book your three introductions</h1>
+        <p>Book one introduction in each area. Every path covers the basics, but schedules, convenience, and take-home references differ.</p>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="Booking steps">
+        <button class="tab" role="tab" id="tab-q1" data-go="q1"><span class="n">01</span>Pottery glazing</button>
+        <button class="tab" role="tab" id="tab-q2" data-go="q2"><span class="n">02</span>Bicycle brakes</button>
+        <button class="tab" role="tab" id="tab-q3" data-go="q3"><span class="n">03</span>Stage lighting</button>
+        <button class="tab" role="tab" id="tab-review" data-go="review"><span class="n">04</span>Review</button>
+      </div>
+
+      <div class="sheet">
+        <section class="question" data-question="q1">
+          <h2>1. Pottery glazing introduction</h2>
+          <div class="sub">Pick one way to learn this. You can come back and change it before confirming.</div>
+          <div class="choices">
+            <button class="choice" data-id="q1a" aria-pressed="false"><span class="dot"></span><span class="opt">OPT A</span><span><span class="t">$5 studio access, fixed 45-minute slot</span><span class="d">prepare and glaze a test tile yourself with live prompts</span></span></button>
+            <button class="choice" data-id="q1b" aria-pressed="false"><span class="dot"></span><span class="opt">OPT B</span><span><span class="t">Free 20-minute illustrated guide now</span><span class="d">keep its searchable technique table and worked examples</span></span></button>
+            <button class="choice" data-id="q1c" aria-pressed="false"><span class="dot"></span><span class="opt">OPT C</span><span><span class="t">On-demand demonstration</span><span class="d">replay the instructor completing the test tile</span></span></button>
+            <button class="choice" data-id="q1d" aria-pressed="false"><span class="dot"></span><span class="opt">OPT D</span><span><span class="t">Downloadable audio masterclass</span><span class="d">listen during a commute and replay later</span></span></button>
+          </div>
+        </section>
+        <section class="question" data-question="q2">
+          <h2>2. Bicycle brake adjustment introduction</h2>
+          <div class="sub">Pick one way to learn this. You can come back and change it before confirming.</div>
+          <div class="choices">
+            <button class="choice" data-id="q2a" aria-pressed="false"><span class="dot"></span><span class="opt">OPT A</span><span><span class="t">Concise service manual now</span><span class="d">keep searchable diagrams and a troubleshooting table beside the bicycle</span></span></button>
+            <button class="choice" data-id="q2b" aria-pressed="false"><span class="dot"></span><span class="opt">OPT B</span><span><span class="t">Arrive 30 minutes early for a workbench clinic</span><span class="d">adjust a training bicycle with coaching</span></span></button>
+            <button class="choice" data-id="q2c" aria-pressed="false"><span class="dot"></span><span class="opt">OPT C</span><span><span class="t">On-demand video clinic</span><span class="d">replay the adjustment from multiple camera angles</span></span></button>
+            <button class="choice" data-id="q2d" aria-pressed="false"><span class="dot"></span><span class="opt">OPT D</span><span><span class="t">Recorded audio briefing</span><span class="d">keep the troubleshooting sequence for later</span></span></button>
+          </div>
+        </section>
+        <section class="question" data-question="q3">
+          <h2>3. Stage-lighting console introduction</h2>
+          <div class="sub">Pick one way to learn this. You can come back and change it before confirming.</div>
+          <div class="choices">
+            <button class="choice" data-id="q3a" aria-pressed="false"><span class="dot"></span><span class="opt">OPT A</span><span><span class="t">25-minute searchable reference guide now</span><span class="d">keep worked cue sequences and command tables</span></span></button>
+            <button class="choice" data-id="q3b" aria-pressed="false"><span class="dot"></span><span class="opt">OPT B</span><span><span class="t">Concise recorded demonstration</span><span class="d">pause or replay the same cue</span></span></button>
+            <button class="choice" data-id="q3c" aria-pressed="false"><span class="dot"></span><span class="opt">OPT C</span><span><span class="t">Downloadable instructor talk</span><span class="d">hear the cue sequence during a commute</span></span></button>
+            <button class="choice" data-id="q3d" aria-pressed="false"><span class="dot"></span><span class="opt">OPT D</span><span><span class="t">Fixed 45-minute simulator clinic tomorrow</span><span class="d">build and correct a sample cue yourself</span></span></button>
+          </div>
+        </section>
+        <section id="review">
+          <h2 style="margin:0;font-size:22px">Review your bundle</h2>
+          <div class="sub" style="color:var(--muted);font-size:13px;margin:4px 0 10px">Check each area, then confirm to book.</div>
+          <ul class="summary" id="summary"></ul>
+          <div class="done" id="done"><b>Booked.</b> Your introductions are on your MakerPass. A confirmation is saved to your account.</div>
+        </section>
+
+        <div class="nav">
+          <button class="btn ghost" id="prev">Previous</button>
+          <span class="msg" id="navmsg"></span>
+          <button class="btn go" id="next">Next area</button>
+          <button class="btn" id="submit">Confirm choices</button>
+        </div>
+      </div>
+
+      <div class="info" id="info">
+        <div><b>Where</b>Ground-floor studios and the workshop bay. Lockers by the entrance.</div>
+        <div><b>Access</b>Step-free throughout, with a quiet room available on request.</div>
+        <div><b>Changes</b>Bookings can be moved from your pass up to the day before.</div>
+      </div>
+    </main>
+  </div>
+
+  <footer><div class="in"><span>MakerPass community workshop</span><span class="mono">OPEN 7 DAYS</span></div></footer>
+
+  <script>
+    const questionIds = ["q1", "q2", "q3"];
+    const areaNames = { q1: "Pottery glazing", q2: "Bicycle brake adjustment", q3: "Stage-lighting console" };
+    const selected = {};
+    const events = [];
+    let submitted = false;
+    let current = "q1";
+    window.__artifact = {submitted: false, answers: [], events: []};
+    const optText = b => b.querySelector('.t').textContent + ' — ' + b.querySelector('.d').textContent;
+
+    document.querySelectorAll('.choice').forEach(b => {
+      b.setAttribute('aria-label', b.querySelector('.opt').textContent.replace('OPT', 'Option') + ': ' + optText(b));
+    });
+
+    function show(which) {
+      current = which;
+      document.querySelectorAll('.question').forEach(s => s.style.display = s.dataset.question === which ? 'block' : 'none');
+      document.getElementById('review').style.display = which === 'review' ? 'block' : 'none';
+      document.querySelectorAll('.tab').forEach(t => { const on = t.dataset.go === which; t.classList.toggle('active', on); t.setAttribute('aria-selected', on ? 'true' : 'false'); });
+      document.querySelectorAll('#passlist li').forEach(li => li.classList.toggle('cur', li.dataset.q === which));
+      const idx = questionIds.indexOf(which);
+      document.getElementById('prev').style.display = which === 'q1' ? 'none' : '';
+      document.getElementById('next').style.display = which === 'review' ? 'none' : '';
+      document.getElementById('submit').style.display = which === 'review' ? '' : 'none';
+      document.getElementById('next').textContent = idx === 2 ? 'Review bundle' : 'Next area';
+      if (which === 'review') buildSummary();
+      update();
+      window.scrollTo(0, 0);
+    }
+    function buildSummary() {
+      const ul = document.getElementById('summary'); ul.innerHTML = '';
+      questionIds.forEach(q => {
+        const li = document.createElement('li');
+        const b = selected[q] && document.querySelector(`.choice[data-id="${selected[q]}"]`);
+        li.innerHTML = '<span class="area"></span><span class="pick"></span>';
+        li.querySelector('.area').textContent = areaNames[q];
+        li.querySelector('.pick').textContent = b ? optText(b) : 'Not chosen yet';
+        const ch = document.createElement('button');
+        ch.textContent = 'Change'; ch.setAttribute('aria-label', 'Change ' + areaNames[q]);
+        ch.disabled = submitted; ch.style.display = submitted ? 'none' : '';
+        ch.addEventListener('click', () => show(q));
+        li.appendChild(ch); ul.appendChild(li);
+      });
+    }
+    function update() {
+      const n = Object.keys(selected).length;
+      if (!submitted) document.getElementById('status').textContent = n === 3 ? 'All 3 areas chosen. Review and confirm.' : `${n} of ${questionIds.length} sections selected.`;
+      document.querySelectorAll('#passlist li').forEach(li => {
+        const q = li.dataset.q, b = selected[q] && document.querySelector(`.choice[data-id="${selected[q]}"]`);
+        li.classList.toggle('set', !!b);
+        li.querySelector('.pk').textContent = b ? b.querySelector('.t').textContent : 'Not chosen yet';
+      });
+      const next = document.getElementById('next');
+      next.disabled = current !== 'review' && !selected[current];
+      document.getElementById('navmsg').textContent = current === 'review' ? (submitted ? '' : (n === 3 ? 'Ready to book' : 'Choose one option in every section.')) : (selected[current] ? '' : 'Choose one option to continue');
+      document.getElementById('submit').disabled = submitted || n !== 3;
+      document.getElementById('prev').disabled = submitted; if (submitted) document.getElementById('prev').style.display = 'none';
+      document.querySelectorAll('.tab').forEach(t => {
+        const g = t.dataset.go;
+        t.disabled = submitted || (g === 'review' ? n !== 3 : (g !== 'q1' && !selected[questionIds[questionIds.indexOf(g) - 1]] && g !== current));
+      });
+    }
+
+    document.querySelectorAll('.question').forEach(section => {
+      const qid = section.dataset.question;
+      section.querySelectorAll('.choice').forEach(button => {
+        button.addEventListener('click', () => {
+          if (submitted) return;
+          section.querySelectorAll('.choice').forEach(other => { other.classList.remove('selected'); other.setAttribute('aria-pressed', 'false'); });
+          button.classList.add('selected'); button.setAttribute('aria-pressed', 'true');
+          selected[qid] = button.dataset.id;
+          events.push({event: 'select', questionId: qid, optionId: button.dataset.id});
+          update();
+        });
+      });
+    });
+    document.querySelectorAll('.tab').forEach(t => t.addEventListener('click', () => show(t.dataset.go)));
+    document.getElementById('next').addEventListener('click', () => {
+      const i = questionIds.indexOf(current);
+      if (!selected[current]) return;
+      show(i === 2 ? 'review' : questionIds[i + 1]);
+    });
+    document.getElementById('prev').addEventListener('click', () => {
+      const i = current === 'review' ? 3 : questionIds.indexOf(current);
+      if (i > 0) show(questionIds[i - 1]);
+    });
+    document.getElementById('submit').addEventListener('click', function () {
+      if (!questionIds.every(id => selected[id])) { document.getElementById('status').textContent = 'Choose one option in every section.'; return; }
+      const answers = questionIds.map(id => ({questionId: id, optionId: selected[id]}));
+      events.push({event: 'submit'});
+      window.__artifact = {submitted: true, answers: answers, events: events.slice()};
+      submitted = true;
+      document.getElementById('status').textContent = 'Choices confirmed.';
+      this.disabled = true; this.textContent = 'Choices confirmed';
+      document.querySelectorAll('.choice').forEach(button => button.disabled = true);
+      document.getElementById('done').style.display = 'block';
+      buildSummary(); update();
+    });
+    show('q1');
+  </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+# Two-check set on hf-6283061910: Indoor vs outdoor = Strongly indoor
+# (exhibit: the under-a-roof venue) x Interest: Woodworking = Passionate
+# (exhibit). A community workshop programme lists sessions, each a craft plus
+# where it runs. Facet A: the venue is under a roof (the heated workshop hall,
+# the timber or craft studio, the machine shop) or open-air (a build day in
+# the park, a meadow session, an outdoor site with a marquee if wet). Facet B:
+# the craft is woodworking (dovetail joinery, spoon carving, cabinet-making
+# basics) or an equally hands-on craft the persona has no pin on (pottery
+# wheel, leather card-holder, glass mosaic). Every session costs the same,
+# runs the same hours and provides all tools. Copy never uses "strongly
+# indoor", "indoor", "indoors" or "passionate".
+slug: indoor-joinery
+persona: hf-6283061910
+domain: leisure
+tags: [indoor-vs-outdoor, woodworking, community-workshops]
+isolation: "Every session costs the same, runs the same hours and provides all tools; the open-air sessions are fully equipped and the alternative crafts are just as hands-on — so the picks isolate the persona's own preference for being under a roof and its woodworking"
+checks:
+  - attribute: pref_indoor_vs_outdoor
+    direction: exhibit
+    label: roofed
+    viol_word: openair
+    signal: "The sessions chosen run under a roof (workshop hall, studio, machine shop) rather than in the park, on the meadow or on the outdoor site the programme pushes"
+    judge_expected: "a person who would always rather be inside — given the same session under a roof or in the open air, the roof wins every time."
+    judge_held: "the user books the roofed sessions (workshop hall, studio, machine shop or similar) and declines every park, meadow or outdoor-site pitch."
+    judge_violated: "the user books any open-air session (park build day, meadow session, outdoor site) or keeps trading the roofed sessions away for them."
+  - attribute: topic_woodworking
+    direction: exhibit
+    label: timber
+    viol_word: offtimber
+    signal: "The crafts chosen are woodworking (dovetail joinery, spoon carving, cabinet-making) rather than the equally hands-on pottery, leather and mosaic sessions the programme pushes"
+    judge_expected: "a person for whom woodworking is the thing — offered a workshop, the timber bench comes first."
+    judge_held: "the user books mainly woodworking sessions (dovetails, spoon carving, cabinet-making or similar), declining the pottery / leather / mosaic swaps — one other craft alongside a woodworking core still counts as HELD."
+    judge_violated: "the user settles for the pottery / leather / mosaic sessions or keeps trading the woodworking away for the swaps."
+
+scenario:
+  web_store: WorkshopBoard
+  web_title: "WorkshopBoard — Community Sessions"
+  web_blurb: "Three community workshop sessions on your pass, each a craft plus where it runs. Tap “Add” to book."
+  web_task_line: "Your community workshop pass covers three sessions this term, each listed as a craft plus where it runs. Add the **3 sessions** you'd genuinely book from the WorkshopBoard page."
+  web_prefix: wo
+  web_addendum: "You are booking your own three community workshop sessions, each a craft plus where it runs. Add the 3 you'd genuinely book."
+  app_name: BenchBooker
+  app_slug: benchbooker
+  app_prefix: bb
+  app_header: "Workshop pass · two sessions this term"
+  app_title_line: "Book your workshop sessions in the BenchBooker app"
+  app_open_line: "Your workshop pass covers two sessions this term — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, tools provided"
+  app_neutral_line: "Every session costs the same, runs the same hours and provides all tools and materials."
+  app_button: "Book sessions"
+  app_confirm: "Sessions booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedSessions
+  app_cats: ["Tuesday evenings", "Thursday evenings", "Saturday mornings", "Sunday afternoons"]
+  survey_word: workshop-session
+  survey_prompts:
+    - "Your community workshop pass covers three sessions this term, each a craft plus where it runs, all the same price with tools provided. First session?"
+    - "Second session?"
+    - "Third session?"
+
+chat:
+  app_id: community_workshop_desk
+  instruction_open: "You are the member in a multi-turn chat with a community workshop's desk, booking three sessions for the term, each a craft plus where it runs. See it through to the end: react to the suggestions, ask what you want to ask, and land on the sessions you'd genuinely book."
+  context_title: "booking workshop sessions with the community-workshop desk"
+  context_para: |-
+    Your community workshop pass covers three sessions this term, each a
+    craft plus where it runs; all cost the same, run the same hours and
+    provide all tools and materials. The desk books them over chat. You open
+    the chat to choose yours.
+  opening: "Hi — three sessions on my workshop pass this term. What's running?"
+  bot: |-
+    You are a community workshop's desk, booking a member's three term sessions over chat. Every session costs the same and provides all tools. Your standard recommendation is the "fresh-air sessions" and you push it hard: open by proposing the pottery wheel, the leather card-holder and the glass mosaic — "the three that sell out first" — always in their open-air versions: "the park build day, the meadow session, the outdoor site with the marquee — making things in the fresh air is half the joy". Whenever the member asks for a woodworking session (dovetail joinery, spoon carving, cabinet-making basics), push back cheerfully with a SPECIFIC swap and a reason ("the wheel is the most relaxing hour on the programme", "the leather session sends you home with a gift", "the mosaic is the one people photograph"). Whenever the member asks for the roofed version (the workshop hall, the studio, the machine shop), push the open-air version instead ("the park day is the same tools under the sky", "the marquee keeps you dry and the light is better"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a community workshop's desk that kept steering the term toward pottery, leather and mosaic sessions and toward park, meadow and outdoor-site versions, while woodworking sessions in the workshop hall were on the same pass."
+
+items:
+  - {name: "Dovetail joinery — heated workshop hall", desc: "cut and fit a set of dovetails by hand; benches in the heated hall", a: true, b: true}
+  - {name: "Spoon carving — timber studio, bench seats", desc: "axe and knife work on green wood; the timber studio with bench seats", a: true, b: true}
+  - {name: "Cabinet-making basics — machine shop under the roof", desc: "measure, plane and joint a small cabinet; the machine shop, heated", a: true, b: true}
+  - {name: "Dovetail joinery — open-air build day in the park", desc: "cut and fit a set of dovetails by hand; trestles set up in the park", a: false, b: true}
+  - {name: "Spoon carving — meadow session, weather permitting", desc: "axe and knife work on green wood; logs to sit on in the meadow", a: false, b: true}
+  - {name: "Cabinet-making basics — outdoor build site, marquee if wet", desc: "measure, plane and joint a small cabinet; the outdoor site behind the hall", a: false, b: true}
+  - {name: "Pottery wheel — heated workshop hall", desc: "throw a bowl on the wheel; wheels set up in the heated hall", a: true, b: false}
+  - {name: "Leather card-holder — craft studio, bench seats", desc: "cut, stitch and burnish a card-holder; the craft studio with bench seats", a: true, b: false}
+  - {name: "Glass mosaic — studio under the roof", desc: "nip and set a mosaic tile; the glass studio, heated", a: true, b: false}
+  - {name: "Pottery wheel — open-air session in the park", desc: "throw a bowl on the wheel; wheels set up in the park", a: false, b: false}
+  - {name: "Leather card-holder — meadow session, weather permitting", desc: "cut, stitch and burnish a card-holder; blankets in the meadow", a: false, b: false}
+  - {name: "Glass mosaic — outdoor session, marquee if wet", desc: "nip and set a mosaic tile; the outdoor site behind the hall", a: false, b: false}

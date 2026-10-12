@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/true-crime-fan-chat"
+theme = "Topic: True crime — Passionate"
+
+[metadata]
+difficulty = "easy"
+type = "chat"
+domain = "media"
+tags = [ "persona-adherence", "true-crime-fan", "llm-judge",]
+
+[[checks]]
+dimension_id = "topic_true_crime"
+dimension_label = "Interest: True crime"
+category = "Interests: Topics"
+anchor_value = "Passionate"
+evaluator = "llm-judge"
+adherence_signal = "At least two of the persona's three reserved titles are true-crime titles; the passion shows up in a free-choice monthly haul."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

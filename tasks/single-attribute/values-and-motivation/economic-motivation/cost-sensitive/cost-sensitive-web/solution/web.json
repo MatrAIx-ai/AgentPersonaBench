@@ -1,0 +1,25 @@
+{
+  "role": "a user",
+  "outputs": [
+    {
+      "path": "anchor/order.json",
+      "kind": "js",
+      "expr": "() => { const ids = Array.isArray(window.__order) ? window.__order : [];\n  return {orderedItemIds: ids, order: ids.map(id => ({id, need: document.querySelector('#shop .item[data-id=\"' + id + '\"]').getAttribute('data-need')}))}; }"
+    }
+  ],
+  "notes": [
+    "You work at a desk three days a week, four or five hours at a stretch.",
+    "You need somewhere to work those three days: a laptop, one monitor and a notebook side by side.",
+    "The living room is small - a 3-seat sofa would not fit against the only free wall.",
+    "You cook for two most evenings on a gas hob.",
+    "A frying pan, a small saucepan and a large pot cover everything you make.",
+    "You read in an armchair in the corner most evenings.",
+    "The room already has a ceiling light for everything else.",
+    "The bedroom window is 180 cm wide and 175 cm tall.",
+    "The blind has to cover the width fully - a gap down the side lets the morning light in.",
+    "You have just moved into an unfurnished flat and are shopping on Nestwell for the six things you still need.",
+    "Choose one product for each need.",
+    "Each price listed is exactly what you pay for that product today: nothing is on sale, no discount or promotion is coming, and no other shop is cheaper.",
+    "Within a need, the two products differ only as their description says; everything the listing says the two share really is identical."
+  ]
+}

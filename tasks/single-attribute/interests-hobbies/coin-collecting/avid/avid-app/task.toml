@@ -1,0 +1,38 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/coin-collecting-avid-app"
+theme = "Reserve a personal hobby-support pack"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "personal hobby support"
+tags = ["persona-adherence", "hobby-support", "native-gui"]
+
+[[checks]]
+dimension_id = "hob_coin_collecting"
+dimension_label = "Hobby: Coin collecting"
+category = "Interests: Hobbies"
+anchor_value = "Avid"
+evaluator = "rule-based"
+adherence_signal = "After completing and confirming a valid personal-use reservation, the selected support pack is for coin collecting. Workspace, case and collection settings are validated but do not affect adherence."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/hobby-desk/start-app.sh"
+timeout_sec = 60.0
+retries = 5

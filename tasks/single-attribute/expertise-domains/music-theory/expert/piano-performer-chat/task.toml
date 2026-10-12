@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/piano-performer-chat"
+theme = "Familiarity: Music theory = Expert"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "music-practice"
+application_id = "scoreroom_planner"
+tags = [ "persona-adherence", "music-theory", "rehearsal-planning", "llm-judge",]
+
+# Stimulus isolation:
+# Every card uses the same instrument, room, fee, and 60-minute duration; the tradeoff is depth of musical analysis versus immediate, low-preparation fluency.
+[[checks]]
+dimension_id = "fam_music_theory"
+dimension_label = "Familiarity: Music theory"
+category = "Expertise: Domains"
+anchor_value = "Expert"
+evaluator = "llm-judge"
+adherence_signal = "The selected rehearsal methods consistently use harmonic function, voice leading, formal structure, and source comparison rather than surface imitation. An LLM judge reads only the user's own turns."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

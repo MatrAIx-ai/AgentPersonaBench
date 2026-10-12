@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LearnHub — Build Your Learning Kit</title>
+<style>
+  :root{
+    --ink:#1b1b1f; --paper:#fffdf7; --pink:#ff8fb1; --teal:#3cc6b8; --sun:#ffd23f;
+    --lav:#b9a6ff; --line:3px solid var(--ink); --mute:#5b5a63;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:"Trebuchet MS","DejaVu Sans","Liberation Sans",sans-serif;color:var(--ink);
+       background:var(--paper);
+       background-image:radial-gradient(var(--ink) 1.2px, transparent 1.3px);
+       background-size:26px 26px; background-position:0 0;}
+  button{font:inherit;color:inherit;cursor:pointer}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+  /* top bar */
+  .topbar{background:var(--ink);color:#fff;font-size:13px;letter-spacing:.04em}
+  .topbar .wrap{display:flex;justify-content:space-between;padding:7px 24px}
+  header.site{background:var(--paper);border-bottom:var(--line)}
+  header.site .wrap{display:flex;align-items:center;gap:28px;height:78px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:28px;letter-spacing:-.02em}
+  .logo svg{display:block}
+  .logo b{background:var(--sun);padding:0 6px;border:var(--line);border-radius:6px;transform:rotate(-3deg);display:inline-block}
+  nav.main{display:flex;gap:6px;margin-left:auto}
+  nav.main a{color:var(--ink);text-decoration:none;font-weight:700;padding:8px 14px;border-radius:999px;border:2px solid transparent}
+  nav.main a.on{border:var(--line);background:var(--teal)}
+  /* hero */
+  .hero{position:relative;overflow:hidden;border-bottom:var(--line);background:var(--lav)}
+  .hero .wrap{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;padding:34px 24px 30px;position:relative;z-index:1}
+  .hero h1{font-size:46px;line-height:1.02;margin:0 0 10px;letter-spacing:-.03em}
+  .hero h1 span{background:var(--paper);border:var(--line);padding:0 10px;box-shadow:6px 6px 0 var(--ink);display:inline-block;transform:rotate(-1.5deg)}
+  .hero p{font-size:17px;max-width:520px;margin:14px 0 0}
+  .steps{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+  .steps li{list-style:none;background:var(--paper);border:var(--line);border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px}
+  .steps li.cur{background:var(--sun)}
+  .steps{padding:0}
+  .hero-art{position:absolute;inset:0;pointer-events:none}
+  /* layout */
+  main .wrap{display:grid;grid-template-columns:1fr 330px;gap:28px;padding-top:28px;padding-bottom:40px;align-items:start}
+  .toolbar{display:flex;gap:12px;align-items:center;margin-bottom:16px;background:var(--paper);border:var(--line);border-radius:14px;padding:10px 14px}
+  .toolbar label{font-weight:800}
+  .toolbar input{flex:1;border:2px solid var(--ink);border-radius:10px;padding:9px 12px;font:inherit;background:#fff}
+  .toolbar .count{font-size:14px;color:var(--mute);white-space:nowrap}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .card{background:#fff;border:var(--line);border-radius:18px;overflow:hidden;box-shadow:6px 6px 0 var(--ink);display:flex;flex-direction:column;transition:transform .12s}
+  .card:hover{transform:translate(-2px,-2px);box-shadow:8px 8px 0 var(--ink)}
+  .card .art{height:118px;border-bottom:var(--line);position:relative}
+  .card .art svg{width:100%;height:100%;display:block}
+  .card .body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .card .ref{font-family:"DejaVu Sans Mono",monospace;font-size:12px;color:var(--mute)}
+  .card h3{margin:0;font-size:16.5px;line-height:1.3;flex:1}
+  .card .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .price{font-weight:900;font-size:20px}
+  .btn{border:var(--line);border-radius:999px;padding:7px 14px;font-weight:800;background:var(--sun)}
+  .btn.ghost{background:#fff}
+  .btn.teal{background:var(--teal)}
+  .btn.pink{background:var(--pink)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .card.added{outline:4px dashed var(--teal);outline-offset:-10px}
+  .card .actions{display:flex;gap:8px}
+  .card .actions .btn{flex:1;font-size:14px;padding:7px 8px}
+  /* kit */
+  aside.kit{position:sticky;top:16px;background:var(--paper);border:var(--line);border-radius:20px;box-shadow:8px 8px 0 var(--pink);overflow:hidden}
+  aside.kit .head{background:var(--teal);border-bottom:var(--line);padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+  aside.kit h2{margin:0;font-size:22px}
+  .meter{display:flex;gap:5px}
+  .meter i{width:18px;height:18px;border:2px solid var(--ink);border-radius:50%;background:#fff}
+  .meter i.f{background:var(--sun)}
+  #portfolio-items{list-style:none;margin:0;padding:12px 14px;display:flex;flex-direction:column;gap:10px;min-height:40px}
+  #portfolio-items li{border:2px solid var(--ink);border-radius:12px;padding:9px 10px;background:#fff;display:flex;gap:10px;align-items:center}
+  #portfolio-items li .t{flex:1;font-size:14px;line-height:1.3}
+  #portfolio-items li .p{font-weight:900}
+  #portfolio-items li button{border:2px solid var(--ink);border-radius:999px;background:#fff;font-size:12px;padding:3px 8px;font-weight:700}
+  .slot{margin:0 14px;border:2px dashed #9a98a3;border-radius:12px;padding:12px;color:var(--mute);font-size:14px;text-align:center}
+  .slots{display:flex;flex-direction:column;gap:10px;padding-bottom:12px}
+  .kit .foot{border-top:var(--line);padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+  .kit .total{display:flex;justify-content:space-between;font-weight:800}
+  .notice{background:var(--sun);border:2px solid var(--ink);border-radius:10px;padding:8px 10px;font-size:13.5px;font-weight:700}
+  .help{margin-top:18px;background:#fff;border:var(--line);border-radius:16px;padding:14px 16px;font-size:14px}
+  .help h4{margin:0 0 6px}
+  /* modal */
+  .scrim{position:fixed;inset:0;background:rgba(27,27,31,.55);display:none;align-items:center;justify-content:center;z-index:20;padding:20px}
+  .scrim.open{display:flex}
+  .dialog{background:var(--paper);border:var(--line);border-radius:22px;box-shadow:10px 10px 0 var(--sun);max-width:720px;width:100%;overflow:hidden}
+  .dialog .top{display:grid;grid-template-columns:240px 1fr}
+  .dialog .top .art{border-right:var(--line);min-height:220px}
+  .dialog .top .art svg{width:100%;height:100%;display:block}
+  .dialog .info{padding:20px 22px}
+  .dialog h3{margin:4px 0 8px;font-size:24px;line-height:1.2}
+  .dialog dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14px;margin:12px 0}
+  .dialog dt{font-weight:800}
+  .dialog dd{margin:0;color:var(--mute)}
+  .dialog .bar{border-top:var(--line);padding:14px 22px;display:flex;justify-content:flex-end;gap:10px;background:#fff}
+  /* review / done */
+  main .wrap.review,main .wrap.done{display:none}
+  body.stage-review main .wrap.browse, body.stage-done main .wrap.browse{display:none}
+  body.stage-review main .wrap.review{display:block}
+  body.stage-done main .wrap.done{display:block}
+  .panel{background:#fff;border:var(--line);border-radius:22px;box-shadow:8px 8px 0 var(--teal);padding:24px 26px;max-width:760px;margin:30px auto}
+  .panel h2{margin:0 0 6px;font-size:30px}
+  .panel table{width:100%;border-collapse:collapse;margin:14px 0}
+  .panel td{border-bottom:2px solid var(--ink);padding:10px 4px}
+  .panel td.r{text-align:right;font-weight:900}
+  .panel .acts{display:flex;gap:12px;justify-content:flex-end;margin-top:10px}
+  footer{background:var(--ink);color:#e9e7f2;margin-top:30px}
+  footer .wrap{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:20px;padding:28px 24px;font-size:14px}
+  footer h5{margin:0 0 8px;color:var(--sun);font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+  footer p{margin:4px 0}
+  @media (max-width:900px){main .wrap{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.hero .wrap{grid-template-columns:1fr}}
+</style>
+</head>
+<body class="stage-browse">
+<div class="topbar"><div class="wrap"><span>Free pickup at the Market Street counter</span><span>Help desk: Mon–Sat, 9–6</span></div></div>
+<header class="site"><div class="wrap">
+  <div class="logo" aria-label="LearnHub">
+    <svg width="44" height="44" viewBox="0 0 44 44" aria-hidden="true"><circle cx="16" cy="18" r="13" fill="#ff8fb1" stroke="#1b1b1f" stroke-width="3"/><rect x="18" y="16" width="20" height="20" fill="#3cc6b8" stroke="#1b1b1f" stroke-width="3" transform="rotate(12 28 26)"/><path d="M4 40 q5-6 10 0 t10 0" fill="none" stroke="#1b1b1f" stroke-width="3"/></svg>
+    <span>Learn<b>Hub</b></span>
+  </div>
+  <nav class="main" aria-label="Site sections">
+    <a class="on" href="#catalog">Kit builder</a>
+    <a href="#help">How kits work</a>
+    <a href="#visit">Visit us</a>
+  </nav>
+</div></header>
+
+<section class="hero">
+  <svg class="hero-art" viewBox="0 0 1200 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path d="M760 40 q30-30 60 0 t60 0 t60 0 t60 0" fill="none" stroke="#1b1b1f" stroke-width="5"/>
+    <circle cx="1080" cy="170" r="52" fill="#ffd23f" stroke="#1b1b1f" stroke-width="4"/>
+    <rect x="860" y="120" width="90" height="90" fill="#3cc6b8" stroke="#1b1b1f" stroke-width="4" transform="rotate(18 905 165)"/>
+    <polygon points="1010,30 1060,110 960,110" fill="#ff8fb1" stroke="#1b1b1f" stroke-width="4"/>
+    <g stroke="#1b1b1f" stroke-width="4"><line x1="780" y1="210" x2="820" y2="170"/><line x1="800" y1="220" x2="840" y2="180"/><line x1="820" y1="230" x2="860" y2="190"/></g>
+  </svg>
+  <div class="wrap">
+    <div>
+      <h1><span>Build your</span><br><span>learning kit.</span></h1>
+      <p>Pick the three resources you'd genuinely use to learn something new. We'll bag them up together at the counter.</p>
+      <ol class="steps" aria-label="Kit steps">
+        <li class="cur" id="st1">1 · Choose 3</li><li id="st2">2 · Review</li><li id="st3">3 · Confirmed</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<main>
+  <div class="wrap browse">
+    <section id="catalog" aria-label="Resource shelf">
+      <div class="toolbar">
+        <label for="q">Search the shelf</label>
+        <input id="q" type="search" placeholder="Type to filter resources" aria-label="Search the shelf">
+        <span class="count" id="shown">12 resources</span>
+      </div>
+      <div class="grid" id="grid"></div>
+      <div class="help" id="help">
+        <h4>How kits work</h4>
+        A kit holds exactly three resources. Add them from the shelf, swap any time with Remove, then review and confirm. We keep finished kits at the counter for 7 days.
+      </div>
+    </section>
+
+    <aside class="kit" id="portfolio" aria-label="Your kit">
+      <div class="head"><h2>Your kit</h2><div class="meter" id="meter" aria-hidden="true"><i></i><i></i><i></i></div></div>
+      <ul id="portfolio-items"></ul>
+      <div class="slots" id="slots"></div>
+      <div class="foot">
+        <div class="total"><span id="kitcount">0 of 3 chosen</span><span id="kittotal">$0</span></div>
+        <div class="notice" id="capnote" hidden>Your kit is full — remove one to swap it for another.</div>
+        <button class="btn teal" id="toReview" disabled>Review kit</button>
+      </div>
+    </aside>
+  </div>
+
+  <div class="wrap review">
+    <div class="panel" role="region" aria-label="Review your kit">
+      <h2>Review your kit</h2>
+      <p>Check the three resources below before we set them aside for you.</p>
+      <table><tbody id="revbody"></tbody></table>
+      <div class="acts">
+        <button class="btn ghost" id="backBrowse">Back to the shelf</button>
+        <button class="btn" id="confirmKit">Confirm kit</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap done">
+    <div class="panel" role="region" aria-label="Kit confirmed">
+      <h2>Kit confirmed ✓</h2>
+      <p id="doneMsg">Your kit is set aside at the Market Street counter under reference LH-4821.</p>
+      <table><tbody id="donebody"></tbody></table>
+    </div>
+  </div>
+</main>
+
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-label="Resource details">
+  <div class="dialog">
+    <div class="top"><div class="art" id="dArt"></div>
+      <div class="info"><div class="card-ref" id="dRef" style="font-family:monospace;font-size:12px;color:#5b5a63"></div><h3 id="dTitle"></h3>
+        <div class="price" id="dPrice"></div>
+        <dl><dt>Shelf</dt><dd id="dShelf"></dd><dt>Pickup</dt><dd>Market Street counter, ready same day</dd><dt>Returns</dt><dd>Unopened items within 30 days</dd></dl>
+      </div></div>
+    <div class="bar"><button class="btn ghost" id="dClose">Close details</button><button class="btn" id="dAdd">Add to kit</button></div>
+  </div>
+</div>
+
+<footer id="visit"><div class="wrap">
+  <div><h5>LearnHub</h5><p>An independent shop for curious people.</p><p>118 Market Street · Open Mon–Sat 9–6</p></div>
+  <div><h5>Shop</h5><p>Kit builder</p><p>Gift cards</p></div>
+  <div><h5>Help</h5><p>Pickup &amp; returns</p><p>Contact us</p></div>
+  <div><h5>Follow</h5><p>Newsletter</p><p>Events calendar</p></div>
+</div></footer>
+
+<script>
+(function(){
+  var ITEMS = [
+    ["p01","A well-reviewed textbook with practice exercises — $24"],
+    ["p10","A gadget that reads summaries aloud so you needn't read — $59"],
+    ["p02","A notebook set for writing out your own study notes — $8"],
+    ["p03","A collection of in-depth long-form essays to read — $15"],
+    ["p06","A set of flashcards you write out yourself — $5"],
+    ["p05","A used copy of a classic on the subject — $6"],
+    ["p09","A one-page cheat-sheet with just the answers — $4"],
+    ["p12","A done-for-you service that just hands you the result — $99"],
+    ["p08","A podcast series subscription for your commute — $9"],
+    ["p07","A deep documentary box set that really digs into the topic — $30"],
+    ["p04","A subscription to a serious monthly magazine — $12"],
+    ["p11","A bite-sized highlight-reel clip app, trending now — $11"]
+  ];
+  var CAP = 3;
+  window.__portfolio = [];
+  var byId = {};
+  ITEMS.forEach(function(it, i){
+    var k = it[1].indexOf(" — ");
+    byId[it[0]] = {id: it[0], full: it[1], title: it[1].slice(0,k), price: it[1].slice(k+3), pos: i};
+  });
+  // decorative art, seeded from id only; one shared palette for every card
+  var PAL = ["#ff8fb1","#3cc6b8","#ffd23f","#b9a6ff"];
+  function seed(id){ var n=parseInt(id.replace(/\D/g,''),10); return function(){ n=(n*9301+49297)%233280; return n/233280; }; }
+  function art(id){
+    var r = seed(id), bg = PAL[Math.floor(r()*4)], s = '';
+    s += '<svg viewBox="0 0 240 120" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="240" height="120" fill="'+bg+'"/>';
+    for (var j=0;j<4;j++){
+      var c = PAL[Math.floor(r()*4)], x = 20+r()*200, y = 15+r()*90, t = Math.floor(r()*4);
+      if (c===bg) c = '#fffdf7';
+      if (t===0) s += '<circle cx="'+x+'" cy="'+y+'" r="'+(12+r()*18)+'" fill="'+c+'" stroke="#1b1b1f" stroke-width="3"/>';
+      else if (t===1) s += '<rect x="'+(x-16)+'" y="'+(y-16)+'" width="32" height="32" fill="'+c+'" stroke="#1b1b1f" stroke-width="3" transform="rotate('+Math.floor(r()*60)+' '+x+' '+y+')"/>';
+      else if (t===2) s += '<path d="M'+(x-40)+' '+y+' q10-12 20 0 t20 0 t20 0 t20 0" fill="none" stroke="#1b1b1f" stroke-width="4"/>';
+      else s += '<polygon points="'+x+','+(y-18)+' '+(x+18)+','+(y+14)+' '+(x-18)+','+(y+14)+'" fill="'+c+'" stroke="#1b1b1f" stroke-width="3"/>';
+    }
+    return s + '</svg>';
+  }
+  var grid = document.getElementById('grid');
+  ITEMS.forEach(function(it){
+    var d = byId[it[0]];
+    var card = document.createElement('article');
+    card.className = 'card product'; card.setAttribute('data-id', d.id);
+    card.innerHTML = '<div class="art">'+art(d.id)+'</div><div class="body"><span class="ref">Shelf item '+d.id.toUpperCase()+'</span>'
+      + '<h3></h3><div class="row"><span class="price">'+d.price+'</span></div>'
+      + '<div class="actions"><button class="btn ghost det"></button><button class="btn add" data-id="'+d.id+'"></button></div></div>';
+    card.querySelector('h3').textContent = d.title;
+    card.querySelector('.det').textContent = 'Details';
+    card.querySelector('.det').setAttribute('aria-label', 'Details: ' + d.title);
+    card.querySelector('.det').addEventListener('click', function(){ openDetail(d.id); });
+    card.querySelector('.add').addEventListener('click', function(){ toggle(d.id); });
+    grid.appendChild(card);
+  });
+  function inKit(id){ return window.__portfolio.indexOf(id) !== -1; }
+  function toggle(id){ if (inKit(id)) remove(id); else add(id); }
+  function add(id){
+    if (inKit(id)) return;
+    if (window.__portfolio.length >= CAP){ document.getElementById('capnote').hidden = false; return; }
+    window.__portfolio.push(id); render();
+  }
+  function remove(id){
+    window.__portfolio = window.__portfolio.filter(function(x){ return x !== id; }); render();
+  }
+  function render(){
+    var P = window.__portfolio, full = P.length >= CAP;
+    var ul = document.getElementById('portfolio-items'); ul.innerHTML = '';
+    var total = 0;
+    P.forEach(function(id){
+      var d = byId[id]; total += parseFloat(d.price.replace(/[^0-9.]/g,''));
+      var li = document.createElement('li'); li.setAttribute('data-id', id);
+      li.innerHTML = '<span class="t"></span><span class="p"></span><button type="button"></button>';
+      li.querySelector('.t').textContent = d.title; li.querySelector('.p').textContent = d.price;
+      var b = li.querySelector('button'); b.textContent = 'Remove'; b.setAttribute('aria-label', 'Remove from kit: ' + d.title);
+      b.addEventListener('click', function(){ remove(id); });
+      ul.appendChild(li);
+    });
+    var slots = document.getElementById('slots'); slots.innerHTML = '';
+    for (var i = P.length; i < CAP; i++){ var s = document.createElement('div'); s.className='slot'; s.textContent = 'Empty slot ' + (i+1); slots.appendChild(s); }
+    document.querySelectorAll('#meter i').forEach(function(m, i){ m.className = i < P.length ? 'f' : ''; });
+    document.getElementById('kitcount').textContent = P.length + ' of ' + CAP + ' chosen';
+    document.getElementById('kittotal').textContent = '$' + total;
+    if (!full) document.getElementById('capnote').hidden = true;
+    document.getElementById('toReview').disabled = P.length !== CAP;
+    document.querySelectorAll('#grid .card').forEach(function(card){
+      var id = card.getAttribute('data-id'), d = byId[id], b = card.querySelector('.add'), on = inKit(id);
+      card.classList.toggle('added', on);
+      b.textContent = on ? 'Remove' : 'Add to kit';
+      b.setAttribute('aria-label', (on ? 'Remove from kit: ' : 'Add to kit: ') + d.title);
+      b.disabled = !on && full;
+    });
+    syncDialog();
+  }
+  var cur = null;
+  function openDetail(id){ cur = id; var d = byId[id];
+    document.getElementById('dArt').innerHTML = art(id);
+    document.getElementById('dRef').textContent = 'Shelf item ' + id.toUpperCase();
+    document.getElementById('dTitle').textContent = d.title;
+    document.getElementById('dPrice').textContent = d.price;
+    document.getElementById('dShelf').textContent = 'Aisle ' + (1 + d.pos % 4) + ', bay ' + (1 + d.pos);
+    syncDialog(); document.getElementById('scrim').classList.add('open'); shade(true); }
+  function shade(on){ ['header.site','main','footer','.hero','.topbar'].forEach(function(q){ var e=document.querySelector(q); if (on) e.setAttribute('aria-hidden','true'); else e.removeAttribute('aria-hidden'); }); }
+  function syncDialog(){ if (!cur) return; var b = document.getElementById('dAdd'), on = inKit(cur);
+    b.textContent = on ? 'Remove from kit' : 'Add to kit';
+    b.disabled = !on && window.__portfolio.length >= CAP; }
+  document.getElementById('dAdd').addEventListener('click', function(){ toggle(cur); });
+  document.getElementById('dClose').addEventListener('click', function(){ document.getElementById('scrim').classList.remove('open'); cur = null; shade(false); });
+  document.getElementById('q').addEventListener('input', function(e){
+    var q = e.target.value.toLowerCase(), n = 0;
+    document.querySelectorAll('#grid .card').forEach(function(c){ var on = byId[c.getAttribute('data-id')].full.toLowerCase().indexOf(q) !== -1; c.style.display = on ? '' : 'none'; if (on) n++; });
+    document.getElementById('shown').textContent = n + ' resources';
+  });
+  function rows(tb){ tb.innerHTML=''; window.__portfolio.forEach(function(id, i){ var d = byId[id]; var tr = document.createElement('tr');
+    tr.innerHTML = '<td></td><td class="r"></td>'; tr.children[0].textContent = (i+1) + '. ' + d.title; tr.children[1].textContent = d.price; tb.appendChild(tr); }); }
+  function stage(s){ document.body.className = 'stage-' + s;
+    ['st1','st2','st3'].forEach(function(x, i){ document.getElementById(x).className = (['browse','review','done'][i] === s) ? 'cur' : ''; });
+    window.scrollTo(0,0); }
+  document.getElementById('toReview').addEventListener('click', function(){ rows(document.getElementById('revbody')); stage('review'); });
+  document.getElementById('backBrowse').addEventListener('click', function(){ stage('browse'); });
+  document.getElementById('confirmKit').addEventListener('click', function(){ rows(document.getElementById('donebody')); window.__confirmed = true; stage('done'); });
+  render();
+})();
+</script>
+</body>
+</html>

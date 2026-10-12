@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/highly-skeptical-web"
+theme = "Skepticism: Very high"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "general"
+tags = [ "persona-adherence", "linguistic-communication", "skepticism", "highly-skeptical", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "cog_skepticism"
+dimension_label = "Skepticism"
+category = "Linguistic: Communication"
+attribute = "Skepticism"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "cog_skepticism=Very high"
+# Web env: the persona adds approaches to a shortlist on a live page (Playwright).
+# Each option's hidden `data-tier` (0..3) in index.html is the ground truth.
+# VIOLATED for any accept-a-claim-at-face-value pick (tier >= 2).
+adherence_signal = "Shortlist built from evidence-seeking / claim-verifying options (data-tier 0-1); no take-the-hype-at-face-value option (>= 2) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

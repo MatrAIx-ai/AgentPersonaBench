@@ -1,0 +1,28 @@
+# Host-side dependencies of the evaluation harness (Python >= 3.12).
+# Agents and environments run in Docker; their images install their own deps.
+# Versions are the ones the paper's runs used; newer minor versions should work.
+anthropic>=1.5
+openai>=2.54
+litellm>=1.100,<1.110
+google-genai>=2.23
+google-auth>=2.58
+httpx>=0.28
+pydantic>=2.13
+pyyaml>=6.0
+requests>=2.34
+tenacity>=9.1
+jinja2>=3.1
+toml>=0.10
+typer>=0.27
+rich>=15.0
+shortuuid>=1.0
+dirhash>=0.5
+packaging>=26.0
+pathspec>=1.1
+python-dotenv>=1.2
+claude-agent-sdk>=0.2
+datasets>=5.0
+datasketch>=2.0
+fastapi>=0.141
+uvicorn>=0.52
+supabase>=2.31

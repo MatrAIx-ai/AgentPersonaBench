@@ -1,0 +1,190 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Byway — My Neighborhood Visit Notes</title>
+<style>
+:root{--ink:#23305e;--ink2:#34457f;--mari:#e8a33d;--mari-soft:#fbecd2;--parch:#f5efe2;--card:#fffdf8;--line:#e2d8c4;--muted:#6a6758;--txt:#22253a;--green:#8fb39a;--water:#b9cfe0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--parch);color:var(--txt);font:16px/1.55 "Liberation Sans","FreeSans",Arial,sans-serif}
+.serif{font-family:"Bitstream Charter","Charter","Georgia",serif}
+.type{font-family:"Courier 10 Pitch","Courier New",monospace}
+button{font:inherit;cursor:pointer}
+.bar{background:var(--parch);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1200px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;gap:14px}
+.wm{font-family:"Bitstream Charter",Georgia,serif;font-size:26px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+.wm em{font-weight:400;color:#b87718;margin-left:2px}
+.crumbs{margin-left:28px;font-size:14px;color:var(--muted);display:flex;gap:8px}
+.crumbs b{color:var(--ink)}
+.me{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted)}
+.me i{width:34px;height:34px;border-radius:50%;background:var(--ink);display:grid;place-items:center}
+.intro{max-width:1200px;margin:0 auto;padding:24px 28px 8px;display:flex;gap:28px;align-items:flex-end}
+.intro small{font-size:12px;letter-spacing:.16em;color:#b87718;text-transform:uppercase}
+h1{font-family:"Bitstream Charter",Georgia,serif;font-size:36px;line-height:1.15;margin:4px 0 8px;color:var(--ink)}
+#instructions{max-width:760px;margin:0;color:#44465a}
+.prog{margin-left:auto;min-width:210px;text-align:right;font-size:13px;color:var(--muted)}
+.prog b{font-size:28px;color:var(--ink);font-family:"Bitstream Charter",Georgia,serif}
+.prog .track{height:8px;border-radius:4px;background:#e9dfcb;margin-top:6px;overflow:hidden}
+.prog .track u{display:block;height:100%;width:0;background:var(--mari);transition:width .2s}
+.shell{max-width:1200px;margin:0 auto;padding:16px 28px 40px;display:grid;grid-template-columns:350px 1fr;gap:28px;align-items:start}
+.route{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;position:sticky;top:14px}
+.route h3{margin:0;padding:14px 18px 6px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.map{display:block;width:100%;height:auto;border-bottom:1px solid var(--line)}
+.stops{list-style:none;margin:0;padding:8px}
+.stops li{margin:0}
+.stop{width:100%;display:flex;gap:12px;align-items:center;text-align:left;background:none;border:1px solid transparent;border-radius:10px;padding:9px 10px;color:var(--txt);font-size:14.5px}
+.stop:hover{background:#f7f1e4}
+.stop .n{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-weight:700;font-size:13px;color:var(--ink)}
+.stop .s{display:block;font-size:12px;color:var(--muted)}
+.stop.cur{background:var(--mari-soft);border-color:#f1d29f}
+.stop.done .n{background:var(--ink);color:#fff}
+.stop.rev .n{border-style:dashed}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px -18px rgba(35,48,94,.35)}
+fieldset{border:0;margin:0;padding:26px 30px 8px;min-width:0}
+fieldset[hidden]{display:none}
+.kick{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.kick .pin{width:22px;height:22px}
+legend{float:left;width:100%;padding:0;margin:0 0 6px;font-family:"Bitstream Charter",Georgia,serif;font-size:27px;font-weight:700;color:var(--ink);line-height:1.2}
+.hint{clear:both;margin:0 0 16px;color:var(--muted);font-size:14.5px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:14px;clear:both}
+.option{position:relative;display:flex;gap:12px;align-items:flex-start;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:18px 16px 16px;cursor:pointer;min-height:130px;transition:border-color .12s, box-shadow .12s}
+.option::before{content:"";position:absolute;left:18px;right:18px;top:0;height:4px;border-radius:0 0 4px 4px;background:#ece3d1}
+.option:hover{border-color:#cdbf9f}
+.option:has(input:checked){border-color:var(--ink);box-shadow:0 0 0 3px rgba(35,48,94,.12);background:#fbfaff}
+.option:has(input:checked)::before{background:var(--mari)}
+.option input{appearance:none;-webkit-appearance:none;flex:none;margin:3px 0 0;width:22px;height:22px;border-radius:50%;border:2px solid #bdb294;background:#fff;display:grid;place-items:center;cursor:pointer}
+.option input:checked{border-color:var(--ink);background:var(--ink)}
+.option input:checked::after{content:"";width:8px;height:8px;border-radius:50%;background:#fff}
+.option input:focus{outline:none}
+.option:focus-within{outline:3px solid #9fb6f0;outline-offset:2px}
+.option span[dir]{font-size:16px;line-height:1.6}
+.nav{display:flex;align-items:center;gap:12px;padding:18px 30px 26px}
+.nav .sp{flex:1}
+.btn{border-radius:10px;padding:12px 22px;font-weight:700;border:1.5px solid var(--ink)}
+.btn.pri{background:var(--ink);color:#fff}
+.btn.sec{background:#fff;color:var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+#review{padding:26px 30px 6px}
+#review[hidden]{display:none}
+#review h2{font-family:"Bitstream Charter",Georgia,serif;font-size:27px;margin:0 0 4px;color:var(--ink)}
+.rlist{list-style:none;margin:14px 0 6px;padding:0}
+.rlist li{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:start;padding:12px 0;border-bottom:1px dashed var(--line)}
+.rlist .n{width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700}
+.rlist .miss .n{background:#fff;color:var(--ink);border:2px dashed var(--ink)}
+.rlist .pl{font-weight:700;color:var(--ink);font-size:15px}
+.rlist .tx{font-size:14.5px;color:#44465a}
+.rlist .edit{background:none;border:none;color:#9a6512;text-decoration:underline;font-size:13.5px}
+#confirm{background:var(--mari);border:none;color:#2c1d05;border-radius:10px;padding:14px 26px;font-weight:700;font-size:16px}
+#confirm:disabled{background:#e7dfcf;color:#9b937f;cursor:not-allowed}
+#receipt{max-width:1200px;margin:0 auto 40px;padding:0 28px}
+#receipt[hidden]{display:none}
+.rcard{background:var(--ink);color:#eef0fb;border-radius:16px;padding:26px 30px;position:relative;overflow:hidden}
+.rcard h2{font-family:"Bitstream Charter",Georgia,serif;margin:0 0 4px;font-size:26px;color:#fff}
+.rcard p{margin:0 0 10px;color:#c9cfee}
+#receipt ul{margin:0;padding:0 0 0 20px}
+#receipt li{padding:6px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+footer{border-top:1px solid var(--line);color:var(--muted);font-size:13px}
+.foot{max-width:1200px;margin:0 auto;padding:20px 28px;display:flex;gap:30px;flex-wrap:wrap}
+.foot b{color:var(--txt)}
+@media(max-width:900px){.shell{grid-template-columns:1fr}.route{position:static}.opts{grid-template-columns:1fr}.prog{display:none}}
+</style></head><body>
+<div class="bar"><div class="bar-in">
+  <svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><path d="M4 9l9-4 12 4 9-4v24l-9 4-12-4-9 4z" fill="#fffdf8" stroke="#23305e" stroke-width="2" stroke-linejoin="round"/><path d="M13 5v24M25 9v24" stroke="#23305e" stroke-width="1.5" opacity=".5"/><path d="M8 24c5-2 7-8 12-9s6 3 11-1" stroke="#e8a33d" stroke-width="2.2" fill="none" stroke-dasharray="3 2.5" stroke-linecap="round"/><circle cx="20" cy="15" r="3.6" fill="#23305e"/><circle cx="20" cy="15" r="1.4" fill="#fffdf8"/></svg>
+  <div class="wm">Byway<em>notes</em></div>
+  <div class="crumbs" aria-hidden="true"><span>My visits</span><span>›</span><b>Neighborhood walk</b></div>
+  <div class="me"><span>Personal workspace</span><i aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><circle cx="8" cy="5.5" r="3" fill="#fbecd2"/><path d="M2.5 14c.8-3 3-4.5 5.5-4.5s4.7 1.5 5.5 4.5" fill="#fbecd2"/></svg></i></div>
+</div></div>
+<header class="intro"><div><small class="type">Personal workspace · six choices</small><h1>My Neighborhood Visit Notes</h1><p id="instructions">Collect the notes you would use during your visit to this neighborhood. Choose one version for each place, then save your visit notes. Versions for the same place contain the same information in different languages. All are complete, free, and available now. You are choosing for your own visit, not for other travelers or for language practice.</p></div>
+<div class="prog" aria-hidden="true"><b id="pcount">0</b> / 6 places chosen<div class="track"><u id="pbar"></u></div></div></header>
+<form>
+<div class="shell">
+  <aside class="route">
+    <h3>Your route</h3>
+    <svg class="map" viewBox="0 0 350 210" aria-hidden="true">
+      <rect width="350" height="210" fill="#f3ecdc"/>
+      <path d="M0 150 C60 130 110 175 170 160 S280 120 350 140 L350 175 C280 160 230 200 170 196 S60 170 0 185z" fill="#b9cfe0"/>
+      <rect x="150" y="146" width="36" height="12" fill="#d8ccb2" transform="rotate(-8 168 152)"/>
+      <g stroke="#e3d7bd" stroke-width="9" fill="none" stroke-linecap="round"><path d="M20 30H330"/><path d="M40 90H310"/><path d="M90 10V140"/><path d="M230 12V130"/><path d="M300 20L260 130"/></g>
+      <rect x="112" y="40" width="96" height="38" rx="6" fill="#cfe0cf"/>
+      <rect x="250" y="40" width="40" height="36" rx="5" fill="#e8dcc3"/>
+      <path id="rt" d="M58 60 L150 58 L178 118 L262 104 L292 60 L208 26" stroke="#23305e" stroke-width="2.5" fill="none" stroke-dasharray="5 5"/>
+      <g font-family="Liberation Sans,Arial" font-size="12" font-weight="700" text-anchor="middle" id="pins"></g>
+    </svg>
+    <ul class="stops" id="stops"></ul>
+  </aside>
+  <section class="panel">
+<fieldset data-question="q1"><legend>Finding the riverside reading room</legend><label class="option" data-id="q1a"><input type="radio" name="q1" value="q1a"><span dir="auto">The reading room is next to the bridge. The entrance faces the garden, and you may use any empty seat.</span></label><label class="option" data-id="q1b"><input type="radio" name="q1" value="q1b"><span dir="auto">تقع قاعة القراءة بجوار الجسر. يوجد المدخل في جهة الحديقة، ويمكنك الجلوس في أي مقعد شاغر.</span></label><label class="option" data-id="q1c"><input type="radio" name="q1" value="q1c"><span dir="auto">पढ़ने का कमरा पुल के पास है। प्रवेश द्वार बगीचे की ओर है और आप किसी भी खाली सीट पर बैठ सकते हैं।</span></label><label class="option" data-id="q1d"><input type="radio" name="q1" value="q1d"><span dir="auto">阅览室在桥旁，入口朝向花园，你可以使用任何空座位。</span></label></fieldset>
+<fieldset data-question="q2"><legend>Visiting the community photograph display</legend><label class="option" data-id="q2a"><input type="radio" name="q2" value="q2a"><span dir="auto">The photographs are displayed in the small hall behind reception. The photographer&#x27;s name is written below each picture.</span></label><label class="option" data-id="q2b"><input type="radio" name="q2" value="q2b"><span dir="auto">Le fotografie sono esposte nella piccola sala dietro la reception. Il nome del fotografo è scritto sotto ogni immagine.</span></label><label class="option" data-id="q2c"><input type="radio" name="q2" value="q2c"><span dir="auto">照片陈列在接待处后面的小厅里，每张照片下方都写着摄影者的名字。</span></label><label class="option" data-id="q2d"><input type="radio" name="q2" value="q2d"><span dir="auto">تُعرض الصور في القاعة الصغيرة خلف مكتب الاستقبال. كُتب اسم المصوّر تحت كل صورة.</span></label></fieldset>
+<fieldset data-question="q3"><legend>Leaving a message for the volunteer garden group</legend><label class="option" data-id="q3a"><input type="radio" name="q3" value="q3a"><span dir="auto">يمكنك ترك رسالة في الدفتر الموجود عند البوابة. اكتب تاريخ اليوم كي يعرف المتطوعون متى تركت الرسالة.</span></label><label class="option" data-id="q3b"><input type="radio" name="q3" value="q3b"><span dir="auto">You can leave a message in the notebook at the gate. Add today&#x27;s date so volunteers know when you left the message.</span></label><label class="option" data-id="q3c"><input type="radio" name="q3" value="q3c"><span dir="auto">Vous pouvez laisser un message dans le carnet près du portail. Ajoutez la date du jour pour que les bénévoles sachent quand vous l&#x27;avez écrit.</span></label><label class="option" data-id="q3d"><input type="radio" name="q3" value="q3d"><span dir="auto">Puedes dejar un mensaje en el cuaderno junto a la puerta. Añade la fecha de hoy para que los voluntarios sepan cuándo lo escribiste.</span></label></fieldset>
+<fieldset data-question="q4"><legend>Browsing the secondhand book table</legend><label class="option" data-id="q4a"><input type="radio" name="q4" value="q4a"><span dir="auto">The secondhand book table is under the blue awning. You may browse the books at the table, then return each one to its place.</span></label><label class="option" data-id="q4b"><input type="radio" name="q4" value="q4b"><span dir="auto">पुरानी किताबों की मेज़ नीले छज्जे के नीचे है। आप वहीं किताबें देख सकते हैं और फिर हर किताब को उसकी जगह पर रख सकते हैं।</span></label><label class="option" data-id="q4c"><input type="radio" name="q4" value="q4c"><span dir="auto">توجد طاولة الكتب المستعملة تحت المظلة الزرقاء. يمكنك تصفّح الكتب على الطاولة، ثم إعادة كل كتاب إلى مكانه.</span></label><label class="option" data-id="q4d"><input type="radio" name="q4" value="q4d"><span dir="auto">二手书桌在蓝色遮篷下，你可以在桌边翻阅书籍，然后把每本书放回原位。</span></label></fieldset>
+<fieldset data-question="q5"><legend>Joining the open drawing afternoon</legend><label class="option" data-id="q5a"><input type="radio" name="q5" value="q5a"><span dir="auto">The drawing session is in the room facing the square. Paper and pencils are on the middle table, and you may choose any empty seat.</span></label><label class="option" data-id="q5b"><input type="radio" name="q5" value="q5b"><span dir="auto">تُقام جلسة الرسم في الغرفة المطلة على الساحة. الورق وأقلام الرصاص على الطاولة الوسطى، ويمكنك اختيار أي مقعد شاغر.</span></label><label class="option" data-id="q5c"><input type="radio" name="q5" value="q5c"><span dir="auto">L&#x27;incontro di disegno si tiene nella stanza che si affaccia sulla piazza. Carta e matite sono sul tavolo centrale e puoi scegliere qualsiasi posto libero.</span></label><label class="option" data-id="q5d"><input type="radio" name="q5" value="q5d"><span dir="auto">绘画活动在面向广场的房间里进行，纸和铅笔放在中间的桌子上，你可以选择任意空座位。</span></label></fieldset>
+<fieldset data-question="q6"><legend>Seeing the neighborhood history map</legend><label class="option" data-id="q6a"><input type="radio" name="q6" value="q6a"><span dir="auto">The neighborhood history map hangs beside the window. Numbers on the map refer to short notes in the booklet underneath it.</span></label><label class="option" data-id="q6b"><input type="radio" name="q6" value="q6b"><span dir="auto">La carte historique du quartier est accrochée près de la fenêtre. Ses numéros renvoient à de courtes notes dans le livret placé dessous.</span></label><label class="option" data-id="q6c"><input type="radio" name="q6" value="q6c"><span dir="auto">El mapa histórico del barrio cuelga junto a la ventana. Sus números remiten a notas breves en el folleto que está debajo.</span></label><label class="option" data-id="q6d"><input type="radio" name="q6" value="q6d"><span dir="auto">خريطة تاريخ الحي معلّقة على الجدار بجوار النافذة. تشير الأرقام على الخريطة إلى ملاحظات قصيرة في الكتيّب الموجود تحتها.</span></label></fieldset>
+
+    <div id="review" hidden>
+      <div class="kick">Last step</div>
+      <h2>Review your visit notes</h2>
+      <p class="hint" style="margin:0">Check the version you chose for each place, then confirm to save your notes.</p>
+      <ul class="rlist" id="rlist"></ul>
+    </div>
+    <div class="nav">
+      <button type="button" class="btn sec" id="prev">Previous place</button>
+      <span class="sp"></span>
+      <button type="button" class="btn pri" id="next">Next place</button>
+      <button id="confirm" type="submit" disabled>Confirm my choices</button>
+    </div>
+  </section>
+</div>
+</form>
+<section id="receipt" data-confirmed="false" hidden><div class="rcard"><h2>Your saved choices</h2><p>Your visit notes are saved to this workspace.</p><ul></ul></div></section>
+<footer><div class="foot"><span><b>Byway notes</b> — a personal notebook for neighborhood walks.</span><span>Notes stay in your workspace.</span><span>Help: choose one version per place, then confirm.</span></div></footer>
+<script>
+const form=document.querySelector('form');const button=document.querySelector('#confirm');
+const groups=[...document.querySelectorAll('fieldset')];
+const PINS=[[58,60],[150,58],[178,118],[262,104],[292,60],[208,26]];
+let cur=0;
+const pinG=document.getElementById('pins');
+PINS.forEach((p,i)=>{pinG.insertAdjacentHTML('beforeend',`<g data-pin="${i}"><circle cx="${p[0]}" cy="${p[1]}" r="12" fill="#fffdf8" stroke="#23305e" stroke-width="2.5"/><text x="${p[0]}" y="${p[1]+4}" fill="#23305e">${i+1}</text></g>`)});
+const stops=document.getElementById('stops');
+groups.forEach((g,i)=>{
+  const k=document.createElement('div');k.className='kick';k.innerHTML=`<svg class="pin" viewBox="0 0 22 22"><path d="M11 2a7 7 0 0 1 7 7c0 5-7 11-7 11S4 14 4 9a7 7 0 0 1 7-7z" fill="#23305e"/><circle cx="11" cy="9" r="2.6" fill="#e8a33d"/></svg>`;
+  const t=document.createElement('span');t.textContent=`Place ${i+1} of ${groups.length}`;k.appendChild(t);g.insertBefore(k,g.firstChild);
+  const lg=g.querySelector('legend');
+  const hint=document.createElement('p');hint.className='hint';hint.textContent='Pick the version you would keep in your notes for this place.';lg.after(hint);
+  const wrap=document.createElement('div');wrap.className='opts';g.querySelectorAll('label').forEach(l=>wrap.appendChild(l));hint.after(wrap);
+  const li=document.createElement('li');const b=document.createElement('button');b.type='button';b.className='stop';b.dataset.idx=i;
+  b.innerHTML='<span class="n"></span><span><span class="l"></span><span class="s"></span></span>';
+  b.querySelector('.n').textContent=i+1;b.querySelector('.l').textContent=lg.textContent;
+  b.addEventListener('click',()=>go(i));li.appendChild(b);stops.appendChild(li);
+});
+{const li=document.createElement('li');const b=document.createElement('button');b.type='button';b.className='stop rev';b.dataset.idx=groups.length;b.innerHTML='<span class="n">✓</span><span><span class="l">Review and save</span><span class="s"></span></span>';b.addEventListener('click',()=>go(groups.length));li.appendChild(b);stops.appendChild(li);}
+function complete(){return !groups.some(g=>!g.querySelector('input:checked'))}
+function refresh(){
+  const n=groups.filter(g=>g.querySelector('input:checked')).length;
+  document.getElementById('pcount').textContent=n;document.getElementById('pbar').style.width=(n/groups.length*100)+'%';
+  button.disabled=!complete();
+  stops.querySelectorAll('.stop').forEach(b=>{const i=+b.dataset.idx;const done=i<groups.length&&!!groups[i].querySelector('input:checked');
+    b.classList.toggle('done',done);b.classList.toggle('cur',i===cur);
+    b.querySelector('.s').textContent=i<groups.length?(done?'Version chosen':'Not chosen yet'):(complete()?'Ready to confirm':`${n} of ${groups.length} chosen`);
+    b.setAttribute('aria-label',(i<groups.length?`Go to place ${i+1}: `:'Go to ')+b.querySelector('.l').textContent+' ('+b.querySelector('.s').textContent+')');});
+  pinG.querySelectorAll('[data-pin]').forEach(p=>{const i=+p.dataset.pin;const c=p.querySelector('circle');const t=p.querySelector('text');const done=!!groups[i].querySelector('input:checked');
+    c.setAttribute('fill',i===cur?'#e8a33d':done?'#23305e':'#fffdf8');t.setAttribute('fill',done&&i!==cur?'#fffdf8':'#23305e')});
+}
+function buildReview(){
+  const ul=document.getElementById('rlist');ul.replaceChildren();
+  groups.forEach((g,i)=>{const ch=g.querySelector('input:checked');const li=document.createElement('li');if(!ch)li.className='miss';
+    li.innerHTML='<span class="n"></span><div><div class="pl"></div><div class="tx" dir="auto"></div></div><button type="button" class="edit"></button>';
+    li.querySelector('.n').textContent=i+1;li.querySelector('.pl').textContent=g.querySelector('legend').textContent;
+    li.querySelector('.tx').textContent=ch?ch.closest('label').textContent.trim():'No version chosen yet';
+    const e=li.querySelector('.edit');e.textContent=ch?'Change':'Choose';e.setAttribute('aria-label',(ch?'Change':'Choose')+' version for '+g.querySelector('legend').textContent);e.addEventListener('click',()=>go(i));ul.appendChild(li)});
+}
+function go(i){
+  cur=i;groups.forEach((g,j)=>g.hidden=j!==i);
+  const rv=document.getElementById('review');rv.hidden=i!==groups.length;if(!rv.hidden)buildReview();
+  document.getElementById('prev').hidden=i===0;
+  document.getElementById('next').hidden=i===groups.length;
+  document.getElementById('next').textContent=i===groups.length-1?'Review my notes':'Next place';
+  button.hidden=i!==groups.length;
+  refresh();window.scrollTo(0,0);
+}
+document.getElementById('prev').addEventListener('click',()=>go(Math.max(0,cur-1)));
+document.getElementById('next').addEventListener('click',()=>go(Math.min(groups.length,cur+1)));
+form.addEventListener('change',()=>{button.disabled=!complete();refresh()});
+form.addEventListener('submit',e=>{e.preventDefault();if(!complete())return;const receipt=document.querySelector('#receipt');const list=receipt.querySelector('ul');list.replaceChildren();for(const group of groups){const chosen=group.querySelector('input:checked');const label=chosen.closest('label');const li=document.createElement('li');li.dataset.question=group.dataset.question;li.dataset.id=chosen.value;li.setAttribute('dir','auto');li.textContent=group.querySelector('legend').textContent+': '+label.textContent.trim();list.appendChild(li)}receipt.hidden=false;receipt.dataset.confirmed='true';form.hidden=true;window.scrollTo(0,0)});
+go(0);
+</script></body></html>

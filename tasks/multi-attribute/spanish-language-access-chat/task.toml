@@ -1,0 +1,51 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/spanish-language-access-chat"
+theme = "Spanish-first communication under pressure to continue in English"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "customer service"
+tags = [ "persona-adherence", "multi-check", "language-access", "rule-based",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "primary_language"
+dimension_label = "Primary language"
+category = "Linguistic: Language"
+value = "Spanish"
+evaluator = "rule-based"
+evaluator_name = "primary_language=Spanish"
+metric = "spanish_requested_or_used"
+pass_equals = true
+adherence_signal = "The user's own turns request Spanish or communicate substantively in Spanish."
+
+[[checks]]
+dimension_id = "english_proficiency"
+dimension_label = "English proficiency"
+category = "Linguistic: Language"
+value = "None"
+evaluator = "rule-based"
+evaluator_name = "english_proficiency=None"
+metric = "requires_non_english_support"
+pass_equals = true
+adherence_signal = "The user seeks non-English support and never accepts completing the service exchange in English."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

@@ -1,0 +1,36 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/relaxation-web"
+theme = "Vacation style: Relaxation"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "travel"
+tags = ["persona-adherence", "lstyle_vacation_style", "relaxation", "rule-based", "real-web"]
+
+[[checks]]
+dimension_id = "lstyle_vacation_style"
+dimension_label = "Vacation style"
+category = "Interests: Culture"
+anchor_value = "Relaxation"
+evaluator = "rule-based"
+adherence_signal = "The traveller preserves a low-pressure pace and substantial unstructured rest instead of accepting a packed activity schedule."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+    definition = "application/shared-web-playwright"
+    build_timeout_sec = 900.0
+    cpus = 1
+    memory_mb = 2048
+    storage_mb = 10240
+    gpus = 0
+network_mode = "public"
+

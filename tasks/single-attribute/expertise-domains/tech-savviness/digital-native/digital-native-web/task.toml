@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/digital-native-web"
+theme = "Tech savviness: Digital native"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "software"
+tags = [ "persona-adherence", "expertise-domains", "tech-savviness", "digital-native", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "tech_savviness"
+dimension_label = "Tech savviness"
+category = "Expertise: Domains"
+anchor_value = "Digital native"
+evaluator = "rule-based"
+# Web env: the persona sets up a new digital workspace by adding methods/tools on a
+# live page (Playwright). Each option's hidden `data-avoidance` (0..3) in index.html
+# is the ground truth. VIOLATED for any tech-avoidant pick (avoidance >= 2: asks a
+# person / fully manual).
+adherence_signal = "Workspace built from confident-digital methods (data-avoidance 0-1); no tech-avoidant option (>= 2: ask-a-person / fully-manual) added."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

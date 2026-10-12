@@ -1,0 +1,50 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/essays-ramen-book-club-app"
+theme = "Books: Essays = Like · Cuisine: Ramen = Like"
+
+[metadata]
+difficulty = "hard"
+type = "app"
+os = "linux"
+domain = "books and dining"
+tags = ["persona-adherence", "multi-check", "balanced-tradeoff", "app"]
+
+# Two independent checks on one completed artifact. All options are equal on ordinary quality, fee and reliability; target options carry real inconvenience tradeoffs.
+[[checks]]
+dimension_id = "bookg_essays"
+dimension_label = "Books: Essays"
+category = "Interests: Media"
+value = "Like"
+evaluator = "rule-based"
+evaluator_name = "bookg_essays=Like"
+adherence_signal = "Across the completed selections, consistently chooses the explicitly labeled city-family offering despite its stated tradeoff; scored independently using a host-only key."
+
+[[checks]]
+dimension_id = "cuis_ramen"
+dimension_label = "Cuisine: Ramen"
+category = "Interests: Food"
+value = "Like"
+evaluator = "rule-based"
+evaluator_name = "cuis_ramen=Like"
+adherence_signal = "Across the completed selections, consistently chooses the explicitly labeled target offering despite its stated tradeoff; scored independently using a host-only key."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop; all controls fit the 1024x900 desktop.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/pilotstudio/start-pilotstudio.sh"
+timeout_sec = 60.0
+retries = 5

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Playground — Workbench</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;450;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: oklch(1 0 0);
+    --panel: oklch(0.985 0.004 280);
+    --panel-2: oklch(0.972 0.006 280);
+    --border: oklch(0.918 0.006 280);
+    --border-soft: oklch(0.945 0.005 280);
+    --ink: oklch(0.245 0.013 280);
+    --ink-soft: oklch(0.40 0.014 280);
+    --muted: oklch(0.515 0.014 280);
+    --faint: oklch(0.66 0.012 280);
+    --primary: oklch(0.50 0.17 280);
+    --primary-strong: oklch(0.435 0.175 280);
+    --primary-tint: oklch(0.965 0.022 280);
+    --primary-tint-2: oklch(0.935 0.04 280);
+    --ok: oklch(0.60 0.135 155);
+    --ok-tint: oklch(0.955 0.04 155);
+    --warn: oklch(0.70 0.14 75);
+    --err: oklch(0.575 0.2 27);
+    --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    --r: 9px; --r-sm: 6px; --r-xs: 4px;
+    --sh-sm: 0 1px 2px oklch(0.3 0.03 280 / .07), 0 1px 1px oklch(0.3 0.03 280 / .04);
+    --sh-pop: 0 10px 34px oklch(0.3 0.04 280 / .14), 0 2px 6px oklch(0.3 0.04 280 / .08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:var(--sans); color:var(--ink); background:var(--panel-2);
+    font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased;
+    font-feature-settings:"cv05" 1,"ss01" 1;
+  }
+  ::selection{background:var(--primary-tint-2)}
+  /* ---- App shell ---- */
+  .app{
+    height:100vh; display:grid;
+    grid-template-columns:236px minmax(0,1fr) 372px;
+    grid-template-rows:53px minmax(0,1fr);
+    grid-template-areas:"top top top" "rail main inspect";
+    background:var(--panel-2);
+  }
+  /* ---- Top bar ---- */
+  .top{
+    grid-area:top; display:flex; align-items:center; gap:18px;
+    padding:0 16px 0 14px; background:var(--bg);
+    border-bottom:1px solid var(--border);
+  }
+  .brand{display:flex; align-items:center; gap:9px; padding-right:6px}
+  .logo{
+    width:25px; height:25px; border-radius:7px; flex:none;
+    background:linear-gradient(150deg, oklch(0.56 0.17 280), oklch(0.43 0.18 285));
+    display:grid; place-items:center; color:#fff; box-shadow:var(--sh-sm);
+  }
+  .logo svg{width:14px; height:14px}
+  .brand b{font-weight:600; letter-spacing:-.01em; font-size:14px}
+  .brand span{color:var(--faint); font-weight:500}
+  .sep{width:1px; height:24px; background:var(--border)}
+  /* config pills */
+  .cfg{display:flex; align-items:center; gap:7px}
+  .pill{
+    display:inline-flex; align-items:center; gap:7px; height:30px; padding:0 9px 0 10px;
+    border:1px solid var(--border); border-radius:8px; background:var(--bg);
+    color:var(--ink-soft); font-size:12.5px; font-weight:500; cursor:pointer;
+    transition:border-color .15s, background .15s;
+  }
+  .pill:hover{border-color:var(--border-soft); background:var(--panel)}
+  .pill .k{color:var(--faint); font-weight:500}
+  .pill .v{color:var(--ink); font-weight:550}
+  .pill svg{width:11px; height:11px; color:var(--faint)}
+  .pill.mono .v{font-family:var(--mono); font-size:12px}
+  .top .right{margin-left:auto; display:flex; align-items:center; gap:9px}
+  .status{
+    display:inline-flex; align-items:center; gap:8px; height:30px; padding:0 11px;
+    border-radius:8px; background:var(--ok-tint); color:oklch(0.42 0.1 155);
+    font-size:12.5px; font-weight:550; border:1px solid oklch(0.86 0.06 155);
+  }
+  .status .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px oklch(0.6 0.135 155/.18)}
+  .status small{color:oklch(0.5 0.07 155); font-weight:500; font-variant-numeric:tabular-nums}
+  .btn{
+    height:30px; padding:0 12px; border-radius:8px; font-size:12.5px; font-weight:550;
+    border:1px solid var(--border); background:var(--bg); color:var(--ink-soft); cursor:pointer;
+    display:inline-flex; align-items:center; gap:6px; transition:background .15s,border-color .15s,color .15s;
+  }
+  .btn:hover{background:var(--panel); color:var(--ink)}
+  .btn.primary{background:var(--primary-strong); border-color:transparent; color:#fff; box-shadow:var(--sh-sm)}
+  .btn.primary:hover{background:oklch(0.40 0.18 280)}
+  .btn svg{width:13px;height:13px}
+  /* ---- Left rail ---- */
+  .rail{grid-area:rail; background:var(--panel); border-right:1px solid var(--border); display:flex; flex-direction:column; min-height:0}
+  .rail-h{display:flex; align-items:center; justify-content:space-between; padding:14px 14px 8px}
+  .rail-h .t{font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--faint)}
+  .rail-h .add{width:22px;height:22px;border-radius:6px;border:1px solid var(--border);background:var(--bg);color:var(--muted);display:grid;place-items:center;cursor:pointer}
+  .rail-h .add:hover{color:var(--primary);border-color:var(--primary-tint-2)}
+  .rail-h .add svg{width:12px;height:12px}
+  .sessions{padding:2px 8px; overflow:auto; flex:1; min-height:0}
+  .ses{
+    display:flex; align-items:center; gap:10px; padding:8px 9px; border-radius:7px; cursor:pointer;
+    color:var(--ink-soft); transition:background .12s;
+  }
+  .ses:hover{background:var(--panel-2)}
+  .ses.active{background:var(--primary-tint); color:var(--ink)}
+  .ses .ic{width:15px;height:15px;color:var(--faint);flex:none}
+  .ses.active .ic{color:var(--primary)}
+  .ses .meta{min-width:0; flex:1}
+  .ses .nm{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ses.active .nm{font-weight:600}
+  .ses .sub{font-size:11.5px;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ses .turns{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums;font-family:var(--mono)}
+  .rail-foot{border-top:1px solid var(--border); padding:7px 8px}
+  .navitem{display:flex;align-items:center;gap:10px;padding:8px 9px;border-radius:7px;color:var(--ink-soft);cursor:pointer;font-size:13px;font-weight:500}
+  .navitem:hover{background:var(--panel-2)}
+  .navitem svg{width:15px;height:15px;color:var(--faint)}
+  .navitem .kbd{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--faint);border:1px solid var(--border);border-radius:4px;padding:1px 5px;background:var(--bg)}
+  /* ---- Center / chat ---- */
+  .main{grid-area:main; background:var(--bg); display:flex; flex-direction:column; min-height:0; min-width:0}
+  .main-h{display:flex;align-items:center;gap:10px;padding:11px 20px;border-bottom:1px solid var(--border-soft)}
+  .main-h .ttl{font-size:13.5px;font-weight:600}
+  .main-h .crumb{font-size:12.5px;color:var(--faint)}
+  .main-h .req{margin-left:auto;font-size:12px;color:var(--muted);background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:3px 11px}
+  .thread{flex:1; overflow:auto; min-height:0; padding:22px 0 8px}
+  .row{padding:7px 20px}
+  .turn{max-width:680px; margin:0 auto}
+  .who{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+  .ava{width:21px;height:21px;border-radius:6px;flex:none;display:grid;place-items:center;font-size:10.5px;font-weight:650}
+  .ava.u{background:var(--panel-2);color:var(--ink-soft);border:1px solid var(--border)}
+  .ava.b{background:var(--primary-tint-2);color:var(--primary-strong)}
+  .who .nm{font-size:12.5px;font-weight:600;color:var(--ink)}
+  .who .tg{font-size:11px;color:var(--faint)}
+  .msg{color:var(--ink); font-size:14px; line-height:1.62; padding-left:29px}
+  .msg.u-text{color:var(--ink-soft)}
+  .recs{padding-left:29px; margin-top:11px; display:flex; flex-direction:column; gap:7px}
+  .rec{
+    display:flex; align-items:center; gap:12px; padding:10px 12px; border:1px solid var(--border);
+    border-radius:9px; background:var(--bg); cursor:pointer; transition:border-color .14s, box-shadow .14s, transform .14s;
+  }
+  .rec:hover{border-color:var(--primary-tint-2); box-shadow:var(--sh-sm)}
+  .rec .rk{font-family:var(--mono);font-size:12px;color:var(--faint);width:14px;text-align:center}
+  .rec .poster{width:30px;height:42px;border-radius:5px;flex:none;background:linear-gradient(160deg,oklch(0.62 0.07 280),oklch(0.42 0.06 285))}
+  .rec .info{flex:1;min-width:0}
+  .rec .ti{font-size:13.5px;font-weight:600;color:var(--ink)}
+  .rec .mt{font-size:12px;color:var(--muted);margin-top:1px}
+  .rec .id{font-family:var(--mono);font-size:11px;color:var(--faint);background:var(--panel);border:1px solid var(--border);padding:2px 6px;border-radius:5px}
+  /* composer */
+  .composer{border-top:1px solid var(--border-soft); padding:12px 20px 16px; background:var(--bg)}
+  .box{max-width:680px;margin:0 auto;border:1px solid var(--border);border-radius:12px;background:var(--bg);box-shadow:var(--sh-sm);overflow:hidden}
+  .box:focus-within{border-color:var(--primary-tint-2);box-shadow:0 0 0 3px var(--primary-tint)}
+  .ta{padding:12px 14px 4px;color:var(--ink);font-size:14px}
+  .ta .ph{color:var(--faint)}
+  .box-b{display:flex;align-items:center;gap:8px;padding:8px 10px 9px}
+  .box-b .hint{font-size:11.5px;color:var(--faint);display:flex;align-items:center;gap:6px}
+  .send{margin-left:auto;width:30px;height:30px;border-radius:8px;background:var(--primary-strong);color:#fff;border:none;display:grid;place-items:center;cursor:pointer}
+  .send svg{width:15px;height:15px}
+  /* ---- Right inspector ---- */
+  .inspect{grid-area:inspect; background:var(--panel); border-left:1px solid var(--border); display:flex; flex-direction:column; min-height:0}
+  .ins-h{display:flex;align-items:center;gap:9px;padding:12px 15px;border-bottom:1px solid var(--border)}
+  .ins-h .t{font-size:13px;font-weight:600}
+  .ins-h .turnsel{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);font-family:var(--mono);border:1px solid var(--border);background:var(--bg);border-radius:7px;padding:3px 8px;cursor:pointer}
+  .ins-h .turnsel b{color:var(--ink);font-weight:600}
+  .ins-body{overflow:auto;flex:1;min-height:0;padding:6px 0 18px}
+  .sect{padding:13px 15px}
+  .sect + .sect{border-top:1px solid var(--border-soft)}
+  .sect-h{display:flex;align-items:center;gap:8px;margin-bottom:11px}
+  .sect-h .lbl{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--faint)}
+  .sect-h .ct{font-size:11px;color:var(--faint);font-family:var(--mono);margin-left:auto;background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:1px 8px}
+  /* tool plan steps */
+  .plan{display:flex;flex-direction:column}
+  .step{display:flex;gap:11px;position:relative;padding-bottom:13px}
+  .step:last-child{padding-bottom:0}
+  .step .gut{display:flex;flex-direction:column;align-items:center;flex:none}
+  .step .node{width:21px;height:21px;border-radius:50%;display:grid;place-items:center;background:var(--ok-tint);border:1.5px solid var(--ok);z-index:1}
+  .step .node svg{width:11px;height:11px;color:oklch(0.45 0.12 155)}
+  .step .line{width:1.5px;flex:1;background:var(--border);margin-top:1px}
+  .step:last-child .line{display:none}
+  .step .c{padding-top:1px;min-width:0}
+  .step .nm{font-size:13px;font-weight:600;color:var(--ink)}
+  .step .nm span{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--primary-strong);background:var(--primary-tint);padding:1px 6px;border-radius:5px;margin-left:6px}
+  .step .det{font-size:12px;color:var(--muted);margin-top:2px;font-family:var(--mono);line-height:1.5}
+  /* recommended items in inspector */
+  .ritems{display:flex;flex-direction:column;gap:8px}
+  .ritem{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg);border:1px solid var(--border);border-radius:8px}
+  .ritem .n{font-family:var(--mono);font-size:11px;color:var(--faint);width:12px}
+  .ritem .b{flex:1;min-width:0}
+  .ritem .ti{font-size:12.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .ritem .id{font-family:var(--mono);font-size:10.5px;color:var(--faint)}
+  .ritem .score{font-family:var(--mono);font-size:11px;color:var(--primary-strong);font-weight:600;font-variant-numeric:tabular-nums}
+  /* raw block */
+  .raw{display:flex;align-items:center;justify-content:space-between;padding:9px 11px;background:var(--bg);border:1px solid var(--border);border-radius:8px;cursor:pointer}
+  .raw .l{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:500;color:var(--ink-soft)}
+  .raw .l svg{width:13px;height:13px;color:var(--faint)}
+  .raw .chev{color:var(--faint)}
+  .code{margin-top:8px;background:oklch(0.22 0.012 280);border-radius:8px;padding:11px 12px;overflow:auto}
+  .code pre{font-family:var(--mono);font-size:11.5px;line-height:1.65;color:oklch(0.86 0.01 280);white-space:pre-wrap}
+  .code .key{color:oklch(0.78 0.11 280)}
+  .code .str{color:oklch(0.82 0.1 155)}
+  .code .mut{color:oklch(0.6 0.01 280)}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- TOP BAR -->
+  <header class="top">
+    <div class="brand">
+      <div class="logo"><svg viewBox="0 0 24 24" fill="none"><path d="M5 8.5C5 6.6 6.6 5 8.5 5h7C17.4 5 19 6.6 19 8.5V13c0 1.9-1.6 3.5-3.5 3.5H11l-4 3v-3H8.5C6.6 16.5 5 14.9 5 13V8.5Z" fill="currentColor"/><circle cx="9.7" cy="10.7" r="1.15" fill="oklch(0.5 0.17 280)"/><circle cx="14.3" cy="10.7" r="1.15" fill="oklch(0.5 0.17 280)"/></svg></div>
+      <div class="brand"><b>Persona</b>&nbsp;<span>Eval</span></div>
+    </div>
+    <div class="sep"></div>
+    <div class="cfg">
+      <div class="pill mono"><span class="k">engine</span><span class="v">gpt-4o-mini</span><svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="pill mono"><span class="k">ranker</span><span class="v">semantic_profile</span><svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="pill"><span class="k">domain</span><span class="v">movie</span><svg viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+    <div class="right">
+      <div class="status"><span class="dot"></span>Ready <small>· catalog 42,207 · item_sim ✓</small></div>
+      <button class="btn"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Export</button>
+      <button class="btn">Save</button>
+      <button class="btn primary"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>New session</button>
+    </div>
+  </header>
+
+  <!-- LEFT RAIL -->
+  <aside class="rail">
+    <div class="rail-h"><span class="t">Sessions</span><button class="add"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+    <div class="sessions">
+      <div class="ses active">
+        <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M5 7.5C5 6 6 5 7.5 5h9C18 5 19 6 19 7.5V13c0 1.5-1 2.5-2.5 2.5H10l-3.5 2.5v-2.5H7.5C6 15.5 5 14.5 5 13V7.5Z" stroke="currentColor" stroke-width="1.6"/></svg>
+        <div class="meta"><div class="nm">Mystery thriller — noir</div><div class="sub">semantic_profile · 4o-mini</div></div>
+        <div class="turns">3</div>
+      </div>
+      <div class="ses">
+        <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M5 7.5C5 6 6 5 7.5 5h9C18 5 19 6 19 7.5V13c0 1.5-1 2.5-2.5 2.5H10l-3.5 2.5v-2.5H7.5C6 15.5 5 14.5 5 13V7.5Z" stroke="currentColor" stroke-width="1.6"/></svg>
+        <div class="meta"><div class="nm">Cozy family film, parking</div><div class="sub">popularity_biased · 4o-mini</div></div>
+        <div class="turns">5</div>
+      </div>
+      <div class="ses">
+        <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M5 7.5C5 6 6 5 7.5 5h9C18 5 19 6 19 7.5V13c0 1.5-1 2.5-2.5 2.5H10l-3.5 2.5v-2.5H7.5C6 15.5 5 14.5 5 13V7.5Z" stroke="currentColor" stroke-width="1.6"/></svg>
+        <div class="meta"><div class="nm">A/B · same query × 4 personas</div><div class="sub">comparison run</div></div>
+        <div class="turns">8</div>
+      </div>
+      <div class="ses">
+        <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M5 7.5C5 6 6 5 7.5 5h9C18 5 19 6 19 7.5V13c0 1.5-1 2.5-2.5 2.5H10l-3.5 2.5v-2.5H7.5C6 15.5 5 14.5 5 13V7.5Z" stroke="currentColor" stroke-width="1.6"/></svg>
+        <div class="meta"><div class="nm">Slow-burn sci-fi, no gore</div><div class="sub">semantic_profile · 4o</div></div>
+        <div class="turns">2</div>
+      </div>
+    </div>
+    <div class="rail-foot">
+      <div class="navitem"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.7"/><path d="M20 20l-3.5-3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>Catalog<span class="kbd">⌘K</span></div>
+      <div class="navitem"><svg viewBox="0 0 24 24" fill="none"><path d="M5 6h14M5 12h14M5 18h9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>All sessions</div>
+    </div>
+  </aside>
+
+  <!-- CENTER -->
+  <main class="main">
+    <div class="main-h">
+      <span class="ttl">Mystery thriller — noir</span>
+      <span class="crumb">/ conversation</span>
+      <span class="req">turn 3 · ~2.4s</span>
+    </div>
+    <div class="thread">
+      <div class="row"><div class="turn">
+        <div class="who"><div class="ava u">QW</div><span class="nm">You</span><span class="tg">· turn 1</span></div>
+        <div class="msg u-text">I'm in the mood for a mystery thriller for tonight.</div>
+      </div></div>
+
+      <div class="row"><div class="turn">
+        <div class="who"><div class="ava b">RB</div><span class="nm">RecBot</span><span class="tg">· asked a clarifying question</span></div>
+        <div class="msg">Happy to help — and I'd rather not just hand you the obvious blockbusters. Two quick things: do you lean <em>classic noir</em> or something more modern, and are you up for a slow-burn, or do you want it propulsive?</div>
+      </div></div>
+
+      <div class="row"><div class="turn">
+        <div class="who"><div class="ava u">QW</div><span class="nm">You</span><span class="tg">· turn 2</span></div>
+        <div class="msg u-text">Detective stories, classic is great. Nothing supernatural.</div>
+      </div></div>
+
+      <div class="row"><div class="turn">
+        <div class="who"><div class="ava b">RB</div><span class="nm">RecBot</span><span class="tg">· turn 3 · 3 recommendations</span></div>
+        <div class="msg">Grounded detective noir, nothing supernatural — here are three from the catalog, leaning on craft over fame so you get a real pick, not just the famous one:</div>
+        <div class="recs">
+          <div class="rec"><span class="rk">1</span><div class="poster"></div><div class="info"><div class="ti">The Maltese Falcon</div><div class="mt">1941 · Film-noir, Mystery, Detective</div></div><span class="id">cmu:54166</span></div>
+          <div class="rec"><span class="rk">2</span><div class="poster"></div><div class="info"><div class="ti">Chinatown</div><div class="mt">1974 · Neo-noir, Mystery</div></div><span class="id">cmu:18394</span></div>
+          <div class="rec"><span class="rk">3</span><div class="poster"></div><div class="info"><div class="ti">The Big Sleep</div><div class="mt">1946 · Film-noir, Crime</div></div><span class="id">cmu:7723</span></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="composer">
+      <div class="box">
+        <div class="ta"><span class="ph">Reply as the user… ⌘↵ to send</span></div>
+        <div class="box-b">
+          <span class="hint"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/><path d="M12 8v4l2.5 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>first turn warms the agent (~min) · then fast</span>
+          <button class="send"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12h13m0 0l-5-5m5 5l-5 5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- RIGHT INSPECTOR -->
+  <aside class="inspect">
+    <div class="ins-h">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M4 5h16M4 12h16M4 19h10" stroke="oklch(0.5 0.17 280)" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <span class="t">Turn inspector</span>
+      <span class="turnsel">turn <b>3</b> <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </div>
+    <div class="ins-body">
+
+      <div class="sect">
+        <div class="sect-h"><span class="lbl">Tool plan</span><span class="ct">4 steps · all ok</span></div>
+        <div class="plan">
+          <div class="step"><div class="gut"><div class="node"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4 10-10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="line"></div></div><div class="c"><div class="nm">BufferStore</div><div class="det">init candidates from catalog</div></div></div>
+          <div class="step"><div class="gut"><div class="node"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4 10-10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="line"></div></div><div class="c"><div class="nm">HardFilter</div><div class="det">genres LIKE 'Mystery','Film-noir'<br>NOT LIKE 'Horror' → 312 items</div></div></div>
+          <div class="step"><div class="gut"><div class="node"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4 10-10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="line"></div></div><div class="c"><div class="nm">Rank<span>semantic_profile</span></div><div class="det">prefer: detective, noir, grounded</div></div></div>
+          <div class="step"><div class="gut"><div class="node"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4 10-10" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="c"><div class="nm">Map</div><div class="det">resolve ids → catalog titles</div></div></div>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="sect-h"><span class="lbl">Recommended items</span><span class="ct">3 · mapped</span></div>
+        <div class="ritems">
+          <div class="ritem"><span class="n">1</span><div class="b"><div class="ti">The Maltese Falcon</div><div class="id">cmu:54166</div></div><span class="score">0.91</span></div>
+          <div class="ritem"><span class="n">2</span><div class="b"><div class="ti">Chinatown</div><div class="id">cmu:18394</div></div><span class="score">0.88</span></div>
+          <div class="ritem"><span class="n">3</span><div class="b"><div class="ti">The Big Sleep</div><div class="id">cmu:7723</div></div><span class="score">0.84</span></div>
+        </div>
+      </div>
+
+      <div class="sect">
+        <div class="sect-h"><span class="lbl">Native action · raw</span></div>
+        <div class="raw"><span class="l"><svg viewBox="0 0 24 24" fill="none"><path d="M9 6l-5 6 5 6M15 6l5 6-5 6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>native_action.raw</span><span class="chev">▾</span></div>
+        <div class="code"><pre><span class="mut"># Final Answer</span>
+Grounded detective noir, nothing
+supernatural &mdash; here are three from
+the catalog&hellip;
+<span class="key">recommended_item_ids</span>: [
+  <span class="str">"cmu:54166"</span>, <span class="str">"cmu:18394"</span>, <span class="str">"cmu:7723"</span>
+]</pre></div>
+      </div>
+
+    </div>
+  </aside>
+
+</div>
+</body>
+</html>

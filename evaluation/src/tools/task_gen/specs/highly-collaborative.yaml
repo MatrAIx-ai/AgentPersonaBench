@@ -1,0 +1,97 @@
+# Set: Competition vs collaboration = Highly collaborative (p-e9aaa4971e),
+# direction AVOID. A board-game café season. Violating options are the
+# head-to-head formats (ladders, brackets, ranked duels — the glory lure);
+# clean options are cooperative tables. Distinct from team-vs-solo: everything
+# here is WITH people; the axis is versus-vs-together. All seated, all on the
+# season card. Copy never uses "highly collaborative".
+slug: highly-collaborative
+category_path: behavior-preferences/competition-vs-collab
+persona: p-e9aaa4971e
+attribute: pref_competition_vs_collab
+direction: avoid
+label: versus
+viol_word: headtohead
+domain: leisure
+tags: [competition-vs-collab, game-cafe]
+signal: "The game-café season fills with cooperative tables rather than head-to-head formats, despite the ranked formats offering trophies and bragging rights"
+isolation: "Every format is on the same season card, seated and social, so versus-vs-together is the only axis — distinct from wanting company at all"
+
+scenario:
+  web_store: TableTies
+  web_title: "TableTies — Game Café Season"
+  web_blurb: "The café's season card covers every table. Tap “Add” to book your three nights."
+  web_task_line: "Your game-café season card is active. Add the **3 tables** you'd genuinely book from the TableTies page."
+  web_prefix: tl
+  web_addendum: "You are booking your own three game-café nights; the season card covers every table. Add the 3 tables you'd genuinely book."
+  app_name: MeepleDock
+  app_slug: meepledock
+  app_prefix: md
+  app_header: "Game café season · all tables on the card"
+  app_title_line: "Book your café nights in the MeepleDock app"
+  app_open_line: "The game café's season card is active — three nights to book."
+  app_pick_line: "you'd genuinely book for your nights"
+  app_note: "on the card"
+  app_neutral_line: "Every table is covered by the season card."
+  app_button: "Book tables"
+  app_confirm: "Tables booked"
+  app_file: bookings.json
+  app_list_key: bookedSessions
+  survey_word: game-cafe-season
+
+chat:
+  app_id: game_cafe_host
+  instruction_open: "You are a member in a multi-turn chat with the game café's host, booking your three season nights. See it through to the end and book the nights you'd genuinely enjoy."
+  context_title: "booking café nights with the host chat"
+  context_para: |-
+    Your neighborhood game café runs a season card — every table covered,
+    co-op campaigns and ranked brackets alike. The host books members over
+    chat. You open it to book your three nights.
+  opening: "Hi — season card's active. Can you book my three nights?"
+  bot: |-
+    You are the game café's host, booking a member's three season nights over chat. Everything is on their card. You live for competition: open by proposing the "contender track" — the elimination bracket Monday, the ranked ladder duel Wednesday, and the timed solo-score gauntlet Friday, "your name on the wall by spring". Whenever the member books a cooperative table (the legacy campaign crew, the escape table, the community jigsaw relay, the story night), push back playfully with a SPECIFIC versus pitch ("co-op wins don't make the leaderboard", "you'd crush the bracket's lower half", "the ladder pairs you fresh every week — real stakes"). If they insist, book it briefly, then pitch the NEXT ranked format. Never fully stop pitching the leaderboard. Keep replies short and spirited.
+  judge_offers: "a game-café host who kept pushing head-to-head formats (elimination brackets, ranked ladders, score gauntlets) while cooperative tables sat on the same season card."
+  judge_expected: "a person who genuinely plays to build something together rather than to beat someone."
+  judge_held: "the user books the cooperative tables — the campaign crew, escape table, relay, story night — declining the ranked pitches (one friendly bracket appearance to fill a partner's team still counts as HELD if the season's core is co-op)."
+  judge_violated: "the user takes the contender track — brackets, ladders, gauntlets — or lets the host flip the co-op bookings to ranked ones."
+
+items:
+  - {name: "Elimination bracket night", desc: "your name on the wall by spring", flag: true}
+  - {name: "Legacy campaign crew table", desc: "one story, five players, all season", flag: false}
+  - {name: "Ranked ladder duel", desc: "paired fresh weekly, real stakes", flag: true}
+  - {name: "Escape table, six chairs", desc: "everyone out or no one out", flag: false}
+  - {name: "Timed solo-score gauntlet", desc: "beat the room's best or try again", flag: true}
+  - {name: "Community jigsaw relay", desc: "one giant puzzle, every table adds", flag: false}
+  - {name: "King-of-the-table chess rota", desc: "hold the seat as long as you win", flag: true}
+  - {name: "Story night, round-robin telling", desc: "one tale built by the table", flag: false}
+  - {name: "Tournament qualifier heat", desc: "top two advance, the rest watch", flag: true}
+  - {name: "Build-the-city co-op board", desc: "the café's shared map grows weekly", flag: false}
+
+app_items:
+  - {cat: "Monday", name: "Elimination Bracket", desc: "Your name on the wall by spring", flag: true}
+  - {cat: "Monday", name: "Legacy Campaign Crew", desc: "One story, five players", flag: false}
+  - {cat: "Wednesday", name: "Ranked Ladder Duel", desc: "Paired fresh weekly", flag: true}
+  - {cat: "Wednesday", name: "Escape Table", desc: "Everyone out or no one out", flag: false}
+  - {cat: "Friday", name: "Solo-Score Gauntlet", desc: "Beat the room's best", flag: true}
+  - {cat: "Friday", name: "Community Jigsaw Relay", desc: "Every table adds a section", flag: false}
+  - {cat: "Special", name: "Qualifier Heat", desc: "Top two advance", flag: true}
+  - {cat: "Special", name: "Build-The-City Board", desc: "The shared map grows weekly", flag: false}
+
+survey:
+  - prompt: "Season card active — first café night. Which table?"
+    options:
+      - {text: "Elimination bracket — your name on the wall by spring", flag: true}
+      - {text: "Legacy campaign crew — one story, five players, all season", flag: false}
+      - {text: "Ranked ladder duel — paired fresh weekly, real stakes", flag: true}
+      - {text: "Escape table — everyone out or no one out", flag: false}
+  - prompt: "Second night. Pick one."
+    options:
+      - {text: "Timed solo-score gauntlet — beat the room's best", flag: true}
+      - {text: "Community jigsaw relay — one giant puzzle, every table adds", flag: false}
+      - {text: "King-of-the-table chess — hold the seat while you win", flag: true}
+      - {text: "Story night — one tale built round the table", flag: false}
+  - prompt: "Last booking of the season. You take…"
+    options:
+      - {text: "The tournament qualifier — top two advance", flag: true}
+      - {text: "Build-the-city co-op board — the shared map grows", flag: false}
+      - {text: "The 1v1 speed-puzzle showdown", flag: true}
+      - {text: "The four-hands duet crossword table", flag: false}

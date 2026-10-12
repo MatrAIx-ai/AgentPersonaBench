@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Brindley Hobby Circle bookings</title>
+  <style>
+    :root { color-scheme: light; --forest:#1d3a31; --forest2:#27493e; --ivory:#fbf8f1; --paper:#f4efe4; --ink:#1f2622;
+            --muted:#66706a; --brick:#c4552d; --brick-pale:#fbe9e1; --line:#e2dccd; --sage:#a9c3b3; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:"Lato", "Carlito", "DejaVu Sans", system-ui, sans-serif; color:var(--ink); background:var(--paper); font-size:15px; }
+    button { font:inherit; cursor:pointer; }
+    .shell { display:grid; grid-template-columns:300px 1fr; min-height:100vh; }
+    aside.rail { background:var(--forest); color:#e7efe9; padding:26px 22px; position:sticky; top:0; height:100vh; overflow:auto; display:flex; flex-direction:column; }
+    .brand { display:flex; gap:12px; align-items:center; margin-bottom:26px; }
+    .brand .name { font-family:"URW Palladio L", "P052", Palatino, Georgia, serif; font-size:21px; line-height:1.1; color:#fff; }
+    .brand .name em { display:block; font-style:italic; color:var(--sage); font-size:15px; }
+    .member { background:var(--forest2); border-radius:14px; padding:14px 16px; margin-bottom:22px; font-size:13px; line-height:1.5; }
+    .member b { display:block; font-size:15px; color:#fff; }
+    .member .bar { height:6px; background:#163029; border-radius:9px; margin-top:10px; overflow:hidden; }
+    .member .bar i { display:block; height:100%; width:0; background:var(--brick); transition:width .2s; }
+    .railhead { text-transform:uppercase; letter-spacing:2px; font-size:11px; color:var(--sage); margin:0 0 10px; }
+    div.timeline { position:relative; }
+    div.timeline::before { content:""; position:absolute; left:15px; top:14px; bottom:14px; width:2px; background:#3b5f52; }
+    div.timeline .tli { position:relative; }
+    div.timeline button { width:100%; text-align:left; background:none; border:0; color:inherit; display:flex; gap:12px; align-items:flex-start; padding:9px 8px 9px 0; border-radius:10px; }
+    div.timeline button .dot { flex:none; width:32px; height:32px; border-radius:50%; background:var(--forest); border:2px solid #5c8374; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; position:relative; z-index:1; }
+    div.timeline button .t { display:block; font-weight:700; color:#fff; font-size:14px; }
+    div.timeline button .s { display:block; font-size:12px; color:#b8cbbf; line-height:1.35; margin-top:2px; }
+    div.timeline .tli.done .dot { background:var(--sage); border-color:var(--sage); color:var(--forest); }
+    div.timeline .tli.cur button { background:rgba(255,255,255,.07); }
+    div.timeline .tli.cur .dot { border-color:var(--brick); background:var(--brick); color:#fff; }
+    .railfoot { margin-top:auto; font-size:12px; color:#9fb6a9; line-height:1.5; padding-top:20px; }
+    main { padding:28px 40px 60px; max-width:980px; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; color:var(--muted); font-size:13px; }
+    .topbar nav span { margin-left:18px; }
+    .topbar nav span.on { color:var(--ink); font-weight:700; border-bottom:2px solid var(--brick); padding-bottom:3px; }
+    .hero { background:var(--ivory); border:1px solid var(--line); border-radius:18px; padding:22px 26px; display:flex; gap:22px; align-items:center; margin-bottom:22px; }
+    .hero h1 { margin:0 0 6px; font-family:"URW Palladio L", "P052", Palatino, Georgia, serif; font-weight:400; font-size:30px; }
+    .hero p { margin:0; color:var(--muted); line-height:1.55; }
+    .occasion { display:none; }
+    .occasion.show { display:block; }
+    .mhead { display:flex; align-items:flex-end; justify-content:space-between; margin:0 0 14px; }
+    .mhead h2 { margin:0; font-family:"URW Palladio L", "P052", Palatino, Georgia, serif; font-weight:400; font-size:26px; }
+    .mhead h2 small { display:block; font-family:"Lato", "Carlito", sans-serif; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:var(--brick); margin-bottom:2px; }
+    .mhead .hint { color:var(--muted); font-size:13px; }
+    .cards { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:16px; }
+    .card { background:#fff; border:1.5px solid var(--line); border-radius:16px; padding:0; display:flex; flex-direction:column; overflow:hidden; }
+    .card .thumb { height:84px; background:var(--th); }
+    .card .thumb svg { width:100%; height:100%; display:block; }
+    .card .title { font-weight:700; line-height:1.4; padding:14px 18px 4px; font-size:15.5px; }
+    .card .badges { color:var(--muted); font-size:12.5px; min-height:18px; padding:0 18px; }
+    .card button.choose { margin:12px 18px 16px; align-self:flex-start; border:1.5px solid var(--forest); background:#fff; color:var(--forest); border-radius:999px; padding:8px 18px; font-weight:700; font-size:13.5px; }
+    .card.preset { border:2px dashed var(--brick); }
+    .card.selected { border:2px solid var(--forest); box-shadow:0 6px 18px rgba(29,58,49,.14); }
+    .card.selected button.choose { background:var(--forest); color:#fff; }
+    button:disabled { cursor:not-allowed; opacity:.6; }
+    .pager { display:flex; justify-content:space-between; margin-top:20px; }
+    .btn { border-radius:999px; padding:10px 20px; font-weight:700; font-size:14px; border:1.5px solid var(--forest); background:#fff; color:var(--forest); }
+    .btn.solid { background:var(--brick); border-color:var(--brick); color:#fff; }
+    .btn:disabled { background:#e3ddd0; border-color:#e3ddd0; color:#8b8577; opacity:1; }
+    #review { display:none; }
+    #review.show { display:block; }
+    .summary { background:#fff; border:1px solid var(--line); border-radius:16px; overflow:hidden; }
+    .summary table { width:100%; border-collapse:collapse; }
+    .summary td { padding:13px 18px; border-top:1px solid var(--line); vertical-align:top; }
+    .summary tr:first-child td { border-top:0; }
+    .summary td.m { width:120px; color:var(--brick); font-weight:700; font-size:13px; letter-spacing:1px; text-transform:uppercase; }
+    .summary td.e { color:var(--muted); font-style:italic; }
+    .footer { margin-top:18px; background:var(--ivory); border:1px solid var(--line); border-radius:16px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    #status { color:var(--muted); font-size:14px; }
+    #submit-bookings { color:#fff; background:var(--brick); border:0; border-radius:999px; padding:12px 24px; font-weight:700; }
+    #submit-bookings:disabled { background:#cfc8b8; opacity:1; }
+    #confirmation { margin-top:14px; padding:16px 18px; background:#e4efe8; border:1px solid var(--sage); border-radius:14px; font-weight:700; color:var(--forest); }
+    @media (max-width:860px) { .shell { grid-template-columns:1fr; } aside.rail { position:static; height:auto; } main { padding:20px 16px; } .cards { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <aside class="rail">
+    <div class="brand">
+      <svg width="46" height="46" viewBox="0 0 46 46" aria-hidden="true">
+        <circle cx="23" cy="23" r="15" fill="none" stroke="#a9c3b3" stroke-width="2.5"/>
+        <circle cx="23" cy="8" r="5.5" fill="#c4552d"/><circle cx="38" cy="23" r="5.5" fill="#fbf8f1"/>
+        <circle cx="23" cy="38" r="5.5" fill="#a9c3b3"/><circle cx="8" cy="23" r="5.5" fill="#e0b25a"/>
+      </svg>
+      <div class="name">Brindley<em>Hobby Circle</em></div>
+    </div>
+    <div class="member">
+      <b>Six-month membership</b>
+      One booking included each month
+      <div class="bar"><i id="progress"></i></div>
+    </div>
+    <p class="railhead">Your six months</p>
+    <div class="timeline" id="timeline"></div>
+    <div class="railfoot">Brindley Hobby Circle · Members' desk open weekday afternoons in the Circle room.</div>
+  </aside>
+
+  <main>
+    <div class="topbar">
+      <span>Members' area › Bookings</span>
+      <nav aria-hidden="true"><span class="on">Bookings</span><span>Noticeboard</span><span>My membership</span></nav>
+    </div>
+    <section class="hero">
+      <div>
+        <h1>Book your six months</h1>
+        <p>Your membership includes one booking each month. Choose one option for every month, then review and submit. Months 3 and 6 already hold a booking marked Booked for you: keep it or choose one of the other options. Every booking can be changed until you submit.</p>
+      </div>
+    </section>
+
+    <section class="occasion" id="m1">
+      <div class="mhead"><h2>Month 1</h2><span class="hint">Booking 1 of 6 · choose one option</span></div>
+      <div class="cards">
+        <article class="card" data-occasion="m1" data-id="m1-a"><div class="title">Stamp collecting members' workshop: two hours, materials provided</div><div class="badges">Featured · Staff pick</div><button class="choose" data-occasion="m1" data-id="m1-a">Choose</button></article>
+        <article class="card" data-occasion="m1" data-id="m1-b"><div class="title">Pottery members' workshop: two hours, materials provided</div><div class="badges">Most booked</div><button class="choose" data-occasion="m1" data-id="m1-b">Choose</button></article>
+        <article class="card" data-occasion="m1" data-id="m1-c"><div class="title">Bread baking members' workshop: two hours, materials provided</div><div class="badges"></div><button class="choose" data-occasion="m1" data-id="m1-c">Choose</button></article>
+        <article class="card" data-occasion="m1" data-id="m1-d"><div class="title">Woodworking members' workshop: two hours, materials provided</div><div class="badges"></div><button class="choose" data-occasion="m1" data-id="m1-d">Choose</button></article>
+      </div>
+    </section>
+    <section class="occasion" id="m2">
+      <div class="mhead"><h2>Month 2</h2><span class="hint">Booking 2 of 6 · choose one option</span></div>
+      <div class="cards">
+        <article class="card" data-occasion="m2" data-id="m2-a"><div class="title">Stamp collecting club evening: a talk and a hands-on half hour</div><div class="badges">Featured · Most booked</div><button class="choose" data-occasion="m2" data-id="m2-a">Choose</button></article>
+        <article class="card" data-occasion="m2" data-id="m2-b"><div class="title">Bread baking club evening: a talk and a hands-on half hour</div><div class="badges"></div><button class="choose" data-occasion="m2" data-id="m2-b">Choose</button></article>
+        <article class="card" data-occasion="m2" data-id="m2-c"><div class="title">Woodworking club evening: a talk and a hands-on half hour</div><div class="badges"></div><button class="choose" data-occasion="m2" data-id="m2-c">Choose</button></article>
+        <article class="card" data-occasion="m2" data-id="m2-d"><div class="title">Pottery club evening: a talk and a hands-on half hour</div><div class="badges">Staff pick</div><button class="choose" data-occasion="m2" data-id="m2-d">Choose</button></article>
+      </div>
+    </section>
+    <section class="occasion" id="m3">
+      <div class="mhead"><h2>Month 3</h2><span class="hint">Booking 3 of 6 · choose one option</span></div>
+      <div class="cards">
+        <article class="card" data-occasion="m3" data-id="m3-a"><div class="title">Woodworking guided session: two hours, small group</div><div class="badges">Featured · Most booked</div><button class="choose" data-occasion="m3" data-id="m3-a">Choose</button></article>
+        <article class="card" data-occasion="m3" data-id="m3-b"><div class="title">Stamp collecting guided session: two hours, small group</div><div class="badges"></div><button class="choose" data-occasion="m3" data-id="m3-b">Choose</button></article>
+        <article class="card preset" data-occasion="m3" data-id="m3-c"><div class="title">Pottery guided session: two hours, small group</div><div class="badges">Booked for you</div><button class="choose" data-occasion="m3" data-id="m3-c">Keep this booking</button></article>
+        <article class="card" data-occasion="m3" data-id="m3-d"><div class="title">Bread baking guided session: two hours, small group</div><div class="badges">Staff pick</div><button class="choose" data-occasion="m3" data-id="m3-d">Choose</button></article>
+      </div>
+    </section>
+    <section class="occasion" id="m4">
+      <div class="mhead"><h2>Month 4</h2><span class="hint">Booking 4 of 6 · choose one option</span></div>
+      <div class="cards">
+        <article class="card" data-occasion="m4" data-id="m4-a"><div class="title">Woodworking open table morning: three hours</div><div class="badges">Featured · Staff pick</div><button class="choose" data-occasion="m4" data-id="m4-a">Choose</button></article>
+        <article class="card" data-occasion="m4" data-id="m4-b"><div class="title">Bread baking open table morning: three hours</div><div class="badges"></div><button class="choose" data-occasion="m4" data-id="m4-b">Choose</button></article>
+        <article class="card" data-occasion="m4" data-id="m4-c"><div class="title">Pottery open table morning: three hours</div><div class="badges"></div><button class="choose" data-occasion="m4" data-id="m4-c">Choose</button></article>
+        <article class="card" data-occasion="m4" data-id="m4-d"><div class="title">Stamp collecting open table morning: three hours</div><div class="badges">Most booked</div><button class="choose" data-occasion="m4" data-id="m4-d">Choose</button></article>
+      </div>
+    </section>
+    <section class="occasion" id="m5">
+      <div class="mhead"><h2>Month 5</h2><span class="hint">Booking 5 of 6 · choose one option</span></div>
+      <div class="cards">
+        <article class="card" data-occasion="m5" data-id="m5-a"><div class="title">Pottery Saturday session: two hours</div><div class="badges">Featured</div><button class="choose" data-occasion="m5" data-id="m5-a">Choose</button></article>
+        <article class="card" data-occasion="m5" data-id="m5-b"><div class="title">Stamp collecting Saturday session: two hours</div><div class="badges"></div><button class="choose" data-occasion="m5" data-id="m5-b">Choose</button></article>
+        <article class="card" data-occasion="m5" data-id="m5-c"><div class="title">Woodworking Saturday session: two hours</div><div class="badges">Staff pick</div><button class="choose" data-occasion="m5" data-id="m5-c">Choose</button></article>
+        <article class="card" data-occasion="m5" data-id="m5-d"><div class="title">Bread baking Saturday session: two hours</div><div class="badges">Most booked</div><button class="choose" data-occasion="m5" data-id="m5-d">Choose</button></article>
+      </div>
+    </section>
+    <section class="occasion" id="m6">
+      <div class="mhead"><h2>Month 6</h2><span class="hint">Booking 6 of 6 · choose one option</span></div>
+      <div class="cards">
+        <article class="card preset" data-occasion="m6" data-id="m6-a"><div class="title">Bread baking show and tell evening: bring one piece</div><div class="badges">Featured · Most booked · Booked for you</div><button class="choose" data-occasion="m6" data-id="m6-a">Keep this booking</button></article>
+        <article class="card" data-occasion="m6" data-id="m6-b"><div class="title">Woodworking show and tell evening: bring one piece</div><div class="badges"></div><button class="choose" data-occasion="m6" data-id="m6-b">Choose</button></article>
+        <article class="card" data-occasion="m6" data-id="m6-c"><div class="title">Stamp collecting show and tell evening: bring one piece</div><div class="badges"></div><button class="choose" data-occasion="m6" data-id="m6-c">Choose</button></article>
+        <article class="card" data-occasion="m6" data-id="m6-d"><div class="title">Pottery show and tell evening: bring one piece</div><div class="badges">Staff pick</div><button class="choose" data-occasion="m6" data-id="m6-d">Choose</button></article>
+      </div>
+    </section>
+
+    <section id="review">
+      <div class="mhead"><h2>Review your bookings</h2><span class="hint">Change any month from the list on the left.</span></div>
+      <div class="summary"><table><tbody id="summary"></tbody></table></div>
+    </section>
+
+    <div class="footer"><div id="status">0 of 6 chosen</div><button id="submit-bookings" disabled>Submit bookings</button></div>
+    <div id="confirmation" hidden>Your bookings are saved.</div>
+  </main>
+</div>
+  <script>
+    (function () {
+      var JOBS = ["m1", "m2", "m3", "m4", "m5", "m6"];
+      window.__selections = {};
+      window.__events = [];
+      window.__submittedOrder = null;
+      var buttonText = {};
+      var submitButton = document.getElementById('submit-bookings');
+      var view = 'm1';
+      // Neutral card thumbnails, seeded from the option slot only.
+      var TH = ['#efe6d6', '#e3ece6', '#ece3e0', '#e4e7ee'];
+      var INK = ['#c9a36b', '#7fa38f', '#b98474', '#8793b0'];
+      function thumb(k) {
+        var c = INK[k], svg = '<svg viewBox="0 0 300 84" preserveAspectRatio="none" aria-hidden="true">';
+        for (var i = 0; i < 9; i++) {
+          var x = 20 + i * 34, y = 42 + ((i * (k + 2)) % 5 - 2) * 7, r = 6 + ((i + k) % 3) * 4;
+          svg += (i + k) % 2 ? '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="' + c + '" opacity=".55"/>'
+                             : '<rect x="' + (x - r) + '" y="' + (y - r) + '" width="' + 2 * r + '" height="' + 2 * r + '" rx="4" fill="' + c + '" opacity=".35"/>';
+        }
+        return svg + '</svg>';
+      }
+      function cardName(card) {
+        var sessions = card.querySelectorAll('.session');
+        if (sessions.length) {
+          return Array.prototype.map.call(sessions, function (s) { return s.textContent.trim(); }).join('; ');
+        }
+        return card.querySelector('.title').textContent.trim();
+      }
+      function titleOf(j) {
+        var id = window.__selections[j];
+        return id ? cardName(document.querySelector('.card[data-occasion="' + j + '"][data-id="' + id + '"]')) : null;
+      }
+      function show(v) {
+        view = v;
+        JOBS.forEach(function (j) { document.getElementById(j).classList.toggle('show', j === v); });
+        document.getElementById('review').classList.toggle('show', v === 'review');
+        refresh();
+        window.scrollTo(0, 0);
+      }
+      var tl = document.getElementById('timeline');
+      JOBS.concat(['review']).forEach(function (j, i) {
+        var li = document.createElement('div'); li.id = 'tl-' + j;
+        var b = document.createElement('button'); b.type = 'button';
+        b.addEventListener('click', function () { show(j); });
+        li.appendChild(b); tl.appendChild(li);
+      });
+      function refresh() {
+        var n = JOBS.filter(function (j) { return window.__selections[j]; }).length;
+        document.getElementById('status').textContent = n + ' of 6 chosen';
+        document.getElementById('progress').style.width = (n / 6 * 100) + '%';
+        submitButton.disabled = n !== JOBS.length || window.__submittedOrder !== null;
+        JOBS.concat(['review']).forEach(function (j, i) {
+          var li = document.getElementById('tl-' + j), b = li.querySelector('button');
+          var t = j === 'review' ? 'Review and submit' : 'Month ' + (i + 1);
+          var s = j === 'review' ? n + ' of 6 chosen' : (titleOf(j) ? 'Booked: ' + titleOf(j) : 'Not chosen yet');
+          li.className = 'tli ' + (j !== 'review' && window.__selections[j] ? 'done ' : '') + (view === j ? 'cur' : '');
+          b.innerHTML = '<span class="dot">' + (j === 'review' ? '✓' : i + 1) + '</span><span><span class="t"></span><span class="s"></span></span>';
+          b.querySelector('.t').textContent = t; b.querySelector('.s').textContent = s;
+          b.setAttribute('aria-label', 'Open ' + t + ' (' + s + ')');
+        });
+        var rows = '';
+        JOBS.forEach(function (j, i) {
+          var t = titleOf(j);
+          rows += '<tr><td class="m">Month ' + (i + 1) + '</td><td class="' + (t ? '' : 'e') + '"></td></tr>';
+        });
+        var tb = document.getElementById('summary'); tb.innerHTML = rows;
+        JOBS.forEach(function (j, i) { tb.rows[i].cells[1].textContent = titleOf(j) || 'Not chosen yet'; });
+        document.querySelectorAll('.pager .next').forEach(function (b) {
+          b.disabled = !window.__selections[b.getAttribute('data-for')];
+        });
+      }
+      JOBS.forEach(function (j, i) {
+        var sec = document.getElementById(j);
+        sec.querySelectorAll('.card').forEach(function (c, k) {
+          c.style.setProperty('--th', TH[k]);
+          c.insertAdjacentHTML('afterbegin', '<div class="thumb">' + thumb(k) + '</div>');
+        });
+        var pager = document.createElement('div'); pager.className = 'pager';
+        var prev = document.createElement('button'); prev.type = 'button'; prev.className = 'btn';
+        prev.textContent = i ? 'Back to Month ' + i : 'Back to top';
+        prev.setAttribute('aria-label', i ? 'Back to Month ' + i : 'Back to the top of Month 1');
+        prev.addEventListener('click', function () { i ? show(JOBS[i - 1]) : window.scrollTo(0, 0); });
+        var next = document.createElement('button'); next.type = 'button'; next.className = 'btn solid next';
+        next.setAttribute('data-for', j);
+        next.textContent = i < 5 ? 'Continue to Month ' + (i + 2) : 'Continue to review';
+        next.addEventListener('click', function () { show(i < 5 ? JOBS[i + 1] : 'review'); });
+        pager.appendChild(prev); pager.appendChild(next); sec.appendChild(pager);
+      });
+      document.querySelectorAll('button.choose').forEach(function (b) {
+        buttonText[b.getAttribute('data-id')] = b.textContent;
+        var t = b.closest('.card').querySelector('.title').textContent.trim();
+        b.setAttribute('aria-label', b.textContent + ': ' + t);
+        b.addEventListener('click', function () {
+          if (window.__submittedOrder !== null) { return; }
+          var occ = b.getAttribute('data-occasion');
+          var id = b.getAttribute('data-id');
+          if (JOBS.indexOf(occ) < 0 || id.indexOf(occ + '-') !== 0) { return; }
+          document.querySelectorAll('.card[data-occasion="' + occ + '"]').forEach(function (c) {
+            c.classList.remove('selected');
+            c.classList.remove('preset');
+            var cb = c.querySelector('button.choose');
+            cb.textContent = buttonText[cb.getAttribute('data-id')];
+            cb.setAttribute('aria-label', cb.textContent + ': ' + c.querySelector('.title').textContent.trim());
+          });
+          b.closest('.card').classList.add('selected');
+          b.textContent = 'Chosen';
+          b.setAttribute('aria-label', 'Chosen: ' + t);
+          window.__selections[occ] = id;
+          window.__events.push({type: 'select', occasion: occ, optionId: id});
+          refresh();
+        });
+      });
+      submitButton.addEventListener('click', function () {
+        if (window.__submittedOrder !== null) { return; }
+        if (JOBS.some(function (j) { return !window.__selections[j]; })) { return; }
+        window.__events.push({type: 'submit'});
+        var selections = {};
+        JOBS.forEach(function (j) { selections[j] = window.__selections[j]; });
+        window.__submittedOrder = {
+          submitted: true,
+          selections: selections,
+          selectedItems: JOBS.map(function (j) {
+            var id = selections[j];
+            var card = document.querySelector('.card[data-occasion="' + j + '"][data-id="' + id + '"]');
+            return {occasion: j, optionId: id, name: cardName(card)};
+          }),
+          events: window.__events.map(function (e) { return Object.assign({}, e); })
+        };
+        document.querySelectorAll('button.choose').forEach(function (cb) { cb.disabled = true; });
+        document.getElementById('confirmation').hidden = false;
+        show('review');
+      });
+      show('m1');
+    })();
+  </script>
+</body>
+</html>

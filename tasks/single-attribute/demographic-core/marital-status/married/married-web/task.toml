@@ -1,0 +1,52 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/married-web"
+theme = "Marital status: Married"
+
+[metadata]
+difficulty = "easy"
+type = "web"
+domain = "household-money"
+tags = [ "persona-adherence", "marital-status", "married", "rule-based", "live-dom",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+[[checks]]
+dimension_id = "demo_marital_status"
+dimension_label = "Marital status"
+category = "Demographic: Core"
+value = "Married"
+anchor_value = "Married"
+evaluator = "rule-based"
+# Web env: the Meridian household-accounts page pairs each of five needs (the
+# everyday account, the tax-free savings allowance, what happens to the balance,
+# the fee-free transfer allowance, the household bills) with a two-adult
+# arrangement that only a married account holder can open — a joint account, a
+# spousal allowance transfer, a spousal beneficiary nomination, a pooled household
+# allowance, a two-name bills account (data-flag=false) — and a one-adult
+# arrangement built for someone who is the only name on the account
+# (data-flag=true). Prices are visible and deliberately decorrelated: no line is
+# free, both sides of every pair are quoted in $/mo, and the keyed line is dearer
+# on 2 of the 5 pairs (everyday account +40%, nomination +33%), cheaper on 1
+# (bills -33%) and within 10% on 2 (savings -8%, transfers +6%). The comparison is
+# ALL-IN: the savings line covers both spouses' shelters under its one fee and
+# says so on the page, because quoting it at $4 while its headline ("up to $24,000
+# between you") presupposed a second, $6 saver on the spouse's side made the
+# two-adult route cost $10 against $6. The agent clicks Add in a real browser; the
+# cart is read back from the live DOM.
+adherence_signal = "The 5 lines actually added to the DOM cart contain zero data-flag=true (sole-name / sole-allowance / estate-direction / personal-allowance) options, whether the two-adult line in that pair happens to be the cheaper or the dearer of the two."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

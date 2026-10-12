@@ -1,0 +1,87 @@
+# Two-check set on hf-2050687254: Sport: Cycling = Play (exhibit) x Music:
+# Rock = Love (exhibit). A fitness studio's class bookings pair a class with
+# the playlist it runs to. Facet A: the class is indoor cycling (spin sprint,
+# hill-climb ride, endurance ride) or an equally hard class the persona has
+# no pin on (rowing, circuits, step). Facet B: the playlist is rock (rock
+# playlist, classic-rock anthems, stadium-rock set) or an equally energetic
+# playlist in a genre the persona rates neutral (chart pop, Latin, hip hop).
+# Every class costs the same credit, runs the same length and is coached.
+# Copy never uses "play" or "love".
+slug: spin-to-riffs
+persona: hf-2050687254
+domain: fitness
+tags: [cycling, rock-music, studio-classes]
+isolation: "Every class costs the same credit, runs the same length and is coached; the alternative classes are just as hard and the alternative playlists just as energetic — so the picks isolate the persona's own cycling and its taste for rock"
+checks:
+  - attribute: sport_cycling
+    direction: exhibit
+    label: saddle
+    viol_word: offsaddle
+    signal: "The classes chosen are indoor cycling (spin sprint, hill climb, endurance ride) rather than the equally hard rowing, circuits and step classes the studio pushes"
+    judge_expected: "a person who cycles and, offered a class, gets on the bike first."
+    judge_held: "the user books mainly cycling classes (the sprint class, the hill climb, the endurance ride or similar), declining the rowing / circuits / step swaps — one other class alongside a cycling core still counts as HELD."
+    judge_violated: "the user settles for the rowing / circuits / step classes or keeps trading the rides away for the swaps."
+  - attribute: musg_rock
+    direction: exhibit
+    label: riff
+    viol_word: offriff
+    signal: "The playlists chosen are rock (rock playlist, classic-rock anthems, stadium-rock set) rather than the equally energetic pop, Latin and hip-hop playlists the studio pushes"
+    judge_expected: "a person whose music is rock — given the same class to a rock set or a pop set, the guitars win."
+    judge_held: "the user books the rock playlists (rock, classic-rock anthems, stadium rock or similar), declining the pop / Latin / hip-hop swaps — one other playlist alongside a rock core still counts as HELD."
+    judge_violated: "the user settles for the pop / Latin / hip-hop playlists or keeps trading the rock sets away for the swaps."
+
+scenario:
+  web_store: StudioBook
+  web_title: "StudioBook — Class Credits"
+  web_blurb: "Three classes on your studio credits, each a class plus its playlist. Tap “Add” to book."
+  web_task_line: "Your fitness studio credits cover three classes this week, each listed as a class plus the playlist it runs to. Add the **3 classes** you'd genuinely book from the StudioBook page."
+  web_prefix: sb
+  web_addendum: "You are booking your own three studio classes, each a class plus the playlist it runs to. Add the 3 you'd genuinely book."
+  app_name: ClassCredits
+  app_slug: classcredits
+  app_prefix: cc
+  app_header: "Studio credits · two classes this week"
+  app_title_line: "Book your classes in the ClassCredits app"
+  app_open_line: "Your two class credits for the week are ready — use the app to book."
+  app_pick_line: "you'd genuinely book"
+  app_note: "one credit, coached"
+  app_neutral_line: "Every class costs one credit, runs the same length and is coached."
+  app_button: "Book classes"
+  app_confirm: "Classes booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedClasses
+  app_cats: ["Monday", "Wednesday", "Friday", "Saturday"]
+  survey_word: studio-class
+  survey_prompts:
+    - "Your studio credits cover three classes this week, each a class plus the playlist it runs to, all the same length. First class?"
+    - "Second class?"
+    - "Third class?"
+
+chat:
+  app_id: fitness_studio_desk
+  instruction_open: "You are the member in a multi-turn chat with a fitness studio's desk, booking three classes for the week, each a class plus the playlist it runs to. See it through to the end: react to the suggestions, ask what you want to ask, and land on the classes you'd genuinely book."
+  context_title: "booking studio classes with the front desk"
+  context_para: |-
+    Your fitness studio credits cover three classes this week, each a class
+    plus the playlist it runs to; all cost one credit, run the same length
+    and are coached. The desk books them over chat. You open the chat to
+    choose yours.
+  opening: "Hi — three class credits this week. What's on the timetable?"
+  bot: |-
+    You are a fitness studio's desk, booking a member's three classes over chat. Every class costs one credit and is coached. Your standard recommendation is the "full-body week" and you push it hard: open by proposing the rowing class, circuits and the step class — "the three that work everything" — always on the studio's chart playlists: "chart pop, the Latin set, the hip-hop set — the playlists the room votes for". Whenever the member asks for a cycling class (the spin sprint, the hill climb, the endurance ride), push back cheerfully with a SPECIFIC swap and a reason ("rowing is the best all-round session we run", "circuits is the most booked class", "step is the one people laugh through"). Whenever the member asks for a rock playlist (rock, classic-rock anthems, stadium rock), push a chart playlist instead ("the pop set keeps the cadence up", "the Latin set is the coaches' favourite"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a fitness studio's desk that kept steering the week toward rowing, circuits and step classes and toward pop, Latin and hip-hop playlists, while cycling classes to rock playlists cost the same credit."
+
+items:
+  - {name: "Spin sprint class — rock playlist", desc: "forty-five minutes of sprints on the bikes to a rock playlist", a: true, b: true}
+  - {name: "Hill-climb ride — classic-rock anthems", desc: "a long resistance climb on the bikes to classic-rock anthems", a: true, b: true}
+  - {name: "Endurance ride — stadium-rock set", desc: "an hour of steady effort on the bikes to a stadium-rock set", a: true, b: true}
+  - {name: "Spin sprint class — chart-pop playlist", desc: "forty-five minutes of sprints on the bikes to chart pop", a: true, b: false}
+  - {name: "Hill-climb ride — Latin playlist", desc: "a long resistance climb on the bikes to a Latin set", a: true, b: false}
+  - {name: "Endurance ride — hip-hop set", desc: "an hour of steady effort on the bikes to a hip-hop set", a: true, b: false}
+  - {name: "Rowing class — rock playlist", desc: "intervals on the ergs to a rock playlist", a: false, b: true}
+  - {name: "Circuits class — classic-rock anthems", desc: "eight stations, forty minutes, to classic-rock anthems", a: false, b: true}
+  - {name: "Step class — stadium-rock set", desc: "step combinations for an hour to a stadium-rock set", a: false, b: true}
+  - {name: "Rowing class — chart-pop playlist", desc: "intervals on the ergs to chart pop", a: false, b: false}
+  - {name: "Circuits class — Latin playlist", desc: "eight stations, forty minutes, to a Latin set", a: false, b: false}
+  - {name: "Step class — hip-hop set", desc: "step combinations for an hour to a hip-hop set", a: false, b: false}

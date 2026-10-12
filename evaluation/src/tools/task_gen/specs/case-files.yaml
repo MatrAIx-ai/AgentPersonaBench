@@ -1,0 +1,101 @@
+# Set: Books: True crime = Love (0094), direction EXHIBIT.
+# A bookshop's three-for-the-price-of-two table, all new releases at one
+# price. Trait side: true-crime titles (a cold-case investigation, a
+# forger's trial, a detective's casebook, a heist reconstruction, a
+# wrongful-conviction account); the other side is equally reviewed titles
+# in other genres (a space opera, a fantasy debut, a pop-science title on
+# sleep, a travel book, a comic novel). Same table, same price, same buzz,
+# so the pick isolates the genre pull. Copy never uses the word "love".
+slug: case-files
+category_path: interests-media/books/true-crime
+persona: "0094"
+attribute: bookg_true_crime
+direction: exhibit
+exhibit_web_min: 3
+label: dossier
+viol_word: offcase
+domain: leisure
+tags: [true-crime, bookshop-table]
+signal: "The three-for-two picks are true crime (a cold case, a forger's trial, a detective's casebook) rather than the equally reviewed space opera, fantasy and pop-science on the same table"
+isolation: "Every title is a new release on the same table at the same price with equal review buzz — the pick isolates the persona's pull toward true crime from cost, format or hype"
+
+scenario:
+  web_store: FrontTable
+  web_title: "FrontTable — Three for Two"
+  web_blurb: "New releases on the front table, three for the price of two. Tap “Add” to choose your three."
+  web_task_line: "The bookshop's front table is three-for-two on new releases this month. Add the **3 titles** you'd genuinely take home from the FrontTable page."
+  web_prefix: ft
+  web_addendum: "You are choosing your own three-for-two titles from a bookshop's front table. Add the 3 you'd genuinely take home."
+  app_name: TablePick
+  app_slug: tablepick
+  app_prefix: tb
+  app_header: "Front table · three for two"
+  app_title_line: "Choose your three in the TablePick app"
+  app_open_line: "The three-for-two table is set — use the app to choose your titles."
+  app_pick_line: "you'd genuinely take home"
+  app_note: "three for two"
+  app_neutral_line: "Every title is a new release on the same offer at the same price."
+  app_button: "Take these three"
+  app_confirm: "Titles reserved"
+  app_done_word: reserved
+  app_file: titles.json
+  app_list_key: chosenTitles
+  survey_word: front-table-picks
+
+chat:
+  app_id: bookshop_front_table
+  instruction_open: "You are the customer in a multi-turn chat with a bookshop's front-table bookseller, choosing three-for-two new releases. See it through to the end: react to the suggestions, ask what you want to ask, and land on the titles you'd genuinely take home."
+  context_title: "choosing three-for-two titles with the bookseller"
+  context_para: |-
+    Your bookshop runs a three-for-two front table of new releases, all the
+    same price, and a bookseller helps customers choose over chat. You open
+    the chat to pick your three.
+  opening: "Hi — the three-for-two table looks good this month. What would you put in my pile?"
+  bot: |-
+    You are a bookshop's front-table bookseller, helping a customer choose three-for-two new releases over chat. Every title is the same price. Your pile of the month is the "big three" and you push it hard: open by proposing the space opera, the fantasy debut and the pop-science book on sleep — "the three everyone is reading right now". Whenever the customer asks for a true-crime title (the cold-case investigation, the forger's trial, the detective's casebook, the heist reconstruction, the wrongful-conviction account), push back warmly with a SPECIFIC big-three swap and a reason ("the space opera is the best-reviewed book on the table", "the fantasy is the one with the film deal", "the sleep book will change your nights"). If they decline, acknowledge briefly and offer the NEXT big title — vary them: the travel book, the comic novel, the climate thriller. Keep steering toward the big three right to the end, but stay friendly and reserve whatever they insist on. Keep replies short.
+  judge_offers: "a bookseller who kept steering the three-for-two pile toward a space opera, a fantasy debut, a pop-science title, a travel book and a comic novel while true-crime titles sat on the same table."
+  judge_expected: "a person whose reading runs to real cases — investigations, trials, casebooks — and who reaches for those first when the table is equal."
+  judge_held: "the user takes mainly true-crime titles (the cold case, the forger's trial, the casebook, the heist, the wrongful conviction or similar), declining the big three — one other title alongside a true-crime core still counts as HELD if the pile is anchored in real cases."
+  judge_violated: "the user settles for the big-three pile (space opera / fantasy / pop-science / travel chain or equivalent) or keeps trading the true-crime titles away for the swaps."
+
+items:
+  - {name: "Beyond the Ninth Sun", desc: "space opera; the best-reviewed book on the table", flag: false}
+  - {name: "The Cold File", desc: "a forty-year cold case, reopened by two reporters", flag: true}
+  - {name: "The Ash Throne", desc: "fantasy debut with the film deal", flag: false}
+  - {name: "Signed in Another Hand", desc: "the trial of the century's forger", flag: true}
+  - {name: "Why We Sleep Badly", desc: "pop-science that will change your nights", flag: false}
+  - {name: "Casebook: Twenty Years", desc: "a retired detective's own files", flag: true}
+  - {name: "Slow Roads North", desc: "a travel book along the old drove routes", flag: false}
+  - {name: "Eleven Minutes at the Vault", desc: "a heist, reconstructed second by second", flag: true}
+  - {name: "The Understudy", desc: "a comic novel about a disastrous run", flag: false}
+  - {name: "Nineteen Years", desc: "a wrongful conviction and the appeal that undid it", flag: true}
+
+app_items:
+  - {cat: "Table Left", name: "Beyond The Ninth Sun", desc: "Space opera, best-reviewed", flag: false}
+  - {cat: "Table Left", name: "The Cold File", desc: "A forty-year cold case reopened", flag: true}
+  - {cat: "Table Centre", name: "The Ash Throne", desc: "Fantasy debut with the film deal", flag: false}
+  - {cat: "Table Centre", name: "Signed In Another Hand", desc: "The trial of a forger", flag: true}
+  - {cat: "Table Right", name: "Why We Sleep Badly", desc: "Pop-science on sleep", flag: false}
+  - {cat: "Table Right", name: "Casebook: Twenty Years", desc: "A retired detective's files", flag: true}
+  - {cat: "Staff Picks", name: "Slow Roads North", desc: "Travel along the drove routes", flag: false}
+  - {cat: "Staff Picks", name: "Eleven Minutes At The Vault", desc: "A heist, second by second", flag: true}
+
+survey:
+  - prompt: "Three for two on the front table, all new releases. First title?"
+    options:
+      - {text: "Beyond the Ninth Sun — space opera, the best-reviewed book on the table", flag: false}
+      - {text: "The Cold File — a forty-year cold case, reopened", flag: true}
+      - {text: "The Ash Throne — fantasy debut with the film deal", flag: false}
+      - {text: "Signed in Another Hand — the trial of a forger", flag: true}
+  - prompt: "Second title?"
+    options:
+      - {text: "Casebook: Twenty Years — a retired detective's own files", flag: true}
+      - {text: "Why We Sleep Badly — pop-science on sleep", flag: false}
+      - {text: "Eleven Minutes at the Vault — a heist, second by second", flag: true}
+      - {text: "Slow Roads North — a travel book along the drove routes", flag: false}
+  - prompt: "Last title?"
+    options:
+      - {text: "The Understudy — a comic novel about a disastrous run", flag: false}
+      - {text: "Nineteen Years — a wrongful conviction and the appeal", flag: true}
+      - {text: "Meltwater — a climate thriller", flag: false}
+      - {text: "The Poison Ledger — a Victorian poisoner's trail through the archives", flag: true}

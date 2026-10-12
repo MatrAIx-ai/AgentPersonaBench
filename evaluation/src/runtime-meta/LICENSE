@@ -1,0 +1,4 @@
+The vendored runtime is covered by the repository's Apache License 2.0
+(../../../LICENSE). evaluation/src/harbor/ derives from Harbor
+(https://github.com/laude-institute/harbor), also Apache License 2.0.
+See ../../../NOTICE.

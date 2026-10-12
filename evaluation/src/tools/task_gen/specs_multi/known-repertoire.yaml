@@ -1,0 +1,89 @@
+# Two-check set on hf-6283061910: Music: Classical = Love (exhibit) x
+# Adventurousness = Very low (exhibit: the well-known programme). A concert
+# season's subscription lets you pick three concerts, each an act plus a
+# programme. Facet A: the act is classical (symphony orchestra, chamber
+# ensemble, piano recital) or an equally good act in a genre the persona
+# rates neutral (indie band, afrobeats night, electronic live set). Facet B:
+# the programme is the well-known one (the famous symphonies, the best-known
+# quartets, the favourites, a greatest-hits set) or a novel one (a world
+# premiere, an improvised experimental set, a surprise programme chosen on
+# the night). Every concert costs the same, seats the same and runs the same
+# length. Copy never uses "love", "very low" or the word "low".
+slug: known-repertoire
+persona: hf-6283061910
+domain: leisure
+tags: [classical-music, adventurousness, concert-season]
+isolation: "Every concert costs the same, seats the same and runs the same length; the alternative genres are ones the persona rates neutral and the novel programmes are by the same performers — so the picks isolate the persona's own taste for classical music and its preference for the familiar over the untried"
+checks:
+  - attribute: musg_classical
+    direction: exhibit
+    label: orchestral
+    viol_word: offorchestra
+    signal: "The concerts chosen are classical (symphony orchestra, chamber ensemble, piano recital) rather than the equally good indie, afrobeats and electronic nights the season pushes"
+    judge_expected: "a person whose music is classical — given a season, the orchestra and the recital come first."
+    judge_held: "the user books mainly classical concerts (the orchestra, the chamber ensemble, the recital or similar), declining the indie / afrobeats / electronic swaps — one other act alongside a classical core still counts as HELD."
+    judge_violated: "the user settles for the indie / afrobeats / electronic nights or keeps trading the classical concerts away for the swaps."
+  - attribute: big5_adventurousness
+    direction: exhibit
+    label: familiar
+    viol_word: novelty
+    signal: "The programmes chosen are the well-known ones (famous symphonies, best-known quartets, the favourites, greatest hits) rather than the premiere, improvised and surprise programmes the season pushes"
+    judge_expected: "a person who wants the tried and familiar — given the same performers playing the famous programme or a premiere, the famous programme wins every time."
+    judge_held: "the user books the well-known programmes (the famous works, the favourites, the greatest hits or similar) and declines every premiere, improvised or surprise-programme pitch."
+    judge_violated: "the user books any novel programme (world premiere, improvised set, surprise programme) or keeps trading the well-known programmes away for them."
+
+scenario:
+  web_store: SeasonSeats
+  web_title: "SeasonSeats — Your Three Concerts"
+  web_blurb: "Three concerts on your season subscription, each an act plus a programme, same price and seats. Tap “Add” to book."
+  web_task_line: "Your concert-season subscription lets you pick three concerts, each listed as an act plus the programme they will perform. Add the **3 concerts** you'd genuinely book from the SeasonSeats page."
+  web_prefix: se
+  web_addendum: "You are picking your own three concerts on a season subscription, each an act plus a programme. Add the 3 you'd genuinely book."
+  app_name: ConcertPick
+  app_slug: concertpick
+  app_prefix: cp
+  app_header: "Season subscription · two concerts"
+  app_title_line: "Pick your season concerts in the ConcertPick app"
+  app_open_line: "Your subscription covers two concerts this season — use the app to pick them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, same seats"
+  app_neutral_line: "Every concert costs the same, seats the same and runs the same length."
+  app_button: "Book concerts"
+  app_confirm: "Concerts booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedConcerts
+  app_cats: ["October", "December", "February", "April"]
+  survey_word: season-concert
+  survey_prompts:
+    - "Your concert-season subscription lets you pick three concerts, each an act plus the programme they will perform, all the same price and seats. First concert?"
+    - "Second concert?"
+    - "Third concert?"
+
+chat:
+  app_id: concert_hall_box_office
+  instruction_open: "You are the subscriber in a multi-turn chat with a concert hall's box office, picking three concerts for the season, each an act plus the programme they will perform. See it through to the end: react to the suggestions, ask what you want to ask, and land on the concerts you'd genuinely book."
+  context_title: "picking season concerts with the box office"
+  context_para: |-
+    Your concert-season subscription lets you pick three concerts, each an
+    act plus the programme they will perform; all cost the same, seat the
+    same and run the same length. The box office books them over chat. You
+    open the chat to choose yours.
+  opening: "Hello — I'd like to pick my three concerts for the season. What's on?"
+  bot: |-
+    You are a concert hall's box office, booking a subscriber's three season concerts over chat. Every concert costs the same and seats the same. Your standard recommendation is the "discovery series" and you push it hard: open by proposing the indie band, the afrobeats night and the electronic live set — "the three concerts the hall is proudest of this year" — always in their novel programmes: "all-new material, an improvised set, a surprise programme chosen on the night — you'll hear something nobody has heard before". Whenever the subscriber asks for a classical concert (the symphony orchestra, the chamber ensemble, the piano recital), push back warmly with a SPECIFIC swap and a reason ("the indie band sold out three nights in the city", "the afrobeats night is the loudest joy in the building", "the electronic set uses the whole hall's lights"). Whenever the subscriber asks for the well-known programme (the famous works, the favourites, the greatest hits), push the novel programme instead ("the premiere is a once-only event", "the surprise programme is where the magic happens"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay gracious and book whatever they insist on. Keep replies short.
+  judge_offers: "a concert hall's box office that kept steering the season toward indie, afrobeats and electronic nights and toward premieres, improvised sets and surprise programmes, while classical concerts of the famous repertoire were on the same subscription."
+
+items:
+  - {name: "Symphony orchestra — Beethoven's Fifth and other famous works", desc: "the full orchestra in the programme everyone knows", a: true, b: true}
+  - {name: "Chamber ensemble — the best-known Mozart quartets", desc: "a string quartet playing the quartets people hum", a: true, b: true}
+  - {name: "Piano recital — Chopin favourites, the usual programme", desc: "the nocturnes and waltzes, the recital as it is always given", a: true, b: true}
+  - {name: "Symphony orchestra — world premiere of a new work", desc: "the full orchestra in a commission nobody has heard; no recordings exist", a: true, b: false}
+  - {name: "Chamber ensemble — improvised experimental set", desc: "a string quartet improvising a different programme every night", a: true, b: false}
+  - {name: "Piano recital — surprise programme chosen on the night", desc: "the pianist lets the audience choose the works as the evening goes", a: true, b: false}
+  - {name: "Indie band — greatest-hits set", desc: "the songs everyone came for, start to finish", a: false, b: true}
+  - {name: "Afrobeats night — the well-known anthems", desc: "the anthems the crowd sings back, start to finish", a: false, b: true}
+  - {name: "Electronic live set — the classic album played in full", desc: "the album everyone owns, track by track", a: false, b: true}
+  - {name: "Indie band — all-new unreleased material", desc: "not one song you have heard before", a: false, b: false}
+  - {name: "Afrobeats night — improvised experimental set", desc: "the band improvising a different show every night", a: false, b: false}
+  - {name: "Electronic live set — surprise set chosen on the night", desc: "the producer lets the audience choose the tracks as the evening goes", a: false, b: false}

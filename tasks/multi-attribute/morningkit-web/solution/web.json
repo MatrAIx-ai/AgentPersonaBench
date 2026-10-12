@@ -1,0 +1,10 @@
+{
+  "role": "a user",
+  "outputs": [
+    {
+      "path": "anchor/kit.json",
+      "kind": "js",
+      "expr": "() => { const g = s => { const li = document.querySelector(`#summary-items li[data-section=\"${s}\"]`); return li ? li.getAttribute('data-id') : null; }; return {blockId: g('blocks'), widgetId: g('widgets')}; }"
+    }
+  ]
+}

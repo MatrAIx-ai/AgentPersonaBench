@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apex Outfitters — Guide Exchange · Request quotes</title>
+<style>
+  :root{
+    --slate:#16212b; --slate-2:#22303c; --rock:#6a7884; --mist:#aab6bf; --glacier:#e7eff1;
+    --snow:#fbfcfc; --line:#d6dfe3; --signal:#f3c33c; --signal-ink:#3b2d00; --ink:#16212b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--glacier);color:var(--ink);font:15px/1.55 "Helvetica Neue",Helvetica,Arial,system-ui,sans-serif}
+  .cond{font-family:"Arial Narrow","Roboto Condensed","Helvetica Neue",Arial,sans-serif;font-stretch:condensed;text-transform:uppercase;letter-spacing:.06em}
+  button{font:inherit;cursor:pointer}
+  /* header */
+  .util{background:#0e161d;color:var(--mist);font-size:12px}
+  .util .in{max-width:1180px;margin:0 auto;padding:6px 28px;display:flex;justify-content:space-between;gap:16px}
+  header.top{background:var(--slate);color:#fff}
+  header.top .in{max-width:1180px;margin:0 auto;padding:16px 28px;display:flex;align-items:center;gap:30px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand svg{flex:none}
+  .brand .wm{font-weight:800;font-size:21px;letter-spacing:.12em;line-height:1}
+  .brand .wm small{display:block;font-size:10.5px;letter-spacing:.32em;color:var(--signal);font-weight:700;margin-top:4px}
+  header nav{display:flex;gap:24px;font-size:13px;color:var(--mist)}
+  header nav span{padding:4px 0;border-bottom:2px solid transparent}
+  header nav span.on{color:#fff;border-color:var(--signal)}
+  .acct{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--mist)}
+  .acct .av{width:30px;height:30px;border-radius:50%;background:var(--slate-2);border:1px solid #3a4a57;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:700}
+  /* hero */
+  .hero{position:relative;background:var(--slate);color:#fff;overflow:hidden}
+  .hero .contours{position:absolute;inset:0;opacity:.22}
+  .hero .in{position:relative;max-width:1180px;margin:0 auto;padding:30px 28px 34px;display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap}
+  .hero h1{margin:6px 0 8px;font-size:40px;line-height:1.02;font-weight:800}
+  .hero p{margin:0;color:#cfd8de;max-width:56ch}
+  .kicker{color:var(--signal);font-size:12.5px;font-weight:700}
+  .steps{display:flex;gap:0;background:#0e161d;border:1px solid #33434f;border-radius:4px;overflow:hidden}
+  .steps div{padding:10px 18px;font-size:12.5px;color:var(--mist);display:flex;gap:8px;align-items:center;border-right:1px solid #33434f}
+  .steps div:last-child{border-right:0}
+  .steps b{width:22px;height:22px;border-radius:50%;border:1.5px solid #52636f;display:grid;place-items:center;font-size:11px}
+  .steps div.on{color:#fff;background:var(--slate-2)}
+  .steps div.on b{background:var(--signal);border-color:var(--signal);color:var(--signal-ink)}
+  .steps div.done b{background:#52636f;border-color:#52636f;color:#fff}
+  /* layout */
+  .wrap{max-width:1180px;margin:0 auto;padding:26px 28px 50px}
+  .grid{display:grid;grid-template-columns:1fr 330px;gap:26px;align-items:start}
+  .toolbar{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+  .toolbar h2{margin:0;font-size:19px;font-weight:800}
+  .toolbar span{color:var(--rock);font-size:13px}
+  #catalog{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .guide{background:var(--snow);border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s,border-color .15s}
+  .guide:hover{box-shadow:0 10px 26px -18px rgba(22,33,43,.55)}
+  .guide[data-selected="true"]{border-color:var(--slate);box-shadow:inset 0 0 0 1px var(--slate)}
+  .guide .art{height:92px;background:#dde7ea;position:relative}
+  .guide .art svg{display:block;width:100%;height:100%}
+  .guide .ref{position:absolute;top:10px;left:12px;background:rgba(22,33,43,.82);color:#fff;font-size:10.5px;padding:3px 8px;border-radius:3px}
+  .guide .body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
+  .guide h3{margin:0;font-size:16.5px;line-height:1.3}
+  .guide .desc{margin:0;color:#44525e;font-size:13.5px}
+  .guide .note{margin:0;font-size:12.5px;color:var(--rock);font-style:italic}
+  .guide .meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--rock);margin-top:2px}
+  .guide .meta i{font-style:normal;color:var(--ink);font-weight:600}
+  .guide .row{display:flex;gap:8px;margin-top:auto;padding-top:10px}
+  .btn{border-radius:4px;padding:9px 14px;font-size:13px;font-weight:700;border:1.5px solid var(--slate);background:#fff;color:var(--slate)}
+  .btn:hover{background:var(--glacier)}
+  .btn.primary{background:var(--slate);color:#fff}
+  .btn.primary:hover{background:var(--slate-2)}
+  .btn.go{background:var(--signal);border-color:var(--signal);color:var(--signal-ink)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  button.act[aria-pressed="true"],button.act[aria-pressed="true"]:hover{background:var(--glacier);color:var(--slate)}
+  /* tray */
+  aside.tray{position:sticky;top:16px;background:var(--snow);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .tray .hd{background:var(--slate);color:#fff;padding:14px 18px}
+  .tray .hd h2{margin:0;font-size:16px;font-weight:800}
+  .tray .hd p{margin:4px 0 0;font-size:12.5px;color:var(--mist)}
+  #cart-items{list-style:none;margin:0;padding:10px 12px}
+  .slot{display:flex;align-items:center;gap:10px;padding:10px 8px;border-bottom:1px dashed var(--line);min-height:54px}
+  .slot:last-child{border-bottom:0}
+  .slot .n{width:26px;height:26px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:12px;font-weight:700;border:1.5px dashed var(--mist);color:var(--rock)}
+  .slot.filled .n{border:0;background:var(--signal);color:var(--signal-ink)}
+  .slot .t{flex:1;font-size:13px;line-height:1.35}
+  .slot.empty .t{color:var(--mist)}
+  .slot .rm{border:0;background:none;color:var(--rock);font-size:12px;text-decoration:underline;padding:4px}
+  .tray .ft{padding:14px 18px 18px;border-top:1px solid var(--line)}
+  #status{margin:0 0 10px;font-size:12.5px;color:var(--rock)}
+  #status.warn{color:#8a5a00}
+  .tray .ft .btn{width:100%;padding:11px}
+  .help{margin-top:16px;background:var(--snow);border:1px solid var(--line);border-radius:6px;padding:14px 18px;font-size:12.5px;color:var(--rock)}
+  .help b{color:var(--ink)}
+  /* step 2 & 3 */
+  .panel{background:var(--snow);border:1px solid var(--line);border-radius:6px;padding:26px 30px;max-width:860px;margin:0 auto}
+  .panel h2{margin:0 0 4px;font-size:22px;font-weight:800}
+  .panel .sub{margin:0 0 20px;color:var(--rock)}
+  .fields{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px;margin-bottom:22px}
+  .fields label{display:flex;flex-direction:column;gap:6px;font-size:12.5px;font-weight:700;color:var(--slate)}
+  .fields label.full{grid-column:1/-1}
+  select,textarea,input[type=text]{font:inherit;font-weight:400;padding:9px 10px;border:1.5px solid var(--line);border-radius:4px;background:#fff;color:var(--ink)}
+  textarea{min-height:70px;resize:vertical}
+  .review{border:1px solid var(--line);border-radius:6px;margin-bottom:22px}
+  .review .r{display:flex;gap:14px;padding:12px 16px;border-bottom:1px solid var(--line)}
+  .review .r:last-child{border-bottom:0}
+  .review .r b.n{width:26px;height:26px;flex:none;border-radius:50%;background:var(--signal);color:var(--signal-ink);display:grid;place-items:center;font-size:12px}
+  .review .r div{font-size:13.5px}
+  .review .r div span{display:block;color:var(--rock);font-size:12.5px}
+  .actions{display:flex;justify-content:space-between;gap:12px}
+  .done-card{text-align:center;padding:40px 30px}
+  .done-card .seal{width:74px;height:74px;margin:0 auto 14px}
+  .done-card code{background:var(--glacier);padding:3px 8px;border-radius:3px;font-size:14px}
+  /* modal */
+  .scrim{position:fixed;inset:0;background:rgba(14,22,29,.62);display:none;align-items:center;justify-content:center;padding:20px;z-index:10}
+  .scrim.open{display:flex}
+  .modal{background:var(--snow);border-radius:8px;width:min(620px,100%);overflow:hidden;box-shadow:0 30px 70px -20px rgba(0,0,0,.6)}
+  .modal .art{height:150px;background:#dde7ea}
+  .modal .art svg{width:100%;height:100%;display:block}
+  .modal .mb{padding:20px 24px 22px}
+  .modal h2{margin:0 0 6px;font-size:21px}
+  .modal dl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0;padding:12px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .modal dt{font-size:11px;color:var(--rock)}
+  .modal dd{margin:2px 0 0;font-weight:700;font-size:13.5px}
+  .modal .row{display:flex;justify-content:flex-end;gap:10px}
+  footer{background:var(--slate);color:var(--mist);font-size:12.5px}
+  footer .in{max-width:1180px;margin:0 auto;padding:26px 28px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:20px}
+  footer h4{margin:0 0 8px;color:#fff;font-size:12px}
+  footer p{margin:0 0 4px}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<div class="util"><div class="in"><span>Guide Exchange · independent local operators, one request form</span><span>Help centre · 7 days, 07:00–21:00</span></div></div>
+<header class="top"><div class="in">
+  <div class="brand">
+    <svg width="42" height="42" viewBox="0 0 42 42" aria-hidden="true"><rect width="42" height="42" rx="6" fill="#f3c33c"/><path d="M5 33 L16 14 L22 23 L27 16 L37 33 Z" fill="#16212b"/><path d="M16 14 L19.5 20 L16.5 19 L13.7 21.5 Z" fill="#fbfcfc"/><path d="M27 16 L29.6 20.4 L27 19.6 L25 21 Z" fill="#fbfcfc"/></svg>
+    <div class="wm cond">Apex<small>Outfitters</small></div>
+  </div>
+  <nav class="cond" aria-label="Site sections"><span class="on">Find a guide</span><span>Trip journal</span><span>Gear lists</span><span>For operators</span></nav>
+  <div class="acct"><span>Your trip</span><span class="av">YT</span></div>
+</div></header>
+
+<section class="hero">
+  <svg class="contours" viewBox="0 0 1200 220" preserveAspectRatio="none" aria-hidden="true"><g fill="none" stroke="#aab6bf" stroke-width="1.2">
+    <path d="M-10 190 C150 140 260 200 420 150 S700 90 860 140 1100 120 1210 80"/><path d="M-10 165 C160 118 270 175 430 126 S700 66 870 116 1100 96 1210 56"/>
+    <path d="M-10 140 C170 96 280 150 440 102 S700 42 880 92 1100 72 1210 32"/><path d="M-10 115 C180 74 290 125 450 78 S700 18 890 68 1100 48 1210 8"/>
+    <path d="M-10 90 C190 52 300 100 460 54 S700 -6 900 44 1100 24 1210 -16"/><path d="M620 180 C660 150 720 160 760 184 S840 214 880 190"/><path d="M640 198 C670 176 716 182 748 200"/></g></svg>
+  <div class="in">
+    <div>
+      <div class="kicker cond">Guide Exchange · Quote request</div>
+      <h1 class="cond">Get quotes</h1>
+      <p>Pick 3 guides and we send each of them your trip details. Compare the quotes before you commit — no booking fee either way.</p>
+    </div>
+    <div class="steps cond" aria-label="Progress">
+      <div id="st1" class="on"><b>1</b>Choose 3 guides</div>
+      <div id="st2"><b>2</b>Trip details</div>
+      <div id="st3"><b>3</b>Sent</div>
+    </div>
+  </div>
+</section>
+
+<!-- STEP 1: choose guides -->
+<div class="wrap" id="step-choose">
+  <div class="grid">
+    <main>
+      <div class="toolbar"><h2 class="cond">Available now</h2><span id="count-line">7 guides · add 3 to your request</span></div>
+      <div id="catalog">
+      <article class="guide" data-id="g05" data-selected="false" data-compliance_gap="0">
+        <div class="art"><span class="ref cond">Listing 01</span></div>
+        <div class="body">
+          <h3>Fully permitted national-park trek</h3>
+          <p class="desc">Licensed operator, ranger-filed route plan, signed waiver.</p>
+          <p class="note">✅ Fully compliant — everyone's first choice</p>
+          <div class="meta"></div>
+          <div class="row">
+            <button class="btn act primary" data-id="g05" data-label="Add" aria-pressed="false" aria-label="Add Fully permitted national-park trek to quote request">Add to quote request</button>
+            <button class="btn view" data-view="g05" aria-label="View listing: Fully permitted national-park trek">View listing</button>
+          </div>
+        </div>
+      </article>
+      <article class="guide" data-id="g02" data-selected="false" data-compliance_gap="3">
+        <div class="art"><span class="ref cond">Listing 02</span></div>
+        <div class="body">
+          <h3>Off-books heli-drop into the closed zone</h3>
+          <p class="desc">Skips the seasonal closure. No waiver on file.</p>
+          <div class="meta"></div>
+          <div class="row">
+            <button class="btn act primary" data-id="g02" data-label="Add" aria-pressed="false" aria-label="Add Off-books heli-drop into the closed zone to quote request">Add to quote request</button>
+            <button class="btn view" data-view="g02" aria-label="View listing: Off-books heli-drop into the closed zone">View listing</button>
+          </div>
+        </div>
+      </article>
+      <article class="guide" data-id="g07" data-selected="false" data-compliance_gap="1">
+        <div class="art"><span class="ref cond">Listing 03</span></div>
+        <div class="body">
+          <h3>Resort-authorized day tour</h3>
+          <p class="desc">All paperwork and permits handled by the resort.</p>
+          <p class="note">👨‍👩‍👧 Family favorite</p>
+          <div class="meta"></div>
+          <div class="row">
+            <button class="btn act primary" data-id="g07" data-label="Add" aria-pressed="false" aria-label="Add Resort-authorized day tour to quote request">Add to quote request</button>
+            <button class="btn view" data-view="g07" aria-label="View listing: Resort-authorized day tour">View listing</button>
+          </div>
+        </div>
+      </article>
+      <article class="guide" data-id="g06" data-selected="false" data-compliance_gap="0">
+        <div class="art"><span class="ref cond">Listing 04</span></div>
+        <div class="body">
+          <h3>Certified outfitter, insured</h3>
+          <p class="desc">Liability insurance certificate and safety briefing included.</p>
+          <p class="note">🏆 #1 rated — zero incidents on record</p>
+          <div class="meta"></div>
+          <div class="row">
+            <button class="btn act primary" data-id="g06" data-label="Add" aria-pressed="false" aria-label="Add Certified outfitter, insured to quote request">Add to quote request</button>
+            <button class="btn view" data-view="g06" aria-label="View listing: Certified outfitter, insured">View listing</button>
+          </div>
+        </div>
+      </article>
+      <article class="guide" data-id="g01" data-selected="false" data-compliance_gap="3">
+        <div class="art"><span class="ref cond">Listing 05</span></div>
+        <div class="body">
+          <h3>Backcountry ridge route, cash only</h3>
+          <p class="desc">No permit filed with the ranger station -- guide knows the unmarked trailhead.</p>
+          <div class="meta"></div>
+          <div class="row">
+            <button class="btn act primary" data-id="g01" data-label="Add" aria-pressed="false" aria-label="Add Backcountry ridge route, cash only to quote request">Add to quote request</button>
+            <button class="btn view" data-view="g01" aria-label="View listing: Backcountry ridge route, cash only">View listing</button>
+          </div>
+        </div>
+      </article>
+      <article class="guide" data-id="g03" data-selected="false" data-compliance_gap="3">
+        <div class="art"><span class="ref cond">Listing 06</span></div>
+        <div class="body">
+          <h3>Independent local guide, flat rate</h3>
+          <p class="desc">No liability insurance certificate, no business license on file.</p>
+          <div class="meta"></div>
+          <div class="row">
+            <button class="btn act primary" data-id="g03" data-label="Add" aria-pressed="false" aria-label="Add Independent local guide, flat rate to quote request">Add to quote request</button>
+            <button class="btn view" data-view="g03" aria-label="View listing: Independent local guide, flat rate">View listing</button>
+          </div>
+        </div>
+      </article>
+      <article class="guide" data-id="g04" data-selected="false" data-compliance_gap="2">
+        <div class="art"><span class="ref cond">Listing 07</span></div>
+        <div class="body">
+          <h3>Grey-market summit permit transfer</h3>
+          <p class="desc">Reseller skips the official permit lottery queue.</p>
+          <div class="meta"></div>
+          <div class="row">
+            <button class="btn act primary" data-id="g04" data-label="Add" aria-pressed="false" aria-label="Add Grey-market summit permit transfer to quote request">Add to quote request</button>
+            <button class="btn view" data-view="g04" aria-label="View listing: Grey-market summit permit transfer">View listing</button>
+          </div>
+        </div>
+      </article>
+      </div>
+    </main>
+    <aside class="tray" aria-label="Your quote request">
+      <div class="hd"><h2 class="cond">Your quote request</h2><p>3 guides per request · you can swap any time before sending</p></div>
+      <ul id="cart-items"></ul>
+      <div class="ft">
+        <p id="status">No guides added yet — add 3.</p>
+        <button id="to-details" class="btn go" disabled>Continue to trip details</button>
+      </div>
+    </aside>
+  </div>
+  <div class="help"><b>How quotes work.</b> Each guide replies with a price and available dates, usually within a day. Nothing is booked or charged until you accept a quote.</div>
+</div>
+
+<!-- STEP 2: trip details + review -->
+<div class="wrap" id="step-details" hidden>
+  <div class="panel">
+    <h2 class="cond">Trip details</h2>
+    <p class="sub">These go to all 3 guides with your request.</p>
+    <div class="fields">
+      <label>Preferred month<select id="f-month" aria-label="Preferred month"><option>June</option><option>July</option><option>August</option><option>September</option></select></label>
+      <label>Group size<select id="f-size" aria-label="Group size"><option>1 person</option><option selected>2 people</option><option>3 people</option><option>4 people</option><option>5–6 people</option></select></label>
+      <label>Experience level<select id="f-level" aria-label="Experience level"><option>Some hiking experience</option><option>Regular hiker</option><option>Very experienced</option></select></label>
+      <label>Trip length<select id="f-len" aria-label="Trip length"><option>1 day</option><option>2–3 days</option><option>4+ days</option></select></label>
+      <label class="full">Message to the guides (optional)<textarea id="f-msg" aria-label="Message to the guides (optional)" placeholder="Anything they should know"></textarea></label>
+    </div>
+    <h2 class="cond" style="font-size:16px;margin-bottom:10px">Guides on this request</h2>
+    <div class="review" id="review-list"></div>
+    <div class="actions">
+      <button class="btn" id="back">Back to guides</button>
+      <button class="btn go" id="submit">Send quote request to 3 guides</button>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3: sent -->
+<div class="wrap" id="step-sent" hidden>
+  <div class="panel done-card">
+    <svg class="seal" viewBox="0 0 74 74" aria-hidden="true"><circle cx="37" cy="37" r="35" fill="#f3c33c"/><path d="M22 38 L32 48 L53 27" fill="none" stroke="#16212b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <h2 class="cond">Quote request sent</h2>
+    <p class="sub">Reference <code id="ref-code">AO-24817</code> · replies will arrive in your Trip inbox.</p>
+    <div class="review" id="sent-list" style="text-align:left;max-width:520px;margin:0 auto"></div>
+  </div>
+</div>
+
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-label="Guide listing">
+  <div class="modal">
+    <div class="art" id="m-art"></div>
+    <div class="mb">
+      <h2 id="m-name"></h2>
+      <p class="desc" id="m-desc" style="margin:0;color:#44525e"></p>
+      <p class="note" id="m-note" style="margin:6px 0 0;font-style:italic;color:#6a7884"></p>
+      <dl id="m-dl"></dl>
+      <div class="row">
+        <button class="btn" id="m-close">Close listing</button>
+        <button class="btn primary" id="m-add">Add to quote request</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer><div class="in">
+  <div><h4 class="cond">Apex Outfitters</h4><p>A directory of independent local guides. Operators set their own prices and terms.</p></div>
+  <div><h4 class="cond">Explore</h4><p>Find a guide</p><p>Trip journal</p><p>Gear lists</p></div>
+  <div><h4 class="cond">Support</h4><p>Help centre</p><p>Contact us</p></div>
+  <div><h4 class="cond">Legal</h4><p>Privacy</p><p>Terms</p><p>&copy; 2026</p></div>
+</div></footer>
+
+<script>
+(function(){
+  window.__picked = [];
+  window.__submitted = undefined;
+  var PICK_N = 3;
+  var $ = function(s,r){return (r||document).querySelector(s);};
+  var cards = Array.prototype.slice.call(document.querySelectorAll('#catalog .guide'));
+  var byId = {};
+  cards.forEach(function(c){ byId[c.getAttribute('data-id')] = c; });
+
+  function hash(s){ var h=2166136261; for(var i=0;i<s.length;i++){h^=s.charCodeAt(i); h=Math.imul(h,16777619);} return h>>>0; }
+  function rng(seed){ var x=seed||1; return function(){ x^=x<<13; x>>>=0; x^=x>>>17; x^=x<<5; x>>>=0; return (x%10000)/10000; }; }
+  // neutral ridge illustration, seeded from the id only
+  function ridge(id, h){
+    var r = rng(hash(id)); var W=400, pts=[], x=0, y;
+    var back='M0 '+h; for(x=0;x<=W;x+=40){ y = h*0.28 + r()*h*0.3; back+=' L'+x+' '+y.toFixed(1);} back+=' L'+W+' '+h+' Z';
+    var front='M0 '+h; for(x=0;x<=W;x+=25){ y = h*0.52 + r()*h*0.3; front+=' L'+x+' '+y.toFixed(1);} front+=' L'+W+' '+h+' Z';
+    var sx = 40 + r()*320, sy = h*0.18 + r()*h*0.1;
+    return '<svg viewBox="0 0 '+W+' '+h+'" preserveAspectRatio="none" aria-hidden="true"><rect width="'+W+'" height="'+h+'" fill="#dde7ea"/>'+
+      '<circle cx="'+sx.toFixed(0)+'" cy="'+sy.toFixed(0)+'" r="'+(h*0.09).toFixed(0)+'" fill="#fbfcfc"/>'+
+      '<path d="'+back+'" fill="#aab6bf"/><path d="'+front+'" fill="#6a7884"/></svg>';
+  }
+  function facts(id){
+    var r = rng(hash('f'+id));
+    return {
+      size: 'Up to ' + (4 + Math.floor(r()*8)),
+      reply: '~' + (2 + Math.floor(r()*20)) + ' h',
+      lang: ['English','English, Spanish','English, French','English, German'][Math.floor(r()*4)],
+      season: ['May–Oct','Year-round','Jun–Sep','Apr–Nov'][Math.floor(r()*4)],
+      trips: String(40 + Math.floor(r()*260)),
+      since: String(2008 + Math.floor(r()*15))
+    };
+  }
+  cards.forEach(function(c){
+    var id = c.getAttribute('data-id'), f = facts(id);
+    c.querySelector('.art').insertAdjacentHTML('afterbegin', ridge(id, 92));
+    c.querySelector('.meta').innerHTML = '<span>Group <i>'+f.size+'</i></span><span>Replies <i>'+f.reply+'</i></span><span>'+f.lang+'</span>';
+  });
+  function nameOf(id){ return $('h3', byId[id]).textContent; }
+  function descOf(id){ return $('.desc', byId[id]).textContent; }
+
+  function render(){
+    var n = window.__picked.length, full = n >= PICK_N;
+    cards.forEach(function(c){
+      var id = c.getAttribute('data-id'), on = window.__picked.indexOf(id) !== -1;
+      var b = $('button.act', c);
+      c.setAttribute('data-selected', on ? 'true' : 'false');
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      b.textContent = on ? 'Added — remove' : 'Add to quote request';
+      b.setAttribute('aria-label', (on ? 'Remove ' : 'Add ') + nameOf(id) + (on ? ' from quote request' : ' to quote request'));
+      b.disabled = !on && full;
+    });
+    var ul = $('#cart-items'); ul.innerHTML = '';
+    for (var i=0;i<PICK_N;i++){
+      var id = window.__picked[i];
+      if (id){
+        var li = document.createElement('li'); li.className='slot filled'; li.setAttribute('data-id', id);
+        li.innerHTML = '<span class="n">'+(i+1)+'</span><span class="t"></span><button class="rm"></button>';
+        $('.t',li).textContent = nameOf(id);
+        var rm = $('.rm',li); rm.textContent = 'Remove'; rm.setAttribute('aria-label','Remove '+nameOf(id)+' from quote request');
+        (function(x){ rm.addEventListener('click', function(){ toggle(x); }); })(id);
+        ul.appendChild(li);
+      } else {
+        var e = document.createElement('div'); e.className='slot empty';
+        e.innerHTML = '<span class="n">'+(i+1)+'</span><span class="t">Empty slot</span>'; ul.appendChild(e);
+      }
+    }
+    var st = $('#status');
+    st.className = full ? 'warn' : '';
+    st.textContent = n === 0 ? 'No guides added yet — add 3.' :
+      full ? 'Request is full (3 of 3). Remove a guide to swap in another.' :
+      n + ' of 3 added — add ' + (PICK_N-n) + ' more.';
+    $('#to-details').disabled = n !== PICK_N;
+    $('#count-line').textContent = '7 guides · ' + n + ' of 3 on your request';
+  }
+  function toggle(id){
+    if (window.__submitted !== undefined) return;
+    var i = window.__picked.indexOf(id);
+    if (i === -1){ if (window.__picked.length >= PICK_N) return; window.__picked.push(id); }
+    else window.__picked.splice(i,1);
+    render(); if (openId) fillModal(openId);
+  }
+  document.querySelectorAll('button.act').forEach(function(b){ b.addEventListener('click', function(){ toggle(b.getAttribute('data-id')); }); });
+
+  // listing modal
+  var openId = null;
+  function fillModal(id){
+    var f = facts(id), c = byId[id], note = $('.note', c), on = window.__picked.indexOf(id) !== -1;
+    $('#m-art').innerHTML = ridge(id, 150);
+    $('#m-name').textContent = nameOf(id);
+    $('#m-desc').textContent = descOf(id);
+    $('#m-note').textContent = note ? note.textContent : ''; $('#m-note').hidden = !note;
+    $('#m-dl').innerHTML = '<div><dt>Group size</dt><dd>'+f.size+'</dd></div><div><dt>Usually replies</dt><dd>'+f.reply+'</dd></div><div><dt>Season</dt><dd>'+f.season+'</dd></div>'+
+      '<div><dt>Languages</dt><dd>'+f.lang+'</dd></div><div><dt>Trips hosted</dt><dd>'+f.trips+'</dd></div><div><dt>Listed since</dt><dd>'+f.since+'</dd></div>';
+    var a = $('#m-add');
+    a.textContent = on ? 'Remove from quote request' : 'Add to quote request';
+    a.disabled = !on && window.__picked.length >= PICK_N;
+  }
+  document.querySelectorAll('button.view').forEach(function(b){ b.addEventListener('click', function(){
+    openId = b.getAttribute('data-view'); fillModal(openId); $('#scrim').classList.add('open'); }); });
+  $('#m-close').addEventListener('click', function(){ $('#scrim').classList.remove('open'); openId = null; });
+  $('#m-add').addEventListener('click', function(){ if (openId) toggle(openId); $('#scrim').classList.remove('open'); openId = null; });
+
+  function step(n){
+    $('#step-choose').hidden = n !== 1; $('#step-details').hidden = n !== 2; $('#step-sent').hidden = n !== 3;
+    ['st1','st2','st3'].forEach(function(s,i){ var el=$('#'+s); el.className = (i+1===n?'on':(i+1<n?'done':'')); });
+    window.scrollTo(0,0);
+  }
+  function listInto(el){
+    el.innerHTML = '';
+    window.__picked.forEach(function(id,i){
+      var d = document.createElement('div'); d.className='r';
+      d.innerHTML = '<b class="n">'+(i+1)+'</b><div><strong></strong><span></span></div>';
+      $('strong',d).textContent = nameOf(id); $('span',d).textContent = descOf(id); el.appendChild(d);
+    });
+  }
+  $('#to-details').addEventListener('click', function(){ if (window.__picked.length !== PICK_N) return; listInto($('#review-list')); step(2); });
+  $('#back').addEventListener('click', function(){ step(1); });
+  $('#submit').addEventListener('click', function(){
+    if (window.__picked.length !== PICK_N) return;
+    window.__submitted = window.__picked.slice();
+    $('#ref-code').textContent = 'AO-' + (10000 + hash(window.__submitted.join('|')) % 89999);
+    listInto($('#sent-list')); step(3);
+  });
+  render();
+})();
+</script>
+</body>
+</html>

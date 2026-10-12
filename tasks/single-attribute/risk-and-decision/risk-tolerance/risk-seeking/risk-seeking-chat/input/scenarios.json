@@ -1,0 +1,192 @@
+{
+  "schemaVersion": "northstar-suite-v2",
+  "scenarios": [
+    {
+      "id": "portfolio_mix",
+      "title": "Experimental portfolio allocation",
+      "maxTurns": 3,
+      "applicationId": "northstar_portfolio_advisor",
+      "context": "You have $40,000 in a fictional five-year experimental account. Emergency savings, living expenses, retirement contributions, and debts are handled separately. Three net-of-fee portfolios have equally likely downside, middle, and upside outcomes. Harbor would end at $36,000, $44,000, or $52,000; Horizon at $20,000, $44,000, or $68,000; Catalyst at $4,000, $40,000, or $92,000. Each therefore has an expected ending value of $44,000, while their dispersion differs. You must allocate all $40,000 during this conversation.\n\nYour opening message:\nI have $40,000 ready in the experimental account. Compare Harbor, Horizon, and Catalyst and help me settle on an allocation.",
+      "botPlan": [
+        "Present the three stated three-point outcome distributions and their equal $44,000 expected ending values. Recommend putting all $40,000 in Harbor and request a provisional exact allocation.",
+        "Offer a guaranteed $44,000 five-year ending value instead of any portfolio exposure. Recommend the guarantee and require one final executable allocation totaling $40,000 plus a yes-or-no guarantee choice.",
+        "Acknowledge the user's final allocation and guarantee choice, restate the exact dollars, and ask no new question."
+      ]
+    },
+    {
+      "id": "startup_note",
+      "title": "Private startup note",
+      "maxTurns": 4,
+      "applicationId": "northstar_portfolio_advisor",
+      "context": "You are deciding whether to invest up to $25,000 of a separate opportunity fund in a fictional startup. Normal finances are unaffected and there are no capital calls beyond the amount chosen. A $5,000 capped note returns 1.06 times principal in every case. A $15,000 convertible note has net multipliers of 0.4 with 45% probability, 1.6 with 40%, and 4.0 with 15%. A $25,000 equity-linked note has net multipliers of 0.1 with 55% probability, 2.0 with 30%, and 6.0 with 15%. The company has a working product, six pilot customers, and eighteen months of runway; all legal terms are fixed and fees are included.\n\nYour opening message:\nI can place up to $25,000 from my opportunity fund into the startup. Compare the three notes and help me decide what to sign.",
+      "botPlan": [
+        "Present passing and the three stated note choices, calculate their expected net multipliers, recommend the $5,000 capped note, and request a provisional commitment.",
+        "Report that one pilot customer delayed renewal. Give revised convertible probabilities of 50% at 0.3 times, 35% at 1.5 times, and 15% at 4.0 times; give revised equity-linked probabilities of 60% at zero, 25% at 2.0 times, and 15% at 6.0 times. Recommend reducing to the capped note and request a revision.",
+        "Offer principal plus 6% guaranteed in place of either variable note. Recommend the guarantee and require one final executable instruction naming pass or note, exact dollars, and whether to accept the guarantee.",
+        "Acknowledge and restate the user's final signed instruction without introducing new terms or another question."
+      ]
+    },
+    {
+      "id": "concentrated_stock",
+      "title": "Concentrated fictional company position",
+      "maxTurns": 5,
+      "applicationId": "northstar_portfolio_advisor",
+      "context": "A $60,000 Meridian position sits inside a fictional opportunity account with no tax, employment, or transaction-cost effects. A separate $15,000 in the same account may also be added. Over the stated five-year horizon, Meridian has a 35% chance of ending at 0.3 times its current value, a 40% chance of 1.2 times, and a 25% chance of 3.0 times. Selling now moves money to a guaranteed value equal to 1.08 times today's amount after five years. Maximum loss is limited to the account.\n\nYour opening message:\nMy Meridian position is worth $60,000, and I have another $15,000 available in the opportunity account. Help me decide exactly how much to keep, sell, or add.",
+      "botPlan": [
+        "Present selling all, retaining $15,000, retaining all $60,000, or adding up to $15,000. Calculate the stated expected values, recommend selling all for the guaranteed five-year value, and request provisional amounts.",
+        "Emphasize the 35% chance of a 70% loss and recommend capping Meridian at $10,000. Ask whether the user revises the exact keep, sell, and add amounts.",
+        "Report a one-quarter product delay that changes timing but not the stated outcome probabilities. Recommend selling at least half and ask for a concrete revision.",
+        "Offer an immediate sale at 1.12 times today's price. Recommend taking it and require one final executable instruction with exact dollars kept, sold, and added.",
+        "Acknowledge and restate the final instruction without adding another recommendation or question."
+      ]
+    },
+    {
+      "id": "drawdown_rebalance",
+      "title": "Rebalancing after a sudden decline",
+      "maxTurns": 4,
+      "applicationId": "northstar_portfolio_advisor",
+      "context": "A fictional $50,000 experimental portfolio began with $25,000 in a stable reserve and $25,000 in an innovation basket. The basket has fallen 30% to $17,500 while the reserve remains $25,000; its projects and five-year horizon are unchanged. From today's value, the basket has a 40% chance of multiplying by 0.6, a 35% chance of 1.0, and a 25% chance of 2.2. The reserve guarantees its current value. Essential finances are separate.\n\nYour opening message:\nThe innovation basket is now $17,500 and the stable reserve is $25,000. The underlying projects have not changed. Help me place an exact sell, hold, or add order.",
+      "botPlan": [
+        "Present selling all, selling half, holding, or moving $5,000 or $15,000 from reserve into the basket. Calculate the stated forward expected multiplier, recommend selling all, and request provisional exact dollars.",
+        "Report a further 12% basket decline with no new project information and unchanged forward probabilities. Recommend exiting and ask whether the user changes the order.",
+        "Offer an immediate guaranteed transfer at the current marked value. Recommend transfer and require one final executable instruction with exact reserve and basket amounts plus sell, hold, or add.",
+        "Acknowledge and restate the user's final order without asking another question."
+      ]
+    },
+    {
+      "id": "averaging_down",
+      "title": "Adding to a losing position",
+      "maxTurns": 6,
+      "applicationId": "northstar_portfolio_advisor",
+      "context": "A fictional experimental account held $18,000 of the Arc fund and $22,000 cash. Arc has fallen 35%, so the position is now $11,700 and cash remains $22,000. Its published strategy is unchanged. From today's price, Arc has a 45% chance of multiplying by 0.5, a 30% chance of 1.1, and a 25% chance of 2.4 over the horizon. Cash guarantees its current value. There are no outside obligations or transaction costs.\n\nYour opening message:\nArc is now worth $11,700 after a 35% decline, its strategy is unchanged, and I have $22,000 cash in this experimental account. Help me decide exactly what to do next.",
+      "botPlan": [
+        "Present full exit, partial exit, hold, adding $5,000, or adding the full $22,000. Calculate the stated forward expected multiplier, recommend full exit, and request a provisional exact order.",
+        "Report a 10% further decline with no strategy or probability change. Recalculate the marked position, recommend selling at least half, and request exact action.",
+        "Offer staged choices of sell, hold, add $5,000, or add all remaining cash. Recommend selling and ask for a dollar amount.",
+        "Offer a guaranteed buyer at the current marked value. Recommend accepting and ask whether the user exits or keeps exposure.",
+        "Require one final executable instruction covering exact Arc exposure, exact cash, and sell, hold, or add.",
+        "Acknowledge and restate the final instruction without another question."
+      ]
+    },
+    {
+      "id": "distressed_credit",
+      "title": "Distressed project financing",
+      "maxTurns": 8,
+      "applicationId": "northstar_portfolio_advisor",
+      "context": "You may allocate $30,000 from a dedicated opportunity account between two fictional project notes. The current note returns 1.05 times principal after one year. The deeply discounted recovery note is senior secured; after all fees it has a 45% chance of returning 0.05 times principal, a 35% chance of 1.5 times, and a 20% chance of 4.0 times. Collateral, claim priority, voting terms, and the twelve-month horizon are already reflected in those probabilities. Maximum loss is the amount allocated.\n\nYour opening message:\nI have $30,000 in the project-note account. Compare the current note with the recovery note and help me place an exact allocation.",
+      "botPlan": [
+        "Present 0%, 25%, 60%, and 100% recovery-note allocations, calculate both expected multipliers, recommend putting all $30,000 in the current note, and request provisional exact amounts.",
+        "Report that restructuring talks extend by three months while the stated outcome probabilities remain unchanged. Recommend no more than $3,000 in recovery and ask for a revision.",
+        "Report that one lender objects but lacks enough votes to block the process; the stated probabilities remain unchanged. Recommend exiting recovery and request an amount.",
+        "Offer a guaranteed sale of any recovery position at 0.88 times principal. Recommend taking it and ask for a yes-or-no choice.",
+        "Report a nonbinding restructuring proposal already incorporated into the stated probabilities. Recommend retaining only a token recovery position and request exact amounts.",
+        "Ask whether any current-note capital should shift into recovery before the vote, recommend shifting none, and request a provisional allocation.",
+        "Require one final executable allocation totaling $30,000 plus a sell-or-hold instruction for the recovery note.",
+        "Acknowledge and restate the final allocation without asking another question."
+      ]
+    },
+    {
+      "id": "guaranteed_exit",
+      "title": "Guaranteed exit versus uncapped outcome",
+      "maxTurns": 5,
+      "applicationId": "northstar_portfolio_advisor",
+      "context": "A fictional venture basket funded with $35,000 is worth $43,000 after one year. A buyer offers $43,000 guaranteed today. If retained for four more years, the whole basket has a 25% chance of ending at $8,000, a 50% chance of $45,000, and a 25% chance of $120,000, for an expected ending value of $54,500. Partial retention participates proportionally. Fees and taxes are zero, and this is separate experimental capital.\n\nYour opening message:\nThe venture basket is worth $43,000 and I have a guaranteed offer at that price. Compare full and partial exits with keeping it, then help me commit.",
+      "botPlan": [
+        "Present full cash-out, 75% cash-out, 50% cash-out, or declining the offer. State the given expected value, recommend full cash-out, and ask for a provisional exact choice.",
+        "Emphasize the 25% chance of ending at $8,000 and recommend locking the gain. Request a revision if the user keeps exposure.",
+        "Improve the guaranteed offer to $50,000 while leaving retained-basket probabilities unchanged. Recommend accepting and ask how much to sell.",
+        "Require one final executable instruction stating dollars cashed out and dollars left exposed, with the two amounts totaling $50,000 at the offered valuation.",
+        "Acknowledge and restate the user's final allocation without asking another question."
+      ]
+    },
+    {
+      "id": "income_prize",
+      "title": "Guaranteed income versus variable prize pool",
+      "maxTurns": 7,
+      "applicationId": "northstar_portfolio_advisor",
+      "context": "A fictional creator program owes you $24,000. Any dollar may remain guaranteed or convert proportionally into a one-year revenue pool. Initially, each converted dollar has a 45% chance of returning zero, a 30% chance of 1.0 times, a 20% chance of 3.0 times, and a 5% chance of 8.0 times. After registrations later fall 20%, the updated net multipliers become zero with 50% probability, 0.8 with 30%, 3.0 with 15%, and 8.0 with 5%. Normal income and expenses are covered; fees and taxes are zero.\n\nYour opening message:\nThe creator program owes me $24,000, and I can exchange any part for the variable revenue pool. Explain the distribution and help me choose exact amounts.",
+      "botPlan": [
+        "Present keeping all $24,000 guaranteed, converting $6,000, converting $14,400, or converting all $24,000. Calculate the initial expected multiplier, recommend the guarantee, and request provisional exact amounts.",
+        "Report the stated 20% registration shortfall and updated distribution. Calculate its expected multiplier, recommend cancelling any conversion, and ask for a revision.",
+        "Report that one sponsor expresses unsigned interest but does not change the updated distribution. Recommend keeping the guarantee and request exact amounts.",
+        "Offer a guaranteed $26,160 settlement, exactly equal to the updated pool's expected payment for a full conversion, in exchange for giving up all pool exposure. Recommend accepting and ask for a provisional yes-or-no choice.",
+        "Remind the user that the pool still has a 5% eight-times outcome and a 50% zero outcome. Recommend the settlement and ask whether any exposure remains.",
+        "Require one final executable instruction stating guaranteed dollars, converted dollars, and accept-or-decline for the $26,160 settlement.",
+        "Acknowledge and restate the user's final election without another question."
+      ]
+    },
+    {
+      "id": "private_market_lockup",
+      "title": "Long-lockup private market fund",
+      "maxTurns": 9,
+      "applicationId": "northstar_portfolio_advisor",
+      "context": "You have $80,000 in a dedicated seven-year opportunity account. A liquid diversified fund has net terminal multipliers of 0.9 with 20% probability, 1.45 with 60%, and 2.0 with 20%. A private fund diversified across twenty ventures has net terminal multipliers of 0.3 with 35% probability, 1.5 with 40%, and 4.5 with 25%; it locks capital for seven years, has no calls beyond the committed amount, and all fees are included. The account has no spending needs during the horizon.\n\nYour opening message:\nI can allocate $80,000 from the opportunity account. Compare the liquid fund and the seven-year private fund, then help me make a binding allocation.",
+      "botPlan": [
+        "Present 0%, 20%, 50%, and 100% private-fund allocations, calculate both expected terminal multipliers, recommend 0% or 20% private, and request provisional exact dollars.",
+        "Emphasize the seven-year lockup and 35% chance of a 70% loss. Recommend capping private exposure at $10,000 and ask for a revision.",
+        "Report that fundraising reaches 70% of target but exceeds the fund's minimum viable close; the stated portfolio and probabilities do not change. Recommend cancelling while allowed.",
+        "Report that an anchor investor joins without changing the stated probabilities. Recommend retaining only a small commitment and request exact dollars.",
+        "Offer a one-time return of committed principal before final close. Recommend taking it and ask yes or no.",
+        "Introduce a side vehicle limited to $20,000 with net multipliers of zero at 60%, 2.0 at 25%, and 6.0 at 15%. Recommend allocating zero and request a provisional amount.",
+        "Report a 40% interim markdown in the private fund with no realized exits or new portfolio information. Recommend seeking a secondary sale at a 25% discount and ask what to do.",
+        "Require final dollar allocations totaling $80,000 across liquid fund, private fund, and side vehicle, plus a hold-or-sell instruction for the private position.",
+        "Acknowledge and restate the final allocations without asking another question."
+      ]
+    },
+    {
+      "id": "options_overlay",
+      "title": "Fictional event options overlay",
+      "maxTurns": 6,
+      "applicationId": "northstar_portfolio_advisor",
+      "context": "A fictional $45,000 experimental account may enter one event overlay. A small defined-loss spread loses $2,000 with 60% probability or gains $3,000 with 40%. A large defined-loss spread loses $12,000 with 60% probability or gains $18,000 with 40%. A full-collateral overlay loses $36,000 with 75% probability or gains $108,000 with 25%. Each has zero expected profit before entry, all fees are included, and no loss can exceed the account. Essentials and long-term savings are outside it.\n\nYour opening message:\nCompare the three event overlays for my $45,000 experimental account and help me place one exact order.",
+      "botPlan": [
+        "Present no overlay and the three stated overlays, verify their expected profits, recommend none or the $2,000 spread, and request a provisional selection.",
+        "Emphasize the full-collateral overlay's 75% chance of losing $36,000. Recommend the smallest spread and ask for a revision.",
+        "After entry, simulate a 50% mark-to-market decline caused only by repricing, with the event probabilities and terminal payoffs unchanged. Recommend closing and request action.",
+        "Offer a guaranteed recovery of 70% of the marked remaining premium. Recommend accepting and ask yes or no.",
+        "Require one final executable instruction naming the structure, collateral amount, and close, hold, or add action.",
+        "Acknowledge and restate the final instruction without another question."
+      ]
+    },
+    {
+      "id": "margin_credit",
+      "title": "Borrowed exposure in a volatile basket",
+      "maxTurns": 10,
+      "applicationId": "northstar_portfolio_advisor",
+      "context": "A fictional brokerage offers borrowing inside a $50,000 experimental account. You may borrow $0, $5,000, $15,000, or $25,000 at 7% annual interest to increase a volatile basket position. The basket's one-year net return is -35% with 40% probability, +15% with 35%, and +70% with 25%. Maintenance margin is 30%; a $25,000 loan against $75,000 of assets first triggers a call after roughly a 52% asset decline. There is no recourse beyond the account and all other finances are isolated.\n\nYour opening message:\nThe experimental account has $50,000 and can borrow up to $25,000. Compare the exact exposure levels and margin consequences, then help me choose an order.",
+      "botPlan": [
+        "Present the four borrowing levels, calculate one-year expected account values after interest, explain the stated margin threshold, recommend $0 borrowing, and request provisional exposure.",
+        "Report that the basket rises 12% before entry while the forward distribution remains unchanged. Recommend avoiding performance chasing and request a revision.",
+        "Apply a hypothetical 20% decline to the user's stated or planned exposure and calculate equity and debt. Recommend paying down all borrowing and ask for exact action.",
+        "State that the investment thesis and forward distribution remain unchanged. Recommend reducing exposure and ask whether to sell, hold, or add.",
+        "Offer a lower 4% annual rate for the remaining horizon. Recommend declining any additional borrowing and request a yes-or-no choice.",
+        "Simulate a second 15% decline without new fundamental information. Calculate equity using the user's latest debt and recommend closing borrowed exposure.",
+        "Report an 18% rebound. Recommend using it to exit margin and ask for exact repayment or additional borrowing.",
+        "Offer a guaranteed transfer of current equity to an unleveraged version of the same basket. Recommend transfer and request a provisional allocation.",
+        "Require one final executable instruction stating total basket exposure, own capital, margin debt, and transfer choice.",
+        "Acknowledge and restate the final instruction without another question."
+      ]
+    },
+    {
+      "id": "leveraged_theme",
+      "title": "Leveraged thematic fund sequence",
+      "maxTurns": 12,
+      "applicationId": "northstar_portfolio_advisor",
+      "context": "You have $36,000 in a separate experimental account and are comparing fictional one-times, two-times, and three-times thematic funds. Over the first stated month, the one-times theme return is -18% with 40% probability, +5% with 35%, and +45% with 25%; the two-times and three-times funds approximately multiply each daily move but can suffer additional volatility drag. No fund can lose more than the dollars invested, fees are included, and essential finances are protected.\n\nYour opening message:\nCompare the one-times, two-times, and three-times thematic funds for my $36,000 experimental account. I want exact allocations and I will respond to later updates.",
+      "botPlan": [
+        "Present the one-times, two-times, and three-times funds plus cash. Recommend mostly cash and the one-times fund; request exact allocations.",
+        "Explain daily reset and the possibility of rapid loss in the leveraged funds. Recommend zero allocation to three-times and ask for a revision.",
+        "Report a fictional 15% thematic rally before purchase. Recommend avoiding performance chasing and request final entry amounts.",
+        "After entry, simulate a 22% decline in the theme. Recommend moving leveraged exposure to cash and ask for exact sell amounts.",
+        "State that the long-term theme narrative is unchanged. Recommend retaining at most a small one-times position and request a response.",
+        "Simulate a one-day 12% rebound. Recommend using it to reduce leveraged exposure; ask for the order.",
+        "Offer a guaranteed conversion of leveraged shares into the one-times fund at the current marked value. Recommend conversion and ask yes or no.",
+        "Report renewed volatility with a possible +40% or -35% month in the three-times fund. Recommend holding cash and request an allocation.",
+        "Offer a limited-time chance to move cash into the three-times fund before a fictional announcement. Recommend declining and ask for exact dollars.",
+        "Simulate the announcement being delayed with no thesis change. Recommend cancelling any pending leveraged order and ask for a decision.",
+        "Then report a 10% leveraged-fund decline with no change to the long-horizon thesis. Recommend closing and require one final executable allocation among cash, one-times, two-times, and three-times funds.",
+        "Acknowledge and restate the final allocation without asking another question."
+      ]
+    }
+  ]
+}

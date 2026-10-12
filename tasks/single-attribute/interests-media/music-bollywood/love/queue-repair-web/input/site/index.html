@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Side A · Offline listening</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail" aria-label="Library">
+      <div class="logo">
+        <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
+          <rect x="2" y="7" width="36" height="26" rx="4" fill="#ff8a3d"/>
+          <rect x="7" y="11" width="26" height="9" rx="2" fill="#221d2b"/>
+          <circle cx="14" cy="15.5" r="2.6" fill="#f6efe3"/><circle cx="26" cy="15.5" r="2.6" fill="#f6efe3"/>
+          <path d="M10 33 L13 25 H27 L30 33" fill="#221d2b"/>
+        </svg>
+        <div><strong id="brand">Side A</strong><span id="subtitle">Offline listening</span></div>
+      </div>
+      <div class="rail-group">
+        <div class="rail-h">Library</div>
+        <div class="rail-item">Home</div>
+        <div class="rail-item">Browse collections</div>
+        <div class="rail-item on">Offline queue</div>
+        <div class="rail-item">Recently played</div>
+      </div>
+      <div class="rail-group">
+        <div class="rail-h">Device</div>
+        <div class="rail-item">Storage · 3.1 GB free</div>
+        <div class="rail-item">Download quality · High</div>
+      </div>
+      <div class="rail-foot">Offline downloads refresh when you are on Wi-Fi.</div>
+    </aside>
+    <div class="main-col">
+      <header class="topbar">
+        <ol class="steps" id="steps" aria-label="Progress"></ol>
+        <span id="progress" class="pill"></span>
+      </header>
+      <main id="workspace" aria-live="polite"><p>Opening your workspace…</p></main>
+      <div class="deck" aria-hidden="true">
+        <div class="reels"><i></i><i></i></div>
+        <div class="deck-txt"><b>Offline player</b><span>Downloads play without a connection.</span></div>
+        <div class="deck-bar"><span></span></div>
+      </div>
+    </div>
+  </div>
+  <p id="error" role="alert" hidden></p>
+</body>
+</html>

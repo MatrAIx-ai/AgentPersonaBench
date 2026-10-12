@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RepeatBasket</title>
+<style>
+  :root{
+    --char:#231f20; --char2:#3a3435; --pers:#e2572b; --pers-d:#c2441c; --peach:#fff3ea; --peach2:#ffe4d3;
+    --card:#ffffff; --line:#eed9cb; --mute:#76686a; --ok:#2e7d5b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{min-height:100vh;display:flex;flex-direction:column;background:var(--peach);color:var(--char);font-family:"FreeSans","Liberation Sans",sans-serif;font-size:15px;line-height:1.45}
+  button{font:inherit;cursor:pointer}
+  a{color:inherit}
+  /* app bar */
+  .bar{background:var(--char);color:#f6e9e1}
+  .bar .in{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:22px;padding:12px 28px}
+  .logo{display:flex;align-items:center;gap:11px}
+  .logo b{font-size:22px;font-weight:800;letter-spacing:-.03em;color:#fff}
+  .logo b span{color:var(--pers)}
+  .bar nav{display:flex;gap:4px;margin-left:18px}
+  .bar nav a{text-decoration:none;font-size:14px;color:#cdbfb8;padding:6px 12px;border-radius:8px}
+  .bar nav a.on{color:#fff;background:var(--char2)}
+  .acct{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:#cdbfb8}
+  .avatar{width:32px;height:32px;border-radius:50%;background:var(--pers);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px}
+  /* page */
+  .page{max-width:1200px;margin:0 auto;width:100%;padding:26px 28px 40px;display:grid;grid-template-columns:270px 1fr;gap:28px;align-items:start}
+  .rail{position:sticky;top:18px;background:var(--card);border-radius:20px;padding:20px 18px;box-shadow:0 10px 30px rgba(120,60,30,.08)}
+  .rail h2{margin:0 0 3px;font-size:13px;text-transform:uppercase;letter-spacing:.12em;color:var(--mute)}
+  .rail .sub{margin:0 0 16px;font-size:13px;color:var(--mute)}
+  .rail .ol{margin:0;padding:0;position:relative}
+  .rail .ol:before{content:"";position:absolute;left:17px;top:18px;bottom:18px;width:2px;background:var(--line)}
+  .rail .li{position:relative}
+  .stepbtn{display:flex;align-items:center;gap:12px;width:100%;background:none;border:0;padding:8px 6px 8px 0;text-align:left;border-radius:12px}
+  .stepbtn .dot{flex:none;width:36px;height:36px;border-radius:50%;background:var(--peach);border:2px solid var(--line);display:grid;place-items:center;font-weight:800;color:var(--mute);position:relative;z-index:1}
+  .stepbtn .t{display:flex;flex-direction:column;font-weight:700;font-size:14.5px}
+  .stepbtn .t small{font-weight:400;color:var(--mute);font-size:12.5px;max-width:170px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .stepbtn.cur .dot{background:var(--pers);border-color:var(--pers);color:#fff}
+  .stepbtn.fin .dot{background:var(--char);border-color:var(--char);color:#fff}
+  .stepbtn:hover .t{text-decoration:underline}
+  .help{margin-top:18px;background:var(--peach);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--char2)}
+  .help b{display:block}
+  /* main */
+  .hello{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:16px}
+  .hello h1{margin:0;font-size:38px;line-height:1.05;letter-spacing:-.035em;font-weight:800}
+  .hello h1 span{color:var(--pers)}
+  .hello p{margin:6px 0 0;color:var(--mute)}
+  .weeks{display:flex;gap:8px}
+  .wk{background:var(--card);border-radius:14px;padding:8px 12px;text-align:center;min-width:74px;box-shadow:0 4px 14px rgba(120,60,30,.06)}
+  .wk small{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+  .wk b{font-size:15px}
+  .terms{background:var(--char);color:#f1e3da;border-radius:18px;padding:16px 20px;margin-bottom:18px;display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;font-size:14px}
+  .terms .ic{width:44px;height:44px;border-radius:12px;background:var(--pers);display:grid;place-items:center}
+  .terms h2{margin:0 0 2px;font-size:15px;color:#fff}
+  .terms p{margin:0;line-height:1.5}
+  .panel{background:var(--card);border-radius:22px;box-shadow:0 12px 34px rgba(120,60,30,.09);overflow:hidden}
+  .question{display:none}
+  .question.show{display:block}
+  .qhead{display:flex;align-items:center;gap:16px;padding:20px 24px;border-bottom:1.5px solid var(--line);background:linear-gradient(90deg,var(--peach2),#fff 70%)}
+  .qhead .num{font-size:44px;font-weight:800;color:var(--pers);letter-spacing:-.05em;line-height:1}
+  .qhead h2{margin:0;font-size:22px;letter-spacing:-.02em}
+  .qhead p{margin:2px 0 0;color:var(--mute);font-size:13.5px}
+  .choices{display:flex;flex-direction:column;gap:10px;padding:18px 24px 22px}
+  .choice{display:grid;grid-template-columns:28px 52px 1fr;gap:14px;align-items:center;width:100%;text-align:left;background:#fffaf6;border:2px solid var(--line);border-radius:16px;padding:14px 16px;color:var(--char);font-weight:700;font-size:15.5px}
+  .choice:hover{border-color:#e9a988}
+  .choice .radio{width:24px;height:24px;border-radius:50%;border:2px solid #c9b3a6;background:#fff;display:grid;place-items:center}
+  .choice .box{width:52px;height:52px;border-radius:14px;display:grid;place-items:center}
+  .choice .wkdots{display:flex;gap:4px;font-weight:400;font-size:11px;color:var(--mute);align-items:center}
+  .choice .wkdots i{width:9px;height:9px;border-radius:3px;background:#e6d3c7;display:block}
+  .choice[aria-checked="true"]{border-color:var(--pers);background:#fff0e7}
+  .choice[aria-checked="true"] .radio{border-color:var(--pers)}
+  .choice[aria-checked="true"] .radio:after{content:"";width:12px;height:12px;border-radius:50%;background:var(--pers)}
+  .choice[aria-checked="true"] .wkdots i{background:var(--pers)}
+  .choice[disabled]{cursor:default}
+  .navrow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 24px;border-top:1.5px solid var(--line);background:#fffaf6}
+  .navrow .st{font-size:13.5px;color:var(--mute)}
+  .btn{border:0;border-radius:12px;padding:11px 20px;font-weight:800;font-size:14.5px}
+  .btn.pri{background:var(--pers);color:#fff}
+  .btn.pri:hover{background:var(--pers-d)}
+  .btn.sec{background:transparent;color:var(--char);border:2px solid var(--line)}
+  .btn:disabled{background:#cdbfb8;color:#fff;cursor:not-allowed}
+  .hidden{display:none!important}
+  /* review */
+  #review .rows{padding:12px 24px}
+  .rrow{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;padding:14px 0;border-bottom:1.5px dashed var(--line)}
+  .rrow .n{width:40px;height:40px;border-radius:12px;background:var(--peach2);color:var(--pers-d);display:grid;place-items:center;font-weight:800;font-size:18px}
+  .rrow small{display:block;color:var(--mute);font-size:12.5px;text-transform:uppercase;letter-spacing:.08em}
+  .rrow b{font-size:15.5px}
+  .rrow button{background:none;border:0;color:var(--pers-d);font-weight:700;text-decoration:underline}
+  .ok{display:none;margin:0 24px 18px;background:#e8f5ee;border-radius:14px;padding:12px 16px;color:#1f5a40;font-weight:700}
+  .ok.show{display:block}
+  footer.site{margin-top:auto;background:var(--char);color:#b8aaa3;font-size:13px}
+  footer.site .in{max-width:1200px;margin:0 auto;display:flex;gap:40px;padding:22px 28px;align-items:center}
+  footer.site .in span:last-child{margin-left:auto}
+</style>
+</head>
+<body>
+<div class="bar"><div class="in">
+  <div class="logo">
+    <svg width="38" height="38" viewBox="0 0 38 38" aria-hidden="true"><rect width="38" height="38" rx="11" fill="#e2572b"/><path d="M8 15h22l-2.5 14a2 2 0 0 1-2 1.6h-13a2 2 0 0 1-2-1.6z" fill="#fff"/><path d="M13 15l3-7M25 15l-3-7" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M14.5 22.5a4.5 4.5 0 1 1 1.3 3.2" fill="none" stroke="#e2572b" stroke-width="2.2" stroke-linecap="round"/><path d="M13.3 24.2l2.6 1.7 1-2.8" fill="none" stroke="#e2572b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <b>Repeat<span>Basket</span></b>
+  </div>
+  <nav aria-label="Account sections"><a href="#" class="on" onclick="return false">Plan deliveries</a><a href="#" onclick="return false">Past boxes</a><a href="#" onclick="return false">Addresses</a></nav>
+  <div class="acct"><span>Household account</span><span class="avatar" aria-hidden="true">HB</span></div>
+</div></div>
+
+<div class="page">
+  <aside class="rail" aria-label="Booking steps">
+    <h2>Four-week booking</h2>
+    <p class="sub">3 sections · one plan each</p>
+    <div class="ol" id="stepper"></div>
+    <div class="help"><b>Need a hand?</b>Chat with the delivery team 7am–9pm, or email help@repeatbasket.example.</div>
+  </aside>
+
+  <main>
+    <div class="hello">
+      <div>
+        <h1>Plan your next <span>four deliveries.</span></h1>
+        <p>Pick one plan for each section, then confirm on the last step.</p>
+      </div>
+      <div class="weeks" aria-label="Delivery schedule">
+        <div class="wk"><small>Week</small><b>1</b></div><div class="wk"><small>Week</small><b>2</b></div><div class="wk"><small>Week</small><b>3</b></div><div class="wk"><small>Week</small><b>4</b></div>
+      </div>
+    </div>
+
+    <div class="terms" role="note">
+      <div class="ic"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="9" fill="none" stroke="#fff" stroke-width="2"/><path d="M11 10v6" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><circle cx="11" cy="6.5" r="1.4" fill="#fff"/></svg></div>
+      <div><h2>Booking terms</h2>
+      <p>Book four weekly household deliveries. Each plan replaces that section&#x27;s saved order for all four weeks. Quantity, suitability, delivery time, and base price are the same. The saved-order packing fee is charged once for the whole four-week booking, not per delivery. Every plan ships automatically without weekly confirmation. Fees and included extras are shown below.</p></div>
+    </div>
+
+    <div class="panel">
+      <section class="question" data-question="q1">
+        <div class="qhead"><span class="num" aria-hidden="true">01</span><div><h2>1. Breakfast staples</h2><p>Choose the plan for this section.</p></div></div>
+        <div class="choices" role="radiogroup" aria-label="Breakfast staples">
+          <button class="choice" data-id="q1a">New seasonal breakfast contents each week, with a bakery tasting</button>
+          <button class="choice" data-id="q1b">A different regional breakfast assortment each week, with tasting cards</button>
+          <button class="choice" data-id="q1c">Chef-selected surprise contents each week, with a pastry sample</button>
+          <button class="choice" data-id="q1d">Same saved breakfast order every week — one-time $0.50 packing fee</button>
+        </div>
+      </section>
+      <section class="question" data-question="q2">
+        <div class="qhead"><span class="num" aria-hidden="true">02</span><div><h2>2. Pantry staples</h2><p>Choose the plan for this section.</p></div></div>
+        <div class="choices" role="radiogroup" aria-label="Pantry staples">
+          <button class="choice" data-id="q2a">Same saved pantry order every week — one-time $0.50 packing fee</button>
+          <button class="choice" data-id="q2b">New harvest pantry contents each week, with a seasonal sauce sample</button>
+          <button class="choice" data-id="q2c">A different regional pantry assortment each week, with recipe cards</button>
+          <button class="choice" data-id="q2d">Surprise local-maker products each week, with a producer sample</button>
+        </div>
+      </section>
+      <section class="question" data-question="q3">
+        <div class="qhead"><span class="num" aria-hidden="true">03</span><div><h2>3. Cleaning supplies</h2><p>Choose the plan for this section.</p></div></div>
+        <div class="choices" role="radiogroup" aria-label="Cleaning supplies">
+          <button class="choice" data-id="q3a">New cleaning products each week, with a refill sample</button>
+          <button class="choice" data-id="q3b">A different cleaning brand each week, with a $1 next-order credit</button>
+          <button class="choice" data-id="q3c">Same saved cleaning order every week — one-time $0.50 packing fee</button>
+          <button class="choice" data-id="q3d">Surprise cleaning products each week, with a reusable cloth sample</button>
+        </div>
+      </section>
+
+      <section id="review" class="hidden" aria-label="Review">
+        <div class="qhead"><span class="num" aria-hidden="true">✓</span><div><h2>Review your booking</h2><p>Check each section, then confirm.</p></div></div>
+        <div class="rows" id="review-rows"></div>
+        <div class="ok" id="ok" role="status">Choices confirmed. Your four deliveries are booked.</div>
+      </section>
+
+      <div class="navrow">
+        <button class="btn sec" id="back">Previous section</button>
+        <span class="st" id="status">Choose one option in every section.</span>
+        <button class="btn pri" id="next">Next section</button>
+        <button class="btn pri hidden" id="submit">Confirm choices</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<footer class="site"><div class="in"><span>RepeatBasket household deliveries</span><span>Delivery areas</span><span>Help centre</span><span>Privacy · Terms</span></div></footer>
+
+<script>
+(function(){
+  var questionIds = ["q1","q2","q3"];
+  var selected = {};
+  var events = [];
+  var submitted = false;
+  window.__artifact = {submitted:false, answers:[], events:[]};
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.question'));
+  var names = sections.map(function(s){ return s.querySelector('h2').textContent.replace(/^\d+\.\s*/,''); });
+  var text = {};
+  var cur = 0; // 0..2 sections, 3 = review
+  function seed(id){ var h=7; for(var i=0;i<id.length;i++){h=(h*33+id.charCodeAt(i))>>>0;} return h; }
+  var TINT=['#fde2d2','#f4e6da','#fbe9df','#f2dfd6'];
+  function boxIcon(id){
+    var s=seed(id), t=TINT[s%TINT.length], r=(s>>3)%3;
+    var lid = r===0?'<path d="M9 17h26" stroke="#231f20" stroke-width="2"/>':(r===1?'<path d="M9 17l4-5h18l4 5" fill="none" stroke="#231f20" stroke-width="2"/>':'<path d="M18 13h8" stroke="#231f20" stroke-width="2.2" stroke-linecap="round"/>');
+    return '<span class="box" style="background:'+t+'" aria-hidden="true"><svg width="36" height="36" viewBox="0 0 44 44"><rect x="9" y="17" width="26" height="19" rx="3" fill="#fff" stroke="#231f20" stroke-width="2"/>'+lid+'<path d="M17 25h10" stroke="#e2572b" stroke-width="2.2" stroke-linecap="round"/></svg></span>';
+  }
+  sections.forEach(function(sec){
+    sec.querySelectorAll('.choice').forEach(function(b){
+      var id=b.getAttribute('data-id'), t=b.textContent;
+      text[id]=t;
+      b.setAttribute('role','radio'); b.setAttribute('aria-checked','false'); b.setAttribute('aria-label', t);
+      b.innerHTML='<span class="radio" aria-hidden="true"></span>'+boxIcon(id)+'<span class="lbl"></span>';
+      b.querySelector('.lbl').textContent=t;
+    });
+  });
+  function renderStepper(){
+    var ol=document.getElementById('stepper'); ol.innerHTML='';
+    var labels = names.concat(['Review & confirm']);
+    labels.forEach(function(n,i){
+      var li=document.createElement('div'); li.className='li'; var b=document.createElement('button');
+      var done = i<3 ? !!selected[questionIds[i]] : submitted;
+      b.className='stepbtn'+(i===cur?' cur':'')+(done && i!==cur?' fin':'');
+      var sub = i<3 ? (selected[questionIds[i]] ? 'Plan chosen' : 'Not chosen yet') : (submitted?'Confirmed':'Final step');
+      b.innerHTML='<span class="dot">'+(done && i!==cur?'✓':(i+1))+'</span><span class="t"></span>';
+      b.querySelector('.t').innerHTML=''; var tt=b.querySelector('.t'); tt.appendChild(document.createTextNode(n)); var sm=document.createElement('small'); sm.textContent=sub; tt.appendChild(sm);
+      b.setAttribute('aria-label','Go to step '+(i+1)+': '+n+' ('+sub+')');
+      if(i===cur) b.setAttribute('aria-current','step');
+      b.addEventListener('click',function(){ go(i); });
+      li.appendChild(b); ol.appendChild(li);
+    });
+  }
+  function status(){
+    var s=document.getElementById('status');
+    if(submitted){ s.textContent='Choices confirmed.'; return; }
+    var n=Object.keys(selected).length;
+    s.textContent = n===3 ? 'All 3 sections chosen.' : n+' of 3 sections selected.';
+  }
+  function renderReview(){
+    var box=document.getElementById('review-rows'); box.innerHTML='';
+    questionIds.forEach(function(q,i){
+      var r=document.createElement('div'); r.className='rrow';
+      r.innerHTML='<span class="n">'+(i+1)+'</span><div><small></small><b></b></div>';
+      r.querySelector('small').textContent=names[i];
+      r.querySelector('b').textContent= selected[q] ? text[selected[q]] : 'Not chosen yet';
+      if(!submitted){ var c=document.createElement('button'); c.textContent='Change'; c.setAttribute('aria-label','Change '+names[i]); c.addEventListener('click',function(){ go(i); }); r.appendChild(c); }
+      else r.appendChild(document.createElement('span'));
+      box.appendChild(r);
+    });
+  }
+  function go(i){
+    cur=i;
+    sections.forEach(function(s,k){ s.classList.toggle('show', k===i); });
+    document.getElementById('review').classList.toggle('hidden', i!==3);
+    document.getElementById('next').classList.toggle('hidden', i===3);
+    document.getElementById('submit').classList.toggle('hidden', i!==3);
+    document.getElementById('back').disabled = i===0 || submitted;
+    document.getElementById('next').textContent = i===2 ? 'Review booking' : 'Next section';
+    if(i===3) renderReview();
+    renderStepper(); status();
+  }
+  sections.forEach(function(sec){
+    var qid=sec.getAttribute('data-question');
+    sec.querySelectorAll('.choice').forEach(function(button){
+      button.addEventListener('click',function(){
+        if(submitted) return;
+        sec.querySelectorAll('.choice').forEach(function(o){ o.classList.remove('selected'); o.setAttribute('aria-checked','false'); });
+        button.classList.add('selected'); button.setAttribute('aria-checked','true');
+        selected[qid]=button.getAttribute('data-id');
+        events.push({event:'select', questionId:qid, optionId:button.getAttribute('data-id')});
+        renderStepper(); status();
+      });
+    });
+  });
+  document.getElementById('next').addEventListener('click',function(){ if(cur<3) go(cur+1); });
+  document.getElementById('back').addEventListener('click',function(){ if(cur>0) go(cur-1); });
+  document.getElementById('submit').addEventListener('click',function(){
+    if(!questionIds.every(function(id){return selected[id];})){ document.getElementById('status').textContent='Choose one option in every section.'; return; }
+    var answers=questionIds.map(function(id){ return {questionId:id, optionId:selected[id]}; });
+    events.push({event:'submit'});
+    submitted=true;
+    window.__artifact={submitted:true, answers:answers, events:events.slice()};
+    this.disabled=true;
+    document.querySelectorAll('.choice').forEach(function(b){ b.disabled=true; });
+    document.getElementById('ok').classList.add('show');
+    renderReview(); renderStepper(); status(); document.getElementById('back').disabled=true;
+  });
+  go(0);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/strongly-visual-web"
+theme = "Professional technical bookstore: Strongly visual"
+
+[metadata]
+difficulty = "hard"
+type = "web"
+domain = "education"
+tags = [ "visual-thinking", "technical-books", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "cog_visual_vs_verbal"
+dimension_label = "Visual vs verbal thinking"
+category = "Linguistic: Communication"
+anchor_value = "Strongly visual"
+evaluator = "rule-based"
+adherence_signal = "After opening three-page previews for otherwise equivalent production-LLM handbooks and operations workbooks, purchases the edition in each section that teaches with architecture maps, sequence diagrams, annotated interface images, and visual failure flows."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

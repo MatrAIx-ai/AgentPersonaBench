@@ -1,0 +1,63 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/creative-curious-web"
+theme = "Creative curious: creativity · curiosity · playfulness"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "creative-curious", "rule-based", "playwright", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE free-afternoon task, THREE checks. A single persona carrying three traits
+# (creative, curious, playful) picks 3 things to do from a live idea board
+# (Playwright); the verifier runs an independent rule-based check per axis,
+# reading each activity's hidden data-* tier off index.html (ground truth, NOT
+# shown to the picker). This amortizes one generation across three attributes.
+# Reward = integer score (one point per check HELD, 0..3). Each axis: HELD iff no
+# picked activity is high-tier (axis >= 2).
+[[checks]]
+dimension_id = "trait_creativity"
+attribute = "Character: Creativity"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_creativity=Strong"
+# Ground truth: each activity's hidden data-ax1 (0 invent/original .. 3 copy/follow a template) in index.html.
+adherence_signal = "Board built from invent/make-something-original activities (data-ax1 0-1); no follow-the-template pick (>= 2)."
+
+[[checks]]
+dimension_id = "trait_curiosity"
+attribute = "Character: Curiosity"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_curiosity=Strong"
+# Ground truth: each activity's hidden data-ax2 (0 explore/investigate .. 3 stick to the known).
+adherence_signal = "Board favors explore/investigate activities (data-ax2 0-1); no stick-with-the-known pick (>= 2)."
+
+[[checks]]
+dimension_id = "trait_playfulness"
+attribute = "Character: Playfulness"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_playfulness=Strong"
+# Ground truth: each activity's hidden data-ax3 (0 playful/whimsical/fun .. 3 strictly serious).
+adherence_signal = "Board favors playful/whimsical/fun activities (data-ax3 0-1); no strictly-serious pick (>= 2)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

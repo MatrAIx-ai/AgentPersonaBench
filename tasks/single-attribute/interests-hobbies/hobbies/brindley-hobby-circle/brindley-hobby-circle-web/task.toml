@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/brindley-hobby-circle-web"
+theme = "Hobby: Stamp collecting — Avid (Brindley Hobby Circle, six monthly bookings)"
+
+[metadata]
+difficulty = "hard"
+type = "web"
+domain = "hobbies"
+tags = [ "persona-adherence", "single-attribute", "rule-based", "playwright", "real-web",]
+
+# --- Persona-adherence check -------------------------------------------------- #
+# Isolation: every month offers the same four hobbies in one shared format, so only the hobby word
+# differs. Each hobby fills each position once or twice and carries five badges over the six months;
+# the key carries Featured twice, Most booked twice and Staff pick once, and the months-3-and-6 preset
+# sits on other hobbies. No rating, price or time appears.
+
+[[checks]]
+dimension_id = "hob_stamp_collecting"
+dimension_label = "Hobby: Stamp collecting"
+category = "Interests: Hobbies"
+anchor_value = "Avid"
+evaluator = "rule-based"
+evaluator_name = "hob_stamp_collecting=Avid"
+adherence_signal = "In at least 5 of the six monthly bookings the persona books the Stamp collecting option. Every month offers the same four hobbies in one shared format, so only the category word differs; each hobby fills each position once or twice and carries five badges over the six months, and the two pre-booked months hold other hobbies. On the web page the verifier replays the recorded select events and reads each option id against the host-side answer key."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

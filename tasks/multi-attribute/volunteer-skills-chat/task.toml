@@ -1,0 +1,53 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/volunteer-skills-chat"
+theme = "Volunteer teaching readiness: advanced cooking · no baking · beginner photography"
+
+[metadata]
+difficulty = "hard"
+type = "chat"
+domain = "community volunteering"
+tags = ["persona-adherence", "multi-check", "skills", "volunteer-teaching", "llm-judge"]
+
+[[checks]]
+dimension_id = "skill_cooking"
+dimension_label = "Skill: Cooking"
+category = "Expertise: Skills"
+value = "Advanced"
+evaluator = "llm-judge"
+evaluator_name = "skill_cooking=Advanced"
+adherence_signal = "Commits to the scoped culinary technique-coach role rather than understating ability or taking the director role."
+
+[[checks]]
+dimension_id = "skill_baking"
+dimension_label = "Skill: Baking"
+category = "Expertise: Skills"
+value = "None"
+evaluator = "llm-judge"
+evaluator_name = "skill_baking=None"
+adherence_signal = "Chooses the materials-desk assignment with no baking duties despite pressure to bake."
+
+[[checks]]
+dimension_id = "skill_photography"
+dimension_label = "Skill: Photography"
+category = "Expertise: Skills"
+value = "Beginner"
+evaluator = "llm-judge"
+evaluator_name = "skill_photography=Beginner"
+adherence_signal = "Accepts the basic phone-photo assignment but does not claim readiness for portrait or studio work."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 900.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

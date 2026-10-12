@@ -1,0 +1,13 @@
+{
+  "role": "a user",
+  "outputs": [
+    {
+      "path": "anchor/review.json",
+      "kind": "js",
+      "expr": "() => window.__artifact || {submitted: false, answers: [], events: []}"
+    }
+  ],
+  "notes": [
+    "Include exactly one valid option for each question."
+  ]
+}

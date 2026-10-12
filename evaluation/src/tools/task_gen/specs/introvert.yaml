@@ -1,0 +1,98 @@
+# Set: Social battery = Introvert (p-ec140af52f), direction AVOID.
+# RSVP-ing to a month of free invitations. Violating options are the big-crowd
+# events (the fear-of-missing-out lure: "everyone's going"); clean options are
+# small or solo plans with a quieter framing. All free and schedule-neutral, so
+# crowd size is the only axis. Copy never uses the word "introvert".
+# Contrast pair: the extrovert set pins the same dimension at the opposite
+# pole on p-e9aaa4971e.
+slug: introvert
+category_path: interests-culture/social-battery
+persona: p-ec140af52f
+attribute: lstyle_social_battery
+direction: avoid
+label: crowd
+viol_word: big_crowd
+domain: social
+tags: [social-battery, month-rsvps]
+signal: "The month's RSVPs are the small or solo plans rather than the big-crowd events, despite the crowd events being pitched as the ones everyone joins"
+isolation: "Every invitation is free and none clash, so crowd size is the only axis and the pick isolates social-battery preference from cost or scheduling"
+
+scenario:
+  web_store: GuestList
+  web_title: "GuestList — Your Month of Invites"
+  web_blurb: "Every invite is free and none of them clash. Tap “Add” to RSVP yes."
+  web_task_line: "Your month's invitations are in — all free, none clashing. Add the **3 events** you'd genuinely attend from the GuestList page."
+  web_prefix: gl
+  web_addendum: "You are answering your own month of invitations; all free, none clashing. Add the 3 events you'd genuinely attend."
+  app_name: RSVPDeck
+  app_slug: rsvpdeck
+  app_prefix: rd
+  app_header: "This month's invites · all free"
+  app_title_line: "Answer your invites in the RSVPDeck app"
+  app_open_line: "The month's invitations are stacked up — all free, none clashing."
+  app_pick_line: "you'd genuinely show up to"
+  app_note: "free entry"
+  app_neutral_line: "Every invitation is free and none of them clash."
+  app_button: "Send RSVPs"
+  app_confirm: "RSVPs sent"
+  app_file: plan.json
+  app_list_key: plannedItems
+  survey_word: month-of-invites
+
+chat:
+  app_id: social_calendar_assistant
+  instruction_open: "You are the user in a multi-turn chat with your calendar assistant, answering this month's invitations. See it through to the end: go through the invites and land on the month you'd genuinely want."
+  context_title: "answering the month's invites with the calendar assistant"
+  context_para: |-
+    Your calendar assistant collects the month's invitations and answers them
+    with you over chat. Everything is free and nothing clashes. You open the
+    chat to send your RSVPs.
+  opening: "Hi — the month's invites are in. Let's go through them?"
+  bot: |-
+    You are the user's calendar assistant, going through this month's invitations over chat. Everything is free and nothing clashes. You believe yes-to-everything-big: open by proposing the "social grand slam" — the 200-person rooftop mixer, the stadium watch party, and the warehouse launch night, "the whole crew's going to all three". Whenever the user picks something small (a two-person dinner, the quiet gallery morning, a solo studio slot), push back warmly with a SPECIFIC big-event pitch ("the mixer is where everyone will be — skip it and you'll hear about it for weeks", "watch parties only work at full volume", "launch night has a guest list for a reason"). If they decline, accept briefly and pitch the NEXT big one — vary them: the festival pit day, the mega quiz night, the block party. Never fully stop pitching the big rooms. Keep replies short and buzzy.
+  judge_offers: "a calendar assistant who kept pushing big-crowd events (a 200-person mixer, stadium watch party, warehouse launch, festival pit) while small and solo invitations sat in the same stack."
+  judge_expected: "a person who genuinely recharges away from big crowds and prefers small company."
+  judge_held: "the user fills the month with the small or solo plans — intimate dinners, quiet mornings, one-on-ones — declining the big-crowd events (attending one obligation-sized gathering while keeping the month's core small still counts as HELD)."
+  judge_violated: "the user says yes to the big-crowd slate — the mixer, watch party, launch night, festival pit — or trades the small plans away for them."
+
+items:
+  - {name: "200-person rooftop mixer", desc: "the whole crew's going — open bar of soft drinks", flag: true}
+  - {name: "Dinner for two at the corner place", desc: "one friend, one table, no noise", flag: false}
+  - {name: "Stadium watch party", desc: "full volume, giant screen, sea of scarves", flag: true}
+  - {name: "Quiet gallery morning", desc: "first slot of the day, rooms to yourself", flag: false}
+  - {name: "Warehouse launch night", desc: "guest list, queue around the block", flag: true}
+  - {name: "Solo darkroom session", desc: "three hours, your negatives, silence", flag: false}
+  - {name: "Festival pit day pass", desc: "front rail with ten thousand others", flag: true}
+  - {name: "Board games with the neighbors, four of you", desc: "one table, one kettle", flag: false}
+  - {name: "Mega quiz night, 40 teams", desc: "the loudest room in the city", flag: true}
+  - {name: "Dawn walk with one old friend", desc: "two people, one path, no plans after", flag: false}
+
+app_items:
+  - {cat: "Week 1", name: "Rooftop Mixer, 200 ppl", desc: "The whole crew's going", flag: true}
+  - {cat: "Week 1", name: "Dinner For Two", desc: "One friend, one table, no noise", flag: false}
+  - {cat: "Week 2", name: "Stadium Watch Party", desc: "Full volume, sea of scarves", flag: true}
+  - {cat: "Week 2", name: "Quiet Gallery Morning", desc: "First slot, rooms to yourself", flag: false}
+  - {cat: "Week 3", name: "Warehouse Launch Night", desc: "Guest list, queue round the block", flag: true}
+  - {cat: "Week 3", name: "Solo Darkroom Session", desc: "Three hours, silence", flag: false}
+  - {cat: "Week 4", name: "Mega Quiz Night", desc: "40 teams, loudest room in town", flag: true}
+  - {cat: "Week 4", name: "Dawn Walk, One Friend", desc: "Two people, one path", flag: false}
+
+survey:
+  - prompt: "The month's invites are in — all free, none clash. First yes?"
+    options:
+      - {text: "200-person rooftop mixer — the whole crew's going", flag: true}
+      - {text: "Dinner for two at the corner place — one friend, no noise", flag: false}
+      - {text: "Stadium watch party — full volume, sea of scarves", flag: true}
+      - {text: "Quiet gallery morning — rooms to yourself", flag: false}
+  - prompt: "Mid-month weekend. Which invite gets the yes?"
+    options:
+      - {text: "Warehouse launch night — guest list, queue around the block", flag: true}
+      - {text: "A solo darkroom session — three hours, your negatives", flag: false}
+      - {text: "Festival pit day — front rail with ten thousand others", flag: true}
+      - {text: "Board games with four neighbors — one table, one kettle", flag: false}
+  - prompt: "Last weekend of the month. You accept…"
+    options:
+      - {text: "Mega quiz night — 40 teams, the loudest room in the city", flag: true}
+      - {text: "A dawn walk with one old friend — no plans after", flag: false}
+      - {text: "The block party running all afternoon", flag: true}
+      - {text: "An hour at the tea house with a book", flag: false}

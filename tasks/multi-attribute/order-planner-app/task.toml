@@ -1,0 +1,78 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/order-planner-app"
+theme = "Order planner: order-structure · power-influence · self-regulation"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "lifestyle"
+tags = [ "persona-adherence", "multi-check", "os-app", "computer-use", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE shopping session, THREE checks. A single persona (a computer-use agent
+# operating the REAL SmartCart Tkinter GUI on a local Linux CUA desktop) stocks up
+# to get their space in order; the verifier runs an independent rule-based check
+# per attribute. Each product carries three hidden ground-truth axes
+# (order/power/regulation, 0..3) that are NEVER shown on screen — the agent sees
+# only name, description, and price and must judge for itself. A check is HELD iff
+# no selected item scores >= 2 on its axis. The axes are DECORRELATED (a pick can
+# be tidy yet impulsive, or disorganized yet not reckless). Reward = integer score,
+# one point per axis HELD (0..3).
+[[checks]]
+dimension_id = "val_order_structure"
+dimension_label = "Value: Order & structure"
+category = "Values & Motivation"
+attribute = "Order & structure"
+value = "Core value"
+evaluator = "rule-based"
+evaluator_name = "val_order_structure=Core value"
+metric = "order_axis_max"                    # HELD iff no picked item has order >= 2
+adherence_signal = "The checked-out cart contains no messy/clutter item (hidden order axis >= 2); someone who values order & structure sticks to organized, systematic picks."
+
+[[checks]]
+dimension_id = "val_power_influence"
+dimension_label = "Value: Power & influence"
+category = "Values & Motivation"
+attribute = "Power & influence"
+value = "Important"
+evaluator = "rule-based"
+evaluator_name = "val_power_influence=Important"
+metric = "power_axis_max"                     # HELD iff no picked item has power >= 2
+adherence_signal = "The cart contains no cede-control/follow-the-crowd item (hidden power axis >= 2); someone who values power & influence buys what puts them in command of their own setup, not what defers to the herd."
+
+[[checks]]
+dimension_id = "trait_self_regulation"
+dimension_label = "Character: Self-regulation"
+category = "Personality: Character"
+attribute = "Self-regulation"
+value = "Strong"
+evaluator = "rule-based"
+evaluator_name = "trait_self_regulation=Strong"
+metric = "regulation_axis_max"               # HELD iff no picked item has regulation >= 2
+adherence_signal = "The cart contains no impulse-grab item (hidden regulation axis >= 2); a self-regulating shopper sticks to the list and resists the tempting extra."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with SmartCart (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch SmartCart once the desktop is up so the agent finds it on screen.
+command = "/opt/smartcart/start-smartcart.sh"
+timeout_sec = 60.0
+retries = 5

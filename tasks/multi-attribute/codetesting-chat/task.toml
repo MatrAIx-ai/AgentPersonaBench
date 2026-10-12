@@ -1,0 +1,65 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/codetesting-chat"
+theme = "Code testing & rigor: TDD · docstring-only · always regression tests"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "software"
+tags = [ "persona-adherence", "multi-check", "code-testing", "rule-based",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE coding task, MANY checks. A single persona carrying several code-rigor
+# values steers an AI coding assistant to fix a buggy function the way they
+# naturally would; the LAST code the assistant produces is scored by an
+# independent rule-based check per value. Reward = integer score (0..N).
+#
+# This persona is a rigorous TDD engineer: Test-driven development (TDD), code
+# comment style = Docstring/documentation blocks only, and bug fix test
+# behavior = Always adds regression tests. The conversation asks the assistant
+# to fix an over-100%-discount bug; the persona's traits show in the tests it
+# asks the assistant to keep, the docstring-only style it insists on, and the
+# regression case it demands.
+[[checks]]
+dimension_id = "code_testing_approach"
+attribute = "Testing and Code Coverage Approach"
+value = "Test-driven development (TDD)"
+evaluator = "rule-based"
+evaluator_name = "code_testing_approach=Test-driven development (TDD)"
+metric = "test_presence"
+pass_min = 1
+
+[[checks]]
+dimension_id = "code_comment_style"
+attribute = "Code Comment Style"
+value = "Docstring/documentation blocks only"
+evaluator = "rule-based"
+evaluator_name = "code_comment_style=Docstring/documentation blocks only"
+metric = "docstring_defects"
+pass_max = 0
+
+[[checks]]
+dimension_id = "bug_fix_test_behavior"
+attribute = "Bug fix test behavior"
+value = "Always adds regression tests"
+evaluator = "rule-based"
+evaluator_name = "bug_fix_test_behavior=Always adds regression tests"
+metric = "regression_presence"
+pass_min = 1
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

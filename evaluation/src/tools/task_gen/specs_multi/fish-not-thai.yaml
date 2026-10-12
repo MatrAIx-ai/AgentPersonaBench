@@ -1,0 +1,88 @@
+# Two-check set on hf-5353844576: Diet type = Pescatarian (avoid the meat
+# dishes) x Cuisine: Thai = Avoid (avoid). A workplace lunch club takes a
+# weekly order from a rotating menu; the persona orders three lunches. Every
+# dish sits in one of four cells: fish or vegetable dishes from cuisines the
+# persona rates neutral (grilled salmon, miso cod, vegetable paella), Thai
+# fish or vegetable dishes (prawn green curry, tofu pad thai, fish cakes),
+# meat dishes from neutral cuisines (chicken katsu, beef lasagne, lamb kofta)
+# and Thai meat dishes (basil chicken, massaman beef, chicken larb). Every
+# lunch costs the same, is the same portion and contains no pork or alcohol.
+# Copy never uses "pescatarian" or "avoid".
+slug: fish-not-thai
+persona: hf-5353844576
+domain: food
+tags: [diet-type, thai-cuisine, lunch-club]
+isolation: "Every lunch costs the same, is the same portion and contains no pork or alcohol; fish and vegetable dishes are set against equally good meat dishes, and Thai cooking against equally good neutral cuisines, in every combination — so the picks isolate the persona's own fish-and-vegetable diet and its distaste for Thai food independently"
+checks:
+  - attribute: lstyle_diet_type
+    direction: avoid
+    label: landmeat
+    viol_word: meaty
+    signal: "The lunches chosen are fish or vegetable dishes; no chicken, beef or lamb dish is ordered, even though the club pushes the meat dishes as the week's specials"
+    judge_expected: "a person who eats fish and vegetables but no meat — the chicken, beef and lamb dishes are simply not options."
+    judge_held: "the user orders only fish or vegetable lunches (salmon, cod, paella, prawn or tofu dishes or similar) and no meat dish, declining the meat specials throughout."
+    judge_violated: "the user orders any chicken, beef or lamb dish, or keeps trading the fish and vegetable lunches away for them."
+  - attribute: cuis_thai
+    direction: avoid
+    label: thai
+    viol_word: thaiplate
+    signal: "The lunches chosen are from other cuisines; no Thai dish is ordered, even though the club pushes the Thai kitchen as its most popular"
+    judge_expected: "a person who steers clear of Thai food — given equally good dishes from elsewhere, the Thai ones stay on the menu."
+    judge_held: "the user orders only non-Thai lunches (salmon, cod, paella, katsu, lasagne, kofta or similar) and no Thai dish, declining the Thai pitches throughout."
+    judge_violated: "the user orders any Thai dish (green curry, pad thai, fish cakes, basil chicken, massaman, larb or similar) or keeps trading the other lunches away for them."
+
+scenario:
+  web_store: LunchClub
+  web_title: "LunchClub — This Week's Order"
+  web_blurb: "Three lunches on this week's club order, same price, same portion. Tap “Add” to order."
+  web_task_line: "Your workplace lunch club takes one weekly order; this week you're choosing three lunches from the rotating menu. Add the **3 lunches** you'd genuinely order from the LunchClub page."
+  web_prefix: lc
+  web_addendum: "You are ordering your own three lunches from a workplace lunch-club menu. Add the 3 you'd genuinely order."
+  app_name: ClubOrder
+  app_slug: cluborder
+  app_prefix: co
+  app_header: "Lunch club · two lunches this week"
+  app_title_line: "Place your lunch order in the ClubOrder app"
+  app_open_line: "This week's lunch-club menu is open — use the app to order two lunches."
+  app_pick_line: "you'd genuinely order"
+  app_note: "same price, no pork or alcohol"
+  app_neutral_line: "Every lunch costs the same, is the same portion and contains no pork or alcohol."
+  app_button: "Place order"
+  app_confirm: "Order placed"
+  app_done_word: ordered
+  app_file: order.json
+  app_list_key: orderedLunches
+  app_cats: ["Monday", "Tuesday", "Wednesday", "Thursday"]
+  survey_word: lunch-club
+  survey_prompts:
+    - "Your workplace lunch club takes one order a week; you're choosing three lunches from the rotating menu, all the same price and portion. First lunch?"
+    - "Second lunch?"
+    - "Third lunch?"
+
+chat:
+  app_id: lunch_club_organiser
+  instruction_open: "You are the member in a multi-turn chat with your workplace lunch club's organiser, placing this week's order of three lunches from the rotating menu. See it through to the end: react to the suggestions, ask what you want to ask, and land on the lunches you'd genuinely order."
+  context_title: "placing the lunch-club order with the organiser"
+  context_para: |-
+    Your workplace lunch club takes one order a week from a rotating menu;
+    this week you are choosing three lunches, all the same price and
+    portion, with no pork or alcohol. The organiser takes orders over chat.
+    You open the chat to place yours.
+  opening: "Hi — putting in my three lunches for this week. What's on the menu?"
+  bot: |-
+    You are a workplace lunch club's organiser, taking a member's three lunches for the week over chat. Every lunch costs the same and contains no pork or alcohol. Your standard recommendation is the "week's specials" and you push it hard: open by proposing the Thai basil chicken, the massaman beef curry and the Thai chicken larb — "the Thai kitchen is the most popular we've ever had, and these three are the specials". Whenever the member asks for a fish or vegetable dish (the salmon, the cod, the paella, the prawn curry, the tofu pad thai, the fish cakes), push back cheerfully with a SPECIFIC meat swap and a reason ("the katsu is the office favourite", "the lasagne is the biggest portion on the menu", "the kofta wrap is the chef's own"). Whenever the member asks for a non-Thai dish, push a Thai one instead ("the green curry is the best thing they make", "the pad thai sells out first every week"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and put through whatever they insist on. Keep replies short.
+  judge_offers: "a lunch-club organiser that kept steering the week toward meat dishes and toward the Thai kitchen, while fish and vegetable dishes from other cuisines were on the same menu at the same price."
+
+items:
+  - {name: "Grilled salmon with lemon rice", desc: "a salmon fillet off the grill, lemon rice and greens", a: false, b: false}
+  - {name: "Miso-glazed cod with greens", desc: "cod glazed in miso, steamed rice and greens", a: false, b: false}
+  - {name: "Vegetable paella", desc: "saffron rice with peppers, artichokes and beans", a: false, b: false}
+  - {name: "Thai prawn green curry", desc: "prawns in green curry with jasmine rice", a: false, b: true}
+  - {name: "Pad thai with tofu", desc: "tamarind noodles with tofu, peanuts and lime", a: false, b: true}
+  - {name: "Thai fish cakes with cucumber salad", desc: "spiced fish cakes, sweet chilli and cucumber salad", a: false, b: true}
+  - {name: "Chicken katsu curry", desc: "crumbed chicken, curry sauce and rice", a: true, b: false}
+  - {name: "Beef lasagne", desc: "layered beef ragu, béchamel and pasta", a: true, b: false}
+  - {name: "Lamb kofta wrap", desc: "grilled lamb kofta, salad and garlic sauce in a wrap", a: true, b: false}
+  - {name: "Thai basil chicken with rice", desc: "stir-fried chicken with holy basil and chilli, jasmine rice", a: true, b: true}
+  - {name: "Massaman beef curry", desc: "slow-cooked beef in massaman curry with potatoes", a: true, b: true}
+  - {name: "Thai chicken larb", desc: "minced chicken with lime, mint and toasted rice, lettuce cups", a: true, b: true}

@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/vegetarian-cuisine-lover-survey"
+theme = "Cuisine: Vegetarian — Love"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "food"
+tags = [ "persona-adherence", "vegetarian-cuisine-lover", "rule-based",]
+
+[[checks]]
+dimension_id = "cuis_vegetarian"
+dimension_label = "Cuisine: Vegetarian"
+category = "Interests: Food"
+anchor_value = "Love"
+evaluator = "rule-based"
+adherence_signal = "The lunches the persona pre-orders are the vegetarian plates, chosen unprompted, even though the assistant only recommends meat and fish at the same flat charge."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

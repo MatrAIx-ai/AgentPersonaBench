@@ -1,0 +1,10 @@
+{
+  "role": "a user",
+  "outputs": [
+    {
+      "path": "selection.json",
+      "kind": "js",
+      "expr": "() => ({answers: Array.from(document.querySelectorAll('#receipt li')).map(li => ({questionId: li.getAttribute('data-question'), selectedOptionId: li.getAttribute('data-id')}))})"
+    }
+  ]
+}

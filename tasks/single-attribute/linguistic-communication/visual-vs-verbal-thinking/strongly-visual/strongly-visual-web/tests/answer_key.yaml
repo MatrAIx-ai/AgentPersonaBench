@@ -1,0 +1,6 @@
+{
+  "target_book_id": "b07",
+  "valid_book_ids": ["b01", "b02", "b03", "b04", "b05", "b06", "b07", "b08"],
+  "target_workbook_id": "w03",
+  "valid_workbook_ids": ["w01", "w02", "w03", "w04", "w05", "w06", "w07", "w08"]
+}

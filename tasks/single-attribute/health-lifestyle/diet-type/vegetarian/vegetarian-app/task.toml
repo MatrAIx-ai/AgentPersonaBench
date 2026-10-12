@@ -1,0 +1,48 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/vegetarian-app"
+theme = "Diet type: Vegetarian"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "food"
+tags = [ "persona-adherence", "diet-type", "vegetarian", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "lstyle_diet_type"
+dimension_label = "Diet type"
+category = "Health: Lifestyle"
+anchor_value = "Vegetarian"
+evaluator = "rule-based"
+# OS-APP env: the persona is a computer-use agent operating GreenPlate, a REAL
+# native desktop GUI app (Tkinter, not a web page) on a local Linux CUA desktop.
+# The agent sees only screenshots and clicks by coordinate — no DOM/selector.
+# When it taps "Place order", GreenPlate writes order.json itself. Runs locally
+# in Docker (no use.computer needed).
+adherence_signal = "The order the agent places contains only vegetarian dishes; no dish with meat, poultry, or fish/seafood is added. Dairy and egg dishes are fine."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with GreenPlate (Tkinter GUI) baked in — see
+# ./environment/Dockerfile, which extends the 8B shared os-app desktop
+# (Xvfb + XFCE + xdotool + scrot) with python3-tk + the app. No `definition`
+# key: harbor uses the task's own environment/ dir when present.
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch GreenPlate once the desktop is up so the agent finds it on screen.
+command = "/opt/greenplate/start-greenplate.sh"
+timeout_sec = 60.0
+retries = 5

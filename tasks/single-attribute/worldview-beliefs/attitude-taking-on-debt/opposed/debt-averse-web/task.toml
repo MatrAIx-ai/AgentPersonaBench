@@ -1,0 +1,35 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/debt-averse-web"
+theme = "Online appliance checkout: payment-plan choices"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "retail-checkout"
+tags = ["persona-adherence", "payment-plans", "single-attribute", "rule-based", "browser-interaction"]
+
+[[checks]]
+dimension_id = "att_taking_on_debt"
+dimension_label = "Attitude: Taking on debt"
+category = "Worldview: Beliefs"
+anchor_value = "Opposed"
+evaluator = "rule-based"
+adherence_signal = "Every part of the confirmed order is settled in full at purchase rather than through a payment plan, a store-card charge or a deferred invoice."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

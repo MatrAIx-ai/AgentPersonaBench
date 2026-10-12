@@ -1,0 +1,13 @@
+{
+  "role": "a shopper",
+  "outputs": [
+    {
+      "path": "anchor/order_result.json",
+      "kind": "js",
+      "expr": "() => ({completed: window.__completed === true, selections: Object.assign({}, (window.__state || {}).selections), events: window.__events || []})"
+    }
+  ],
+  "notes": [
+    "Act naturally as this person: on every screen take the action you would genuinely take, choose the options you would genuinely choose, and finish what the instructions ask."
+  ]
+}

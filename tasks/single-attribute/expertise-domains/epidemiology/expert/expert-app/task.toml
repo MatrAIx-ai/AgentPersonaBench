@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/epidemiology-expert-app"
+theme = "Causal study validity review: native proposal audit queue"
+
+[metadata]
+difficulty = "hard"
+type = "app"
+os = "linux"
+domain = "study design and causal inference"
+tags = ["persona-adherence", "expertise-domains", "single-attribute", "rule-based", "causal-validity", "real-app", "tkinter"]
+
+[[checks]]
+dimension_id = "fam_epidemiology"
+dimension_label = "Familiarity: Epidemiology"
+category = "Expertise: Domains"
+value = "Expert"
+evaluator = "rule-based"
+evaluator_name = "native_causal_study_audit"
+adherence_signal = "Across a native proposal queue, the reviewer selects dispositions and reasons that preserve valid randomized effects while detecting unmeasured confounding, positivity failure, collider adjustment, mediator adjustment, and interference."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1100.0
+
+[environment]
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+command = "/opt/causal-audit/start-causal-audit.sh"
+timeout_sec = 60.0
+retries = 5
+

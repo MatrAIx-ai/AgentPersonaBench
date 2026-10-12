@@ -1,0 +1,10 @@
+{
+  "role": "a customer",
+  "outputs": [
+    {
+      "path": "anchor/purchase.json",
+      "kind": "js",
+      "expr": "() => window.__purchaseState"
+    }
+  ]
+}

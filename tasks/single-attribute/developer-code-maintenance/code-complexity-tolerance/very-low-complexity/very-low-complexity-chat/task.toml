@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/very-low-complexity-chat"
+theme = "Code complexity tolerance: Very low"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "software"
+tags = [ "persona-adherence", "code-complexity-tolerance", "simplicity", "rule-based",]
+
+# --- Single-attribute task ---------------------------------------------------- #
+# A developer persona with very low complexity tolerance drives an AI coding
+# assistant to implement an event-log analyzer; the LAST code the assistant
+# produces is scored by one deterministic rule-based check reading cyclomatic
+# complexity + nesting depth. Reward = 1.0/0.0.
+[[checks]]
+dimension_id = "code_complexity_tolerance"
+dimension_label = "Code complexity tolerance"
+category = "Developer: Code Maintenance"
+anchor_value = "Very low"
+evaluator = "rule-based"
+evaluator_name = "code_complexity_tolerance=Very low"
+adherence_signal = "Final code keeps every function at cyclomatic complexity <=3 and nesting depth <=2."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

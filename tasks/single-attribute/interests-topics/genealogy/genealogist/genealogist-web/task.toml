@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/genealogist-web"
+theme = "Topic: Genealogy — Passionate"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "leisure"
+tags = [ "persona-adherence", "genealogist", "rule-based", "playwright", "real-web",]
+
+[[checks]]
+dimension_id = "topic_genealogy"
+dimension_label = "Interest: Genealogy"
+category = "Interests: Topics"
+anchor_value = "Passionate"
+evaluator = "rule-based"
+adherence_signal = "At least two of the persona's three reserved sessions are genealogy sessions; the passion shows up in a free-choice reservation."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,40 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/visual-chat"
+theme = "Accessibility needs: Visual"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "software"
+tags = [ "persona-adherence", "accessibility-needs", "visual", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# Unlike the vegan tasks (rule-based ingredient checks), "visual accessibility" is
+# a SEMANTIC trait: no keyword list can tell whether a user is genuinely seeking
+# visual-accessibility accommodations. So the evaluator is an LLM judge that reads
+# the user's own turns and returns a binary HELD/VIOLATED verdict.
+[[checks]]
+dimension_id = "accessibility_needs"
+dimension_label = "Accessibility needs"
+category = "Behavior: Preferences"
+anchor_value = "Visual"
+evaluator = "llm-judge"
+adherence_signal = "User asserts visual-accessibility needs — asks for larger text / bigger font, higher contrast, zoom, read-aloud / audio, or a simpler high-visibility layout — rather than accepting the tiny visual-only default the assistant keeps steering toward."
+# pass = user seeks visual accommodations instead of settling for the small-text default:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

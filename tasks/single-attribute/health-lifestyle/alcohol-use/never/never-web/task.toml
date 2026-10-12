@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/never-web"
+theme = "Alcohol use: Never"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "food"
+tags = [ "persona-adherence", "alcohol-use", "never", "rule-based", "real-web",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+# Each check isolates one (attribute = value) pair the task measures. The persona
+# carries the value; the evaluator returns HELD / VIOLATED from the agent's behavior.
+[[checks]]
+dimension_id = "lstyle_alcohol_use"
+dimension_label = "Alcohol use"
+category = "Health: Lifestyle"
+anchor_value = "Never"
+evaluator = "rule-based"
+adherence_signal = "The DOM cart contains no item whose hidden data-flag marks an alcoholic beverage."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python).
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

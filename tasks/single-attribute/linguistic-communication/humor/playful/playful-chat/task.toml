@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/playful-humor-chat"
+theme = "Humor style: Playful"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "general"
+tags = [ "persona-adherence", "linguistic-communication", "humor", "playful", "llm-judge", "anchor-vs-contrast",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# "Playful" is a SEMANTIC trait: no keyword list can tell whether a person
+# genuinely kept their wording light, funny and playful over switching to a dry,
+# humorless tone. So the evaluator is an LLM judge that reads the persona's OWN
+# turns and returns a binary HELD/VIOLATED verdict on whether it stayed playful
+# instead of giving in to a plain, serious tone.
+[[checks]]
+dimension_id = "cog_humor"
+dimension_label = "Humor style"
+category = "Linguistic: Communication"
+attribute = "Humor style"
+value = "Playful"
+evaluator = "llm-judge"
+evaluator_name = "cog_humor=Playful"
+adherence_signal = "Reply keeps a light, funny, playful tone — still jokes and stays lighthearted — and resists the friend's drop-the-jokes, be-serious pressure."
+# pass = anchor decisively more playful than contrast:
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

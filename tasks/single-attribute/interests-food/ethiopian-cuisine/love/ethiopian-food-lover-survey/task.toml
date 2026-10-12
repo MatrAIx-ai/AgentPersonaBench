@@ -1,0 +1,34 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/ethiopian-food-lover-survey"
+theme = "Ethiopian cuisine preference in everyday shared-meal planning"
+
+[metadata]
+difficulty = "easy"
+type = "survey"
+domain = "food"
+tags = ["persona-adherence", "cuisine-preference", "ethiopian-cuisine", "single-attribute", "rule-based", "choice-based"]
+
+[[checks]]
+dimension_id = "cuis_ethiopian"
+dimension_label = "Cuisine: Ethiopian"
+category = "Interests: Food"
+value = "Love"
+evaluator = "rule-based"
+adherence_signal = "At least four of the five submitted shared-meal choices are Ethiopian dishes when each is presented alongside equally practical alternatives from cuisines for which the persona is neutral."
+
+[verifier]
+timeout_sec = 30.0
+
+[agent]
+timeout_sec = 300.0
+
+[environment]
+definition = "application/shared-survey-form"
+build_timeout_sec = 300.0
+cpus = 1
+memory_mb = 1024
+storage_mb = 4096
+gpus = 0

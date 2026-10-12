@@ -1,0 +1,43 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/knitter-app"
+theme = "Knitting: Active"
+
+[metadata]
+difficulty = "medium"
+type = "app"
+os = "linux"
+domain = "leisure"
+tags = [ "persona-adherence", "knitter", "rule-based", "os-app", "computer-use",]
+
+[[checks]]
+dimension_id = "hob_knitting"
+dimension_label = "Hobby: Knitting"
+category = "Interests: Hobbies"
+anchor_value = "Active"
+evaluator = "rule-based"
+adherence_signal = "At least two of the persona's three voucher picks are knitting items; an active knitter at a craft fair stocks their own craft first."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 1800.0
+
+[environment]
+# Task-local Linux CUA desktop with the MakersFair Tkinter GUI baked in —
+# see ./environment/Dockerfile. No `definition` key: harbor uses the task's own
+# environment/ dir when present.
+build_timeout_sec = 1200.0
+cpus = 4
+memory_mb = 4096
+storage_mb = 40960
+gpus = 0
+
+[environment.healthcheck]
+# Launch MakersFair once the desktop is up so the agent finds it on screen.
+command = "/opt/knitter/start-app.sh"
+timeout_sec = 60.0
+retries = 5

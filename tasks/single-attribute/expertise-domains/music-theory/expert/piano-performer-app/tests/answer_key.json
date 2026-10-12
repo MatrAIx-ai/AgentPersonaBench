@@ -1,0 +1,23 @@
+{
+  "_about": "Host-only ground truth. The acting model can read input/ and the app image, so neither app copy contains these labels. The verifier scores submitted IDs against this file and reconciles its IDs and names with both label-free catalogs.",
+  "label": {
+    "sr01": false,
+    "sr02": true,
+    "sr03": false,
+    "sr04": true,
+    "sr05": true,
+    "sr06": false,
+    "sr07": true,
+    "sr08": false
+  },
+  "name": {
+    "sr01": "Chord-Name Flashcards",
+    "sr02": "Harmonic Route Map",
+    "sr03": "Hard-Bars Motor Drill",
+    "sr04": "Voice-Leading Reduction",
+    "sr05": "Formal Return Comparison",
+    "sr06": "Full-Movement Loop",
+    "sr07": "Edition Evidence Table",
+    "sr08": "Favorite-Recording Shadow"
+  }
+}

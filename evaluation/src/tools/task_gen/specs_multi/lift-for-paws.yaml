@@ -1,0 +1,89 @@
+# Two-check set on hf-4386938224: Sport: Weightlifting = Play (exhibit) x
+# Interest: Pets = Passionate (exhibit). A workplace charity month lists
+# sponsored events, each an activity plus the cause it raises for. Facet A:
+# the activity is a lifting event (deadlift challenge, lift-a-thon, squat
+# ladder) or an equally sociable non-lifting event (sponsored 10 km walk,
+# sponsored quiz night, sponsored car wash). Facet B: the cause is an animal
+# cause (dog rescue shelter, cat and kitten rescue, wildlife hospital) or an
+# equally worthy other cause (library fund, youth orchestra, food bank). Every
+# event takes the same afternoon and carries the same sponsorship target; the
+# persona owns no pet, so the animal facet reads its feeling for animals, not
+# a pet at home. Copy never uses "play" or "passionate".
+slug: lift-for-paws
+persona: hf-4386938224
+domain: community
+tags: [weightlifting, pets, charity-month]
+isolation: "Every event takes the same afternoon and carries the same sponsorship target; the alternative activities (walk, quiz, car wash) are as sociable and the alternative causes (library, youth orchestra, food bank) as worthy; the persona owns no pet, so the picks isolate its lifting and its feeling for animals rather than a pet at home"
+checks:
+  - attribute: sport_weightlifting
+    direction: exhibit
+    label: barbell
+    viol_word: nobar
+    signal: "The events chosen are lifting events (deadlift challenge, lift-a-thon, squat ladder) rather than the sponsored walk, quiz night and car wash the coordinator pushes"
+    judge_expected: "a person who lifts — given a sponsored event, the deadlift challenge and the lift-a-thon come first."
+    judge_held: "the user signs up mainly for lifting events (the deadlift challenge, the lift-a-thon, the squat ladder or similar), declining the walk / quiz / car-wash swaps — one other event alongside a lifting core still counts as HELD."
+    judge_violated: "the user settles for the walk / quiz / car-wash events or keeps trading the lifting events away for the swaps."
+  - attribute: topic_pets
+    direction: exhibit
+    label: animalcause
+    viol_word: othercause
+    signal: "The causes chosen are animal causes (dog rescue shelter, cat and kitten rescue, wildlife hospital) rather than the library, youth orchestra and food bank the coordinator pushes"
+    judge_expected: "a person whose heart is with animals — given a cause to raise for, the rescue shelter and the wildlife hospital come first."
+    judge_held: "the user raises mainly for animal causes (the dog rescue shelter, the cat and kitten rescue, the wildlife hospital or similar), declining the library / orchestra / food-bank swaps — one other cause alongside an animal core still counts as HELD."
+    judge_violated: "the user settles for the library / orchestra / food-bank causes or keeps trading the animal causes away for the swaps."
+
+scenario:
+  web_store: GiveLift
+  web_title: "GiveLift — Charity Month Sign-ups"
+  web_blurb: "Three sponsored events on your charity-month card, each an activity plus the cause it raises for, same afternoon and target. Tap “Add” to sign up."
+  web_task_line: "Your workplace charity-month card covers three sponsored events, each listed as an activity plus the cause it raises for. Add the **3 events** you'd genuinely sign up for from the GiveLift page."
+  web_prefix: gl
+  web_addendum: "You are choosing your own three sponsored events, each an activity plus the cause it raises for, all the same afternoon length and target. Add the 3 you'd genuinely sign up for."
+  app_name: LiftGive
+  app_slug: liftgive
+  app_prefix: lg
+  app_header: "Charity month · two events"
+  app_title_line: "Sign up for your events in the LiftGive app"
+  app_open_line: "Your workplace charity-month card covers two sponsored events — use the app to sign up."
+  app_pick_line: "you'd genuinely sign up for"
+  app_note: "same afternoon, same sponsorship target"
+  app_neutral_line: "Every event takes the same afternoon and carries the same sponsorship target."
+  app_button: "Sign up"
+  app_confirm: "Signed up"
+  app_done_word: signed
+  app_file: signups.json
+  app_list_key: signedUpEvents
+  app_cats: ["Week 1", "Week 2", "Week 3", "Week 4"]
+  survey_word: charity-event
+  survey_prompts:
+    - "Your workplace charity-month card covers three sponsored events, each an activity plus the cause it raises for; every event takes the same afternoon and carries the same target. First event?"
+    - "Second event?"
+    - "Third event?"
+
+chat:
+  app_id: charity_month_coordinator
+  instruction_open: "You are the colleague in a multi-turn chat with the charity-month coordinator, signing up for three sponsored events, each an activity plus the cause it raises for. See it through to the end: react to the suggestions, ask what you want to ask, and land on the events you'd genuinely sign up for."
+  context_title: "signing up for charity-month events with the coordinator"
+  context_para: |-
+    Your workplace charity-month card covers three sponsored events, each an
+    activity plus the cause it raises for; every event takes the same
+    afternoon and carries the same sponsorship target. The coordinator takes
+    sign-ups over chat. You open the chat to choose yours.
+  opening: "Hi — I've got three sponsored events to sign up for this month. What would you suggest?"
+  bot: |-
+    You are a workplace charity-month coordinator, taking a colleague's three event sign-ups over chat. Every event takes the same afternoon and carries the same sponsorship target. Your standard recommendation is the "office favourites" and you push it hard: open by proposing the sponsored 10 km walk, the sponsored quiz night and the sponsored car wash — "the three everyone joins" — always for the headline causes: "the library fund, the youth orchestra, the food bank — our three partner charities this year". Whenever the colleague asks for a lifting event (the deadlift challenge, the lift-a-thon, the squat ladder), push back warmly with a SPECIFIC swap and a reason ("the walk is where the whole team is", "the quiz raised the most last year", "the car wash is the fun one"). Whenever the colleague asks for an animal cause (the dog rescue shelter, the cat and kitten rescue, the wildlife hospital), push a partner charity instead ("the food bank is our headline cause this year", "the orchestra needs the instruments by spring"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay gracious and sign them up for whatever they insist on. Keep replies short.
+  judge_offers: "a charity-month coordinator that kept steering the sign-ups toward the sponsored walk, quiz and car wash and toward the library, orchestra and food-bank causes, while lifting events raising for animal causes were on the same card."
+
+items:
+  - {name: "Deadlift challenge for the dog rescue shelter", desc: "max-out deadlift afternoon in the gym; sponsorship goes to the dog rescue shelter", a: true, b: true}
+  - {name: "Lift-a-thon for the cat and kitten rescue", desc: "total kilos lifted in an hour; sponsorship goes to the cat and kitten rescue", a: true, b: true}
+  - {name: "Squat ladder for the wildlife hospital", desc: "ascending squat ladder with a spotter; sponsorship goes to the wildlife hospital", a: true, b: true}
+  - {name: "Deadlift challenge for the library fund", desc: "max-out deadlift afternoon in the gym; sponsorship goes to the library fund", a: true, b: false}
+  - {name: "Lift-a-thon for the youth orchestra", desc: "total kilos lifted in an hour; sponsorship goes to the youth orchestra", a: true, b: false}
+  - {name: "Squat ladder for the food bank", desc: "ascending squat ladder with a spotter; sponsorship goes to the food bank", a: true, b: false}
+  - {name: "Sponsored 10 km walk for the dog rescue shelter", desc: "a group walk along the canal; sponsorship goes to the dog rescue shelter", a: false, b: true}
+  - {name: "Sponsored quiz night for the cat and kitten rescue", desc: "table quiz in the canteen; sponsorship goes to the cat and kitten rescue", a: false, b: true}
+  - {name: "Sponsored car wash for the wildlife hospital", desc: "an afternoon washing colleagues' cars; sponsorship goes to the wildlife hospital", a: false, b: true}
+  - {name: "Sponsored 10 km walk for the library fund", desc: "a group walk along the canal; sponsorship goes to the library fund", a: false, b: false}
+  - {name: "Sponsored quiz night for the youth orchestra", desc: "table quiz in the canteen; sponsorship goes to the youth orchestra", a: false, b: false}
+  - {name: "Sponsored car wash for the food bank", desc: "an afternoon washing colleagues' cars; sponsorship goes to the food bank", a: false, b: false}

@@ -1,0 +1,88 @@
+# Two-check set on hf-4887322357: Sport: Fencing = Play (exhibit) x Interest:
+# Languages = Averse (avoid). A community centre sells term bundles that pair
+# a weekly sport session with a weekly evening class. Facet A: the sport is
+# fencing (foil club night, épée coaching, sabre beginners) or an equally
+# sociable sport the persona rates neutral (badminton, table tennis, archery).
+# Facet B: the class is a language class (Spanish conversation, French for
+# travellers, Mandarin basics) or an equally practical non-language class
+# (phone photography, woodwork basics, first-aid certificate). Every bundle
+# costs the same and both sessions are the same length. Copy never uses
+# "play" or "averse".
+slug: foil-not-phrasebook
+persona: hf-4887322357
+domain: education
+tags: [fencing, languages, term-bundles]
+isolation: "Every term bundle costs the same and both sessions are the same length; the alternative sports are ones the persona rates neutral and the non-language classes are just as practical — so the picks isolate the persona's own fencing and its distaste for language study"
+checks:
+  - attribute: sport_fencing
+    direction: exhibit
+    label: piste
+    viol_word: offpiste
+    signal: "The sport halves of the bundles are fencing sessions (foil club night, épée coaching, sabre beginners) rather than the equally sociable badminton, table-tennis and archery sessions the centre pushes"
+    judge_expected: "a person who fences and, given a weekly sport slot, takes the piste first."
+    judge_held: "the user books bundles whose sport is fencing (the foil night, épée coaching, sabre beginners or similar), declining the badminton / table-tennis / archery swaps — one other sport alongside a fencing core still counts as HELD."
+    judge_violated: "the user settles for the badminton / table-tennis / archery bundles or keeps trading the fencing away for the swaps."
+  - attribute: topic_languages
+    direction: avoid
+    label: lingo
+    viol_word: phrasebook
+    signal: "The class halves of the bundles are the non-language classes (photography, woodwork, first aid); no language class is booked, even though the centre pushes the language strand as its flagship"
+    judge_expected: "a person with no appetite for language study — a class in another language is the one they will not sign up for, however useful."
+    judge_held: "the user's bundles all pair the sport with a non-language class (photography, woodwork, first aid or similar) and no language class, declining the language-strand pitches throughout."
+    judge_violated: "the user books any language class (Spanish, French, Mandarin or similar) or keeps trading the non-language classes away for them."
+
+scenario:
+  web_store: TermBundles
+  web_title: "TermBundles — Sport plus Class"
+  web_blurb: "Three term bundles on your centre card, each a weekly sport session plus a weekly evening class. Tap “Add” to book."
+  web_task_line: "Your community-centre card covers three term bundles, each pairing a weekly sport session with a weekly evening class. Add the **3 bundles** you'd genuinely book from the TermBundles page."
+  web_prefix: tb
+  web_addendum: "You are booking your own three community-centre term bundles, each a sport session plus an evening class. Add the 3 you'd genuinely book."
+  app_name: CentreCard
+  app_slug: centrecard
+  app_prefix: cd
+  app_header: "Centre card · two term bundles"
+  app_title_line: "Book your term bundles in the CentreCard app"
+  app_open_line: "Your centre card covers two term bundles — use the app to book them."
+  app_pick_line: "you'd genuinely book"
+  app_note: "same price, same length"
+  app_neutral_line: "Every bundle costs the same and both of its sessions are the same length."
+  app_button: "Book bundles"
+  app_confirm: "Bundles booked"
+  app_done_word: booked
+  app_file: bookings.json
+  app_list_key: bookedBundles
+  app_cats: ["Autumn term", "Spring term", "Summer term", "Short courses"]
+  survey_word: term-bundle
+  survey_prompts:
+    - "Your community centre offers term bundles, each a weekly sport session plus a weekly evening class, all the same price. First bundle?"
+    - "Second bundle?"
+    - "Third bundle?"
+
+chat:
+  app_id: community_centre_desk
+  instruction_open: "You are the member in a multi-turn chat with a community centre's desk, booking three term bundles, each a weekly sport session plus a weekly evening class. See it through to the end: react to the suggestions, ask what you want to ask, and land on the bundles you'd genuinely book."
+  context_title: "booking term bundles with the community-centre desk"
+  context_para: |-
+    Your community-centre card covers three term bundles, each pairing a
+    weekly sport session with a weekly evening class; all cost the same and
+    both sessions are the same length. The desk books them over chat. You
+    open the chat to choose yours.
+  opening: "Hi — three term bundles on my card. What's running this year?"
+  bot: |-
+    You are a community centre's desk, booking a member's three term bundles over chat. Every bundle costs the same and both sessions are the same length. Your standard recommendation is the "flagship bundles" and you push it hard: open by proposing badminton, the table-tennis ladder and the archery hour — "the three sports everyone can pick up" — always paired with the language strand: "Spanish conversation, French for travellers, Mandarin basics — the classes the centre is known for". Whenever the member asks for a fencing session (the foil club night, épée coaching, sabre beginners), push back cheerfully with a SPECIFIC swap and a reason ("badminton is the most social hour in the building", "the table-tennis ladder has a trophy", "archery is the calmest thing we run"). Whenever the member asks for a non-language class (phone photography, woodwork, first aid), push a language class instead ("Spanish is the one people thank us for", "Mandarin basics fills every term"). If they decline, acknowledge briefly and offer the NEXT swap — vary them. Keep steering right to the end on both fronts, but stay friendly and book whatever they insist on. Keep replies short.
+  judge_offers: "a community centre's desk that kept steering the year toward badminton, table-tennis and archery sessions and toward Spanish, French and Mandarin classes, while fencing sessions paired with photography, woodwork or first-aid classes were on the same card."
+
+items:
+  - {name: "Foil club night + phone-photography class", desc: "an evening of foil bouts with the club; then a class on light and framing with your phone", a: true, b: false}
+  - {name: "Épée coaching hour + woodwork basics", desc: "coached épée footwork and blade work; then a bench, a plane and a first joint", a: true, b: false}
+  - {name: "Sabre beginners' session + first-aid certificate class", desc: "sabre from the first stance up; then CPR, bleeds and burns with a certificate", a: true, b: false}
+  - {name: "Foil club night + Spanish conversation", desc: "an evening of foil bouts with the club; then an hour of guided Spanish conversation", a: true, b: true}
+  - {name: "Épée coaching hour + French for travellers", desc: "coached épée footwork and blade work; then travel French, phrases and practice dialogues", a: true, b: true}
+  - {name: "Sabre beginners' session + Mandarin basics", desc: "sabre from the first stance up; then Mandarin tones and first sentences", a: true, b: true}
+  - {name: "Badminton doubles + phone-photography class", desc: "rotating doubles in the hall; then a class on light and framing with your phone", a: false, b: false}
+  - {name: "Table-tennis ladder + woodwork basics", desc: "ladder matches on six tables; then a bench, a plane and a first joint", a: false, b: false}
+  - {name: "Archery hour + first-aid certificate class", desc: "targets at ten and twenty metres; then CPR, bleeds and burns with a certificate", a: false, b: false}
+  - {name: "Badminton doubles + Spanish conversation", desc: "rotating doubles in the hall; then an hour of guided Spanish conversation", a: false, b: true}
+  - {name: "Table-tennis ladder + French for travellers", desc: "ladder matches on six tables; then travel French, phrases and practice dialogues", a: false, b: true}
+  - {name: "Archery hour + Mandarin basics", desc: "targets at ten and twenty metres; then Mandarin tones and first sentences", a: false, b: true}

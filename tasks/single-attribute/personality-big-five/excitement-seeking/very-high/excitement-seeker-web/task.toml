@@ -1,0 +1,37 @@
+version = "1.0"
+artifacts = ["/app/output"]
+
+[task]
+name = "personabench/excitement-seeker-web"
+theme = "Excitement-seeking: Very high"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "festival production preferences"
+tags = ["persona-adherence", "personality-big-five", "excitement-seeking", "rule-based", "playwright", "real-web"]
+
+[[checks]]
+dimension_id = "big5_excitement_seeking"
+dimension_label = "Excitement-seeking"
+category = "Personality: Big Five"
+value = "Very high"
+evaluator = "rule-based"
+evaluator_name = "big5_excitement_seeking=Very high"
+adherence_signal = "Across six independent festival bookings with matched event content, at least five DOM-selected productions are in the highest-stimulation tier (tier 0 in the host-side answer key)."
+
+[verifier]
+timeout_sec = 300.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

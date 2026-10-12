@@ -1,0 +1,62 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/formaltone-web"
+theme = "Communication style: formal, serious, no emoji"
+
+[metadata]
+difficulty = "medium"
+type = "web"
+domain = "workplace"
+tags = [ "persona-adherence", "multi-check", "comm-style", "rule-based", "real-web",]
+
+# --- Multi-attribute task ----------------------------------------------------- #
+# ONE written message, MANY checks. A single persona carrying several
+# communication-style values writes one short message on a live team-board
+# page; the verifier runs an independent rule-based check per value. Reward =
+# integer score (one point per check HELD, 0..N).
+[[checks]]
+dimension_id = "cog_formality"
+attribute = "Formality"
+value = "Formal"
+evaluator = "rule-based"
+evaluator_name = "cog_formality=Formal"
+metric = "informal_marker_count"
+pass_max = 0
+
+[[checks]]
+dimension_id = "cog_humor"
+attribute = "Humor style"
+value = "Serious"
+evaluator = "rule-based"
+evaluator_name = "cog_humor=Serious"
+metric = "playful_marker_count"
+pass_max = 0
+
+[[checks]]
+dimension_id = "cog_emoji_use"
+attribute = "Emoji / emoticon use"
+value = "Never"
+evaluator = "rule-based"
+evaluator_name = "cog_emoji_use=Never"
+metric = "emoji_count"
+pass_max = 0
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+network_mode = "public"
+
+[environment]
+# Reuses the shared Playwright image (Chromium + playwright python); the
+# solver drives a real browser (type + click), not a host-side shortcut.
+definition = "application/shared-web-playwright"
+build_timeout_sec = 900.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
+network_mode = "public"

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nestwell — Home essentials</title>
+  <style>
+    :root {
+      --linen:#f3efe7; --paper:#fffdf9; --ink:#2a2521; --soft:#6f655b; --line:#e3dbcf;
+      --clay:#b0522c; --clay-d:#8f3f1f; --clay-w:#f6e6dc; --moss:#58624a; --sand:#e9e0d1;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; background:var(--linen); color:var(--ink);
+           font:15px/1.55 "Liberation Sans", Arial, sans-serif; }
+    .serif { font-family:"Bitstream Charter", "Liberation Serif", Georgia, serif; }
+    .util { background:var(--ink); color:#e9e0d1; font-size:12.5px; letter-spacing:.3px; }
+    .util .in { max-width:1180px; margin:0 auto; padding:7px 24px; display:flex; justify-content:space-between; gap:16px; }
+    .top { background:var(--paper); border-bottom:1px solid var(--line); }
+    .top .in { max-width:1180px; margin:0 auto; padding:16px 24px; display:flex; align-items:center; gap:28px; }
+    .brand { display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); }
+    .brand svg { width:42px; height:42px; }
+    .brand b { font-family:"Bitstream Charter", Georgia, serif; font-size:27px; letter-spacing:-.5px; font-weight:700; }
+    .brand b i { color:var(--clay); font-style:italic; font-weight:400; }
+    .top nav.depts { display:flex; gap:20px; font-size:14px; color:var(--soft); flex:1; }
+    .top nav.depts span { padding-bottom:3px; border-bottom:2px solid transparent; }
+    .top nav.depts span.on { color:var(--ink); border-color:var(--clay); }
+    .bag-pill { display:flex; align-items:center; gap:8px; border:1px solid var(--line); border-radius:999px;
+                padding:7px 14px; font-size:14px; background:var(--linen); }
+    .bag-pill svg { width:18px; height:18px; }
+    .hero { max-width:1180px; margin:0 auto; padding:34px 24px 10px; display:flex; align-items:flex-end; justify-content:space-between; gap:24px; }
+    .hero h1 { font-family:"Bitstream Charter", Georgia, serif; font-weight:400; font-size:40px; line-height:1.1; margin:0; letter-spacing:-.6px; }
+    .hero h1 em { color:var(--clay); }
+    .hero p { margin:10px 0 0; color:var(--soft); max-width:56ch; }
+    .steps { display:flex; gap:6px; font-size:13px; color:var(--soft); white-space:nowrap; }
+    .steps span { padding:6px 12px; border-radius:999px; border:1px solid var(--line); background:var(--paper); }
+    .steps span.on { background:var(--ink); color:var(--paper); border-color:var(--ink); }
+    .wrap { max-width:1180px; margin:0 auto; padding:18px 24px 60px; display:grid; grid-template-columns:200px 1fr 300px; gap:28px; align-items:start; }
+    aside.side { position:sticky; top:16px; font-size:14px; }
+    aside.side h4 { margin:0 0 10px; font-size:11.5px; letter-spacing:1.4px; text-transform:uppercase; color:var(--soft); }
+    aside.side ul { list-style:none; margin:0; padding:0; border-left:1px solid var(--line); }
+    aside.side li a { display:block; padding:6px 0 6px 14px; color:var(--ink); text-decoration:none; margin-left:-1px; border-left:2px solid transparent; }
+    aside.side li a:hover { border-color:var(--clay); color:var(--clay-d); }
+    aside.side .note { margin-top:22px; padding:14px; border-radius:10px; background:var(--sand); color:var(--soft); font-size:13px; }
+    .need { background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:20px 22px 22px; margin-bottom:22px; scroll-margin-top:16px; }
+    .need-head { display:flex; gap:14px; align-items:center; margin-bottom:14px; }
+    .need-head .num { font-family:"Bitstream Charter", Georgia, serif; font-size:30px; color:var(--clay); width:44px; }
+    .need-head .room { margin:0; font-size:11.5px; letter-spacing:1.4px; text-transform:uppercase; color:var(--soft); }
+    .need-head h2 { margin:0; font-family:"Bitstream Charter", Georgia, serif; font-weight:700; font-size:22px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .item { display:flex; flex-direction:column; border:1px solid var(--line); border-radius:12px; overflow:hidden; background:var(--paper); transition:border-color .15s, box-shadow .15s; }
+    .item:hover { box-shadow:0 6px 18px rgba(60,40,20,.08); }
+    .item .art { background:var(--sand); height:120px; display:flex; align-items:center; justify-content:center; }
+    .item .art svg { width:92px; height:92px; fill:none; stroke:var(--moss); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round; }
+    .item .body { padding:14px 16px 6px; flex:1; }
+    .item .sku { margin:0; font-size:11.5px; color:var(--soft); letter-spacing:.4px; }
+    .item h3 { margin:2px 0 6px; font-size:17px; font-family:"Bitstream Charter", Georgia, serif; }
+    .item .desc { margin:0; color:#4a423b; font-size:13.5px; }
+    .item .desc::first-letter { text-transform:uppercase; }
+    .item .buy { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 16px 16px; }
+    .item .price { font-size:20px; font-weight:700; }
+    button { font:inherit; cursor:pointer; }
+    button.add { border:1.5px solid var(--ink); background:var(--ink); color:var(--paper); font-weight:700; font-size:13.5px; padding:9px 16px; border-radius:999px; }
+    button.add:hover { background:#000; }
+    .item[data-selected="true"] { border-color:var(--clay); box-shadow:0 0 0 2px var(--clay-w); }
+    .item[data-selected="true"] button.add { background:var(--paper); color:var(--clay-d); border-color:var(--clay); }
+    button.add:disabled { opacity:.55; cursor:default; }
+    .basket { position:sticky; top:16px; background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:18px; }
+    .basket h3 { margin:0 0 4px; font-family:"Bitstream Charter", Georgia, serif; font-size:21px; }
+    .basket .sub { margin:0 0 12px; color:var(--soft); font-size:13px; }
+    .basket ul { list-style:none; margin:0; padding:0; }
+    .basket li { display:grid; grid-template-columns:1fr auto; gap:2px 10px; padding:9px 0; border-top:1px dashed var(--line); font-size:13.5px; }
+    .basket li .rm { grid-column:1 / -1; justify-self:start; border:0; background:none; color:var(--clay-d); font-size:12.5px; padding:0; text-decoration:underline; }
+    .basket .empty { color:var(--soft); font-size:13.5px; padding:10px 0; border-top:1px dashed var(--line); }
+    .tot { display:flex; justify-content:space-between; font-weight:700; font-size:16px; padding-top:12px; border-top:1px solid var(--ink); margin-top:6px; }
+    .primary { width:100%; margin-top:14px; border:0; border-radius:999px; padding:13px; background:var(--clay); color:#fff; font-weight:700; font-size:15px; }
+    .primary:hover { background:var(--clay-d); }
+    .primary:disabled { background:#cdbfb2; cursor:not-allowed; }
+    .ghost { border:1px solid var(--line); background:var(--paper); border-radius:999px; padding:10px 18px; font-weight:700; }
+    .perks { list-style:none; padding:0; margin:14px 0 0; font-size:12.5px; color:var(--soft); }
+    .perks li { padding:3px 0 3px 18px; position:relative; }
+    .perks li::before { content:""; position:absolute; left:2px; top:10px; width:7px; height:7px; border-radius:50%; background:var(--moss); }
+    /* review step */
+    #review, #done { display:none; max-width:900px; margin:0 auto; padding:18px 24px 60px; }
+    body.step-review #browse, body.step-done #browse { display:none; }
+    body.step-review #review { display:block; }
+    body.step-done #done { display:block; }
+    .rv-card { background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:22px; margin-bottom:22px; }
+    .rv-card h2 { margin:0 0 12px; font-family:"Bitstream Charter", Georgia, serif; font-size:22px; }
+    table.lines { width:100%; border-collapse:collapse; font-size:14px; }
+    table.lines td { padding:10px 6px; border-top:1px solid var(--line); vertical-align:top; }
+    table.lines td.p { text-align:right; font-weight:700; white-space:nowrap; }
+    table.lines td.k { color:var(--soft); width:130px; }
+    .rv-foot { display:flex; justify-content:space-between; align-items:center; gap:16px; }
+    .rv-foot .primary { width:auto; padding:13px 34px; margin:0; }
+    .extras .item .art { height:90px; }
+    .done-card { text-align:center; padding:50px 22px; }
+    .done-card svg { width:70px; height:70px; }
+    .done-card h2 { font-size:30px; }
+    footer { background:var(--ink); color:#cfc5b6; font-size:13px; }
+    footer .in { max-width:1180px; margin:0 auto; padding:30px 24px; display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:24px; }
+    footer h5 { margin:0 0 8px; color:#fff; font-size:13px; }
+    footer p { margin:0 0 4px; }
+    @media (max-width:980px) { .wrap { grid-template-columns:1fr; } aside.side { display:none; } .basket { position:static; } }
+    @media (max-width:640px) { .grid { grid-template-columns:1fr; } .hero { flex-direction:column; align-items:flex-start; } .top nav.depts { display:none; } }
+  </style>
+</head>
+<body class="step-browse">
+  <div class="util"><div class="in"><span>Free delivery to your door on every order</span><span>Help centre · Store finder · 0800 440 118</span></div></div>
+  <div class="top"><div class="in">
+    <span class="brand" aria-label="Nestwell">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#2a2521"/><path d="M11 27c4 8 22 8 26 0" fill="none" stroke="#e9e0d1" stroke-width="2.4" stroke-linecap="round"/><path d="M13 23c5 5 17 5 22 0" fill="none" stroke="#b0522c" stroke-width="2.4" stroke-linecap="round"/><path d="M17 19l7-6 7 6" fill="none" stroke="#e9e0d1" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <b>Nest<i>well</i></b>
+    </span>
+    <nav class="depts" aria-hidden="true"><span class="on">Home essentials</span><span>Rooms</span><span>Inspiration</span><span>Services</span></nav>
+    <span class="bag-pill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1 12H6z M9 8a3 3 0 0 1 6 0" fill="none" stroke="#2a2521" stroke-width="1.8"/></svg><span id="bag-count">Basket · 0 items</span></span>
+  </div></div>
+
+  <div id="shop">
+  <div id="browse">
+    <div class="hero">
+      <div>
+        <h1>Home essentials,<br><em>room by room.</em></h1>
+        <p>Browse each department, add what you want to your basket, then review it before you pay.</p>
+      </div>
+      <div class="steps" aria-hidden="true"><span class="on">1 Browse</span><span>2 Review</span><span>3 Confirmation</span></div>
+    </div>
+    <div class="wrap">
+      <aside class="side">
+        <h4>Departments</h4>
+        <ul>
+          <li><a href="#sec-chair">Desk chairs</a></li>
+          <li><a href="#sec-desk">Desks</a></li>
+          <li><a href="#sec-sofa">Sofas</a></li>
+          <li><a href="#sec-cookware">Cookware</a></li>
+          <li><a href="#sec-lamp">Floor lamps</a></li>
+          <li><a href="#sec-blind">Blackout blinds</a></li>
+        </ul>
+        <div class="note">Every listing shows today's full price, with delivery included.</div>
+      </aside>
+      <main>
+      <section class="need" id="sec-chair" data-need="chair" data-required="true">
+        <header class="need-head"><span class="num">01</span><div><p class="room">Study corner</p><h2>Desk chairs</h2></div></header>
+        <div class="grid">
+        <article class="item" data-id="i01" data-need="chair" data-selected="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96"><path d="M34 22h28v26H34z"/><path d="M30 52h36v6H30z"/><path d="M48 58v14M36 80l12-8 12 8"/><circle cx="36" cy="82" r="2"/><circle cx="60" cy="82" r="2"/></svg></div>
+          <div class="body">
+            <p class="sku">Item NW-25088</p>
+            <h3>Meridian Task Chair</h3>
+            <p class="desc">mesh back, seat-height adjustment, 2D armrests. Charcoal or grey, 150 kg rating, BIFMA tested, 3-year warranty, delivered Tue 14th.</p>
+          </div>
+          <div class="buy">
+            <b class="price">$170</b>
+            <button class="add" type="button" data-id="i01" aria-pressed="false" aria-label="Add Meridian Task Chair to basket">Add to basket</button>
+          </div>
+        </article>
+        <article class="item" data-id="i02" data-need="chair" data-selected="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96"><path d="M34 22h28v26H34z"/><path d="M30 52h36v6H30z"/><path d="M48 58v14M36 80l12-8 12 8"/><circle cx="36" cy="82" r="2"/><circle cx="60" cy="82" r="2"/></svg></div>
+          <div class="body">
+            <p class="sku">Item NW-64683</p>
+            <h3>Meridian Task Chair Pro</h3>
+            <p class="desc">mesh back, seat-height adjustment, 4D armrests, adjustable seat depth, 4-position backrest height. Charcoal or grey, 150 kg rating, BIFMA tested, 3-year warranty, delivered Tue 14th.</p>
+          </div>
+          <div class="buy">
+            <b class="price">$300</b>
+            <button class="add" type="button" data-id="i02" aria-pressed="false" aria-label="Add Meridian Task Chair Pro to basket">Add to basket</button>
+          </div>
+        </article>
+        </div>
+      </section>
+      <section class="need" id="sec-desk" data-need="desk" data-required="true">
+        <header class="need-head"><span class="num">02</span><div><p class="room">Study corner</p><h2>Desks</h2></div></header>
+        <div class="grid">
+        <article class="item" data-id="i03" data-need="desk" data-selected="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96"><path d="M14 40h68v5H14z"/><path d="M20 45v34M76 45v34"/><path d="M34 20h24v15H34z"/><path d="M46 35v5"/></svg></div>
+          <div class="body">
+            <p class="sku">Item NW-14278</p>
+            <h3>Kestrel 120 Lift</h3>
+            <p class="desc">120 x 60 cm oak-effect top, electric sit-stand frame adjustable 72-120 cm with four memory presets, steel legs, cable tray. 10-year frame warranty, delivered Tue 14th.</p>
+          </div>
+          <div class="buy">
+            <b class="price">$320</b>
+            <button class="add" type="button" data-id="i03" aria-pressed="false" aria-label="Add Kestrel 120 Lift to basket">Add to basket</button>
+          </div>
+        </article>
+        <article class="item" data-id="i04" data-need="desk" data-selected="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96"><path d="M14 40h68v5H14z"/><path d="M20 45v34M76 45v34"/><path d="M34 20h24v15H34z"/><path d="M46 35v5"/></svg></div>
+          <div class="body">
+            <p class="sku">Item NW-53873</p>
+            <h3>Kestrel 120</h3>
+            <p class="desc">120 x 60 cm oak-effect top, fixed height 74 cm, steel legs, cable tray. 10-year frame warranty, delivered Tue 14th.</p>
+          </div>
+          <div class="buy">
+            <b class="price">$150</b>
+            <button class="add" type="button" data-id="i04" aria-pressed="false" aria-label="Add Kestrel 120 to basket">Add to basket</button>
+          </div>
+        </article>
+        </div>
+      </section>
+      <section class="need" id="sec-sofa" data-need="sofa" data-required="true">
+        <header class="need-head"><span class="num">03</span><div><p class="room">Living room</p><h2>Sofas</h2></div></header>
+        <div class="grid">
+        <article class="item" data-id="i05" data-need="sofa" data-selected="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96"><path d="M22 36h52v18H22z"/><path d="M14 44h8v22h-8zM74 44h8v22h-8z"/><path d="M22 54h52v12H22z"/><path d="M18 66v8M78 66v8"/></svg></div>
+          <div class="body">
+            <p class="sku">Item NW-93468</p>
+            <h3>Linden 2-Seat</h3>
+            <p class="desc">142 cm wide, 50 cm seat depth, removable machine-washable covers, 3 fabrics. 10-year frame and cushion warranty, delivered Tue 14th.</p>
+          </div>
+          <div class="buy">
+            <b class="price">$450</b>
+            <button class="add" type="button" data-id="i05" aria-pressed="false" aria-label="Add Linden 2-Seat to basket">Add to basket</button>
+          </div>
+        </article>
+        <article class="item" data-id="i06" data-need="sofa" data-selected="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96"><path d="M22 36h52v18H22z"/><path d="M14 44h8v22h-8zM74 44h8v22h-8z"/><path d="M22 54h52v12H22z"/><path d="M18 66v8M78 66v8"/></svg></div>
+          <div class="body">
+            <p class="sku">Item NW-43063</p>
+            <h3>Linden 2-Seat Modular</h3>
+            <p class="desc">152 cm wide, 56 cm seat depth, removable machine-washable covers, 8 fabrics, tool-free modules you can extend with a chaise or armchair later, USB-C port in the arm. 10-year frame and cushion warranty, delivered Tue 14th.</p>
+          </div>
+          <div class="buy">
+            <b class="price">$940</b>
+            <button class="add" type="button" data-id="i06" aria-pressed="false" aria-label="Add Linden 2-Seat Modular to basket">Add to basket</button>
+          </div>
+        </article>
+        </div>
+      </section>
+      <section class="need" id="sec-cookware" data-need="cookware" data-required="true">
+        <header class="need-head"><span class="num">04</span><div><p class="room">Kitchen</p><h2>Cookware</h2></div></header>
+        <div class="grid">
+        <article class="item" data-id="i07" data-need="cookware" data-selected="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96"><path d="M22 44h40v20a8 8 0 0 1-8 8H30a8 8 0 0 1-8-8z"/><path d="M62 50h20"/><path d="M26 44v-4h32v4"/><path d="M36 28c0-6 6-6 6-12M46 30c0-6 6-6 6-12"/></svg></div>
+          <div class="body">
+            <p class="sku">Item NW-82658</p>
+            <h3>Ironline Ultimate 14-Piece Set</h3>
+            <p class="desc">14 pieces: 8 pans and pots (2 frying pans, saute pan, 3 saucepans, stockpot, casserole), 5 lids, 1 steamer insert. Forged hard-anodised body, riveted handles. Gas, electric and induction, dishwasher-safe, oven-safe to 200 C, limited lifetime warranty.</p>
+          </div>
+          <div class="buy">
+            <b class="price">$200</b>
+            <button class="add" type="button" data-id="i07" aria-pressed="false" aria-label="Add Ironline Ultimate 14-Piece Set to basket">Add to basket</button>
+          </div>
+        </article>
+        <article class="item" data-id="i08" data-need="cookware" data-selected="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96"><path d="M22 44h40v20a8 8 0 0 1-8 8H30a8 8 0 0 1-8-8z"/><path d="M62 50h20"/><path d="M26 44v-4h32v4"/><path d="M36 28c0-6 6-6 6-12M46 30c0-6 6-6 6-12"/></svg></div>
+          <div class="body">
+            <p class="sku">Item NW-32253</p>
+            <h3>Ironline Comfort 14-Piece Set</h3>
+            <p class="desc">14 pieces: 6 pans and pots (frying pan, saute pan, 2 saucepans, stockpot, casserole), 4 lids, 4 nylon utensils. Gas, electric and induction, dishwasher-safe, oven-safe to 200 C, limited lifetime warranty.</p>
+          </div>
+          <div class="buy">
+            <b class="price">$80</b>
+            <button class="add" type="button" data-id="i08" aria-pressed="false" aria-label="Add Ironline Comfort 14-Piece Set to basket">Add to basket</button>
+          </div>
+        </article>
+        </div>
+      </section>
+      <section class="need" id="sec-lamp" data-need="lamp" data-required="true">
+        <header class="need-head"><span class="num">05</span><div><p class="room">Living room</p><h2>Floor lamps</h2></div></header>
+        <div class="grid">
+        <article class="item" data-id="i09" data-need="lamp" data-selected="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96"><path d="M34 16h26l-6 16H40z"/><path d="M48 32v44"/><path d="M36 78h24"/><path d="M47 40c-8 0-12 4-12 10" stroke-dasharray="3 3"/></svg></div>
+          <div class="body">
+            <p class="sku">Item NW-71848</p>
+            <h3>Halo Reader</h3>
+            <p class="desc">adjustable head, standard screw fitting, takes any bulb up to 60 W. 22 cm painted-metal base, 180 cm tall, foot switch. Bulb not included, ETL listed.</p>
+          </div>
+          <div class="buy">
+            <b class="price">$40</b>
+            <button class="add" type="button" data-id="i09" aria-pressed="false" aria-label="Add Halo Reader to basket">Add to basket</button>
+          </div>
+        </article>
+        <article class="item" data-id="i10" data-need="lamp" data-selected="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96"><path d="M34 16h26l-6 16H40z"/><path d="M48 32v44"/><path d="M36 78h24"/><path d="M47 40c-8 0-12 4-12 10" stroke-dasharray="3 3"/></svg></div>
+          <div class="body">
+            <p class="sku">Item NW-17169</p>
+            <h3>Halo Reader Rattan</h3>
+            <p class="desc">adjustable head, standard screw fitting, takes any bulb up to 60 W. Hand-woven rattan shade, 38 cm weighted metal base, 180 cm tall, foot switch. Bulb not included, ETL listed.</p>
+          </div>
+          <div class="buy">
+            <b class="price">$105</b>
+            <button class="add" type="button" data-id="i10" aria-pressed="false" aria-label="Add Halo Reader Rattan to basket">Add to basket</button>
+          </div>
+        </article>
+        </div>
+      </section>
+      <section class="need" id="sec-blind" data-need="blind" data-required="true">
+        <header class="need-head"><span class="num">06</span><div><p class="room">Bedroom</p><h2>Blackout blinds</h2></div></header>
+        <div class="grid">
+        <article class="item" data-id="i11" data-need="blind" data-selected="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96"><path d="M18 14h60v6H18z"/><path d="M22 20h52v44H22z"/><path d="M22 30h52M22 40h52M22 50h52"/><path d="M48 64v10"/><circle cx="48" cy="77" r="3"/></svg></div>
+          <div class="body">
+            <p class="sku">Item NW-56764</p>
+            <h3>Duskline 120</h3>
+            <p class="desc">cut-to-size blackout roller blind. Stock width 120 cm, trimmed in store to any width between 45 and 120 cm. 180 cm drop, cordless, fittings included, 3-year warranty.</p>
+          </div>
+          <div class="buy">
+            <b class="price">$32</b>
+            <button class="add" type="button" data-id="i11" aria-pressed="false" aria-label="Add Duskline 120 to basket">Add to basket</button>
+          </div>
+        </article>
+        <article class="item" data-id="i12" data-need="blind" data-selected="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96"><path d="M18 14h60v6H18z"/><path d="M22 20h52v44H22z"/><path d="M22 30h52M22 40h52M22 50h52"/><path d="M48 64v10"/><circle cx="48" cy="77" r="3"/></svg></div>
+          <div class="body">
+            <p class="sku">Item NW-96359</p>
+            <h3>Duskline 200</h3>
+            <p class="desc">cut-to-size blackout roller blind. Stock width 200 cm, trimmed in store to any width between 125 and 200 cm. 180 cm drop, cordless, fittings included, 3-year warranty.</p>
+          </div>
+          <div class="buy">
+            <b class="price">$68</b>
+            <button class="add" type="button" data-id="i12" aria-pressed="false" aria-label="Add Duskline 200 to basket">Add to basket</button>
+          </div>
+        </article>
+        </div>
+      </section>
+      </main>
+      <aside class="basket" aria-label="Your basket">
+        <h3>Your basket</h3>
+        <p class="sub" id="bag-sub">Nothing added yet.</p>
+        <ul id="bag-list"></ul>
+        <div class="tot"><span>Subtotal</span><span id="bag-total">$0</span></div>
+        <button class="primary" id="to-review" type="button">Review basket</button>
+        <ul class="perks"><li>Assembly guides with every item</li><li>Delivery included on all orders</li><li>Order tracking by text message</li></ul>
+      </aside>
+    </div>
+  </div>
+
+  <div id="review">
+    <div class="hero" style="padding-left:0;padding-right:0">
+      <div><h1>Review <em>your basket</em></h1><p>Check your items, choose any extras, then place your order.</p></div>
+      <div class="steps" aria-hidden="true"><span>1 Browse</span><span class="on">2 Review</span><span>3 Confirmation</span></div>
+    </div>
+    <div class="rv-card">
+      <h2>Items</h2>
+      <table class="lines"><tbody id="rv-lines"></tbody></table>
+    </div>
+      <section class="need extras" data-need="extras" data-required="false">
+        <header class="need-head"><span class="num">+</span><div><p class="room">Before you pay</p><h2>Optional extras</h2></div></header>
+        <div class="grid">
+        <article class="item" data-id="x01" data-need="extras" data-selected="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96"><path d="M16 40h40v28H16z"/><path d="M56 48h14l10 10v10H56z"/><circle cx="28" cy="70" r="5"/><circle cx="68" cy="70" r="5"/></svg></div>
+          <div class="body">
+            <p class="sku">Item NW-21443</p>
+            <h3>Express delivery</h3>
+            <p class="desc">the whole order arrives tomorrow instead of Tue 14th.</p>
+          </div>
+          <div class="buy">
+            <b class="price">+$40</b>
+            <button class="add" type="button" data-id="x01" aria-pressed="false" aria-label="Add Express delivery to basket">Add to basket</button>
+          </div>
+        </article>
+        <article class="item" data-id="x02" data-need="extras" data-selected="false">
+          <div class="art" aria-hidden="true"><svg viewBox="0 0 96 96"><path d="M16 40h40v28H16z"/><path d="M56 48h14l10 10v10H56z"/><circle cx="28" cy="70" r="5"/><circle cx="68" cy="70" r="5"/></svg></div>
+          <div class="body">
+            <p class="sku">Item NW-61038</p>
+            <h3>Nestwell Care</h3>
+            <p class="desc">5-year accidental-damage cover on every item in this order.</p>
+          </div>
+          <div class="buy">
+            <b class="price">+$60</b>
+            <button class="add" type="button" data-id="x02" aria-pressed="false" aria-label="Add Nestwell Care to basket">Add to basket</button>
+          </div>
+        </article>
+        </div>
+      </section>
+    <div class="rv-card">
+      <div class="rv-foot">
+        <button class="ghost" id="back" type="button">Back to shopping</button>
+        <div class="tot" style="border:0;margin:0;padding:0;gap:18px"><span>Order total</span><span id="rv-total">$0</span></div>
+        <button class="primary" id="place-order" type="button">Place order</button>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div id="done">
+    <div class="rv-card done-card">
+      <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22" fill="#58624a"/><path d="M14 25l7 7 13-15" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h2 class="serif">Order placed</h2>
+      <p id="done-msg">Thank you — your order is confirmed.</p>
+    </div>
+  </div>
+
+  <footer><div class="in">
+    <div><h5>Nestwell</h5><p>Home essentials for every room.</p><p>Open daily, online and in store.</p></div>
+    <div><h5>Help</h5><p>Delivery</p><p>Returns</p><p>Assembly</p></div>
+    <div><h5>Company</h5><p>About us</p><p>Careers</p><p>Stores</p></div>
+    <div><h5>Contact</h5><p>0800 440 118</p><p>hello@nestwell.example</p></div>
+  </div></footer>
+
+  <script>
+    // Selection lives in the DOM (data-selected on each .item); any number of
+    // products may be chosen per department, including none.
+    var items = Array.prototype.slice.call(document.querySelectorAll('#shop .item'));
+    function title(r) { return r.querySelector('h3').textContent; }
+    function price(r) { return parseInt(r.querySelector('.price').textContent.replace(/[^0-9]/g, ''), 10) || 0; }
+    function chosen() { return items.filter(function (r) { return r.getAttribute('data-selected') === 'true'; }); }
+    function setSel(r, on) {
+      r.setAttribute('data-selected', on ? 'true' : 'false');
+      var b = r.querySelector('button.add');
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      b.textContent = on ? 'In basket — remove' : 'Add to basket';
+      b.setAttribute('aria-label', (on ? 'Remove ' + title(r) + ' from basket' : 'Add ' + title(r) + ' to basket'));
+      render();
+    }
+    function money(n) { return '$' + n.toLocaleString('en-US'); }
+    function render() {
+      var c = chosen(), list = document.getElementById('bag-list'), total = 0;
+      list.innerHTML = '';
+      c.forEach(function (r) {
+        total += price(r);
+        var li = document.createElement('li');
+        var n = document.createElement('span'); n.textContent = title(r);
+        var p = document.createElement('b'); p.textContent = r.querySelector('.price').textContent;
+        var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'rm';
+        rm.textContent = 'Remove'; rm.setAttribute('aria-label', 'Remove ' + title(r) + ' (basket)');
+        rm.addEventListener('click', function () { setSel(r, false); });
+        li.appendChild(n); li.appendChild(p); li.appendChild(rm); list.appendChild(li);
+      });
+      document.getElementById('bag-sub').textContent = c.length ? c.length + (c.length === 1 ? ' item' : ' items') : 'Nothing added yet.';
+      document.getElementById('bag-count').textContent = 'Basket · ' + c.length + (c.length === 1 ? ' item' : ' items');
+      document.getElementById('bag-total').textContent = money(total);
+      document.getElementById('rv-total').textContent = money(total);
+      var rows = document.getElementById('rv-lines'); rows.innerHTML = '';
+      var main = c.filter(function (r) { return r.getAttribute('data-need') !== 'extras'; });
+      if (!main.length) { rows.innerHTML = '<tr><td>No items in your basket.</td></tr>'; }
+      main.forEach(function (r) {
+        var tr = document.createElement('tr');
+        var k = document.createElement('td'); k.className = 'k'; k.textContent = r.closest('.need').querySelector('h2').textContent;
+        var n = document.createElement('td'); n.textContent = title(r);
+        var p = document.createElement('td'); p.className = 'p'; p.textContent = r.querySelector('.price').textContent;
+        tr.appendChild(k); tr.appendChild(n); tr.appendChild(p); rows.appendChild(tr);
+      });
+    }
+    items.forEach(function (r) {
+      r.querySelector('button.add').addEventListener('click', function () {
+        setSel(r, r.getAttribute('data-selected') !== 'true');
+      });
+    });
+    document.querySelectorAll('aside.side a').forEach(function (a) {
+      a.addEventListener('click', function (e) { e.preventDefault(); var t = document.querySelector(a.getAttribute('href')); if (t) t.scrollIntoView(); });
+    });
+    function step(s) { document.body.className = 'step-' + s; window.scrollTo(0, 0); }
+    document.getElementById('to-review').addEventListener('click', function () { step('review'); });
+    document.getElementById('back').addEventListener('click', function () { step('browse'); });
+    document.getElementById('place-order').addEventListener('click', function () {
+      window.__order = chosen().map(function (r) { return r.getAttribute('data-id'); });
+      document.getElementById('done-msg').textContent = 'Thank you — order NW-' + (40000 + window.__order.length * 137) +
+        ' is confirmed with ' + window.__order.length + (window.__order.length === 1 ? ' line.' : ' lines.');
+      items.forEach(function (r) { r.querySelector('button.add').disabled = true; });
+      this.disabled = true;
+      step('done');
+    });
+    render();
+  </script>
+</body>
+</html>

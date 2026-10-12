@@ -1,0 +1,39 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/eco-web"
+theme = "Sustainability: Core value"
+
+[metadata]
+difficulty = "easy"
+type = "web"
+domain = "shopping"
+tags = [ "persona-adherence", "sustainability", "core-value", "rule-based", "live-dom",]
+
+# --- Persona-adherence check(s) --------------------------------------------- #
+[[checks]]
+dimension_id = "val_sustainability"
+dimension_label = "Value: Sustainability"
+category = "Values & Motivation"
+anchor_value = "Core value"
+evaluator = "rule-based"
+# Web env: a household-essentials page pairs each need (water, cups, towels,
+# plates, food storage) with a cheap single-use pick (data-flag=true, prices
+# shown, always cheaper) and a reusable alternative (data-flag=false). The agent
+# clicks Add in a real browser; the cart is read back from the live DOM.
+adherence_signal = "The 4 items actually added to the DOM cart contain zero data-flag=true (single-use/disposable) products, despite the flagged options being visibly cheaper."
+
+[verifier]
+timeout_sec = 60.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-web-playwright"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0

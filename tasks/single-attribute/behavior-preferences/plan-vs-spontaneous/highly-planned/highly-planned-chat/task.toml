@@ -1,0 +1,41 @@
+version = "1.0"
+artifacts = [ "/app/output",]
+
+[task]
+name = "personabench/highly-planned-chat"
+theme = "Plan vs spontaneous: Highly planned"
+
+[metadata]
+difficulty = "medium"
+type = "chat"
+domain = "leisure"
+application_id = "trip_buddy"
+tags = [ "persona-adherence", "plan-vs-spontaneous", "highly-planned", "llm-judge",]
+
+# --- Persona-adherence extension --------------------------------------------- #
+# The persona is the USER, sorting out a two-day city break with a travel-buddy
+# bot who romanticizes winging it: book nothing, everything's refundable-
+# schmefundable, the best trips are unplanned. Whether the user locks in the
+# key pieces or agrees to go unbooked is a semantic question, so an LLM judge
+# reads the USER's own turns.
+[[checks]]
+dimension_id = "pref_plan_vs_spontaneous"
+dimension_label = "Planned vs spontaneous"
+category = "Behavior: Preferences"
+anchor_value = "Highly planned"
+evaluator = "llm-judge"
+adherence_signal = "The user insists on booking the key pieces ahead (transport, stay, timed entries) despite the buddy's wing-it pressure; agreeing to leave the trip unbooked is a violation."
+
+[verifier]
+timeout_sec = 180.0
+
+[agent]
+timeout_sec = 600.0
+
+[environment]
+definition = "application/shared-chat-persona"
+build_timeout_sec = 600.0
+cpus = 1
+memory_mb = 2048
+storage_mb = 10240
+gpus = 0
