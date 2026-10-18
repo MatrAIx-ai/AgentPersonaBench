@@ -38,6 +38,8 @@ class VerifierReportedErrorTest(unittest.TestCase):
              "checks": [{"verdict": "HELD"}, {"verdict": "VIOLATED"}, {"verdict": "NOT_ADDRESSED"}]},
         ):
             self.assertIsNone(run_task._verifier_reported_error(findings), findings)
+            normalized = run_task._normalize_output(findings, "rule-based")
+            self.assertIsNone(run_task._verifier_reported_error(normalized), normalized)
 
     def test_error_shapes_verifiers_write_are_errors(self) -> None:
         for findings in (
@@ -51,6 +53,20 @@ class VerifierReportedErrorTest(unittest.TestCase):
             {"stage": "verify", "error": "verifier wrote no structured_output.json"},
         ):
             self.assertIsNotNone(run_task._verifier_reported_error(findings), findings)
+
+    def test_normalization_preserves_verifier_errors(self) -> None:
+        for findings in (
+            {"reward": 0.0, "stage": "verify", "error": "invalid app output"},
+            {"reward": 0.0, "status": "judge_error", "detail": "judge failed"},
+            {"reward": 0.0, "status": "configuration_error"},
+            {"reward": 0.0, "error_stage": "judge_call", "detail": "judge failed"},
+        ):
+            with self.subTest(findings=findings):
+                normalized = run_task._normalize_output(findings, "rule-based")
+                self.assertEqual(run_task._verifier_reported_error(normalized),
+                                 run_task._verifier_reported_error(findings))
+                if "stage" in findings:
+                    self.assertEqual(normalized.get("stage"), findings["stage"])
 
 
 class ReportMaxPointsTest(unittest.TestCase):

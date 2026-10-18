@@ -44,7 +44,7 @@ CONFIGS = REPO / "evaluation" / "configs"
 # task-specific data never mix at the top level.
 _UNIVERSAL_KEYS = {"reward", "score", "detail", "kind", "passed", "persona",
                    "criteria", "checks", "verdict", "passed_count", "total_checks",
-                   "points", "max_points"}
+                   "points", "max_points", "error", "status", "error_stage", "stage"}
 
 
 def _normalize_output(findings: dict, evaluator: str | None) -> dict:
